@@ -6,6 +6,8 @@ import { dirname, isAbsolute, resolve } from 'node:path';
 
 const MAX_BYTES = 25 * 1024 * 1024;
 const SHA256 = /^[0-9a-f]{64}$/;
+const CONTROLLED_DOWNLOAD =
+  /^\/api\/themes\/[a-z0-9]+(?:-[a-z0-9]+)*\/download\/(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 
 function parseArgs(argv) {
   const values = {};
@@ -38,32 +40,82 @@ function trustedOrigin(value) {
   return url.origin;
 }
 
-async function readRemote(source, originValue) {
-  const initial = new URL(source);
-  if (initial.protocol !== 'https:') throw new Error('Remote package URLs must use HTTPS');
-  const origin = trustedOrigin(originValue);
-  if (initial.origin !== origin) throw new Error('Remote package URL must match the trusted origin');
-  const response = await fetch(initial, { redirect: 'follow', signal: AbortSignal.timeout(30_000) });
-  if (!response.ok) throw new Error(`Download failed with HTTP ${response.status}`);
-  if (new URL(response.url).origin !== origin) throw new Error('Redirected package URL must remain on the trusted origin');
-  const declared = Number(response.headers.get('content-length'));
-  if (Number.isFinite(declared) && declared > MAX_BYTES) throw new Error(`Package exceeds ${MAX_BYTES} bytes`);
-  if (!response.body) throw new Error('Download returned no response body');
-
-  const chunks = [];
-  let total = 0;
-  const reader = response.body.getReader();
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    total += value.byteLength;
-    if (total > MAX_BYTES) {
-      await reader.cancel();
-      throw new Error(`Package exceeds ${MAX_BYTES} bytes`);
-    }
-    chunks.push(Buffer.from(value));
+function validateRemoteUrl(value, origin, expectedPath) {
+  const url = new URL(value);
+  if (
+    url.protocol !== 'https:' ||
+    url.username ||
+    url.password ||
+    url.origin !== origin ||
+    url.search ||
+    url.hash
+  ) {
+    throw new Error('Remote package URL must be credential-free HTTPS on the trusted origin');
   }
-  return Buffer.concat(chunks, total);
+  if (!CONTROLLED_DOWNLOAD.test(url.pathname)) {
+    throw new Error('Remote package URL must use the controlled theme download route');
+  }
+  if (expectedPath && url.pathname !== expectedPath) {
+    throw new Error('Redirected package URL must remain on the same controlled theme download path');
+  }
+  return url;
+}
+
+async function readRemote(source, originValue) {
+  const origin = trustedOrigin(originValue);
+  let current = validateRemoteUrl(source, origin);
+  const controlledPath = current.pathname;
+  let cookie;
+
+  for (let redirectCount = 0; redirectCount <= 5; redirectCount += 1) {
+    const response = await fetch(current, {
+      redirect: 'manual',
+      headers: cookie ? { cookie } : undefined,
+      signal: AbortSignal.timeout(30_000),
+    });
+
+    if (response.status >= 300 && response.status < 400) {
+      if (redirectCount === 5) throw new Error('Too many download redirects');
+      const location = response.headers.get('location');
+      if (!location) throw new Error('Download redirect has no location');
+      const next = validateRemoteUrl(new URL(location, current).toString(), origin, controlledPath);
+      const setCookie = response.headers.get('set-cookie');
+      if (setCookie) {
+        if (response.status !== 307) {
+          throw new Error('Download cookie bootstrap must use HTTP 307');
+        }
+        const pair = setCookie.split(';', 1)[0];
+        if (!/^[!#$%&'*+.^_`|~0-9A-Za-z-]+=[^;\r\n]*$/.test(pair)) {
+          throw new Error('Download bootstrap returned an invalid cookie');
+        }
+        cookie = pair;
+      }
+      await response.body?.cancel();
+      current = next;
+      continue;
+    }
+
+    if (!response.ok) throw new Error(`Download failed with HTTP ${response.status}`);
+    const declared = Number(response.headers.get('content-length'));
+    if (Number.isFinite(declared) && declared > MAX_BYTES) throw new Error(`Package exceeds ${MAX_BYTES} bytes`);
+    if (!response.body) throw new Error('Download returned no response body');
+
+    const chunks = [];
+    let total = 0;
+    const reader = response.body.getReader();
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > MAX_BYTES) {
+        await reader.cancel();
+        throw new Error(`Package exceeds ${MAX_BYTES} bytes`);
+      }
+      chunks.push(Buffer.from(value));
+    }
+    return Buffer.concat(chunks, total);
+  }
+  throw new Error('Download failed');
 }
 
 async function main() {
@@ -73,6 +125,7 @@ async function main() {
   if (!isAbsolute(args.output)) throw new Error('output must use an absolute path');
 
   const bytes = /^https?:\/\//i.test(args.source) ? await readRemote(args.source, args.origin) : await readLocal(args.source);
+  if (bytes.byteLength > MAX_BYTES) throw new Error(`Package exceeds ${MAX_BYTES} bytes`);
   const actual = createHash('sha256').update(bytes).digest('hex');
   if (actual !== args.sha256) throw new Error(`SHA-256 mismatch: expected ${args.sha256}, received ${actual}`);
 
