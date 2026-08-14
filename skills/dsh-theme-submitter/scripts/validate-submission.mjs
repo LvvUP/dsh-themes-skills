@@ -20,6 +20,7 @@ const COMPATIBILITY = {
 const SHA256 = /^[0-9a-f]{64}$/;
 const VERSION = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const LICENSE = /^[A-Za-z0-9][A-Za-z0-9.+() -]{0,79}$/;
 const COLOR = /^#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?$/;
 const CONTENT_PATH = /^assets\/([a-f0-9]{64})\.webp$/;
 const FORBIDDEN = /^(?:scripts?|dependencies|devDependencies|peerDependencies|optionalDependencies|lifecycle|css|html|javascript|code|package|artifact|payload|api[-_]?key|cookie|password|authorization|secret|session|credential|accessToken|refreshToken)$/i;
@@ -125,6 +126,10 @@ if (manifest.schemaVersion !== '2.0') throw new Error('schemaVersion must equal 
 if (!['theme', 'full-skin'].includes(manifest.kind)) throw new Error('kind must be theme or full-skin');
 if (!SLUG.test(manifest.slug) || manifest.slug.length > 64) throw new Error('invalid slug');
 if (!VERSION.test(manifest.version)) throw new Error('version must be exact semantic version');
+if (
+  typeof manifest.license !== 'string' || manifest.license !== manifest.license.trim() ||
+  !LICENSE.test(manifest.license)
+) throw new Error('license is required and must be a concise SPDX or LicenseRef identifier (maximum 80 characters)');
 if (typeof manifest.name !== 'string' || !manifest.name.trim() || typeof manifest.description !== 'string' || !manifest.description.trim()) throw new Error('name and description are required');
 if (manifest.category !== undefined && (typeof manifest.category !== 'string' || !manifest.category.trim() || manifest.category.length > 80 || /[\u0000-\u001f\u007f<>]/.test(manifest.category))) throw new Error('category is invalid');
 object(manifest.author, 'author', ['name', 'url']);

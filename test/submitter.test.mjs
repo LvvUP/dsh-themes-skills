@@ -36,3 +36,29 @@ test('submitter rejects publication metadata and secret-like fields', async () =
   assert.notEqual(result.code, 0);
   assert.match(result.stderr, /secret-like field/);
 });
+
+test('submitter requires a concise, well-formed license identifier', async (t) => {
+  const cases = [
+    ['missing', undefined],
+    ['empty', ''],
+    ['over 80 characters', `LicenseRef-${'a'.repeat(71)}`],
+    ['unsafe characters', 'MIT<script>'],
+    ['surrounding whitespace', ' MIT'],
+  ];
+
+  for (const [label, license] of cases) {
+    await t.test(label, async () => {
+      const directory = await mkdtemp(join(tmpdir(), 'dsh-submit-license-'));
+      const input = await writeAuthoring(directory);
+      const manifest = join(directory, 'manifest.json');
+      assert.equal((await run(creator, ['--input', input, '--output', manifest])).code, 0);
+      const value = JSON.parse(await readFile(manifest, 'utf8'));
+      if (license === undefined) delete value.license;
+      else value.license = license;
+      await writeFile(manifest, JSON.stringify(value));
+      const result = await run(submitter, ['--manifest', manifest, '--site', 'https://themes.example']);
+      assert.notEqual(result.code, 0);
+      assert.match(result.stderr, /license is required/);
+    });
+  }
+});
