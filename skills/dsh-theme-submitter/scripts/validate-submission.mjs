@@ -15,7 +15,7 @@ const COMPATIBILITY = {
   dshPackageIntegrity: 'sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==',
   tokenCatalogSha256: 'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926',
   frontendBundleSha256: 'a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68',
-  selectorCatalogSha256: 'e544ff5a3f7edacced0c5c9ed8fd26cb598b3d01d1298b10952a64876beaf7fd',
+  selectorCatalogSha256: '4c04e9fcff6caccd4c76ebc23a4442d4d1443356d9750f7135506d788a3ec7c7',
 };
 const SHA256 = /^[0-9a-f]{64}$/;
 const VERSION = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
@@ -56,7 +56,7 @@ function optionalHttps(value, label) {
 }
 
 function localUrl(value, label) {
-  if (typeof value !== 'string' || !/^\/(?:theme-studio|imgs|theme-packages)\/[A-Za-z0-9][A-Za-z0-9._~!$&'()*+,;=:@%/-]*$/.test(value)) throw new Error(`${label} must be a reviewed same-origin URL`);
+  if (typeof value !== 'string' || !/^\/(?:api\/theme-studio|__dsh-themes|imgs|theme-packages)\/[A-Za-z0-9][A-Za-z0-9._~!$&'()*+,;=:@%/-]*$/.test(value)) throw new Error(`${label} must be a reviewed same-origin URL`);
   let decoded;
   try { decoded = decodeURIComponent(value); } catch { throw new Error(`${label} has invalid encoding`); }
   if (decoded.split('/').some((part) => part === '.' || part === '..')) throw new Error(`${label} contains path traversal`);
@@ -70,6 +70,10 @@ function previewUrl(value, label) {
 
 function ratio(value, label) {
   if (!Number.isFinite(value) || value < 0 || value > 1) throw new Error(`${label} must be between 0 and 1`);
+}
+
+function focusPercent(value, label) {
+  if (!Number.isInteger(value) || value < 0 || value > 100) throw new Error(`${label} must be an integer percentage from 0 to 100`);
 }
 
 function submissionOrigin(value) {
@@ -141,7 +145,7 @@ if (manifest.kind === 'theme') {
   const visual = object(manifest.visual, 'visual', ['preset', 'focus', 'surfaceOpacity', 'overlayOpacity', 'borderStrength', 'glowStrength']);
   if (!['glass', 'outline', 'glow'].includes(visual.preset)) throw new Error('invalid visual preset');
   const focus = object(visual.focus, 'visual.focus', ['x', 'y']);
-  ratio(focus.x, 'visual.focus.x'); ratio(focus.y, 'visual.focus.y');
+  focusPercent(focus.x, 'visual.focus.x'); focusPercent(focus.y, 'visual.focus.y');
   for (const key of ['surfaceOpacity', 'overlayOpacity', 'borderStrength', 'glowStrength']) ratio(visual[key], `visual.${key}`);
 
   if (!Array.isArray(manifest.assets) || manifest.assets.length !== 5) throw new Error('full-skin requires exactly five authoring assets');
@@ -155,7 +159,7 @@ if (manifest.kind === 'theme') {
     if (!match || match[1] !== input.sha256 || paths.has(input.path)) throw new Error('asset paths must be unique and content-addressed');
     paths.add(input.path);
     localUrl(input.url, 'asset.url');
-    provisionalAssets ||= input.url.startsWith('/theme-studio/import/');
+    provisionalAssets ||= input.url.startsWith('/api/theme-studio/import/');
     if (input.mimeType !== 'image/webp' || !Number.isInteger(input.sizeBytes) || input.sizeBytes < 1 || input.sizeBytes > 10 * 1024 * 1024) throw new Error('asset MIME, extension, or size is invalid');
     if (!Number.isInteger(input.width) || !Number.isInteger(input.height) || input.width < 1 || input.height < 1 || input.width > 8192 || input.height > 8192 || input.width * input.height > 24_000_000) throw new Error('invalid asset dimensions');
   }
@@ -165,7 +169,10 @@ if (manifest.kind === 'theme') {
   if (preview.light.source === 'runtime' || preview.dark.source === 'runtime') throw new Error('authors cannot claim runtime previews before website verification');
   for (const [mode, role] of [['light', 'preview-light'], ['dark', 'preview-dark']]) {
     const asset = assetsByRole.get(role);
-    if (preview[mode].sha256 !== asset.sha256 || preview[mode].url !== asset.url) throw new Error(`preview.${mode} must reference the ${role} asset`);
+    if (
+      preview[mode].sha256 !== asset.sha256 || preview[mode].url !== asset.url ||
+      preview[mode].width !== asset.width || preview[mode].height !== asset.height
+    ) throw new Error(`preview.${mode} metadata must match the ${role} asset`);
   }
 }
 

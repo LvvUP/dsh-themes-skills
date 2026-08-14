@@ -59,7 +59,7 @@ export async function writeAuthoring(directory, overrides = {}) {
       { role: 'preview-dark', sourcePath: 'assets/preview-dark.webp', mimeType: 'image/webp', width: 1440, height: 900 },
     ],
     visual: {
-      preset: 'glass', focus: { x: 0.7, y: 0.5 }, surfaceOpacity: 0.82,
+      preset: 'glass', focus: { x: 70, y: 50 }, surfaceOpacity: 0.82,
       overlayOpacity: 0.7, borderStrength: 0.55, glowStrength: 0.15,
     },
     ...overrides,

@@ -1,6 +1,6 @@
 # Authoring V2
 
-The normalized output matches the website's `FullSkinManifestV2` contract. Local assets receive content-addressed paths and provisional `/theme-studio/import/*` URLs. The website must import the files, replace those URLs, decode the images again, and build the trusted package.
+The normalized output matches the website's `FullSkinManifestV2` contract. Local assets receive content-addressed paths and provisional `/api/theme-studio/import/*` URLs. The website must import the files, replace those URLs, decode the images again, and build the trusted package.
 
 Use this full-skin authoring shape:
 
@@ -31,7 +31,7 @@ Use this full-skin authoring shape:
   ],
   "visual": {
     "preset": "glass",
-    "focus": { "x": 0.7, "y": 0.5 },
+    "focus": { "x": 70, "y": 50 },
     "surfaceOpacity": 0.82,
     "overlayOpacity": 0.7,
     "borderStrength": 0.55,
@@ -56,7 +56,7 @@ The example abbreviates `tokens`; real input must include all 13 names listed be
 - `--dsw-alias-state-warn-primary`
 - `--dsw-specific-sidebar-fill`
 
-Full skins require five distinct raster files: `background`, `sidebar`, `card`, `preview-light`, and `preview-dark`. All input paths must remain under the adjacent `assets/` directory. Creator output marks previews as simulated; the website replaces them with real `runtime` screenshots before publication.
+Full skins require five distinct raster files: `background`, `sidebar`, `card`, `preview-light`, and `preview-dark`. All input paths must remain under the adjacent `assets/` directory. `visual.focus.x/y` are canonical integer CSS-position percentages from 0 through 100. Creator output marks previews as simulated; the website replaces them with real `runtime` screenshots before publication.
 
 For a palette-only `theme`, omit `copyright`, `assets`, and `visual`, and provide `preview: { "light": "...", "dark": "...", "surface": "optional" }`. Preview values may be reviewed same-origin paths or credential-free HTTPS URLs.
 
@@ -66,4 +66,4 @@ Compatibility is pinned to:
 - DSH npm integrity `sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==`
 - Main frontend JS SHA-256 `a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68`
 - Token catalog SHA-256 `fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926`
-- Selector catalog SHA-256 `e544ff5a3f7edacced0c5c9ed8fd26cb598b3d01d1298b10952a64876beaf7fd`
+- Selector catalog SHA-256 `4c04e9fcff6caccd4c76ebc23a4442d4d1443356d9750f7135506d788a3ec7c7`

@@ -26,7 +26,8 @@ test('schema generator is deterministic and pins rc.6', async () => {
   assert.equal(Object.keys(manifest.tokens).length, 13);
   assert.match(manifest.assets[0].sha256, /^[0-9a-f]{64}$/);
   assert.match(manifest.assets[0].path, /^assets\/[0-9a-f]{64}\.webp$/);
-  assert.match(manifest.assets[0].url, /^\/theme-studio\/import\/[0-9a-f]{64}\.webp$/);
+  assert.match(manifest.assets[0].url, /^\/api\/theme-studio\/import\/[0-9a-f]{64}\.webp$/);
+  assert.deepEqual(manifest.visual.focus, { x: 70, y: 50 });
   assert.equal(manifest.preview.light.source, 'simulated');
 });
 

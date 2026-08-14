@@ -27,7 +27,7 @@ const COMPATIBILITY = {
   dshPackageIntegrity: 'sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==',
   tokenCatalogSha256: 'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926',
   frontendBundleSha256: 'a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68',
-  selectorCatalogSha256: 'e544ff5a3f7edacced0c5c9ed8fd26cb598b3d01d1298b10952a64876beaf7fd',
+  selectorCatalogSha256: '4c04e9fcff6caccd4c76ebc23a4442d4d1443356d9750f7135506d788a3ec7c7',
 };
 
 function parseArgs(argv) {
@@ -83,6 +83,11 @@ function ratio(value, label) {
   return value;
 }
 
+function focusPercent(value, label) {
+  if (!Number.isInteger(value) || value < 0 || value > 100) throw new Error(`${label} must be an integer percentage from 0 to 100`);
+  return value;
+}
+
 function imageSignature(bytes, mimeType) {
   return bytes.length >= 12 && bytes.subarray(0, 4).toString('ascii') === 'RIFF' && bytes.subarray(8, 12).toString('ascii') === 'WEBP';
 }
@@ -108,7 +113,7 @@ async function normalizeAsset(asset, base) {
   return {
     role: asset.role,
     path: `assets/${fileName}`,
-    url: `/theme-studio/import/${fileName}`,
+    url: `/api/theme-studio/import/${fileName}`,
     sha256,
     mimeType: asset.mimeType,
     sizeBytes: bytes.length,
@@ -199,7 +204,7 @@ async function main() {
         aiGenerated: copyright.aiGenerated,
       },
       visual: {
-        preset: visual.preset, focus: { x: ratio(focus.x, 'visual.focus.x'), y: ratio(focus.y, 'visual.focus.y') },
+        preset: visual.preset, focus: { x: focusPercent(focus.x, 'visual.focus.x'), y: focusPercent(focus.y, 'visual.focus.y') },
         surfaceOpacity: ratio(visual.surfaceOpacity, 'visual.surfaceOpacity'), overlayOpacity: ratio(visual.overlayOpacity, 'visual.overlayOpacity'),
         borderStrength: ratio(visual.borderStrength, 'visual.borderStrength'), glowStrength: ratio(visual.glowStrength, 'visual.glowStrength'),
       },
