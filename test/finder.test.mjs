@@ -8,7 +8,7 @@ import { run } from './helpers.mjs';
 
 const finder = resolve('skills/dsh-theme-finder/scripts/find-themes.mjs');
 const tokenHash = 'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926';
-const selectorHash = '4c04e9fcff6caccd4c76ebc23a4442d4d1443356d9750f7135506d788a3ec7c7';
+const selectorHash = '5bcd9f874095af2114d86f91301868c6b0f2cebe58f51b9919150975d406baa3';
 const dshIntegrity = 'sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==';
 const frontendSha256 = 'a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68';
 

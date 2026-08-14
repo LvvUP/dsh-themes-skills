@@ -15,7 +15,7 @@ const COMPATIBILITY = {
   dshPackageIntegrity: 'sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==',
   tokenCatalogSha256: 'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926',
   frontendBundleSha256: 'a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68',
-  selectorCatalogSha256: '4c04e9fcff6caccd4c76ebc23a4442d4d1443356d9750f7135506d788a3ec7c7',
+  selectorCatalogSha256: '5bcd9f874095af2114d86f91301868c6b0f2cebe58f51b9919150975d406baa3',
 };
 const SHA256 = /^[0-9a-f]{64}$/;
 const VERSION = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
@@ -118,7 +118,7 @@ const manifest = JSON.parse(bytes.toString('utf8'));
 object(manifest, 'manifest');
 inspectKeys(manifest);
 
-const commonKeys = ['schemaVersion', 'kind', 'slug', 'name', 'description', 'author', 'license', 'version', 'compatibility', 'tokens', 'preview'];
+const commonKeys = ['schemaVersion', 'kind', 'slug', 'name', 'description', 'category', 'author', 'license', 'version', 'compatibility', 'tokens', 'preview'];
 const allowedRoot = manifest.kind === 'full-skin' ? [...commonKeys, 'copyright', 'visual', 'assets'] : commonKeys;
 for (const key of Object.keys(manifest)) if (!allowedRoot.includes(key)) throw new Error(`manifest.${key} is not allowed`);
 if (manifest.schemaVersion !== '2.0') throw new Error('schemaVersion must equal 2.0');
@@ -126,6 +126,7 @@ if (!['theme', 'full-skin'].includes(manifest.kind)) throw new Error('kind must 
 if (!SLUG.test(manifest.slug) || manifest.slug.length > 64) throw new Error('invalid slug');
 if (!VERSION.test(manifest.version)) throw new Error('version must be exact semantic version');
 if (typeof manifest.name !== 'string' || !manifest.name.trim() || typeof manifest.description !== 'string' || !manifest.description.trim()) throw new Error('name and description are required');
+if (manifest.category !== undefined && (typeof manifest.category !== 'string' || !manifest.category.trim() || manifest.category.length > 80 || /[\u0000-\u001f\u007f<>]/.test(manifest.category))) throw new Error('category is invalid');
 object(manifest.author, 'author', ['name', 'url']);
 if (typeof manifest.author.name !== 'string' || !manifest.author.name.trim()) throw new Error('author.name is required');
 optionalHttps(manifest.author.url, 'author.url');

@@ -7,5 +7,6 @@
 - The author name and copyright source type, declaration, and optional HTTPS source URL are accurate.
 - The license covers the manifest and all submitted art; third-party art is accompanied by verifiable permission.
 - The manifest contains no code, CSS, HTML, dependencies, lifecycle script, font, SVG, external runtime asset, credential, or secret.
+- The author manifest contains neither `payload` nor `artifact`; the trusted publisher may add both to a release sidecar, and publication readiness trusts only the complete `.tgz` artifact digest.
 - Mock previews are labeled drafts. Publication requires screenshots from an isolated real Harness run.
 - The user understands that moderation may reject unsafe, incompatible, misleading, or unlicensed content.

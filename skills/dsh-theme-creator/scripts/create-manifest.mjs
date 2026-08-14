@@ -10,7 +10,7 @@ const TOKENS = [
   '--dsw-alias-label-secondary', '--dsw-alias-state-error-primary', '--dsw-alias-state-success-primary',
   '--dsw-alias-state-warn-primary', '--dsw-specific-sidebar-fill',
 ];
-const ROOT_KEYS = new Set(['schemaVersion', 'kind', 'slug', 'name', 'description', 'version', 'license', 'author', 'copyright', 'compatibility', 'tokens', 'assets', 'visual', 'preview']);
+const ROOT_KEYS = new Set(['schemaVersion', 'kind', 'slug', 'name', 'description', 'category', 'version', 'license', 'author', 'copyright', 'compatibility', 'tokens', 'assets', 'visual', 'preview']);
 const FORBIDDEN_KEYS = /^(?:scripts?|dependencies|devDependencies|peerDependencies|optionalDependencies|lifecycle|css|html|javascript|code|package|artifact|payload)$/i;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const VERSION = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
@@ -27,7 +27,7 @@ const COMPATIBILITY = {
   dshPackageIntegrity: 'sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==',
   tokenCatalogSha256: 'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926',
   frontendBundleSha256: 'a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68',
-  selectorCatalogSha256: '4c04e9fcff6caccd4c76ebc23a4442d4d1443356d9750f7135506d788a3ec7c7',
+  selectorCatalogSha256: '5bcd9f874095af2114d86f91301868c6b0f2cebe58f51b9919150975d406baa3',
 };
 
 function parseArgs(argv) {
@@ -158,6 +158,7 @@ async function main() {
   const common = {
     schemaVersion: '2.0', kind: source.kind, slug: source.slug,
     name: text(source.name, 'name', 120), description: text(source.description, 'description', 1000),
+    ...(source.category ? { category: text(source.category, 'category', 80) } : {}),
     author: { name: text(author.name, 'author.name', 100), ...(author.url ? { url: httpsUrl(author.url, 'author.url') } : {}) },
     license: source.license, version: source.version, compatibility: COMPATIBILITY, tokens: normalizeTokens(source.tokens),
   };

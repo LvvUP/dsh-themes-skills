@@ -45,6 +45,7 @@ export async function writeAuthoring(directory, overrides = {}) {
     slug: 'ocean-workbench',
     name: 'Ocean Workbench',
     description: 'A deterministic test skin.',
+    category: 'illustrated',
     version: '1.0.0',
     license: 'CC-BY-4.0',
     author: { name: 'Test Author', url: 'https://example.com/' },

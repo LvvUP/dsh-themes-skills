@@ -11,6 +11,7 @@ Use this full-skin authoring shape:
   "slug": "ocean-workbench",
   "name": "Ocean Workbench",
   "description": "A calm blue workbench skin.",
+  "category": "illustrated",
   "version": "1.0.0",
   "license": "CC-BY-4.0",
   "author": { "name": "Example Author", "url": "https://example.com" },
@@ -66,4 +67,6 @@ Compatibility is pinned to:
 - DSH npm integrity `sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==`
 - Main frontend JS SHA-256 `a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68`
 - Token catalog SHA-256 `fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926`
-- Selector catalog SHA-256 `4c04e9fcff6caccd4c76ebc23a4442d4d1443356d9750f7135506d788a3ec7c7`
+- Selector catalog SHA-256 `5bcd9f874095af2114d86f91301868c6b0f2cebe58f51b9919150975d406baa3`
+
+`category` is optional descriptive metadata. Authoring manifests must not include `payload` or `artifact`: the trusted publisher produces the canonical `<slug>-<version>.payload.tar` digest and complete `.tgz` artifact digest. Release sidecars may contain both, but publication readiness trusts only `artifact`.

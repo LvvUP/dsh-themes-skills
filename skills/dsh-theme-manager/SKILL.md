@@ -12,6 +12,7 @@ Manage at most one verified `@dsh-themes/*` Cordis plugin in the `web` profile. 
 - Mutate the profile only with `dsh plugin --profile web`. Never edit `$DSH_HOME`, `~/.dsh`, a profile package file, lockfile, Harness `dist`, or `index.html`.
 - Accept only an exact package version with a trusted catalog record, HTTPS URL or explicit absolute local path, SHA-256, and `0.1.0-rc.6` compatibility record.
 - Never execute a downloaded package, lifecycle script, author JavaScript, CSS, or HTML while verifying it.
+- A V2 release sidecar may contain both `payload` and `artifact`. Validate both declarations when present, but trust only the complete `.tgz` `artifact` for installation; never substitute the self-reference-free `<slug>-<version>.payload.tar` digest. A package-internal manifest contains `payload` only.
 - Stop when more than one direct `@dsh-themes/*` dependency exists, a version is a range, compatibility differs, or an exact rollback artifact cannot be prepared.
 - Explain that a hash proves agreement with the selected catalog record, not publisher identity.
 
