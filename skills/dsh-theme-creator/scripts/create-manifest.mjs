@@ -4,6 +4,8 @@ import { createHash } from 'node:crypto';
 import { lstat, readFile, realpath, writeFile } from 'node:fs/promises';
 import { dirname, isAbsolute, resolve, sep } from 'node:path';
 
+import sharp from 'sharp';
+
 const TOKENS = [
   '--dsw-alias-bg-base', '--dsw-alias-bg-layer-1', '--dsw-alias-bg-layer-2', '--dsw-alias-bg-overlay',
   '--dsw-alias-border-l1', '--dsw-alias-border-l2', '--dsw-alias-brand-primary', '--dsw-alias-label-primary',
@@ -88,8 +90,42 @@ function focusPercent(value, label) {
   return value;
 }
 
-function imageSignature(bytes, mimeType) {
-  return bytes.length >= 12 && bytes.subarray(0, 4).toString('ascii') === 'RIFF' && bytes.subarray(8, 12).toString('ascii') === 'WEBP';
+async function decodeWebp(bytes, sourcePath) {
+  if (bytes.length > MAX_ASSET_BYTES) throw new Error(`Asset exceeds 10MB: ${sourcePath}`);
+  const image = sharp(bytes, {
+    animated: true,
+    failOn: 'error',
+    limitInputPixels: 24_000_000,
+    sequentialRead: true,
+  });
+  let metadata;
+  try {
+    metadata = await image.metadata();
+  } catch {
+    throw new Error(`Asset is not a decodable WebP image: ${sourcePath}`);
+  }
+  const pages = metadata.pages ?? 1;
+  if (metadata.format !== 'webp') throw new Error(`Asset is not a WebP image: ${sourcePath}`);
+  if (pages !== 1 || metadata.pageHeight !== undefined) {
+    throw new Error(`Animated or multi-page WebP assets are not allowed: ${sourcePath}`);
+  }
+  const { width, height } = metadata;
+  if (
+    !Number.isInteger(width) || !Number.isInteger(height) ||
+    width < 1 || height < 1 || width > 8192 || height > 8192 ||
+    width * height > 24_000_000
+  ) {
+    throw new Error(`Invalid decoded asset dimensions: ${sourcePath}`);
+  }
+  try {
+    const decoded = await image.clone().raw().toBuffer({ resolveWithObject: true });
+    if (decoded.info.width !== width || decoded.info.height !== height) {
+      throw new Error('decoded dimensions changed');
+    }
+  } catch {
+    throw new Error(`Asset cannot be fully decoded as WebP: ${sourcePath}`);
+  }
+  return { width, height };
 }
 
 async function normalizeAsset(asset, base) {
@@ -98,7 +134,7 @@ async function normalizeAsset(asset, base) {
   const sourcePath = text(asset.sourcePath, 'asset.sourcePath', 300).replaceAll('\\', '/');
   if (!/^assets\/[A-Za-z0-9][A-Za-z0-9._/-]*$/.test(sourcePath) || sourcePath.includes('..') || sourcePath.includes('//')) throw new Error(`Unsafe asset sourcePath: ${sourcePath}`);
   if (!MIME.has(asset.mimeType)) throw new Error(`Unsupported asset MIME: ${asset.mimeType}`);
-  if (!Number.isInteger(asset.width) || !Number.isInteger(asset.height) || asset.width < 1 || asset.height < 1 || asset.width > 8192 || asset.height > 8192 || asset.width * asset.height > 24_000_000) throw new Error(`Invalid asset dimensions: ${sourcePath}`);
+  if (!Number.isInteger(asset.width) || !Number.isInteger(asset.height)) throw new Error(`Invalid declared asset dimensions: ${sourcePath}`);
   const resolved = resolve(base, sourcePath);
   if (!resolved.startsWith(`${resolve(base)}${sep}`)) throw new Error(`Asset escapes authoring directory: ${sourcePath}`);
   const metadata = await lstat(resolved);
@@ -107,7 +143,10 @@ async function normalizeAsset(asset, base) {
   if (!actual.startsWith(`${await realpath(base)}${sep}`)) throw new Error(`Asset resolves outside authoring directory: ${sourcePath}`);
   if (metadata.size > MAX_ASSET_BYTES) throw new Error(`Asset exceeds 10MB: ${sourcePath}`);
   const bytes = await readFile(actual);
-  if (!imageSignature(bytes, asset.mimeType)) throw new Error(`Asset signature does not match ${asset.mimeType}: ${sourcePath}`);
+  const decoded = await decodeWebp(bytes, sourcePath);
+  if (asset.width !== decoded.width || asset.height !== decoded.height) {
+    throw new Error(`Declared asset dimensions do not match decoded WebP: ${sourcePath}`);
+  }
   const sha256 = createHash('sha256').update(bytes).digest('hex');
   const fileName = `${sha256}.webp`;
   return {
@@ -117,8 +156,8 @@ async function normalizeAsset(asset, base) {
     sha256,
     mimeType: asset.mimeType,
     sizeBytes: bytes.length,
-    width: asset.width,
-    height: asset.height,
+    width: decoded.width,
+    height: decoded.height,
   };
 }
 

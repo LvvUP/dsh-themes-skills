@@ -2,6 +2,8 @@ import { spawn } from 'node:child_process';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
+import sharp from 'sharp';
+
 export const tokenNames = [
   '--dsw-alias-bg-base', '--dsw-alias-bg-layer-1', '--dsw-alias-bg-layer-2', '--dsw-alias-bg-overlay',
   '--dsw-alias-border-l1', '--dsw-alias-border-l2', '--dsw-alias-brand-primary', '--dsw-alias-label-primary',
@@ -33,12 +35,17 @@ export async function run(script, args, options = {}) {
 
 export async function writeAuthoring(directory, overrides = {}) {
   await mkdir(join(directory, 'assets'), { recursive: true });
-  const webp = (label) => Buffer.concat([Buffer.from('RIFF'), Buffer.from([0, 0, 0, 0]), Buffer.from('WEBP'), Buffer.from(label)]);
-  await writeFile(join(directory, 'assets', 'background.webp'), webp('background-image'));
-  await writeFile(join(directory, 'assets', 'sidebar.webp'), webp('sidebar-image'));
-  await writeFile(join(directory, 'assets', 'card.webp'), webp('card-image'));
-  await writeFile(join(directory, 'assets', 'preview-light.webp'), webp('preview-light-image'));
-  await writeFile(join(directory, 'assets', 'preview-dark.webp'), webp('preview-dark-image'));
+  const fixtures = [
+    ['background.webp', 1920, 1080, '#174ea6'],
+    ['sidebar.webp', 900, 1600, '#185abc'],
+    ['card.webp', 1200, 800, '#1967d2'],
+    ['preview-light.webp', 1440, 900, '#8ab4f8'],
+    ['preview-dark.webp', 1440, 900, '#202124'],
+  ];
+  await Promise.all(fixtures.map(([name, width, height, background]) =>
+    sharp({ create: { width, height, channels: 4, background } })
+      .webp({ lossless: true, effort: 0 })
+      .toFile(join(directory, 'assets', name))));
   const value = {
     schemaVersion: '2.0',
     kind: 'full-skin',

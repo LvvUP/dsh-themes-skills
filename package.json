@@ -10,5 +10,8 @@
     "test": "node --test",
     "validate": "node scripts/validate-skills.mjs"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "dependencies": {
+    "sharp": "0.35.2"
+  }
 }

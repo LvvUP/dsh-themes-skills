@@ -5,6 +5,8 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import test from 'node:test';
 
+import sharp from 'sharp';
+
 import { run, tokens, writeAuthoring } from './helpers.mjs';
 
 const creator = resolve('skills/dsh-theme-creator/scripts/create-manifest.mjs');
@@ -56,6 +58,44 @@ test('schema rejects missing tokens, dangerous CSS, and incompatible DSH', async
     const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
     assert.notEqual(result.code, 0);
     assert.match(result.stderr, /rc\.6/);
+  });
+});
+
+test('creator fully decodes bounded, single-page WebP assets', async (t) => {
+  await t.test('rejects a corrupt RIFF/WEBP lookalike', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-corrupt-'));
+    const input = await writeAuthoring(directory);
+    await writeFile(
+      join(directory, 'assets', 'background.webp'),
+      Buffer.concat([Buffer.from('RIFF'), Buffer.alloc(4), Buffer.from('WEBPcorrupt')]),
+    );
+    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /decodable WebP|fully decoded/);
+  });
+
+  await t.test('rejects animated and multi-page WebP', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-animated-'));
+    const input = await writeAuthoring(directory);
+    const red = await sharp({ create: { width: 4, height: 4, channels: 4, background: '#ff0000' } }).png().toBuffer();
+    const blue = await sharp({ create: { width: 4, height: 4, channels: 4, background: '#0000ff' } }).png().toBuffer();
+    await sharp([red, blue], { join: { animated: true } })
+      .webp({ loop: 0, delay: [100, 100] })
+      .toFile(join(directory, 'assets', 'background.webp'));
+    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /Animated or multi-page WebP/);
+  });
+
+  await t.test('rejects dimensions copied from declarations instead of decoded pixels', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-dimensions-'));
+    const input = await writeAuthoring(directory);
+    const authoring = JSON.parse(await readFile(input, 'utf8'));
+    authoring.assets[0].width = 1919;
+    await writeFile(input, `${JSON.stringify(authoring, null, 2)}\n`);
+    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /do not match decoded WebP/);
   });
 });
 
