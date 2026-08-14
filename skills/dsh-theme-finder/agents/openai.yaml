@@ -1,0 +1,4 @@
+interface:
+  display_name: "DSH Theme Finder"
+  short_description: "Search the verified DSH-Themes catalog safely"
+  default_prompt: "Use $dsh-theme-finder to find a compatible verified DeepSeek Harness theme."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "DSH Theme Creator"
+  short_description: "Create deterministic, declarative DSH theme manifests"
+  default_prompt: "Use $dsh-theme-creator to create and validate a declarative DSH theme."
