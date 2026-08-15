@@ -19,5 +19,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
+      - name: Bootstrap the attested DSH runner
+        working-directory: skills/dsh-theme-manager/runtime
+        run: |
+          corepack enable
+          corepack pnpm install --frozen-lockfile --ignore-scripts
       - run: npm run validate
       - run: npm test
