@@ -31,7 +31,10 @@ Read [references/compatibility.md](references/compatibility.md) before changing 
    node <skill-dir>/scripts/theme-state.mjs inspect --input <plugin-list.json>
    ```
 
-The script fails on multiple theme packages or non-exact versions. Delete the temporary list after use.
+The script accepts the rc.6 root array only when it contains exactly one unambiguous
+`dsh-profile-web` record, then inspects that record's direct dependencies. It fails on
+duplicate or multiple profile records, multiple theme packages, or non-exact SemVer 2.0
+versions. Delete the temporary list after use.
 
 ## Validate the release record
 

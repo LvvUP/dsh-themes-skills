@@ -1,0 +1,21 @@
+[
+  {
+    "name": "dsh-profile-web",
+    "path": "/tmp/dsh-home/profiles/web",
+    "private": true,
+    "dependencies": {
+      "@dsh-themes/abyssal-maid": {
+        "from": "@dsh-themes/abyssal-maid",
+        "version": "1.0.0",
+        "resolved": "file:../../../../artifacts/abyssal-maid-1.0.0.tgz",
+        "path": "/tmp/dsh-home/profiles/web/node_modules/@dsh-themes/abyssal-maid"
+      },
+      "@dsh-themes/reasoning-tide": {
+        "from": "@dsh-themes/reasoning-tide",
+        "version": "1.0.0",
+        "resolved": "file:../../../../artifacts/reasoning-tide-1.0.0.tgz",
+        "path": "/tmp/dsh-home/profiles/web/node_modules/@dsh-themes/reasoning-tide"
+      }
+    }
+  }
+]

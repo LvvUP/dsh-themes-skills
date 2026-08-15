@@ -3,8 +3,9 @@
 import { readFile } from 'node:fs/promises';
 import { isAbsolute, resolve } from 'node:path';
 
+import { isExactSemver } from './semver.mjs';
+
 const PACKAGE = /^@dsh-themes\/[a-z0-9]+(?:[._-][a-z0-9]+)*$/;
-const VERSION = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 const SHA256 = /^[0-9a-f]{64}$/;
 
 function parseArgs(argv) {
@@ -24,17 +25,53 @@ async function loadJson(path) {
   return JSON.parse(await readFile(resolve(path), 'utf8'));
 }
 
+function dependencyEntries(dependencies) {
+  if (!dependencies || typeof dependencies !== 'object' || Array.isArray(dependencies)) {
+    throw new Error('Profile dependencies must be an object when present');
+  }
+  return Object.entries(dependencies).map(([name, dependency]) => ({
+    name,
+    version: typeof dependency === 'string' ? dependency : dependency?.resolvedVersion ?? dependency?.version,
+    direct: dependency?.direct,
+  }));
+}
+
+function looksLikeProfile(entry) {
+  return Boolean(
+    entry &&
+    typeof entry === 'object' &&
+    !Array.isArray(entry) &&
+    !PACKAGE.test(entry.name) &&
+    (
+      entry.name?.startsWith('dsh-profile-') ||
+      typeof entry.path === 'string' ||
+      typeof entry.private === 'boolean' ||
+      Object.hasOwn(entry, 'dependencies')
+    )
+  );
+}
+
+function profileEntries(profiles) {
+  if (profiles.length !== 1 || !profiles.every(looksLikeProfile)) {
+    throw new Error('Expected exactly one unambiguous rc.6 profile record');
+  }
+  const [profile] = profiles;
+  if (profile.name !== 'dsh-profile-web') {
+    throw new Error(`Expected the web profile record, received ${String(profile.name)}`);
+  }
+  return profile.dependencies === undefined ? [] : dependencyEntries(profile.dependencies);
+}
+
 function normalizedThemes(input) {
   let entries = [];
-  if (Array.isArray(input)) entries = input;
+  if (Array.isArray(input)) {
+    const profileCount = input.filter(looksLikeProfile).length;
+    entries = profileCount > 0 ? profileEntries(input) : input;
+  }
   else if (Array.isArray(input?.plugins)) entries = input.plugins;
   else if (Array.isArray(input?.items)) entries = input.items;
   else if (input?.dependencies && typeof input.dependencies === 'object') {
-    entries = Object.entries(input.dependencies).map(([name, dependency]) => ({
-      name,
-      version: typeof dependency === 'string' ? dependency : dependency?.resolvedVersion ?? dependency?.version,
-      direct: dependency?.direct,
-    }));
+    entries = dependencyEntries(input.dependencies);
   } else if (input && typeof input === 'object') {
     entries = Object.entries(input).map(([name, version]) => ({ name, version }));
   }
@@ -52,7 +89,7 @@ function inspect(input) {
   const themes = normalizedThemes(input);
   for (const theme of themes) {
     if (!PACKAGE.test(theme.name)) throw new Error(`Invalid DSH-Themes package name: ${theme.name}`);
-    if (typeof theme.version !== 'string' || !VERSION.test(theme.version)) {
+    if (!isExactSemver(theme.version)) {
       throw new Error(`Theme ${theme.name} does not have an exact semantic version`);
     }
   }
@@ -70,7 +107,7 @@ function artifact(values, prefix) {
   if (present !== 4) throw new Error(`${prefix} requires name, version, artifact, and sha256 together`);
   const normalizedPath = resolve(artifactPath);
   if (!PACKAGE.test(name)) throw new Error(`Invalid ${prefix} package name`);
-  if (!VERSION.test(version)) throw new Error(`Invalid ${prefix} exact version`);
+  if (!isExactSemver(version)) throw new Error(`Invalid ${prefix} exact version`);
   if (!isAbsolute(artifactPath)) throw new Error(`${prefix} artifact must use an absolute path`);
   if (!SHA256.test(sha256)) throw new Error(`Invalid ${prefix} sha256`);
   return { packageName: name, version, artifactPath: normalizedPath, artifactSha256: sha256 };
@@ -79,7 +116,7 @@ function artifact(values, prefix) {
 function validateEntry(entry, allowNull = false) {
   if (entry === null && allowNull) return null;
   if (!entry || typeof entry !== 'object') throw new Error('Invalid rollback artifact entry');
-  if (!PACKAGE.test(entry.packageName) || !VERSION.test(entry.version) || !isAbsolute(entry.artifactPath) || !SHA256.test(entry.artifactSha256)) {
+  if (!PACKAGE.test(entry.packageName) || !isExactSemver(entry.version) || !isAbsolute(entry.artifactPath) || !SHA256.test(entry.artifactSha256)) {
     throw new Error('Rollback artifact entry is malformed');
   }
   return {

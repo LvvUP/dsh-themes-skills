@@ -3,6 +3,8 @@
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
+import { isExactSemver } from './semver.mjs';
+
 const CURRENT = Object.freeze({
   dshPackageVersion: '0.1.0-rc.6',
   dshPackageIntegrity: 'sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==',
@@ -17,7 +19,6 @@ const HISTORICAL = Object.freeze({
 });
 const SHA256 = /^[0-9a-f]{64}$/;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const VERSION = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 
 function fail(message) {
   throw new Error(message);
@@ -88,7 +89,7 @@ function checkIntegrity(sha256, integrity, name) {
 
 function validateV2(record, manifest, origin) {
   if (manifest.kind !== 'theme' && manifest.kind !== 'full-skin') fail('V2 kind must be theme or full-skin');
-  if (!SLUG.test(manifest.slug) || !VERSION.test(manifest.version)) fail('V2 slug or version is invalid');
+  if (!SLUG.test(manifest.slug) || !isExactSemver(manifest.version)) fail('V2 slug or version is invalid');
 
   const compatibility = object(manifest.compatibility, 'manifest.compatibility');
   for (const [key, expected] of Object.entries(CURRENT)) {
@@ -131,7 +132,7 @@ function validateV2(record, manifest, origin) {
 }
 
 function validateV1(record, manifest, origin) {
-  if (!SLUG.test(manifest.slug) || !VERSION.test(manifest.version)) fail('V1 slug or version is invalid');
+  if (!SLUG.test(manifest.slug) || !isExactSemver(manifest.version)) fail('V1 slug or version is invalid');
   const compatibility = object(manifest.compatibility, 'manifest.compatibility');
   exact(compatibility.deepseekHarnessVersion, HISTORICAL.dshVersion, 'compatibility.deepseekHarnessVersion');
   exact(compatibility.deepseekHarnessCommit, HISTORICAL.commit, 'compatibility.deepseekHarnessCommit');

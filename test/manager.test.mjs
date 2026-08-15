@@ -7,11 +7,13 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import test from 'node:test';
 
+import { isExactSemver } from '../skills/dsh-theme-manager/scripts/semver.mjs';
 import { run } from './helpers.mjs';
 
 const state = resolve('skills/dsh-theme-manager/scripts/theme-state.mjs');
 const verifier = resolve('skills/dsh-theme-manager/scripts/fetch-and-verify.mjs');
 const releaseValidator = resolve('skills/dsh-theme-manager/scripts/validate-release.mjs');
+const fixture = (name) => resolve('test/fixtures', name);
 const shaA = 'a'.repeat(64);
 const shaB = 'b'.repeat(64);
 const shaC = 'c'.repeat(64);
@@ -233,6 +235,73 @@ test('multiple active theme packages are a hard conflict', async () => {
   }
 });
 
+test('theme state parses the rc.6 root profile array and rejects ambiguous profiles', async (t) => {
+  await t.test('recognizes the built-in state from the empty profile fixture', async () => {
+    const result = await run(state, [
+      'inspect', '--input', fixture('dsh-rc6-plugin-list-empty.json'),
+    ]);
+    assert.equal(result.code, 0, result.stderr);
+    assert.deepEqual(JSON.parse(result.stdout), {
+      profile: 'web',
+      count: 0,
+      active: null,
+    });
+  });
+
+  await t.test('recognizes one direct theme from the profile dependencies', async () => {
+    const result = await run(state, [
+      'inspect', '--input', fixture('dsh-rc6-plugin-list-one-theme.json'),
+    ]);
+    assert.equal(result.code, 0, result.stderr);
+    assert.deepEqual(JSON.parse(result.stdout), {
+      profile: 'web',
+      count: 1,
+      active: {
+        name: '@dsh-themes/abyssal-maid',
+        version: '1.0.0',
+        direct: true,
+      },
+    });
+  });
+
+  await t.test('treats two direct themes in the profile as a hard conflict', async () => {
+    const result = await run(state, [
+      'inspect', '--input', fixture('dsh-rc6-plugin-list-two-themes.json'),
+    ]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /Multiple DSH-Themes packages/);
+  });
+
+  await t.test('rejects duplicate profile records instead of merging them', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-duplicate-profile-'));
+    try {
+      const profile = JSON.parse(await readFile(fixture('dsh-rc6-plugin-list-one-theme.json'), 'utf8'))[0];
+      const input = await writeJson(directory, 'duplicate.json', [profile, profile]);
+      const result = await run(state, ['inspect', '--input', input]);
+      assert.notEqual(result.code, 0);
+      assert.match(result.stderr, /exactly one unambiguous rc\.6 profile record/);
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+
+  await t.test('rejects a non-web profile record', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-wrong-profile-'));
+    try {
+      const input = await writeJson(directory, 'wrong.json', [{
+        name: 'dsh-profile-other',
+        path: '/tmp/dsh-home/profiles/other',
+        private: true,
+      }]);
+      const result = await run(state, ['inspect', '--input', input]);
+      assert.notEqual(result.code, 0);
+      assert.match(result.stderr, /Expected the web profile record/);
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+});
+
 test('theme state accepts one exact direct package and rejects ranges', async (t) => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-state-'));
   try {
@@ -254,7 +323,13 @@ test('theme state accepts one exact direct package and rejects ranges', async (t
       },
     });
 
-    for (const [name, version] of [['range', '^1.2.3'], ['empty-prerelease', '1.2.3-alpha..1']]) {
+    for (const [name, version] of [
+      ['range', '^1.2.3'],
+      ['empty-prerelease', '1.2.3-alpha..1'],
+      ['only-empty-prerelease-identifiers', '1.2.3-..'],
+      ['numeric-prerelease-leading-zero', '1.2.3-alpha.01'],
+      ['empty-build-identifier', '1.2.3+build..1'],
+    ]) {
       await t.test(name, async () => {
         const input = await writeJson(directory, `${name}.json`, {
           dependencies: { '@dsh-themes/ocean-workbench': version },
@@ -266,6 +341,16 @@ test('theme state accepts one exact direct package and rejects ranges', async (t
     }
   } finally {
     await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test('manager exact-version checks implement the shared SemVer 2.0 vectors', async () => {
+  const vectors = JSON.parse(await readFile(fixture('semver-vectors.json'), 'utf8'));
+  for (const version of vectors.valid) {
+    assert.equal(isExactSemver(version), true, `expected valid SemVer: ${version}`);
+  }
+  for (const version of vectors.invalid) {
+    assert.equal(isExactSemver(version), false, `expected invalid SemVer: ${version}`);
   }
 });
 
