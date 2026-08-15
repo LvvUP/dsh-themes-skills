@@ -6,7 +6,7 @@
 - Compatibility is exactly DeepSeek Harness `0.1.0-rc.6` with the verified token and selector catalog hashes.
 - The author name and copyright source type, declaration, and optional HTTPS source URL are accurate.
 - The license identifier, fixed license URL, commercial-use status, attribution duty, and share-alike duty are explicit and mutually consistent.
-- The license covers the manifest and all submitted art; licensed third-party art includes a fixed source revision when available, attribution, and a fixed NOTICE URL. These declarations still require moderation and do not prove permission.
+- The license covers the manifest and all submitted art; licensed third-party art includes a fixed source revision when available, attribution of no more than 256 characters, and a fixed NOTICE URL. These declarations still require moderation and do not prove permission.
 - Noncommercial art is understood to be external-showcase-only in the current sponsored site context unless separate rights clearance is documented.
 - The manifest contains no code, CSS, HTML, dependencies, lifecycle script, font, SVG, external runtime asset, credential, or secret.
 - The author manifest contains neither `payload` nor `artifact`; the trusted publisher may add both to a release sidecar, and publication readiness trusts only the complete `.tgz` artifact digest.

@@ -6,6 +6,7 @@ import { isAbsolute, resolve } from 'node:path';
 import { isExactSemver } from './semver.mjs';
 
 const MAX_BYTES = 2 * 1024 * 1024;
+const MAX_ATTRIBUTION_LENGTH = 256;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const SHA256 = /^[0-9a-f]{64}$/;
 const SOURCE_REVISION = /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/;
@@ -114,7 +115,7 @@ function normalizeLicense(item) {
 
 function normalizeAttributions(value) {
   if (!Array.isArray(value) || value.length > 20) return null;
-  const entries = value.map((entry) => safeText(entry, 160));
+  const entries = value.map((entry) => safeText(entry, MAX_ATTRIBUTION_LENGTH));
   if (entries.some((entry) => !entry) || new Set(entries).size !== entries.length) return null;
   return entries;
 }

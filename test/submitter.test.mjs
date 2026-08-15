@@ -8,6 +8,7 @@ import { run, writeAuthoring } from './helpers.mjs';
 
 const creator = resolve('skills/dsh-theme-creator/scripts/create-manifest.mjs');
 const submitter = resolve('skills/dsh-theme-submitter/scripts/validate-submission.mjs');
+const redlineAttribution = 'Clean-room original artwork generated for DSH-Themes; experimental full-skin concept inspired by the general idea of dsh-ui, without copying its code or protected media.';
 
 test('submitter validates locally and returns a credential-free browser handoff', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-submit-'));
@@ -37,13 +38,14 @@ test('submitter routes noncommercial manifests to showcase-only review', async (
     copyright: {
       source: 'licensed', sourceUrl: `https://example.com/source/${revision}`,
       sourceRevision: revision, noticeUrl: `https://example.com/source/${revision}/NOTICE`,
-      attribution: 'Artist', aiGenerated: false,
+      attribution: redlineAttribution, aiGenerated: false,
     },
   });
   const manifest = join(directory, 'manifest.json');
   assert.equal((await run(creator, ['--input', input, '--output', manifest])).code, 0);
   const result = await run(submitter, ['--manifest', manifest, '--site', 'https://themes.example']);
   assert.equal(result.code, 0, result.stderr);
+  assert.equal(redlineAttribution.length, 169);
   assert.equal(JSON.parse(result.stdout).distributionEligibility, 'external-showcase-only');
 
   const altered = JSON.parse(await readFile(manifest, 'utf8'));
@@ -61,6 +63,13 @@ test('submitter routes noncommercial manifests to showcase-only review', async (
   const attributionResult = await run(submitter, ['--manifest', malformedAttribution, '--site', 'https://themes.example']);
   assert.notEqual(attributionResult.code, 0);
   assert.match(attributionResult.stderr, /copyright\.attribution is invalid/);
+
+  altered.copyright.attribution = 'a'.repeat(257);
+  const oversizedAttribution = join(directory, 'oversized-attribution.json');
+  await writeFile(oversizedAttribution, JSON.stringify(altered));
+  const oversizedResult = await run(submitter, ['--manifest', oversizedAttribution, '--site', 'https://themes.example']);
+  assert.notEqual(oversizedResult.code, 0);
+  assert.match(oversizedResult.stderr, /copyright\.attribution is invalid/);
 });
 
 test('submitter rejects publication metadata and secret-like fields', async () => {

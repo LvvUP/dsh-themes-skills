@@ -24,6 +24,7 @@ const ASSET_ROLE = new Set(['background', 'sidebar', 'card', 'preview-light', 'p
 const REQUIRED_ROLES = ['background', 'sidebar', 'card', 'preview-light', 'preview-dark'];
 const PRESET = new Set(['glass', 'outline', 'glow']);
 const MAX_ASSET_BYTES = 10 * 1024 * 1024;
+const MAX_ATTRIBUTION_LENGTH = 256;
 
 const COMPATIBILITY = {
   dshPackageVersion: '0.1.0-rc.6',
@@ -294,7 +295,7 @@ async function main() {
         ...(copyright.sourceUrl ? { sourceUrl: httpsUrl(copyright.sourceUrl, 'copyright.sourceUrl') } : {}),
         ...(copyright.sourceRevision ? { sourceRevision: copyright.sourceRevision } : {}),
         ...(copyright.noticeUrl ? { noticeUrl: httpsUrl(copyright.noticeUrl, 'copyright.noticeUrl') } : {}),
-        ...(copyright.attribution ? { attribution: text(copyright.attribution, 'copyright.attribution', 500) } : {}),
+        ...(copyright.attribution ? { attribution: text(copyright.attribution, 'copyright.attribution', MAX_ATTRIBUTION_LENGTH) } : {}),
         aiGenerated: copyright.aiGenerated,
       },
       visual: {

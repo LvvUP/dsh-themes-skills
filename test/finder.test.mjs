@@ -13,6 +13,7 @@ const tokenHash = 'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb
 const selectorHash = '5bcd9f874095af2114d86f91301868c6b0f2cebe58f51b9919150975d406baa3';
 const dshIntegrity = 'sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==';
 const frontendSha256 = 'a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68';
+const redlineAttribution = 'Clean-room original artwork generated for DSH-Themes; experimental full-skin concept inspired by the general idea of dsh-ui, without copying its code or protected media.';
 
 function item(overrides = {}) {
   const sha256 = 'a'.repeat(64);
@@ -150,6 +151,33 @@ test('finder fails individual malformed provenance without crashing query search
   const result = await run(finder, ['--catalog', catalog, '--query', 'ignore']);
   assert.equal(result.code, 0, result.stderr);
   assert.equal(JSON.parse(result.stdout).count, 0);
+});
+
+test('finder accepts the 169-character built-in attribution and rejects entries above 256 characters', async (t) => {
+  assert.equal(redlineAttribution.length, 169);
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-finder-attribution-boundary-'));
+
+  await t.test('accepts the redline-02 attribution', async () => {
+    const catalog = join(directory, 'valid.json');
+    await writeFile(catalog, JSON.stringify({ items: [
+      item({ provenance: { source: 'original', attributions: [redlineAttribution] } }),
+    ] }));
+    const result = await run(finder, ['--catalog', catalog]);
+    assert.equal(result.code, 0, result.stderr);
+    const output = JSON.parse(result.stdout);
+    assert.equal(output.count, 1);
+    assert.deepEqual(output.items[0].provenance.attributions, [redlineAttribution]);
+  });
+
+  await t.test('rejects a 257-character attribution', async () => {
+    const catalog = join(directory, 'too-long.json');
+    await writeFile(catalog, JSON.stringify({ items: [
+      item({ provenance: { source: 'original', attributions: ['a'.repeat(257)] } }),
+    ] }));
+    const result = await run(finder, ['--catalog', catalog]);
+    assert.equal(result.code, 0, result.stderr);
+    assert.equal(JSON.parse(result.stdout).count, 0);
+  });
 });
 
 test('finder and manager enforce the same SemVer 2.0 vectors', async () => {

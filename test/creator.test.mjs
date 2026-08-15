@@ -11,6 +11,7 @@ import { run, tokens, writeAuthoring } from './helpers.mjs';
 
 const creator = resolve('skills/dsh-theme-creator/scripts/create-manifest.mjs');
 const hasher = resolve('skills/dsh-theme-creator/scripts/hash-file.mjs');
+const redlineAttribution = 'Clean-room original artwork generated for DSH-Themes; experimental full-skin concept inspired by the general idea of dsh-ui, without copying its code or protected media.';
 
 test('schema generator is deterministic and pins rc.6', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-'));
@@ -55,7 +56,7 @@ test('creator records fixed third-party provenance and license restrictions', as
       sourceUrl: `https://example.com/source/${revision}`,
       sourceRevision: revision,
       noticeUrl: `https://example.com/source/${revision}/NOTICE`,
-      attribution: 'Original Artist; Derivative Artist',
+      attribution: redlineAttribution,
       aiGenerated: false,
     },
   });
@@ -66,6 +67,8 @@ test('creator records fixed third-party provenance and license restrictions', as
   assert.equal(manifest.licensePolicy.commercialUse, 'prohibited');
   assert.equal(manifest.copyright.sourceRevision, revision);
   assert.equal(manifest.copyright.noticeUrl, `https://example.com/source/${revision}/NOTICE`);
+  assert.equal(redlineAttribution.length, 169);
+  assert.equal(manifest.copyright.attribution, redlineAttribution);
 });
 
 test('creator rejects missing or misleading rights metadata', async (t) => {
@@ -117,6 +120,20 @@ test('creator rejects missing or misleading rights metadata', async (t) => {
     const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
     assert.notEqual(result.code, 0);
     assert.match(result.stderr, /sourceUrl must contain/);
+  });
+
+  await t.test('attribution longer than 256 characters', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-attribution-length-'));
+    const input = await writeAuthoring(directory, {
+      copyright: {
+        source: 'licensed', sourceUrl: 'https://example.com/source',
+        noticeUrl: 'https://example.com/source/NOTICE',
+        attribution: 'a'.repeat(257), aiGenerated: false,
+      },
+    });
+    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /copyright\.attribution is invalid/);
   });
 });
 

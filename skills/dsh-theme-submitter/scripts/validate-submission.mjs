@@ -25,6 +25,7 @@ const SOURCE_REVISION = /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/;
 const COLOR = /^#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?$/;
 const CONTENT_PATH = /^assets\/([a-f0-9]{64})\.webp$/;
 const FORBIDDEN = /^(?:scripts?|dependencies|devDependencies|peerDependencies|optionalDependencies|lifecycle|css|html|javascript|code|package|artifact|payload|api[-_]?key|cookie|password|authorization|secret|session|credential|accessToken|refreshToken)$/i;
+const MAX_ATTRIBUTION_LENGTH = 256;
 
 function parseArgs(argv) {
   const values = {};
@@ -174,7 +175,7 @@ if (manifest.kind === 'theme') {
   if (
     copyright.attribution !== undefined &&
     (typeof copyright.attribution !== 'string' || copyright.attribution !== copyright.attribution.trim() ||
-      !copyright.attribution || copyright.attribution.length > 500 || /[\u0000-\u001f\u007f<>]/.test(copyright.attribution))
+      !copyright.attribution || copyright.attribution.length > MAX_ATTRIBUTION_LENGTH || /[\u0000-\u001f\u007f<>]/.test(copyright.attribution))
   ) throw new Error('copyright.attribution is invalid');
   if (copyright.source === 'generated' && copyright.aiGenerated !== true) throw new Error('generated art must declare aiGenerated true');
   if (copyright.source === 'licensed' && !copyright.sourceUrl && !copyright.attribution) throw new Error('licensed art requires sourceUrl or attribution');
