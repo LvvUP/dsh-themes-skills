@@ -41,6 +41,7 @@ function looksLikeProfile(entry) {
     entry &&
     typeof entry === 'object' &&
     !Array.isArray(entry) &&
+    typeof entry.name === 'string' &&
     !PACKAGE.test(entry.name) &&
     (
       entry.name?.startsWith('dsh-profile-') ||
@@ -64,10 +65,7 @@ function profileEntries(profiles) {
 
 function normalizedThemes(input) {
   let entries = [];
-  if (Array.isArray(input)) {
-    const profileCount = input.filter(looksLikeProfile).length;
-    entries = profileCount > 0 ? profileEntries(input) : input;
-  }
+  if (Array.isArray(input)) entries = profileEntries(input);
   else if (Array.isArray(input?.plugins)) entries = input.plugins;
   else if (Array.isArray(input?.items)) entries = input.items;
   else if (input?.dependencies && typeof input.dependencies === 'object') {

@@ -300,6 +300,23 @@ test('theme state parses the rc.6 root profile array and rejects ambiguous profi
       await rm(directory, { recursive: true, force: true });
     }
   });
+
+  await t.test('rejects empty or plugin-shaped root arrays as ambiguous', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-ambiguous-profile-'));
+    try {
+      for (const [name, payload] of [
+        ['empty', []],
+        ['plugin-shaped', [{ name: '@dsh-themes/abyssal-maid', version: '1.0.0' }]],
+      ]) {
+        const input = await writeJson(directory, `${name}.json`, payload);
+        const result = await run(state, ['inspect', '--input', input]);
+        assert.notEqual(result.code, 0);
+        assert.match(result.stderr, /exactly one unambiguous rc\.6 profile record/);
+      }
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
 });
 
 test('theme state accepts one exact direct package and rejects ranges', async (t) => {
