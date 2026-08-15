@@ -55,6 +55,12 @@ export async function writeAuthoring(directory, overrides = {}) {
     category: 'illustrated',
     version: '1.0.0',
     license: 'CC-BY-4.0',
+    licensePolicy: {
+      url: 'https://creativecommons.org/licenses/by/4.0/',
+      commercialUse: 'allowed',
+      attributionRequired: true,
+      shareAlikeRequired: false,
+    },
     author: { name: 'Test Author', url: 'https://example.com/' },
     copyright: { source: 'original', aiGenerated: false },
     compatibility: { dshPackageVersion: '0.1.0-rc.6' },

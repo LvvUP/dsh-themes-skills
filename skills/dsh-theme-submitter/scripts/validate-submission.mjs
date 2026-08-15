@@ -21,6 +21,7 @@ const SHA256 = /^[0-9a-f]{64}$/;
 const VERSION = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const LICENSE = /^[A-Za-z0-9][A-Za-z0-9.+() -]{0,79}$/;
+const SOURCE_REVISION = /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/;
 const COLOR = /^#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?$/;
 const CONTENT_PATH = /^assets\/([a-f0-9]{64})\.webp$/;
 const FORBIDDEN = /^(?:scripts?|dependencies|devDependencies|peerDependencies|optionalDependencies|lifecycle|css|html|javascript|code|package|artifact|payload|api[-_]?key|cookie|password|authorization|secret|session|credential|accessToken|refreshToken)$/i;
@@ -92,6 +93,28 @@ function validateCompatibility(value) {
   for (const [key, expected] of Object.entries(COMPATIBILITY)) if (input[key] !== expected) throw new Error(`compatibility.${key} is not the verified rc.6 value`);
 }
 
+function validateLicensePolicy(value, identifier) {
+  const policy = object(value, 'licensePolicy', ['url', 'commercialUse', 'attributionRequired', 'shareAlikeRequired']);
+  if (typeof policy.url !== 'string') throw new Error('licensePolicy.url is required');
+  optionalHttps(policy.url, 'licensePolicy.url');
+  if (!['allowed', 'prohibited', 'rights-clearance-required'].includes(policy.commercialUse)) {
+    throw new Error('licensePolicy.commercialUse must be allowed, prohibited, or rights-clearance-required');
+  }
+  if (typeof policy.attributionRequired !== 'boolean' || typeof policy.shareAlikeRequired !== 'boolean') {
+    throw new Error('licensePolicy attributionRequired and shareAlikeRequired must be booleans');
+  }
+  if (/(?:^|-)NC(?:-|$)/i.test(identifier) && policy.commercialUse !== 'prohibited') {
+    throw new Error('A noncommercial license must declare commercialUse prohibited');
+  }
+  if (/(?:^|-)BY(?:-|$)/i.test(identifier) && policy.attributionRequired !== true) {
+    throw new Error('An attribution license must declare attributionRequired true');
+  }
+  if (/(?:^|-)SA(?:-|$)/i.test(identifier) && policy.shareAlikeRequired !== true) {
+    throw new Error('A share-alike license must declare shareAlikeRequired true');
+  }
+  return policy;
+}
+
 function validateTokens(value) {
   const input = object(value, 'tokens');
   if (Object.keys(input).length !== TOKENS.length || Object.keys(input).some((name) => !TOKENS.includes(name))) throw new Error('tokens must contain exactly the 13-token catalog');
@@ -119,7 +142,7 @@ const manifest = JSON.parse(bytes.toString('utf8'));
 object(manifest, 'manifest');
 inspectKeys(manifest);
 
-const commonKeys = ['schemaVersion', 'kind', 'slug', 'name', 'description', 'category', 'author', 'license', 'version', 'compatibility', 'tokens', 'preview'];
+const commonKeys = ['schemaVersion', 'kind', 'slug', 'name', 'description', 'category', 'author', 'license', 'licensePolicy', 'version', 'compatibility', 'tokens', 'preview'];
 const allowedRoot = manifest.kind === 'full-skin' ? [...commonKeys, 'copyright', 'visual', 'assets'] : commonKeys;
 for (const key of Object.keys(manifest)) if (!allowedRoot.includes(key)) throw new Error(`manifest.${key} is not allowed`);
 if (manifest.schemaVersion !== '2.0') throw new Error('schemaVersion must equal 2.0');
@@ -130,6 +153,7 @@ if (
   typeof manifest.license !== 'string' || manifest.license !== manifest.license.trim() ||
   !LICENSE.test(manifest.license)
 ) throw new Error('license is required and must be a concise SPDX or LicenseRef identifier (maximum 80 characters)');
+const licensePolicy = validateLicensePolicy(manifest.licensePolicy, manifest.license);
 if (typeof manifest.name !== 'string' || !manifest.name.trim() || typeof manifest.description !== 'string' || !manifest.description.trim()) throw new Error('name and description are required');
 if (manifest.category !== undefined && (typeof manifest.category !== 'string' || !manifest.category.trim() || manifest.category.length > 80 || /[\u0000-\u001f\u007f<>]/.test(manifest.category))) throw new Error('category is invalid');
 object(manifest.author, 'author', ['name', 'url']);
@@ -143,11 +167,33 @@ if (manifest.kind === 'theme') {
   const preview = object(manifest.preview, 'preview', ['light', 'dark', 'surface']);
   previewUrl(preview.light, 'preview.light'); previewUrl(preview.dark, 'preview.dark');
 } else {
-  const copyright = object(manifest.copyright, 'copyright', ['source', 'sourceUrl', 'attribution', 'aiGenerated']);
+  const copyright = object(manifest.copyright, 'copyright', ['source', 'sourceUrl', 'sourceRevision', 'noticeUrl', 'attribution', 'aiGenerated']);
   if (!['original', 'user-owned', 'licensed', 'public-domain', 'generated'].includes(copyright.source) || typeof copyright.aiGenerated !== 'boolean') throw new Error('complete copyright provenance is required');
   optionalHttps(copyright.sourceUrl, 'copyright.sourceUrl');
+  optionalHttps(copyright.noticeUrl, 'copyright.noticeUrl');
+  if (
+    copyright.attribution !== undefined &&
+    (typeof copyright.attribution !== 'string' || copyright.attribution !== copyright.attribution.trim() ||
+      !copyright.attribution || copyright.attribution.length > 500 || /[\u0000-\u001f\u007f<>]/.test(copyright.attribution))
+  ) throw new Error('copyright.attribution is invalid');
   if (copyright.source === 'generated' && copyright.aiGenerated !== true) throw new Error('generated art must declare aiGenerated true');
   if (copyright.source === 'licensed' && !copyright.sourceUrl && !copyright.attribution) throw new Error('licensed art requires sourceUrl or attribution');
+  if (copyright.sourceRevision !== undefined && !SOURCE_REVISION.test(copyright.sourceRevision)) throw new Error('copyright.sourceRevision must be a lowercase 40- or 64-character revision');
+  if (copyright.sourceRevision && !copyright.sourceUrl) throw new Error('copyright.sourceRevision requires sourceUrl');
+  if (copyright.sourceRevision) {
+    const sourceUrl = new URL(copyright.sourceUrl);
+    if (!sourceUrl.pathname.includes(copyright.sourceRevision)) throw new Error('copyright.sourceUrl must contain copyright.sourceRevision');
+    if (copyright.noticeUrl) {
+      const noticeUrl = new URL(copyright.noticeUrl);
+      if (noticeUrl.origin !== sourceUrl.origin || !noticeUrl.pathname.includes(copyright.sourceRevision)) {
+        throw new Error('copyright.noticeUrl must share the fixed source origin and revision');
+      }
+    }
+  }
+  if (
+    copyright.source === 'licensed' && licensePolicy.attributionRequired &&
+    (!copyright.attribution || !copyright.noticeUrl)
+  ) throw new Error('Attribution-required licensed art requires attribution and noticeUrl');
   const visual = object(manifest.visual, 'visual', ['preset', 'focus', 'surfaceOpacity', 'overlayOpacity', 'borderStrength', 'glowStrength']);
   if (!['glass', 'outline', 'glow'].includes(visual.preset)) throw new Error('invalid visual preset');
   const focus = object(visual.focus, 'visual.focus', ['x', 'y']);
@@ -190,7 +236,13 @@ process.stdout.write(`${JSON.stringify({
   ready: true, slug: manifest.slug, version: manifest.version, kind: manifest.kind,
   dshPackageVersion: manifest.compatibility.dshPackageVersion,
   manifestSha256: createHash('sha256').update(bytes).digest('hex'),
-  provisionalAssets, submissionUrl: submission.href,
+  provisionalAssets,
+  distributionEligibility: licensePolicy.commercialUse === 'allowed'
+    ? 'eligible-for-hosted-review'
+    : licensePolicy.commercialUse === 'prohibited'
+      ? 'external-showcase-only'
+      : 'rights-clearance-required',
+  submissionUrl: submission.href,
   next: provisionalAssets
     ? 'Sign in, upload the original raster files in Theme Studio, and let the website replace provisional URLs before moderation.'
     : 'Sign in in your browser, review the parsed declaration, and submit it for moderation.',

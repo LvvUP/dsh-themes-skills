@@ -87,6 +87,24 @@ function checkIntegrity(sha256, integrity, name) {
   if (integrity !== expected) fail(`${name}.integrity does not encode its SHA-256`);
 }
 
+function validateDistribution(value) {
+  const distribution = object(value, 'distribution');
+  const allowed = new Set(['kind', 'installability', 'redistribution', 'previewPolicy']);
+  for (const key of Object.keys(distribution)) {
+    if (!allowed.has(key)) fail(`distribution.${key} is not allowed`);
+  }
+  exact(distribution.kind, 'hosted-verified-artifact', 'distribution.kind');
+  exact(distribution.installability, 'manager', 'distribution.installability');
+  exact(distribution.redistribution, 'allowed', 'distribution.redistribution');
+  exact(distribution.previewPolicy, 'hosted', 'distribution.previewPolicy');
+  return {
+    kind: distribution.kind,
+    installability: distribution.installability,
+    redistribution: distribution.redistribution,
+    previewPolicy: distribution.previewPolicy,
+  };
+}
+
 function validateV2(record, manifest, origin) {
   if (manifest.kind !== 'theme' && manifest.kind !== 'full-skin') fail('V2 kind must be theme or full-skin');
   if (!SLUG.test(manifest.slug) || !isExactSemver(manifest.version)) fail('V2 slug or version is invalid');
@@ -165,9 +183,11 @@ if (!args.input) fail('--input is required');
 const record = object(JSON.parse(await readFile(resolve(args.input), 'utf8')), 'release record');
 const manifest = object(record.manifest, 'manifest');
 const origin = trustedOrigin(args.origin);
-const result = manifest.schemaVersion === '2.0'
+const distribution = validateDistribution(record.distribution);
+const validation = manifest.schemaVersion === '2.0'
   ? validateV2(record, manifest, origin)
   : manifest.schemaVersion === 1
     ? validateV1(record, manifest, origin)
     : fail('unsupported manifest schemaVersion');
+const result = { ...validation, distribution };
 process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);

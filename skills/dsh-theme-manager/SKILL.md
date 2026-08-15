@@ -11,6 +11,7 @@ Manage at most one verified `@dsh-themes/*` Cordis plugin in the `web` profile. 
 
 - Mutate the profile only with `dsh plugin --profile web`. Never edit `$DSH_HOME`, `~/.dsh`, a profile package file, lockfile, Harness `dist`, or `index.html`.
 - Accept a current installation only when its exact version, controlled download URL or explicit absolute local path, complete-artifact SHA-256, and manifest match the certified `0.1.0-rc.6` baseline.
+- Accept a catalog release record only when its distribution authorization is exactly `hosted-verified-artifact` + `manager` + `allowed` + `hosted`. Reject missing authorization, external showcases, link-only previews, rights-clearance-required entries, arbitrary repositories, and executable third-party packages even if they resemble a theme release.
 - Never execute a downloaded package, lifecycle script, author JavaScript, CSS, or HTML while verifying it.
 - Keep digest scopes separate. A complete `.tgz` `artifact` digest authorizes installation. A V2 `payload` digest covers the canonical tar excluding the manifest. A V1 `package` digest covers the canonical payload excluding `theme.json`. Neither payload digest authorizes a downloaded `.tgz`.
 - Recognize an exact rc.5/V1 release as historical, never as a current rc.6 package. Require its separately catalogued complete-artifact digest before any deliberate historical installation.
@@ -42,6 +43,12 @@ Build a permission-restricted JSON file containing the raw manifest and catalog 
 
 ```json
 {
+  "distribution": {
+    "kind": "hosted-verified-artifact",
+    "installability": "manager",
+    "redistribution": "allowed",
+    "previewPolicy": "hosted"
+  },
   "artifactUrl": "https://trusted.example/api/themes/example/download/1.1.0",
   "artifactSha256": "64 lowercase hex characters",
   "manifest": {}
@@ -56,7 +63,7 @@ node <skill-dir>/scripts/validate-release.mjs \
   --origin <trusted-https-origin>
 ```
 
-For a current V2 release, require `status: "current"`, `installableCurrent: true`, and `artifactSha256` equal to the manifest's complete `.tgz` `artifact.sha256`. The URL must be the same trusted origin and exactly `/api/themes/<slug>/download/<version>` with no credentials, query, or fragment. A V2 package-internal manifest may omit `artifact`; it is informative only and cannot authorize installation by itself.
+For a current V2 release, require `status: "current"`, `installableCurrent: true`, the exact hosted distribution authorization echoed by the validator, and `artifactSha256` equal to the manifest's complete `.tgz` `artifact.sha256`. The URL must be the same trusted origin and exactly `/api/themes/<slug>/download/<version>` with no credentials, query, or fragment. A V2 package-internal manifest may omit `artifact`; it is informative only and cannot authorize installation by itself.
 
 `sourceCommit` must be absent or `null` for rc.6. Reject any supplied commit because npm did not expose a trustworthy source commit. Do not reuse the historical rc.5 source commit.
 

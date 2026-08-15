@@ -12,11 +12,12 @@ const TOKENS = [
   '--dsw-alias-label-secondary', '--dsw-alias-state-error-primary', '--dsw-alias-state-success-primary',
   '--dsw-alias-state-warn-primary', '--dsw-specific-sidebar-fill',
 ];
-const ROOT_KEYS = new Set(['schemaVersion', 'kind', 'slug', 'name', 'description', 'category', 'version', 'license', 'author', 'copyright', 'compatibility', 'tokens', 'assets', 'visual', 'preview']);
+const ROOT_KEYS = new Set(['schemaVersion', 'kind', 'slug', 'name', 'description', 'category', 'version', 'license', 'licensePolicy', 'author', 'copyright', 'compatibility', 'tokens', 'assets', 'visual', 'preview']);
 const FORBIDDEN_KEYS = /^(?:scripts?|dependencies|devDependencies|peerDependencies|optionalDependencies|lifecycle|css|html|javascript|code|package|artifact|payload)$/i;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const VERSION = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 const LICENSE = /^[A-Za-z0-9][A-Za-z0-9.+() -]{0,79}$/;
+const SOURCE_REVISION = /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/;
 const COLOR = /^#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?$/;
 const MIME = new Set(['image/webp']);
 const ASSET_ROLE = new Set(['background', 'sidebar', 'card', 'preview-light', 'preview-dark']);
@@ -69,6 +70,32 @@ function httpsUrl(value, label) {
   const url = new URL(text(value, label, 2048));
   if (url.protocol !== 'https:' || url.username || url.password) throw new Error(`${label} must be a credential-free HTTPS URL`);
   return url.href;
+}
+
+function normalizeLicensePolicy(value, identifier) {
+  const policy = object(value, 'licensePolicy', ['url', 'commercialUse', 'attributionRequired', 'shareAlikeRequired']);
+  if (typeof policy.url !== 'string') throw new Error('licensePolicy.url is required');
+  if (!['allowed', 'prohibited', 'rights-clearance-required'].includes(policy.commercialUse)) {
+    throw new Error('licensePolicy.commercialUse must be allowed, prohibited, or rights-clearance-required');
+  }
+  if (typeof policy.attributionRequired !== 'boolean' || typeof policy.shareAlikeRequired !== 'boolean') {
+    throw new Error('licensePolicy attributionRequired and shareAlikeRequired must be booleans');
+  }
+  if (/(?:^|-)NC(?:-|$)/i.test(identifier) && policy.commercialUse !== 'prohibited') {
+    throw new Error('A noncommercial license must declare commercialUse prohibited');
+  }
+  if (/(?:^|-)BY(?:-|$)/i.test(identifier) && policy.attributionRequired !== true) {
+    throw new Error('An attribution license must declare attributionRequired true');
+  }
+  if (/(?:^|-)SA(?:-|$)/i.test(identifier) && policy.shareAlikeRequired !== true) {
+    throw new Error('A share-alike license must declare shareAlikeRequired true');
+  }
+  return {
+    url: httpsUrl(policy.url, 'licensePolicy.url'),
+    commercialUse: policy.commercialUse,
+    attributionRequired: policy.attributionRequired,
+    shareAlikeRequired: policy.shareAlikeRequired,
+  };
 }
 
 function previewUrl(value, label) {
@@ -190,7 +217,10 @@ async function main() {
   if (!['theme', 'full-skin'].includes(source.kind)) throw new Error('kind must be theme or full-skin');
   if (!SLUG.test(source.slug) || source.slug.length > 64) throw new Error('slug must be lowercase kebab-case');
   if (!VERSION.test(source.version)) throw new Error('version must be exact semantic version');
-  if (!LICENSE.test(source.license)) throw new Error('license must be a concise SPDX or LicenseRef identifier');
+  if (typeof source.license !== 'string' || source.license !== source.license.trim() || !LICENSE.test(source.license)) {
+    throw new Error('license must be a concise SPDX or LicenseRef identifier');
+  }
+  const licensePolicy = normalizeLicensePolicy(source.licensePolicy, source.license);
   object(source.compatibility, 'compatibility', ['dshPackageVersion']);
   if (source.compatibility.dshPackageVersion !== '0.1.0-rc.6') throw new Error('Only DSH 0.1.0-rc.6 is verified');
   const author = object(source.author, 'author', ['name', 'url']);
@@ -199,7 +229,7 @@ async function main() {
     name: text(source.name, 'name', 120), description: text(source.description, 'description', 1000),
     ...(source.category ? { category: text(source.category, 'category', 80) } : {}),
     author: { name: text(author.name, 'author.name', 100), ...(author.url ? { url: httpsUrl(author.url, 'author.url') } : {}) },
-    license: source.license, version: source.version, compatibility: COMPATIBILITY, tokens: normalizeTokens(source.tokens),
+    license: source.license, licensePolicy, version: source.version, compatibility: COMPATIBILITY, tokens: normalizeTokens(source.tokens),
   };
 
   let manifest;
@@ -216,10 +246,32 @@ async function main() {
     };
   } else {
     if (source.preview) throw new Error('full-skin preview is derived from local assets');
-    const copyright = object(source.copyright, 'copyright', ['source', 'sourceUrl', 'attribution', 'aiGenerated']);
+    const copyright = object(source.copyright, 'copyright', ['source', 'sourceUrl', 'sourceRevision', 'noticeUrl', 'attribution', 'aiGenerated']);
     if (!['original', 'user-owned', 'licensed', 'public-domain', 'generated'].includes(copyright.source) || typeof copyright.aiGenerated !== 'boolean') throw new Error('copyright source and aiGenerated are required');
     if (copyright.source === 'generated' && copyright.aiGenerated !== true) throw new Error('generated art must declare aiGenerated true');
     if (copyright.source === 'licensed' && !copyright.sourceUrl && !copyright.attribution) throw new Error('licensed art requires sourceUrl or attribution');
+    if (copyright.sourceRevision !== undefined && !SOURCE_REVISION.test(copyright.sourceRevision)) {
+      throw new Error('copyright.sourceRevision must be a lowercase 40- or 64-character revision');
+    }
+    if (copyright.sourceRevision && !copyright.sourceUrl) throw new Error('copyright.sourceRevision requires sourceUrl');
+    if (copyright.sourceRevision) {
+      const sourceUrl = new URL(httpsUrl(copyright.sourceUrl, 'copyright.sourceUrl'));
+      if (!sourceUrl.pathname.includes(copyright.sourceRevision)) {
+        throw new Error('copyright.sourceUrl must contain copyright.sourceRevision');
+      }
+      if (copyright.noticeUrl) {
+        const noticeUrl = new URL(httpsUrl(copyright.noticeUrl, 'copyright.noticeUrl'));
+        if (noticeUrl.origin !== sourceUrl.origin || !noticeUrl.pathname.includes(copyright.sourceRevision)) {
+          throw new Error('copyright.noticeUrl must share the fixed source origin and revision');
+        }
+      }
+    }
+    if (
+      copyright.source === 'licensed' && licensePolicy.attributionRequired &&
+      (!copyright.attribution || !copyright.noticeUrl)
+    ) {
+      throw new Error('Attribution-required licensed art requires attribution and noticeUrl');
+    }
     const sourceAssets = source.assets;
     if (!Array.isArray(sourceAssets) || sourceAssets.length !== 5) throw new Error('full-skin requires the five local asset roles');
     const assets = [];
@@ -240,6 +292,8 @@ async function main() {
       copyright: {
         source: copyright.source,
         ...(copyright.sourceUrl ? { sourceUrl: httpsUrl(copyright.sourceUrl, 'copyright.sourceUrl') } : {}),
+        ...(copyright.sourceRevision ? { sourceRevision: copyright.sourceRevision } : {}),
+        ...(copyright.noticeUrl ? { noticeUrl: httpsUrl(copyright.noticeUrl, 'copyright.noticeUrl') } : {}),
         ...(copyright.attribution ? { attribution: text(copyright.attribution, 'copyright.attribution', 500) } : {}),
         aiGenerated: copyright.aiGenerated,
       },

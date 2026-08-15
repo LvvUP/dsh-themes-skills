@@ -2,6 +2,19 @@
 
 Treat every value as exact. A missing source commit is intentional: the published npm metadata for this release does not expose a trustworthy `gitHead`, so never invent or reuse one.
 
+An exact compatibility match is necessary but not sufficient for installation. The release record must also contain this exact catalog authorization:
+
+```json
+{
+  "kind": "hosted-verified-artifact",
+  "installability": "manager",
+  "redistribution": "allowed",
+  "previewPolicy": "hosted"
+}
+```
+
+Treat `external-showcase`, `showcase-only`, `link-only`, noncommercial, rights-clearance-required, missing, or unknown distribution values as non-installable. Do not inspect or execute an external repository to turn it into an installable record.
+
 | Field | Value |
 | --- | --- |
 | DeepSeek Harness package | `@deepseek-ai/dsh@0.1.0-rc.6` |

@@ -33,6 +33,12 @@ function integrity(sha256) {
 
 function currentRelease() {
   return {
+    distribution: {
+      kind: 'hosted-verified-artifact',
+      installability: 'manager',
+      redistribution: 'allowed',
+      previewPolicy: 'hosted',
+    },
     artifactUrl: `${trustedOrigin}/api/themes/ocean-workbench/download/1.1.0`,
     artifactSha256: shaA,
     manifest: {
@@ -61,6 +67,12 @@ function currentRelease() {
 
 function historicalRelease() {
   return {
+    distribution: {
+      kind: 'hosted-verified-artifact',
+      installability: 'manager',
+      redistribution: 'allowed',
+      previewPolicy: 'hosted',
+    },
     artifactUrl: `${trustedOrigin}/api/themes/paper-console/download/1.0.0`,
     artifactSha256: shaC,
     manifest: {
@@ -121,6 +133,7 @@ test('release validator separates current V2, historical V1, and artifact author
       assert.equal(output.sourceCommit, null);
       assert.equal(output.artifactSha256, shaA);
       assert.equal(output.payloadSha256, shaB);
+      assert.equal(output.distribution.kind, 'hosted-verified-artifact');
     });
 
     await t.test('accepts an explicit null rc.6 sourceCommit', async () => {
@@ -154,6 +167,27 @@ test('release validator separates current V2, historical V1, and artifact author
       const result = await validateRelease(directory, 'payload-only-v2.json', release);
       assert.notEqual(result.code, 0);
       assert.match(result.stderr, /manifest\.artifact must be an object/);
+    });
+
+    await t.test('refuses an external showcase even when it carries artifact-shaped fields', async () => {
+      const release = currentRelease();
+      release.distribution = {
+        kind: 'external-showcase',
+        installability: 'showcase-only',
+        redistribution: 'rights-clearance-required',
+        previewPolicy: 'link-only',
+      };
+      const result = await validateRelease(directory, 'external-showcase.json', release);
+      assert.notEqual(result.code, 0);
+      assert.match(result.stderr, /distribution\.kind/);
+    });
+
+    await t.test('fails closed when the distribution authorization is absent', async () => {
+      const release = currentRelease();
+      delete release.distribution;
+      const result = await validateRelease(directory, 'missing-distribution.json', release);
+      assert.notEqual(result.code, 0);
+      assert.match(result.stderr, /distribution must be an object/);
     });
 
     await t.test('requires the exact V2 payload and artifact digest scopes', async () => {
