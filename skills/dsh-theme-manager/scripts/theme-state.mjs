@@ -64,15 +64,10 @@ function profileEntries(profiles) {
 }
 
 function normalizedThemes(input) {
-  let entries = [];
-  if (Array.isArray(input)) entries = profileEntries(input);
-  else if (Array.isArray(input?.plugins)) entries = input.plugins;
-  else if (Array.isArray(input?.items)) entries = input.items;
-  else if (input?.dependencies && typeof input.dependencies === 'object') {
-    entries = dependencyEntries(input.dependencies);
-  } else if (input && typeof input === 'object') {
-    entries = Object.entries(input).map(([name, version]) => ({ name, version }));
+  if (!Array.isArray(input)) {
+    throw new Error('Expected the rc.6 plugin list root array');
   }
+  const entries = profileEntries(input);
 
   return entries
     .map((entry) => ({

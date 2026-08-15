@@ -63,39 +63,44 @@ function validateRemoteUrl(value, origin, expectedPath) {
 
 async function readRemote(source, originValue) {
   const origin = trustedOrigin(originValue);
-  let current = validateRemoteUrl(source, origin);
+  const current = validateRemoteUrl(source, origin);
   const controlledPath = current.pathname;
-  let cookie;
 
-  for (let redirectCount = 0; redirectCount <= 5; redirectCount += 1) {
-    const response = await fetch(current, {
+  let response = await fetch(current, {
+    redirect: 'manual',
+    signal: AbortSignal.timeout(30_000),
+  });
+
+  if (response.status >= 300 && response.status < 400) {
+    if (response.status !== 307) {
+      throw new Error('Only one HTTP 307 cookie bootstrap redirect is allowed');
+    }
+    const location = response.headers.get('location');
+    const setCookie = response.headers.get('set-cookie');
+    if (!location || !setCookie) {
+      throw new Error('HTTP 307 bootstrap requires both Location and Set-Cookie');
+    }
+    const next = validateRemoteUrl(
+      new URL(location, current).toString(),
+      origin,
+      controlledPath
+    );
+    const pair = setCookie.split(';', 1)[0];
+    if (!/^[!#$%&'*+.^_`|~0-9A-Za-z-]+=[^;\r\n]*$/.test(pair)) {
+      throw new Error('Download bootstrap returned an invalid cookie');
+    }
+    await response.body?.cancel();
+    response = await fetch(next, {
       redirect: 'manual',
-      headers: cookie ? { cookie } : undefined,
+      headers: { cookie: pair },
       signal: AbortSignal.timeout(30_000),
     });
-
     if (response.status >= 300 && response.status < 400) {
-      if (redirectCount === 5) throw new Error('Too many download redirects');
-      const location = response.headers.get('location');
-      if (!location) throw new Error('Download redirect has no location');
-      const next = validateRemoteUrl(new URL(location, current).toString(), origin, controlledPath);
-      const setCookie = response.headers.get('set-cookie');
-      if (setCookie) {
-        if (response.status !== 307) {
-          throw new Error('Download cookie bootstrap must use HTTP 307');
-        }
-        const pair = setCookie.split(';', 1)[0];
-        if (!/^[!#$%&'*+.^_`|~0-9A-Za-z-]+=[^;\r\n]*$/.test(pair)) {
-          throw new Error('Download bootstrap returned an invalid cookie');
-        }
-        cookie = pair;
-      }
-      await response.body?.cancel();
-      current = next;
-      continue;
+      throw new Error('A second download redirect is not allowed');
     }
+  }
 
-    if (!response.ok) throw new Error(`Download failed with HTTP ${response.status}`);
+  if (!response.ok) throw new Error(`Download failed with HTTP ${response.status}`);
     const declared = Number(response.headers.get('content-length'));
     if (Number.isFinite(declared) && declared > MAX_BYTES) throw new Error(`Package exceeds ${MAX_BYTES} bytes`);
     if (!response.body) throw new Error('Download returned no response body');
@@ -114,8 +119,6 @@ async function readRemote(source, originValue) {
       chunks.push(Buffer.from(value));
     }
     return Buffer.concat(chunks, total);
-  }
-  throw new Error('Download failed');
 }
 
 async function main() {

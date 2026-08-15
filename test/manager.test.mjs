@@ -13,11 +13,30 @@ import { run } from './helpers.mjs';
 const state = resolve('skills/dsh-theme-manager/scripts/theme-state.mjs');
 const verifier = resolve('skills/dsh-theme-manager/scripts/fetch-and-verify.mjs');
 const releaseValidator = resolve('skills/dsh-theme-manager/scripts/validate-release.mjs');
+const runnerVerifier = resolve('skills/dsh-theme-manager/scripts/verify-runner.mjs');
+const runner = resolve('skills/dsh-theme-manager/scripts/run-dsh.mjs');
+const loopbackGate = resolve('skills/dsh-theme-manager/scripts/assert-loopback.mjs');
 const fixture = (name) => resolve('test/fixtures', name);
 const shaA = 'a'.repeat(64);
 const shaB = 'b'.repeat(64);
 const shaC = 'c'.repeat(64);
 const trustedOrigin = 'https://themes.example';
+const runtimeAttestation = Object.freeze({
+  schemaVersion: 1,
+  attestationSha256: '2400606c5cb6534e09a65020e4ae12a0df4c1d08f15918d714bc5037c2ed99ba',
+  runnerLockfileSha256: '22f995efe8338c2a3cd97bd731853d010363531145c35073adb2dca3773f6053',
+  criticalPackagesCount: 197,
+  criticalPackagesSha256: 'f883815b282c4e86a1ecb8cf60914459f875a1d34da02cfce8b119824a950894',
+  packageManagerName: 'pnpm',
+  packageManagerVersion: '11.7.0',
+  packageManagerIntegrity: 'sha512-GcyFLBIMcSV2DyRD7mvgyltA+fUFmN4aCaHxd1A+AQ5Xwjx3ZG4B52HeWb+HT7IqM5jDOrlpH8E+uUa28PTWIA==',
+  uiThemePackageVersion: '0.1.0-rc.6',
+  uiThemePackageIntegrity: 'sha512-Wu+bvnuti/gLA+t5a2cWUMQJ5UCqxt6oEK+OJiJ68gN0ixs2skpaN0nFdFoY2exC5KByXrNlN1rRrD+FsZSBLA==',
+  webFrontendPackageVersion: '0.1.0-rc.6',
+  webFrontendPackageIntegrity: 'sha512-+RpdDF11FqUZSbJGoZ4oLIk/4PJR+ynTS4ELMn9QqucbYZ8tv0Itq9ZtG2o6pKIe7NO0lj/eBjCR2EoRKx7L+g==',
+  frontendBundleSha256: 'a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68',
+  frontendStylesheetSha256: '8ecb4b25268f5acae7e6f1b9e5cc8d14e5c5fa17da70a6a7863c896496f257ea',
+});
 
 const compatibility = Object.freeze({
   dshPackageVersion: '0.1.0-rc.6',
@@ -33,6 +52,7 @@ function integrity(sha256) {
 
 function currentRelease() {
   return {
+    verified: true,
     distribution: {
       kind: 'hosted-verified-artifact',
       installability: 'manager',
@@ -41,6 +61,7 @@ function currentRelease() {
     },
     artifactUrl: `${trustedOrigin}/api/themes/ocean-workbench/download/1.1.0`,
     artifactSha256: shaA,
+    runtimeAttestation: { ...runtimeAttestation },
     manifest: {
       schemaVersion: '2.0',
       kind: 'full-skin',
@@ -130,18 +151,18 @@ test('release validator separates current V2, historical V1, and artifact author
       assert.equal(output.status, 'current');
       assert.equal(output.installableCurrent, true);
       assert.equal(output.dshVersion, '0.1.0-rc.6');
-      assert.equal(output.sourceCommit, null);
+      assert.equal(Object.hasOwn(output, 'sourceCommit'), false);
       assert.equal(output.artifactSha256, shaA);
       assert.equal(output.payloadSha256, shaB);
-      assert.equal(output.distribution.kind, 'hosted-verified-artifact');
+      assert.equal(output.runtimeAttestationSha256, runtimeAttestation.attestationSha256);
     });
 
-    await t.test('accepts an explicit null rc.6 sourceCommit', async () => {
+    await t.test('rejects an explicit null rc.6 sourceCommit', async () => {
       const release = currentRelease();
       release.manifest.compatibility.sourceCommit = null;
       const result = await validateRelease(directory, 'current-null-commit.json', release);
-      assert.equal(result.code, 0, result.stderr);
-      assert.equal(JSON.parse(result.stdout).sourceCommit, null);
+      assert.notEqual(result.code, 0);
+      assert.match(result.stderr, /sourceCommit must be omitted/);
     });
 
     await t.test('rejects a fabricated rc.6 sourceCommit', async () => {
@@ -150,7 +171,7 @@ test('release validator separates current V2, historical V1, and artifact author
         '47f943859bef60e4160492346772ded9b24f765a';
       const result = await validateRelease(directory, 'fake-source-commit.json', release);
       assert.notEqual(result.code, 0);
-      assert.match(result.stderr, /sourceCommit must be omitted or null/);
+      assert.match(result.stderr, /sourceCommit must be omitted/);
     });
 
     await t.test('never treats a V2 payload digest as the complete artifact digest', async () => {
@@ -198,6 +219,15 @@ test('release validator separates current V2, historical V1, and artifact author
       assert.match(result.stderr, /distribution must be an object/);
     });
 
+    await t.test('fails closed when verified or runtime attestation is absent', async () => {
+      for (const field of ['verified', 'runtimeAttestation']) {
+        const release = currentRelease();
+        delete release[field];
+        const result = await validateRelease(directory, `missing-${field}.json`, release);
+        assert.notEqual(result.code, 0);
+      }
+    });
+
     await t.test('requires the exact V2 payload and artifact digest scopes', async () => {
       const wrongArtifact = currentRelease();
       wrongArtifact.manifest.artifact.digestScope = 'canonical-tar-payload-excluding-manifest';
@@ -210,6 +240,12 @@ test('release validator separates current V2, historical V1, and artifact author
       const payloadResult = await validateRelease(directory, 'wrong-v2-payload-scope.json', wrongPayload);
       assert.notEqual(payloadResult.code, 0);
       assert.match(payloadResult.stderr, /payload\.digestScope/);
+
+      const missingPayload = currentRelease();
+      delete missingPayload.manifest.payload;
+      const missingResult = await validateRelease(directory, 'missing-v2-payload.json', missingPayload);
+      assert.notEqual(missingResult.code, 0);
+      assert.match(missingResult.stderr, /manifest\.payload/);
     });
 
     await t.test('recognizes rc.5 V1 only as historical and non-current', async () => {
@@ -268,7 +304,12 @@ test('multiple active theme packages are a hard conflict', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-conflict-'));
   try {
     const list = join(directory, 'plugins.json');
-    await writeFile(list, JSON.stringify({ dependencies: { '@dsh-themes/one': '1.0.0', '@dsh-themes/two': '2.0.0', other: '3.0.0' } }));
+    await writeFile(list, JSON.stringify([{
+      name: 'dsh-profile-web',
+      path: '/tmp/dsh-home/profiles/web',
+      private: true,
+      dependencies: { '@dsh-themes/one': '1.0.0', '@dsh-themes/two': '2.0.0', other: '3.0.0' },
+    }]));
     const result = await run(state, ['inspect', '--input', list]);
     assert.notEqual(result.code, 0);
     assert.match(result.stderr, /Multiple DSH-Themes packages/);
@@ -364,12 +405,15 @@ test('theme state parses the rc.6 root profile array and rejects ambiguous profi
 test('theme state accepts one exact direct package and rejects ranges', async (t) => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-state-'));
   try {
-    const exactPath = await writeJson(directory, 'exact.json', {
+    const exactPath = await writeJson(directory, 'exact.json', [{
+      name: 'dsh-profile-web',
+      path: '/tmp/dsh-home/profiles/web',
+      private: true,
       dependencies: {
         '@dsh-themes/ocean-workbench': { resolvedVersion: '1.2.3-rc.1+verified.2', direct: true },
         '@dsh-themes/transitive': { resolvedVersion: '9.9.9', direct: false },
       },
-    });
+    }]);
     const inspected = await run(state, ['inspect', '--input', exactPath]);
     assert.equal(inspected.code, 0, inspected.stderr);
     assert.deepEqual(JSON.parse(inspected.stdout), {
@@ -390,9 +434,12 @@ test('theme state accepts one exact direct package and rejects ranges', async (t
       ['empty-build-identifier', '1.2.3+build..1'],
     ]) {
       await t.test(name, async () => {
-        const input = await writeJson(directory, `${name}.json`, {
+        const input = await writeJson(directory, `${name}.json`, [{
+          name: 'dsh-profile-web',
+          path: '/tmp/dsh-home/profiles/web',
+          private: true,
           dependencies: { '@dsh-themes/ocean-workbench': version },
-        });
+        }]);
         const result = await run(state, ['inspect', '--input', input]);
         assert.notEqual(result.code, 0);
         assert.match(result.stderr, /exact semantic version/);
@@ -585,6 +632,21 @@ test('remote verifier confines a 307 cookie bootstrap to the exact trusted path'
         response.end();
         return;
       }
+      if (request.url === '/api/themes/no-cookie/download/1.2.3') {
+        response.writeHead(307, {
+          location: '/api/themes/no-cookie/download/1.2.3',
+        });
+        response.end();
+        return;
+      }
+      if (request.url === '/api/themes/second-redirect/download/1.2.3') {
+        response.writeHead(307, {
+          location: '/api/themes/second-redirect/download/1.2.3',
+          'set-cookie': 'dsh_download_identity=second-hop; Path=/; HttpOnly',
+        });
+        response.end();
+        return;
+      }
       response.writeHead(404).end();
     });
     await listen(primary);
@@ -636,7 +698,23 @@ test('remote verifier confines a 307 cookie bootstrap to the exact trusted path'
         '--output', join(directory, 'wrong-status.tgz'),
       ], { env });
       assert.notEqual(result.code, 0);
-      assert.match(result.stderr, /must use HTTP 307/);
+      assert.match(result.stderr, /Only one HTTP 307/);
+    });
+
+    await t.test('requires a cookie-bearing 307 and refuses a second redirect', async () => {
+      for (const [slug, error] of [
+        ['no-cookie', /requires both Location and Set-Cookie/],
+        ['second-redirect', /second download redirect/],
+      ]) {
+        const result = await run(verifier, [
+          '--source', `${origin}/api/themes/${slug}/download/1.2.3`,
+          '--origin', origin,
+          '--sha256', createHash('sha256').update(bytes).digest('hex'),
+          '--output', join(directory, `${slug}.tgz`),
+        ], { env });
+        assert.notEqual(result.code, 0);
+        assert.match(result.stderr, error);
+      }
     });
 
     await t.test('rejects query-bearing controlled paths before network access', async () => {
@@ -655,5 +733,42 @@ test('remote verifier confines a 307 cookie bootstrap to the exact trusted path'
     if (primary?.listening) await close(primary);
     if (foreign?.listening) await close(foreign);
     await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test('verified runner and loopback gate fail closed', async () => {
+  const verified = await run(runnerVerifier, []);
+  assert.equal(verified.code, 0, verified.stderr);
+  const status = JSON.parse(verified.stdout);
+  assert.equal(status.dshVersion, '0.1.0-rc.6');
+  assert.equal(status.pnpmVersion, '11.7.0');
+  assert.equal(status.criticalPackages, 197);
+
+  const version = await run(runner, ['--version']);
+  assert.equal(version.code, 0, version.stderr);
+  assert.equal(version.stdout.trim(), '0.1.0-rc.6');
+
+  for (const args of [
+    ['web', '--host', '0.0.0.0'],
+    ['web', '--trusted-host', 'example.test'],
+    ['web', '--patch', '/tmp/patch.yml'],
+  ]) {
+    const rejected = await run(runner, args);
+    assert.notEqual(rejected.code, 0);
+    assert.match(rejected.stderr, /unsupported runner command/);
+  }
+
+  for (const url of ['http://127.0.0.1:3000', 'http://[::1]:3000']) {
+    const accepted = await run(loopbackGate, ['--url', url]);
+    assert.equal(accepted.code, 0, accepted.stderr);
+  }
+  for (const url of [
+    'http://0.0.0.0:3000',
+    'http://192.168.1.2:3000',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000/?trusted=1',
+  ]) {
+    const rejected = await run(loopbackGate, ['--url', url]);
+    assert.notEqual(rejected.code, 0);
   }
 });
