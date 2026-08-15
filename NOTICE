@@ -3,7 +3,7 @@ Copyright 2026 DSH-Themes contributors
 
 This product includes software developed by DSH-Themes contributors.
 
-The repository structure and community skill categories were informed by the
-public CodexThemes Skills project (https://github.com/codexthemes/skills).
-No source code from that project is included in this baseline.
-
+The repository's community skill categories were informed by the public
+CodexThemes Skills project (https://github.com/codexthemes/skills), licensed
+under Apache-2.0. This repository is an independent implementation and does
+not include source code copied from that project.

@@ -1,0 +1,31 @@
+---
+name: dsh-theme-submitter
+description: Validate a local declarative DSH-Themes manifest and guide its author into the website's authenticated submission flow. Use when preparing a theme or full skin for moderation, checking provenance and compatibility, or opening a safe submission page without API credentials, cookies, or automated account access.
+---
+
+# DSH Theme Submitter
+
+Validate locally, then let the user sign in on the website. Never request, read, save, copy, or transmit a browser cookie, session, password, API key, authorization header, or long-lived credential.
+
+## Preflight
+
+1. Confirm the user intends to publish and can license every included asset.
+2. Read [references/submission-checklist.md](references/submission-checklist.md).
+3. Validate the manifest and produce a safe handoff URL:
+
+   ```bash
+   node <skill-dir>/scripts/validate-submission.mjs \
+     --manifest <absolute-manifest.json> \
+     --site <https://trusted-dsh-themes-site>
+   ```
+
+For local development only, `http://localhost:<port>` is allowed. The script performs no network request and writes no credentials or configuration. It rejects executable fields, unsafe color syntax, non-rc.6 compatibility, missing hashes, remote runtime assets, secret-like keys, package publication claims, and malformed copyright declarations.
+
+## Handoff
+
+1. Report validation success, manifest SHA-256, theme slug, and exact DSH version.
+2. Open or give the user the returned `submissionUrl`.
+3. Tell the user to sign in in their own browser, upload the validated JSON and its local raster assets, review the parsed values, accept the declaration, and submit for moderation.
+4. Do not post directly to a private submission API, scrape a browser session, or claim acceptance before the website returns a submission ID.
+
+If validation fails, fix the declarative source with `dsh-theme-creator`; do not bypass the failed check. The website remains authoritative and will repeat image decoding, ownership, schema, compatibility, and security validation.
