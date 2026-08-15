@@ -3,8 +3,9 @@
 import { readFile, stat } from 'node:fs/promises';
 import { isAbsolute, resolve } from 'node:path';
 
+import { isExactSemver } from './semver.mjs';
+
 const MAX_BYTES = 2 * 1024 * 1024;
-const EXACT_VERSION = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?$/;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const SHA256 = /^[0-9a-f]{64}$/;
 const TOKEN_HASH = 'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926';
@@ -62,7 +63,7 @@ function accepted(item, args, catalogOrigin) {
   const kind = item.kind === 'skin' ? 'full-skin' : item.kind;
   if (!SLUG.test(item.slug) || !['theme', 'full-skin'].includes(kind)) return null;
   if (typeof item.name !== 'string' || typeof item.description !== 'string') return null;
-  if (!EXACT_VERSION.test(item.version) || item.compatibility?.dshPackageVersion !== args['dsh-version']) return null;
+  if (!isExactSemver(item.version) || item.compatibility?.dshPackageVersion !== args['dsh-version']) return null;
   if (
     item.compatibility?.schemaVersion !== 2 ||
     item.compatibility?.tokenCatalogSha256 !== TOKEN_HASH ||

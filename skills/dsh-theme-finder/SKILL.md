@@ -18,7 +18,10 @@ node <skill-dir>/scripts/find-themes.mjs \
   [--dsh-version 0.1.0-rc.6] [--limit 10]
 ```
 
-The client sends no cookies, credentials, or authorization headers. It refuses HTTP, cross-origin redirects, oversized responses, unpublished entries, unverified entries, non-exact versions, unsupported package names, and missing/malformed hashes.
+The client sends no cookies, credentials, or authorization headers. It refuses HTTP,
+cross-origin redirects, oversized responses, unpublished entries, unverified entries,
+versions that are not exact SemVer 2.0 values, unsupported package names, and
+missing/malformed hashes.
 
 ## Present results
 

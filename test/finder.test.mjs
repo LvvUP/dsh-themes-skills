@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, writeFile } from 'node:fs/promises';
+import { mkdtemp, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import test from 'node:test';
 
+import { isExactSemver as isFinderSemver } from '../skills/dsh-theme-finder/scripts/semver.mjs';
+import { isExactSemver as isManagerSemver } from '../skills/dsh-theme-manager/scripts/semver.mjs';
 import { run } from './helpers.mjs';
 
 const finder = resolve('skills/dsh-theme-finder/scripts/find-themes.mjs');
@@ -26,6 +28,16 @@ function item(overrides = {}) {
   };
 }
 
+function itemAtVersion(version) {
+  return item({
+    version,
+    package: {
+      ...item().package,
+      fileName: `ocean-workbench-${version}.tgz`,
+    },
+  });
+}
+
 test('finder returns only published verified exact rc.6 releases', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-finder-'));
   const catalog = join(directory, 'catalog.json');
@@ -41,4 +53,39 @@ test('finder returns only published verified exact rc.6 releases', async () => {
   assert.equal(output.count, 1);
   assert.equal(output.items[0].slug, 'ocean-workbench');
   assert.equal(output.items[0].compatibility.dshPackageVersion, '0.1.0-rc.6');
+});
+
+test('finder and manager enforce the same SemVer 2.0 vectors', async () => {
+  const vectors = JSON.parse(await readFile(resolve('test/fixtures/semver-vectors.json'), 'utf8'));
+  for (const version of vectors.valid) {
+    assert.equal(isFinderSemver(version), true, `finder rejected valid SemVer: ${version}`);
+    assert.equal(isManagerSemver(version), true, `manager rejected valid SemVer: ${version}`);
+  }
+  for (const version of vectors.invalid) {
+    assert.equal(isFinderSemver(version), false, `finder accepted invalid SemVer: ${version}`);
+    assert.equal(isManagerSemver(version), false, `manager accepted invalid SemVer: ${version}`);
+  }
+});
+
+test('finder accepts prerelease and build metadata but never verifies empty identifiers', async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-finder-semver-'));
+
+  await t.test('accepts a valid prerelease with build metadata', async () => {
+    const version = '1.2.3-alpha.1+verified.2';
+    const catalog = join(directory, 'valid.json');
+    await writeFile(catalog, JSON.stringify({ items: [itemAtVersion(version)] }));
+    const result = await run(finder, ['--catalog', catalog]);
+    assert.equal(result.code, 0, result.stderr);
+    assert.deepEqual(JSON.parse(result.stdout).items.map((entry) => entry.version), [version]);
+  });
+
+  for (const version of ['1.2.3-alpha..1', '1.2.3-..', '1.2.3+build..1']) {
+    await t.test(`rejects ${version}`, async () => {
+      const catalog = join(directory, `${Buffer.from(version).toString('hex')}.json`);
+      await writeFile(catalog, JSON.stringify({ items: [itemAtVersion(version)] }));
+      const result = await run(finder, ['--catalog', catalog]);
+      assert.equal(result.code, 0, result.stderr);
+      assert.equal(JSON.parse(result.stdout).count, 0);
+    });
+  }
 });
