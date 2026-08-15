@@ -58,6 +58,19 @@ function optionalHttps(value, label) {
   if (url.protocol !== 'https:' || url.username || url.password) throw new Error(`${label} must be a credential-free HTTPS URL`);
 }
 
+function rejectLicenseAsNotice(value, label) {
+  const url = new URL(value);
+  let basename;
+  try {
+    basename = decodeURIComponent(url.pathname).split('/').filter(Boolean).at(-1) ?? '';
+  } catch {
+    throw new Error(`${label} has invalid encoding`);
+  }
+  if (/^licen[cs]e(?:\.|$)/i.test(basename)) {
+    throw new Error(`${label} must identify an actual NOTICE, not a LICENSE file`);
+  }
+}
+
 function localUrl(value, label) {
   if (typeof value !== 'string' || !/^\/(?:api\/theme-studio|__dsh-themes|imgs|theme-packages)\/[A-Za-z0-9][A-Za-z0-9._~!$&'()*+,;=:@%/-]*$/.test(value)) throw new Error(`${label} must be a reviewed same-origin URL`);
   let decoded;
@@ -172,6 +185,7 @@ if (manifest.kind === 'theme') {
   if (!['original', 'user-owned', 'licensed', 'public-domain', 'generated'].includes(copyright.source) || typeof copyright.aiGenerated !== 'boolean') throw new Error('complete copyright provenance is required');
   optionalHttps(copyright.sourceUrl, 'copyright.sourceUrl');
   optionalHttps(copyright.noticeUrl, 'copyright.noticeUrl');
+  if (copyright.noticeUrl) rejectLicenseAsNotice(copyright.noticeUrl, 'copyright.noticeUrl');
   if (
     copyright.attribution !== undefined &&
     (typeof copyright.attribution !== 'string' || copyright.attribution !== copyright.attribution.trim() ||

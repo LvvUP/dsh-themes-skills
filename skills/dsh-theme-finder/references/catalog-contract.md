@@ -85,7 +85,7 @@ This class is text/link discovery only. It deliberately has no `package`, no ins
     "sourceSubdir": "skin",
     "sourcePackage": "@external/example-skin",
     "sourceVersion": "0.0.1",
-    "noticeUrl": "https://example.com/project/blob/<revision>/skin/NOTICE",
+    "noticeUrl": null,
     "attributions": ["Original creator", "Derivative creator"],
     "executableRuntime": true
   },
@@ -104,6 +104,8 @@ This class is text/link discovery only. It deliberately has no `package`, no ins
 }
 ```
 
-The source, license, and NOTICE URLs must share an origin and contain the fixed revision. `redistribution` is `prohibited` or `rights-clearance-required`; previews remain link-only. A version claim is reported only as a claim and never becomes verified compatibility. The Finder rejects an external record if it contains a package, uses Manager installability, hosts copied previews, omits attribution, points at a mutable source root, or supplies certified fingerprints.
+The source and license URLs, plus any non-null NOTICE URL, must share an origin and contain the fixed revision. External `noticeUrl` may be omitted or `null` only when the upstream provides no NOTICE; a LICENSE URL is never an acceptable substitute. `redistribution` is `prohibited` or `rights-clearance-required`; previews remain link-only. A version claim is reported only as a claim and never becomes verified compatibility. The Finder rejects an external record if it contains a package, preview, assets, download/install URL, or non-null install command; uses Manager installability; hosts copied previews; omits attribution; points at a mutable source root; or supplies certified fingerprints.
+
+This exception does not relax hosted provenance. Attribution-required licensed artwork entering hosted review must still provide its genuine fixed NOTICE URL.
 
 `verified` is catalog attestation, not cryptographic publisher identity. A complete artifact hash proves byte agreement with the selected catalog record, not authorship or license ownership.

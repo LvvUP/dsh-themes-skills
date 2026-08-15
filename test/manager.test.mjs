@@ -177,6 +177,14 @@ test('release validator separates current V2, historical V1, and artifact author
         redistribution: 'rights-clearance-required',
         previewPolicy: 'link-only',
       };
+      release.provenance = {
+        sourceUrl: 'https://example.com/source/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        sourceRevision: 'a'.repeat(40),
+        noticeUrl: null,
+        attributions: ['External author'],
+        executableRuntime: true,
+      };
+      release.installCommand = null;
       const result = await validateRelease(directory, 'external-showcase.json', release);
       assert.notEqual(result.code, 0);
       assert.match(result.stderr, /distribution\.kind/);

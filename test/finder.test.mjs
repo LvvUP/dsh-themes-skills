@@ -72,8 +72,51 @@ function showcase(overrides = {}) {
     compatibility: {
       status: 'unverified', claimedDshPackageVersion: '0.1.0-rc.6', certifiedFingerprints: null,
     },
+    installCommand: null,
     ...overrides,
   };
+}
+
+const skinCenterRevision = 'a7716d824479be7c5e07de0bc9450962c7480bde';
+const skinCenterSpecs = [
+  ['blue-fantasy', '0.1.15', 'powerdog996（DreamSkin 社区）· dsh-web-ui 适配', 'DreamSkin media rights, DeepSeek marks, and license-holder alignment remain unresolved.'],
+  ['dragon-heir', '0.1.15', 'dsh-web-ui', 'AI generation provenance and per-asset rights records are incomplete.'],
+  ['harbor', '0.1.14', 'moeblack', 'Contributor ownership and the directory license holder conflict.'],
+  ['miku', '0.1.15', '涂山苏苏', 'Hatsune Miku character and trademark clearance is not documented.'],
+  ['minecraft', '0.1.15', 'dsh-web-ui', 'Minecraft naming and trade-dress clearance is not documented.'],
+  ['qq98', '0.1.15', 'dsh-web-ui', 'QQ/OICQ naming, penguin mark, and interface trade dress remain unresolved.'],
+  ['ths', '0.1.15', 'dsh-web-ui', 'Tonghuashun marks and local workspace-statistics access require review.'],
+  ['trading', '0.1.15', 'dsh-web-ui', 'External scripts, market APIs, local RPC, and workspace access require review.'],
+  ['whale-song', '0.1.15', 'dsh-web-ui', 'Concept-art provenance and DeepSeek mark clearance are incomplete.'],
+  ['xp', '0.1.15', 'dsh-web-ui', 'Windows XP/Luna/Zune naming, flag marks, and trade dress remain unresolved.'],
+];
+
+function skinCenterShowcases() {
+  return skinCenterSpecs.map(([slug, version, author, risk]) => ({
+    slug: `dsh-web-ui-${slug}`, kind: 'full-skin', name: `dsh-web-ui · ${slug}`,
+    description: `External executable skin shown as fixed-source text metadata only. ${risk}`,
+    status: 'published', verified: false, modes: ['light', 'dark'], author: { name: author },
+    license: 'BSD-3-Clause file / Apache-2.0 metadata (conflict)', version,
+    licensePolicy: {
+      url: `https://github.com/zhu1090093659/dsh-web-ui/blob/${skinCenterRevision}/packages/skins/${slug}/LICENSE`,
+      commercialUse: 'rights-clearance-required', attributionRequired: true, shareAlikeRequired: false,
+    },
+    provenance: {
+      sourceUrl: `https://github.com/zhu1090093659/dsh-web-ui/tree/${skinCenterRevision}/packages/skins/${slug}`,
+      sourceRevision: skinCenterRevision, sourceSubdir: `packages/skins/${slug}`,
+      sourcePackage: `@linxin666/dsh-client-ui-skin-${slug}`, sourceVersion: version,
+      noticeUrl: null, attributions: [author, 'BSD file holder: zhu1090093659', risk],
+      executableRuntime: true,
+    },
+    distribution: {
+      kind: 'external-showcase', installability: 'showcase-only',
+      redistribution: 'rights-clearance-required', previewPolicy: 'link-only',
+    },
+    compatibility: {
+      status: 'unverified', claimedDshPackageVersion: '0.1.0-rc.6', certifiedFingerprints: null,
+    },
+    installCommand: null,
+  }));
 }
 
 test('finder returns only published verified exact rc.6 releases', async () => {
@@ -125,6 +168,87 @@ test('finder keeps external showcases visible but non-installable', async () => 
   assert.deepEqual(JSON.parse(showcases.stdout).items.map((entry) => entry.slug), ['maid-atelier-community']);
 });
 
+test('finder accepts eleven fixed text-only showcases while exposing zero as installable', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-finder-eleven-showcases-'));
+  const catalog = join(directory, 'catalog.json');
+  await writeFile(catalog, JSON.stringify({ items: [showcase(), ...skinCenterShowcases()] }));
+
+  const all = await run(finder, ['--catalog', catalog, '--limit', '50']);
+  assert.equal(all.code, 0, all.stderr);
+  const output = JSON.parse(all.stdout);
+  assert.equal(output.count, 11);
+  assert.equal(output.items.every((entry) => entry.distribution.kind === 'external-showcase'), true);
+  assert.equal(output.items.every((entry) => entry.installCommand === null && !('package' in entry)), true);
+  assert.equal(
+    output.items.filter((entry) => entry.provenance.noticeUrl === null).length,
+    10,
+  );
+
+  const installable = await run(finder, [
+    '--catalog', catalog, '--availability', 'installable', '--limit', '50',
+  ]);
+  assert.equal(installable.code, 0, installable.stderr);
+  assert.equal(JSON.parse(installable.stdout).count, 0);
+});
+
+test('external NOTICE may be omitted or null but a LICENSE cannot impersonate NOTICE', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-finder-optional-notice-'));
+  const omitted = showcase({ slug: 'notice-omitted' });
+  delete omitted.provenance.noticeUrl;
+  const explicitNull = showcase({
+    slug: 'notice-null',
+    provenance: { ...showcase().provenance, noticeUrl: null },
+  });
+  const licenseAsNotice = showcase({
+    slug: 'license-as-notice',
+    provenance: {
+      ...showcase().provenance,
+      noticeUrl: showcase().licensePolicy.url,
+    },
+  });
+  const catalog = join(directory, 'catalog.json');
+  await writeFile(catalog, JSON.stringify({ items: [omitted, explicitNull, licenseAsNotice] }));
+  const result = await run(finder, ['--catalog', catalog, '--limit', '50']);
+  assert.equal(result.code, 0, result.stderr);
+  const output = JSON.parse(result.stdout);
+  assert.deepEqual(output.items.map((entry) => entry.slug), ['notice-omitted', 'notice-null']);
+  assert.equal(output.items.every((entry) => entry.provenance.noticeUrl === null), true);
+});
+
+test('hosted licensed artifacts still require a genuine NOTICE', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-finder-hosted-notice-'));
+  const licenseUrl = 'https://example.com/fixed/LICENSE';
+  const licensed = {
+    source: 'licensed',
+    sourceUrl: 'https://example.com/fixed/source',
+    attributions: ['Upstream author'],
+  };
+  const catalog = join(directory, 'catalog.json');
+  await writeFile(catalog, JSON.stringify({ items: [
+    item({
+      slug: 'hosted-notice-omitted',
+      licensePolicy: { ...item().licensePolicy, url: licenseUrl },
+      provenance: licensed,
+      package: { ...item().package, fileName: 'hosted-notice-omitted-1.0.0.tgz', url: 'https://example.com/api/themes/hosted-notice-omitted/download/1.0.0' },
+    }),
+    item({
+      slug: 'hosted-notice-null',
+      licensePolicy: { ...item().licensePolicy, url: licenseUrl },
+      provenance: { ...licensed, noticeUrl: null },
+      package: { ...item().package, fileName: 'hosted-notice-null-1.0.0.tgz', url: 'https://example.com/api/themes/hosted-notice-null/download/1.0.0' },
+    }),
+    item({
+      slug: 'hosted-license-as-notice',
+      licensePolicy: { ...item().licensePolicy, url: licenseUrl },
+      provenance: { ...licensed, noticeUrl: licenseUrl },
+      package: { ...item().package, fileName: 'hosted-license-as-notice-1.0.0.tgz', url: 'https://example.com/api/themes/hosted-license-as-notice/download/1.0.0' },
+    }),
+  ] }));
+  const result = await run(finder, ['--catalog', catalog, '--limit', '50']);
+  assert.equal(result.code, 0, result.stderr);
+  assert.equal(JSON.parse(result.stdout).count, 0);
+});
+
 test('finder rejects showcase records that masquerade as installable or copyable', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-finder-showcase-gate-'));
   const baseline = showcase();
@@ -134,6 +258,10 @@ test('finder rejects showcase records that masquerade as installable or copyable
     showcase({ distribution: { ...baseline.distribution, previewPolicy: 'hosted' } }),
     showcase({ provenance: { ...baseline.provenance, sourceUrl: 'https://github.com/Small-tailqwq/dsh-deep-whale' } }),
     showcase({ licensePolicy: { ...baseline.licensePolicy, url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/' } }),
+    showcase({ installCommand: 'install this external package' }),
+    showcase({ preview: 'https://example.com/copied-preview.webp' }),
+    showcase({ assets: [] }),
+    showcase({ downloadUrl: 'https://example.com/external.tgz' }),
   ];
   const catalog = join(directory, 'catalog.json');
   await writeFile(catalog, JSON.stringify({ items: cases }));

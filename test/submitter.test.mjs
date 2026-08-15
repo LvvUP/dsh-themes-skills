@@ -70,6 +70,16 @@ test('submitter routes noncommercial manifests to showcase-only review', async (
   const oversizedResult = await run(submitter, ['--manifest', oversizedAttribution, '--site', 'https://themes.example']);
   assert.notEqual(oversizedResult.code, 0);
   assert.match(oversizedResult.stderr, /copyright\.attribution is invalid/);
+
+  altered.copyright.attribution = redlineAttribution;
+  altered.copyright.noticeUrl = `https://example.com/source/${revision}/LICENSE`;
+  const licenseAsNotice = join(directory, 'license-as-notice.json');
+  await writeFile(licenseAsNotice, JSON.stringify(altered));
+  const noticeResult = await run(submitter, [
+    '--manifest', licenseAsNotice, '--site', 'https://themes.example',
+  ]);
+  assert.notEqual(noticeResult.code, 0);
+  assert.match(noticeResult.stderr, /actual NOTICE, not a LICENSE/);
 });
 
 test('submitter rejects publication metadata and secret-like fields', async () => {

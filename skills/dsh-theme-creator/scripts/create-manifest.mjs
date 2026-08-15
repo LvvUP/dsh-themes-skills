@@ -73,6 +73,19 @@ function httpsUrl(value, label) {
   return url.href;
 }
 
+function rejectLicenseAsNotice(value, label) {
+  const url = new URL(value);
+  let basename;
+  try {
+    basename = decodeURIComponent(url.pathname).split('/').filter(Boolean).at(-1) ?? '';
+  } catch {
+    throw new Error(`${label} has invalid encoding`);
+  }
+  if (/^licen[cs]e(?:\.|$)/i.test(basename)) {
+    throw new Error(`${label} must identify an actual NOTICE, not a LICENSE file`);
+  }
+}
+
 function normalizeLicensePolicy(value, identifier) {
   const policy = object(value, 'licensePolicy', ['url', 'commercialUse', 'attributionRequired', 'shareAlikeRequired']);
   if (typeof policy.url !== 'string') throw new Error('licensePolicy.url is required');
@@ -262,6 +275,7 @@ async function main() {
       }
       if (copyright.noticeUrl) {
         const noticeUrl = new URL(httpsUrl(copyright.noticeUrl, 'copyright.noticeUrl'));
+        rejectLicenseAsNotice(noticeUrl.href, 'copyright.noticeUrl');
         if (noticeUrl.origin !== sourceUrl.origin || !noticeUrl.pathname.includes(copyright.sourceRevision)) {
           throw new Error('copyright.noticeUrl must share the fixed source origin and revision');
         }
@@ -272,6 +286,12 @@ async function main() {
       (!copyright.attribution || !copyright.noticeUrl)
     ) {
       throw new Error('Attribution-required licensed art requires attribution and noticeUrl');
+    }
+    if (copyright.noticeUrl && !copyright.sourceRevision) {
+      rejectLicenseAsNotice(
+        httpsUrl(copyright.noticeUrl, 'copyright.noticeUrl'),
+        'copyright.noticeUrl',
+      );
     }
     const sourceAssets = source.assets;
     if (!Array.isArray(sourceAssets) || sourceAssets.length !== 5) throw new Error('full-skin requires the five local asset roles');

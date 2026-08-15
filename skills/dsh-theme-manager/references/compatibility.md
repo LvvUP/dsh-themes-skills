@@ -13,7 +13,7 @@ An exact compatibility match is necessary but not sufficient for installation. T
 }
 ```
 
-Treat `external-showcase`, `showcase-only`, `link-only`, noncommercial, rights-clearance-required, missing, or unknown distribution values as non-installable. Do not inspect or execute an external repository to turn it into an installable record.
+Treat `external-showcase`, `showcase-only`, `link-only`, noncommercial, rights-clearance-required, missing, or unknown distribution values as non-installable. This remains true when external provenance legitimately omits NOTICE or sets `noticeUrl: null`; Manager must not inspect a LICENSE, source tree, or executable repository to manufacture missing authority.
 
 | Field | Value |
 | --- | --- |

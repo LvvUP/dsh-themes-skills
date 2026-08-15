@@ -79,7 +79,7 @@ For licensed third-party art, use a fixed source rather than a mutable repositor
 }
 ```
 
-Attribution-required licensed art needs both `attribution` and `noticeUrl`; `attribution` is limited to 256 characters. These fields document a claim for moderation; they do not prove that the submitter owns the necessary rights. Noncommercial declarations can be classified for external showcase review but must not become hosted installable artifacts without separate rights clearance.
+Attribution-required licensed art entering hosted review needs both `attribution` and a genuine `noticeUrl`; `attribution` is limited to 256 characters. A LICENSE URL cannot stand in for NOTICE. These fields document a claim for moderation; they do not prove that the submitter owns the necessary rights. If an external upstream has no NOTICE, the website may record omitted/null `noticeUrl` only in its separate non-installable external-showcase catalog entry. Noncommercial declarations can be classified for external showcase review but must not become hosted installable artifacts without separate rights clearance.
 
 For a palette-only `theme`, omit `copyright`, `assets`, and `visual`, and provide `preview: { "light": "...", "dark": "...", "surface": "optional" }`. Preview values may be reviewed same-origin paths or credential-free HTTPS URLs.
 

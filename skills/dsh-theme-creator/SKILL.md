@@ -13,7 +13,7 @@ Create data-only themes for DeepSeek Harness `0.1.0-rc.6`. Do not accept or gene
 2. Make an authoring JSON file beside an `assets/` directory. Use normalized WebP files that the user has the right to publish; send JPEG/PNG originals through the website Theme Studio instead.
 3. Provide all 13 tokens with complete `light` and `dark` hexadecimal values and check contrast in the real Harness UI.
 4. For a full skin, provide distinct background, sidebar, card, light-preview, and dark-preview rasters plus the shared focus point.
-5. Record the license URL, commercial-use status, attribution/share-alike requirements, and copyright provenance. For licensed art, pin a source revision when available and include the attribution plus fixed NOTICE URL. Never infer ownership from file possession.
+5. Record the license URL, commercial-use status, attribution/share-alike requirements, and copyright provenance. For licensed art entering hosted review, pin a source revision when available and include the attribution plus genuine fixed NOTICE URL. Never substitute a LICENSE for NOTICE or infer ownership from file possession. A missing upstream NOTICE is represented only by the website's non-installable external-showcase contract, not by relaxing Creator output.
 6. Generate a normalized manifest:
 
    ```bash

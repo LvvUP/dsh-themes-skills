@@ -107,6 +107,24 @@ test('creator rejects missing or misleading rights metadata', async (t) => {
     assert.match(result.stderr, /noticeUrl/);
   });
 
+  await t.test('license file cannot be supplied as a notice', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-license-as-notice-'));
+    const revision = 'cdb4da4f9c708571c6303cc1053185c62c8b617b';
+    const input = await writeAuthoring(directory, {
+      copyright: {
+        source: 'licensed',
+        sourceUrl: `https://example.com/source/${revision}`,
+        sourceRevision: revision,
+        noticeUrl: `https://example.com/source/${revision}/LICENSE`,
+        attribution: 'Artist',
+        aiGenerated: false,
+      },
+    });
+    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /actual NOTICE, not a LICENSE/);
+  });
+
   await t.test('revision paired with a mutable source URL', async () => {
     const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-revision-'));
     const input = await writeAuthoring(directory, {

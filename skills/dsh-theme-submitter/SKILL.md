@@ -9,7 +9,7 @@ Validate locally, then let the user sign in on the website. Never request, read,
 
 ## Preflight
 
-1. Confirm the user intends to publish and can license every included asset for the declared commercial-use policy.
+1. Confirm the user intends to publish and can license every included asset for the declared commercial-use policy. Licensed hosted submissions that require attribution need a genuine fixed-revision NOTICE URL; a LICENSE URL is not a NOTICE. Upstreams without a NOTICE may only be handed off as non-installable external showcases with `noticeUrl` omitted or null.
 2. Read [references/submission-checklist.md](references/submission-checklist.md).
 3. Validate the manifest and produce a safe handoff URL:
 

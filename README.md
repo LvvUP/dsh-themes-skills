@@ -23,7 +23,7 @@ The submitter never asks for, stores, or transmits a browser cookie, API key, or
 
 Catalog entries have an explicit distribution class. Only `hosted-verified-artifact` entries with Manager installability, allowed redistribution, hosted previews, exact rc.6 fingerprints, a controlled same-origin download route, and a complete `.tgz` SHA-256 can enter the installation workflow.
 
-`external-showcase` entries are fixed, attributed source records for discovery only. They carry no package or install command, expose no certified compatibility fingerprints, use link-only previews, and remain non-installable when a license prohibits commercial use or redistribution still needs rights clearance. The repository never converts or executes third-party theme code automatically.
+`external-showcase` entries are fixed, attributed source records for discovery only. They carry no package or install command, expose no certified compatibility fingerprints, use link-only previews, and remain non-installable when a license prohibits commercial use or redistribution still needs rights clearance. An upstream NOTICE may be omitted or represented as `null` only for this external class; a LICENSE URL must never be substituted for a missing NOTICE. The repository never converts or executes third-party theme code automatically.
 
 ## Development
 

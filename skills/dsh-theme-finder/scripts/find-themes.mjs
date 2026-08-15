@@ -93,6 +93,16 @@ function httpsUrl(value) {
   }
 }
 
+function isLicenseDocumentUrl(url) {
+  let basename;
+  try {
+    basename = decodeURIComponent(url.pathname).split('/').filter(Boolean).at(-1) ?? '';
+  } catch {
+    return true;
+  }
+  return /^licen[cs]e(?:\.|$)/i.test(basename);
+}
+
 function normalizeLicense(item) {
   const identifier = safeText(item.license, 80);
   const policy = item.licensePolicy;
@@ -128,6 +138,7 @@ function normalizeHostedProvenance(value, license) {
   const attributions = normalizeAttributions(value.attributions ?? []);
   if (sourceUrl === null && value.sourceUrl !== undefined) return null;
   if (noticeUrl === null && value.noticeUrl !== undefined) return null;
+  if (noticeUrl && isLicenseDocumentUrl(noticeUrl)) return null;
   if (!attributions) return null;
   if (license.attributionRequired && value.source === 'licensed' && (!noticeUrl || attributions.length === 0)) return null;
   return {
@@ -141,13 +152,17 @@ function normalizeHostedProvenance(value, license) {
 function normalizeExternalProvenance(value, license) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
   const sourceUrl = httpsUrl(value.sourceUrl);
-  const noticeUrl = httpsUrl(value.noticeUrl);
+  const hasNotice = value.noticeUrl !== undefined && value.noticeUrl !== null;
+  const noticeUrl = hasNotice ? httpsUrl(value.noticeUrl) : null;
   const attributions = normalizeAttributions(value.attributions);
   if (
-    !sourceUrl || !noticeUrl || !SOURCE_REVISION.test(value.sourceRevision) || !attributions?.length ||
+    !sourceUrl || (hasNotice && !noticeUrl) || !SOURCE_REVISION.test(value.sourceRevision) || !attributions?.length ||
     typeof value.executableRuntime !== 'boolean'
   ) return null;
-  if (!sourceUrl.pathname.includes(value.sourceRevision) || !noticeUrl.pathname.includes(value.sourceRevision)) return null;
+  if (
+    !sourceUrl.pathname.includes(value.sourceRevision) ||
+    (noticeUrl && (!noticeUrl.pathname.includes(value.sourceRevision) || isLicenseDocumentUrl(noticeUrl)))
+  ) return null;
   if (license.attributionRequired && attributions.length === 0) return null;
   if (value.sourceSubdir !== undefined) {
     if (
@@ -164,7 +179,7 @@ function normalizeExternalProvenance(value, license) {
     ...(value.sourceSubdir ? { sourceSubdir: value.sourceSubdir } : {}),
     ...(value.sourcePackage ? { sourcePackage: value.sourcePackage } : {}),
     ...(value.sourceVersion ? { sourceVersion: value.sourceVersion } : {}),
-    noticeUrl: noticeUrl.href,
+    noticeUrl: noticeUrl?.href ?? null,
     attributions,
     executableRuntime: value.executableRuntime === true,
   };
@@ -254,8 +269,13 @@ function acceptedHosted(item, args, catalogOrigin, kind, license, modes) {
 
 function acceptedShowcase(item, kind, license, modes) {
   const distribution = item.distribution;
+  const forbiddenFields = [
+    'package', 'preview', 'previews', 'assets', 'download', 'downloadUrl',
+    'installUrl', 'artifactUrl',
+  ];
   if (
-    item.verified !== false || item.package !== undefined || !distribution ||
+    item.verified !== false || item.installCommand !== null ||
+    forbiddenFields.some((key) => Object.prototype.hasOwnProperty.call(item, key)) || !distribution ||
     Object.keys(distribution).sort().join(',') !== 'installability,kind,previewPolicy,redistribution' ||
     distribution.kind !== SHOWCASE.kind || distribution.installability !== SHOWCASE.installability ||
     distribution.previewPolicy !== SHOWCASE.previewPolicy ||
@@ -265,9 +285,10 @@ function acceptedShowcase(item, kind, license, modes) {
   if (!provenance) return null;
   const licenseUrl = new URL(license.url);
   const sourceUrl = new URL(provenance.sourceUrl);
-  const noticeUrl = new URL(provenance.noticeUrl);
+  const noticeUrl = provenance.noticeUrl ? new URL(provenance.noticeUrl) : null;
   if (
-    licenseUrl.origin !== sourceUrl.origin || noticeUrl.origin !== sourceUrl.origin ||
+    licenseUrl.origin !== sourceUrl.origin ||
+    (noticeUrl && (noticeUrl.origin !== sourceUrl.origin || noticeUrl.href === licenseUrl.href)) ||
     !licenseUrl.pathname.includes(provenance.sourceRevision)
   ) return null;
   const compatibility = item.compatibility;
