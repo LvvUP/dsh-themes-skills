@@ -9,7 +9,8 @@ Manage at most one verified `@dsh-themes/*` Cordis plugin in the `web` profile. 
 
 ## Safety boundaries
 
-- Mutate the profile only with `dsh plugin --profile web`. Never edit `$DSH_HOME`, `~/.dsh`, a profile package file, lockfile, Harness `dist`, or `index.html`.
+- Execute every DSH operation through `scripts/run-dsh.mjs`. It verifies the bundled runner attestation, keeps the user's workspace as `cwd`, disables telemetry, and places the attested `pnpm@11.7.0` shim first on `PATH`. Never resolve or invoke a PATH `dsh`.
+- Mutate the profile only through the launcher's `dsh plugin --profile web` command. Never edit `$DSH_HOME`, `~/.dsh`, a profile package file, lockfile, Harness `dist`, or `index.html`.
 - Accept a current installation only when its exact version, controlled download URL or explicit absolute local path, complete-artifact SHA-256, and manifest match the certified `0.1.0-rc.6` baseline.
 - Never execute a downloaded package, lifecycle script, author JavaScript, CSS, or HTML while verifying it.
 - Keep digest scopes separate. A complete `.tgz` `artifact` digest authorizes installation. A V2 `payload` digest covers the canonical tar excluding the manifest. A V1 `package` digest covers the canonical payload excluding `theme.json`. Neither payload digest authorizes a downloaded `.tgz`.
@@ -21,10 +22,10 @@ Read [references/compatibility.md](references/compatibility.md) before changing 
 
 ## Inspect
 
-1. Resolve `dsh`; stop if unavailable.
-2. Compare `dsh --version` with the release's exact compatibility version. The current lane requires `0.1.0-rc.6`.
-3. Run `dsh --profile web --dump-config`; do not echo unrelated configuration.
-4. Save the output of `dsh plugin --profile web list --json` to a permission-restricted temporary file.
+1. Bootstrap and verify the bundled runner exactly as documented in `references/compatibility.md`; stop on any digest, lock, package, or pnpm mismatch.
+2. Run `node <skill-dir>/scripts/run-dsh.mjs --version`; the current lane requires `0.1.0-rc.6`.
+3. Run `node <skill-dir>/scripts/run-dsh.mjs --profile web --dump-config`; do not echo unrelated configuration.
+4. Save `node <skill-dir>/scripts/run-dsh.mjs plugin --profile web list --json` to a permission-restricted temporary file.
 5. Detect conflicts:
 
    ```bash
@@ -44,6 +45,29 @@ Build a permission-restricted JSON file containing the raw manifest and catalog 
 {
   "artifactUrl": "https://trusted.example/api/themes/example/download/1.1.0",
   "artifactSha256": "64 lowercase hex characters",
+  "verified": true,
+  "distribution": {
+    "kind": "hosted-verified-artifact",
+    "installability": "manager",
+    "redistribution": "allowed",
+    "previewPolicy": "hosted"
+  },
+  "runtimeAttestation": {
+    "schemaVersion": 1,
+    "attestationSha256": "certified value from compatibility.md",
+    "runnerLockfileSha256": "certified value from compatibility.md",
+    "criticalPackagesCount": 197,
+    "criticalPackagesSha256": "certified value from compatibility.md",
+    "packageManagerName": "pnpm",
+    "packageManagerVersion": "11.7.0",
+    "packageManagerIntegrity": "certified value from compatibility.md",
+    "uiThemePackageVersion": "0.1.0-rc.6",
+    "uiThemePackageIntegrity": "certified value from compatibility.md",
+    "webFrontendPackageVersion": "0.1.0-rc.6",
+    "webFrontendPackageIntegrity": "certified value from compatibility.md",
+    "frontendBundleSha256": "certified value from compatibility.md",
+    "frontendStylesheetSha256": "certified value from compatibility.md"
+  },
   "manifest": {}
 }
 ```
@@ -56,9 +80,9 @@ node <skill-dir>/scripts/validate-release.mjs \
   --origin <trusted-https-origin>
 ```
 
-For a current V2 release, require `status: "current"`, `installableCurrent: true`, and `artifactSha256` equal to the manifest's complete `.tgz` `artifact.sha256`. The URL must be the same trusted origin and exactly `/api/themes/<slug>/download/<version>` with no credentials, query, or fragment. A V2 package-internal manifest may omit `artifact`; it is informative only and cannot authorize installation by itself.
+For a current V2 release, require `status: "current"`, `installableCurrent: true`, `verified: true`, the four exact hosted-distribution fields, the exact independent runtime attestation, and `artifactSha256` equal to the manifest's complete `.tgz` `artifact.sha256`. The release sidecar must contain both `artifact` and `payload`; the package-internal manifest may omit `artifact` and is informative only. The URL must be the same trusted origin and exactly `/api/themes/<slug>/download/<version>` with no credentials, query, or fragment. External showcases and incomplete records are never Manager-installable.
 
-`sourceCommit` must be absent or `null` for rc.6. Reject any supplied commit because npm did not expose a trustworthy source commit. Do not reuse the historical rc.5 source commit.
+The `sourceCommit` key must be absent from rc.6 package compatibility. Reject the key even when its value is `null`: npm did not expose a trustworthy source commit. Do not reuse the historical rc.5 source commit.
 
 The validator returns `status: "historical-v1"` and `installableCurrent: false` for the exact rc.5/V1 contract. This preserves historical recognition without treating it as rc.6. Its `package.sha256` is a payload digest; the catalog `artifactSha256` remains the only complete `.tgz` digest.
 
@@ -76,7 +100,7 @@ node <skill-dir>/scripts/fetch-and-verify.mjs \
   [--origin <trusted-https-origin>]
 ```
 
-`--origin` is required for a remote source. The URL must use the controlled download route, and redirects cannot leave its trusted origin. The verifier handles only the route's same-origin, same-path HTTP 307 cookie bootstrap; it refuses HTTP, oversized responses, hash mismatches, relative local paths, and overwrites. Keep verified files in a workspace-local `.dsh-themes/artifacts/` directory. Do not delete an artifact referenced by the current rollback record.
+`--origin` is required for a remote source. The URL must use the controlled download route. The verifier accepts at most one same-origin, same-path HTTP 307 that carries the cookie bootstrap, then refuses every further 3xx; it refuses HTTP, oversized responses, hash mismatches, relative local paths, and overwrites. Keep verified files in a workspace-local `.dsh-themes/artifacts/` directory. Do not delete an artifact referenced by the current rollback record.
 
 ## Install or switch
 
@@ -91,10 +115,11 @@ node <skill-dir>/scripts/fetch-and-verify.mjs \
    ```
 
 3. Save the JSON output atomically as `.dsh-themes/rollback.json`; archive an existing record without overwriting it.
-4. Remove the current theme, if any: `dsh plugin --profile web remove "<current-package>"`.
-5. Add the verified target: `dsh plugin --profile web add "<absolute-target.tgz>" --save-exact`.
+4. Remove the current theme, if any: `node <skill-dir>/scripts/run-dsh.mjs plugin --profile web remove "<current-package>"`.
+5. Add the verified target: `node <skill-dir>/scripts/run-dsh.mjs plugin --profile web add "<absolute-target.tgz>" --save-exact`.
 6. Re-run dump-config and list. Confirm one exact target and no prior theme.
-7. Prompt the user to restart Harness; only then verify the browser roster and light/dark/system values.
+7. Prompt the user to restart Harness. Launch acceptance with `node <skill-dir>/scripts/run-dsh.mjs web [--port <port>]`; the launcher forces `127.0.0.1`, disables telemetry, and rejects `--patch`, `--trusted-host`, LAN, and wildcard binds.
+8. Before opening a browser, run `node <skill-dir>/scripts/assert-loopback.mjs --url <actual-url>`. Only after that passes may you verify the browser roster and light/dark/system values. `--trusted-host` is a browser-trust fence, not authentication, and is never an exception to this gate.
 
 If any post-removal step fails, remove a partial target, reinstall the prepared previous artifact when present, and verify again. If the previous state was built-in, leave no DSH-Themes package installed.
 
@@ -111,4 +136,4 @@ For rollback:
 5. Verify and restart Harness.
 6. Generate a reverse record with `theme-state.mjs reverse --input ...`, archive the consumed record, and save the reverse record atomically.
 
-Quote every path. On Windows use the resolved `dsh.cmd` shim when necessary. Never use an unresolved environment variable, home directory, or workspace root as an artifact target.
+Quote every path. The cross-platform launcher resolves the attested Node entry and pnpm shim; do not substitute `dsh`, `dsh.cmd`, `pnpm dlx`, or `npx`. Never use an unresolved environment variable, home directory, or workspace root as an artifact target.

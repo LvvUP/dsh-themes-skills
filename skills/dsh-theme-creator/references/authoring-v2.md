@@ -14,11 +14,14 @@ Use this full-skin authoring shape:
   "category": "illustrated",
   "version": "1.0.0",
   "license": "CC-BY-4.0",
-  "author": { "name": "Example Author", "url": "https://example.com" },
-  "copyright": {
-    "source": "original",
-    "aiGenerated": false
+  "licensePolicy": {
+    "url": "https://creativecommons.org/licenses/by/4.0/",
+    "commercialUse": "allowed",
+    "attributionRequired": true,
+    "shareAlikeRequired": false
   },
+  "author": { "name": "Example Author", "url": "https://example.com" },
+  "copyright": { "source": "original", "aiGenerated": false },
   "compatibility": { "dshPackageVersion": "0.1.0-rc.6" },
   "tokens": {
     "--dsw-alias-bg-base": { "light": "#f8fbff", "dark": "#101827" }
@@ -58,6 +61,25 @@ The example abbreviates `tokens`; real input must include all 13 names listed be
 - `--dsw-specific-sidebar-fill`
 
 Full skins require five distinct raster files: `background`, `sidebar`, `card`, `preview-light`, and `preview-dark`. All input paths must remain under the adjacent `assets/` directory. `visual.focus.x/y` are canonical integer CSS-position percentages from 0 through 100. Creator output marks previews as simulated; the website replaces them with real `runtime` screenshots before publication.
+
+`license` is the concise SPDX or `LicenseRef` identifier. `licensePolicy` is mandatory and records the fixed HTTPS license text plus `commercialUse` (`allowed`, `prohibited`, or `rights-clearance-required`) and explicit attribution/share-alike booleans. A `-NC-` identifier must say `prohibited`; `-BY-` and `-SA-` identifiers must declare their matching duties.
+
+For licensed third-party art, use a fixed source rather than a mutable repository root:
+
+```json
+{
+  "copyright": {
+    "source": "licensed",
+    "sourceUrl": "https://example.com/project/tree/<fixed-revision>",
+    "sourceRevision": "40-or-64-lowercase-hex",
+    "noticeUrl": "https://example.com/project/blob/<fixed-revision>/NOTICE",
+    "attribution": "Original creator; derivative creator",
+    "aiGenerated": false
+  }
+}
+```
+
+Attribution-required licensed art entering hosted review needs both `attribution` and a genuine `noticeUrl`; `attribution` is limited to 256 characters. A LICENSE URL cannot stand in for NOTICE. These fields document a claim for moderation; they do not prove that the submitter owns the necessary rights. If an external upstream has no NOTICE, the website may record omitted/null `noticeUrl` only in its separate non-installable external-showcase catalog entry. Noncommercial declarations can be classified for external showcase review but must not become hosted installable artifacts without separate rights clearance.
 
 For a palette-only `theme`, omit `copyright`, `assets`, and `visual`, and provide `preview: { "light": "...", "dark": "...", "surface": "optional" }`. Preview values may be reviewed same-origin paths or credential-free HTTPS URLs.
 

@@ -9,7 +9,7 @@ Validate locally, then let the user sign in on the website. Never request, read,
 
 ## Preflight
 
-1. Confirm the user intends to publish and can license every included asset.
+1. Confirm the user intends to publish and can license every included asset for the declared commercial-use policy. Licensed hosted submissions that require attribution need a genuine fixed-revision NOTICE URL; a LICENSE URL is not a NOTICE. Upstreams without a NOTICE may only be handed off as non-installable external showcases with `noticeUrl` omitted or null.
 2. Read [references/submission-checklist.md](references/submission-checklist.md).
 3. Validate the manifest and produce a safe handoff URL:
 
@@ -24,8 +24,9 @@ For local development only, `http://localhost:<port>` is allowed. The script per
 ## Handoff
 
 1. Report validation success, manifest SHA-256, theme slug, and exact DSH version.
-2. Open or give the user the returned `submissionUrl`.
-3. Tell the user to sign in in their own browser, upload the validated JSON and its local raster assets, review the parsed values, accept the declaration, and submit for moderation.
-4. Do not post directly to a private submission API, scrape a browser session, or claim acceptance before the website returns a submission ID.
+2. Report `distributionEligibility`: commercially permitted declarations may enter hosted review; noncommercial declarations are showcase-only; unclear rights require clearance.
+3. Open or give the user the returned `submissionUrl`.
+4. Tell the user to sign in in their own browser, upload the validated JSON and its local raster assets, review the parsed values, accept the declaration, and submit for moderation.
+5. Do not post directly to a private submission API, scrape a browser session, or claim acceptance before the website returns a submission ID.
 
 If validation fails, fix the declarative source with `dsh-theme-creator`; do not bypass the failed check. The website remains authoritative and will repeat image decoding, ownership, schema, compatibility, and security validation.

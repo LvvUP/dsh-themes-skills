@@ -11,6 +11,7 @@ import { run, tokens, writeAuthoring } from './helpers.mjs';
 
 const creator = resolve('skills/dsh-theme-creator/scripts/create-manifest.mjs');
 const hasher = resolve('skills/dsh-theme-creator/scripts/hash-file.mjs');
+const redlineAttribution = 'Clean-room original artwork generated for DSH-Themes; experimental full-skin concept inspired by the general idea of dsh-ui, without copying its code or protected media.';
 
 test('schema generator is deterministic and pins rc.6', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-'));
@@ -25,12 +26,133 @@ test('schema generator is deterministic and pins rc.6', async () => {
   const manifest = JSON.parse(await readFile(first, 'utf8'));
   assert.equal(manifest.compatibility.dshPackageVersion, '0.1.0-rc.6');
   assert.equal(manifest.compatibility.tokenCatalogSha256, 'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926');
+  assert.deepEqual(manifest.licensePolicy, {
+    attributionRequired: true,
+    commercialUse: 'allowed',
+    shareAlikeRequired: false,
+    url: 'https://creativecommons.org/licenses/by/4.0/',
+  });
   assert.equal(Object.keys(manifest.tokens).length, 13);
   assert.match(manifest.assets[0].sha256, /^[0-9a-f]{64}$/);
   assert.match(manifest.assets[0].path, /^assets\/[0-9a-f]{64}\.webp$/);
   assert.match(manifest.assets[0].url, /^\/api\/theme-studio\/import\/[0-9a-f]{64}\.webp$/);
   assert.deepEqual(manifest.visual.focus, { x: 70, y: 50 });
   assert.equal(manifest.preview.light.source, 'simulated');
+});
+
+test('creator records fixed third-party provenance and license restrictions', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-provenance-'));
+  const revision = 'cdb4da4f9c708571c6303cc1053185c62c8b617b';
+  const input = await writeAuthoring(directory, {
+    license: 'CC-BY-NC-SA-4.0',
+    licensePolicy: {
+      url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+      commercialUse: 'prohibited',
+      attributionRequired: true,
+      shareAlikeRequired: true,
+    },
+    copyright: {
+      source: 'licensed',
+      sourceUrl: `https://example.com/source/${revision}`,
+      sourceRevision: revision,
+      noticeUrl: `https://example.com/source/${revision}/NOTICE`,
+      attribution: redlineAttribution,
+      aiGenerated: false,
+    },
+  });
+  const output = join(directory, 'manifest.json');
+  const result = await run(creator, ['--input', input, '--output', output]);
+  assert.equal(result.code, 0, result.stderr);
+  const manifest = JSON.parse(await readFile(output, 'utf8'));
+  assert.equal(manifest.licensePolicy.commercialUse, 'prohibited');
+  assert.equal(manifest.copyright.sourceRevision, revision);
+  assert.equal(manifest.copyright.noticeUrl, `https://example.com/source/${revision}/NOTICE`);
+  assert.equal(redlineAttribution.length, 169);
+  assert.equal(manifest.copyright.attribution, redlineAttribution);
+});
+
+test('creator rejects missing or misleading rights metadata', async (t) => {
+  await t.test('missing license policy', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-license-policy-'));
+    const input = await writeAuthoring(directory, { licensePolicy: undefined });
+    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /licensePolicy must be an object/);
+  });
+
+  await t.test('noncommercial license marked commercially allowed', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-nc-'));
+    const input = await writeAuthoring(directory, {
+      license: 'CC-BY-NC-SA-4.0',
+      licensePolicy: {
+        url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+        commercialUse: 'allowed', attributionRequired: true, shareAlikeRequired: true,
+      },
+    });
+    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /noncommercial license/);
+  });
+
+  await t.test('attribution-required licensed art without notice', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-notice-'));
+    const input = await writeAuthoring(directory, {
+      copyright: {
+        source: 'licensed', sourceUrl: 'https://example.com/source',
+        attribution: 'Artist', aiGenerated: false,
+      },
+    });
+    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /noticeUrl/);
+  });
+
+  await t.test('license file cannot be supplied as a notice', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-license-as-notice-'));
+    const revision = 'cdb4da4f9c708571c6303cc1053185c62c8b617b';
+    const input = await writeAuthoring(directory, {
+      copyright: {
+        source: 'licensed',
+        sourceUrl: `https://example.com/source/${revision}`,
+        sourceRevision: revision,
+        noticeUrl: `https://example.com/source/${revision}/LICENSE`,
+        attribution: 'Artist',
+        aiGenerated: false,
+      },
+    });
+    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /actual NOTICE, not a LICENSE/);
+  });
+
+  await t.test('revision paired with a mutable source URL', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-revision-'));
+    const input = await writeAuthoring(directory, {
+      copyright: {
+        source: 'licensed', sourceUrl: 'https://example.com/source/main',
+        sourceRevision: 'cdb4da4f9c708571c6303cc1053185c62c8b617b',
+        noticeUrl: 'https://example.com/source/main/NOTICE',
+        attribution: 'Artist', aiGenerated: false,
+      },
+    });
+    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /sourceUrl must contain/);
+  });
+
+  await t.test('attribution longer than 256 characters', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-attribution-length-'));
+    const input = await writeAuthoring(directory, {
+      copyright: {
+        source: 'licensed', sourceUrl: 'https://example.com/source',
+        noticeUrl: 'https://example.com/source/NOTICE',
+        attribution: 'a'.repeat(257), aiGenerated: false,
+      },
+    });
+    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /copyright\.attribution is invalid/);
+  });
 });
 
 test('schema rejects missing tokens, dangerous CSS, and incompatible DSH', async (t) => {

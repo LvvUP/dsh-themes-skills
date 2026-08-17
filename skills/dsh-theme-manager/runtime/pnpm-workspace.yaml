@@ -1,0 +1,6 @@
+packages:
+  - .
+
+engineStrict: true
+nodeLinker: isolated
+strictPeerDependencies: true

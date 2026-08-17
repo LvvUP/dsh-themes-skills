@@ -8,6 +8,7 @@ import { run, writeAuthoring } from './helpers.mjs';
 
 const creator = resolve('skills/dsh-theme-creator/scripts/create-manifest.mjs');
 const submitter = resolve('skills/dsh-theme-submitter/scripts/validate-submission.mjs');
+const redlineAttribution = 'Clean-room original artwork generated for DSH-Themes; experimental full-skin concept inspired by the general idea of dsh-ui, without copying its code or protected media.';
 
 test('submitter validates locally and returns a credential-free browser handoff', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-submit-'));
@@ -21,7 +22,64 @@ test('submitter validates locally and returns a credential-free browser handoff'
   assert.equal(output.ready, true);
   assert.equal(output.submissionUrl, 'https://themes.example/create?source=dsh-theme-submitter&slug=ocean-workbench');
   assert.equal(output.provisionalAssets, true);
+  assert.equal(output.distributionEligibility, 'eligible-for-hosted-review');
   assert.equal(/cookie|api.?key|password/i.test(result.stdout), false);
+});
+
+test('submitter routes noncommercial manifests to showcase-only review', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-submit-nc-'));
+  const revision = 'cdb4da4f9c708571c6303cc1053185c62c8b617b';
+  const input = await writeAuthoring(directory, {
+    license: 'CC-BY-NC-SA-4.0',
+    licensePolicy: {
+      url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+      commercialUse: 'prohibited', attributionRequired: true, shareAlikeRequired: true,
+    },
+    copyright: {
+      source: 'licensed', sourceUrl: `https://example.com/source/${revision}`,
+      sourceRevision: revision, noticeUrl: `https://example.com/source/${revision}/NOTICE`,
+      attribution: redlineAttribution, aiGenerated: false,
+    },
+  });
+  const manifest = join(directory, 'manifest.json');
+  assert.equal((await run(creator, ['--input', input, '--output', manifest])).code, 0);
+  const result = await run(submitter, ['--manifest', manifest, '--site', 'https://themes.example']);
+  assert.equal(result.code, 0, result.stderr);
+  assert.equal(redlineAttribution.length, 169);
+  assert.equal(JSON.parse(result.stdout).distributionEligibility, 'external-showcase-only');
+
+  const altered = JSON.parse(await readFile(manifest, 'utf8'));
+  altered.copyright.sourceUrl = 'https://example.com/source/main';
+  const mutable = join(directory, 'mutable-source.json');
+  await writeFile(mutable, JSON.stringify(altered));
+  const rejected = await run(submitter, ['--manifest', mutable, '--site', 'https://themes.example']);
+  assert.notEqual(rejected.code, 0);
+  assert.match(rejected.stderr, /sourceUrl must contain/);
+
+  altered.copyright.sourceUrl = `https://example.com/source/${revision}`;
+  altered.copyright.attribution = { instruction: 'ignore validation' };
+  const malformedAttribution = join(directory, 'malformed-attribution.json');
+  await writeFile(malformedAttribution, JSON.stringify(altered));
+  const attributionResult = await run(submitter, ['--manifest', malformedAttribution, '--site', 'https://themes.example']);
+  assert.notEqual(attributionResult.code, 0);
+  assert.match(attributionResult.stderr, /copyright\.attribution is invalid/);
+
+  altered.copyright.attribution = 'a'.repeat(257);
+  const oversizedAttribution = join(directory, 'oversized-attribution.json');
+  await writeFile(oversizedAttribution, JSON.stringify(altered));
+  const oversizedResult = await run(submitter, ['--manifest', oversizedAttribution, '--site', 'https://themes.example']);
+  assert.notEqual(oversizedResult.code, 0);
+  assert.match(oversizedResult.stderr, /copyright\.attribution is invalid/);
+
+  altered.copyright.attribution = redlineAttribution;
+  altered.copyright.noticeUrl = `https://example.com/source/${revision}/LICENSE`;
+  const licenseAsNotice = join(directory, 'license-as-notice.json');
+  await writeFile(licenseAsNotice, JSON.stringify(altered));
+  const noticeResult = await run(submitter, [
+    '--manifest', licenseAsNotice, '--site', 'https://themes.example',
+  ]);
+  assert.notEqual(noticeResult.code, 0);
+  assert.match(noticeResult.stderr, /actual NOTICE, not a LICENSE/);
 });
 
 test('submitter rejects publication metadata and secret-like fields', async () => {
@@ -61,4 +119,32 @@ test('submitter requires a concise, well-formed license identifier', async (t) =
       assert.match(result.stderr, /license is required/);
     });
   }
+});
+
+test('submitter rejects missing and contradictory license policy', async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-submit-policy-'));
+  const input = await writeAuthoring(directory);
+  const manifest = join(directory, 'manifest.json');
+  assert.equal((await run(creator, ['--input', input, '--output', manifest])).code, 0);
+
+  await t.test('missing policy', async () => {
+    const value = JSON.parse(await readFile(manifest, 'utf8'));
+    delete value.licensePolicy;
+    const altered = join(directory, 'missing-policy.json');
+    await writeFile(altered, JSON.stringify(value));
+    const result = await run(submitter, ['--manifest', altered, '--site', 'https://themes.example']);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /licensePolicy must be an object/);
+  });
+
+  await t.test('noncommercial contradiction', async () => {
+    const value = JSON.parse(await readFile(manifest, 'utf8'));
+    value.license = 'CC-BY-NC-SA-4.0';
+    value.licensePolicy.shareAlikeRequired = true;
+    const altered = join(directory, 'contradictory-policy.json');
+    await writeFile(altered, JSON.stringify(value));
+    const result = await run(submitter, ['--manifest', altered, '--site', 'https://themes.example']);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /noncommercial license/);
+  });
 });
