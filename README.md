@@ -30,9 +30,15 @@ Catalog entries have an explicit distribution class. Only verified `hosted-verif
 Requires Node.js 22 or newer.
 
 ```bash
+npm ci --ignore-scripts
 npm test
 npm run validate
 ```
+
+`npm test` deterministically bootstraps the nested verified runner with the
+Corepack-pinned `pnpm@11.7.0`, a frozen lockfile, and lifecycle scripts disabled.
+It then verifies the runner attestation and complete critical dependency closure
+before executing the test suite.
 
 This is an independent community project and is not affiliated with or endorsed by DeepSeek AI. DeepSeek and related names are trademarks of their respective owners.
 

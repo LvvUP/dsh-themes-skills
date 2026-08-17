@@ -19,10 +19,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
-      - name: Bootstrap the attested DSH runner
-        working-directory: skills/dsh-theme-manager/runtime
-        run: |
-          corepack enable
-          corepack pnpm install --frozen-lockfile --ignore-scripts
+      - name: Confirm the nested runner starts unbootstrapped
+        run: test ! -d skills/dsh-theme-manager/runtime/node_modules
+      - name: Test the advertised clean-clone workflow
+        run: npm test
       - run: npm run validate
-      - run: npm test
