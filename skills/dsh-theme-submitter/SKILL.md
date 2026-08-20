@@ -7,6 +7,8 @@ description: Validate a local declarative DSH-Themes manifest and guide its auth
 
 Validate locally, then let the user sign in on the website. Never request, read, save, copy, or transmit a browser cookie, session, password, API key, authorization header, or long-lived credential.
 
+Upstream DeepSeek Harness `0.1.0-rc.8` is available on npm `next`, but DSH-Themes certifies submissions only for `0.1.0-rc.6`. Reject rc.7/rc.8 compatibility rather than upgrading or rewriting it; V1 rc.5 is historical and is not accepted by this submission path. [`release-state.json`](../../release-state.json) records this informational distinction without controlling validation.
+
 ## Preflight
 
 1. Confirm the user intends to publish and can license every included asset for the declared commercial-use policy. Licensed hosted submissions that require attribution need a genuine fixed-revision NOTICE URL; a LICENSE URL is not a NOTICE. Upstreams without a NOTICE may only be handed off as non-installable external showcases with `noticeUrl` omitted or null.

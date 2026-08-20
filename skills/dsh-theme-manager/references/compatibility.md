@@ -2,6 +2,16 @@
 
 Treat every value as exact. A missing source commit is intentional: the published npm metadata for this release does not expose a trustworthy `gitHead`, so never invent or reuse one.
 
+## Release lanes
+
+| Lane | Exact release | Status |
+| --- | --- | --- |
+| Upstream | `0.1.0-rc.8`, npm `next`, tag `dsh-v0.1.0-rc.8` at `141eb6fef83422698aef7a981029e843e8161534` | Released upstream; not certified or Manager-installable |
+| Certified | `0.1.0-rc.6` | The only current DSH-Themes installation lane |
+| Historical V1 | `0.1.0-rc.5` at `47f943859bef60e4160492346772ded9b24f765a` | Historical recognition only; never current |
+
+The official rc.8 tag maps that release to public source; it does not upgrade the rc.6 package contract or prove npm tarball provenance. npm `latest` was still rc.7 when this status was captured on 2026-08-20. The repository's [`release-state.json`](../../../release-state.json) is the canonical informational summary, but Manager never reads it as a security authority. Validators, the frozen lockfile, and the runtime attestation below remain exact rc.6 evidence and must fail closed for rc.7/rc.8.
+
 An exact compatibility match is necessary but not sufficient for installation. The release record must also set `verified: true` and contain this exact catalog authorization:
 
 ```json

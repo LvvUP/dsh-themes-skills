@@ -12,6 +12,8 @@ import { run, tokens, writeAuthoring } from './helpers.mjs';
 const creator = resolve('skills/dsh-theme-creator/scripts/create-manifest.mjs');
 const hasher = resolve('skills/dsh-theme-creator/scripts/hash-file.mjs');
 const redlineAttribution = 'Clean-room original artwork generated for DSH-Themes; experimental full-skin concept inspired by the general idea of dsh-ui, without copying its code or protected media.';
+const releaseState = JSON.parse(await readFile(resolve('release-state.json'), 'utf8'));
+const upstreamVersion = releaseState.upstream.dshPackageVersion;
 
 test('schema generator is deterministic and pins rc.6', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-'));
@@ -180,6 +182,15 @@ test('schema rejects missing tokens, dangerous CSS, and incompatible DSH', async
     const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
     assert.notEqual(result.code, 0);
     assert.match(result.stderr, /rc\.6/);
+  });
+  await t.test('released but uncertified upstream version', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-schema-upstream-'));
+    const input = await writeAuthoring(directory, {
+      compatibility: { dshPackageVersion: upstreamVersion },
+    });
+    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /Only DSH 0\.1\.0-rc\.6 is verified/);
   });
 });
 

@@ -14,7 +14,7 @@
 
 </div>
 
-DSH-Themes Skills 面向 DeepSeek Harness `0.1.0-rc.6`，由四个彼此独立的技能组成，覆盖两条清晰的工作流：
+DSH-Themes Skills 的已认证安装通道面向 DeepSeek Harness `0.1.0-rc.6`，由四个彼此独立的技能组成，覆盖两条清晰的工作流：
 
 - **发现与使用：**先由 `dsh-theme-finder` 提供目录证据，再由 `dsh-theme-manager` 安装或切换符合条件的已验证制品。
 - **创作与发布：**先由 `dsh-theme-creator` 生成确定性的纯数据清单，再由 `dsh-theme-submitter` 在本地完成校验，并将用户引导至网站的登录投稿流程。
@@ -75,7 +75,12 @@ npx skills add LvvUP/dsh-themes-skills --skill dsh-theme-finder
 
 ## 兼容性与项目状态
 
+- 当前上游源码 Release：**DeepSeek Harness `0.1.0-rc.8`**，官方 tag 为 `dsh-v0.1.0-rc.8`，对应提交 `141eb6fef83422698aef7a981029e843e8161534`。
+- 截至 2026-08-20 的 npm 通道状态：精确 rc.8 位于 **`next`**，**`latest` 仍是 rc.7**。
 - 当前验证目标：**DeepSeek Harness `0.1.0-rc.6`**。
+- RC.7 与 RC.8 尚未通过 DSH-Themes 认证；Finder、Creator、Submitter 与 Manager 会继续对这些运行时 fail closed。上游发布不等于获得安装授权。
+- 面向 `0.1.0-rc.5` 的 V1 发布只作为历史制品保留，绝不会被视为当前 RC.6 制品。
+- [`release-state.json`](release-state.json) 是版本状态的规范信息摘要，但不控制 validator、冻结 runner 或安装授权。
 - 主题变更后需要重启 Harness。
 - 项目目前处于开发者预览阶段，仅支持最新的 `main` 分支。
 - 本项目由社区独立维护，与 DeepSeek AI 无隶属或背书关系。DeepSeek 及相关名称是其各自权利人的商标。

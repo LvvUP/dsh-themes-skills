@@ -7,6 +7,10 @@ description: Search and classify a trusted DSH-Themes catalog containing install
 
 Return catalog evidence, not invented recommendations. Search only a website/catalog origin the user explicitly trusts.
 
+## Release boundary
+
+Upstream DeepSeek Harness is `0.1.0-rc.8` on npm `next`, but it is not certified here. This Skill searches the certified `0.1.0-rc.6` lane only and must reject rc.7 or rc.8 as installable compatibility. V1 `0.1.0-rc.5` records are historical only. See the repository's informational [`release-state.json`](../../release-state.json); it does not grant installation authority.
+
 ## Search
 
 Use the bundled read-only client:

@@ -14,6 +14,8 @@ const selectorHash = '5bcd9f874095af2114d86f91301868c6b0f2cebe58f51b9919150975d4
 const dshIntegrity = 'sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==';
 const frontendSha256 = 'a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68';
 const redlineAttribution = 'Clean-room original artwork generated for DSH-Themes; experimental full-skin concept inspired by the general idea of dsh-ui, without copying its code or protected media.';
+const releaseState = JSON.parse(await readFile(resolve('release-state.json'), 'utf8'));
+const upstreamVersion = releaseState.upstream.dshPackageVersion;
 
 function item(overrides = {}) {
   const sha256 = 'a'.repeat(64);
@@ -137,6 +139,18 @@ test('finder returns only published verified exact rc.6 releases', async () => {
   assert.equal(output.items[0].compatibility.dshPackageVersion, '0.1.0-rc.6');
   assert.equal(output.items[0].distribution.installability, 'manager');
   assert.equal(output.items[0].license.identifier, 'CC-BY-4.0');
+});
+
+test('finder fails closed for the released but uncertified upstream version', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-finder-upstream-'));
+  const catalog = join(directory, 'catalog.json');
+  await writeFile(catalog, JSON.stringify({ items: [item()] }));
+  const result = await run(finder, [
+    '--catalog', catalog,
+    '--dsh-version', upstreamVersion,
+  ]);
+  assert.notEqual(result.code, 0);
+  assert.match(result.stderr, /Only DSH 0\.1\.0-rc\.6 is verified/);
 });
 
 test('finder keeps external showcases visible but non-installable', async () => {
