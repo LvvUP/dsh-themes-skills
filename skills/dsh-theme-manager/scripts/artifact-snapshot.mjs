@@ -1,4 +1,5 @@
 import { createHash, randomBytes } from 'node:crypto';
+import { execFile } from 'node:child_process';
 import {
   chmod,
   link,
@@ -9,6 +10,132 @@ import {
   unlink,
 } from 'node:fs/promises';
 import { join, parse, relative, resolve } from 'node:path';
+import { promisify } from 'node:util';
+
+const execFileAsync = promisify(execFile);
+const WINDOWS_PRIVATE_PATH_ENV = 'DSH_THEMES_PRIVATE_PATH';
+const WINDOWS_PRIVATE_KIND_ENV = 'DSH_THEMES_PRIVATE_KIND';
+const WINDOWS_PRIVATE_ACTION_ENV = 'DSH_THEMES_PRIVATE_ACTION';
+const WINDOWS_PRIVATE_ACL_SCRIPT = String.raw`
+$ErrorActionPreference = 'Stop'
+$target = [Environment]::GetEnvironmentVariable('DSH_THEMES_PRIVATE_PATH', 'Process')
+$kind = [Environment]::GetEnvironmentVariable('DSH_THEMES_PRIVATE_KIND', 'Process')
+$action = [Environment]::GetEnvironmentVariable('DSH_THEMES_PRIVATE_ACTION', 'Process')
+if ([String]::IsNullOrWhiteSpace($target)) { throw 'missing private path' }
+if ($kind -ne 'directory' -and $kind -ne 'file') { throw 'invalid private path kind' }
+if ($action -ne 'configure' -and $action -ne 'verify') { throw 'invalid private path action' }
+
+$item = Get-Item -LiteralPath $target -Force
+if ($kind -eq 'directory' -and -not $item.PSIsContainer) {
+  throw 'private directory target is not a directory'
+}
+if ($kind -eq 'file' -and $item.PSIsContainer) {
+  throw 'private file target is not a file'
+}
+
+$currentSid = [System.Security.Principal.WindowsIdentity]::GetCurrent().User
+$systemSid = [System.Security.Principal.SecurityIdentifier]::new('S-1-5-18')
+$inheritance = [System.Security.AccessControl.InheritanceFlags]::None
+if ($kind -eq 'directory') {
+  $inheritance = [System.Security.AccessControl.InheritanceFlags]::ContainerInherit -bor [System.Security.AccessControl.InheritanceFlags]::ObjectInherit
+}
+if ($action -eq 'configure') {
+  $acl = Get-Acl -LiteralPath $target
+  $acl.SetAccessRuleProtection($true, $false)
+  foreach ($rule in @($acl.Access)) {
+    [void]$acl.RemoveAccessRuleSpecific($rule)
+  }
+  $acl.SetOwner($currentSid)
+  foreach ($sid in @($currentSid, $systemSid)) {
+    $rule = [System.Security.AccessControl.FileSystemAccessRule]::new(
+      $sid,
+      [System.Security.AccessControl.FileSystemRights]::FullControl,
+      $inheritance,
+      [System.Security.AccessControl.PropagationFlags]::None,
+      [System.Security.AccessControl.AccessControlType]::Allow
+    )
+    [void]$acl.AddAccessRule($rule)
+  }
+  Set-Acl -LiteralPath $target -AclObject $acl
+}
+
+$verified = Get-Acl -LiteralPath $target
+$ownerSid = $verified.GetOwner([System.Security.Principal.SecurityIdentifier]).Value
+if ($ownerSid -ne $currentSid.Value) { throw 'private path owner is not the current user' }
+if (-not $verified.AreAccessRulesProtected) { throw 'private path DACL still inherits access rules' }
+$rules = @($verified.Access)
+$allowedSids = @($currentSid.Value, $systemSid.Value)
+if ($rules.Count -ne 2) { throw 'private path DACL must contain exactly two access rules' }
+foreach ($rule in $rules) {
+  $sid = $rule.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value
+  if ($rule.IsInherited) { throw 'private path DACL contains an inherited access rule' }
+  if ($rule.AccessControlType -ne [System.Security.AccessControl.AccessControlType]::Allow) {
+    throw 'private path DACL contains a non-Allow access rule'
+  }
+  if ($allowedSids -notcontains $sid) { throw 'private path DACL contains an extra Allow principal' }
+  $fullControl = [System.Security.AccessControl.FileSystemRights]::FullControl
+  if (($rule.FileSystemRights -band $fullControl) -ne $fullControl) {
+    throw 'private path DACL does not grant required FullControl'
+  }
+  if ($rule.InheritanceFlags -ne $inheritance) {
+    throw 'private path DACL has incorrect inheritance flags'
+  }
+  if ($rule.PropagationFlags -ne [System.Security.AccessControl.PropagationFlags]::None) {
+    throw 'private path DACL has incorrect propagation flags'
+  }
+}
+foreach ($sid in $allowedSids) {
+  $matches = @($rules | Where-Object {
+    $_.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value -eq $sid
+  })
+  if ($matches.Count -ne 1) { throw 'private path DACL is missing a required principal' }
+}
+`;
+
+async function secureWindowsPath(path, kind, action) {
+  const systemRoot = process.env.SystemRoot ?? process.env.windir;
+  if (!systemRoot) {
+    throw new Error('cannot secure private path without the Windows system root');
+  }
+  const powershell = join(
+    systemRoot,
+    'System32',
+    'WindowsPowerShell',
+    'v1.0',
+    'powershell.exe'
+  );
+  try {
+    await execFileAsync(
+      powershell,
+      [
+        '-NoLogo',
+        '-NoProfile',
+        '-NonInteractive',
+        '-ExecutionPolicy',
+        'Bypass',
+        '-Command',
+        WINDOWS_PRIVATE_ACL_SCRIPT,
+      ],
+      {
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          [WINDOWS_PRIVATE_PATH_ENV]: path,
+          [WINDOWS_PRIVATE_KIND_ENV]: kind,
+          [WINDOWS_PRIVATE_ACTION_ENV]: action,
+        },
+        maxBuffer: 64 * 1024,
+        timeout: 15_000,
+        windowsHide: true,
+      }
+    );
+  } catch (error) {
+    const detail = error?.stderr?.trim() || error?.message || 'unknown error';
+    throw new Error(`failed to secure private Windows path: ${detail}`, {
+      cause: error,
+    });
+  }
+}
 
 function inside(parent, child) {
   const path = relative(parent, child);
@@ -18,8 +145,10 @@ function inside(parent, child) {
 async function privateDirectory(parent, name) {
   const path = join(parent, name);
   if (!inside(parent, path)) throw new Error(`unsafe artifact directory: ${name}`);
+  let created = false;
   try {
     await mkdir(path, { mode: 0o700 });
+    created = true;
   } catch (error) {
     if (error?.code !== 'EEXIST') throw error;
   }
@@ -27,7 +156,9 @@ async function privateDirectory(parent, name) {
   if (!info.isDirectory() || info.isSymbolicLink()) {
     throw new Error(`${name} must be a real directory`);
   }
-  if ((info.mode & 0o077) !== 0) {
+  if (process.platform === 'win32') {
+    await secureWindowsPath(path, 'directory', created ? 'configure' : 'verify');
+  } else if ((info.mode & 0o077) !== 0) {
     throw new Error(`${name} must not be accessible by group or other users`);
   }
   if ((await realpath(path)) !== path) {
@@ -67,7 +198,9 @@ async function verifyExistingSnapshot(path, expectedDigest, expectedSize, maxByt
   if (!info.isFile() || info.isSymbolicLink() || info.size !== expectedSize) {
     throw new Error('existing verified artifact snapshot is not a stable regular file');
   }
-  if ((info.mode & 0o077) !== 0) {
+  if (process.platform === 'win32') {
+    await secureWindowsPath(path, 'file', 'verify');
+  } else if ((info.mode & 0o077) !== 0) {
     throw new Error('existing verified artifact snapshot has unsafe permissions');
   }
   const handle = await open(path, 'r');
@@ -173,7 +306,11 @@ export async function snapshotAllowedArtifact(
     let reused = false;
     try {
       await link(incomingPath, snapshotPath);
-      await chmod(snapshotPath, 0o600);
+      if (process.platform === 'win32') {
+        await secureWindowsPath(snapshotPath, 'file', 'configure');
+      } else {
+        await chmod(snapshotPath, 0o600);
+      }
     } catch (error) {
       if (error?.code !== 'EEXIST') throw error;
       reused = true;

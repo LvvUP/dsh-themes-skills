@@ -22,6 +22,29 @@ const releaseValidator = resolve('skills/dsh-theme-manager/scripts/validate-rele
 const runnerVerifier = resolve('skills/dsh-theme-manager/scripts/verify-runner.mjs');
 const runner = resolve('skills/dsh-theme-manager/scripts/run-dsh.mjs');
 const loopbackGate = resolve('skills/dsh-theme-manager/scripts/assert-loopback.mjs');
+const WINDOWS_PRIVATE_ACL_INSPECTOR = String.raw`
+$ErrorActionPreference = 'Stop'
+$target = [Environment]::GetEnvironmentVariable('DSH_THEMES_TEST_PRIVATE_PATH', 'Process')
+if ([String]::IsNullOrWhiteSpace($target)) { throw 'missing private path' }
+$acl = Get-Acl -LiteralPath $target
+$currentSid = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value
+$rules = @($acl.Access | ForEach-Object {
+  [PSCustomObject]@{
+    sid = $_.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value
+    allow = $_.AccessControlType -eq [System.Security.AccessControl.AccessControlType]::Allow
+    inherited = $_.IsInherited
+    fullControl = (($_.FileSystemRights -band [System.Security.AccessControl.FileSystemRights]::FullControl) -eq [System.Security.AccessControl.FileSystemRights]::FullControl)
+    inheritance = [int]$_.InheritanceFlags
+    propagation = [int]$_.PropagationFlags
+  }
+})
+[PSCustomObject]@{
+  protected = $acl.AreAccessRulesProtected
+  ownerSid = $acl.GetOwner([System.Security.Principal.SecurityIdentifier]).Value
+  currentSid = $currentSid
+  rules = $rules
+} | ConvertTo-Json -Depth 4 -Compress
+`;
 const fixture = (name) => resolve('test/fixtures', name);
 const shaA = 'a'.repeat(64);
 const shaB = 'b'.repeat(64);
@@ -182,6 +205,67 @@ function close(server) {
   return new Promise((resolvePromise, rejectPromise) => {
     server.close((error) => (error ? rejectPromise(error) : resolvePromise()));
   });
+}
+
+function inspectWindowsPrivateAcl(target) {
+  const systemRoot = process.env.SystemRoot ?? process.env.windir;
+  assert.ok(systemRoot, 'Windows system root is required for ACL inspection');
+  const powershell = join(
+    systemRoot,
+    'System32',
+    'WindowsPowerShell',
+    'v1.0',
+    'powershell.exe'
+  );
+  const result = spawnSync(
+    powershell,
+    [
+      '-NoLogo',
+      '-NoProfile',
+      '-NonInteractive',
+      '-ExecutionPolicy',
+      'Bypass',
+      '-Command',
+      WINDOWS_PRIVATE_ACL_INSPECTOR,
+    ],
+    {
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        DSH_THEMES_TEST_PRIVATE_PATH: target,
+      },
+      timeout: 15_000,
+      windowsHide: true,
+    }
+  );
+  assert.equal(result.status, 0, result.stderr);
+  return JSON.parse(result.stdout);
+}
+
+function assertPrivateWindowsAcl(target, expectedInheritance) {
+  const acl = inspectWindowsPrivateAcl(target);
+  assert.equal(acl.protected, true);
+  assert.equal(acl.ownerSid, acl.currentSid);
+  assert.equal(acl.rules.length, 2);
+  assert.ok(acl.rules.every((rule) => rule.allow));
+  assert.ok(acl.rules.every((rule) => !rule.inherited));
+  assert.ok(acl.rules.every((rule) => rule.fullControl));
+  assert.ok(
+    acl.rules.every((rule) => rule.inheritance === expectedInheritance)
+  );
+  assert.ok(acl.rules.every((rule) => rule.propagation === 0));
+  assert.deepEqual(
+    acl.rules.map((rule) => rule.sid).sort(),
+    [acl.currentSid, 'S-1-5-18'].sort()
+  );
+}
+
+async function assertPrivateSnapshotPermissions(target) {
+  if (process.platform === 'win32') {
+    assertPrivateWindowsAcl(target, 0);
+    return;
+  }
+  assert.equal((await lstat(target)).mode & 0o777, 0o600);
 }
 
 test('release validator separates current V3, historical V2/V1, and artifact authority', async (t) => {
@@ -908,7 +992,14 @@ test('allowlisted plugin snapshot keeps a durable rollback locator after the sou
         `${snapshot.sha256}.tgz`
       )
     );
-    assert.equal((await lstat(snapshot.path)).mode & 0o777, 0o600);
+    await assertPrivateSnapshotPermissions(snapshot.path);
+    if (process.platform === 'win32') {
+      assertPrivateWindowsAcl(join(directory, '.dsh-themes'), 3);
+      assertPrivateWindowsAcl(
+        join(directory, '.dsh-themes', 'verified-artifacts'),
+        3
+      );
+    }
 
     const reused = await snapshotAllowedArtifact(source, {
       workspace: directory,
