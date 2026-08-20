@@ -141,7 +141,7 @@ test('finder returns only published verified exact rc.6 releases', async () => {
   assert.equal(output.items[0].license.identifier, 'CC-BY-4.0');
 });
 
-test('finder fails closed for the released but uncertified upstream version', async () => {
+test('finder may inspect the RC.8 target but does not relabel RC.6 artifacts', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-finder-upstream-'));
   const catalog = join(directory, 'catalog.json');
   await writeFile(catalog, JSON.stringify({ items: [item()] }));
@@ -149,8 +149,10 @@ test('finder fails closed for the released but uncertified upstream version', as
     '--catalog', catalog,
     '--dsh-version', upstreamVersion,
   ]);
-  assert.notEqual(result.code, 0);
-  assert.match(result.stderr, /Only DSH 0\.1\.0-rc\.6 is verified/);
+  assert.equal(result.code, 0, result.stderr);
+  const output = JSON.parse(result.stdout);
+  assert.equal(output.dshVersion, upstreamVersion);
+  assert.equal(output.count, 0);
 });
 
 test('finder keeps external showcases visible but non-installable', async () => {
@@ -355,4 +357,116 @@ test('finder accepts prerelease and build metadata but never verifies empty iden
       assert.equal(JSON.parse(result.stdout).count, 0);
     });
   }
+});
+
+function directorySkin(overrides = {}) {
+  const revision = 'a9b915cee0f12f2fd13a6575bc8feaa9ee09d6ed';
+  return {
+    catalogId: 2206,
+    slug: 'dsh-web-ui-qq98',
+    kind: 'skin',
+    title: 'QQ98 Retro',
+    summary: 'A pinned CSS-only community adaptation awaiting RC.8 runtime evidence.',
+    author: { key: 'github:zhu1090093659', name: 'dsh-web-ui' },
+    source: {
+      repository: 'zhu1090093659/dsh-web-ui',
+      revision,
+      subdir: 'packages/skins/qq98',
+      url: `https://github.com/zhu1090093659/dsh-web-ui/tree/${revision}/packages/skins/qq98`,
+      packageName: '@linxin666/dsh-client-ui-skin-qq98',
+      packageVersion: '0.1.18',
+      evidence: [],
+    },
+    rights: {
+      licenseExpression: 'Apache-2.0 metadata AND BSD-3-Clause scoped file',
+      licenseUrl: `https://github.com/zhu1090093659/dsh-web-ui/blob/${revision}/packages/skins/qq98/LICENSE`,
+      status: 'conditional',
+      attributionRequired: true,
+      assetDisclosure: 'Historical brand artwork is omitted from the adaptation.',
+      trademarkDisclosure: 'No trademark permission is inferred.',
+    },
+    runtime: {
+      status: 'verification-pending',
+      networkBehavior: 'No remote URL is included in the CSS-only adaptation.',
+      riskDisclosure: 'RC.8 acceptance remains pending.',
+      rollback: 'No installation is authorized.',
+    },
+    distribution: {
+      kind: 'external-showcase',
+      installability: 'showcase-only',
+      consentRequired: true,
+    },
+    compatibility: {
+      status: 'verification-pending',
+      baseline: '0.1.0-rc.8',
+      evidence: ['Candidate only.'],
+    },
+    admission: { status: 'published', reviewedAt: '2026-08-20', notes: [] },
+    categories: ['retro'],
+    capabilities: ['appearance'],
+    qualitySignals: [],
+    previewAssets: [
+      { kind: 'light', url: '/preview.webp', alt: 'Editorial preview', width: 960, height: 600 },
+    ],
+    tags: ['dsh-web-ui'],
+    ...overrides,
+  };
+}
+
+test('finder preserves directory rights/runtime/source axes and keeps RC.8 pending items non-installable', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-finder-directory-'));
+  const catalog = join(directory, 'catalog.json');
+  const spoofedRuntime = directorySkin({
+    catalogId: 2207,
+    slug: 'dsh-web-ui-ths',
+    source: {
+      ...directorySkin().source,
+      subdir: 'packages/skins/ths',
+      url: directorySkin().source.url.replaceAll('qq98', 'ths'),
+      packageName: '@linxin666/dsh-client-ui-skin-ths',
+    },
+    runtime: { ...directorySkin().runtime, status: 'runtime-verified' },
+    distribution: {
+      kind: 'external-runtime-verified',
+      installability: 'community-installer',
+      consentRequired: true,
+    },
+    compatibility: {
+      ...directorySkin().compatibility,
+      status: 'verified',
+    },
+  });
+  const heldConversion = directorySkin({
+    catalogId: 9999,
+    slug: 'unlicensed-conversion-hold',
+    admission: { status: 'hold', reviewedAt: '2026-08-20', notes: ['No LICENSE.'] },
+  });
+  await writeFile(catalog, JSON.stringify({ items: [
+    directorySkin(),
+    spoofedRuntime,
+    heldConversion,
+  ] }));
+
+  const result = await run(finder, [
+    '--catalog', catalog,
+    '--dsh-version', '0.1.0-rc.8',
+    '--limit', '50',
+  ]);
+  assert.equal(result.code, 0, result.stderr);
+  const output = JSON.parse(result.stdout);
+  assert.deepEqual(output.items.map((entry) => entry.slug), ['dsh-web-ui-qq98']);
+  assert.equal(output.items[0].installable, false);
+  assert.equal(output.items[0].distribution.kind, 'external-showcase');
+  assert.equal(output.items[0].rights.status, 'conditional');
+  assert.equal(output.items[0].runtime.status, 'verification-pending');
+  assert.equal(output.items[0].source.sourceRevision, directorySkin().source.revision);
+  assert.equal(output.items[0].source.sourceSubdir, 'packages/skins/qq98');
+
+  const installable = await run(finder, [
+    '--catalog', catalog,
+    '--dsh-version', '0.1.0-rc.8',
+    '--availability', 'installable',
+  ]);
+  assert.equal(installable.code, 0, installable.stderr);
+  assert.equal(JSON.parse(installable.stdout).count, 0);
 });

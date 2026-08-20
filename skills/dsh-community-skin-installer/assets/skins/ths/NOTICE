@@ -1,0 +1,8 @@
+DSH-Themes RC.8 CSS-only adaptation
+
+Upstream: dsh-web-ui
+Source: https://github.com/zhu1090093659/dsh-web-ui/tree/a9b915cee0f12f2fd13a6575bc8feaa9ee09d6ed/packages/skins/ths
+Revision: a9b915cee0f12f2fd13a6575bc8feaa9ee09d6ed
+Upstream package metadata says Apache-2.0 while the package LICENSE file is BSD-3-Clause; both facts are disclosed. The BSD-3-Clause text is included in LICENSE.
+
+Modifications: compiled CSS was extracted from the fixed upstream client bundle, legacy body scoping was migrated to Skin Center v2, and all executable hooks, injected chrome, favicons, document-title changes, network/RPC behavior, and inline brand artwork were omitted. The adaptation is not affiliated with or endorsed by any named product or trademark owner.

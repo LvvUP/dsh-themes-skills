@@ -9,7 +9,7 @@ Manage at most one verified `@dsh-themes/*` Cordis plugin in the `web` profile. 
 
 ## Release boundary
 
-The current upstream release is DeepSeek Harness `0.1.0-rc.8` on npm `next`, sourced by official tag `dsh-v0.1.0-rc.8` at `141eb6fef83422698aef7a981029e843e8161534`. That upstream fact is not installation authority: the only current certified lane remains `0.1.0-rc.6`, while V1 rc.5 is historical. Stop on rc.7 or rc.8 instead of changing the runner or compatibility record. See the informational [`release-state.json`](../../release-state.json) and the exact certified evidence below.
+The current upstream release is DeepSeek Harness `0.1.0-rc.8` on npm `next`, sourced by official tag `dsh-v0.1.0-rc.8` at `141eb6fef83422698aef7a981029e843e8161534`. This repository records exact candidate registry, Web asset-set, ui-theme bundle, and token evidence in [`references/rc8-v3-candidate.json`](references/rc8-v3-candidate.json), while selector and runtime-attestation authority remain `null`. Candidate evidence is not installation authority: the only current certified lane remains `0.1.0-rc.6`, while V1 rc.5 is historical. Stop on rc.7 or every RC.8 V3 record until a future release atomically closes the candidate blockers. See the informational [`release-state.json`](../../release-state.json) and the exact certified evidence below.
 
 ## Safety boundaries
 
@@ -89,6 +89,15 @@ For a current V2 release, require `status: "current"`, `installableCurrent: true
 The `sourceCommit` key must be absent from rc.6 package compatibility. Reject the key even when its value is `null`: npm did not expose a trustworthy source commit. Do not reuse the historical rc.5 source commit.
 
 The validator returns `status: "historical-v1"` and `installableCurrent: false` for the exact rc.5/V1 contract. This preserves historical recognition without treating it as rc.6. Its `package.sha256` is a payload digest; the catalog `artifactSha256` remains the only complete `.tgz` digest.
+
+Schema `3.0` is reserved for RC.8. `validate-release.mjs` rejects every V3 release record with a pending-evidence error. To audit the checked-in non-installable candidate only, run:
+
+```bash
+node <skill-dir>/scripts/validate-rc8-candidate.mjs \
+  --input <absolute-copy-of-rc8-v3-candidate.json>
+```
+
+It must return `candidate-evidence-validated-not-installable`. Never downgrade V3 to V2, fill a missing selector with RC.6 data, or run it through the RC.6 runner.
 
 Delete the temporary release record after use.
 

@@ -10,6 +10,7 @@ const required = [
   'dsh-theme-creator',
   'dsh-theme-finder',
   'dsh-theme-submitter',
+  'dsh-community-skin-installer',
 ];
 
 function fail(message) {

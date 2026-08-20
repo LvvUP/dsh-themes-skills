@@ -93,10 +93,8 @@ test('release documentation exposes all three lanes from the canonical state', a
 
 test('informational upstream state cannot change executable rc.6 gates', async () => {
   const operationalFiles = [
-    'skills/dsh-theme-finder/scripts/find-themes.mjs',
     'skills/dsh-theme-creator/scripts/create-manifest.mjs',
     'skills/dsh-theme-submitter/scripts/validate-submission.mjs',
-    'skills/dsh-theme-manager/scripts/validate-release.mjs',
     'skills/dsh-theme-manager/scripts/verify-runner.mjs',
     'skills/dsh-theme-manager/runtime/package.json',
     'skills/dsh-theme-manager/runtime/attestation.json',
@@ -116,4 +114,30 @@ test('informational upstream state cannot change executable rc.6 gates', async (
     );
     assert.doesNotMatch(contents, /release-state\.json/);
   }
+});
+
+test('RC.8 discovery does not open either executable installation lane', async () => {
+  const finder = await readFile(
+    new URL('skills/dsh-theme-finder/scripts/find-themes.mjs', root),
+    'utf8'
+  );
+  const communityGate = await readFile(
+    new URL(
+      'skills/dsh-community-skin-installer/scripts/catalog-authority.mjs',
+      root
+    ),
+    'utf8'
+  );
+  const manager = await readFile(
+    new URL('skills/dsh-theme-manager/scripts/validate-release.mjs', root),
+    'utf8'
+  );
+
+  assert.ok(finder.includes(state.upstream.dshPackageVersion));
+  assert.ok(finder.includes(state.certified.dshPackageVersion));
+  assert.doesNotMatch(finder, /release-state\.json/);
+  assert.match(communityGate, /managerRc8Certified/);
+  assert.doesNotMatch(communityGate, /release-state\.json/);
+  assert.match(manager, /rejectPendingV3/);
+  assert.match(manager, /RC\.8 V3 certification is pending/);
 });

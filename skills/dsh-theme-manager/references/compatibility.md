@@ -6,11 +6,13 @@ Treat every value as exact. A missing source commit is intentional: the publishe
 
 | Lane | Exact release | Status |
 | --- | --- | --- |
-| Upstream | `0.1.0-rc.8`, npm `next`, tag `dsh-v0.1.0-rc.8` at `141eb6fef83422698aef7a981029e843e8161534` | Released upstream; not certified or Manager-installable |
+| Upstream / V3 target | `0.1.0-rc.8`, npm `next`, tag `dsh-v0.1.0-rc.8` at `141eb6fef83422698aef7a981029e843e8161534` | Exact candidate evidence recorded; selector/runtime/UI acceptance pending; not Manager-installable |
 | Certified | `0.1.0-rc.6` | The only current DSH-Themes installation lane |
 | Historical V1 | `0.1.0-rc.5` at `47f943859bef60e4160492346772ded9b24f765a` | Historical recognition only; never current |
 
 The official rc.8 tag maps that release to public source; it does not upgrade the rc.6 package contract or prove npm tarball provenance. npm `latest` was still rc.7 when this status was captured on 2026-08-20. The repository's [`release-state.json`](../../../release-state.json) is the canonical informational summary, but Manager never reads it as a security authority. Validators, the frozen lockfile, and the runtime attestation below remain exact rc.6 evidence and must fail closed for rc.7/rc.8.
+
+The public RC.8 V3 candidate is [`rc8-v3-candidate.json`](rc8-v3-candidate.json). It fixes the three npm tarballs, Web entry assets, the 86-file `dist/assets/**` aggregate, `ui-theme/lib/client.js`, and the 13-token catalog. Its install-authority selector and runtime-attestation hashes remain intentionally `null`, and it lists the remaining style lifecycle, module/factory, Full Skin, UI-state, and macOS/Linux/Windows gates. `scripts/validate-rc8-candidate.mjs` validates only this explicitly pending record and returns a non-installable result. Never replace missing V3 values with RC.6 evidence.
 
 An exact compatibility match is necessary but not sufficient for installation. The release record must also set `verified: true` and contain this exact catalog authorization:
 

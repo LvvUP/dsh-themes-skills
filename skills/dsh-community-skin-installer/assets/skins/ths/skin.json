@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schemas.linxin666.org/dsh-skin/v2.json",
+  "skinManifestVersion": 2,
+  "id": "ths",
+  "name": "红盘终端",
+  "nameEn": "Red Market Terminal",
+  "version": "0.2.5-dsh-themes.1",
+  "author": "dsh-web-ui; RC.8 CSS-only adaptation by DSH-Themes",
+  "tagline": "红色数据终端 · RC.8 CSS-only 安全适配",
+  "description": "从 dsh-web-ui v0.1.18 同花顺风格固定源码机械迁移的 RC.8 Skin Center v2 纯样式版本。保留红灰数据终端表面；主动移除品牌字样、行情栏、workspace RPC、favicon 与文档标题注入。",
+  "tags": [
+    "trading",
+    "terminal",
+    "red",
+    "css-only",
+    "rc8-adaptation"
+  ],
+  "accent": "#e60012",
+  "order": 105,
+  "license": "BSD-3-Clause / Apache-2.0 package metadata conflict",
+  "licenseUrl": "https://github.com/zhu1090093659/dsh-web-ui/tree/a9b915cee0f12f2fd13a6575bc8feaa9ee09d6ed/packages/skins/ths/LICENSE",
+  "sourceUrl": "https://github.com/zhu1090093659/dsh-web-ui/tree/a9b915cee0f12f2fd13a6575bc8feaa9ee09d6ed/packages/skins/ths",
+  "attribution": "zhu1090093659 / dsh-web-ui; modified by DSH-Themes",
+  "contributes": {
+    "stylesheet": "skin.css",
+    "patches": "patches.css"
+  }
+}

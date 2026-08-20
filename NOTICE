@@ -7,3 +7,10 @@ The repository's community skill categories were informed by the public
 CodexThemes Skills project (https://github.com/codexthemes/skills), licensed
 under Apache-2.0. This repository is an independent implementation and does
 not include source code copied from that project.
+
+The dsh-community-skin-installer includes modified CSS-only adaptations derived
+from fixed revisions of the dsh-web-ui project by zhu1090093659. Those asset
+directories retain the upstream BSD 3-Clause license, source revision,
+modification notice, and file-level provenance. Package metadata at the fixed
+upstream revisions reports Apache-2.0 while the scoped LICENSE file is
+BSD-3-Clause; this conflict is intentionally preserved rather than normalized.

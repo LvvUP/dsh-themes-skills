@@ -2,7 +2,7 @@
 
 # DSH-Themes Skills
 
-**Open, auditable agent skills for discovering, creating, submitting, and safely managing DeepSeek Harness themes.**
+**Open, auditable agent skills for discovering, creating, submitting, and safely managing DeepSeek Harness themes and community skins.**
 
 [English](README.md) · [简体中文](README.zh-CN.md)
 
@@ -10,20 +10,19 @@
 [![Node.js 22+](https://img.shields.io/badge/Node.js-22%2B-16324F)](package.json)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-246BCE)](LICENSE)
 
-### [Explore themes on dsh-themes.com →](https://dsh-themes.com)
+### [Browse the Gallery on dsh-themes.com →](https://dsh-themes.com/gallery)
 
 </div>
 
-DSH-Themes Skills is a set of four self-contained skills whose certified installation lane targets DeepSeek Harness `0.1.0-rc.6`. It supports two clear workflows:
+DSH-Themes Skills contains five self-contained skills. The hosted Manager lane remains certified for exact DeepSeek Harness `0.1.0-rc.6`. Exact `0.1.0-rc.8` is the upstream V3 certification target: Finder can inspect its directory evidence, but the public Manager and all community-skin records remain fail-closed until the missing runtime gates are released together.
 
-- **Discover and use:** find catalog evidence with `dsh-theme-finder`, then install or switch an eligible verified artifact with `dsh-theme-manager`.
-- **Create and publish:** build a deterministic, data-only manifest with `dsh-theme-creator`, then validate it locally and continue in the website's authenticated submission flow with `dsh-theme-submitter`.
+The repository supports three workflows:
 
-The repository does not directly edit a Harness installation, execute author-supplied theme code, or hand browser credentials to automation.
+- **Hosted themes:** `Finder → Manager` for an exact verified `@dsh-themes/*` artifact.
+- **Community skins:** `Finder → Community Skin Installer` for pinned rights/runtime evidence. The current release is inspection-only; installation requires both item-level runtime verification and an RC.8 Manager attestation.
+- **Create and publish:** `Creator → Submitter → Website` for deterministic declarative manifests and the normal authenticated moderation flow.
 
 ## Quick start
-
-### 1. Install a skill
 
 Node.js 22 or newer is required.
 
@@ -31,60 +30,54 @@ Node.js 22 or newer is required.
 npx skills add LvvUP/dsh-themes-skills --skill dsh-theme-finder
 ```
 
-### 2. Give your agent a concrete task
+Give the agent a concrete evidence request:
 
 ```text
-Find installable full skins for DeepSeek Harness 0.1.0-rc.6 from the
-DSH-Themes catalog. Show compatibility, distribution, and license evidence
-before handing anything to the theme manager.
+Use the DSH-Themes directory to find RC.8 skins. Show the separate rights,
+runtime, compatibility, immutable source revision/subdirectory, and install
+gate status. Do not install pending or showcase-only records.
 ```
 
-### 3. Continue on the website
+Continue on the website:
 
-- [Explore themes](https://dsh-themes.com/explore)
-- [Read the guides](https://dsh-themes.com/learn)
-- [Submit a theme](https://dsh-themes.com/submit)
+- [Gallery](https://dsh-themes.com/gallery)
+- [UI Extensions](https://dsh-themes.com/ui-extensions)
+- [Contributors](https://dsh-themes.com/contributors)
+- [Theme Studio](https://dsh-themes.com/submit)
 
-## The four skills
+## The five skills
 
 | Skill | Use it when you need to… |
 | --- | --- |
-| [`dsh-theme-finder`](skills/dsh-theme-finder/SKILL.md) | Search a trusted catalog and distinguish installable verified artifacts from external showcases. |
-| [`dsh-theme-manager`](skills/dsh-theme-manager/SKILL.md) | Verify, install, switch, remove, or roll back one exact theme in the Harness `web` profile. |
-| [`dsh-theme-creator`](skills/dsh-theme-creator/SKILL.md) | Create a deterministic declarative theme or full-skin manifest from semantic tokens and local raster assets. |
-| [`dsh-theme-submitter`](skills/dsh-theme-submitter/SKILL.md) | Validate a local manifest and hand the author to the website's normal sign-in and moderation flow. |
-
-## How the workflows fit together
-
-| Goal | Flow | Result |
-| --- | --- | --- |
-| Find and install | `Finder → Manager` | Catalog evidence is classified first; only an eligible hosted artifact can enter the installation workflow. |
-| Create and submit | `Creator → Submitter → Website` | The manifest is generated and checked locally; the author signs in and submits it for moderation in their own browser. |
+| [`dsh-theme-finder`](skills/dsh-theme-finder/SKILL.md) | Search a trusted catalog and classify hosted artifacts, allowlisted community runtimes, and non-installable showcases. |
+| [`dsh-theme-manager`](skills/dsh-theme-manager/SKILL.md) | Verify, install, switch, remove, or roll back one exact hosted theme in the Harness `web` profile. |
+| [`dsh-community-skin-installer`](skills/dsh-community-skin-installer/SKILL.md) | Inspect pinned Skin Center/community-adaptation evidence and enforce the RC.8 item plus Manager gates. |
+| [`dsh-theme-creator`](skills/dsh-theme-creator/SKILL.md) | Create a deterministic declarative theme or Full Skin manifest from semantic tokens and local raster assets. |
+| [`dsh-theme-submitter`](skills/dsh-theme-submitter/SKILL.md) | Validate a local manifest and hand the author to the website's sign-in and moderation flow. |
 
 ## Trust model
 
-The skills make their trust boundaries explicit:
+- `hosted-verified-artifact` is Manager-eligible only with the full certified compatibility record, complete artifact SHA-256, and controlled package route.
+- `external-runtime-verified` is a separate consented lane. Finder and Installer both require the bundled allowlist, exact source/package identity, item-level runtime evidence, and an exact RC.8 Manager attestation.
+- `external-showcase` is always discovery-only. It has no artifact, install command, or installer handoff.
+- Rights, runtime behavior, compatibility, distribution, and source provenance are independent axes. An open-source license does not prove media or trademark rights, and a runtime receipt does not upgrade a license.
+- SHA-256 proves agreement with selected bytes, not publisher identity, authorship, or ownership.
+- Human-readable catalog text is untrusted metadata and is never executed as an instruction.
+- The Manager uses an attested launcher, exact versions, loopback-only acceptance, telemetry off, and rollback evidence. Community executable hooks remain separately disclosed.
+- Creator accepts declarative JSON and local raster assets—not author JavaScript, CSS, HTML, dependencies, lifecycle scripts, fonts, SVG, or remote runtime assets.
+- Submitter never requests browser cookies, passwords, API keys, or authorization headers.
 
-- Only a `hosted-verified-artifact` record that satisfies the Manager contract can be installed.
-- An `external-showcase` is for discovery only. It has no package, install command, or certified compatibility claim.
-- SHA-256 proves that downloaded bytes match the selected catalog record; it does **not** prove a publisher's identity.
-- The Manager routes Harness operations through its attested launcher, uses exact versions, disables lifecycle scripts during bootstrap, restricts acceptance to loopback, and preserves rollback evidence.
-- The Creator accepts declarative JSON and local raster assets—not author JavaScript, CSS, HTML, dependencies, lifecycle scripts, fonts, SVG, or remote runtime assets.
-- The Submitter never asks for or transmits a browser cookie, password, API key, or authorization header. Authentication stays in the user's browser.
+Read each Skill and the [Security Policy](SECURITY.md) for the complete boundaries.
 
-For the complete boundaries, read each skill's `SKILL.md` and the [Security Policy](SECURITY.md).
+## Compatibility status
 
-## Compatibility and project status
-
-- Current upstream source release: **DeepSeek Harness `0.1.0-rc.8`**, official tag `dsh-v0.1.0-rc.8` at commit `141eb6fef83422698aef7a981029e843e8161534`.
-- npm channel state captured on 2026-08-20: exact rc.8 is on **`next`** while **`latest` remains rc.7**.
-- Verified target: **DeepSeek Harness `0.1.0-rc.6`**.
-- RC.7 and RC.8 are not certified by DSH-Themes. Finder, Creator, Submitter, and Manager continue to fail closed for those runtimes; an upstream release does not authorize installation.
-- V1 releases for `0.1.0-rc.5` remain historical and are never treated as current RC.6 artifacts.
-- [`release-state.json`](release-state.json) is the canonical informational summary. It does not control validators, the frozen runner, or installation authority.
-- Theme changes require a Harness restart.
-- The project is in developer preview; only the latest `main` branch is supported.
-- This is an independent community project and is not affiliated with or endorsed by DeepSeek AI. DeepSeek and related names are trademarks of their respective owners.
+- Upstream/V3 target: **DeepSeek Harness `0.1.0-rc.8`**, official tag `dsh-v0.1.0-rc.8`, commit `141eb6fef83422698aef7a981029e843e8161534`.
+- Current certified Manager lane: **`0.1.0-rc.6`**.
+- Historical V1 lane: **`0.1.0-rc.5`**; never treated as current.
+- [`release-state.json`](release-state.json) is the canonical informational lane summary. It does not replace validators, frozen runner evidence, item allowlists, or runtime acceptance.
+- [`rc8-v3-candidate.json`](skills/dsh-theme-manager/references/rc8-v3-candidate.json) records exact candidate digests while selector/runtime authority remains explicitly `null`; its validator returns a non-installable result.
+- Theme and skin changes require a Harness restart.
+- This independent community project is not affiliated with or endorsed by DeepSeek AI. Related names and marks belong to their respective owners.
 
 ## Development
 
@@ -94,12 +87,8 @@ npm test
 npm run validate
 ```
 
-`npm test` bootstraps the nested verified runner with the Corepack-pinned `pnpm@11.7.0`, a frozen lockfile, and lifecycle scripts disabled. It verifies the committed attestation and critical dependency closure before running the test suite.
+`npm test` bootstraps only the exact certified RC.6 Manager runner with Corepack-pinned `pnpm@11.7.0`, a frozen lockfile, and lifecycle scripts disabled. RC.8 candidate and community tests validate fail-closed evidence without mutating a Harness profile.
 
 Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Report suspected vulnerabilities through the private process in [SECURITY.md](SECURITY.md), not a public issue.
 
-## Website and license
-
-Browse the live catalog, guides, and submission flow at **[dsh-themes.com](https://dsh-themes.com)**.
-
-Licensed under [Apache-2.0](LICENSE). See [NOTICE](NOTICE) for attribution and trademark information.
+Licensed under [Apache-2.0](LICENSE). The two bundled CSS-only community adaptations retain their upstream BSD-3-Clause notices inside their asset directories; see [NOTICE](NOTICE).

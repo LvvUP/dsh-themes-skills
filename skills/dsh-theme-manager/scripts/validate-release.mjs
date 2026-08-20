@@ -207,6 +207,21 @@ function validateV1(record, manifest, origin) {
   };
 }
 
+function rejectPendingV3(manifest) {
+  const compatibility = object(
+    manifest.compatibility,
+    'manifest.compatibility'
+  );
+  if (compatibility.dshPackageVersion !== '0.1.0-rc.8') {
+    fail(
+      'V3 manifests must target exact RC.8; mixed rc.6/rc.7/rc.8 evidence is forbidden'
+    );
+  }
+  fail(
+    'RC.8 V3 certification is pending selector, runtime-attestation-v2, full UI, and cross-platform acceptance evidence; Manager remains fail-closed'
+  );
+}
+
 const args = parseArgs(process.argv.slice(2));
 if (!args.input) fail('--input is required');
 const record = object(JSON.parse(await readFile(resolve(args.input), 'utf8')), 'release record');
@@ -214,6 +229,8 @@ const manifest = object(record.manifest, 'manifest');
 const origin = trustedOrigin(args.origin);
 const result = manifest.schemaVersion === '2.0'
   ? validateV2(record, manifest, origin)
+  : manifest.schemaVersion === '3.0'
+    ? rejectPendingV3(manifest)
   : manifest.schemaVersion === 1
     ? validateV1(record, manifest, origin)
     : fail('unsupported manifest schemaVersion');

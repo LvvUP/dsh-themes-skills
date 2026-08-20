@@ -1,0 +1,16 @@
+/** DSH-Themes RC.8 semantic-token anchor; see NOTICE. */
+:root {
+  --dsw-alias-brand-primary: #2b7cd9;
+  --dsw-alias-brand-text: #0d3d75;
+  --dsw-alias-button-primary-fill: #2b7cd9;
+  --dsw-alias-state-business-primary: #2b7cd9;
+  --dsw-specific-sidebar-fill: #e8f1fa;
+}
+
+body[data-ds-dark-theme] {
+  --dsw-alias-brand-primary: #6aa8f0;
+  --dsw-alias-brand-text: #9cc9ef;
+  --dsw-alias-button-primary-fill: #1e63b8;
+  --dsw-alias-state-business-primary: #5d9fe8;
+  --dsw-specific-sidebar-fill: #1e4f8f;
+}
