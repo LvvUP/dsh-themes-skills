@@ -7,6 +7,8 @@ description: Create and validate deterministic declarative manifests for DSH-The
 
 Create data-only themes for DeepSeek Harness `0.1.0-rc.6`. Do not accept or generate author-supplied JavaScript, CSS, HTML, dependencies, lifecycle scripts, fonts, SVG, remote runtime assets, or hashed class selectors.
 
+Upstream DeepSeek Harness `0.1.0-rc.8` is released on npm `next` but remains uncertified by DSH-Themes. Continue generating only the certified rc.6 contract and reject rc.7/rc.8 input; V1 rc.5 is historical and is not valid Creator output. The repository's [`release-state.json`](../../release-state.json) is informational and never changes validator authority.
+
 ## Create
 
 1. Read [references/authoring-v2.md](references/authoring-v2.md).

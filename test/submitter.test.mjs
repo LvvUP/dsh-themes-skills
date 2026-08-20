@@ -9,6 +9,8 @@ import { run, writeAuthoring } from './helpers.mjs';
 const creator = resolve('skills/dsh-theme-creator/scripts/create-manifest.mjs');
 const submitter = resolve('skills/dsh-theme-submitter/scripts/validate-submission.mjs');
 const redlineAttribution = 'Clean-room original artwork generated for DSH-Themes; experimental full-skin concept inspired by the general idea of dsh-ui, without copying its code or protected media.';
+const releaseState = JSON.parse(await readFile(resolve('release-state.json'), 'utf8'));
+const upstreamVersion = releaseState.upstream.dshPackageVersion;
 
 test('submitter validates locally and returns a credential-free browser handoff', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-submit-'));
@@ -24,6 +26,22 @@ test('submitter validates locally and returns a credential-free browser handoff'
   assert.equal(output.provisionalAssets, true);
   assert.equal(output.distributionEligibility, 'eligible-for-hosted-review');
   assert.equal(/cookie|api.?key|password/i.test(result.stdout), false);
+});
+
+test('submitter fails closed for the released but uncertified upstream version', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-submit-upstream-'));
+  const input = await writeAuthoring(directory);
+  const manifest = join(directory, 'manifest.json');
+  assert.equal((await run(creator, ['--input', input, '--output', manifest])).code, 0);
+  const value = JSON.parse(await readFile(manifest, 'utf8'));
+  value.compatibility.dshPackageVersion = upstreamVersion;
+  await writeFile(manifest, JSON.stringify(value));
+  const result = await run(submitter, [
+    '--manifest', manifest,
+    '--site', 'https://themes.example',
+  ]);
+  assert.notEqual(result.code, 0);
+  assert.match(result.stderr, /verified rc\.6 value/);
 });
 
 test('submitter routes noncommercial manifests to showcase-only review', async () => {

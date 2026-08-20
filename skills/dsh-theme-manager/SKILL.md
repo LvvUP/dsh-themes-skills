@@ -7,6 +7,10 @@ description: Safely install, switch, remove, verify, or roll back verified DSH-T
 
 Manage at most one verified `@dsh-themes/*` Cordis plugin in the `web` profile. Theme changes require a DeepSeek Harness restart.
 
+## Release boundary
+
+The current upstream release is DeepSeek Harness `0.1.0-rc.8` on npm `next`, sourced by official tag `dsh-v0.1.0-rc.8` at `141eb6fef83422698aef7a981029e843e8161534`. That upstream fact is not installation authority: the only current certified lane remains `0.1.0-rc.6`, while V1 rc.5 is historical. Stop on rc.7 or rc.8 instead of changing the runner or compatibility record. See the informational [`release-state.json`](../../release-state.json) and the exact certified evidence below.
+
 ## Safety boundaries
 
 - Execute every DSH operation through `scripts/run-dsh.mjs`. It verifies the bundled runner attestation, keeps the user's workspace as `cwd`, disables telemetry, and places the attested `pnpm@11.7.0` shim first on `PATH`. Never resolve or invoke a PATH `dsh`.

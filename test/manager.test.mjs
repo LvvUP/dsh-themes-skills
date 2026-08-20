@@ -21,6 +21,8 @@ const shaA = 'a'.repeat(64);
 const shaB = 'b'.repeat(64);
 const shaC = 'c'.repeat(64);
 const trustedOrigin = 'https://themes.example';
+const releaseState = JSON.parse(await readFile(resolve('release-state.json'), 'utf8'));
+const upstreamVersion = releaseState.upstream.dshPackageVersion;
 const runtimeAttestation = Object.freeze({
   schemaVersion: 1,
   attestationSha256: '2400606c5cb6534e09a65020e4ae12a0df4c1d08f15918d714bc5037c2ed99ba',
@@ -172,6 +174,14 @@ test('release validator separates current V2, historical V1, and artifact author
       const result = await validateRelease(directory, 'fake-source-commit.json', release);
       assert.notEqual(result.code, 0);
       assert.match(result.stderr, /sourceCommit must be omitted/);
+    });
+
+    await t.test('fails closed for the released but uncertified upstream version', async () => {
+      const release = currentRelease();
+      release.manifest.compatibility.dshPackageVersion = upstreamVersion;
+      const result = await validateRelease(directory, 'uncertified-upstream.json', release);
+      assert.notEqual(result.code, 0);
+      assert.match(result.stderr, /certified baseline/);
     });
 
     await t.test('never treats a V2 payload digest as the complete artifact digest', async () => {

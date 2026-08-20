@@ -14,7 +14,7 @@
 
 </div>
 
-DSH-Themes Skills is a set of four self-contained skills for DeepSeek Harness `0.1.0-rc.6`. It supports two clear workflows:
+DSH-Themes Skills is a set of four self-contained skills whose certified installation lane targets DeepSeek Harness `0.1.0-rc.6`. It supports two clear workflows:
 
 - **Discover and use:** find catalog evidence with `dsh-theme-finder`, then install or switch an eligible verified artifact with `dsh-theme-manager`.
 - **Create and publish:** build a deterministic, data-only manifest with `dsh-theme-creator`, then validate it locally and continue in the website's authenticated submission flow with `dsh-theme-submitter`.
@@ -76,7 +76,12 @@ For the complete boundaries, read each skill's `SKILL.md` and the [Security Poli
 
 ## Compatibility and project status
 
+- Current upstream source release: **DeepSeek Harness `0.1.0-rc.8`**, official tag `dsh-v0.1.0-rc.8` at commit `141eb6fef83422698aef7a981029e843e8161534`.
+- npm channel state captured on 2026-08-20: exact rc.8 is on **`next`** while **`latest` remains rc.7**.
 - Verified target: **DeepSeek Harness `0.1.0-rc.6`**.
+- RC.7 and RC.8 are not certified by DSH-Themes. Finder, Creator, Submitter, and Manager continue to fail closed for those runtimes; an upstream release does not authorize installation.
+- V1 releases for `0.1.0-rc.5` remain historical and are never treated as current RC.6 artifacts.
+- [`release-state.json`](release-state.json) is the canonical informational summary. It does not control validators, the frozen runner, or installation authority.
 - Theme changes require a Harness restart.
 - The project is in developer preview; only the latest `main` branch is supported.
 - This is an independent community project and is not affiliated with or endorsed by DeepSeek AI. DeepSeek and related names are trademarks of their respective owners.
