@@ -29,6 +29,7 @@ import {
   loadCommunityAuthority,
   validateCommunityRecord,
 } from './catalog-authority.mjs';
+import { assertBundledCssSafe } from './bundled-skin-policy.mjs';
 
 const ALLOWED_IDS = new Set(['qq98', 'ths']);
 const INSTALL_RECORD = '.dsh-themes-install.json';
@@ -140,7 +141,23 @@ async function assertRegularFile(path, label) {
   if (!info.isFile() || info.isSymbolicLink()) fail(`${label} must be a regular file`);
 }
 
-async function verifyBundledSkin(id) {
+function stable(value) {
+  if (Array.isArray(value)) return value.map(stable);
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(
+    Object.keys(value)
+      .sort()
+      .map((key) => [key, stable(value[key])])
+  );
+}
+
+function exactObject(actual, expected, label) {
+  if (JSON.stringify(stable(actual)) !== JSON.stringify(stable(expected))) {
+    fail(`${label} does not match trusted catalog and receipt authority`);
+  }
+}
+
+async function verifyBundledSkin(id, trustedAuthority) {
   const source = join(assetsRoot, id);
   const canonicalSource = await existingDirectory(source, `bundled ${id} skin`);
   if (!isInside(assetsRoot, canonicalSource)) fail('Bundled skin resolves outside the Skill');
@@ -176,6 +193,13 @@ async function verifyBundledSkin(id) {
     files[name] = digest;
   }
   files['PROVENANCE.json'] = await sha256(provenancePath);
+  const computedAuthority = {
+    schemaVersion: 1,
+    sourceSha256: provenance.sourceSha256,
+    provenanceSha256: files['PROVENANCE.json'],
+    files,
+  };
+  exactObject(computedAuthority, trustedAuthority, 'Bundled asset authority');
 
   const manifest = JSON.parse(await readFile(join(canonicalSource, 'skin.json'), 'utf8'));
   if (
@@ -189,9 +213,7 @@ async function verifyBundledSkin(id) {
   }
   for (const cssName of ['skin.css', 'patches.css']) {
     const css = await readFile(join(canonicalSource, cssName), 'utf8');
-    if (/@import\b|javascript\s*:|https?:\/\//i.test(css)) {
-      fail(`Bundled ${cssName} contains a forbidden remote or executable reference`);
-    }
+    assertBundledCssSafe(css, `Bundled ${cssName}`);
   }
   return { source: canonicalSource, provenance, files };
 }
@@ -251,8 +273,8 @@ async function targetState(profile, id) {
   return { installed: true, target, ...managed };
 }
 
-async function installSkin(profile, id) {
-  const bundled = await verifyBundledSkin(id);
+async function installSkin(profile, id, trustedAuthority) {
+  const bundled = await verifyBundledSkin(id, trustedAuthority);
   const state = await targetState(profile, id);
   if (state.installed) fail(`Skin ${id} is already installed`);
 
@@ -322,6 +344,7 @@ async function recoverSkin(profile, id, from) {
 const { command, id, dshHome, from, authorityRecord } = parseArgs(
   process.argv.slice(2)
 );
+let installAuthority;
 if (command === 'install') {
   const rawRecord = JSON.parse(await readFile(authorityRecord, 'utf8'));
   const gate = validateCommunityRecord(
@@ -332,6 +355,7 @@ if (command === 'install') {
   if (gate.skin.skinId !== id) {
     fail('--id does not match the validated catalog record');
   }
+  installAuthority = gate.skin.bundledAssetAuthority;
 }
 const profile = await resolveProfile(dshHome, {
   createSkins: command === 'install' || command === 'recover',
@@ -352,7 +376,7 @@ if (command === 'inspect') {
       }
     : { installed: false, managed: false, id, target: state.target };
 } else if (command === 'install') {
-  result = await installSkin(profile, id);
+  result = await installSkin(profile, id, installAuthority);
 } else if (command === 'remove') {
   result = await removeSkin(profile, id);
 } else {

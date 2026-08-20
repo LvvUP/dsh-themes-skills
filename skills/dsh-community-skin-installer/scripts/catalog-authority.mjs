@@ -1,6 +1,29 @@
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 
 const catalogUrl = new URL('../references/community-catalog.json', import.meta.url);
+const runtimeReceiptUrl = new URL(
+  '../references/runtime-receipt.rc8.json',
+  import.meta.url
+);
+const preparedEvidenceUrl = new URL(
+  '../references/runtime-evidence-prepared.json',
+  import.meta.url
+);
+const FINAL_MANAGER_ATTESTATION_SHA256 =
+  '1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae';
+const FINAL_COMPATIBILITY_SIDECAR_SHA256 =
+  '7d900fb37e0c9e69befa53a5fd07c05f63430d9040f9152c5b535d1f96a57138';
+const FINAL_CERTIFICATION_SHA256 =
+  'eadc424475c655e593d7d9901d359d5b8aea928351179912678a8d5ed327a80d';
+const ATTESTATION_EQUIVALENCE_BRIDGE_SHA256 =
+  '4a23118be7cb3d46de29af0a7ac4955f73d1103b9f61b2b8608eed580345b531';
+const RUNTIME_RECEIPT_SHA256 =
+  '89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1';
+const PREPARED_EVIDENCE_SHA256 =
+  'ab9259fb0f67bd0bf03a64f0d791cd3f06de467b6d8553d87fd607e8f75aa5fd';
+const MAIN_RUNTIME_RECEIPT_SHA256 =
+  '0b09909a0b7cafba5dd68f066bd3959d5666afc519a39c5c52f3d3bd9126b4c2';
 
 function fail(message) {
   throw new Error(message);
@@ -15,6 +38,68 @@ function record(value, label) {
 
 function exact(actual, expected, label) {
   if (actual !== expected) fail(`${label} does not match the local allowlist`);
+}
+
+function sha256(bytes) {
+  return createHash('sha256').update(bytes).digest('hex');
+}
+
+function stable(value) {
+  if (Array.isArray(value)) return value.map(stable);
+  if (value === null || typeof value !== 'object') return value;
+  return Object.fromEntries(
+    Object.keys(value)
+      .sort()
+      .map((key) => [key, stable(value[key])])
+  );
+}
+
+function exactObject(actual, expected, label) {
+  if (JSON.stringify(stable(actual)) !== JSON.stringify(stable(expected))) {
+    fail(`${label} does not match the local allowlist`);
+  }
+}
+
+function validateBundledAssetAuthority(local, runtimeItem) {
+  const authority = record(
+    local.bundledAssetAuthority,
+    'bundledAssetAuthority'
+  );
+  exact(authority.schemaVersion, 1, 'bundledAssetAuthority.schemaVersion');
+  for (const [label, value] of [
+    ['bundledAssetAuthority.sourceSha256', authority.sourceSha256],
+    ['bundledAssetAuthority.provenanceSha256', authority.provenanceSha256],
+  ]) {
+    if (!/^[a-f0-9]{64}$/.test(value)) fail(`${label} is invalid`);
+  }
+  const files = record(authority.files, 'bundledAssetAuthority.files');
+  const names = Object.keys(files).sort();
+  const expectedNames = [
+    'LICENSE',
+    'NOTICE',
+    'PROVENANCE.json',
+    'patches.css',
+    'skin.css',
+    'skin.json',
+  ].sort();
+  if (JSON.stringify(names) !== JSON.stringify(expectedNames)) {
+    fail('bundledAssetAuthority.files is incomplete');
+  }
+  for (const [name, digest] of Object.entries(files)) {
+    if (!/^[a-f0-9]{64}$/.test(digest)) {
+      fail(`bundledAssetAuthority.files.${name} is invalid`);
+    }
+  }
+  exact(
+    files['PROVENANCE.json'],
+    authority.provenanceSha256,
+    'bundled PROVENANCE.json sha256'
+  );
+  exactObject(
+    runtimeItem.bundledAssetAuthority,
+    authority,
+    'runtime receipt bundledAssetAuthority'
+  );
 }
 
 function repositoryName(repositoryUrl) {
@@ -218,13 +303,57 @@ function validateLegacyRecord(selected, local, catalog) {
 }
 
 export async function loadCommunityAuthority() {
-  const catalog = await readFile(catalogUrl, 'utf8').then(JSON.parse);
-  return { catalog };
+  const [catalogText, runtimeReceiptBytes, preparedEvidenceBytes] =
+    await Promise.all([
+      readFile(catalogUrl, 'utf8'),
+      readFile(runtimeReceiptUrl),
+      readFile(preparedEvidenceUrl),
+    ]);
+  exact(
+    sha256(runtimeReceiptBytes),
+    RUNTIME_RECEIPT_SHA256,
+    'runtime receipt sha256'
+  );
+  exact(
+    sha256(preparedEvidenceBytes),
+    PREPARED_EVIDENCE_SHA256,
+    'prepared evidence sha256'
+  );
+  const catalog = JSON.parse(catalogText);
+  const runtimeReceipt = JSON.parse(runtimeReceiptBytes.toString('utf8'));
+  exact(
+    runtimeReceipt.status,
+    'runtime-verified-install-authority',
+    'runtime receipt status'
+  );
+  exact(
+    runtimeReceipt.finalManager?.attestationSha256,
+    FINAL_MANAGER_ATTESTATION_SHA256,
+    'runtime receipt Manager attestation'
+  );
+  exact(
+    runtimeReceipt.finalManager?.attestationEquivalenceBridgeSha256,
+    ATTESTATION_EQUIVALENCE_BRIDGE_SHA256,
+    'runtime receipt attestation bridge'
+  );
+  exact(
+    runtimeReceipt.mainRuntimeReceipt?.sha256,
+    MAIN_RUNTIME_RECEIPT_SHA256,
+    'main runtime receipt sha256'
+  );
+  if (
+    runtimeReceipt.items?.length !== 11 ||
+    runtimeReceipt.summary?.installableRecords !== 11 ||
+    /\/(?:private\/)?tmp\/|\/var\/folders\//.test(runtimeReceiptBytes.toString('utf8'))
+  ) {
+    fail('runtime receipt is incomplete or contains an absolute machine path');
+  }
+  return { catalog, runtimeReceipt };
 }
 
 export function validateCommunityRecord(
   raw,
-  { catalog },
+  { catalog, runtimeReceipt },
   { mode = 'inspect' } = {}
 ) {
   if (mode !== 'inspect' && mode !== 'install') {
@@ -245,7 +374,18 @@ export function validateCommunityRecord(
     catalog.managerGate?.certifiedDshPackageVersion ===
       catalog.baseline.dshPackageVersion &&
     catalog.managerGate?.targetDshPackageVersion ===
-      catalog.baseline.dshPackageVersion;
+      catalog.baseline.dshPackageVersion &&
+    catalog.managerGate?.targetRuntimeAttestationSha256 ===
+      FINAL_MANAGER_ATTESTATION_SHA256 &&
+    catalog.managerGate?.compatibilitySidecarSha256 ===
+      FINAL_COMPATIBILITY_SIDECAR_SHA256 &&
+    catalog.managerGate?.certificationSha256 === FINAL_CERTIFICATION_SHA256 &&
+    catalog.managerGate?.attestationEquivalenceBridgeSha256 ===
+      ATTESTATION_EQUIVALENCE_BRIDGE_SHA256 &&
+    catalog.managerGate?.runtimeReceiptSha256 === RUNTIME_RECEIPT_SHA256 &&
+    catalog.managerGate?.preparedEvidenceSha256 === PREPARED_EVIDENCE_SHA256 &&
+    catalog.managerGate?.mainRuntimeReceiptSha256 ===
+      MAIN_RUNTIME_RECEIPT_SHA256;
   const blockingReasons = [];
   if (normalized.shape !== 'directory-v1') {
     blockingReasons.push('legacy-record-not-install-authority');
@@ -253,6 +393,16 @@ export function validateCommunityRecord(
   if (!runtimeVerified) blockingReasons.push('item-runtime-verification-pending');
   if (!managerRc8Certified) {
     blockingReasons.push('adjacent-manager-rc8-attestation-not-certified');
+  }
+  const runtimeItem = runtimeReceipt.items?.find(
+    (candidate) => candidate.slug === local.slug
+  );
+  if (!runtimeItem || !String(runtimeItem.result).startsWith('passed')) {
+    blockingReasons.push('runtime-receipt-item-missing-or-failed');
+  } else if (local.installationMode === 'bundled-user-skin') {
+    validateBundledAssetAuthority(local, runtimeItem);
+  } else if (local.bundledAssetAuthority || runtimeItem.bundledAssetAuthority) {
+    fail('Only bundled user skins may carry bundledAssetAuthority');
   }
   const installable = blockingReasons.length === 0;
   if (mode === 'install' && !installable) {

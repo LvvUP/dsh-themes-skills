@@ -26,7 +26,7 @@ test('RC.8 candidate validator reports evidence without granting installation', 
   assert.ok(output.blockers.length > 0);
 });
 
-test('Manager rejects every V3 install record while RC.8 evidence is pending', async (t) => {
+test('Manager still rejects the historical incomplete V3 candidate shape', async (t) => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-rc8-manager-pending-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const input = join(directory, 'release.json');
@@ -46,7 +46,10 @@ test('Manager rejects every V3 install record while RC.8 evidence is pending', a
     'https://dsh-themes.com',
   ]);
   assert.notEqual(result.code, 0);
-  assert.match(result.stderr, /RC\.8 V3 certification is pending/);
+  assert.match(
+    result.stderr,
+    /verified (?:must be true|does not match the certified baseline)/
+  );
 });
 
 test('RC.8 candidate authority keeps selector and runtime hashes explicitly null', async () => {

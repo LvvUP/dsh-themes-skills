@@ -6,10 +6,17 @@
     "sourceCommit": "141eb6fef83422698aef7a981029e843e8161534"
   },
   "managerGate": {
-    "certifiedDshPackageVersion": "0.1.0-rc.6",
+    "certifiedDshPackageVersion": "0.1.0-rc.8",
     "targetDshPackageVersion": "0.1.0-rc.8",
-    "certificationStatus": "pending",
-    "installable": false
+    "targetRuntimeAttestationSha256": "1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae",
+    "compatibilitySidecarSha256": "7d900fb37e0c9e69befa53a5fd07c05f63430d9040f9152c5b535d1f96a57138",
+    "certificationSha256": "eadc424475c655e593d7d9901d359d5b8aea928351179912678a8d5ed327a80d",
+    "attestationEquivalenceBridgeSha256": "4a23118be7cb3d46de29af0a7ac4955f73d1103b9f61b2b8608eed580345b531",
+    "preparedEvidenceSha256": "ab9259fb0f67bd0bf03a64f0d791cd3f06de467b6d8553d87fd607e8f75aa5fd",
+    "runtimeReceiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1",
+    "mainRuntimeReceiptSha256": "0b09909a0b7cafba5dd68f066bd3959d5666afc519a39c5c52f3d3bd9126b4c2",
+    "certificationStatus": "certified-installable",
+    "installable": true
   },
   "skinCenter": {
     "packageName": "@linxin666/dsh-client-ui-skin-center",
@@ -36,12 +43,18 @@
       "directoryLicenseExpression": "CC-BY-NC-SA-4.0",
       "directoryRightsStatus": "conditional",
       "rightsStatus": "reviewed-noncommercial-only",
-      "runtimeStatus": "verification-pending",
+      "runtimeStatus": "runtime-verified",
       "executableHooks": true,
       "commercialUse": "prohibited",
       "noticeRequired": true,
       "networkDisclosure": [],
-      "riskDisclosure": "Preserve the 上善 → zipzip/ZipZipPipe → Small-tailqwq attribution chain, non-commercial restriction, and share-alike terms."
+      "riskDisclosure": "Preserve the 上善 → zipzip/ZipZipPipe → Small-tailqwq attribution chain, non-commercial restriction, and share-alike terms.",
+      "runtimeEvidence": {
+        "status": "passed",
+        "receiptItem": "dsh-deep-whale-maid-atelier",
+        "receiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1",
+        "attestationEquivalenceBridgeSha256": "4a23118be7cb3d46de29af0a7ac4955f73d1103b9f61b2b8608eed580345b531"
+      }
     },
     {
       "catalogId": 2201,
@@ -55,12 +68,18 @@
       "directoryLicenseExpression": "Apache-2.0 metadata AND BSD-3-Clause scoped file",
       "directoryRightsStatus": "conditional",
       "rightsStatus": "reviewed-with-disclosures",
-      "runtimeStatus": "verification-pending",
+      "runtimeStatus": "runtime-verified",
       "executableHooks": true,
       "commercialUse": "rights-clearance-required",
       "noticeRequired": true,
       "networkDisclosure": [],
-      "riskDisclosure": "DreamSkin attribution and DeepSeek artwork/mark provenance remain separately disclosed."
+      "riskDisclosure": "DreamSkin attribution and DeepSeek artwork/mark provenance remain separately disclosed.",
+      "runtimeEvidence": {
+        "status": "passed",
+        "receiptItem": "dsh-web-ui-blue-fantasy",
+        "receiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1",
+        "attestationEquivalenceBridgeSha256": "4a23118be7cb3d46de29af0a7ac4955f73d1103b9f61b2b8608eed580345b531"
+      }
     },
     {
       "catalogId": 2202,
@@ -74,12 +93,18 @@
       "directoryLicenseExpression": "Apache-2.0 metadata AND BSD-3-Clause scoped file",
       "directoryRightsStatus": "conditional",
       "rightsStatus": "reviewed-with-disclosures",
-      "runtimeStatus": "verification-pending",
+      "runtimeStatus": "runtime-verified",
       "executableHooks": true,
       "commercialUse": "rights-clearance-required",
       "noticeRequired": true,
       "networkDisclosure": [],
-      "riskDisclosure": "Generated-artwork provenance is incomplete and remains separate from the code license."
+      "riskDisclosure": "Generated-artwork provenance is incomplete and remains separate from the code license.",
+      "runtimeEvidence": {
+        "status": "passed",
+        "receiptItem": "dsh-web-ui-dragon-heir",
+        "receiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1",
+        "attestationEquivalenceBridgeSha256": "4a23118be7cb3d46de29af0a7ac4955f73d1103b9f61b2b8608eed580345b531"
+      }
     },
     {
       "catalogId": 2203,
@@ -93,12 +118,18 @@
       "directoryLicenseExpression": "Apache-2.0 metadata AND BSD-3-Clause scoped file",
       "directoryRightsStatus": "conditional",
       "rightsStatus": "reviewed-with-disclosures",
-      "runtimeStatus": "verification-pending",
+      "runtimeStatus": "runtime-verified",
       "executableHooks": true,
       "commercialUse": "rights-clearance-required",
       "noticeRequired": true,
       "networkDisclosure": [],
-      "riskDisclosure": "Artwork provenance and contributor/license-holder alignment remain disclosed."
+      "riskDisclosure": "Artwork provenance and contributor/license-holder alignment remain disclosed.",
+      "runtimeEvidence": {
+        "status": "passed",
+        "receiptItem": "dsh-web-ui-harbor",
+        "receiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1",
+        "attestationEquivalenceBridgeSha256": "4a23118be7cb3d46de29af0a7ac4955f73d1103b9f61b2b8608eed580345b531"
+      }
     },
     {
       "catalogId": 2204,
@@ -112,12 +143,18 @@
       "directoryLicenseExpression": "Apache-2.0 metadata AND BSD-3-Clause scoped file",
       "directoryRightsStatus": "conditional",
       "rightsStatus": "reviewed-with-disclosures",
-      "runtimeStatus": "verification-pending",
+      "runtimeStatus": "runtime-verified",
       "executableHooks": true,
       "commercialUse": "rights-clearance-required",
       "noticeRequired": true,
       "networkDisclosure": [],
-      "riskDisclosure": "Character, Vocaloid naming, cursor artwork, and trademark permissions are not established by the package license."
+      "riskDisclosure": "Character, Vocaloid naming, cursor artwork, and trademark permissions are not established by the package license.",
+      "runtimeEvidence": {
+        "status": "passed",
+        "receiptItem": "dsh-web-ui-miku",
+        "receiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1",
+        "attestationEquivalenceBridgeSha256": "4a23118be7cb3d46de29af0a7ac4955f73d1103b9f61b2b8608eed580345b531"
+      }
     },
     {
       "catalogId": 2205,
@@ -131,12 +168,18 @@
       "directoryLicenseExpression": "Apache-2.0 metadata AND BSD-3-Clause scoped file",
       "directoryRightsStatus": "conditional",
       "rightsStatus": "reviewed-with-disclosures",
-      "runtimeStatus": "verification-pending",
+      "runtimeStatus": "runtime-verified",
       "executableHooks": true,
       "commercialUse": "rights-clearance-required",
       "noticeRequired": true,
       "networkDisclosure": [],
-      "riskDisclosure": "Clean-room texture statements do not grant Minecraft naming or trade-dress rights."
+      "riskDisclosure": "Clean-room texture statements do not grant Minecraft naming or trade-dress rights.",
+      "runtimeEvidence": {
+        "status": "passed",
+        "receiptItem": "dsh-web-ui-minecraft",
+        "receiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1",
+        "attestationEquivalenceBridgeSha256": "4a23118be7cb3d46de29af0a7ac4955f73d1103b9f61b2b8608eed580345b531"
+      }
     },
     {
       "catalogId": 2206,
@@ -150,13 +193,32 @@
       "directoryLicenseExpression": "Apache-2.0 metadata AND BSD-3-Clause scoped file",
       "directoryRightsStatus": "conditional",
       "rightsStatus": "reviewed-with-disclosures",
-      "runtimeStatus": "verification-pending",
+      "runtimeStatus": "runtime-verified",
       "executableHooks": false,
       "commercialUse": "rights-clearance-required",
       "noticeRequired": true,
       "networkDisclosure": [],
       "adaptation": "dsh-themes-rc8-css-only-v1",
-      "riskDisclosure": "The RC.8 adaptation omits QQ/OICQ wording, penguin art, injected chrome, favicon, and title mutation; the historical preview is not an exact runtime preview."
+      "bundledAssetAuthority": {
+        "schemaVersion": 1,
+        "sourceSha256": "1d8163448bc50845a9be13b3c8179bf79a778ab86a00ab43a004f5595cde2c62",
+        "provenanceSha256": "000613dbdcdc99f0ef2f6ef8012a15ec445a6173d319d654704449a213eff684",
+        "files": {
+          "LICENSE": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "NOTICE": "e8c4a8a30ae46f0fffbb076b0bed62a30b5ee8b51ff353c59cbf4862823768c7",
+          "PROVENANCE.json": "000613dbdcdc99f0ef2f6ef8012a15ec445a6173d319d654704449a213eff684",
+          "patches.css": "33a7670fc6188f7b06f19d3a18d8cd00f5839168808587f700cfa00195fe4bd6",
+          "skin.css": "6e414c9f689dbfa978001f8d332237e64b22fedd51da16e2b20a48f3550937a2",
+          "skin.json": "426ac9c8b5517577db3486df465304171ea3533ed50591f6b1b19d78a5dbd423"
+        }
+      },
+      "riskDisclosure": "The RC.8 adaptation omits QQ/OICQ wording, penguin art, injected chrome, favicon, and title mutation; the historical preview is not an exact runtime preview.",
+      "runtimeEvidence": {
+        "status": "passed",
+        "receiptItem": "dsh-web-ui-qq98",
+        "receiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1",
+        "attestationEquivalenceBridgeSha256": "4a23118be7cb3d46de29af0a7ac4955f73d1103b9f61b2b8608eed580345b531"
+      }
     },
     {
       "catalogId": 2207,
@@ -170,13 +232,32 @@
       "directoryLicenseExpression": "Apache-2.0 metadata AND BSD-3-Clause scoped file",
       "directoryRightsStatus": "conditional",
       "rightsStatus": "reviewed-with-disclosures",
-      "runtimeStatus": "verification-pending",
+      "runtimeStatus": "runtime-verified",
       "executableHooks": false,
       "commercialUse": "rights-clearance-required",
       "noticeRequired": true,
       "networkDisclosure": [],
       "adaptation": "dsh-themes-rc8-css-only-v1",
-      "riskDisclosure": "Published as Red Market Terminal: the RC.8 adaptation omits Tonghuashun wording, quote/RPC behavior, injected chrome, favicon, and title mutation."
+      "bundledAssetAuthority": {
+        "schemaVersion": 1,
+        "sourceSha256": "6fd68f16c91c533d07a2271b09f04982796d0a9196d4caa90730fde7bb2be117",
+        "provenanceSha256": "68ebcc6bbfb3c8daf2973491fede2d85719d788703037b2510f71ffab7d4c917",
+        "files": {
+          "LICENSE": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "NOTICE": "331121edcd6e0d7fd740db20b3e393d195e7393c6237b8f267eea66794a0cfe8",
+          "PROVENANCE.json": "68ebcc6bbfb3c8daf2973491fede2d85719d788703037b2510f71ffab7d4c917",
+          "patches.css": "648fd39a7168a71cc79fbfc4a6dcdb99587362cd2e58604f6c743f045e3a714e",
+          "skin.css": "b5cb4887e98ada90f28b2c90fccd23a2c7416a8cae0acca71a3d8268b08af7e2",
+          "skin.json": "5af025c011797aa34d2a0d2dbf6edfafb30a4e199f9fe2a6075b28a183c76c17"
+        }
+      },
+      "riskDisclosure": "Published as Red Market Terminal: the RC.8 adaptation omits Tonghuashun wording, quote/RPC behavior, injected chrome, favicon, and title mutation.",
+      "runtimeEvidence": {
+        "status": "passed",
+        "receiptItem": "dsh-web-ui-ths",
+        "receiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1",
+        "attestationEquivalenceBridgeSha256": "4a23118be7cb3d46de29af0a7ac4955f73d1103b9f61b2b8608eed580345b531"
+      }
     },
     {
       "catalogId": 2208,
@@ -190,7 +271,7 @@
       "directoryLicenseExpression": "Apache-2.0 metadata AND BSD-3-Clause scoped file",
       "directoryRightsStatus": "conditional",
       "rightsStatus": "reviewed-with-disclosures",
-      "runtimeStatus": "verification-pending",
+      "runtimeStatus": "runtime-verified",
       "executableHooks": true,
       "commercialUse": "rights-clearance-required",
       "noticeRequired": true,
@@ -201,7 +282,13 @@
         "https://api.frankfurter.dev",
         "https://api.frankfurter.app"
       ],
-      "riskDisclosure": "Built-in hooks may request public market-data endpoints and inject terminal chrome."
+      "riskDisclosure": "RC.8 activation requested qt.gtimg.cn, api.binance.com, and api.frankfurter.dev; declared data-api.binance.vision and api.frankfurter.app fallbacks were not observed. With optional dsh-ticker absent, /plugins/dsh-ticker/api/settings returned 404 without breaking try-on, apply, restart, switch-back, removal, or rollback. Switching away cleaned up the trading hook.",
+      "runtimeEvidence": {
+        "status": "passed-with-network-and-optional-dependency-disclosures",
+        "receiptItem": "dsh-web-ui-trading",
+        "receiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1",
+        "attestationEquivalenceBridgeSha256": "4a23118be7cb3d46de29af0a7ac4955f73d1103b9f61b2b8608eed580345b531"
+      }
     },
     {
       "catalogId": 2209,
@@ -215,12 +302,18 @@
       "directoryLicenseExpression": "Apache-2.0 metadata AND BSD-3-Clause scoped file",
       "directoryRightsStatus": "conditional",
       "rightsStatus": "reviewed-with-disclosures",
-      "runtimeStatus": "verification-pending",
+      "runtimeStatus": "runtime-verified",
       "executableHooks": true,
       "commercialUse": "rights-clearance-required",
       "noticeRequired": true,
       "networkDisclosure": [],
-      "riskDisclosure": "Concept-art provenance and DeepSeek mark clearance remain separately disclosed."
+      "riskDisclosure": "Concept-art provenance and DeepSeek mark clearance remain separately disclosed.",
+      "runtimeEvidence": {
+        "status": "passed",
+        "receiptItem": "dsh-web-ui-whale-song",
+        "receiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1",
+        "attestationEquivalenceBridgeSha256": "4a23118be7cb3d46de29af0a7ac4955f73d1103b9f61b2b8608eed580345b531"
+      }
     },
     {
       "catalogId": 2210,
@@ -234,12 +327,26 @@
       "directoryLicenseExpression": "Apache-2.0 metadata AND BSD-3-Clause scoped file",
       "directoryRightsStatus": "conditional",
       "rightsStatus": "reviewed-with-disclosures",
-      "runtimeStatus": "verification-pending",
+      "runtimeStatus": "runtime-verified",
       "executableHooks": true,
       "commercialUse": "rights-clearance-required",
       "noticeRequired": true,
       "networkDisclosure": [],
-      "riskDisclosure": "Windows XP/Luna/Zune naming and interface trade dress are not granted by the package license."
+      "riskDisclosure": "Windows XP/Luna/Zune naming and interface trade dress are not granted by the package license.",
+      "runtimeEvidence": {
+        "status": "passed",
+        "receiptItem": "dsh-web-ui-xp",
+        "receiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1",
+        "attestationEquivalenceBridgeSha256": "4a23118be7cb3d46de29af0a7ac4955f73d1103b9f61b2b8608eed580345b531"
+      }
     }
-  ]
+  ],
+  "runtimeEvidence": {
+    "status": "runtime-verified-install-authority",
+    "receipt": "references/runtime-receipt.rc8.json",
+    "receiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1",
+    "candidateEvidence": "references/runtime-evidence-prepared.json",
+    "candidateEvidenceSha256": "ab9259fb0f67bd0bf03a64f0d791cd3f06de467b6d8553d87fd607e8f75aa5fd",
+    "silentHashReplacementAllowed": false
+  }
 }

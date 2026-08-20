@@ -19,8 +19,10 @@ const parsed = JSON.parse(await readFile(args[1], 'utf8'));
 if (!Array.isArray(parsed)) fail('Plugin list must be the DSH root array');
 const profiles = parsed.filter((entry) => entry?.name === 'dsh-profile-web');
 if (profiles.length !== 1) fail('Expected exactly one dsh-profile-web record');
-const dependencies = profiles[0]?.dependencies;
-if (!dependencies || typeof dependencies !== 'object' || Array.isArray(dependencies)) {
+const dependencies = profiles[0]?.dependencies === undefined
+  ? {}
+  : profiles[0].dependencies;
+if (dependencies === null || typeof dependencies !== 'object' || Array.isArray(dependencies)) {
   fail('dsh-profile-web dependencies are missing');
 }
 if (dependencies[LEGACY_AGGREGATE]) {

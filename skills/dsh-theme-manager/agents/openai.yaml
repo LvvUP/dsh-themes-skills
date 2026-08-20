@@ -1,4 +1,4 @@
 interface:
   display_name: "DSH Theme Manager"
   short_description: "Safely install, verify, and roll back DSH themes"
-  default_prompt: "Use $dsh-theme-manager to validate and install a verified DSH-Themes V2 package."
+  default_prompt: "Use $dsh-theme-manager to validate and install a hosted V3 package only under final RC.8 attestation 1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae, then perform a managed cold restart and digest-bound recoverable rollback."

@@ -7,14 +7,14 @@ import { fileURLToPath } from 'node:url';
 
 const repositoryDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const skillDir = resolve(repositoryDir, 'skills/dsh-theme-manager');
-const runtimeDir = resolve(skillDir, 'runtime');
+const runtimeDir = resolve(skillDir, 'runtime-rc8');
 const runtimePackagePath = resolve(runtimeDir, 'package.json');
 const expectedPackageManager =
   'pnpm@11.7.0+sha512.19cc852c120c7125760f2443ee6be0ca5b40f9f50598de1a09a1f177503e010e57c23c77646e01e761de59bf874fb22a3398c33ab9691fc13eb946b6f0f4d620';
 
 const runtimePackage = JSON.parse(await readFile(runtimePackagePath, 'utf8'));
 if (runtimePackage.packageManager !== expectedPackageManager) {
-  throw new Error('runtime packageManager differs from the certified pnpm baseline');
+  throw new Error('RC.8 runtime packageManager differs from the certified pnpm baseline');
 }
 
 const corepack = process.platform === 'win32' ? 'corepack.cmd' : 'corepack';

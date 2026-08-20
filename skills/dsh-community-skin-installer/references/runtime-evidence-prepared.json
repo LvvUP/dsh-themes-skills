@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "status": "evidence-prepared-not-install-authority",
+  "promotionGate": "community-catalog-and-finder-authority-atomic-update",
+  "baseline": "@deepseek-ai/dsh@0.1.0-rc.8",
+  "candidateReceipt": {
+    "sha256": "1e927be6aaee59f53e25a3c7b7ea8dd2019199964629ee8c242ea7e125460b2c",
+    "attestationSha256": "9b012472019296a47a6a074eddfd489bbda8dc8e4bee7ac5d1b722c2b9fbcdfa",
+    "statusAtCapture": "candidate-verified-not-installable",
+    "screenshotsBundledHere": false,
+    "containsAbsoluteMachinePaths": false
+  },
+  "finalManager": {
+    "attestationSha256": "1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae",
+    "certificationRunId": 32393288849,
+    "certificationHeadSha": "e3fe9ac465b8db8070efbdb83ddc6c821f923a73",
+    "certificationStatus": "verified"
+  },
+  "equivalentFrozenInputs": {
+    "runnerLockfileSha256": "b38b68f1f443b7065f530d665ea7acbc9327275503ba0d9a6edd030b81f915ec",
+    "productionPackagesCount": 504,
+    "productionPackagesSha256": "58c78fcf15d2b6c58bad0fc870a4d28dabda33bfae3633cf94794465564a939b",
+    "dshPackagesCount": 187,
+    "dshPackagesSha256": "aa3929a9418b928d9ef200964f8ae4cce54086b1d5bc474cb9b42af90f0a78d8"
+  },
+  "nonEquivalentClaims": [
+    "attestation document path and bytes",
+    "candidate acceptance blockers versus final six-job matrix",
+    "candidate pending status versus final verified status",
+    "final compatibility and certification-run fields"
+  ],
+  "authority": {
+    "silentHashReplacementAllowed": false,
+    "installationAttestationSha256": "1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae",
+    "candidateReceiptInterpretation": "The UI receipt ran on the same frozen lock and production closure. It does not itself certify the final Manager attestation or authorize installation."
+  },
+  "skinCenter": {
+    "packageName": "@linxin666/dsh-client-ui-skin-center",
+    "version": "0.2.5",
+    "artifactSha256": "5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499",
+    "removeReinstallLifecyclePassed": true
+  },
+  "items": [
+    { "slug": "dsh-deep-whale-maid-atelier", "result": "passed", "installationMode": "skin-center-builtin" },
+    { "slug": "dsh-web-ui-blue-fantasy", "result": "passed", "installationMode": "skin-center-builtin" },
+    { "slug": "dsh-web-ui-dragon-heir", "result": "passed", "installationMode": "skin-center-builtin" },
+    { "slug": "dsh-web-ui-harbor", "result": "passed", "installationMode": "skin-center-builtin" },
+    { "slug": "dsh-web-ui-miku", "result": "passed", "installationMode": "skin-center-builtin" },
+    { "slug": "dsh-web-ui-minecraft", "result": "passed", "installationMode": "skin-center-builtin" },
+    {
+      "slug": "dsh-web-ui-trading",
+      "result": "passed-with-network-and-optional-dependency-disclosures",
+      "installationMode": "skin-center-builtin",
+      "networkDisclosure": [
+        "https://qt.gtimg.cn",
+        "https://api.binance.com",
+        "https://data-api.binance.vision",
+        "https://api.frankfurter.dev",
+        "https://api.frankfurter.app"
+      ],
+      "optionalDependencyDisclosure": "When optional dsh-ticker is absent, /plugins/dsh-ticker/api/settings may return 404; this did not block core try-on, apply, restart, removal, or rollback."
+    },
+    { "slug": "dsh-web-ui-whale-song", "result": "passed", "installationMode": "skin-center-builtin" },
+    { "slug": "dsh-web-ui-xp", "result": "passed", "installationMode": "skin-center-builtin" },
+    { "slug": "dsh-web-ui-qq98", "result": "passed", "installationMode": "bundled-user-skin", "sourcePackageVersion": "0.1.18" },
+    { "slug": "dsh-web-ui-ths", "result": "passed", "installationMode": "bundled-user-skin", "sourcePackageVersion": "0.1.18" }
+  ]
+}

@@ -21,11 +21,20 @@ const SOURCE_REVISION = /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/;
 const PACKAGE_NAME = /^(?:@[a-z0-9][a-z0-9._-]*\/[a-z0-9][a-z0-9._-]*|[a-z0-9][a-z0-9._-]*)$/;
 const SAFE_SUBDIR = /^[A-Za-z0-9][A-Za-z0-9._/-]{0,299}$/;
 const TOKEN_HASH = 'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926';
-const SELECTOR_HASH = '5bcd9f874095af2114d86f91301868c6b0f2cebe58f51b9919150975d406baa3';
-const DSH_INTEGRITY = 'sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==';
-const FRONTEND_SHA256 = 'a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68';
-const CERTIFIED_DSH_VERSION = '0.1.0-rc.6';
-const RC8_TARGET_VERSION = '0.1.0-rc.8';
+const SELECTOR_HASH = '663aa5927591ac99076f924ee9cd6f9bd09e6a8a9ee1e6b8b1b0d9e3093df807';
+const DSH_INTEGRITY = 'sha512-VQU5NlomrKLRgcXuOf+sxWFvqxPA8q9vMhrKPlPPXiOJEhGlGlAdiyxZvZxkCVI+v0zbhe21cY3/luLyxpSzzA==';
+const SOURCE_COMMIT = '141eb6fef83422698aef7a981029e843e8161534';
+const WEB_INDEX_SHA256 = '1af3332985a498e11b8a4b34e29304c59beedf0838eea3b3d61b676f0288c7f0';
+const WEB_ASSET_SET_SHA256 = 'b225f316eacc754b41ffdc1402f4de92c742cf5d9b7e460923092aad65800f06';
+const UI_THEME_CLIENT_SHA256 = '86f6ae4775ca2f4af29b7abaf200a18833b6675aa8446942f819342829eba6a5';
+const RUNTIME_ATTESTATION_SHA256 = '1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae';
+const COMMUNITY_RUNTIME_RECEIPT_SHA256 = '89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1';
+const COMMUNITY_PREPARED_EVIDENCE_SHA256 = 'ab9259fb0f67bd0bf03a64f0d791cd3f06de467b6d8553d87fd607e8f75aa5fd';
+const COMMUNITY_MAIN_RECEIPT_SHA256 = '0b09909a0b7cafba5dd68f066bd3959d5666afc519a39c5c52f3d3bd9126b4c2';
+const COMMUNITY_ATTESTATION_BRIDGE_SHA256 = '4a23118be7cb3d46de29af0a7ac4955f73d1103b9f61b2b8608eed580345b531';
+const CERTIFIED_DSH_VERSION = '0.1.0-rc.8';
+const HISTORICAL_V2_VERSION = '0.1.0-rc.6';
+const RC8_TARGET_VERSION = CERTIFIED_DSH_VERSION;
 const HOSTED = Object.freeze({
   kind: 'hosted-verified-artifact',
   installability: 'manager',
@@ -52,8 +61,8 @@ function parseArgs(argv) {
   values['dsh-version'] ??= CERTIFIED_DSH_VERSION;
   values.availability ??= 'all';
   values.limit ??= '10';
-  if (![CERTIFIED_DSH_VERSION, RC8_TARGET_VERSION].includes(values['dsh-version'])) {
-    throw new Error('DSH version must be exact 0.1.0-rc.6 or the 0.1.0-rc.8 certification target');
+  if (![HISTORICAL_V2_VERSION, CERTIFIED_DSH_VERSION].includes(values['dsh-version'])) {
+    throw new Error('DSH version must be exact historical 0.1.0-rc.6 or certified 0.1.0-rc.8');
   }
   if (values.kind && !['theme', 'skin', 'full-skin', 'ui-extension'].includes(values.kind)) {
     throw new Error('--kind must be theme, skin, full-skin, or ui-extension');
@@ -249,11 +258,15 @@ function acceptedHosted(item, args, catalogOrigin, kind, license, modes) {
   if (!provenance) return null;
   if (item.compatibility?.dshPackageVersion !== args['dsh-version']) return null;
   if (
-    item.compatibility?.schemaVersion !== 2 ||
+    item.compatibility?.schemaVersion !== 3 ||
     item.compatibility?.tokenCatalogSha256 !== TOKEN_HASH ||
     item.compatibility?.selectorCatalogSha256 !== SELECTOR_HASH ||
     item.compatibility?.dshPackageIntegrity !== DSH_INTEGRITY ||
-    item.compatibility?.frontendBundleSha256 !== FRONTEND_SHA256
+    item.compatibility?.sourceCommit !== SOURCE_COMMIT ||
+    item.compatibility?.webIndexHtmlSha256 !== WEB_INDEX_SHA256 ||
+    item.compatibility?.webAssetSetSha256 !== WEB_ASSET_SET_SHA256 ||
+    item.compatibility?.uiThemeClientBundleSha256 !== UI_THEME_CLIENT_SHA256 ||
+    item.compatibility?.runtimeAttestationSha256 !== RUNTIME_ATTESTATION_SHA256
   ) return null;
   if (!SHA256.test(item.package?.sha256)) return null;
   const packageName = `@dsh-themes/${item.slug}`;
@@ -283,9 +296,13 @@ function acceptedHosted(item, args, catalogOrigin, kind, license, modes) {
       status: 'verified',
       dshPackageVersion: args['dsh-version'],
       dshPackageIntegrity: DSH_INTEGRITY,
-      frontendBundleSha256: FRONTEND_SHA256,
+      sourceCommit: SOURCE_COMMIT,
       tokenCatalogSha256: TOKEN_HASH,
       selectorCatalogSha256: SELECTOR_HASH,
+      webIndexHtmlSha256: WEB_INDEX_SHA256,
+      webAssetSetSha256: WEB_ASSET_SET_SHA256,
+      uiThemeClientBundleSha256: UI_THEME_CLIENT_SHA256,
+      runtimeAttestationSha256: RUNTIME_ATTESTATION_SHA256,
     },
     package: {
       name: packageName,
@@ -519,7 +536,21 @@ function communityAuthorityFor(item, source, rights) {
     COMMUNITY_AUTHORITY.managerGate?.certifiedDshPackageVersion ===
       RC8_TARGET_VERSION &&
     COMMUNITY_AUTHORITY.managerGate?.targetDshPackageVersion ===
-      RC8_TARGET_VERSION;
+      RC8_TARGET_VERSION &&
+    COMMUNITY_AUTHORITY.managerGate?.targetRuntimeAttestationSha256 ===
+      RUNTIME_ATTESTATION_SHA256 &&
+    COMMUNITY_AUTHORITY.managerGate?.runtimeReceiptSha256 ===
+      COMMUNITY_RUNTIME_RECEIPT_SHA256 &&
+    COMMUNITY_AUTHORITY.managerGate?.preparedEvidenceSha256 ===
+      COMMUNITY_PREPARED_EVIDENCE_SHA256 &&
+    COMMUNITY_AUTHORITY.managerGate?.mainRuntimeReceiptSha256 ===
+      COMMUNITY_MAIN_RECEIPT_SHA256 &&
+    COMMUNITY_AUTHORITY.managerGate?.attestationEquivalenceBridgeSha256 ===
+      COMMUNITY_ATTESTATION_BRIDGE_SHA256 &&
+    local.runtimeEvidence?.receiptSha256 ===
+      COMMUNITY_RUNTIME_RECEIPT_SHA256 &&
+    local.runtimeEvidence?.attestationEquivalenceBridgeSha256 ===
+      COMMUNITY_ATTESTATION_BRIDGE_SHA256;
   return managerRc8Certified ? local : null;
 }
 

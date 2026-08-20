@@ -10,13 +10,19 @@ const TOKENS = [
   '--dsw-alias-label-secondary', '--dsw-alias-state-error-primary', '--dsw-alias-state-success-primary',
   '--dsw-alias-state-warn-primary', '--dsw-specific-sidebar-fill',
 ];
-const COMPATIBILITY = {
-  dshPackageVersion: '0.1.0-rc.6',
-  dshPackageIntegrity: 'sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==',
-  tokenCatalogSha256: 'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926',
-  frontendBundleSha256: 'a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68',
-  selectorCatalogSha256: '5bcd9f874095af2114d86f91301868c6b0f2cebe58f51b9919150975d406baa3',
-};
+const CURRENT_DSH_VERSION = '0.1.0-rc.8';
+const COMPATIBILITY_SHA256 =
+  '94f707533122d7fa7930558030d13053ecad7d5ee5f003a5fdf38d78fd2fe2e1';
+const compatibilityBytes = await readFile(
+  new URL('../references/compatibility-v3.json', import.meta.url),
+);
+if (createHash('sha256').update(compatibilityBytes).digest('hex') !== COMPATIBILITY_SHA256) {
+  throw new Error('compatibility-v3.json does not match the certified RC.8 authority');
+}
+const COMPATIBILITY = JSON.parse(compatibilityBytes.toString('utf8'));
+if (COMPATIBILITY.dshPackageVersion !== CURRENT_DSH_VERSION) {
+  throw new Error('compatibility-v3.json does not target the certified DSH version');
+}
 const SHA256 = /^[0-9a-f]{64}$/;
 const VERSION = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -50,6 +56,12 @@ function object(value, label, allowedKeys) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error(`${label} must be an object`);
   if (allowedKeys) for (const key of Object.keys(value)) if (!allowedKeys.includes(key)) throw new Error(`${label}.${key} is not allowed`);
   return value;
+}
+
+function stable(value) {
+  if (Array.isArray(value)) return value.map(stable);
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(Object.keys(value).sort().map((key) => [key, stable(value[key])]));
 }
 
 function optionalHttps(value, label) {
@@ -102,9 +114,10 @@ function submissionOrigin(value) {
 }
 
 function validateCompatibility(value) {
-  const input = object(value, 'compatibility', [...Object.keys(COMPATIBILITY), 'sourceCommit']);
-  if (input.sourceCommit !== undefined) throw new Error('sourceCommit must be omitted unless independently verified');
-  for (const [key, expected] of Object.entries(COMPATIBILITY)) if (input[key] !== expected) throw new Error(`compatibility.${key} is not the verified rc.6 value`);
+  const input = object(value, 'compatibility');
+  if (JSON.stringify(stable(input)) !== JSON.stringify(stable(COMPATIBILITY))) {
+    throw new Error('compatibility must exactly match the certified RC.8 V3 final evidence');
+  }
 }
 
 function validateLicensePolicy(value, identifier) {
@@ -159,7 +172,7 @@ inspectKeys(manifest);
 const commonKeys = ['schemaVersion', 'kind', 'slug', 'name', 'description', 'category', 'author', 'license', 'licensePolicy', 'version', 'compatibility', 'tokens', 'preview'];
 const allowedRoot = manifest.kind === 'full-skin' ? [...commonKeys, 'copyright', 'visual', 'assets'] : commonKeys;
 for (const key of Object.keys(manifest)) if (!allowedRoot.includes(key)) throw new Error(`manifest.${key} is not allowed`);
-if (manifest.schemaVersion !== '2.0') throw new Error('schemaVersion must equal 2.0');
+if (manifest.schemaVersion !== '3.0') throw new Error('schemaVersion must equal 3.0');
 if (!['theme', 'full-skin'].includes(manifest.kind)) throw new Error('kind must be theme or full-skin');
 if (!SLUG.test(manifest.slug) || manifest.slug.length > 64) throw new Error('invalid slug');
 if (!VERSION.test(manifest.version)) throw new Error('version must be exact semantic version');
@@ -250,6 +263,7 @@ submission.searchParams.set('slug', manifest.slug);
 process.stdout.write(`${JSON.stringify({
   ready: true, slug: manifest.slug, version: manifest.version, kind: manifest.kind,
   dshPackageVersion: manifest.compatibility.dshPackageVersion,
+  runtimeAttestationSha256: manifest.compatibility.runtimeAttestationSha256,
   manifestSha256: createHash('sha256').update(bytes).digest('hex'),
   provisionalAssets,
   distributionEligibility: licensePolicy.commercialUse === 'allowed'

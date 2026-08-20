@@ -7,24 +7,24 @@
 [English](README.md) · [简体中文](README.zh-CN.md)
 
 [![CI](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml)
-[![Node.js 22+](https://img.shields.io/badge/Node.js-22%2B-16324F)](package.json)
+[![Node.js 22/24](https://img.shields.io/badge/Node.js-22.19%20%7C%2024.15-16324F)](package.json)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-246BCE)](LICENSE)
 
 ### [Browse the Gallery on dsh-themes.com →](https://dsh-themes.com/gallery)
 
 </div>
 
-DSH-Themes Skills contains five self-contained skills. The hosted Manager lane remains certified for exact DeepSeek Harness `0.1.0-rc.6`. Exact `0.1.0-rc.8` is the upstream V3 certification target: Finder can inspect its directory evidence, but the public Manager and all community-skin records remain fail-closed until the missing runtime gates are released together.
+DSH-Themes Skills contains five self-contained skills. The hosted Manager, Creator, Submitter, and Finder lanes are certified for exact DeepSeek Harness `0.1.0-rc.8` V3, backed by a six-job Linux/macOS/Windows runtime matrix. Eleven community-skin records are separately runtime-verified and installable only through their consented, receipt-bound installer lane.
 
 The repository supports three workflows:
 
 - **Hosted themes:** `Finder → Manager` for an exact verified `@dsh-themes/*` artifact.
-- **Community skins:** `Finder → Community Skin Installer` for pinned rights/runtime evidence. The current release is inspection-only; installation requires both item-level runtime verification and an RC.8 Manager attestation.
+- **Community skins:** `Finder → Community Skin Installer` for exactly eleven pinned records. Installation requires item runtime evidence, the exact RC.8 Manager attestation, the final sanitized receipt, and explicit user consent.
 - **Create and publish:** `Creator → Submitter → Website` for deterministic declarative manifests and the normal authenticated moderation flow.
 
 ## Quick start
 
-Node.js 22 or newer is required.
+Use Node.js `22.19+` within Node 22 or `24.15+` within Node 24.
 
 ```bash
 npx skills add LvvUP/dsh-themes-skills --skill dsh-theme-finder
@@ -71,12 +71,12 @@ Read each Skill and the [Security Policy](SECURITY.md) for the complete boundari
 
 ## Compatibility status
 
-- Upstream/V3 target: **DeepSeek Harness `0.1.0-rc.8`**, official tag `dsh-v0.1.0-rc.8`, commit `141eb6fef83422698aef7a981029e843e8161534`.
-- Current certified Manager lane: **`0.1.0-rc.6`**.
+- Current certified V3 lane: **DeepSeek Harness `0.1.0-rc.8`**, official tag `dsh-v0.1.0-rc.8`, commit `141eb6fef83422698aef7a981029e843e8161534`, final runtime attestation `1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae`.
+- Historical V2 lane: **`0.1.0-rc.6`**; recognized for audit, never current-installable.
 - Historical V1 lane: **`0.1.0-rc.5`**; never treated as current.
 - [`release-state.json`](release-state.json) is the canonical informational lane summary. It does not replace validators, frozen runner evidence, item allowlists, or runtime acceptance.
-- [`rc8-v3-candidate.json`](skills/dsh-theme-manager/references/rc8-v3-candidate.json) records exact candidate digests while selector/runtime authority remains explicitly `null`; its validator returns a non-installable result.
-- Theme and skin changes require a Harness restart.
+- [`rc8-v3-candidate.json`](skills/dsh-theme-manager/references/rc8-v3-candidate.json) is preserved as historical pending evidence; it never substitutes for the final attestation.
+- Theme and skin changes use a managed cold restart; production live unload/HMR is not promised by the RC.8 contract.
 - This independent community project is not affiliated with or endorsed by DeepSeek AI. Related names and marks belong to their respective owners.
 
 ## Development
@@ -87,7 +87,7 @@ npm test
 npm run validate
 ```
 
-`npm test` bootstraps only the exact certified RC.6 Manager runner with Corepack-pinned `pnpm@11.7.0`, a frozen lockfile, and lifecycle scripts disabled. RC.8 candidate and community tests validate fail-closed evidence without mutating a Harness profile.
+`npm test` bootstraps only the exact certified RC.8 Manager runner with Corepack-pinned `pnpm@11.7.0`, a frozen lockfile, and lifecycle scripts disabled. The RC.6 runtime files remain byte-identical historical evidence. Community tests validate the separate 11-item receipt and use isolated temporary profiles.
 
 Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Report suspected vulnerabilities through the private process in [SECURITY.md](SECURITY.md), not a public issue.
 

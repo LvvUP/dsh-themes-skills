@@ -7,24 +7,24 @@
 [English](README.md) · [简体中文](README.zh-CN.md)
 
 [![CI](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml)
-[![Node.js 22+](https://img.shields.io/badge/Node.js-22%2B-16324F)](package.json)
+[![Node.js 22/24](https://img.shields.io/badge/Node.js-22.19%20%7C%2024.15-16324F)](package.json)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-246BCE)](LICENSE)
 
 ### [前往 dsh-themes.com 浏览展廊 →](https://dsh-themes.com/zh/gallery)
 
 </div>
 
-DSH-Themes Skills 由五个彼此独立的技能组成。站内托管 Manager 通道目前仍只认证精确的 DeepSeek Harness `0.1.0-rc.6`。精确的 `0.1.0-rc.8` 是上游 V3 认证目标：Finder 可以检查其目录证据，但在公开 Manager 与社区皮肤的运行时门槛一并完成前，安装会保持 fail closed。
+DSH-Themes Skills 由五个彼此独立的技能组成。站内 Manager、Creator、Submitter 与 Finder 已升级为精确的 DeepSeek Harness `0.1.0-rc.8` V3，并由 Linux、macOS、Windows 共六个运行时矩阵任务认证。11 个社区皮肤已经过独立运行时验证，并且只能通过需要明确同意、受回执约束的安装通道进入。
 
 本仓库覆盖三条工作流：
 
 - **站内主题：**`Finder → Manager`，处理精确且已验证的 `@dsh-themes/*` 制品。
-- **社区皮肤：**`Finder → Community Skin Installer`，检查固定的权利与运行时证据。当前版本只允许检查；安装需要“条目运行时已验证”和“Manager 已认证 RC.8”两个条件同时成立。
+- **社区皮肤：**`Finder → Community Skin Installer`，处理精确 11 条固定记录。安装需要条目运行时证据、精确 RC.8 Manager attestation、最终脱敏回执与用户明确同意同时成立。
 - **创作与发布：**`Creator → Submitter → 网站`，生成确定性的声明式清单，并进入正常的登录审核流程。
 
 ## 快速开始
 
-需要 Node.js 22 或更高版本。
+使用 Node.js 22 系列的 `22.19+`，或 Node.js 24 系列的 `24.15+`。
 
 ```bash
 npx skills add LvvUP/dsh-themes-skills --skill dsh-theme-finder
@@ -71,12 +71,12 @@ showcase-only 条目。
 
 ## 兼容性状态
 
-- 上游/V3 目标：**DeepSeek Harness `0.1.0-rc.8`**，官方 tag `dsh-v0.1.0-rc.8`，提交 `141eb6fef83422698aef7a981029e843e8161534`。
-- 当前已认证 Manager 通道：**`0.1.0-rc.6`**。
+- 当前已认证 V3 通道：**DeepSeek Harness `0.1.0-rc.8`**，官方 tag `dsh-v0.1.0-rc.8`，提交 `141eb6fef83422698aef7a981029e843e8161534`，最终 runtime attestation 为 `1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae`。
+- 历史 V2 通道：**`0.1.0-rc.6`**，只用于审计，不作为当前安装通道。
 - 历史 V1 通道：**`0.1.0-rc.5`**，不会被视为当前版本。
 - [`release-state.json`](release-state.json) 是版本通道的信息摘要，但不能替代 validator、冻结 runner 证据、条目 allowlist 或运行时验收。
-- [`rc8-v3-candidate.json`](skills/dsh-theme-manager/references/rc8-v3-candidate.json) 固定记录了候选摘要；selector 与 runtime authority 仍明确为 `null`，validator 只会返回不可安装结果。
-- 主题与皮肤变更后需要重启 Harness。
+- [`rc8-v3-candidate.json`](skills/dsh-theme-manager/references/rc8-v3-candidate.json) 作为历史 pending 证据保留，不能代替最终 attestation。
+- 主题与皮肤变更使用托管冷重启；RC.8 合同不承诺生产环境 live unload/HMR。
 - 本项目由社区独立维护，与 DeepSeek AI 无隶属或背书关系；相关名称与商标属于各自权利人。
 
 ## 开发
@@ -87,7 +87,7 @@ npm test
 npm run validate
 ```
 
-`npm test` 只会用 Corepack 固定的 `pnpm@11.7.0`、冻结 lockfile 与禁用生命周期脚本，引导当前已认证的 RC.6 Manager runner。RC.8 candidate 与社区测试只验证 fail-closed 证据，不会修改 Harness profile。
+`npm test` 只会用 Corepack 固定的 `pnpm@11.7.0`、冻结 lockfile 与禁用生命周期脚本，引导当前已认证的 RC.8 Manager runner。RC.6 runtime 文件继续以字节不变的方式保存历史证据；社区测试会验证独立的 11 条回执，并只使用隔离临时 profile。
 
 欢迎参与贡献。提交 Pull Request 前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。如发现疑似漏洞，请按 [SECURITY.md](SECURITY.md) 的私密流程报告，不要创建公开 Issue。
 

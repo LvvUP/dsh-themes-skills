@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { isExactSemver } from './semver.mjs';
 
-const CURRENT = Object.freeze({
+const HISTORICAL_V2 = Object.freeze({
   dshPackageVersion: '0.1.0-rc.6',
   dshPackageIntegrity: 'sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==',
   tokenCatalogSha256: 'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926',
@@ -13,7 +15,7 @@ const CURRENT = Object.freeze({
   frontendStylesheetSha256: '8ecb4b25268f5acae7e6f1b9e5cc8d14e5c5fa17da70a6a7863c896496f257ea',
   selectorCatalogSha256: '5bcd9f874095af2114d86f91301868c6b0f2cebe58f51b9919150975d406baa3',
 });
-const RUNTIME = Object.freeze({
+const RUNTIME_V1 = Object.freeze({
   schemaVersion: 1,
   attestationSha256: '2400606c5cb6534e09a65020e4ae12a0df4c1d08f15918d714bc5037c2ed99ba',
   runnerLockfileSha256: '22f995efe8338c2a3cd97bd731853d010363531145c35073adb2dca3773f6053',
@@ -29,6 +31,26 @@ const RUNTIME = Object.freeze({
   frontendBundleSha256: 'a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68',
   frontendStylesheetSha256: '8ecb4b25268f5acae7e6f1b9e5cc8d14e5c5fa17da70a6a7863c896496f257ea',
 });
+const RUNTIME_V2 = Object.freeze({
+  schemaVersion: 2,
+  attestationSha256:
+    '1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae',
+  runnerLockfileSha256:
+    'b38b68f1f443b7065f530d665ea7acbc9327275503ba0d9a6edd030b81f915ec',
+  productionPackagesCount: 504,
+  productionPackagesSha256:
+    '58c78fcf15d2b6c58bad0fc870a4d28dabda33bfae3633cf94794465564a939b',
+  dshPackagesCount: 187,
+  dshPackagesSha256:
+    'aa3929a9418b928d9ef200964f8ae4cce54086b1d5bc474cb9b42af90f0a78d8',
+  packageManagerName: 'pnpm',
+  packageManagerVersion: '11.7.0',
+  dshPackageVersion: '0.1.0-rc.8',
+  certificationRunId: 32393288849,
+  certificationHeadSha:
+    'e3fe9ac465b8db8070efbdb83ddc6c821f923a73',
+  lifecycle: 'managed-cold-restart',
+});
 const HISTORICAL = Object.freeze({
   dshVersion: '0.1.0-rc.5',
   commit: '47f943859bef60e4160492346772ded9b24f765a',
@@ -36,6 +58,21 @@ const HISTORICAL = Object.freeze({
 });
 const SHA256 = /^[0-9a-f]{64}$/;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const skillDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const finalAttestationBytes = await readFile(
+  resolve(skillDir, 'runtime-rc8/attestation.json')
+);
+if (
+  createHash('sha256').update(finalAttestationBytes).digest('hex') !==
+  RUNTIME_V2.attestationSha256
+) {
+  throw new Error('local RC.8 attestation does not match installation authority');
+}
+const finalAttestation = JSON.parse(finalAttestationBytes.toString('utf8'));
+const CURRENT_V3 = Object.freeze({
+  ...finalAttestation.compatibility,
+  runtimeAttestationSha256: RUNTIME_V2.attestationSha256,
+});
 
 function fail(message) {
   throw new Error(message);
@@ -84,13 +121,26 @@ function validateDistribution(record) {
   exact(distribution.previewPolicy, 'hosted', 'distribution.previewPolicy');
 }
 
-function validateRuntimeAttestation(value) {
+function validateRuntimeAttestation(value, expected) {
   const attestation = object(value, 'runtimeAttestation');
-  onlyKeys(attestation, Object.keys(RUNTIME), 'runtimeAttestation');
-  for (const [key, expected] of Object.entries(RUNTIME)) {
-    exact(attestation[key], expected, `runtimeAttestation.${key}`);
+  onlyKeys(attestation, Object.keys(expected), 'runtimeAttestation');
+  for (const [key, expectedValue] of Object.entries(expected)) {
+    exact(attestation[key], expectedValue, `runtimeAttestation.${key}`);
   }
   return attestation;
+}
+
+function stableJson(value) {
+  const stable = (entry) => {
+    if (Array.isArray(entry)) return entry.map(stable);
+    if (!entry || typeof entry !== 'object') return entry;
+    return Object.fromEntries(
+      Object.keys(entry)
+        .sort()
+        .map((key) => [key, stable(entry[key])])
+    );
+  };
+  return JSON.stringify(stable(value));
 }
 
 function trustedOrigin(value) {
@@ -134,12 +184,15 @@ function checkIntegrity(sha256, integrity, name) {
 
 function validateV2(record, manifest, origin) {
   validateDistribution(record);
-  const runtimeAttestation = validateRuntimeAttestation(record.runtimeAttestation);
+  const runtimeAttestation = validateRuntimeAttestation(
+    record.runtimeAttestation,
+    RUNTIME_V1
+  );
   if (manifest.kind !== 'theme' && manifest.kind !== 'full-skin') fail('V2 kind must be theme or full-skin');
   if (!SLUG.test(manifest.slug) || !isExactSemver(manifest.version)) fail('V2 slug or version is invalid');
 
   const compatibility = object(manifest.compatibility, 'manifest.compatibility');
-  for (const [key, expected] of Object.entries(CURRENT)) {
+  for (const [key, expected] of Object.entries(HISTORICAL_V2)) {
     if (key === 'frontendStylesheetSha256') continue;
     exact(compatibility[key], expected, `compatibility.${key}`);
   }
@@ -166,9 +219,9 @@ function validateV2(record, manifest, origin) {
   if (manifest.package !== undefined) fail('V2 manifests cannot use the V1 package digest field');
 
   return {
-    status: 'current',
-    installableCurrent: true,
-    dshVersion: CURRENT.dshPackageVersion,
+    status: 'historical-v2',
+    installableCurrent: false,
+    dshVersion: HISTORICAL_V2.dshPackageVersion,
     packageName: artifact.name,
     version: manifest.version,
     artifactUrl: controlledArtifactUrl(record.artifactUrl, origin, manifest.slug, manifest.version),
@@ -207,19 +260,81 @@ function validateV1(record, manifest, origin) {
   };
 }
 
-function rejectPendingV3(manifest) {
+function validateV3(record, manifest, origin) {
+  validateDistribution(record);
+  const runtimeAttestation = validateRuntimeAttestation(
+    record.runtimeAttestation,
+    RUNTIME_V2
+  );
+  if (manifest.kind !== 'theme' && manifest.kind !== 'full-skin') {
+    fail('V3 kind must be theme or full-skin');
+  }
+  if (!SLUG.test(manifest.slug) || !isExactSemver(manifest.version)) {
+    fail('V3 slug or version is invalid');
+  }
   const compatibility = object(
     manifest.compatibility,
     'manifest.compatibility'
   );
-  if (compatibility.dshPackageVersion !== '0.1.0-rc.8') {
+  if (stableJson(compatibility) !== stableJson(CURRENT_V3)) {
     fail(
-      'V3 manifests must target exact RC.8; mixed rc.6/rc.7/rc.8 evidence is forbidden'
+      'V3 compatibility must match the exact certified RC.8 evidence; mixed rc.6/rc.7/rc.8 evidence is forbidden'
     );
   }
-  fail(
-    'RC.8 V3 certification is pending selector, runtime-attestation-v2, full UI, and cross-platform acceptance evidence; Manager remains fail-closed'
+
+  const artifact = object(manifest.artifact, 'manifest.artifact');
+  exact(artifact.name, `@dsh-themes/${manifest.slug}`, 'artifact.name');
+  exact(artifact.version, manifest.version, 'artifact.version');
+  exact(
+    artifact.fileName,
+    `${manifest.slug}-${manifest.version}.tgz`,
+    'artifact.fileName'
   );
+  exact(artifact.digestScope, 'artifact-tgz', 'artifact.digestScope');
+  checkSha(artifact.sha256, 'artifact.sha256');
+  checkIntegrity(artifact.sha256, artifact.integrity, 'artifact');
+  checkSha(record.artifactSha256, 'artifactSha256');
+  exact(record.artifactSha256, artifact.sha256, 'catalog artifactSha256');
+
+  const payload = object(manifest.payload, 'manifest.payload');
+  exact(
+    payload.fileName,
+    `${manifest.slug}-${manifest.version}.payload.tar`,
+    'payload.fileName'
+  );
+  exact(
+    payload.digestScope,
+    'canonical-tar-payload-excluding-manifest',
+    'payload.digestScope'
+  );
+  checkSha(payload.sha256, 'payload.sha256');
+  checkIntegrity(payload.sha256, payload.integrity, 'payload');
+  if (payload.sha256 === artifact.sha256) {
+    fail('payload and artifact digests must use distinct scopes');
+  }
+  if (manifest.package !== undefined) {
+    fail('V3 manifests cannot use the V1 package digest field');
+  }
+
+  return {
+    status: 'current',
+    installableCurrent: true,
+    dshVersion: '0.1.0-rc.8',
+    sourceCommit: CURRENT_V3.officialRelease.sourceCommit,
+    packageName: artifact.name,
+    version: manifest.version,
+    artifactUrl: controlledArtifactUrl(
+      record.artifactUrl,
+      origin,
+      manifest.slug,
+      manifest.version
+    ),
+    artifactSha256: artifact.sha256,
+    payloadSha256: payload.sha256,
+    runtimeAttestationSha256: runtimeAttestation.attestationSha256,
+    certificationRunId: runtimeAttestation.certificationRunId,
+    lifecycle: runtimeAttestation.lifecycle,
+  };
 }
 
 const args = parseArgs(process.argv.slice(2));
@@ -230,7 +345,7 @@ const origin = trustedOrigin(args.origin);
 const result = manifest.schemaVersion === '2.0'
   ? validateV2(record, manifest, origin)
   : manifest.schemaVersion === '3.0'
-    ? rejectPendingV3(manifest)
+    ? validateV3(record, manifest, origin)
   : manifest.schemaVersion === 1
     ? validateV1(record, manifest, origin)
     : fail('unsupported manifest schemaVersion');

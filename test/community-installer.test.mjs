@@ -1,10 +1,12 @@
 import assert from 'node:assert/strict';
-import { access, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import test from 'node:test';
+
+import { assertBundledCssSafe } from '../skills/dsh-community-skin-installer/scripts/bundled-skin-policy.mjs';
 
 const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const skillRoot = join(repoRoot, 'skills/dsh-community-skin-installer');
@@ -34,6 +36,7 @@ async function workspace(t) {
 }
 
 function directoryRecord(catalog, skin) {
+  const verified = skin.runtimeStatus === 'runtime-verified';
   const repository = new URL(skin.sourceRepository).pathname.replace(/^\//, '');
   const sourcePackage = skin.slug === 'dsh-deep-whale-maid-atelier'
     ? { name: 'dsh-deep-whale-maid-atelier', version: undefined }
@@ -76,12 +79,12 @@ function directoryRecord(catalog, skin) {
       rollback: 'Untrusted display metadata.',
     },
     distribution: {
-      kind: 'external-showcase',
-      installability: 'showcase-only',
+      kind: verified ? 'external-runtime-verified' : 'external-showcase',
+      installability: verified ? 'community-installer' : 'showcase-only',
       consentRequired: true,
     },
     compatibility: {
-      status: 'verification-pending',
+      status: verified ? 'verified' : 'verification-pending',
       baseline: catalog.baseline.dshPackageVersion,
       evidence: [],
     },
@@ -104,22 +107,34 @@ test('community installer scripts are syntactically valid', () => {
   }
 });
 
-test('community authority is self-contained and keeps both RC.8 gates closed', async () => {
+test('community authority is self-contained and opens only the exact final RC.8 gate', async () => {
   const catalog = JSON.parse(await readFile(catalogPath, 'utf8'));
   const authoritySource = await readFile(scripts.authority, 'utf8');
   assert.doesNotMatch(authoritySource, /release-state\.json/);
-  assert.deepEqual(catalog.managerGate, {
-    certifiedDshPackageVersion: '0.1.0-rc.6',
-    targetDshPackageVersion: '0.1.0-rc.8',
-    certificationStatus: 'pending',
-    installable: false,
-  });
-  assert.ok(
-    catalog.skins.every((skin) => skin.runtimeStatus === 'verification-pending')
+  assert.equal(catalog.managerGate.certifiedDshPackageVersion, '0.1.0-rc.8');
+  assert.equal(catalog.managerGate.targetDshPackageVersion, '0.1.0-rc.8');
+  assert.equal(
+    catalog.managerGate.targetRuntimeAttestationSha256,
+    '1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae'
   );
+  assert.equal(
+    catalog.managerGate.runtimeReceiptSha256,
+    '89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1'
+  );
+  assert.equal(catalog.managerGate.certificationStatus, 'certified-installable');
+  assert.equal(catalog.managerGate.installable, true);
+  assert.ok(
+    catalog.skins.every((skin) => skin.runtimeStatus === 'runtime-verified')
+  );
+  assert.equal(catalog.skins.length, 11);
+  assert.equal(new Set(catalog.skins.map((skin) => skin.skinId)).size, 11);
+  const trading = catalog.skins.find((skin) => skin.skinId === 'trading');
+  assert.match(trading.riskDisclosure, /qt\.gtimg\.cn/);
+  assert.match(trading.riskDisclosure, /dsh-ticker/);
+  assert.match(trading.riskDisclosure, /404/);
 });
 
-test('nested directory records inspect successfully while both install gates remain closed', async (t) => {
+test('nested directory records inspect and install only through final authority', async (t) => {
   const root = await workspace(t);
   const catalog = JSON.parse(await readFile(catalogPath, 'utf8'));
   const skin = catalog.skins.find((candidate) => candidate.skinId === 'qq98');
@@ -133,18 +148,13 @@ test('nested directory records inspect successfully while both install gates rem
     run(scripts.validate, ['--input', input, '--mode', 'inspect']).stdout
   );
   assert.equal(inspected.recordShape, 'directory-v1');
-  assert.equal(inspected.installable, false);
-  assert.deepEqual(inspected.blockingReasons, [
-    'item-runtime-verification-pending',
-    'adjacent-manager-rc8-attestation-not-certified',
-  ]);
+  assert.equal(inspected.installable, true);
+  assert.deepEqual(inspected.blockingReasons, []);
 
-  const blocked = run(
-    scripts.validate,
-    ['--input', input, '--mode', 'install'],
-    { ok: false }
+  const installable = JSON.parse(
+    run(scripts.validate, ['--input', input, '--mode', 'install']).stdout
   );
-  assert.match(blocked.stderr, /item-runtime-verification-pending/);
+  assert.equal(installable.installable, true);
 
   const tampered = directoryRecord(catalog, skin);
   tampered.source.revision = '0'.repeat(40);
@@ -155,6 +165,22 @@ test('nested directory records inspect successfully while both install gates rem
     { ok: false }
   );
   assert.match(rejected.stderr, /source\.revision does not match/);
+
+  const showcaseSubstitution = directoryRecord(catalog, skin);
+  showcaseSubstitution.distribution = {
+    kind: 'external-showcase',
+    installability: 'showcase-only',
+    consentRequired: true,
+  };
+  await writeFile(input, `${JSON.stringify(showcaseSubstitution, null, 2)}\n`, {
+    mode: 0o600,
+  });
+  assert.match(
+    run(scripts.validate, ['--input', input, '--mode', 'install'], {
+      ok: false,
+    }).stderr,
+    /distribution\.kind does not match/
+  );
 
   const wrongLicense = directoryRecord(catalog, skin);
   wrongLicense.rights.licenseUrl =
@@ -170,7 +196,7 @@ test('nested directory records inspect successfully while both install gates rem
   );
 });
 
-test('direct CSS adaptation installation is script-gated before touching the profile', async (t) => {
+test('direct CSS adaptation installation validates authority before touching the profile', async (t) => {
   const root = await workspace(t);
   const dshHome = join(root, 'profile');
   await mkdir(dshHome);
@@ -188,18 +214,46 @@ test('direct CSS adaptation installation is script-gated before touching the pro
   );
   assert.match(missingRecord.stderr, /install requires --record/);
 
-  const pending = run(
-    scripts.userSkin,
-    ['install', '--id', 'qq98', '--dsh-home', dshHome, '--record', input],
-    { ok: false }
+  const installed = JSON.parse(
+    run(scripts.userSkin, [
+      'install', '--id', 'qq98', '--dsh-home', dshHome, '--record', input,
+    ]).stdout
   );
-  assert.match(pending.stderr, /Installation is blocked/);
-  await assert.rejects(access(join(dshHome, 'skins')), /ENOENT/);
+  assert.equal(installed.installed, true);
+  assert.equal(installed.record.executableHooksIncluded, false);
 
   const before = JSON.parse(
     run(scripts.userSkin, ['inspect', '--id', 'qq98', '--dsh-home', dshHome]).stdout
   );
-  assert.equal(before.installed, false);
+  assert.equal(before.installed, true);
+
+  const removed = JSON.parse(
+    run(scripts.userSkin, ['remove', '--id', 'qq98', '--dsh-home', dshHome]).stdout
+  );
+  assert.equal(removed.recoverable, true);
+  const recovered = JSON.parse(
+    run(scripts.userSkin, [
+      'recover', '--id', 'qq98', '--dsh-home', dshHome, '--from', removed.recoveryPath,
+    ]).stdout
+  );
+  assert.equal(recovered.recovered, true);
+});
+
+test('bundled CSS policy rejects every unbound url spelling', () => {
+  assert.doesNotThrow(() => assertBundledCssSafe(':root { color: #123456; }'));
+  for (const css of [
+    '.x { background: url(//attacker.example/pixel); }',
+    '.x { background: URL("https://attacker.example/pixel"); }',
+    '.x { background: url(data:text/html,attack); }',
+    '.x { background: url(./unbound-local.webp); }',
+    '.x { background: u/**/rl(//attacker.example/pixel); }',
+  ]) {
+    assert.throws(() => assertBundledCssSafe(css), /forbidden unbound url/);
+  }
+  assert.throws(
+    () => assertBundledCssSafe('.x { background: u\\72l(//attacker.example); }'),
+    /forbidden CSS escape/
+  );
 });
 
 test('Skin Center state accepts only the exact standalone 0.2.5 dependency', async (t) => {
@@ -214,6 +268,22 @@ test('Skin Center state accepts only the exact standalone 0.2.5 dependency', asy
 
   await writePlugins({});
   assert.equal(JSON.parse(run(scripts.state, ['--input', input]).stdout).installed, false);
+  await writeFile(
+    input,
+    `${JSON.stringify([{ name: 'dsh-profile-web', private: true }], null, 2)}\n`,
+    { mode: 0o600 }
+  );
+  assert.equal(
+    JSON.parse(run(scripts.state, ['--input', input]).stdout).installed,
+    false
+  );
+  for (const malformed of [null, [], 'invalid']) {
+    await writePlugins(malformed);
+    assert.match(
+      run(scripts.state, ['--input', input], { ok: false }).stderr,
+      /dependencies are missing/
+    );
+  }
   await writePlugins({ '@linxin666/dsh-client-ui-skin-center': '0.2.5' });
   assert.equal(JSON.parse(run(scripts.state, ['--input', input]).stdout).version, '0.2.5');
   await writePlugins({ '@linxin666/dsh-client-ui-skin-center': '^0.2.5' });
@@ -225,6 +295,14 @@ test('Skin Center state accepts only the exact standalone 0.2.5 dependency', asy
   assert.match(
     run(scripts.state, ['--input', input], { ok: false }).stderr,
     /Legacy aggregate is a direct dependency/
+  );
+  await writePlugins({
+    '@linxin666/dsh-skins': '0.1.18',
+    '@linxin666/dsh-client-ui-skin-center': '0.2.5',
+  });
+  assert.match(
+    run(scripts.state, ['--input', input], { ok: false }).stderr,
+    /Legacy aggregate and standalone Skin Center/
   );
 });
 

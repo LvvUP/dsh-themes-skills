@@ -5,56 +5,38 @@ import { dirname, delimiter, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
+import {
+  ALLOWED_ADD_ARTIFACT_SHA256,
+  buildDshChildArgs,
+  isAllowedRunnerCommand,
+} from './runner-policy.mjs';
+import { snapshotAllowedArtifact } from './artifact-snapshot.mjs';
+
 const skillDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const runtimeDir = resolve(skillDir, 'runtime');
+const runtimeDir = resolve(skillDir, 'runtime-rc8');
 const dshBin = resolve(runtimeDir, 'node_modules/@deepseek-ai/dsh/lib/bin.js');
 const localBin = resolve(runtimeDir, 'node_modules/.bin');
 const args = process.argv.slice(2);
-const THEME = /^@dsh-themes\/[a-z0-9]+(?:[._-][a-z0-9]+)*$/;
 
 function fail(message) {
   process.stderr.write(`${message}\n`);
   process.exit(1);
 }
 
-function isAllowedCommand(values) {
-  if (values.length === 1 && ['--version', '-V'].includes(values[0])) return true;
-  if (
-    values.length === 3 &&
-    values[0] === '--profile' &&
-    values[1] === 'web' &&
-    ['--dump-config', '--dump-default-config'].includes(values[2])
-  ) {
-    return true;
+async function prepareAllowedAddArtifact(values) {
+  if (values[0] !== 'plugin' || values[3] !== 'add') {
+    return values;
   }
-  if (values[0] === 'plugin' && values[1] === '--profile' && values[2] === 'web') {
-    const action = values[3];
-    if (action === 'list') return values.length === 5 && values[4] === '--json';
-    if (action === 'remove') return values.length === 5 && THEME.test(values[4]);
-    if (action === 'add') {
-      return (
-        values.length === 6 &&
-        resolve(values[4]) === values[4] &&
-        values[4].endsWith('.tgz') &&
-        values[5] === '--save-exact'
-      );
-    }
-    return false;
-  }
-  if (values[0] === 'web') {
-    const withoutPort = values.slice(1);
-    if (withoutPort.length === 0) return true;
-    return (
-      withoutPort.length === 2 &&
-      withoutPort[0] === '--port' &&
-      /^(?:0|[1-9]\d{0,4})$/.test(withoutPort[1]) &&
-      Number(withoutPort[1]) <= 65535
-    );
-  }
-  return false;
+  const snapshot = await snapshotAllowedArtifact(values[4], {
+    workspace: process.cwd(),
+    allowedDigests: ALLOWED_ADD_ARTIFACT_SHA256,
+  });
+  const snapshotValues = [...values];
+  snapshotValues[4] = snapshot.path;
+  return snapshotValues;
 }
 
-if (!isAllowedCommand(args)) {
+if (!isAllowedRunnerCommand(args)) {
   fail(
     'unsupported runner command; only version, web, web dump, and exact web-profile plugin list/add/remove are allowed'
   );
@@ -78,7 +60,12 @@ if (verificationStatus.code !== 0 || verificationStatus.signal) {
   process.exit(verificationStatus.code ?? 1);
 }
 
-const childArgs = args[0] === 'web' ? ['web', '--host', '127.0.0.1', ...args.slice(1)] : args;
+let childArgs;
+try {
+  childArgs = buildDshChildArgs(await prepareAllowedAddArtifact(args), resolve);
+} catch (error) {
+  fail(error instanceof Error ? error.message : String(error));
+}
 const child = spawn(process.execPath, [dshBin, ...childArgs], {
   cwd: process.cwd(),
   env: {
@@ -88,10 +75,15 @@ const child = spawn(process.execPath, [dshBin, ...childArgs], {
   },
   stdio: 'inherit',
 });
-child.once('error', (error) => fail(error.message));
 const result = await new Promise((done) =>
-  child.once('exit', (code, signal) => done({ code, signal }))
+  child.once('error', (error) => done({ code: 1, signal: null, error })).once(
+    'exit',
+    (code, signal) => done({ code, signal, error: null })
+  )
 );
+if (result.error) {
+  fail(result.error.message);
+}
 if (result.signal) {
   process.kill(process.pid, result.signal);
 } else {

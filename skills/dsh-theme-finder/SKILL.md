@@ -9,7 +9,7 @@ Return catalog evidence, not invented recommendations. Search only a website or 
 
 ## Release boundary
 
-The current certified Manager lane is exact DeepSeek Harness `0.1.0-rc.6`. Exact `0.1.0-rc.8` is the upstream V3 certification target and may be searched for pending/showcase evidence, but this public release does not authorize RC.8 installation. V1 `0.1.0-rc.5` remains historical. See the informational [`release-state.json`](../../release-state.json); Finder also keeps executable gates independent of that file.
+The current certified Manager lane is exact DeepSeek Harness `0.1.0-rc.8` with V3 compatibility and final runtime attestation `1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae`. RC.6 V2 and RC.5 V1 remain historical. See the informational [`release-state.json`](../../release-state.json); Finder keeps executable gates independent of that file.
 
 ## Search
 
@@ -20,7 +20,7 @@ node <skill-dir>/scripts/find-themes.mjs \
   --catalog <https-url-or-absolute-json-path> \
   [--query <words>] [--kind theme|skin|full-skin|ui-extension] \
   [--mode light|dark] [--availability all|installable|showcase] \
-  [--dsh-version 0.1.0-rc.6|0.1.0-rc.8] [--limit 10]
+  [--dsh-version 0.1.0-rc.8|0.1.0-rc.6] [--limit 10]
 ```
 
 The client sends no cookies, credentials, or authorization headers. It refuses HTTP, cross-origin redirects, oversized responses, unpublished directory records, mutable source revisions, malformed source subdirectories, unsafe package versions, contradictory rights/runtime/compatibility axes, and unknown distribution combinations.
@@ -29,11 +29,11 @@ It accepts the original release catalog plus the directory API envelope. Directo
 
 ## Three distribution classes
 
-- `hosted-verified-artifact` + `manager`: installable only when the release record also contains the exact certified RC.6 fingerprints, complete artifact digest, controlled same-origin package route, and hosted distribution contract. A directory card without that full release record remains discovery-only until the exact release is resolved.
-- `external-runtime-verified` + `community-installer`: eligible only when the record matches Finder's bundled community authority, item-level runtime status is verified, consent is required, compatibility is exact RC.8, and the adjacent public Manager is also certified for RC.8. No bundled record currently passes both gates.
+- `hosted-verified-artifact` + `manager`: installable only when the release record contains exact certified RC.8 V3 fingerprints, the final runtime attestation digest, complete artifact digest, controlled same-origin package route, and hosted distribution contract. A directory card without that full release record remains discovery-only until the exact release is resolved and independently revalidated by Manager.
+- `external-runtime-verified` + `community-installer`: eligible only when the record matches Finder's bundled community authority, item-level runtime status is verified, consent is required, compatibility is exact RC.8, and that authority binds final Manager attestation `1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae` plus community receipt `89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1`. This opens exactly 11 records and cannot be generalized from Manager certification alone.
 - `external-showcase` + `showcase-only`: always non-installable. It cannot supply an artifact, package, install command, or installer handoff, even when its code license permits redistribution.
 
-Use `--availability installable` when the user wants only results whose complete local gate passed. Use `--dsh-version 0.1.0-rc.8 --availability all` to inspect the current RC.8 candidate/showcase directory without implying installation.
+Use `--availability installable` when the user wants only results whose complete local gate passed. Use `--dsh-version 0.1.0-rc.6 --availability all` only to audit historical or claimed records; RC.6 hosted packages are not current-installable.
 
 Read [references/catalog-contract.md](references/catalog-contract.md) only when adapting another catalog or debugging a rejected record.
 

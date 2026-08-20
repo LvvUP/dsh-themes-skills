@@ -1,6 +1,8 @@
 # Authoring V2
 
-The normalized output matches the website's `FullSkinManifestV2` contract. Local assets receive content-addressed paths and provisional `/api/theme-studio/import/*` URLs. The website must import the files, replace those URLs, decode the images again, and build the trusted package.
+Historical RC.6 reference only. The current Creator and Submitter reject `schemaVersion: "2.0"`; do not copy this format into new authoring or submission output. Use [authoring-v3.md](authoring-v3.md) for the certified RC.8 lane.
+
+This historical normalized output matched the website's `FullSkinManifestV2` contract. Local assets received content-addressed paths and provisional `/api/theme-studio/import/*` URLs. The website imported the files, replaced those URLs, decoded the images again, and built the trusted package.
 
 Use this full-skin authoring shape:
 
@@ -91,6 +93,6 @@ Compatibility is pinned to:
 - Token catalog SHA-256 `fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926`
 - Selector catalog SHA-256 `5bcd9f874095af2114d86f91301868c6b0f2cebe58f51b9919150975d406baa3`
 
-This remains the only certified authoring lane even though upstream DeepSeek Harness `0.1.0-rc.8` is available on npm `next`. RC.7 and RC.8 require a separately reviewed compatibility contract and may not be selected by changing a release-number variable. Historical V1 `0.1.0-rc.5` manifests are retained for audit and rollback, not as Creator output. See the informational [`release-state.json`](../../../release-state.json).
+These values are retained solely to interpret historical RC.6 V2 records. They are not current Creator output and must not be rewritten into V3. The current V3 lane uses the separately certified RC.8 contract in [compatibility-v3.json](compatibility-v3.json). Historical RC.5 V1 manifests are likewise audit-only.
 
 `category` is optional descriptive metadata. Authoring manifests must not include `payload` or `artifact`: the trusted publisher produces the canonical `<slug>-<version>.payload.tar` digest and complete `.tgz` artifact digest. Release sidecars may contain both, but publication readiness trusts only `artifact`.

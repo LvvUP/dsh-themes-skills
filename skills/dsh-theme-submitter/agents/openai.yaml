@@ -1,4 +1,4 @@
 interface:
   display_name: "DSH Theme Submitter"
   short_description: "Validate a theme and open the secure submission flow"
-  default_prompt: "Use $dsh-theme-submitter to validate my theme and guide me to the website submission flow."
+  default_prompt: "Use $dsh-theme-submitter to validate my data-only RC.8 V3 theme and guide me to the website submission flow."
