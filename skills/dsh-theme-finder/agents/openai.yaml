@@ -1,4 +1,4 @@
 interface:
   display_name: "DSH Theme Finder"
-  short_description: "Classify installable themes and external showcases"
-  default_prompt: "Use $dsh-theme-finder to find a verified theme or a clearly labeled external showcase."
+  short_description: "Classify hosted, community, and showcase directory records"
+  default_prompt: "Use $dsh-theme-finder to search a trusted DSH directory and hand off only exact RC.8 V3 records bound to Manager attestation 1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae; community records must also match receipt 89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1."

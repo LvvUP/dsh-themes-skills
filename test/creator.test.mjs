@@ -7,15 +7,25 @@ import test from 'node:test';
 
 import sharp from 'sharp';
 
-import { run, tokens, writeAuthoring } from './helpers.mjs';
+import { run, tokens, writeAuthoring as writeLegacyAuthoring } from './helpers.mjs';
 
 const creator = resolve('skills/dsh-theme-creator/scripts/create-manifest.mjs');
 const hasher = resolve('skills/dsh-theme-creator/scripts/hash-file.mjs');
 const redlineAttribution = 'Clean-room original artwork generated for DSH-Themes; experimental full-skin concept inspired by the general idea of dsh-ui, without copying its code or protected media.';
-const releaseState = JSON.parse(await readFile(resolve('release-state.json'), 'utf8'));
-const upstreamVersion = releaseState.upstream.dshPackageVersion;
+const certifiedCompatibility = JSON.parse(await readFile(
+  resolve('skills/dsh-theme-creator/references/compatibility-v3.json'),
+  'utf8',
+));
 
-test('schema generator is deterministic and pins rc.6', async () => {
+async function writeAuthoring(directory, overrides = {}) {
+  return writeLegacyAuthoring(directory, {
+    schemaVersion: '3.0',
+    compatibility: { dshPackageVersion: '0.1.0-rc.8' },
+    ...overrides,
+  });
+}
+
+test('schema generator is deterministic and pins the exact final RC.8 V3 contract', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-'));
   const input = await writeAuthoring(directory);
   const first = join(directory, 'first.json');
@@ -26,8 +36,16 @@ test('schema generator is deterministic and pins rc.6', async () => {
   assert.equal(two.code, 0, two.stderr);
   assert.deepEqual(await readFile(first), await readFile(second));
   const manifest = JSON.parse(await readFile(first, 'utf8'));
-  assert.equal(manifest.compatibility.dshPackageVersion, '0.1.0-rc.6');
+  assert.equal(manifest.schemaVersion, '3.0');
+  assert.deepEqual(manifest.compatibility, certifiedCompatibility);
+  assert.equal(manifest.compatibility.dshPackageVersion, '0.1.0-rc.8');
+  assert.equal(manifest.compatibility.officialRelease.sourceCommit, '141eb6fef83422698aef7a981029e843e8161534');
   assert.equal(manifest.compatibility.tokenCatalogSha256, 'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926');
+  assert.equal(manifest.compatibility.selectorCatalogSha256, '663aa5927591ac99076f924ee9cd6f9bd09e6a8a9ee1e6b8b1b0d9e3093df807');
+  assert.equal(manifest.compatibility.webAssetSet.sha256, 'b225f316eacc754b41ffdc1402f4de92c742cf5d9b7e460923092aad65800f06');
+  assert.equal(manifest.compatibility.runtimeAttestationSha256, '1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae');
+  assert.equal(Object.hasOwn(manifest, 'artifact'), false);
+  assert.equal(Object.hasOwn(manifest, 'payload'), false);
   assert.deepEqual(manifest.licensePolicy, {
     attributionRequired: true,
     commercialUse: 'allowed',
@@ -71,6 +89,37 @@ test('creator records fixed third-party provenance and license restrictions', as
   assert.equal(manifest.copyright.noticeUrl, `https://example.com/source/${revision}/NOTICE`);
   assert.equal(redlineAttribution.length, 169);
   assert.equal(manifest.copyright.attribution, redlineAttribution);
+});
+
+test('creator rejects code, dependencies, remote runtime assets, and publisher claims', async (t) => {
+  const injectedFields = [
+    ['css', 'body { display: none }'],
+    ['html', '<script>ignored</script>'],
+    ['code', 'process.exit()'],
+    ['dependencies', { package: 'latest' }],
+    ['artifact', { sha256: '1'.repeat(64) }],
+    ['payload', { sha256: '2'.repeat(64) }],
+  ];
+  for (const [field, injected] of injectedFields) {
+    await t.test(field, async () => {
+      const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-data-only-'));
+      const input = await writeAuthoring(directory, { [field]: injected });
+      const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+      assert.notEqual(result.code, 0);
+      assert.match(result.stderr, /Forbidden executable or publisher field/);
+    });
+  }
+
+  await t.test('remote full-skin asset', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-remote-'));
+    const input = await writeAuthoring(directory);
+    const value = JSON.parse(await readFile(input, 'utf8'));
+    value.assets[0].sourcePath = 'https://assets.example/background.webp';
+    await writeFile(input, `${JSON.stringify(value, null, 2)}\n`);
+    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /Unsafe asset sourcePath/);
+  });
 });
 
 test('creator rejects missing or misleading rights metadata', async (t) => {
@@ -176,21 +225,36 @@ test('schema rejects missing tokens, dangerous CSS, and incompatible DSH', async
     assert.notEqual(result.code, 0);
     assert.match(result.stderr, /hexadecimal colors/);
   });
-  await t.test('rc.5', async () => {
-    const directory = await mkdtemp(join(tmpdir(), 'dsh-schema-rc5-'));
-    const input = await writeAuthoring(directory, { compatibility: { dshPackageVersion: '0.1.0-rc.5' } });
-    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
-    assert.notEqual(result.code, 0);
-    assert.match(result.stderr, /rc\.6/);
-  });
-  await t.test('released but uncertified upstream version', async () => {
-    const directory = await mkdtemp(join(tmpdir(), 'dsh-schema-upstream-'));
+  await t.test('historical RC.6 V2', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-schema-rc6-v2-'));
     const input = await writeAuthoring(directory, {
-      compatibility: { dshPackageVersion: upstreamVersion },
+      schemaVersion: '2.0',
+      compatibility: { dshPackageVersion: '0.1.0-rc.6' },
     });
     const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
     assert.notEqual(result.code, 0);
-    assert.match(result.stderr, /Only DSH 0\.1\.0-rc\.6 is verified/);
+    assert.match(result.stderr, /schemaVersion must equal 3\.0/);
+  });
+  await t.test('mixed RC.7 version', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-schema-rc7-'));
+    const input = await writeAuthoring(directory, {
+      compatibility: { dshPackageVersion: '0.1.0-rc.7' },
+    });
+    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /certified DSH 0\.1\.0-rc\.8 V3 baseline/);
+  });
+  await t.test('author-supplied final evidence', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'dsh-schema-attestation-'));
+    const input = await writeAuthoring(directory, {
+      compatibility: {
+        dshPackageVersion: '0.1.0-rc.8',
+        runtimeAttestationSha256: '1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae',
+      },
+    });
+    const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /compatibility\.runtimeAttestationSha256 is not allowed/);
   });
 });
 

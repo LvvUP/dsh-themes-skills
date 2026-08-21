@@ -26,13 +26,9 @@ const PRESET = new Set(['glass', 'outline', 'glow']);
 const MAX_ASSET_BYTES = 10 * 1024 * 1024;
 const MAX_ATTRIBUTION_LENGTH = 256;
 
-const COMPATIBILITY = {
-  dshPackageVersion: '0.1.0-rc.6',
-  dshPackageIntegrity: 'sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==',
-  tokenCatalogSha256: 'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926',
-  frontendBundleSha256: 'a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68',
-  selectorCatalogSha256: '5bcd9f874095af2114d86f91301868c6b0f2cebe58f51b9919150975d406baa3',
-};
+const COMPATIBILITY = JSON.parse(
+  await readFile(new URL('../references/compatibility-v3.json', import.meta.url), 'utf8'),
+);
 
 function parseArgs(argv) {
   const values = {};
@@ -227,7 +223,7 @@ async function main() {
   object(source, 'root');
   rejectForbidden(source);
   for (const key of Object.keys(source)) if (!ROOT_KEYS.has(key)) throw new Error(`Unknown root field: ${key}`);
-  if (source.schemaVersion !== '2.0') throw new Error('schemaVersion must equal 2.0');
+  if (source.schemaVersion !== '3.0') throw new Error('schemaVersion must equal 3.0');
   if (!['theme', 'full-skin'].includes(source.kind)) throw new Error('kind must be theme or full-skin');
   if (!SLUG.test(source.slug) || source.slug.length > 64) throw new Error('slug must be lowercase kebab-case');
   if (!VERSION.test(source.version)) throw new Error('version must be exact semantic version');
@@ -236,10 +232,12 @@ async function main() {
   }
   const licensePolicy = normalizeLicensePolicy(source.licensePolicy, source.license);
   object(source.compatibility, 'compatibility', ['dshPackageVersion']);
-  if (source.compatibility.dshPackageVersion !== '0.1.0-rc.6') throw new Error('Only DSH 0.1.0-rc.6 is verified');
+  if (source.compatibility.dshPackageVersion !== COMPATIBILITY.dshPackageVersion) {
+    throw new Error('Only the certified DSH 0.1.0-rc.8 V3 baseline is accepted');
+  }
   const author = object(source.author, 'author', ['name', 'url']);
   const common = {
-    schemaVersion: '2.0', kind: source.kind, slug: source.slug,
+    schemaVersion: '3.0', kind: source.kind, slug: source.slug,
     name: text(source.name, 'name', 120), description: text(source.description, 'description', 1000),
     ...(source.category ? { category: text(source.category, 'category', 80) } : {}),
     author: { name: text(author.name, 'author.name', 100), ...(author.url ? { url: httpsUrl(author.url, 'author.url') } : {}) },

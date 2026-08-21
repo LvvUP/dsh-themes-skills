@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "status": "runtime-verified-install-authority",
+  "promotionGate": "completed",
+  "baseline": "@deepseek-ai/dsh@0.1.0-rc.8",
+  "candidateReceipt": {
+    "sha256": "1e927be6aaee59f53e25a3c7b7ea8dd2019199964629ee8c242ea7e125460b2c",
+    "attestationSha256": "9b012472019296a47a6a074eddfd489bbda8dc8e4bee7ac5d1b722c2b9fbcdfa",
+    "statusAtCapture": "candidate-verified-not-installable",
+    "screenshotsBundledHere": false,
+    "containsAbsoluteMachinePaths": false
+  },
+  "finalManager": {
+    "attestationSha256": "1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae",
+    "certificationRunId": 32393288849,
+    "certificationHeadSha": "e3fe9ac465b8db8070efbdb83ddc6c821f923a73",
+    "certificationStatus": "verified",
+    "compatibilitySidecarSha256": "7d900fb37e0c9e69befa53a5fd07c05f63430d9040f9152c5b535d1f96a57138",
+    "certificationSha256": "eadc424475c655e593d7d9901d359d5b8aea928351179912678a8d5ed327a80d",
+    "attestationEquivalenceBridgeSha256": "4a23118be7cb3d46de29af0a7ac4955f73d1103b9f61b2b8608eed580345b531"
+  },
+  "equivalentFrozenInputs": {
+    "runnerLockfileSha256": "b38b68f1f443b7065f530d665ea7acbc9327275503ba0d9a6edd030b81f915ec",
+    "productionPackagesCount": 504,
+    "productionPackagesSha256": "58c78fcf15d2b6c58bad0fc870a4d28dabda33bfae3633cf94794465564a939b",
+    "dshPackagesCount": 187,
+    "dshPackagesSha256": "aa3929a9418b928d9ef200964f8ae4cce54086b1d5bc474cb9b42af90f0a78d8"
+  },
+  "nonEquivalentClaims": [
+    "attestation document path and bytes",
+    "candidate acceptance blockers versus final six-job matrix",
+    "candidate pending status versus final verified status",
+    "final compatibility and certification-run fields"
+  ],
+  "authority": {
+    "silentHashReplacementAllowed": false,
+    "installationAttestationSha256": "1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae",
+    "candidateReceiptInterpretation": "The UI receipt ran on the same frozen lock and production closure. It does not itself certify the final Manager attestation or authorize installation.",
+    "installable": true,
+    "publicRecordInterpretation": "This sanitized receipt binds the 11 allowlisted records to the final RC.8 Manager authority. It carries no machine path, browser profile, or mutable source revision."
+  },
+  "skinCenter": {
+    "packageName": "@linxin666/dsh-client-ui-skin-center",
+    "version": "0.2.5",
+    "artifactSha256": "5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499",
+    "removeReinstallLifecyclePassed": true
+  },
+  "items": [
+    {
+      "slug": "dsh-deep-whale-maid-atelier",
+      "result": "passed",
+      "installationMode": "skin-center-builtin"
+    },
+    {
+      "slug": "dsh-web-ui-blue-fantasy",
+      "result": "passed",
+      "installationMode": "skin-center-builtin"
+    },
+    {
+      "slug": "dsh-web-ui-dragon-heir",
+      "result": "passed",
+      "installationMode": "skin-center-builtin"
+    },
+    {
+      "slug": "dsh-web-ui-harbor",
+      "result": "passed",
+      "installationMode": "skin-center-builtin"
+    },
+    {
+      "slug": "dsh-web-ui-miku",
+      "result": "passed",
+      "installationMode": "skin-center-builtin"
+    },
+    {
+      "slug": "dsh-web-ui-minecraft",
+      "result": "passed",
+      "installationMode": "skin-center-builtin"
+    },
+    {
+      "slug": "dsh-web-ui-trading",
+      "result": "passed-with-network-and-optional-dependency-disclosures",
+      "installationMode": "skin-center-builtin",
+      "networkDisclosure": [
+        "https://qt.gtimg.cn",
+        "https://api.binance.com",
+        "https://data-api.binance.vision",
+        "https://api.frankfurter.dev",
+        "https://api.frankfurter.app"
+      ],
+      "optionalDependencyDisclosure": "When optional dsh-ticker is absent, /plugins/dsh-ticker/api/settings may return 404; this did not block core try-on, apply, restart, removal, or rollback."
+    },
+    {
+      "slug": "dsh-web-ui-whale-song",
+      "result": "passed",
+      "installationMode": "skin-center-builtin"
+    },
+    {
+      "slug": "dsh-web-ui-xp",
+      "result": "passed",
+      "installationMode": "skin-center-builtin"
+    },
+    {
+      "slug": "dsh-web-ui-qq98",
+      "result": "passed",
+      "installationMode": "bundled-user-skin",
+      "sourcePackageVersion": "0.1.18",
+      "bundledAssetAuthority": {
+        "schemaVersion": 1,
+        "sourceSha256": "1d8163448bc50845a9be13b3c8179bf79a778ab86a00ab43a004f5595cde2c62",
+        "provenanceSha256": "000613dbdcdc99f0ef2f6ef8012a15ec445a6173d319d654704449a213eff684",
+        "files": {
+          "LICENSE": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "NOTICE": "e8c4a8a30ae46f0fffbb076b0bed62a30b5ee8b51ff353c59cbf4862823768c7",
+          "PROVENANCE.json": "000613dbdcdc99f0ef2f6ef8012a15ec445a6173d319d654704449a213eff684",
+          "patches.css": "33a7670fc6188f7b06f19d3a18d8cd00f5839168808587f700cfa00195fe4bd6",
+          "skin.css": "6e414c9f689dbfa978001f8d332237e64b22fedd51da16e2b20a48f3550937a2",
+          "skin.json": "426ac9c8b5517577db3486df465304171ea3533ed50591f6b1b19d78a5dbd423"
+        }
+      }
+    },
+    {
+      "slug": "dsh-web-ui-ths",
+      "result": "passed",
+      "installationMode": "bundled-user-skin",
+      "sourcePackageVersion": "0.1.18",
+      "bundledAssetAuthority": {
+        "schemaVersion": 1,
+        "sourceSha256": "6fd68f16c91c533d07a2271b09f04982796d0a9196d4caa90730fde7bb2be117",
+        "provenanceSha256": "68ebcc6bbfb3c8daf2973491fede2d85719d788703037b2510f71ffab7d4c917",
+        "files": {
+          "LICENSE": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "NOTICE": "331121edcd6e0d7fd740db20b3e393d195e7393c6237b8f267eea66794a0cfe8",
+          "PROVENANCE.json": "68ebcc6bbfb3c8daf2973491fede2d85719d788703037b2510f71ffab7d4c917",
+          "patches.css": "648fd39a7168a71cc79fbfc4a6dcdb99587362cd2e58604f6c743f045e3a714e",
+          "skin.css": "b5cb4887e98ada90f28b2c90fccd23a2c7416a8cae0acca71a3d8268b08af7e2",
+          "skin.json": "5af025c011797aa34d2a0d2dbf6edfafb30a4e199f9fe2a6075b28a183c76c17"
+        }
+      }
+    }
+  ],
+  "promotedAt": "2026-08-21T02:00:00.000Z",
+  "mainRuntimeReceipt": {
+    "path": "docs/verification/community-skins-rc8/runtime-receipt.json",
+    "sha256": "0b09909a0b7cafba5dd68f066bd3959d5666afc519a39c5c52f3d3bd9126b4c2",
+    "containsAbsoluteMachinePaths": false
+  },
+  "summary": {
+    "itemsCovered": 11,
+    "runtimeMatrixPassed": 11,
+    "installableRecords": 11,
+    "consentRequired": 11
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schemas.linxin666.org/dsh-skin/v2.json",
+  "skinManifestVersion": 2,
+  "id": "qq98",
+  "name": "QQ2008 怀旧版",
+  "nameEn": "QQ2008 Retro",
+  "version": "0.2.5-dsh-themes.1",
+  "author": "dsh-web-ui; RC.8 CSS-only adaptation by DSH-Themes",
+  "tagline": "水晶蓝桌面 · RC.8 CSS-only 安全适配",
+  "description": "从 dsh-web-ui v0.1.18 固定源码机械迁移的 RC.8 Skin Center v2 纯样式版本。保留主要配色和界面表面；主动移除企鹅图标、标题栏、状态栏、favicon 与文档标题注入。",
+  "tags": [
+    "retro",
+    "crystal-blue",
+    "css-only",
+    "rc8-adaptation"
+  ],
+  "accent": "#2b7cd9",
+  "order": 104,
+  "license": "BSD-3-Clause / Apache-2.0 package metadata conflict",
+  "licenseUrl": "https://github.com/zhu1090093659/dsh-web-ui/tree/a9b915cee0f12f2fd13a6575bc8feaa9ee09d6ed/packages/skins/qq98/LICENSE",
+  "sourceUrl": "https://github.com/zhu1090093659/dsh-web-ui/tree/a9b915cee0f12f2fd13a6575bc8feaa9ee09d6ed/packages/skins/qq98",
+  "attribution": "zhu1090093659 / dsh-web-ui; modified by DSH-Themes",
+  "contributes": {
+    "stylesheet": "skin.css",
+    "patches": "patches.css"
+  }
+}

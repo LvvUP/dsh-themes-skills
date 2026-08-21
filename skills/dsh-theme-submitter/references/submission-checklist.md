@@ -3,8 +3,8 @@
 - The manifest was generated from data-only authoring input.
 - The normalized full skin has distinct background, sidebar, card, light-preview, and dark-preview WebP files, each no larger than 10MB and 24MP, with its SHA-256 recorded. JPEG/PNG originals are uploaded through Theme Studio for conversion.
 - The theme contains all 13 `--dsw-*` tokens in light and dark modes.
-- Compatibility is exactly DeepSeek Harness `0.1.0-rc.6` with the verified token and selector catalog hashes.
-- Upstream `0.1.0-rc.8` on npm `next` is understood to be released but uncertified; rc.7/rc.8 must not be rewritten into the certified rc.6 declaration. V1 rc.5 remains historical only. See the informational [`release-state.json`](../../../release-state.json).
+- The manifest is schema V3 and compatibility exactly matches [compatibility-v3.json](compatibility-v3.json): DeepSeek Harness `0.1.0-rc.8` official tag/commit, all three npm artifact digests, token/UI/entrypoint/asset-set/selector fingerprints, and the final runtime attestation SHA-256.
+- RC.6 V2 and RC.5 V1 are historical only. They are neither upgraded by rewriting version strings nor accepted as current Submitter input; partial or candidate RC.8 evidence is also rejected.
 - The author name and copyright source type, declaration, and optional HTTPS source URL are accurate.
 - The license identifier, fixed license URL, commercial-use status, attribution duty, and share-alike duty are explicit and mutually consistent.
 - The license covers the manifest and all submitted art; licensed third-party art entering hosted review includes a fixed source revision when available, attribution of no more than 256 characters, and a genuine fixed NOTICE URL. A LICENSE URL cannot substitute for NOTICE. An upstream with no NOTICE can only be recorded by the website as a non-installable external showcase with omitted/null `noticeUrl`. These declarations still require moderation and do not prove permission.

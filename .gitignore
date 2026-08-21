@@ -2,6 +2,7 @@ node_modules/
 .DS_Store
 coverage/
 *.tgz
+!test/fixtures/deep-ocean-1.2.0.tgz
 .dsh-themes/
 .env
 .env.*

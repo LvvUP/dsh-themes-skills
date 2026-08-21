@@ -1,12 +1,18 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { lstat, mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:https';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import test from 'node:test';
 
+import {
+  ALLOWED_ADD_ARTIFACT_SHA256,
+  buildDshChildArgs,
+  isAllowedRunnerCommand,
+} from '../skills/dsh-theme-manager/scripts/runner-policy.mjs';
+import { snapshotAllowedArtifact } from '../skills/dsh-theme-manager/scripts/artifact-snapshot.mjs';
 import { isExactSemver } from '../skills/dsh-theme-manager/scripts/semver.mjs';
 import { run } from './helpers.mjs';
 
@@ -16,14 +22,63 @@ const releaseValidator = resolve('skills/dsh-theme-manager/scripts/validate-rele
 const runnerVerifier = resolve('skills/dsh-theme-manager/scripts/verify-runner.mjs');
 const runner = resolve('skills/dsh-theme-manager/scripts/run-dsh.mjs');
 const loopbackGate = resolve('skills/dsh-theme-manager/scripts/assert-loopback.mjs');
+const WINDOWS_PRIVATE_ACL_INSPECTOR = String.raw`
+$ErrorActionPreference = 'Stop'
+$target = [Environment]::GetEnvironmentVariable('DSH_THEMES_TEST_PRIVATE_PATH', 'Process')
+if ([String]::IsNullOrWhiteSpace($target)) { throw 'missing private path' }
+$isDirectory = [System.IO.Directory]::Exists($target)
+if ($isDirectory) {
+  $acl = [System.IO.Directory]::GetAccessControl($target)
+} else {
+  $acl = [System.IO.File]::GetAccessControl($target)
+}
+$currentSid = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value
+$ownerSid = $acl.GetOwner([System.Security.Principal.SecurityIdentifier]).Value
+$tab = [char]9
+[Console]::WriteLine("protected" + $tab + $acl.AreAccessRulesProtected)
+[Console]::WriteLine("owner" + $tab + $ownerSid)
+[Console]::WriteLine("current" + $tab + $currentSid)
+$rules = @($acl.GetAccessRules($true, $true, [System.Security.Principal.SecurityIdentifier]))
+foreach ($rule in $rules) {
+  $sid = $rule.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value
+  $allow = $rule.AccessControlType -eq [System.Security.AccessControl.AccessControlType]::Allow
+  $fullControl = (($rule.FileSystemRights -band [System.Security.AccessControl.FileSystemRights]::FullControl) -eq [System.Security.AccessControl.FileSystemRights]::FullControl)
+  $fields = @("rule", $sid, $allow, $rule.IsInherited, $fullControl, [int]$rule.InheritanceFlags, [int]$rule.PropagationFlags)
+  [Console]::WriteLine([String]::Join($tab, $fields))
+}
+`;
 const fixture = (name) => resolve('test/fixtures', name);
 const shaA = 'a'.repeat(64);
 const shaB = 'b'.repeat(64);
 const shaC = 'c'.repeat(64);
 const trustedOrigin = 'https://themes.example';
-const releaseState = JSON.parse(await readFile(resolve('release-state.json'), 'utf8'));
-const upstreamVersion = releaseState.upstream.dshPackageVersion;
+const finalAttestation = JSON.parse(
+  await readFile(
+    resolve('skills/dsh-theme-manager/runtime-rc8/attestation.json'),
+    'utf8'
+  )
+);
 const runtimeAttestation = Object.freeze({
+  schemaVersion: 2,
+  attestationSha256:
+    '1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae',
+  runnerLockfileSha256:
+    'b38b68f1f443b7065f530d665ea7acbc9327275503ba0d9a6edd030b81f915ec',
+  productionPackagesCount: 504,
+  productionPackagesSha256:
+    '58c78fcf15d2b6c58bad0fc870a4d28dabda33bfae3633cf94794465564a939b',
+  dshPackagesCount: 187,
+  dshPackagesSha256:
+    'aa3929a9418b928d9ef200964f8ae4cce54086b1d5bc474cb9b42af90f0a78d8',
+  packageManagerName: 'pnpm',
+  packageManagerVersion: '11.7.0',
+  dshPackageVersion: '0.1.0-rc.8',
+  certificationRunId: 32393288849,
+  certificationHeadSha:
+    'e3fe9ac465b8db8070efbdb83ddc6c821f923a73',
+  lifecycle: 'managed-cold-restart',
+});
+const historicalRuntimeAttestation = Object.freeze({
   schemaVersion: 1,
   attestationSha256: '2400606c5cb6534e09a65020e4ae12a0df4c1d08f15918d714bc5037c2ed99ba',
   runnerLockfileSha256: '22f995efe8338c2a3cd97bd731853d010363531145c35073adb2dca3773f6053',
@@ -41,6 +96,10 @@ const runtimeAttestation = Object.freeze({
 });
 
 const compatibility = Object.freeze({
+  ...finalAttestation.compatibility,
+  runtimeAttestationSha256: runtimeAttestation.attestationSha256,
+});
+const historicalCompatibility = Object.freeze({
   dshPackageVersion: '0.1.0-rc.6',
   dshPackageIntegrity: 'sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==',
   tokenCatalogSha256: 'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926',
@@ -65,7 +124,7 @@ function currentRelease() {
     artifactSha256: shaA,
     runtimeAttestation: { ...runtimeAttestation },
     manifest: {
-      schemaVersion: '2.0',
+      schemaVersion: '3.0',
       kind: 'full-skin',
       slug: 'ocean-workbench',
       version: '1.1.0',
@@ -88,6 +147,14 @@ function currentRelease() {
   };
 }
 
+function historicalV2Release() {
+  const release = currentRelease();
+  release.runtimeAttestation = { ...historicalRuntimeAttestation };
+  release.manifest.schemaVersion = '2.0';
+  release.manifest.compatibility = { ...historicalCompatibility };
+  return release;
+}
+
 function historicalRelease() {
   return {
     distribution: {
@@ -105,7 +172,7 @@ function historicalRelease() {
       compatibility: {
         deepseekHarnessVersion: '0.1.0-rc.5',
         deepseekHarnessCommit: '47f943859bef60e4160492346772ded9b24f765a',
-        tokenCatalogSha256: compatibility.tokenCatalogSha256,
+        tokenCatalogSha256: historicalCompatibility.tokenCatalogSha256,
       },
       package: {
         name: '@dsh-themes/paper-console',
@@ -142,60 +209,144 @@ function close(server) {
   });
 }
 
-test('release validator separates current V2, historical V1, and artifact authority', async (t) => {
+function inspectWindowsPrivateAcl(target) {
+  const systemRoot = process.env.SystemRoot ?? process.env.windir;
+  assert.ok(systemRoot, 'Windows system root is required for ACL inspection');
+  const powershell = join(
+    systemRoot,
+    'System32',
+    'WindowsPowerShell',
+    'v1.0',
+    'powershell.exe'
+  );
+  const result = spawnSync(
+    powershell,
+    [
+      '-NoLogo',
+      '-NoProfile',
+      '-NonInteractive',
+      '-ExecutionPolicy',
+      'Bypass',
+      '-Command',
+      WINDOWS_PRIVATE_ACL_INSPECTOR,
+    ],
+    {
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        DSH_THEMES_TEST_PRIVATE_PATH: target,
+      },
+      timeout: 15_000,
+      windowsHide: true,
+    }
+  );
+  assert.equal(result.status, 0, result.stderr);
+  const acl = { protected: false, ownerSid: '', currentSid: '', rules: [] };
+  for (const line of result.stdout.trim().split(/\r?\n/)) {
+    const [kind, ...fields] = line.split('\t');
+    if (kind === 'protected') acl.protected = fields[0] === 'True';
+    if (kind === 'owner') acl.ownerSid = fields[0];
+    if (kind === 'current') acl.currentSid = fields[0];
+    if (kind === 'rule') {
+      acl.rules.push({
+        sid: fields[0],
+        allow: fields[1] === 'True',
+        inherited: fields[2] === 'True',
+        fullControl: fields[3] === 'True',
+        inheritance: Number(fields[4]),
+        propagation: Number(fields[5]),
+      });
+    }
+  }
+  return acl;
+}
+
+function assertPrivateWindowsAcl(target, expectedInheritance) {
+  const acl = inspectWindowsPrivateAcl(target);
+  assert.equal(acl.protected, true);
+  assert.equal(acl.ownerSid, acl.currentSid);
+  assert.equal(acl.rules.length, 2);
+  assert.ok(acl.rules.every((rule) => rule.allow));
+  assert.ok(acl.rules.every((rule) => !rule.inherited));
+  assert.ok(acl.rules.every((rule) => rule.fullControl));
+  assert.ok(
+    acl.rules.every((rule) => rule.inheritance === expectedInheritance)
+  );
+  assert.ok(acl.rules.every((rule) => rule.propagation === 0));
+  assert.deepEqual(
+    acl.rules.map((rule) => rule.sid).sort(),
+    [acl.currentSid, 'S-1-5-18'].sort()
+  );
+}
+
+async function assertPrivateSnapshotPermissions(target) {
+  if (process.platform === 'win32') {
+    assertPrivateWindowsAcl(target, 0);
+    return;
+  }
+  assert.equal((await lstat(target)).mode & 0o777, 0o600);
+}
+
+test('release validator separates current V3, historical V2/V1, and artifact authority', async (t) => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-release-'));
   try {
-    await t.test('accepts the exact current rc.6 V2 release', async () => {
+    await t.test('accepts the exact certified RC.8 V3 release', async () => {
       const release = currentRelease();
-      const result = await validateRelease(directory, 'current-v2.json', release);
+      const result = await validateRelease(directory, 'current-v3.json', release);
       assert.equal(result.code, 0, result.stderr);
       const output = JSON.parse(result.stdout);
       assert.equal(output.status, 'current');
       assert.equal(output.installableCurrent, true);
-      assert.equal(output.dshVersion, '0.1.0-rc.6');
-      assert.equal(Object.hasOwn(output, 'sourceCommit'), false);
+      assert.equal(output.dshVersion, '0.1.0-rc.8');
+      assert.equal(
+        output.sourceCommit,
+        '141eb6fef83422698aef7a981029e843e8161534'
+      );
       assert.equal(output.artifactSha256, shaA);
       assert.equal(output.payloadSha256, shaB);
       assert.equal(output.runtimeAttestationSha256, runtimeAttestation.attestationSha256);
+      assert.equal(output.certificationRunId, 32393288849);
+      assert.equal(output.lifecycle, 'managed-cold-restart');
     });
 
-    await t.test('rejects an explicit null rc.6 sourceCommit', async () => {
+    await t.test('rejects mixed RC.6 evidence inside a V3 record', async () => {
       const release = currentRelease();
-      release.manifest.compatibility.sourceCommit = null;
-      const result = await validateRelease(directory, 'current-null-commit.json', release);
+      release.manifest.compatibility.selectorCatalogSha256 =
+        historicalCompatibility.selectorCatalogSha256;
+      const result = await validateRelease(directory, 'mixed-v3.json', release);
       assert.notEqual(result.code, 0);
-      assert.match(result.stderr, /sourceCommit must be omitted/);
+      assert.match(result.stderr, /exact certified RC\.8 evidence/);
     });
 
-    await t.test('rejects a fabricated rc.6 sourceCommit', async () => {
-      const release = currentRelease();
-      release.manifest.compatibility.sourceCommit =
-        '47f943859bef60e4160492346772ded9b24f765a';
-      const result = await validateRelease(directory, 'fake-source-commit.json', release);
-      assert.notEqual(result.code, 0);
-      assert.match(result.stderr, /sourceCommit must be omitted/);
+    await t.test('recognizes exact RC.6 V2 only as historical', async () => {
+      const result = await validateRelease(
+        directory,
+        'historical-v2.json',
+        historicalV2Release()
+      );
+      assert.equal(result.code, 0, result.stderr);
+      const output = JSON.parse(result.stdout);
+      assert.equal(output.status, 'historical-v2');
+      assert.equal(output.installableCurrent, false);
+      assert.equal(output.dshVersion, '0.1.0-rc.6');
+      assert.equal(
+        output.runtimeAttestationSha256,
+        historicalRuntimeAttestation.attestationSha256
+      );
     });
 
-    await t.test('fails closed for the released but uncertified upstream version', async () => {
-      const release = currentRelease();
-      release.manifest.compatibility.dshPackageVersion = upstreamVersion;
-      const result = await validateRelease(directory, 'uncertified-upstream.json', release);
-      assert.notEqual(result.code, 0);
-      assert.match(result.stderr, /certified baseline/);
-    });
-
-    await t.test('never treats a V2 payload digest as the complete artifact digest', async () => {
+    await t.test('never treats a payload digest as the complete artifact digest', async () => {
       const release = currentRelease();
       release.artifactSha256 = release.manifest.payload.sha256;
-      const result = await validateRelease(directory, 'v2-payload-substitution.json', release);
+      const result = await validateRelease(directory, 'payload-substitution.json', release);
       assert.notEqual(result.code, 0);
       assert.match(result.stderr, /catalog artifactSha256/);
     });
 
-    await t.test('refuses a payload-only embedded V2 manifest as installation authority', async () => {
+    await t.test('refuses a payload-only V3 manifest as installation authority', async () => {
       const release = currentRelease();
       delete release.manifest.artifact;
-      const result = await validateRelease(directory, 'payload-only-v2.json', release);
+      const result = await validateRelease(directory, 'payload-only-v3.json', release);
       assert.notEqual(result.code, 0);
       assert.match(result.stderr, /manifest\.artifact must be an object/);
     });
@@ -238,7 +389,7 @@ test('release validator separates current V2, historical V1, and artifact author
       }
     });
 
-    await t.test('requires the exact V2 payload and artifact digest scopes', async () => {
+    await t.test('requires the exact V3 payload and artifact digest scopes', async () => {
       const wrongArtifact = currentRelease();
       wrongArtifact.manifest.artifact.digestScope = 'canonical-tar-payload-excluding-manifest';
       const artifactResult = await validateRelease(directory, 'wrong-artifact-scope.json', wrongArtifact);
@@ -247,13 +398,13 @@ test('release validator separates current V2, historical V1, and artifact author
 
       const wrongPayload = currentRelease();
       wrongPayload.manifest.payload.digestScope = 'artifact-tgz';
-      const payloadResult = await validateRelease(directory, 'wrong-v2-payload-scope.json', wrongPayload);
+      const payloadResult = await validateRelease(directory, 'wrong-v3-payload-scope.json', wrongPayload);
       assert.notEqual(payloadResult.code, 0);
       assert.match(payloadResult.stderr, /payload\.digestScope/);
 
       const missingPayload = currentRelease();
       delete missingPayload.manifest.payload;
-      const missingResult = await validateRelease(directory, 'missing-v2-payload.json', missingPayload);
+      const missingResult = await validateRelease(directory, 'missing-v3-payload.json', missingPayload);
       assert.notEqual(missingResult.code, 0);
       assert.match(missingResult.stderr, /manifest\.payload/);
     });
@@ -328,7 +479,7 @@ test('multiple active theme packages are a hard conflict', async () => {
   }
 });
 
-test('theme state parses the rc.6 root profile array and rejects ambiguous profiles', async (t) => {
+test('theme state parses the RC.8 root profile array and rejects ambiguous profiles', async (t) => {
   await t.test('recognizes the built-in state from the empty profile fixture', async () => {
     const result = await run(state, [
       'inspect', '--input', fixture('dsh-rc6-plugin-list-empty.json'),
@@ -372,7 +523,7 @@ test('theme state parses the rc.6 root profile array and rejects ambiguous profi
       const input = await writeJson(directory, 'duplicate.json', [profile, profile]);
       const result = await run(state, ['inspect', '--input', input]);
       assert.notEqual(result.code, 0);
-      assert.match(result.stderr, /exactly one unambiguous rc\.6 profile record/);
+      assert.match(result.stderr, /exactly one unambiguous RC\.8 profile record/);
     } finally {
       await rm(directory, { recursive: true, force: true });
     }
@@ -404,7 +555,7 @@ test('theme state parses the rc.6 root profile array and rejects ambiguous profi
         const input = await writeJson(directory, `${name}.json`, payload);
         const result = await run(state, ['inspect', '--input', input]);
         assert.notEqual(result.code, 0);
-        assert.match(result.stderr, /exactly one unambiguous rc\.6 profile record/);
+        assert.match(result.stderr, /exactly one unambiguous RC\.8 profile record/);
       }
     } finally {
       await rm(directory, { recursive: true, force: true });
@@ -470,87 +621,102 @@ test('manager exact-version checks implement the shared SemVer 2.0 vectors', asy
   }
 });
 
-test('rollback records preserve exact artifacts and reverse safely', async () => {
+test('rollback schema 2 binds exact current hosted artifacts and schema 1 is audit-only', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-rollback-'));
   try {
-    const previous = join(directory, 'previous.tgz');
-    const target = join(directory, 'target.tgz');
+    const target = fixture('deep-ocean-1.2.0.tgz');
+    const targetSha256 =
+      '8fca6598f084b47ec07bd00876a686c640ad68f280b5737b789a68fa5df5044f';
     const result = await run(state, [
       'record', '--at', '2026-08-14T00:00:00.000Z',
-      '--previous-name', '@dsh-themes/previous', '--previous-version', '1.2.3', '--previous-artifact', previous, '--previous-sha256', shaA,
-      '--target-name', '@dsh-themes/target', '--target-version', '2.0.0-rc.1', '--target-artifact', target, '--target-sha256', shaB,
+      '--target-name', '@dsh-themes/deep-ocean',
+      '--target-version', '1.2.0',
+      '--target-artifact', target,
+      '--target-sha256', targetSha256,
     ]);
     assert.equal(result.code, 0, result.stderr);
     const record = JSON.parse(result.stdout);
-    assert.equal(record.createdAt, '2026-08-14T00:00:00.000Z');
-    assert.deepEqual(record.previous, {
-      packageName: '@dsh-themes/previous',
-      version: '1.2.3',
-      artifactPath: previous,
-      artifactSha256: shaA,
-    });
-    assert.deepEqual(record.target, {
-      packageName: '@dsh-themes/target',
-      version: '2.0.0-rc.1',
-      artifactPath: target,
-      artifactSha256: shaB,
-    });
-    const path = join(directory, 'rollback.json');
-    await writeFile(path, JSON.stringify(record));
-    const validated = await run(state, ['validate-record', '--input', path]);
+    assert.equal(record.schemaVersion, 2);
+    assert.equal(record.dshPackageVersion, '0.1.0-rc.8');
+    assert.equal(
+      record.runtimeAttestationSha256,
+      runtimeAttestation.attestationSha256
+    );
+    assert.equal(record.target.artifactSha256, targetSha256);
+    assert.equal(record.target.manifestSchemaVersion, '3.0');
+
+    const recordPath = await writeJson(directory, 'rollback.json', record);
+    const validated = await run(state, [
+      'validate-record', '--input', recordPath,
+    ]);
     assert.equal(validated.code, 0, validated.stderr);
-    const reversed = await run(state, ['reverse', '--input', path]);
+
+    const reversed = await run(state, ['reverse', '--input', recordPath]);
     assert.equal(reversed.code, 0, reversed.stderr);
     const reverseRecord = JSON.parse(reversed.stdout);
-    assert.deepEqual(reverseRecord.previous, record.target);
-    assert.deepEqual(reverseRecord.target, record.previous);
+    assert.equal(reverseRecord.previous.packageName, '@dsh-themes/deep-ocean');
+    assert.equal(reverseRecord.target, null);
+    const reversePath = await writeJson(directory, 'reverse.json', reverseRecord);
+    assert.equal(
+      (await run(state, ['validate-record', '--input', reversePath])).code,
+      0
+    );
 
-    const tampered = structuredClone(record);
-    tampered.target.artifactPath = 'relative.tgz';
-    const tamperedPath = await writeJson(directory, 'tampered.json', tampered);
-    const rejected = await run(state, ['validate-record', '--input', tamperedPath]);
-    assert.notEqual(rejected.code, 0);
-    assert.match(rejected.stderr, /malformed/);
-  } finally {
-    await rm(directory, { recursive: true, force: true });
-  }
-});
-
-test('rollback record can reverse a theme back from the built-in palette', async () => {
-  const directory = await mkdtemp(join(tmpdir(), 'dsh-rollback-built-in-'));
-  try {
-    const target = join(directory, 'target.tgz');
-    const created = await run(state, [
-      'record', '--at', '2026-08-14T00:00:00.000Z',
-      '--target-name', '@dsh-themes/target', '--target-version', '2.0.0', '--target-artifact', target, '--target-sha256', shaB,
-    ]);
-    assert.equal(created.code, 0, created.stderr);
-    const path = join(directory, 'rollback.json');
-    await writeFile(path, created.stdout);
-    const reversed = await run(state, ['reverse', '--input', path]);
-    assert.equal(reversed.code, 0, reversed.stderr);
-    const record = JSON.parse(reversed.stdout);
-    assert.equal(record.target, null);
-    assert.equal(record.previous.packageName, '@dsh-themes/target');
-    const reversePath = join(directory, 'reverse.json');
-    await writeFile(reversePath, reversed.stdout);
-    assert.equal((await run(state, ['validate-record', '--input', reversePath])).code, 0);
-
-    const impossible = await writeJson(directory, 'two-built-ins.json', {
+    const legacyPath = await writeJson(directory, 'legacy.json', {
       schemaVersion: 1,
       profile: 'web',
       createdAt: '2026-08-14T00:00:00.000Z',
       previous: null,
-      target: null,
+      target: {
+        packageName: '@dsh-themes/deep-ocean',
+        version: '1.1.0',
+        artifactPath: join(directory, 'historical-v2.tgz'),
+        artifactSha256: shaA,
+      },
     });
-    const rejected = await run(state, ['validate-record', '--input', impossible]);
-    assert.notEqual(rejected.code, 0);
-    assert.match(rejected.stderr, /two built-in states/);
+    const refusedLegacy = await run(state, [
+      'validate-record', '--input', legacyPath,
+    ]);
+    assert.notEqual(refusedLegacy.code, 0);
+    assert.match(refusedLegacy.stderr, /read-only|cannot be executed/);
+    const inspectedLegacy = await run(state, [
+      'inspect-record', '--input', legacyPath,
+    ]);
+    assert.equal(inspectedLegacy.code, 0, inspectedLegacy.stderr);
+    assert.equal(JSON.parse(inspectedLegacy.stdout).executable, false);
+
+    const alteredPath = join(directory, 'altered-current.tgz');
+    const alteredBytes = Buffer.concat([
+      await readFile(target),
+      Buffer.from('not-an-authorized-hosted-artifact'),
+    ]);
+    await writeFile(alteredPath, alteredBytes, { mode: 0o600 });
+    const alteredSha256 = createHash('sha256')
+      .update(alteredBytes)
+      .digest('hex');
+    const rejectedAltered = await run(state, [
+      'record',
+      '--target-name', '@dsh-themes/deep-ocean',
+      '--target-version', '1.2.0',
+      '--target-artifact', alteredPath,
+      '--target-sha256', alteredSha256,
+    ]);
+    assert.notEqual(rejectedAltered.code, 0);
+    assert.match(rejectedAltered.stderr, /hosted artifact allowlist/);
+
+    const rejectedArbitrary = await run(state, [
+      'record',
+      '--target-name', '@dsh-themes/arbitrary',
+      '--target-version', '1.0.0',
+      '--target-artifact', target,
+      '--target-sha256', targetSha256,
+    ]);
+    assert.notEqual(rejectedArbitrary.code, 0);
+    assert.match(rejectedArbitrary.stderr, /hosted artifact allowlist/);
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
 });
-
 test('artifact verifier checks complete-package SHA-256 and refuses overwrite', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-verify-'));
   try {
@@ -746,22 +912,172 @@ test('remote verifier confines a 307 cookie bootstrap to the exact trusted path'
   }
 });
 
-test('verified runner and loopback gate fail closed', async () => {
+test('runner policy forces no-open and narrowly allows Skin Center removal', () => {
+  assert.equal(ALLOWED_ADD_ARTIFACT_SHA256.size, 14);
+  assert.equal(
+    isAllowedRunnerCommand([
+      'plugin',
+      '--profile',
+      'web',
+      'remove',
+      '@linxin666/dsh-client-ui-skin-center',
+    ]),
+    true
+  );
+  assert.equal(
+    isAllowedRunnerCommand([
+      'plugin',
+      '--profile',
+      'web',
+      'remove',
+      '@linxin666/arbitrary-package',
+    ]),
+    false
+  );
+  assert.equal(
+    isAllowedRunnerCommand([
+      'plugin',
+      '--profile',
+      'web',
+      'remove',
+      '@dsh-themes/ocean-workbench',
+    ]),
+    true
+  );
+  assert.deepEqual(buildDshChildArgs(['web'], resolve), [
+    'web',
+    '--host',
+    '127.0.0.1',
+    '--no-open',
+  ]);
+  assert.deepEqual(buildDshChildArgs(['web', '--port', '4312'], resolve), [
+    'web',
+    '--host',
+    '127.0.0.1',
+    '--no-open',
+    '--port',
+    '4312',
+  ]);
+  for (const values of [
+    ['web', '--open', 'true'],
+    ['web', '--no-open', '--no-open'],
+    ['web', '--host', '127.0.0.1'],
+  ]) {
+    assert.equal(isAllowedRunnerCommand(values), false);
+  }
+});
+
+test('runner refuses an arbitrary absolute tgz before DSH plugin add executes', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-runner-add-deny-'));
+  try {
+    const arbitrary = join(directory, 'arbitrary.tgz');
+    await writeFile(arbitrary, 'not an allowlisted hosted artifact', {
+      mode: 0o600,
+    });
+    const result = await run(
+      runner,
+      [
+        'plugin', '--profile', 'web', 'add', arbitrary, '--save-exact',
+      ],
+      { cwd: directory, env: { DSH_HOME: directory } }
+    );
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /current install allowlist/);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test('allowlisted plugin snapshot keeps a durable rollback locator after the source disappears', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-runner-add-snapshot-'));
+  try {
+    const source = join(directory, 'downloaded-deep-ocean.tgz');
+    const bytes = await readFile(fixture('deep-ocean-1.2.0.tgz'));
+    await writeFile(source, bytes, { mode: 0o600 });
+    const snapshot = await snapshotAllowedArtifact(source, {
+      workspace: directory,
+      allowedDigests: ALLOWED_ADD_ARTIFACT_SHA256,
+    });
+    assert.equal(
+      snapshot.sha256,
+      '8fca6598f084b47ec07bd00876a686c640ad68f280b5737b789a68fa5df5044f'
+    );
+    assert.equal(
+      snapshot.path,
+      join(
+        await realpath(directory),
+        '.dsh-themes',
+        'verified-artifacts',
+        `${snapshot.sha256}.tgz`
+      )
+    );
+    await assertPrivateSnapshotPermissions(snapshot.path);
+    if (process.platform === 'win32') {
+      assertPrivateWindowsAcl(join(directory, '.dsh-themes'), 3);
+      assertPrivateWindowsAcl(
+        join(directory, '.dsh-themes', 'verified-artifacts'),
+        3
+      );
+    }
+
+    const reused = await snapshotAllowedArtifact(source, {
+      workspace: directory,
+      allowedDigests: ALLOWED_ADD_ARTIFACT_SHA256,
+    });
+    assert.equal(reused.path, snapshot.path);
+    assert.equal(reused.reused, true);
+
+    await rm(source);
+    assert.deepEqual(await readFile(snapshot.path), bytes);
+    const record = await run(state, [
+      'record',
+      '--target-name', '@dsh-themes/deep-ocean',
+      '--target-version', '1.2.0',
+      '--target-artifact', snapshot.path,
+      '--target-sha256', snapshot.sha256,
+    ]);
+    assert.equal(record.code, 0, record.stderr);
+    const recordPath = await writeJson(
+      directory,
+      'persistent-rollback.json',
+      JSON.parse(record.stdout)
+    );
+    assert.equal(
+      (await run(state, ['validate-record', '--input', recordPath])).code,
+      0
+    );
+    assert.equal((await run(state, ['reverse', '--input', recordPath])).code, 0);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test('verified RC.8 runner and loopback gate fail closed', async () => {
   const verified = await run(runnerVerifier, []);
   assert.equal(verified.code, 0, verified.stderr);
   const status = JSON.parse(verified.stdout);
-  assert.equal(status.dshVersion, '0.1.0-rc.6');
-  assert.equal(status.pnpmVersion, '11.7.0');
-  assert.equal(status.criticalPackages, 197);
+  assert.equal(status.dshVersion, '0.1.0-rc.8');
+  assert.equal(status.packages, 504);
+  assert.equal(status.dshPackages, 187);
+  assert.equal(status.certificationRunId, 32393288849);
 
   const version = await run(runner, ['--version']);
   assert.equal(version.code, 0, version.stderr);
-  assert.equal(version.stdout.trim(), '0.1.0-rc.6');
+  assert.equal(version.stdout.trim(), '0.1.0-rc.8');
 
   for (const args of [
     ['web', '--host', '0.0.0.0'],
+    ['web', '--open', 'true'],
+    ['web', '--no-open', '--no-open'],
     ['web', '--trusted-host', 'example.test'],
     ['web', '--patch', '/tmp/patch.yml'],
+    [
+      'plugin',
+      '--profile',
+      'web',
+      'remove',
+      '@linxin666/arbitrary-package',
+    ],
   ]) {
     const rejected = await run(runner, args);
     assert.notEqual(rejected.code, 0);

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "ths",
+  "sourceRevision": "a9b915cee0f12f2fd13a6575bc8feaa9ee09d6ed",
+  "sourcePath": "packages/skins/ths/lib/client.js",
+  "sourceSha256": "6fd68f16c91c533d07a2271b09f04982796d0a9196d4caa90730fde7bb2be117",
+  "conversion": "dsh-themes-rc8-css-only-v1",
+  "executableHooksIncluded": false,
+  "files": {
+    "LICENSE": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+    "NOTICE": "331121edcd6e0d7fd740db20b3e393d195e7393c6237b8f267eea66794a0cfe8",
+    "patches.css": "648fd39a7168a71cc79fbfc4a6dcdb99587362cd2e58604f6c743f045e3a714e",
+    "skin.css": "b5cb4887e98ada90f28b2c90fccd23a2c7416a8cae0acca71a3d8268b08af7e2",
+    "skin.json": "5af025c011797aa34d2a0d2dbf6edfafb30a4e199f9fe2a6075b28a183c76c17"
+  }
+}

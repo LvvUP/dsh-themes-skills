@@ -7,7 +7,7 @@ description: Validate a local declarative DSH-Themes manifest and guide its auth
 
 Validate locally, then let the user sign in on the website. Never request, read, save, copy, or transmit a browser cookie, session, password, API key, authorization header, or long-lived credential.
 
-Upstream DeepSeek Harness `0.1.0-rc.8` is available on npm `next`, but DSH-Themes certifies submissions only for `0.1.0-rc.6`. Reject rc.7/rc.8 compatibility rather than upgrading or rewriting it; V1 rc.5 is historical and is not accepted by this submission path. [`release-state.json`](../../release-state.json) records this informational distinction without controlling validation.
+Accept only `schemaVersion: "3.0"` manifests whose compatibility object exactly equals the certified `0.1.0-rc.8` final evidence in [references/compatibility-v3.json](references/compatibility-v3.json). Reject partial, candidate, mixed-version, or extra compatibility evidence. RC.6 V2 and RC.5 V1 are historical and are not accepted by this submission path.
 
 ## Preflight
 
@@ -21,7 +21,7 @@ Upstream DeepSeek Harness `0.1.0-rc.8` is available on npm `next`, but DSH-Theme
      --site <https://trusted-dsh-themes-site>
    ```
 
-For local development only, `http://localhost:<port>` is allowed. The script performs no network request and writes no credentials or configuration. It rejects executable fields, unsafe color syntax, non-rc.6 compatibility, missing hashes, remote runtime assets, secret-like keys, package publication claims, and malformed copyright declarations.
+For local development only, `http://localhost:<port>` is allowed. The script performs no network request and writes no credentials or configuration. It rejects executable fields, unsafe color syntax, non-V3 or non-exact-RC.8 compatibility, missing hashes, remote runtime assets, secret-like keys, `artifact`/`payload` publication claims, and malformed copyright declarations.
 
 ## Handoff
 

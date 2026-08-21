@@ -5,13 +5,13 @@ description: Create and validate deterministic declarative manifests for DSH-The
 
 # DSH Theme Creator
 
-Create data-only themes for DeepSeek Harness `0.1.0-rc.6`. Do not accept or generate author-supplied JavaScript, CSS, HTML, dependencies, lifecycle scripts, fonts, SVG, remote runtime assets, or hashed class selectors.
+Create data-only schema V3 themes for the certified DeepSeek Harness `0.1.0-rc.8` baseline. Do not accept or generate author-supplied JavaScript, CSS, HTML, dependencies, lifecycle scripts, fonts, SVG, remote runtime assets, or hashed class selectors.
 
-Upstream DeepSeek Harness `0.1.0-rc.8` is released on npm `next` but remains uncertified by DSH-Themes. Continue generating only the certified rc.6 contract and reject rc.7/rc.8 input; V1 rc.5 is historical and is not valid Creator output. The repository's [`release-state.json`](../../release-state.json) is informational and never changes validator authority.
+The generator accepts only `schemaVersion: "3.0"` authoring input that selects `0.1.0-rc.8`, then inserts the complete fixed compatibility evidence from [references/compatibility-v3.json](references/compatibility-v3.json). It never accepts author-supplied attestation fields and never emits `artifact` or `payload`. RC.6 V2 and RC.5 V1 remain historical, non-output formats.
 
 ## Create
 
-1. Read [references/authoring-v2.md](references/authoring-v2.md).
+1. Read [references/authoring-v3.md](references/authoring-v3.md). Read [references/authoring-v2.md](references/authoring-v2.md) only when auditing historical RC.6 data.
 2. Make an authoring JSON file beside an `assets/` directory. Use normalized WebP files that the user has the right to publish; send JPEG/PNG originals through the website Theme Studio instead.
 3. Provide all 13 tokens with complete `light` and `dark` hexadecimal values and check contrast in the real Harness UI.
 4. For a full skin, provide distinct background, sidebar, card, light-preview, and dark-preview rasters plus the shared focus point.
@@ -24,7 +24,7 @@ Upstream DeepSeek Harness `0.1.0-rc.8` is released on npm `next` but remains unc
      --output <new-manifest.json>
    ```
 
-The generator rejects unknown fields, contradictory license policies, incomplete third-party provenance, unsafe color syntax, missing modes/tokens, incompatible DSH versions, symlinks, path traversal, invalid raster signatures, duplicate content, oversized files, and output overwrites. It removes local filesystem paths, records deterministic SHA-256 values, and marks imported full-skin URLs as provisional until the website replaces them.
+The generator rejects unknown fields, contradictory license policies, incomplete third-party provenance, unsafe color syntax, missing modes/tokens, non-V3 or non-RC.8 input, symlinks, path traversal, invalid raster signatures, duplicate content, oversized files, and output overwrites. It removes local filesystem paths, records deterministic SHA-256 values, binds the exact final RC.8 attestation and compatibility fingerprints, and marks imported full-skin URLs as provisional until the website replaces them.
 
 ## Hash a release package
 
@@ -34,7 +34,7 @@ Hash the exact `.tgz` after a trusted publisher builds it:
 node <skill-dir>/scripts/hash-file.mjs --input <absolute-package.tgz>
 ```
 
-Record the returned `sha256` and `integrity` only in the published release record. Do not claim that a theme author's submission hash is the trusted package hash.
+Record the returned `sha256` and `integrity` only in a trusted publisher's release workflow. Never insert them into Creator output or claim that an author's hash is a trusted `artifact` or `payload` digest.
 
 ## Validate visually
 

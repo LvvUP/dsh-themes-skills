@@ -1,18 +1,22 @@
 # Verified compatibility baseline
 
-Treat every value as exact. A missing source commit is intentional: the published npm metadata for this release does not expose a trustworthy `gitHead`, so never invent or reuse one.
+Treat every value below as exact. The current installation contract is RC.8/V3 plus the final runtime attestation; version strings alone are never authority.
 
 ## Release lanes
 
 | Lane | Exact release | Status |
 | --- | --- | --- |
-| Upstream | `0.1.0-rc.8`, npm `next`, tag `dsh-v0.1.0-rc.8` at `141eb6fef83422698aef7a981029e843e8161534` | Released upstream; not certified or Manager-installable |
-| Certified | `0.1.0-rc.6` | The only current DSH-Themes installation lane |
-| Historical V1 | `0.1.0-rc.5` at `47f943859bef60e4160492346772ded9b24f765a` | Historical recognition only; never current |
+| Current upstream and certified | `0.1.0-rc.8`, npm `next`, tag `dsh-v0.1.0-rc.8`, source `141eb6fef83422698aef7a981029e843e8161534` | Manager-installable only through the exact V3 sidecar and final runtime attestation |
+| Historical V2 | `0.1.0-rc.6` | Recognized for audit only; never current-installable or rollback-executable |
+| Historical V1 | `0.1.0-rc.5`, source `47f943859bef60e4160492346772ded9b24f765a` | Recognized for audit only |
 
-The official rc.8 tag maps that release to public source; it does not upgrade the rc.6 package contract or prove npm tarball provenance. npm `latest` was still rc.7 when this status was captured on 2026-08-20. The repository's [`release-state.json`](../../../release-state.json) is the canonical informational summary, but Manager never reads it as a security authority. Validators, the frozen lockfile, and the runtime attestation below remain exact rc.6 evidence and must fail closed for rc.7/rc.8.
+The final sidecar is [`themes/compatibility/dsh-0.1.0-rc.8.json`](../../../../themes/compatibility/dsh-0.1.0-rc.8.json). It has no blockers and binds GitHub Actions run [`32393288849`](https://github.com/LvvUP/DSH-Themes/actions/runs/32393288849), head `e3fe9ac465b8db8070efbdb83ddc6c821f923a73`, across Linux, macOS, and Windows on Node `22.19.0` and `24.15.0`. The earlier `.candidate.json` and candidate attestation remain historical evidence, not alternate authority.
 
-An exact compatibility match is necessary but not sufficient for installation. The release record must also set `verified: true` and contain this exact catalog authorization:
+The official Git tag maps RC.8 to public source. npm provenance is separately and narrowly recorded as `registry-digest-only`: integrity, shasum, tarball SHA-256, and registry URL do not prove a byte-for-byte build from the official commit.
+
+## Catalog authorization
+
+An exact compatibility match is necessary but not sufficient. A current release record must also set `verified: true`, use a controlled same-origin download, and contain exactly:
 
 ```json
 {
@@ -23,80 +27,84 @@ An exact compatibility match is necessary but not sufficient for installation. T
 }
 ```
 
-Treat `external-showcase`, `showcase-only`, `link-only`, noncommercial, rights-clearance-required, missing, or unknown distribution values as non-installable. This remains true when external provenance legitimately omits NOTICE or sets `noticeUrl: null`; Manager must not inspect a LICENSE, source tree, or executable repository to manufacture missing authority.
+`external-showcase`, `external-runtime-verified`, community-installer records, incomplete rights, and unknown distribution values are not Manager-installable. The adjacent community installer has its own allowlist and may use the Manager launcher only for its exact Skin Center package.
 
-| Field | Value |
-| --- | --- |
-| DeepSeek Harness package | `@deepseek-ai/dsh@0.1.0-rc.6` |
-| DSH npm integrity | `sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==` |
-| DSH npm shasum | `de9fbf39056c7f4e658a3e284cb1d66ebc86d040` |
-| Package-manifest `sourceCommit` | key omitted |
-| ui-theme package | `@deepseek-ai/dsh-client-ui-theme@0.1.0-rc.6` |
-| ui-theme npm integrity | `sha512-Wu+bvnuti/gLA+t5a2cWUMQJ5UCqxt6oEK+OJiJ68gN0ixs2skpaN0nFdFoY2exC5KByXrNlN1rRrD+FsZSBLA==` |
-| Web frontend package | `@deepseek-ai/dsh-web-frontend@0.1.0-rc.6` |
-| Frontend npm integrity | `sha512-+RpdDF11FqUZSbJGoZ4oLIk/4PJR+ynTS4ELMn9QqucbYZ8tv0Itq9ZtG2o6pKIe7NO0lj/eBjCR2EoRKx7L+g==` |
-| Main frontend JS SHA-256 | `a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68` |
-| Main frontend CSS SHA-256 | `8ecb4b25268f5acae7e6f1b9e5cc8d14e5c5fa17da70a6a7863c896496f257ea` |
-| Token catalog SHA-256 | `fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926` |
-| DSH-Themes selector catalog SHA-256 | `5bcd9f874095af2114d86f91301868c6b0f2cebe58f51b9919150975d406baa3` |
-
-## Verified runner
-
-The package compatibility manifest and runtime attestation are separate contracts. The historical V2 package manifest contains five rc.6 compatibility fingerprints. It does not claim to contain the dependency closure. A current Manager release record additionally carries the exact independent runtime-attestation fields below.
+## RC.8 V3 compatibility
 
 | Field | Exact value |
 | --- | --- |
-| Attestation SHA-256 | `2400606c5cb6534e09a65020e4ae12a0df4c1d08f15918d714bc5037c2ed99ba` |
-| Runner lockfile SHA-256 | `22f995efe8338c2a3cd97bd731853d010363531145c35073adb2dca3773f6053` |
-| Critical `@deepseek-ai/*` package count | `197` |
-| Canonical critical-package array SHA-256 | `f883815b282c4e86a1ecb8cf60914459f875a1d34da02cfce8b119824a950894` |
-| Package manager | `pnpm@11.7.0` |
-| pnpm integrity | `sha512-GcyFLBIMcSV2DyRD7mvgyltA+fUFmN4aCaHxd1A+AQ5Xwjx3ZG4B52HeWb+HT7IqM5jDOrlpH8E+uUa28PTWIA==` |
-| Web frontend integrity | `sha512-+RpdDF11FqUZSbJGoZ4oLIk/4PJR+ynTS4ELMn9QqucbYZ8tv0Itq9ZtG2o6pKIe7NO0lj/eBjCR2EoRKx7L+g==` |
+| DSH | `@deepseek-ai/dsh@0.1.0-rc.8` |
+| DSH npm integrity | `sha512-VQU5NlomrKLRgcXuOf+sxWFvqxPA8q9vMhrKPlPPXiOJEhGlGlAdiyxZvZxkCVI+v0zbhe21cY3/luLyxpSzzA==` |
+| Official tag/source | `dsh-v0.1.0-rc.8` / `141eb6fef83422698aef7a981029e843e8161534` |
+| ui-theme | `@deepseek-ai/dsh-client-ui-theme@0.1.0-rc.8` |
+| ui-theme client bundle SHA-256 | `86f6ae4775ca2f4af29b7abaf200a18833b6675aa8446942f819342829eba6a5` |
+| Web frontend | `@deepseek-ai/dsh-web-frontend@0.1.0-rc.8` |
+| Web `index.html` SHA-256 | `1af3332985a498e11b8a4b34e29304c59beedf0838eea3b3d61b676f0288c7f0` |
+| 86-file Web asset-set SHA-256 | `b225f316eacc754b41ffdc1402f4de92c742cf5d9b7e460923092aad65800f06` |
+| 13-token catalog SHA-256 | `fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926` |
+| Published-artifact selector allowlist SHA-256 | `663aa5927591ac99076f924ee9cd6f9bd09e6a8a9ee1e6b8b1b0d9e3093df807` |
+| Final runtime attestation SHA-256 | `1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae` |
 
-Bootstrap once from the Skill directory. The subshell preserves the caller's workspace; subsequent launcher calls always retain that workspace as the child `cwd`:
+The selector digest uses `declared-order-selector-lf` over the selectors actually consumed by the 13 current artifacts:
+
+```text
+html
+body
+body[data-ds-dark-theme]
+#root
+[data-slot='root'] > div
+[data-slot='conversation'] > div
+body[data-ds-dark-theme] [data-slot='conversation'] > div
+[data-slot='sidebar'] > div
+body[data-ds-dark-theme] [data-slot='sidebar'] > div
+[data-composer-card='true']
+[data-slot='details']
+body[data-ds-dark-theme] [data-composer-card='true']
+body[data-ds-dark-theme] [data-slot='details']
+```
+
+This is an artifact dependency allowlist, not a claim to enumerate every RC.8 product state.
+
+## Verified runner
+
+| Field | Exact value |
+| --- | --- |
+| Runtime directory | `runtime-rc8/` |
+| Attestation schema/status | `2` / `verified` |
+| Attestation SHA-256 | `1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae` |
+| Lockfile SHA-256 | `b38b68f1f443b7065f530d665ea7acbc9327275503ba0d9a6edd030b81f915ec` |
+| Production closure | `504` packages / `58c78fcf15d2b6c58bad0fc870a4d28dabda33bfae3633cf94794465564a939b` |
+| DSH closure | `187` packages / `aa3929a9418b928d9ef200964f8ae4cce54086b1d5bc474cb9b42af90f0a78d8` |
+| Package manager | `pnpm@11.7.0` |
+| Certification run/head | `32393288849` / `e3fe9ac465b8db8070efbdb83ddc6c821f923a73` |
+| Lifecycle | `managed-cold-restart` |
+
+Bootstrap from the Skill directory without lifecycle scripts:
 
 ```sh
 (
-  cd "<skill-dir>/runtime" &&
+  cd "<skill-dir>/runtime-rc8" &&
   corepack pnpm install --frozen-lockfile --ignore-scripts
 )
 node "<skill-dir>/scripts/verify-runner.mjs"
 ```
 
-Corepack reads the exact `packageManager` version and SHA-512 hash from `runtime/package.json`. The frozen install refuses lock drift and lifecycle scripts. `verify-runner.mjs` then verifies the attestation, lock digest, pnpm/DSH versions, and all 197 attested critical package resolutions before any DSH operation.
+All operations use `node "<skill-dir>/scripts/run-dsh.mjs" ...`. The launcher resolves the attested Node entry, disables telemetry, forces loopback, and launches Web with exactly one `--no-open`. Plugin add accepts only the 13 current hosted artifact digests or exact Skin Center 0.2.5, copies the opened bytes into a private `wx` no-overwrite workspace snapshot at `.dsh-themes/verified-artifacts/<sha256>.tgz`, and gives DSH only that durable 0600 file. The snapshot closes the caller-path swap window and remains present for pnpm's `file:` locator and rollback; the 0700 parent directories and digest-named no-overwrite file also reduce accidental replacement, though a process already running as the same OS user remains inside the local trust boundary. The launcher rejects caller-supplied open/host flags, `0.0.0.0`, LAN hosts, `--patch`, and `--trusted-host`.
 
-All operations use `node "<skill-dir>/scripts/run-dsh.mjs" ...`; never use a PATH `dsh` or `pnpm dlx`. Real UI acceptance is limited to `http://127.0.0.1:<port>` or `http://[::1]:<port>`, with telemetry disabled. `0.0.0.0`, LAN hosts, `--patch`, and `--trusted-host` are rejected; trusted-host controls are not authentication.
+RC.8 live unload/HMR is not part of the contract. Install, switch, remove, rollback, and acceptance all require a managed cold restart. The official five-style disposer remains cleanup fixture evidence only.
 
-The token hash is the SHA-256 of the sorted 13-token catalog, one UTF-8 token per line with a final newline. The selector hash is the SHA-256 of this canonical ordered UTF-8 list, one selector per line with a final newline:
+## Rollback authority
 
-```text
-html
-body
-#root
-body[data-ds-dark-theme]
-[data-slot='root']
-[data-slot='root'] > div
-[data-slot='sidebar']
-[data-slot='sidebar'] > div
-[data-slot='conversation']
-[data-slot='conversation'] > div
-[data-slot='conversation.session']
-[data-slot='conversation.composer']
-[data-composer-card='true']
-[data-slot='details']
-[data-shell-overlay='true']
-```
+Only rollback schema 2 is executable. It binds `dshPackageVersion: "0.1.0-rc.8"` and the final attestation SHA-256. `validate-record` re-hashes each referenced `.tgz`, requires exactly one embedded current V3 manifest, and re-checks the final runtime attestation. Schema 1 may be inspected for history but cannot be validated or reversed.
 
-This is the rc.6 DSH-Themes allowlist verified against the real Web UI, not every selector present in Harness.
+Before rollback, re-run `validate-release.mjs` for every package that will be installed. A rollback record is not a substitute for current catalog authority. The launcher removes only `@dsh-themes/*` plus the exact adjacent-installer package `@linxin666/dsh-client-ui-skin-center`; arbitrary third-party package names remain rejected.
 
-## Digest scopes
+## Digest scopes and history
 
 | Contract | Field | Scope | Installation authority |
 | --- | --- | --- | --- |
-| V2 sidecar | `artifact.sha256` | Complete downloaded `.tgz` | Yes, when it also matches the trusted catalog |
-| V2 embedded/sidecar | `payload.sha256` | Canonical tar excluding the manifest | No |
-| V1 embedded/sidecar | `package.sha256` | Canonical package payload excluding `theme.json` | No |
-| Catalog | `artifactSha256` | Complete downloaded `.tgz` | Yes |
+| V3 sidecar/catalog | `artifact.sha256` / `artifactSha256` | Complete downloaded `.tgz` | Yes, only with all current authority fields |
+| V3/V2 embedded or sidecar | `payload.sha256` | Canonical tar excluding the manifest | No |
+| V1 embedded or sidecar | `package.sha256` | Canonical payload excluding `theme.json` | No |
 
-V1 packages certified for `0.1.0-rc.5` remain historical artifacts. Their exact source commit is `47f943859bef60e4160492346772ded9b24f765a`, but this value must never appear in an rc.6 V2 compatibility record.
+The exact RC.6 attestation and lock remain under `runtime/` with SHA-256 values `2400606c5cb6534e09a65020e4ae12a0df4c1d08f15918d714bc5037c2ed99ba` and `22f995efe8338c2a3cd97bd731853d010363531145c35073adb2dca3773f6053`. They are historical evidence only and must never be mixed with `runtime-rc8/`.
