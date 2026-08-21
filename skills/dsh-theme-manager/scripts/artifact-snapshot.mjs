@@ -25,11 +25,12 @@ if ([String]::IsNullOrWhiteSpace($target)) { throw 'missing private path' }
 if ($kind -ne 'directory' -and $kind -ne 'file') { throw 'invalid private path kind' }
 if ($action -ne 'configure' -and $action -ne 'verify') { throw 'invalid private path action' }
 
-$item = Get-Item -LiteralPath $target -Force
-if ($kind -eq 'directory' -and -not $item.PSIsContainer) {
+$isDirectory = [System.IO.Directory]::Exists($target)
+$isFile = [System.IO.File]::Exists($target)
+if ($kind -eq 'directory' -and -not $isDirectory) {
   throw 'private directory target is not a directory'
 }
-if ($kind -eq 'file' -and $item.PSIsContainer) {
+if ($kind -eq 'file' -and (-not $isFile -or $isDirectory)) {
   throw 'private file target is not a file'
 }
 
@@ -40,7 +41,11 @@ if ($kind -eq 'directory') {
   $inheritance = [System.Security.AccessControl.InheritanceFlags]::ContainerInherit -bor [System.Security.AccessControl.InheritanceFlags]::ObjectInherit
 }
 if ($action -eq 'configure') {
-  $acl = Get-Acl -LiteralPath $target
+  if ($kind -eq 'directory') {
+    $acl = [System.IO.Directory]::GetAccessControl($target)
+  } else {
+    $acl = [System.IO.File]::GetAccessControl($target)
+  }
   $acl.SetAccessRuleProtection($true, $false)
   foreach ($rule in @($acl.Access)) {
     [void]$acl.RemoveAccessRuleSpecific($rule)
@@ -56,10 +61,18 @@ if ($action -eq 'configure') {
     )
     [void]$acl.AddAccessRule($rule)
   }
-  Set-Acl -LiteralPath $target -AclObject $acl
+  if ($kind -eq 'directory') {
+    [System.IO.Directory]::SetAccessControl($target, $acl)
+  } else {
+    [System.IO.File]::SetAccessControl($target, $acl)
+  }
 }
 
-$verified = Get-Acl -LiteralPath $target
+if ($kind -eq 'directory') {
+  $verified = [System.IO.Directory]::GetAccessControl($target)
+} else {
+  $verified = [System.IO.File]::GetAccessControl($target)
+}
 $ownerSid = $verified.GetOwner([System.Security.Principal.SecurityIdentifier]).Value
 if ($ownerSid -ne $currentSid.Value) { throw 'private path owner is not the current user' }
 if (-not $verified.AreAccessRulesProtected) { throw 'private path DACL still inherits access rules' }
@@ -85,10 +98,12 @@ foreach ($rule in $rules) {
   }
 }
 foreach ($sid in $allowedSids) {
-  $matches = @($rules | Where-Object {
-    $_.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value -eq $sid
-  })
-  if ($matches.Count -ne 1) { throw 'private path DACL is missing a required principal' }
+  $matchCount = 0
+  foreach ($rule in $rules) {
+    $ruleSid = $rule.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value
+    if ($ruleSid -eq $sid) { $matchCount += 1 }
+  }
+  if ($matchCount -ne 1) { throw 'private path DACL is missing a required principal' }
 }
 `;
 

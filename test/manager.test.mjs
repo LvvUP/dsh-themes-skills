@@ -26,24 +26,25 @@ const WINDOWS_PRIVATE_ACL_INSPECTOR = String.raw`
 $ErrorActionPreference = 'Stop'
 $target = [Environment]::GetEnvironmentVariable('DSH_THEMES_TEST_PRIVATE_PATH', 'Process')
 if ([String]::IsNullOrWhiteSpace($target)) { throw 'missing private path' }
-$acl = Get-Acl -LiteralPath $target
+$isDirectory = [System.IO.Directory]::Exists($target)
+if ($isDirectory) {
+  $acl = [System.IO.Directory]::GetAccessControl($target)
+} else {
+  $acl = [System.IO.File]::GetAccessControl($target)
+}
 $currentSid = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value
-$rules = @($acl.Access | ForEach-Object {
-  [PSCustomObject]@{
-    sid = $_.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value
-    allow = $_.AccessControlType -eq [System.Security.AccessControl.AccessControlType]::Allow
-    inherited = $_.IsInherited
-    fullControl = (($_.FileSystemRights -band [System.Security.AccessControl.FileSystemRights]::FullControl) -eq [System.Security.AccessControl.FileSystemRights]::FullControl)
-    inheritance = [int]$_.InheritanceFlags
-    propagation = [int]$_.PropagationFlags
-  }
-})
-[PSCustomObject]@{
-  protected = $acl.AreAccessRulesProtected
-  ownerSid = $acl.GetOwner([System.Security.Principal.SecurityIdentifier]).Value
-  currentSid = $currentSid
-  rules = $rules
-} | ConvertTo-Json -Depth 4 -Compress
+$ownerSid = $acl.GetOwner([System.Security.Principal.SecurityIdentifier]).Value
+$tab = [char]9
+[Console]::WriteLine("protected" + $tab + $acl.AreAccessRulesProtected)
+[Console]::WriteLine("owner" + $tab + $ownerSid)
+[Console]::WriteLine("current" + $tab + $currentSid)
+foreach ($rule in @($acl.Access)) {
+  $sid = $rule.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value
+  $allow = $rule.AccessControlType -eq [System.Security.AccessControl.AccessControlType]::Allow
+  $fullControl = (($rule.FileSystemRights -band [System.Security.AccessControl.FileSystemRights]::FullControl) -eq [System.Security.AccessControl.FileSystemRights]::FullControl)
+  $fields = @("rule", $sid, $allow, $rule.IsInherited, $fullControl, [int]$rule.InheritanceFlags, [int]$rule.PropagationFlags)
+  [Console]::WriteLine([String]::Join($tab, $fields))
+}
 `;
 const fixture = (name) => resolve('test/fixtures', name);
 const shaA = 'a'.repeat(64);
@@ -239,7 +240,24 @@ function inspectWindowsPrivateAcl(target) {
     }
   );
   assert.equal(result.status, 0, result.stderr);
-  return JSON.parse(result.stdout);
+  const acl = { protected: false, ownerSid: '', currentSid: '', rules: [] };
+  for (const line of result.stdout.trim().split(/\r?\n/)) {
+    const [kind, ...fields] = line.split('\t');
+    if (kind === 'protected') acl.protected = fields[0] === 'True';
+    if (kind === 'owner') acl.ownerSid = fields[0];
+    if (kind === 'current') acl.currentSid = fields[0];
+    if (kind === 'rule') {
+      acl.rules.push({
+        sid: fields[0],
+        allow: fields[1] === 'True',
+        inherited: fields[2] === 'True',
+        fullControl: fields[3] === 'True',
+        inheritance: Number(fields[4]),
+        propagation: Number(fields[5]),
+      });
+    }
+  }
+  return acl;
 }
 
 function assertPrivateWindowsAcl(target, expectedInheritance) {
