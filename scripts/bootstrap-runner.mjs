@@ -17,10 +17,26 @@ if (runtimePackage.packageManager !== expectedPackageManager) {
   throw new Error('RC.8 runtime packageManager differs from the certified pnpm baseline');
 }
 
-const corepack = process.platform === 'win32' ? 'corepack.cmd' : 'corepack';
+// Node 24 no longer spawns .cmd shims directly on Windows. Execute Corepack's
+// bundled JavaScript entry with the already-running Node binary instead of
+// enabling a command shell; every install argument therefore remains a
+// distinct, non-interpolated value.
+const corepack =
+  process.platform === 'win32'
+    ? resolve(
+        dirname(process.execPath),
+        'node_modules/corepack/dist/corepack.js'
+      )
+    : 'corepack';
+const corepackArgs = [
+  'pnpm',
+  'install',
+  '--frozen-lockfile',
+  '--ignore-scripts',
+];
 const install = spawnSync(
-  corepack,
-  ['pnpm', 'install', '--frozen-lockfile', '--ignore-scripts'],
+  process.platform === 'win32' ? process.execPath : corepack,
+  process.platform === 'win32' ? [corepack, ...corepackArgs] : corepackArgs,
   {
     cwd: runtimeDir,
     env: {
