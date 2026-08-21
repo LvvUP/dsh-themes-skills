@@ -6,6 +6,12 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { isExactSemver } from './semver.mjs';
+import {
+  classifyHostedArtifact,
+  CURRENT_INSTALLABLE_HOSTED_ARTIFACTS,
+  LEGACY_ROLLBACK_HOSTED_ARTIFACTS,
+} from './hosted-artifact-authority.mjs';
+import { validateRollbackRecord } from './theme-state.mjs';
 
 const HISTORICAL_V2 = Object.freeze({
   dshPackageVersion: '0.1.0-rc.6',
@@ -337,16 +343,96 @@ function validateV3(record, manifest, origin) {
   };
 }
 
-const args = parseArgs(process.argv.slice(2));
-if (!args.input) fail('--input is required');
-const record = object(JSON.parse(await readFile(resolve(args.input), 'utf8')), 'release record');
-const manifest = object(record.manifest, 'manifest');
-const origin = trustedOrigin(args.origin);
-const result = manifest.schemaVersion === '2.0'
-  ? validateV2(record, manifest, origin)
-  : manifest.schemaVersion === '3.0'
-    ? validateV3(record, manifest, origin)
-  : manifest.schemaVersion === 1
-    ? validateV1(record, manifest, origin)
-    : fail('unsupported manifest schemaVersion');
-process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+export async function validateReleaseRecord(
+  rawRecord,
+  {
+    origin: rawOrigin,
+    authority = 'current',
+    rollbackRecord,
+    currentArtifacts = CURRENT_INSTALLABLE_HOSTED_ARTIFACTS,
+    legacyArtifacts = LEGACY_ROLLBACK_HOSTED_ARTIFACTS,
+  } = {}
+) {
+  const record = object(rawRecord, 'release record');
+  const manifest = object(record.manifest, 'manifest');
+  const origin = trustedOrigin(rawOrigin);
+  const result = manifest.schemaVersion === '2.0'
+    ? validateV2(record, manifest, origin)
+    : manifest.schemaVersion === '3.0'
+      ? validateV3(record, manifest, origin)
+      : manifest.schemaVersion === 1
+        ? validateV1(record, manifest, origin)
+        : fail('unsupported manifest schemaVersion');
+
+  const artifactAuthority = classifyHostedArtifact(
+    result.packageName,
+    result.version,
+    result.artifactSha256,
+    { currentArtifacts, legacyArtifacts }
+  );
+  if (authority === 'current') {
+    if (manifest.schemaVersion !== '3.0') return result;
+    if (artifactAuthority !== 'current-installable') {
+      fail(
+        artifactAuthority === 'legacy-rollback'
+          ? 'legacy rollback artifacts are not valid fresh-install or normal catalog targets'
+          : 'hosted artifact is not in the current installable authority'
+      );
+    }
+    return { ...result, artifactAuthority };
+  }
+  if (authority !== 'legacy-rollback') {
+    fail('authority must be current or legacy-rollback');
+  }
+  if (artifactAuthority !== 'legacy-rollback') {
+    fail('legacy rollback authority requires one exact retired artifact');
+  }
+  if (manifest.schemaVersion === 1) validateDistribution(record);
+  if (!rollbackRecord) {
+    fail('legacy rollback authority requires a verified schema-2 rollback record');
+  }
+  const validatedRollback = await validateRollbackRecord(rollbackRecord, {
+    currentArtifacts,
+    legacyArtifacts,
+  });
+  const previous = validatedRollback.previous;
+  if (
+    previous?.artifactAuthority !== 'legacy-rollback' ||
+    previous.packageName !== result.packageName ||
+    previous.version !== result.version ||
+    previous.artifactSha256 !== result.artifactSha256 ||
+    previous.payloadSha256 !== result.payloadSha256
+  ) {
+    fail('release record does not match the legacy artifact selected by rollback');
+  }
+  return {
+    ...result,
+    historicalStatus: result.status,
+    status: 'legacy-rollback',
+    installableCurrent: false,
+    rollbackEligible: true,
+    artifactAuthority,
+  };
+}
+
+async function runCli(argv) {
+  const args = parseArgs(argv);
+  if (!args.input) fail('--input is required');
+  const record = object(
+    JSON.parse(await readFile(resolve(args.input), 'utf8')),
+    'release record'
+  );
+  const rollbackRecord = args['rollback-record']
+    ? JSON.parse(await readFile(resolve(args['rollback-record']), 'utf8'))
+    : undefined;
+  const result = await validateReleaseRecord(record, {
+    origin: args.origin,
+    authority: args.authority ?? 'current',
+    rollbackRecord,
+  });
+  process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+}
+
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  await runCli(process.argv.slice(2));
+}

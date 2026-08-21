@@ -6,14 +6,27 @@ import { createServer } from 'node:https';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import test from 'node:test';
+import { gzipSync } from 'node:zlib';
 
 import {
   ALLOWED_ADD_ARTIFACT_SHA256,
+  CURRENT_INSTALLABLE_ADD_ARTIFACT_SHA256,
   buildDshChildArgs,
   isAllowedRunnerCommand,
 } from '../skills/dsh-theme-manager/scripts/runner-policy.mjs';
+import {
+  CURRENT_CATALOG_INDEX_SHA256,
+  CURRENT_INSTALLABLE_HOSTED_ARTIFACTS,
+  LEGACY_ROLLBACK_HOSTED_ARTIFACTS,
+} from '../skills/dsh-theme-manager/scripts/hosted-artifact-authority.mjs';
 import { snapshotAllowedArtifact } from '../skills/dsh-theme-manager/scripts/artifact-snapshot.mjs';
 import { isExactSemver } from '../skills/dsh-theme-manager/scripts/semver.mjs';
+import {
+  reverseRollbackRecord,
+  validateRollbackRecord,
+} from '../skills/dsh-theme-manager/scripts/theme-state.mjs';
+import { validateReleaseRecord } from '../skills/dsh-theme-manager/scripts/validate-release.mjs';
+import { prepareAllowedAddArtifact } from '../skills/dsh-theme-manager/scripts/run-dsh.mjs';
 import { run } from './helpers.mjs';
 
 const state = resolve('skills/dsh-theme-manager/scripts/theme-state.mjs');
@@ -112,6 +125,8 @@ function integrity(sha256) {
 }
 
 function currentRelease() {
+  const artifactSha256 =
+    '8fca6598f084b47ec07bd00876a686c640ad68f280b5737b789a68fa5df5044f';
   return {
     verified: true,
     distribution: {
@@ -120,31 +135,51 @@ function currentRelease() {
       redistribution: 'allowed',
       previewPolicy: 'hosted',
     },
-    artifactUrl: `${trustedOrigin}/api/themes/ocean-workbench/download/1.1.0`,
-    artifactSha256: shaA,
+    artifactUrl: `${trustedOrigin}/api/themes/deep-ocean/download/1.2.0`,
+    artifactSha256,
     runtimeAttestation: { ...runtimeAttestation },
     manifest: {
       schemaVersion: '3.0',
       kind: 'full-skin',
-      slug: 'ocean-workbench',
-      version: '1.1.0',
+      slug: 'deep-ocean',
+      version: '1.2.0',
       compatibility: { ...compatibility },
       artifact: {
-        name: '@dsh-themes/ocean-workbench',
-        version: '1.1.0',
-        fileName: 'ocean-workbench-1.1.0.tgz',
-        sha256: shaA,
-        integrity: integrity(shaA),
+        name: '@dsh-themes/deep-ocean',
+        version: '1.2.0',
+        fileName: 'deep-ocean-1.2.0.tgz',
+        sha256: artifactSha256,
+        integrity: integrity(artifactSha256),
         digestScope: 'artifact-tgz',
       },
       payload: {
-        fileName: 'ocean-workbench-1.1.0.payload.tar',
+        fileName: 'deep-ocean-1.2.0.payload.tar',
         sha256: shaB,
         integrity: integrity(shaB),
         digestScope: 'canonical-tar-payload-excluding-manifest',
       },
     },
   };
+}
+
+function legacyArcticRelease() {
+  const release = currentRelease();
+  const artifactSha256 =
+    'f5e90f8b335b3cc0e484040515621b12622d103252e148492b6effab73dc4b28';
+  release.artifactUrl = `${trustedOrigin}/api/themes/arctic-panel/download/1.1.0`;
+  release.artifactSha256 = artifactSha256;
+  release.manifest.slug = 'arctic-panel';
+  release.manifest.version = '1.1.0';
+  release.manifest.artifact = {
+    ...release.manifest.artifact,
+    name: '@dsh-themes/arctic-panel',
+    version: '1.1.0',
+    fileName: 'arctic-panel-1.1.0.tgz',
+    sha256: artifactSha256,
+    integrity: integrity(artifactSha256),
+  };
+  release.manifest.payload.fileName = 'arctic-panel-1.1.0.payload.tar';
+  return release;
 }
 
 function historicalV2Release() {
@@ -192,11 +227,122 @@ async function writeJson(directory, name, value) {
   return path;
 }
 
-async function validateRelease(directory, name, value, origin = trustedOrigin) {
+async function validateRelease(
+  directory,
+  name,
+  value,
+  origin = trustedOrigin,
+  extraArgs = []
+) {
   return run(releaseValidator, [
     '--input', await writeJson(directory, name, value),
     '--origin', origin,
+    ...extraArgs,
   ]);
+}
+
+function tarWithSkinManifest(manifest) {
+  const body = Buffer.from(`${JSON.stringify(manifest)}\n`);
+  const header = Buffer.alloc(512);
+  header.write('package/skin.json', 0, 'utf8');
+  const writeOctal = (value, offset, length) => {
+    header.write(`${value.toString(8).padStart(length - 1, '0')}\0`, offset, 'ascii');
+  };
+  writeOctal(0o644, 100, 8);
+  writeOctal(0, 108, 8);
+  writeOctal(0, 116, 8);
+  writeOctal(body.length, 124, 12);
+  writeOctal(0, 136, 12);
+  header.fill(0x20, 148, 156);
+  header[156] = '0'.charCodeAt(0);
+  header.write('ustar\0', 257, 'ascii');
+  header.write('00', 263, 'ascii');
+  const checksum = header.reduce((sum, byte) => sum + byte, 0);
+  header.write(`${checksum.toString(8).padStart(6, '0')}\0 `, 148, 'ascii');
+  const padding = Buffer.alloc((512 - (body.length % 512)) % 512);
+  return gzipSync(Buffer.concat([header, body, padding, Buffer.alloc(1024)]), {
+    level: 9,
+    mtime: 0,
+  });
+}
+
+async function writeTestThemeArtifact(directory, slug, version) {
+  const bytes = tarWithSkinManifest({
+    schemaVersion: '3.0',
+    kind: 'full-skin',
+    slug,
+    version,
+    compatibility: { ...compatibility },
+    payload: { sha256: shaB },
+  });
+  const path = join(directory, `${slug}-${version}.tgz`);
+  await writeFile(path, bytes, { mode: 0o600 });
+  return {
+    packageName: `@dsh-themes/${slug}`,
+    version,
+    artifactPath: path,
+    artifactSha256: createHash('sha256').update(bytes).digest('hex'),
+    manifestSchemaVersion: '3.0',
+    dshPackageVersion: '0.1.0-rc.8',
+    runtimeAttestationSha256: runtimeAttestation.attestationSha256,
+    payloadSha256: shaB,
+  };
+}
+
+async function writeTestLegacyArtifact(directory, slug, version, manifest) {
+  const bytes = tarWithSkinManifest(manifest);
+  const path = join(directory, `${slug}-${version}.tgz`);
+  await writeFile(path, bytes, { mode: 0o600 });
+  return {
+    packageName: `@dsh-themes/${slug}`,
+    version,
+    artifactPath: path,
+    artifactSha256: createHash('sha256').update(bytes).digest('hex'),
+  };
+}
+
+function releaseForArtifact(entry) {
+  const release = currentRelease();
+  const slug = entry.packageName.slice('@dsh-themes/'.length);
+  release.artifactUrl = `${trustedOrigin}/api/themes/${slug}/download/${entry.version}`;
+  release.artifactSha256 = entry.artifactSha256;
+  release.manifest.slug = slug;
+  release.manifest.version = entry.version;
+  release.manifest.artifact = {
+    ...release.manifest.artifact,
+    name: entry.packageName,
+    version: entry.version,
+    fileName: `${slug}-${entry.version}.tgz`,
+    sha256: entry.artifactSha256,
+    integrity: integrity(entry.artifactSha256),
+  };
+  release.manifest.payload.fileName = `${slug}-${entry.version}.payload.tar`;
+  return release;
+}
+
+function historicalV2ReleaseForArtifact(entry) {
+  const release = releaseForArtifact(entry);
+  release.runtimeAttestation = { ...historicalRuntimeAttestation };
+  release.manifest.schemaVersion = '2.0';
+  release.manifest.compatibility = { ...historicalCompatibility };
+  return release;
+}
+
+function historicalV1ReleaseForArtifact(entry) {
+  const release = historicalRelease();
+  const slug = entry.packageName.slice('@dsh-themes/'.length);
+  release.verified = true;
+  release.artifactUrl = `${trustedOrigin}/api/themes/${slug}/download/${entry.version}`;
+  release.artifactSha256 = entry.artifactSha256;
+  release.manifest.slug = slug;
+  release.manifest.version = entry.version;
+  release.manifest.package = {
+    ...release.manifest.package,
+    name: entry.packageName,
+    version: entry.version,
+    fileName: `${slug}-${entry.version}.tgz`,
+  };
+  return release;
 }
 
 function listen(server) {
@@ -297,16 +443,30 @@ test('release validator separates current V3, historical V2/V1, and artifact aut
       const output = JSON.parse(result.stdout);
       assert.equal(output.status, 'current');
       assert.equal(output.installableCurrent, true);
+      assert.equal(output.artifactAuthority, 'current-installable');
       assert.equal(output.dshVersion, '0.1.0-rc.8');
       assert.equal(
         output.sourceCommit,
         '141eb6fef83422698aef7a981029e843e8161534'
       );
-      assert.equal(output.artifactSha256, shaA);
+      assert.equal(output.artifactSha256, release.artifactSha256);
       assert.equal(output.payloadSha256, shaB);
       assert.equal(output.runtimeAttestationSha256, runtimeAttestation.attestationSha256);
       assert.equal(output.certificationRunId, 32393288849);
       assert.equal(output.lifecycle, 'managed-cold-restart');
+    });
+
+    await t.test('rejects a rollback-only predecessor as a fresh install', async () => {
+      const result = await validateRelease(
+        directory,
+        'legacy-fresh-install.json',
+        legacyArcticRelease()
+      );
+      assert.notEqual(result.code, 0);
+      assert.match(
+        result.stderr,
+        /not valid fresh-install or normal catalog targets/
+      );
     });
 
     await t.test('rejects mixed RC.6 evidence inside a V3 record', async () => {
@@ -439,12 +599,12 @@ test('release validator confines downloads to the exact controlled same-origin r
   const directory = await mkdtemp(join(tmpdir(), 'dsh-release-url-'));
   try {
     const cases = [
-      ['cross-origin', 'https://other.example/api/themes/ocean-workbench/download/1.1.0', /trusted origin/],
-      ['wrong-slug', `${trustedOrigin}/api/themes/other/download/1.1.0`, /controlled route/],
-      ['wrong-version', `${trustedOrigin}/api/themes/ocean-workbench/download/1.1.1`, /controlled route/],
-      ['query', `${trustedOrigin}/api/themes/ocean-workbench/download/1.1.0?token=secret`, /credential-free HTTPS URL/],
-      ['fragment', `${trustedOrigin}/api/themes/ocean-workbench/download/1.1.0#download`, /credential-free HTTPS URL/],
-      ['encoded-segment', `${trustedOrigin}/api/themes/ocean%2Dworkbench/download/1.1.0`, /controlled route/],
+      ['cross-origin', 'https://other.example/api/themes/deep-ocean/download/1.2.0', /trusted origin/],
+      ['wrong-slug', `${trustedOrigin}/api/themes/other/download/1.2.0`, /controlled route/],
+      ['wrong-version', `${trustedOrigin}/api/themes/deep-ocean/download/1.2.1`, /controlled route/],
+      ['query', `${trustedOrigin}/api/themes/deep-ocean/download/1.2.0?token=secret`, /credential-free HTTPS URL/],
+      ['fragment', `${trustedOrigin}/api/themes/deep-ocean/download/1.2.0#download`, /credential-free HTTPS URL/],
+      ['encoded-segment', `${trustedOrigin}/api/themes/deep%2Docean/download/1.2.0`, /controlled route/],
     ];
 
     for (const [name, artifactUrl, error] of cases) {
@@ -621,6 +781,430 @@ test('manager exact-version checks implement the shared SemVer 2.0 vectors', asy
   }
 });
 
+test('hosted authority pins 30 current artifacts and 22 rollback-only versions', () => {
+  assert.equal(
+    CURRENT_CATALOG_INDEX_SHA256,
+    '0dd86b35ed13557d8dfa80b20a2290b17476fb03dc096b6f56bf4667c2377645'
+  );
+  assert.equal(CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.size, 30);
+  assert.equal(LEGACY_ROLLBACK_HOSTED_ARTIFACTS.size, 22);
+  assert.equal(
+    createHash('sha256')
+      .update(JSON.stringify([...CURRENT_INSTALLABLE_HOSTED_ARTIFACTS]))
+      .digest('hex'),
+    'a5ecde8b622c0a15e4d2aced53ac58fc567dab033fd40af7c93cc920c57772dd'
+  );
+  assert.equal(
+    createHash('sha256')
+      .update(JSON.stringify([...LEGACY_ROLLBACK_HOSTED_ARTIFACTS]))
+      .digest('hex'),
+    '7c2c85fa320d6ce29407cc9ce8874f89b2122dd537da941bc3e17244b9fedd04'
+  );
+  assert.deepEqual(
+    [...LEGACY_ROLLBACK_HOSTED_ARTIFACTS.keys()],
+    [
+      '@dsh-themes/abyssal-maid@1.0.0',
+      '@dsh-themes/arctic-panel@1.0.0',
+      '@dsh-themes/arctic-panel@1.1.0',
+      '@dsh-themes/copper-wire@1.0.0',
+      '@dsh-themes/deep-ocean@1.0.0',
+      '@dsh-themes/deep-ocean@1.1.0',
+      '@dsh-themes/graphite-relay@1.0.0',
+      '@dsh-themes/graphite-relay@1.1.0',
+      '@dsh-themes/high-signal@1.0.0',
+      '@dsh-themes/high-signal@1.1.0',
+      '@dsh-themes/jade-circuit@1.0.0',
+      '@dsh-themes/jade-circuit@1.1.0',
+      '@dsh-themes/neon-afterline@1.0.0',
+      '@dsh-themes/neon-afterline@1.1.0',
+      '@dsh-themes/paper-console@1.0.0',
+      '@dsh-themes/paper-console@1.1.0',
+      '@dsh-themes/quiet-matrix@1.0.0',
+      '@dsh-themes/quiet-matrix@1.1.0',
+      '@dsh-themes/reasoning-tide@1.0.0',
+      '@dsh-themes/redline-02@1.0.0',
+      '@dsh-themes/solar-trace@1.0.0',
+      '@dsh-themes/solar-trace@1.1.0',
+    ]
+  );
+});
+
+test('1.1 to 1.2 upgrade keeps legacy bytes rollback-only and supports a verified reverse', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-rollback-upgrade-'));
+  try {
+    const previous = await writeTestThemeArtifact(
+      directory,
+      'arctic-panel',
+      '1.1.0'
+    );
+    const target = await writeTestThemeArtifact(
+      directory,
+      'arctic-panel',
+      '1.2.0'
+    );
+    const currentArtifacts = new Map([
+      [`${target.packageName}@${target.version}`, target.artifactSha256],
+    ]);
+    const legacyArtifacts = new Map([
+      [`${previous.packageName}@${previous.version}`, previous.artifactSha256],
+    ]);
+    const authorityOptions = { currentArtifacts, legacyArtifacts };
+    const rollbackRecord = {
+      schemaVersion: 2,
+      profile: 'web',
+      dshPackageVersion: '0.1.0-rc.8',
+      runtimeAttestationSha256: runtimeAttestation.attestationSha256,
+      direction: 'rollback',
+      createdAt: '2026-08-21T00:00:00.000Z',
+      previous: { ...previous, artifactAuthority: 'legacy-rollback' },
+      target: { ...target, artifactAuthority: 'current-installable' },
+    };
+
+    const validated = await validateRollbackRecord(
+      rollbackRecord,
+      authorityOptions
+    );
+    assert.equal(validated.previous.artifactAuthority, 'legacy-rollback');
+    assert.equal(validated.target.artifactAuthority, 'current-installable');
+
+    const reverse = await reverseRollbackRecord(
+      rollbackRecord,
+      authorityOptions
+    );
+    assert.equal(reverse.direction, 'reverse');
+    assert.equal(reverse.previous.version, '1.2.0');
+    assert.equal(reverse.target.version, '1.1.0');
+    assert.equal(
+      (await validateRollbackRecord(reverse, authorityOptions)).target
+        .artifactAuthority,
+      'legacy-rollback'
+    );
+
+    await assert.rejects(
+      validateReleaseRecord(releaseForArtifact(previous), {
+        origin: trustedOrigin,
+        ...authorityOptions,
+      }),
+      /not valid fresh-install or normal catalog targets/
+    );
+    const legacyRelease = await validateReleaseRecord(
+      releaseForArtifact(previous),
+      {
+        origin: trustedOrigin,
+        authority: 'legacy-rollback',
+        rollbackRecord,
+        ...authorityOptions,
+      }
+    );
+    assert.equal(legacyRelease.status, 'legacy-rollback');
+    assert.equal(legacyRelease.installableCurrent, false);
+    assert.equal(legacyRelease.rollbackEligible, true);
+
+    const allAddDigests = new Set([
+      previous.artifactSha256,
+      target.artifactSha256,
+    ]);
+    await assert.rejects(
+      prepareAllowedAddArtifact(
+        ['plugin', '--profile', 'web', 'add', previous.artifactPath, '--save-exact'],
+        null,
+        {
+          workspace: directory,
+          ...authorityOptions,
+          currentAddDigests: new Set([target.artifactSha256]),
+          allAddDigests,
+        }
+      ),
+      /current install allowlist/
+    );
+
+    const rollbackPath = await writeJson(
+      directory,
+      'upgrade-rollback.json',
+      rollbackRecord
+    );
+    const legacyReleasePath = await writeJson(
+      directory,
+      'arctic-panel-1.1.0.release.json',
+      releaseForArtifact(previous)
+    );
+    const authorizedLegacy = await prepareAllowedAddArtifact(
+      ['plugin', '--profile', 'web', 'add', previous.artifactPath, '--save-exact'],
+      {
+        rollbackRecordPath: rollbackPath,
+        releaseRecordPath: legacyReleasePath,
+        origin: trustedOrigin,
+      },
+      {
+        workspace: directory,
+        ...authorityOptions,
+        currentAddDigests: new Set([target.artifactSha256]),
+        allAddDigests,
+      }
+    );
+    assert.equal(authorizedLegacy[4].endsWith(`${previous.artifactSha256}.tgz`), true);
+
+    const reversePath = await writeJson(directory, 'reverse.json', reverse);
+    const currentReleasePath = await writeJson(
+      directory,
+      'arctic-panel-1.2.0.release.json',
+      releaseForArtifact(target)
+    );
+    const authorizedReverse = await prepareAllowedAddArtifact(
+      ['plugin', '--profile', 'web', 'add', target.artifactPath, '--save-exact'],
+      {
+        rollbackRecordPath: reversePath,
+        releaseRecordPath: currentReleasePath,
+        origin: trustedOrigin,
+      },
+      {
+        workspace: directory,
+        ...authorityOptions,
+        currentAddDigests: new Set([target.artifactSha256]),
+        allAddDigests,
+      }
+    );
+    assert.equal(authorizedReverse[4].endsWith(`${target.artifactSha256}.tgz`), true);
+
+    const wrongDigest = structuredClone(rollbackRecord);
+    wrongDigest.previous.artifactSha256 = '0'.repeat(64);
+    await assert.rejects(
+      validateRollbackRecord(wrongDigest, authorityOptions),
+      /current or legacy rollback authority/
+    );
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test('arctic, neon, and quiet 1.1 to 1.2 records all reverse without opening fresh legacy install', async (t) => {
+  for (const slug of ['arctic-panel', 'neon-afterline', 'quiet-matrix']) {
+    await t.test(slug, async () => {
+      const directory = await mkdtemp(join(tmpdir(), `dsh-${slug}-upgrade-`));
+      try {
+        const previous = await writeTestThemeArtifact(directory, slug, '1.1.0');
+        const target = await writeTestThemeArtifact(directory, slug, '1.2.0');
+        const currentArtifacts = new Map([
+          [`${target.packageName}@${target.version}`, target.artifactSha256],
+        ]);
+        const legacyArtifacts = new Map([
+          [`${previous.packageName}@${previous.version}`, previous.artifactSha256],
+        ]);
+        const authorityOptions = { currentArtifacts, legacyArtifacts };
+        const record = {
+          schemaVersion: 2,
+          profile: 'web',
+          dshPackageVersion: '0.1.0-rc.8',
+          runtimeAttestationSha256: runtimeAttestation.attestationSha256,
+          direction: 'rollback',
+          createdAt: '2026-08-21T00:00:00.000Z',
+          previous: { ...previous, artifactAuthority: 'legacy-rollback' },
+          target: { ...target, artifactAuthority: 'current-installable' },
+        };
+        const validated = await validateRollbackRecord(record, authorityOptions);
+        assert.equal(validated.previous.version, '1.1.0');
+        assert.equal(validated.target.version, '1.2.0');
+        const reverse = await reverseRollbackRecord(record, authorityOptions);
+        assert.equal(reverse.direction, 'reverse');
+        assert.equal(
+          (await validateRollbackRecord(reverse, authorityOptions)).target.version,
+          '1.1.0'
+        );
+        await assert.rejects(
+          prepareAllowedAddArtifact(
+            ['plugin', '--profile', 'web', 'add', previous.artifactPath, '--save-exact'],
+            null,
+            {
+              workspace: directory,
+              ...authorityOptions,
+              currentAddDigests: new Set([target.artifactSha256]),
+              allAddDigests: new Set([
+                target.artifactSha256,
+                previous.artifactSha256,
+              ]),
+            }
+          ),
+          /current install allowlist/
+        );
+      } finally {
+        await rm(directory, { recursive: true, force: true });
+      }
+    });
+  }
+});
+
+test('schema-2 rollback can bind retained V1 and V2 bytes only with their exact release record', async (t) => {
+  const cases = [
+    {
+      name: 'V1',
+      slug: 'deep-ocean',
+      version: '1.0.0',
+      manifest: {
+        schemaVersion: 1,
+        kind: 'theme',
+        slug: 'deep-ocean',
+        version: '1.0.0',
+        compatibility: {
+          deepseekHarnessVersion: '0.1.0-rc.5',
+          deepseekHarnessCommit: '47f943859bef60e4160492346772ded9b24f765a',
+          tokenCatalogSha256: historicalCompatibility.tokenCatalogSha256,
+        },
+        package: {
+          name: '@dsh-themes/deep-ocean',
+          version: '1.0.0',
+          digestScope: 'canonical-tar-payload-excluding-theme.json',
+          sha256: shaB,
+        },
+      },
+      entryAuthority: {
+        manifestSchemaVersion: '1',
+        dshPackageVersion: '0.1.0-rc.5',
+        runtimeAttestationSha256: null,
+        payloadSha256: shaB,
+      },
+      release: historicalV1ReleaseForArtifact,
+      historicalStatus: 'historical-v1',
+    },
+    {
+      name: 'V2',
+      slug: 'deep-ocean',
+      version: '1.1.0',
+      manifest: {
+        schemaVersion: '2.0',
+        kind: 'theme',
+        slug: 'deep-ocean',
+        version: '1.1.0',
+        compatibility: { ...historicalCompatibility },
+        artifact: null,
+        payload: { sha256: shaB },
+      },
+      entryAuthority: {
+        manifestSchemaVersion: '2.0',
+        dshPackageVersion: '0.1.0-rc.6',
+        runtimeAttestationSha256: historicalRuntimeAttestation.attestationSha256,
+        payloadSha256: shaB,
+      },
+      release: historicalV2ReleaseForArtifact,
+      historicalStatus: 'historical-v2',
+    },
+  ];
+
+  for (const item of cases) {
+    await t.test(item.name, async () => {
+      const directory = await mkdtemp(join(tmpdir(), `dsh-${item.name}-rollback-`));
+      try {
+        const previous = await writeTestLegacyArtifact(
+          directory,
+          item.slug,
+          item.version,
+          item.manifest
+        );
+        const target = await writeTestThemeArtifact(
+          directory,
+          item.slug,
+          '1.2.0'
+        );
+        const currentArtifacts = new Map([
+          [`${target.packageName}@${target.version}`, target.artifactSha256],
+        ]);
+        const legacyArtifacts = new Map([
+          [`${previous.packageName}@${previous.version}`, previous.artifactSha256],
+        ]);
+        const authorityOptions = { currentArtifacts, legacyArtifacts };
+        const record = {
+          schemaVersion: 2,
+          profile: 'web',
+          dshPackageVersion: '0.1.0-rc.8',
+          runtimeAttestationSha256: runtimeAttestation.attestationSha256,
+          direction: 'rollback',
+          createdAt: '2026-08-21T00:00:00.000Z',
+          previous: {
+            ...previous,
+            ...item.entryAuthority,
+            artifactAuthority: 'legacy-rollback',
+          },
+          target: { ...target, artifactAuthority: 'current-installable' },
+        };
+        const validated = await validateRollbackRecord(record, authorityOptions);
+        assert.equal(
+          validated.previous.manifestSchemaVersion,
+          item.entryAuthority.manifestSchemaVersion
+        );
+
+        const allAddDigests = new Set([
+          target.artifactSha256,
+          previous.artifactSha256,
+        ]);
+        await assert.rejects(
+          prepareAllowedAddArtifact(
+            ['plugin', '--profile', 'web', 'add', previous.artifactPath, '--save-exact'],
+            null,
+            {
+              workspace: directory,
+              ...authorityOptions,
+              currentAddDigests: new Set([target.artifactSha256]),
+              allAddDigests,
+            }
+          ),
+          /current install allowlist/
+        );
+
+        const releaseRecord = item.release(previous);
+        const authorizedRelease = await validateReleaseRecord(releaseRecord, {
+          origin: trustedOrigin,
+          authority: 'legacy-rollback',
+          rollbackRecord: record,
+          ...authorityOptions,
+        });
+        assert.equal(authorizedRelease.status, 'legacy-rollback');
+        assert.equal(authorizedRelease.historicalStatus, item.historicalStatus);
+        assert.equal(authorizedRelease.rollbackEligible, true);
+
+        const rollbackPath = await writeJson(directory, `${item.name}-rollback.json`, record);
+        const releasePath = await writeJson(directory, `${item.name}-release.json`, releaseRecord);
+        const prepared = await prepareAllowedAddArtifact(
+          ['plugin', '--profile', 'web', 'add', previous.artifactPath, '--save-exact'],
+          {
+            rollbackRecordPath: rollbackPath,
+            releaseRecordPath: releasePath,
+            origin: trustedOrigin,
+          },
+          {
+            workspace: directory,
+            ...authorityOptions,
+            currentAddDigests: new Set([target.artifactSha256]),
+            allAddDigests,
+          }
+        );
+        assert.equal(
+          prepared[4].endsWith(`${previous.artifactSha256}.tgz`),
+          true
+        );
+
+        const wrongRelease = structuredClone(releaseRecord);
+        if (item.name === 'V1') {
+          wrongRelease.manifest.package.sha256 = shaC;
+          wrongRelease.manifest.package.integrity = integrity(shaC);
+        } else {
+          wrongRelease.manifest.payload.sha256 = shaC;
+          wrongRelease.manifest.payload.integrity = integrity(shaC);
+        }
+        await assert.rejects(
+          validateReleaseRecord(wrongRelease, {
+            origin: trustedOrigin,
+            authority: 'legacy-rollback',
+            rollbackRecord: record,
+            ...authorityOptions,
+          }),
+          /does not authorize|payload|release record/
+        );
+      } finally {
+        await rm(directory, { recursive: true, force: true });
+      }
+    });
+  }
+});
+
 test('rollback schema 2 binds exact current hosted artifacts and schema 1 is audit-only', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-rollback-'));
   try {
@@ -702,7 +1286,7 @@ test('rollback schema 2 binds exact current hosted artifacts and schema 1 is aud
       '--target-sha256', alteredSha256,
     ]);
     assert.notEqual(rejectedAltered.code, 0);
-    assert.match(rejectedAltered.stderr, /hosted artifact allowlist/);
+    assert.match(rejectedAltered.stderr, /current installable hosted authority/);
 
     const rejectedArbitrary = await run(state, [
       'record',
@@ -712,7 +1296,7 @@ test('rollback schema 2 binds exact current hosted artifacts and schema 1 is aud
       '--target-sha256', targetSha256,
     ]);
     assert.notEqual(rejectedArbitrary.code, 0);
-    assert.match(rejectedArbitrary.stderr, /hosted artifact allowlist/);
+    assert.match(rejectedArbitrary.stderr, /current installable hosted authority/);
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
@@ -913,7 +1497,10 @@ test('remote verifier confines a 307 cookie bootstrap to the exact trusted path'
 });
 
 test('runner policy forces no-open and narrowly allows Skin Center removal', () => {
-  assert.equal(ALLOWED_ADD_ARTIFACT_SHA256.size, 14);
+  assert.equal(CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.size, 30);
+  assert.equal(LEGACY_ROLLBACK_HOSTED_ARTIFACTS.size, 22);
+  assert.equal(CURRENT_INSTALLABLE_ADD_ARTIFACT_SHA256.size, 31);
+  assert.equal(ALLOWED_ADD_ARTIFACT_SHA256.size, 53);
   assert.equal(
     isAllowedRunnerCommand([
       'plugin',
@@ -996,7 +1583,7 @@ test('allowlisted plugin snapshot keeps a durable rollback locator after the sou
     await writeFile(source, bytes, { mode: 0o600 });
     const snapshot = await snapshotAllowedArtifact(source, {
       workspace: directory,
-      allowedDigests: ALLOWED_ADD_ARTIFACT_SHA256,
+      allowedDigests: CURRENT_INSTALLABLE_ADD_ARTIFACT_SHA256,
     });
     assert.equal(
       snapshot.sha256,
@@ -1022,7 +1609,7 @@ test('allowlisted plugin snapshot keeps a durable rollback locator after the sou
 
     const reused = await snapshotAllowedArtifact(source, {
       workspace: directory,
-      allowedDigests: ALLOWED_ADD_ARTIFACT_SHA256,
+      allowedDigests: CURRENT_INSTALLABLE_ADD_ARTIFACT_SHA256,
     });
     assert.equal(reused.path, snapshot.path);
     assert.equal(reused.reused, true);

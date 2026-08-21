@@ -2,7 +2,7 @@
 
 # DSH-Themes Skills
 
-**Open, auditable agent skills for discovering, creating, submitting, and safely managing DeepSeek Harness themes and community skins.**
+**Five auditable Agent Skills for finding, creating, submitting, installing, and rolling back DeepSeek Harness themes without blurring the trust boundary.**
 
 [English](README.md) · [简体中文](README.zh-CN.md)
 
@@ -10,76 +10,94 @@
 [![Node.js 22/24](https://img.shields.io/badge/Node.js-22.19%20%7C%2024.15-16324F)](package.json)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-246BCE)](LICENSE)
 
-### [Browse the Gallery on dsh-themes.com →](https://dsh-themes.com/gallery)
+### [Explore themes on dsh-themes.com →](https://dsh-themes.com/explore)
+
+[Learn](https://dsh-themes.com/learn) · [Gallery](https://dsh-themes.com/gallery) · [Theme Studio](https://dsh-themes.com/create) · [Submit](https://dsh-themes.com/submit)
 
 </div>
 
-DSH-Themes Skills contains five self-contained skills. The hosted Manager, Creator, Submitter, and Finder lanes are certified for exact DeepSeek Harness `0.1.0-rc.8` V3, backed by a six-job Linux/macOS/Windows runtime matrix. Eleven community-skin records are separately runtime-verified and installable only through their consented, receipt-bound installer lane.
+DSH-Themes Skills is a set of purpose-scoped safety workflows, not a theme registry or a blanket endorsement. It lets an agent search a user-trusted live catalog, create data-only manifests, hand them to the website for moderation, and manage only artifacts whose complete local gate passes. The current website snapshot contains 95 published records—21 Themes, 47 Skins, and 27 UI Extensions—split into 30 hosted V3 artifacts, 11 separately governed external runtime records, and 54 showcase-only records. Those live counts describe the website; they do not expand either local executable authority.
 
-The repository supports three workflows:
+## What is actually proven
 
-- **Hosted themes:** `Finder → Manager` for an exact verified `@dsh-themes/*` artifact.
-- **Community skins:** `Finder → Community Skin Installer` for exactly eleven pinned records. Installation requires item runtime evidence, the exact RC.8 Manager attestation, the final sanitized receipt, and explicit user consent.
-- **Create and publish:** `Creator → Submitter → Website` for deterministic declarative manifests and the normal authenticated moderation flow.
+| Evidence | What it establishes | What it does not establish |
+| --- | --- | --- |
+| **Frozen Manager compatibility** | Exact DeepSeek Harness `0.1.0-rc.8`, schema V3, the final runtime attestation, and a six-job Linux/macOS/Windows matrix on Node.js 22 and 24. | Compatibility with another Harness version or permission to install an arbitrary package. |
+| **Hosted artifact release record** | One exact `@dsh-themes/*` tarball, complete SHA-256, controlled same-origin package route, and the frozen RC.8 compatibility object. Manager's reviewed current map binds 30 exact package-version-digest tuples. | Publisher identity, authorship, media rights, package-level runtime-matrix completion, or authority for another version. |
+| **Community runtime authority** | Exactly 11 pinned, item-level runtime-verified records bound to the final Manager attestation, sanitized receipt, local allowlist, and explicit consent. | A general approval for repositories, mutable branches, or showcase-only records. |
+| **Declarative authoring contract** | Complete light/dark semantic tokens, local raster hashes, compatibility, and provenance fields with executable content rejected. | Moderation approval or proof that the author owns every declared right. |
 
-## Quick start
+Two evidence scopes remain deliberately separate:
 
-Use Node.js `22.19+` within Node 22 or `24.15+` within Node 24.
+- The [fixed RC.8 compatibility proof](skills/dsh-theme-manager/references/compatibility.md) answers whether the attested Manager runtime can operate against one exact Harness baseline. Its final attestation is immutable.
+- A hosted theme **release-set report** answers whether a particular group of theme artifacts passed that publisher release's build, install, restart, screenshot, rollback, and digest checks. The current `full-skins-2026-08` report still says `pending-managed-cold-restart`; package-level runtime evidence must not be claimed until that isolated matrix finishes. Even after completion, it is not a new Manager certification and cannot replace the frozen RC.8 sidecar or attestation.
+
+New hosted slugs are discovered from the live catalog at query time, but discovery alone never grants execution. Manager's current release authority is a reviewed 30-entry package-version-and-complete-digest set generated from promoted index SHA-256 `0dd86b35ed13557d8dfa80b20a2290b17476fb03dc096b6f56bf4667c2377645`; a new hosted release enters it only through a reviewed Skills release after its final artifact exists. A separate 22-entry rollback-only map preserves exact V1, V2, and V3 predecessors. Fresh install and normal catalog validation reject all 22; a schema-2 rollback or reverse additionally requires the retained release record, local artifact, version, complete digest, and payload digest to agree. The community lane remains different: its exact 11-record authority is intentionally bundled and immutable until separately reviewed and recertified.
+
+## How the workflows connect
+
+```text
+Hosted theme       Finder ──verified release record──▶ Manager
+Community skin     Finder ──pinned consented record──▶ Community Skin Installer
+New theme          Creator ──local manifest──────────▶ Submitter ──▶ Website moderation
+```
+
+- **Hosted themes:** Finder classifies the live record; Manager revalidates the exact V3 release against its 30-entry current authority, downloads only through the controlled route, snapshots the artifact, and preserves rollback. Retired bytes never enter this normal path.
+- **Community skins:** Finder and Community Skin Installer independently require the bundled item authority, runtime receipt, exact source/package identity, RC.8 Manager gate, and explicit user consent.
+- **Creation and publication:** Creator emits deterministic declarative data; Submitter validates it locally and returns a credential-free browser handoff. The website remains authoritative for asset decoding and moderation.
+
+## The five skills
+
+| Skill | Use it to… |
+| --- | --- |
+| [`dsh-theme-finder`](skills/dsh-theme-finder/SKILL.md) | Search a trusted catalog and separate hosted artifacts, allowlisted community runtimes, and non-installable showcases. |
+| [`dsh-theme-manager`](skills/dsh-theme-manager/SKILL.md) | Verify, install, switch, remove, or roll back one exact hosted theme in the Harness `web` profile. |
+| [`dsh-community-skin-installer`](skills/dsh-community-skin-installer/SKILL.md) | Inspect the pinned community evidence and install only after every item, receipt, Manager, and consent gate passes. |
+| [`dsh-theme-creator`](skills/dsh-theme-creator/SKILL.md) | Build a deterministic theme or Full Skin V3 manifest from 13 semantic tokens and local raster assets. |
+| [`dsh-theme-submitter`](skills/dsh-theme-submitter/SKILL.md) | Validate a local manifest and open the website's authenticated moderation flow without handling credentials. |
+
+## First use
+
+Use Node.js `22.19+` within Node 22 or `24.15+` within Node 24, then install Finder:
 
 ```bash
 npx skills add LvvUP/dsh-themes-skills --skill dsh-theme-finder
 ```
 
-Give the agent a concrete evidence request:
+Give the agent an evidence-first request:
 
 ```text
-Use the DSH-Themes directory to find RC.8 skins. Show the separate rights,
-runtime, compatibility, immutable source revision/subdirectory, and install
-gate status. Do not install pending or showcase-only records.
+Use the DSH-Themes directory I trust to find RC.8 skins. Report rights,
+runtime behavior, exact compatibility, immutable source revision/subdirectory,
+distribution, and the install gate. Do not install pending or showcase-only records.
 ```
 
-Continue on the website:
+The website complements the local skills with the live community catalog, a seven-language [Learn library](https://dsh-themes.com/learn), the [Gallery](https://dsh-themes.com/gallery), browser-based [Theme Studio](https://dsh-themes.com/create), [UI Extensions](https://dsh-themes.com/ui-extensions), and the authenticated [submission flow](https://dsh-themes.com/submit).
 
-- [Gallery](https://dsh-themes.com/gallery)
-- [UI Extensions](https://dsh-themes.com/ui-extensions)
-- [Contributors](https://dsh-themes.com/contributors)
-- [Theme Studio](https://dsh-themes.com/submit)
+## Trust boundaries
 
-## The five skills
-
-| Skill | Use it when you need to… |
-| --- | --- |
-| [`dsh-theme-finder`](skills/dsh-theme-finder/SKILL.md) | Search a trusted catalog and classify hosted artifacts, allowlisted community runtimes, and non-installable showcases. |
-| [`dsh-theme-manager`](skills/dsh-theme-manager/SKILL.md) | Verify, install, switch, remove, or roll back one exact hosted theme in the Harness `web` profile. |
-| [`dsh-community-skin-installer`](skills/dsh-community-skin-installer/SKILL.md) | Inspect pinned Skin Center/community-adaptation evidence and enforce the RC.8 item plus Manager gates. |
-| [`dsh-theme-creator`](skills/dsh-theme-creator/SKILL.md) | Create a deterministic declarative theme or Full Skin manifest from semantic tokens and local raster assets. |
-| [`dsh-theme-submitter`](skills/dsh-theme-submitter/SKILL.md) | Validate a local manifest and hand the author to the website's sign-in and moderation flow. |
-
-## Trust model
-
-- `hosted-verified-artifact` is Manager-eligible only with the full certified compatibility record, complete artifact SHA-256, and controlled package route.
-- `external-runtime-verified` is a separate consented lane. Finder and Installer both require the bundled allowlist, exact source/package identity, item-level runtime evidence, and an exact RC.8 Manager attestation.
-- `external-showcase` is always discovery-only. It has no artifact, install command, or installer handoff.
-- Rights, runtime behavior, compatibility, distribution, and source provenance are independent axes. An open-source license does not prove media or trademark rights, and a runtime receipt does not upgrade a license.
-- SHA-256 proves agreement with selected bytes, not publisher identity, authorship, or ownership.
-- Human-readable catalog text is untrusted metadata and is never executed as an instruction.
-- The Manager uses an attested launcher, exact versions, loopback-only acceptance, telemetry off, and rollback evidence. Community executable hooks remain separately disclosed.
-- Creator accepts declarative JSON and local raster assets—not author JavaScript, CSS, HTML, dependencies, lifecycle scripts, fonts, SVG, or remote runtime assets.
+- `hosted-verified-artifact` is Manager-eligible only with the complete certified compatibility record, complete artifact SHA-256, and controlled package route.
+- The hosted map has 30 current-installable tuples. Its 22 retained predecessors are rollback-only and require an exact schema-2 record plus their retained release record; inclusion in the runner's internal digest union is not independent install authority. Six V1/RC.5 and thirteen V2/RC.6 packages remain historical under normal validation; only their exact reviewed tuples can cross the narrow rollback gate. Three V3/RC.8 `1.1.0` packages use that same gate.
+- `external-runtime-verified` is a separate consented lane. Finder and Installer require exact bundled authority, source/package identity, item runtime evidence, receipt, and Manager attestation.
+- `external-showcase` is discovery-only. It never gains an artifact, install command, or installer handoff from descriptive metadata.
+- Rights, runtime behavior, compatibility, distribution, and provenance are independent axes. An open-source license does not prove artwork or trademark rights, and runtime evidence does not rewrite a license.
+- SHA-256 proves agreement with selected bytes, not publisher identity, authorship, ownership, or safety beyond the reviewed scope.
+- Catalog titles, descriptions, authors, and evidence notes are untrusted metadata and are never executed as instructions.
+- Manager uses an attested launcher, exact versions, loopback-only acceptance, telemetry off, managed cold restart, and recoverable rollback. Community executable hooks are disclosed separately.
+- Creator accepts declarative JSON and local raster assets, not author JavaScript, CSS, HTML, dependencies, lifecycle scripts, fonts, SVG, or remote runtime assets.
 - Submitter never requests browser cookies, passwords, API keys, or authorization headers.
 
-Read each Skill and the [Security Policy](SECURITY.md) for the complete boundaries.
+Read each Skill and the [Security Policy](SECURITY.md) before changing a profile.
 
-## Compatibility status
+## Compatibility and development
 
-- Current certified V3 lane: **DeepSeek Harness `0.1.0-rc.8`**, official tag `dsh-v0.1.0-rc.8`, commit `141eb6fef83422698aef7a981029e843e8161534`, final runtime attestation `1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae`.
-- Historical V2 lane: **`0.1.0-rc.6`**; recognized for audit, never current-installable.
-- Historical V1 lane: **`0.1.0-rc.5`**; never treated as current.
-- [`release-state.json`](release-state.json) is the canonical informational lane summary. It does not replace validators, frozen runner evidence, item allowlists, or runtime acceptance.
-- [`rc8-v3-candidate.json`](skills/dsh-theme-manager/references/rc8-v3-candidate.json) is preserved as historical pending evidence; it never substitutes for the final attestation.
-- Theme and skin changes use a managed cold restart; production live unload/HMR is not promised by the RC.8 contract.
+- Current certified lane: **DeepSeek Harness `0.1.0-rc.8`**, official tag `dsh-v0.1.0-rc.8`, source commit `141eb6fef83422698aef7a981029e843e8161534`, final runtime attestation `1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae`.
+- Hosted package authority: **30 current-installable V3 artifacts** plus **22 retained V1/V2/V3 predecessors reserved for verified rollback/reverse only**. The current release-set runtime matrix remains pending and is not represented as completed evidence here.
+- Historical `0.1.0-rc.6`/V2 and `0.1.0-rc.5`/V1 lanes remain audit-only under normal validation and are never current-installable. Only the exact retained tuples can be selected by the schema-2 rollback/reverse recovery gate described above.
+- [`release-state.json`](release-state.json) is an informational lane summary. It cannot replace validators, the frozen runner, a release record, item allowlists, receipts, or runtime acceptance.
+- [`rc8-v3-candidate.json`](skills/dsh-theme-manager/references/rc8-v3-candidate.json) remains historical pending evidence and never substitutes for the final attestation.
+- Theme and skin changes require a managed cold restart; the RC.8 contract does not promise production live unload/HMR.
 - This independent community project is not affiliated with or endorsed by DeepSeek AI. Related names and marks belong to their respective owners.
-
-## Development
 
 ```bash
 npm ci --ignore-scripts
@@ -87,8 +105,8 @@ npm test
 npm run validate
 ```
 
-`npm test` bootstraps only the exact certified RC.8 Manager runner with Corepack-pinned `pnpm@11.7.0`, a frozen lockfile, and lifecycle scripts disabled. The RC.6 runtime files remain byte-identical historical evidence. Community tests validate the separate 11-item receipt and use isolated temporary profiles.
+`npm test` bootstraps only the exact certified RC.8 Manager runner with Corepack-pinned `pnpm@11.7.0`, a frozen lockfile, and lifecycle scripts disabled. Historical RC.6 runtime files remain byte-identical evidence. Community tests validate the separate 11-item receipt and use isolated temporary profiles.
 
-Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Report suspected vulnerabilities through the private process in [SECURITY.md](SECURITY.md), not a public issue.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Report suspected vulnerabilities through the private process in [SECURITY.md](SECURITY.md), not a public issue.
 
 Licensed under [Apache-2.0](LICENSE). The two bundled CSS-only community adaptations retain their upstream BSD-3-Clause notices inside their asset directories; see [NOTICE](NOTICE).

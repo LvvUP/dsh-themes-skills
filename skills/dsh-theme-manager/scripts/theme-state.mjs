@@ -7,6 +7,11 @@ import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
 
 import { isExactSemver } from './semver.mjs';
+import {
+  classifyHostedArtifact,
+  CURRENT_INSTALLABLE_HOSTED_ARTIFACTS,
+  LEGACY_ROLLBACK_HOSTED_ARTIFACTS,
+} from './hosted-artifact-authority.mjs';
 
 const PACKAGE = /^@dsh-themes\/[a-z0-9]+(?:[._-][a-z0-9]+)*$/;
 const SHA256 = /^[0-9a-f]{64}$/;
@@ -16,21 +21,25 @@ const CURRENT_RUNTIME_ATTESTATION_SHA256 =
 const CURRENT_SOURCE_COMMIT = '141eb6fef83422698aef7a981029e843e8161534';
 const CURRENT_SELECTOR_CATALOG_SHA256 =
   '663aa5927591ac99076f924ee9cd6f9bd09e6a8a9ee1e6b8b1b0d9e3093df807';
-const CURRENT_HOSTED_ARTIFACTS = new Map([
-  ['@dsh-themes/abyssal-maid@1.1.0', '7d25f7b1052f0d7988c9e145aea65c3a542e33dc78d64254ae38f6dd87b174d4'],
-  ['@dsh-themes/arctic-panel@1.1.0', 'f5e90f8b335b3cc0e484040515621b12622d103252e148492b6effab73dc4b28'],
-  ['@dsh-themes/copper-wire@1.1.0', 'bdc6dee20634f9bef9769f9cbd029b1c9eb6d416008eaac8d7bf35eca6d12da4'],
-  ['@dsh-themes/deep-ocean@1.2.0', '8fca6598f084b47ec07bd00876a686c640ad68f280b5737b789a68fa5df5044f'],
-  ['@dsh-themes/graphite-relay@1.2.0', '6f23cd12796a6373bbe8612ecc2a86b7a7d8e563beb24ecb57ddfd10e86c358c'],
-  ['@dsh-themes/high-signal@1.2.0', '01acb404b6273289fa31848c08388d0b99d199b1d8acdad1f958d734d2df14c3'],
-  ['@dsh-themes/jade-circuit@1.2.0', '639b3aefc09e204904a5541c82f81310f9c54ca9818473bde8afcaaa958a9fbb'],
-  ['@dsh-themes/neon-afterline@1.1.0', '9417f66297422f3a0d3311d3b07587da75d5d16aab2d149b32342a36510ce7b9'],
-  ['@dsh-themes/paper-console@1.2.0', 'f140a38123331ebbebbd63ee0e5af17ce88268ebcba340e55be4e3db12ff0891'],
-  ['@dsh-themes/quiet-matrix@1.1.0', 'c3067862b989fbb4d79a23a5569e4ff735f5df358a56b67a71af11a9501b6627'],
-  ['@dsh-themes/reasoning-tide@1.1.0', '1f05fc67471b8b004397b3582b2ed1e56a45b3ac79f27688e337699e3d46d3a6'],
-  ['@dsh-themes/redline-02@1.1.0', 'b3716d237822f58613b884dad9d82a1f4cb2ca9f873f28d0705b5c73f1aaecd9'],
-  ['@dsh-themes/solar-trace@1.2.0', 'af447d963e9f5a6cae8454dff553665b16500dfd52a724ab9e75f47f007f56e7'],
-]);
+const HISTORICAL_V2 = Object.freeze({
+  dshPackageVersion: '0.1.0-rc.6',
+  dshPackageIntegrity:
+    'sha512-brpZfED7ieRa2PQ5tUxMhHrM1pb2CmKFVM/f6yMULBDMicahk+Z2OsHgTwTDnoiZm23Ftu9rQz0NN4pflaoJcg==',
+  tokenCatalogSha256:
+    'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926',
+  frontendBundleSha256:
+    'a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68',
+  selectorCatalogSha256:
+    '5bcd9f874095af2114d86f91301868c6b0f2cebe58f51b9919150975d406baa3',
+  runtimeAttestationSha256:
+    '2400606c5cb6534e09a65020e4ae12a0df4c1d08f15918d714bc5037c2ed99ba',
+});
+const HISTORICAL_V1 = Object.freeze({
+  dshPackageVersion: '0.1.0-rc.5',
+  sourceCommit: '47f943859bef60e4160492346772ded9b24f765a',
+  tokenCatalogSha256:
+    'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926',
+});
 const skillDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const currentAttestationPath = resolve(
   skillDir,
@@ -169,7 +178,7 @@ function tarManifest(bytes) {
     offset = bodyStart + Math.ceil(size / 512) * 512;
   }
   if (manifests.length !== 1) {
-    throw new Error('Rollback artifact must contain exactly one V3 manifest');
+    throw new Error('Rollback artifact must contain exactly one supported manifest');
   }
   return manifests[0];
 }
@@ -192,13 +201,127 @@ async function assertCurrentRuntimeAuthority() {
   }
 }
 
-async function assertCurrentV3Artifact(entry) {
-  const authorizedSha256 = CURRENT_HOSTED_ARTIFACTS.get(
-    `${entry.packageName}@${entry.version}`
+function exactV3Manifest(manifest, entry) {
+  const compatibility = manifest?.compatibility;
+  return Boolean(
+    manifest?.schemaVersion === '3.0' &&
+    manifest?.slug === entry.packageName.slice('@dsh-themes/'.length) &&
+    manifest?.version === entry.version &&
+    compatibility?.dshPackageVersion === CURRENT_DSH_PACKAGE_VERSION &&
+    compatibility?.officialRelease?.tag ===
+      `dsh-v${CURRENT_DSH_PACKAGE_VERSION}` &&
+    compatibility?.officialRelease?.sourceCommit === CURRENT_SOURCE_COMMIT &&
+    compatibility?.selectorCatalogSha256 ===
+      CURRENT_SELECTOR_CATALOG_SHA256 &&
+    compatibility?.runtimeAttestationSha256 ===
+      CURRENT_RUNTIME_ATTESTATION_SHA256 &&
+    SHA256.test(manifest?.payload?.sha256)
   );
-  if (authorizedSha256 !== entry.artifactSha256) {
+}
+
+function exactV2Manifest(manifest, entry) {
+  const compatibility = manifest?.compatibility;
+  const artifact = manifest?.artifact;
+  const artifactMatches =
+    artifact == null ||
+    (artifact?.name === entry.packageName &&
+      artifact?.version === entry.version &&
+      artifact?.digestScope === 'artifact-tgz' &&
+      artifact?.sha256 === entry.artifactSha256);
+  return Boolean(
+    manifest?.schemaVersion === '2.0' &&
+    manifest?.slug === entry.packageName.slice('@dsh-themes/'.length) &&
+    manifest?.version === entry.version &&
+    artifactMatches &&
+    compatibility?.dshPackageVersion === HISTORICAL_V2.dshPackageVersion &&
+    compatibility?.dshPackageIntegrity === HISTORICAL_V2.dshPackageIntegrity &&
+    compatibility?.tokenCatalogSha256 ===
+      HISTORICAL_V2.tokenCatalogSha256 &&
+    compatibility?.frontendBundleSha256 ===
+      HISTORICAL_V2.frontendBundleSha256 &&
+    compatibility?.selectorCatalogSha256 ===
+      HISTORICAL_V2.selectorCatalogSha256 &&
+    SHA256.test(manifest?.payload?.sha256) &&
+    !Object.hasOwn(compatibility, 'sourceCommit')
+  );
+}
+
+function exactV1Manifest(manifest, entry) {
+  const compatibility = manifest?.compatibility;
+  return Boolean(
+    manifest?.schemaVersion === 1 &&
+    manifest?.slug === entry.packageName.slice('@dsh-themes/'.length) &&
+    manifest?.version === entry.version &&
+    manifest?.package?.name === entry.packageName &&
+    manifest?.package?.version === entry.version &&
+    manifest?.package?.digestScope ===
+      'canonical-tar-payload-excluding-theme.json' &&
+    SHA256.test(manifest?.package?.sha256) &&
+    compatibility?.deepseekHarnessVersion ===
+      HISTORICAL_V1.dshPackageVersion &&
+    compatibility?.deepseekHarnessCommit === HISTORICAL_V1.sourceCommit &&
+    compatibility?.tokenCatalogSha256 ===
+      HISTORICAL_V1.tokenCatalogSha256
+  );
+}
+
+function manifestAuthority(manifest, entry, artifactAuthority) {
+  if (exactV3Manifest(manifest, entry)) {
+    return {
+      artifactAuthority,
+      manifestSchemaVersion: '3.0',
+      dshPackageVersion: CURRENT_DSH_PACKAGE_VERSION,
+      runtimeAttestationSha256: CURRENT_RUNTIME_ATTESTATION_SHA256,
+      payloadSha256: manifest.payload.sha256,
+    };
+  }
+  if (artifactAuthority === 'legacy-rollback' && exactV2Manifest(manifest, entry)) {
+    return {
+      artifactAuthority,
+      manifestSchemaVersion: '2.0',
+      dshPackageVersion: HISTORICAL_V2.dshPackageVersion,
+      runtimeAttestationSha256: HISTORICAL_V2.runtimeAttestationSha256,
+      payloadSha256: manifest.payload.sha256,
+    };
+  }
+  if (artifactAuthority === 'legacy-rollback' && exactV1Manifest(manifest, entry)) {
+    return {
+      artifactAuthority,
+      manifestSchemaVersion: '1',
+      dshPackageVersion: HISTORICAL_V1.dshPackageVersion,
+      runtimeAttestationSha256: null,
+      payloadSha256: manifest.package.sha256,
+    };
+  }
+  throw new Error(
+    artifactAuthority === 'current-installable'
+      ? 'Target artifact is not an exact current RC.8 V3 release'
+      : 'Rollback artifact does not match its exact retained V1, V2, or V3 authority'
+  );
+}
+
+async function assertAuthorizedArtifact(
+  entry,
+  {
+    allowLegacyRollback = false,
+    currentArtifacts = CURRENT_INSTALLABLE_HOSTED_ARTIFACTS,
+    legacyArtifacts = LEGACY_ROLLBACK_HOSTED_ARTIFACTS,
+  } = {}
+) {
+  const artifactAuthority = classifyHostedArtifact(
+    entry.packageName,
+    entry.version,
+    entry.artifactSha256,
+    { currentArtifacts, legacyArtifacts }
+  );
+  if (
+    artifactAuthority === null ||
+    (artifactAuthority === 'legacy-rollback' && !allowLegacyRollback)
+  ) {
     throw new Error(
-      'Rollback artifact is not in the current hosted artifact allowlist'
+      allowLegacyRollback
+        ? 'Rollback artifact is not in the current or legacy rollback authority'
+        : 'Target artifact is not in the current installable hosted authority'
     );
   }
   const bytes = await readFile(entry.artifactPath);
@@ -208,26 +331,10 @@ async function assertCurrentV3Artifact(entry) {
   if (sha256(bytes) !== entry.artifactSha256) {
     throw new Error('Rollback artifact SHA-256 does not match its record');
   }
-  const manifest = tarManifest(bytes);
-  const compatibility = manifest?.compatibility;
-  if (
-    manifest?.schemaVersion !== '3.0' ||
-    manifest?.slug !== entry.packageName.slice('@dsh-themes/'.length) ||
-    manifest?.version !== entry.version ||
-    compatibility?.dshPackageVersion !== CURRENT_DSH_PACKAGE_VERSION ||
-    compatibility?.officialRelease?.tag !==
-      `dsh-v${CURRENT_DSH_PACKAGE_VERSION}` ||
-    compatibility?.officialRelease?.sourceCommit !== CURRENT_SOURCE_COMMIT ||
-    compatibility?.selectorCatalogSha256 !==
-      CURRENT_SELECTOR_CATALOG_SHA256 ||
-    compatibility?.runtimeAttestationSha256 !==
-      CURRENT_RUNTIME_ATTESTATION_SHA256
-  ) {
-    throw new Error('Rollback artifact is not an exact current RC.8 V3 release');
-  }
+  return manifestAuthority(tarManifest(bytes), entry, artifactAuthority);
 }
 
-async function artifact(values, prefix) {
+async function artifact(values, prefix, authorityOptions = {}) {
   const name = values[`${prefix}-name`];
   const version = values[`${prefix}-version`];
   const artifactPath = values[`${prefix}-artifact`];
@@ -245,12 +352,12 @@ async function artifact(values, prefix) {
     version,
     artifactPath: normalizedPath,
     artifactSha256: sha256,
-    manifestSchemaVersion: '3.0',
-    dshPackageVersion: CURRENT_DSH_PACKAGE_VERSION,
-    runtimeAttestationSha256: CURRENT_RUNTIME_ATTESTATION_SHA256,
   };
-  await assertCurrentV3Artifact(entry);
-  return entry;
+  const authority = await assertAuthorizedArtifact(entry, {
+    ...authorityOptions,
+    allowLegacyRollback: prefix === 'previous',
+  });
+  return { ...entry, ...authority };
 }
 
 function normalizeEntryShape(entry, allowNull = false) {
@@ -267,27 +374,54 @@ function normalizeEntryShape(entry, allowNull = false) {
   };
 }
 
-async function validateEntry(entry, allowNull = false) {
+async function validateEntry(
+  entry,
+  {
+    allowNull = false,
+    allowLegacyRollback = false,
+    currentArtifacts = CURRENT_INSTALLABLE_HOSTED_ARTIFACTS,
+    legacyArtifacts = LEGACY_ROLLBACK_HOSTED_ARTIFACTS,
+  } = {}
+) {
   const normalized = normalizeEntryShape(entry, allowNull);
   if (normalized === null) return null;
+  const authority = await assertAuthorizedArtifact(normalized, {
+    allowLegacyRollback,
+    currentArtifacts,
+    legacyArtifacts,
+  });
   if (
-    entry.manifestSchemaVersion !== '3.0' ||
-    entry.dshPackageVersion !== CURRENT_DSH_PACKAGE_VERSION ||
-    entry.runtimeAttestationSha256 !== CURRENT_RUNTIME_ATTESTATION_SHA256
+    entry.artifactAuthority !== undefined &&
+    entry.artifactAuthority !== authority.artifactAuthority
   ) {
-    throw new Error('Rollback artifact entry lacks current RC.8 V3 authority');
+    throw new Error('Rollback artifact entry authority was changed');
   }
-  const current = {
-    ...normalized,
-    manifestSchemaVersion: '3.0',
-    dshPackageVersion: CURRENT_DSH_PACKAGE_VERSION,
-    runtimeAttestationSha256: CURRENT_RUNTIME_ATTESTATION_SHA256,
-  };
-  await assertCurrentV3Artifact(current);
-  return current;
+  if (
+    authority.artifactAuthority === 'legacy-rollback' &&
+    entry.artifactAuthority !== 'legacy-rollback'
+  ) {
+    throw new Error('Legacy rollback artifact entry lacks explicit authority');
+  }
+  for (const field of [
+    'manifestSchemaVersion',
+    'dshPackageVersion',
+    'runtimeAttestationSha256',
+    'payloadSha256',
+  ]) {
+    if (entry[field] !== authority[field]) {
+      throw new Error(`Rollback artifact entry ${field} was changed`);
+    }
+  }
+  return { ...normalized, ...authority };
 }
 
-async function validateRecord(input) {
+export async function validateRollbackRecord(
+  input,
+  {
+    currentArtifacts = CURRENT_INSTALLABLE_HOSTED_ARTIFACTS,
+    legacyArtifacts = LEGACY_ROLLBACK_HOSTED_ARTIFACTS,
+  } = {}
+) {
   if (input?.schemaVersion === 1) {
     throw new Error(
       'Legacy schemaVersion 1 rollback record is read-only and cannot be executed'
@@ -303,17 +437,63 @@ async function validateRecord(input) {
   }
   await assertCurrentRuntimeAuthority();
   if (!Number.isFinite(Date.parse(input.createdAt))) throw new Error('Rollback record createdAt must be ISO-8601');
-  const previous = await validateEntry(input.previous, true);
-  const target = await validateEntry(input.target, true);
+  const options = { currentArtifacts, legacyArtifacts };
+  const previous = await validateEntry(input.previous, {
+    ...options,
+    allowNull: true,
+    allowLegacyRollback: true,
+  });
+  const target = await validateEntry(input.target, {
+    ...options,
+    allowNull: true,
+    allowLegacyRollback: true,
+  });
   if (previous === null && target === null) throw new Error('Rollback record cannot contain two built-in states');
+  if (
+    previous?.artifactAuthority === 'legacy-rollback' &&
+    target?.artifactAuthority !== 'current-installable'
+  ) {
+    throw new Error('A legacy rollback source requires one exact current target');
+  }
+  if (
+    target?.artifactAuthority === 'legacy-rollback' &&
+    previous?.artifactAuthority !== 'current-installable'
+  ) {
+    throw new Error('A reverse legacy target requires one exact current source');
+  }
+  const derivedDirection = previous?.artifactAuthority === 'legacy-rollback'
+    ? 'rollback'
+    : target?.artifactAuthority === 'legacy-rollback'
+      ? 'reverse'
+      : input.direction === 'reverse'
+        ? 'reverse'
+        : 'rollback';
+  if (input.direction !== undefined && input.direction !== derivedDirection) {
+    throw new Error('Rollback record direction does not match its artifact authorities');
+  }
   return {
     schemaVersion: 2,
     profile: 'web',
     dshPackageVersion: CURRENT_DSH_PACKAGE_VERSION,
     runtimeAttestationSha256: CURRENT_RUNTIME_ATTESTATION_SHA256,
+    direction: derivedDirection,
     createdAt: new Date(input.createdAt).toISOString(),
     previous,
     target,
+  };
+}
+
+export async function reverseRollbackRecord(input, authorityOptions = {}) {
+  const record = await validateRollbackRecord(input, authorityOptions);
+  return {
+    schemaVersion: 2,
+    profile: 'web',
+    dshPackageVersion: CURRENT_DSH_PACKAGE_VERSION,
+    runtimeAttestationSha256: CURRENT_RUNTIME_ATTESTATION_SHA256,
+    direction: record.direction === 'rollback' ? 'reverse' : 'rollback',
+    createdAt: new Date().toISOString(),
+    previous: record.target,
+    target: record.previous,
   };
 }
 
@@ -330,40 +510,37 @@ async function inspectRecord(input) {
       reason: 'schemaVersion 1 predates RC.8 runtime authority',
     };
   }
-  return { ...(await validateRecord(input)), executable: true };
+  return { ...(await validateRollbackRecord(input)), executable: true };
 }
 
-const { command, values } = parseArgs(process.argv.slice(2));
-let result;
-if (command === 'inspect') result = inspect(await loadJson(values.input));
-else if (command === 'record') {
-  await assertCurrentRuntimeAuthority();
-  const createdAt = values.at ? new Date(values.at) : new Date();
-  if (!Number.isFinite(createdAt.valueOf())) throw new Error('--at must be a valid date');
-  result = {
-    schemaVersion: 2,
-    profile: 'web',
-    dshPackageVersion: CURRENT_DSH_PACKAGE_VERSION,
-    runtimeAttestationSha256: CURRENT_RUNTIME_ATTESTATION_SHA256,
-    createdAt: createdAt.toISOString(),
-    previous: await artifact(values, 'previous'),
-    target: await artifact(values, 'target'),
-  };
-} else if (command === 'inspect-record') result = await inspectRecord(await loadJson(values.input));
-else if (command === 'validate-record') result = await validateRecord(await loadJson(values.input));
-else if (command === 'reverse') {
-  const record = await validateRecord(await loadJson(values.input));
-  result = {
-    schemaVersion: 2,
-    profile: 'web',
-    dshPackageVersion: CURRENT_DSH_PACKAGE_VERSION,
-    runtimeAttestationSha256: CURRENT_RUNTIME_ATTESTATION_SHA256,
-    createdAt: new Date().toISOString(),
-    previous: record.target,
-    target: record.previous,
-  };
-} else {
-  throw new Error('Usage: theme-state.mjs <inspect|record|inspect-record|validate-record|reverse> [--key value]');
+async function runCli(argv) {
+  const { command, values } = parseArgs(argv);
+  let result;
+  if (command === 'inspect') result = inspect(await loadJson(values.input));
+  else if (command === 'record') {
+    await assertCurrentRuntimeAuthority();
+    const createdAt = values.at ? new Date(values.at) : new Date();
+    if (!Number.isFinite(createdAt.valueOf())) throw new Error('--at must be a valid date');
+    result = {
+      schemaVersion: 2,
+      profile: 'web',
+      dshPackageVersion: CURRENT_DSH_PACKAGE_VERSION,
+      runtimeAttestationSha256: CURRENT_RUNTIME_ATTESTATION_SHA256,
+      direction: 'rollback',
+      createdAt: createdAt.toISOString(),
+      previous: await artifact(values, 'previous'),
+      target: await artifact(values, 'target'),
+    };
+  } else if (command === 'inspect-record') result = await inspectRecord(await loadJson(values.input));
+  else if (command === 'validate-record') result = await validateRollbackRecord(await loadJson(values.input));
+  else if (command === 'reverse') {
+    result = await reverseRollbackRecord(await loadJson(values.input));
+  } else {
+    throw new Error('Usage: theme-state.mjs <inspect|record|inspect-record|validate-record|reverse> [--key value]');
+  }
+  process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
 }
 
-process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  await runCli(process.argv.slice(2));
+}

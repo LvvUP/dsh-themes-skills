@@ -9,16 +9,16 @@ Manage at most one verified `@dsh-themes/*` Cordis plugin in the `web` profile. 
 
 ## Release boundary
 
-The current certified release is DeepSeek Harness `0.1.0-rc.8` on npm `next`, mapped by official tag `dsh-v0.1.0-rc.8` to source commit `141eb6fef83422698aef7a981029e843e8161534`. Installation authority is the exact V3 sidecar `themes/compatibility/dsh-0.1.0-rc.8.json`, the frozen `runtime-rc8` closure, and successful six-job matrix run `32393288849` at head `e3fe9ac465b8db8070efbdb83ddc6c821f923a73`. RC.6/V2 and RC.5/V1 remain byte-addressable history but are not current-installable; reject RC.7 and mixed records. Lifecycle authority is managed cold restart—upstream RC.8 live unload/HMR is not promised. See [`src/config/dsh-releases.ts`](../../../src/config/dsh-releases.ts) and the exact evidence below.
+The current certified release is DeepSeek Harness `0.1.0-rc.8` on npm `next`, mapped by official tag `dsh-v0.1.0-rc.8` to source commit `141eb6fef83422698aef7a981029e843e8161534`. Installation authority is the publisher-side V3 sidecar `themes/compatibility/dsh-0.1.0-rc.8.json`, the frozen `runtime-rc8` closure, successful six-job matrix run `32393288849` at head `e3fe9ac465b8db8070efbdb83ddc6c821f923a73`, and the reviewed package-version-complete-digest authority in `scripts/hosted-artifact-authority.mjs`. The current map is generated from promoted index SHA-256 `0dd86b35ed13557d8dfa80b20a2290b17476fb03dc096b6f56bf4667c2377645` and has 30 current-installable V3 artifacts. A separate map retains 22 exact V1, V2, and V3 predecessors only for a verified schema-2 rollback or its reverse; they are not fresh-install or normal catalog targets. Normal validation still reports RC.6/V2 and RC.5/V1 as historical. Only the exact retained tuples may cross the rollback gate, and they still run under the current RC.8 Manager's cold-restart boundary; reject all other historical, RC.7, and mixed records. The `full-skins-2026-08` package release-set runtime matrix remains `pending-managed-cold-restart`; do not present the frozen Manager proof as package-level runtime evidence for that set. The exact public evidence is documented below and in [`references/compatibility.md`](references/compatibility.md); do not infer authority from a private publisher source path.
 
 ## Safety boundaries
 
-- Execute every DSH operation through `scripts/run-dsh.mjs`. It verifies the bundled runner attestation, keeps the user's workspace as `cwd`, disables telemetry, and places the attested `pnpm@11.7.0` shim first on `PATH`. For plugin add, it streams the selected file into a private no-overwrite snapshot, verifies the allowlisted digest, and passes only the durable workspace path `.dsh-themes/verified-artifacts/<sha256>.tgz` to DSH. This file remains available to pnpm's `file:` locator and rollback records; do not delete it while the package or a rollback record refers to it. Never resolve or invoke a PATH `dsh`.
+- Execute every DSH operation through `scripts/run-dsh.mjs`. It verifies the bundled runner attestation, keeps the user's workspace as `cwd`, disables telemetry, and places the attested `pnpm@11.7.0` shim first on `PATH`. A normal plugin add accepts only one of the 30 current hosted artifact digests or the adjacent installer's exact Skin Center digest. A rollback add may expose one of the 22 retired digests only when a verified schema-2 record selects it and an exact retained release record independently matches its package, version, complete digest, and payload digest. Every accepted add is streamed into a private no-overwrite snapshot, and only the durable workspace path `.dsh-themes/verified-artifacts/<sha256>.tgz` reaches DSH. This file remains available to pnpm's `file:` locator and rollback records; do not delete it while the package or a rollback record refers to it. Never resolve or invoke a PATH `dsh`.
 - Mutate the profile only through the launcher's `dsh plugin --profile web` command. Never edit `$DSH_HOME`, `~/.dsh`, a profile package file, lockfile, Harness `dist`, or `index.html`.
-- Accept a current installation only when its exact version, controlled download URL or explicit absolute local path, complete-artifact SHA-256, V3 manifest, and runtime attestation match the certified `0.1.0-rc.8` baseline.
+- Accept a current installation only when its exact package and version, controlled download URL or explicit absolute local path, complete-artifact SHA-256, V3 manifest, and runtime attestation match one entry in `CURRENT_INSTALLABLE_HOSTED_ARTIFACTS` and the certified `0.1.0-rc.8` baseline. Live catalog discovery cannot extend that local authority.
 - Never execute a downloaded package, lifecycle script, author JavaScript, CSS, or HTML while verifying it.
 - Keep digest scopes separate. A complete `.tgz` `artifact` digest authorizes installation. V3/V2 `payload` digests cover the canonical tar excluding the manifest; V1 `package` covers its canonical payload. None of those payload digests authorizes a downloaded `.tgz`.
-- Recognize exact RC.6/V2 and RC.5/V1 records as historical only. Never execute them through the current RC.8 Manager or rollback path.
+- Recognize exact RC.6/V2 and RC.5/V1 records as historical under normal validation. Never execute an arbitrary historical record. The only exception is a tuple already present in the 22-entry rollback-only map, selected as `previous` by an exact executable schema-2 record and independently matched by its retained release record. Six V1, thirteen V2, and three V3 packages meet that narrow byte-level boundary.
 - Stop when more than one direct `@dsh-themes/*` dependency exists, a version is a range, current compatibility differs, or an exact rollback artifact cannot be prepared.
 - Explain that a hash proves agreement with the selected catalog record, not publisher identity.
 
@@ -83,11 +83,23 @@ node <skill-dir>/scripts/validate-release.mjs \
   --origin <trusted-https-origin>
 ```
 
-For a current V3 release, require `status: "current"`, `installableCurrent: true`, `verified: true`, the four exact hosted-distribution fields, exact official-release and npm provenance records, every Web/token/selector fingerprint, the final independent runtime attestation, and `artifactSha256` equal to the sidecar's complete `.tgz` `artifact.sha256`. The package-internal manifest may omit `artifact` and is informative only. The URL must be the same trusted origin and exactly `/api/themes/<slug>/download/<version>` with no credentials, query, or fragment. External/community lanes and incomplete records are never Manager-installable.
+For a current V3 release, require `status: "current"`, `installableCurrent: true`, `artifactAuthority: "current-installable"`, `verified: true`, the four exact hosted-distribution fields, exact official-release and npm provenance records, every Web/token/selector fingerprint, the final independent runtime attestation, and `artifactSha256` equal to the sidecar's complete `.tgz` `artifact.sha256`. The exact package, version, and complete digest must also appear in the 30-entry current authority. The package-internal manifest may omit `artifact` and is informative only. The URL must be the same trusted origin and exactly `/api/themes/<slug>/download/<version>` with no credentials, query, or fragment. External/community lanes, incomplete records, and all 22 rollback-only artifacts are never normal Manager-installable targets.
 
 Keep the official tag/source mapping separate from npm evidence: the RC.8 registry records expose fixed integrity, shasum, and tarball SHA-256 but claim only `registry-digest-only` provenance.
 
 The validator returns `historical-v2` for exact RC.6 and `historical-v1` for exact RC.5, always with `installableCurrent: false`. Their payload digests never replace the catalog's complete-artifact digest.
+
+Do not pass `--authority legacy-rollback` during discovery, fresh installation, normal switching, or catalog validation. It is valid only after `theme-state.mjs validate-record` accepts a schema-2 record whose `previous` entry is one exact retained artifact. In that path, validate the retained V1, V2, or V3 release record with both authorities:
+
+```bash
+node <skill-dir>/scripts/validate-release.mjs \
+  --input <retained-old-release-record.json> \
+  --origin <trusted-https-origin> \
+  --authority legacy-rollback \
+  --rollback-record <absolute-schema-2-record.json>
+```
+
+Require `status: "legacy-rollback"`, `installableCurrent: false`, `rollbackEligible: true`, and `artifactAuthority: "legacy-rollback"`. `historicalStatus` preserves `historical-v1`, `historical-v2`, or `current` for the retained record's original schema. The release record, rollback entry, local bytes, package, version, complete digest, and payload digest must all agree. A wrong digest or a record that selects another package fails closed.
 
 Schema `3.0` is the only current RC.8 Manager contract. Never downgrade it to V2, fill missing values from RC.6, or mix candidate/final attestation hashes.
 
@@ -95,7 +107,7 @@ Delete the temporary release record after use.
 
 ## Verify artifacts
 
-Prepare both the target artifact and, when changing an installed theme, the exact previous artifact:
+Prepare both the current-installable target artifact and, when changing an installed theme, the exact previous artifact. A retained predecessor must already have its exact old release record and must be preserved solely for rollback:
 
 ```bash
 node <skill-dir>/scripts/fetch-and-verify.mjs \
@@ -134,13 +146,23 @@ To return to the built-in palette, inspect, remove the one active theme, verify 
 
 For rollback:
 
-1. Validate the schema-2 record: `node <skill-dir>/scripts/theme-state.mjs validate-record --input .dsh-themes/rollback.json`. This re-hashes every referenced `.tgz`, requires an embedded current V3 manifest, and re-checks the final RC.8 runtime attestation. Schema 1 is inspect-only and cannot execute.
-2. Re-run `validate-release.mjs` against the retained current V3 release record for every package that will be installed; never infer authority from rollback JSON alone.
+1. Validate the schema-2 record: `node <skill-dir>/scripts/theme-state.mjs validate-record --input .dsh-themes/rollback.json`. This re-hashes every referenced `.tgz`, requires an exact supported embedded manifest (current RC.8/V3 for a normal target; retained RC.5/V1, RC.6/V2, or RC.8/V3 for a rollback-only entry), re-checks the final Manager attestation, and derives `direction` from the exact current/retired authority of both entries. Rollback-record schema 1 is inspect-only and cannot execute.
+2. Re-run `validate-release.mjs` against the retained release record for every package that will be installed; never infer authority from rollback JSON alone. Use normal current validation for a current artifact. Use the `--authority legacy-rollback --rollback-record <absolute-record>` form above only when the record's `previous` entry is an exact retired artifact.
 3. Inspect current state and ensure it matches the record's target, where `null` means the built-in palette.
 4. Re-verify the previous artifact, if present.
-5. Remove the target and install the previous exact artifact, or install nothing for the built-in palette.
+5. Remove the target and install the selected previous artifact through the record-bound launcher form, or install nothing for the built-in palette:
+
+   ```bash
+   node <skill-dir>/scripts/run-dsh.mjs \
+     plugin --profile web add "<absolute-previous.tgz>" --save-exact \
+     --rollback-record "<absolute-schema-2-record.json>" \
+     --release-record "<absolute-release-record.json>" \
+     --origin "<trusted-https-origin>"
+   ```
+
+   The option order is part of the narrow command grammar. A retained digest presented to the normal six-argument add path is rejected, even if the bytes appear in `LEGACY_ROLLBACK_HOSTED_ARTIFACTS`.
 6. Verify and restart Harness.
-7. Generate a reverse record with `theme-state.mjs reverse --input ...`, archive the consumed record, and save the reverse record atomically.
+7. Generate a reverse record with `theme-state.mjs reverse --input ...`, archive the consumed record, and save the reverse record atomically. Reversing the rollback uses the same record-bound launcher form and the exact release record for the reverse record's `previous` (normally the current `1.2.0` artifact).
 
 The launcher permits removal of `@dsh-themes/*` and, solely for the adjacent reviewed community installer, the exact package `@linxin666/dsh-client-ui-skin-center`. No other third-party package name is accepted.
 
