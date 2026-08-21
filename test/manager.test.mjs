@@ -38,7 +38,8 @@ $tab = [char]9
 [Console]::WriteLine("protected" + $tab + $acl.AreAccessRulesProtected)
 [Console]::WriteLine("owner" + $tab + $ownerSid)
 [Console]::WriteLine("current" + $tab + $currentSid)
-foreach ($rule in @($acl.Access)) {
+$rules = @($acl.GetAccessRules($true, $true, [System.Security.Principal.SecurityIdentifier]))
+foreach ($rule in $rules) {
   $sid = $rule.IdentityReference.Translate([System.Security.Principal.SecurityIdentifier]).Value
   $allow = $rule.AccessControlType -eq [System.Security.AccessControl.AccessControlType]::Allow
   $fullControl = (($rule.FileSystemRights -band [System.Security.AccessControl.FileSystemRights]::FullControl) -eq [System.Security.AccessControl.FileSystemRights]::FullControl)

@@ -47,7 +47,8 @@ if ($action -eq 'configure') {
     $acl = [System.IO.File]::GetAccessControl($target)
   }
   $acl.SetAccessRuleProtection($true, $false)
-  foreach ($rule in @($acl.Access)) {
+  $existingRules = @($acl.GetAccessRules($true, $true, [System.Security.Principal.SecurityIdentifier]))
+  foreach ($rule in $existingRules) {
     [void]$acl.RemoveAccessRuleSpecific($rule)
   }
   $acl.SetOwner($currentSid)
@@ -76,7 +77,7 @@ if ($kind -eq 'directory') {
 $ownerSid = $verified.GetOwner([System.Security.Principal.SecurityIdentifier]).Value
 if ($ownerSid -ne $currentSid.Value) { throw 'private path owner is not the current user' }
 if (-not $verified.AreAccessRulesProtected) { throw 'private path DACL still inherits access rules' }
-$rules = @($verified.Access)
+$rules = @($verified.GetAccessRules($true, $true, [System.Security.Principal.SecurityIdentifier]))
 $allowedSids = @($currentSid.Value, $systemSid.Value)
 if ($rules.Count -ne 2) { throw 'private path DACL must contain exactly two access rules' }
 foreach ($rule in $rules) {
