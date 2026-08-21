@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import { readdir, readFile } from 'node:fs/promises';
-import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 
 const root = new URL('../skills/', import.meta.url);
 const required = [
@@ -48,7 +48,7 @@ async function validateSkill(name) {
   const scripts = (await readdir(scriptsDirectory)).filter((file) => file.endsWith('.mjs'));
   if (scripts.length === 0) fail(`${name}: at least one deterministic script is required`);
   for (const script of scripts) {
-    const path = join(scriptsDirectory.pathname, script);
+    const path = fileURLToPath(new URL(script, scriptsDirectory));
     const check = spawnSync(process.execPath, ['--check', path], { encoding: 'utf8' });
     if (check.status !== 0) fail(`${name}/${script}: ${check.stderr.trim()}`);
   }
