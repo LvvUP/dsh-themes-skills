@@ -5,31 +5,33 @@
  * here. Every value is the SHA-256 of the complete published `.tgz`.
  */
 export const CURRENT_CATALOG_INDEX_SHA256 =
-  '628fb4b8a257bda7e682edf48a1f2920e7d3c737d9261fa19d26cd137d2987d9';
+  '54686ba2df528b994840ab5ad33b24f06037e7bcdc0d3a034b0fb361456b658a';
 
 export const CURRENT_INSTALLABLE_HOSTED_ARTIFACTS = new Map([
   ['@dsh-themes/abyssal-maid@1.1.0', 'd6ac9f9f3fb5efe8c2b26fe276c8364bd55520c9defac0091afbf820f3c46533'],
   ['@dsh-themes/arcana-nocturne@1.0.0', '6be47f5c778f835923e4443dfbe02f51c7ce22cae4d6108de29dcd091c47510e'],
   ['@dsh-themes/arctic-panel@1.2.0', 'b63e76dba471bdaf049e7b9431c08b96a008ded34db33c228d60a16bf9a9354c'],
   ['@dsh-themes/argentina-matchday@1.0.0', 'fe6ea0c510514c401d414b067224f524750c3d934786f9abce603f9d7437a111'],
+  ['@dsh-themes/bamboo-quietude@1.0.0', 'cf4ca1827178b3aa7f682e97d222a1694907ff6dc8f1299129ed8cf3eb19cebc'],
   ['@dsh-themes/banff-alpine@1.0.0', '1e1462c53c1d1fa772993838f938bff80a5454907ffc52c0731bd20ceb548ab2'],
-  ['@dsh-themes/copper-wire@1.1.0', '104a6b0c1791a4ef27ddf9c7ce9e1e40f83aab7e020cbaaf3737a5723a2c998e'],
+  ['@dsh-themes/copper-wire@1.2.0', 'f9c72ef9de62e0074235bfc42650d8e37cc8a30c8f5b2ee69efd8aeedc7de541'],
   ['@dsh-themes/deep-ocean@1.2.0', '8fca6598f084b47ec07bd00876a686c640ad68f280b5737b789a68fa5df5044f'],
   ['@dsh-themes/eiffel-lumiere@1.0.0', '7be143cb91b4934db33d99c7e4367a367199ed3138961b5136bb01ced69d400f'],
-  ['@dsh-themes/england-matchday@1.0.0', '19007c637465034a216e5bdcc549ae270f6c9d8946d2f2722e0250644101c75c'],
+  ['@dsh-themes/england-matchday@1.0.0', 'd8561dcebcd04ac0b6b09e70d15d7ce3e9987a9f22b4f981ffa8eb26c60e2dae'],
+  ['@dsh-themes/fire-horse-chronicle@1.0.0', '6eccabbdc98e00ad92144cbaee608159412e7c8e19d8c4272c8fe76194228455'],
   ['@dsh-themes/frontier-ink@1.0.0', 'e41c8c261816e29f9b20cd08d65d6778a9c775be9d57cd5b196cd35c65e6c220'],
-  ['@dsh-themes/germany-matchday@1.0.0', 'f088344528c8a47ad3cb00397b949c9f65d0e3a0eeaec940d9a2bd314311f96d'],
+  ['@dsh-themes/germany-matchday@1.0.0', '4028f77dd5955a73222ddbeb9f03976f76fd9a51bd0ca0add027c6017731c440'],
   ['@dsh-themes/graphite-relay@1.2.0', '6f23cd12796a6373bbe8612ecc2a86b7a7d8e563beb24ecb57ddfd10e86c358c'],
   ['@dsh-themes/harbour-pulse@1.0.0', 'e00926c19fc0a2a2ff508cd25fdf29f9d17b2ad1e1802378fa65c863db5e5901'],
   ['@dsh-themes/high-signal@1.2.0', '01acb404b6273289fa31848c08388d0b99d199b1d8acdad1f958d734d2df14c3'],
   ['@dsh-themes/jade-circuit@1.2.0', '639b3aefc09e204904a5541c82f81310f9c54ca9818473bde8afcaaa958a9fbb'],
   ['@dsh-themes/jianghu-ink@1.0.0', '2ea8741c46dc9415e3b32c3e5c6d52fe72f06e05dcf5cde1e2b775342271e0b4'],
-  ['@dsh-themes/liberty-ink@1.0.0', '15e4485a6e705cc59ab8caf66abd3312915c86205fb376a6542b5b7fcc575f13'],
-  ['@dsh-themes/neon-afterline@1.2.0', 'a087f10f059b18d249c97a4dd6ca5cf206af4218e8ab10ec12f8febd61b68a21'],
+  ['@dsh-themes/liberty-ink@1.0.0', 'eaa6ca20fc2afc1aadf38d46526ef356d4db998b4d8a6c7b07ca9301578a7ec8'],
+  ['@dsh-themes/neon-afterline@1.2.0', '1d4bc56ff6fa646bd4dd347d22b6f69462bc01bde86cdea02a95d869a94813ae'],
   ['@dsh-themes/paper-console@1.2.0', 'f140a38123331ebbebbd63ee0e5af17ce88268ebcba340e55be4e3db12ff0891'],
   ['@dsh-themes/quiet-matrix@1.2.0', 'c9259708249cae228e7b92317244418cdd16d3281d2107dbef6803ee266aca0d'],
   ['@dsh-themes/reasoning-tide@1.1.0', '0bdd0ccd1d2c31fbe2baaae31a3c6a5bd0a40c0037c6e6754dcb7df102cac9a6'],
-  ['@dsh-themes/redline-02@1.1.0', '1b8213e52b41476445b7ca0825a6dc9874bb2d754a98c1a74e5d2f6e3466356d'],
+  ['@dsh-themes/redline-02@1.2.0', '9992031934fe86f3a81a78056d9767380f51bfb9821c9e44632e97964e6fad70'],
   ['@dsh-themes/sakura-kawaii@1.0.0', '7bda784f90d0c34ee8510bc1684e33400d1c053da4094fd8200cd2994df0a2e6'],
   ['@dsh-themes/savanna-horizon@1.0.0', '84ab6e9139ef71a298bfbbf0f106c2689f11a42208e1edbb14c38bbfb3797562'],
   ['@dsh-themes/solar-trace@1.2.0', 'af447d963e9f5a6cae8454dff553665b16500dfd52a724ab9e75f47f007f56e7'],
@@ -50,6 +52,7 @@ export const LEGACY_ROLLBACK_HOSTED_ARTIFACTS = new Map([
   ['@dsh-themes/arctic-panel@1.0.0', 'dba7f725d96ea15a3f93d209df849ce138ad7ef3a1309d21a5e8c796430c3e67'],
   ['@dsh-themes/arctic-panel@1.1.0', 'f5e90f8b335b3cc0e484040515621b12622d103252e148492b6effab73dc4b28'],
   ['@dsh-themes/copper-wire@1.0.0', '4f6e98758719dc2c6cd58a8c6e88b308e131d76be524f8e83ce43c9dea6e09cc'],
+  ['@dsh-themes/copper-wire@1.1.0', '104a6b0c1791a4ef27ddf9c7ce9e1e40f83aab7e020cbaaf3737a5723a2c998e'],
   ['@dsh-themes/deep-ocean@1.0.0', '3b045ef5e7022d45fcfda7bac44671e2dfdcba3c1e2b050ee27b6f5f00171318'],
   ['@dsh-themes/deep-ocean@1.1.0', '342a1f9cb1db44b1e2163239bf25f96c7661f948a39d36d7ca479c8ece96ec35'],
   ['@dsh-themes/graphite-relay@1.0.0', 'c8d4923d72b11d6d8c497f286b2cdfae8647282bdb8bea2e7d76374e4d65709f'],
@@ -66,6 +69,7 @@ export const LEGACY_ROLLBACK_HOSTED_ARTIFACTS = new Map([
   ['@dsh-themes/quiet-matrix@1.1.0', 'c3067862b989fbb4d79a23a5569e4ff735f5df358a56b67a71af11a9501b6627'],
   ['@dsh-themes/reasoning-tide@1.0.0', '8168017e15d40d626f04de3866472baab14f70c5e813d743e27a4eac0c5015d1'],
   ['@dsh-themes/redline-02@1.0.0', 'fca9d050bd6c6c406f4a700759a029a0102ddc741db4aac63d63b78d52468420'],
+  ['@dsh-themes/redline-02@1.1.0', '1b8213e52b41476445b7ca0825a6dc9874bb2d754a98c1a74e5d2f6e3466356d'],
   ['@dsh-themes/solar-trace@1.0.0', '5e0e2b319d137b784ebd25df795f0ac004647591a11ba7e7ea7a81d90af1270a'],
   ['@dsh-themes/solar-trace@1.1.0', 'eb645cef469502af39626144e238656b2a79805c7409267c11f9e01a5fa31c39'],
 ]);

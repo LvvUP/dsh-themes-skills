@@ -15,6 +15,7 @@ import {
   isAllowedRunnerCommand,
 } from '../skills/dsh-theme-manager/scripts/runner-policy.mjs';
 import {
+  classifyHostedArtifact,
   CURRENT_CATALOG_INDEX_SHA256,
   CURRENT_INSTALLABLE_HOSTED_ARTIFACTS,
   LEGACY_ROLLBACK_HOSTED_ARTIFACTS,
@@ -456,6 +457,49 @@ test('release validator separates current V3, historical V2/V1, and artifact aut
       assert.equal(output.lifecycle, 'managed-cold-restart');
     });
 
+    await t.test('accepts Fire Horse only at the current authority digest', async () => {
+      const release = currentRelease();
+      const slug = 'fire-horse-chronicle';
+      const version = '1.0.0';
+      const artifactSha256 = CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.get(
+        `@dsh-themes/${slug}@${version}`
+      );
+      assert.match(artifactSha256, /^[a-f0-9]{64}$/);
+      release.artifactUrl = `${trustedOrigin}/api/themes/${slug}/download/${version}`;
+      release.artifactSha256 = artifactSha256;
+      release.manifest.slug = slug;
+      release.manifest.version = version;
+      release.manifest.artifact = {
+        ...release.manifest.artifact,
+        name: `@dsh-themes/${slug}`,
+        version,
+        fileName: `${slug}-${version}.tgz`,
+        sha256: artifactSha256,
+        integrity: integrity(artifactSha256),
+      };
+      release.manifest.payload.fileName = `${slug}-${version}.payload.tar`;
+
+      const accepted = await validateRelease(
+        directory,
+        'fire-horse-current.json',
+        release
+      );
+      assert.equal(accepted.code, 0, accepted.stderr);
+      assert.equal(JSON.parse(accepted.stdout).artifactAuthority, 'current-installable');
+
+      const drifted = structuredClone(release);
+      drifted.artifactSha256 = shaA;
+      drifted.manifest.artifact.sha256 = shaA;
+      drifted.manifest.artifact.integrity = integrity(shaA);
+      const rejected = await validateRelease(
+        directory,
+        'fire-horse-drifted.json',
+        drifted
+      );
+      assert.notEqual(rejected.code, 0);
+      assert.match(rejected.stderr, /current installable authority/);
+    });
+
     await t.test('rejects a rollback-only predecessor as a fresh install', async () => {
       const result = await validateRelease(
         directory,
@@ -781,50 +825,62 @@ test('manager exact-version checks implement the shared SemVer 2.0 vectors', asy
   }
 });
 
-test('hosted authority pins 30 current artifacts and 22 rollback-only versions', () => {
+test('hosted authority pins 32 current artifacts and 24 rollback-only versions', () => {
   assert.equal(
     CURRENT_CATALOG_INDEX_SHA256,
-    '628fb4b8a257bda7e682edf48a1f2920e7d3c737d9261fa19d26cd137d2987d9'
+    '54686ba2df528b994840ab5ad33b24f06037e7bcdc0d3a034b0fb361456b658a'
   );
-  assert.equal(CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.size, 30);
-  assert.equal(LEGACY_ROLLBACK_HOSTED_ARTIFACTS.size, 22);
+  assert.equal(CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.size, 32);
+  assert.equal(LEGACY_ROLLBACK_HOSTED_ARTIFACTS.size, 24);
+  assert.equal(ALLOWED_ADD_ARTIFACT_SHA256.size, 57);
   assert.equal(
     createHash('sha256')
       .update(JSON.stringify([...CURRENT_INSTALLABLE_HOSTED_ARTIFACTS]))
       .digest('hex'),
-    '7dbd7905558c30b67dae94c334bf0f5e79b775fa4babb17aef07365d197a855b'
+    'e3ed309a499b162041bff48e89f522b04866f612c504614fe80f5f56f2226e5c'
   );
   assert.equal(
     createHash('sha256')
       .update(JSON.stringify([...LEGACY_ROLLBACK_HOSTED_ARTIFACTS]))
       .digest('hex'),
-    '7c2c85fa320d6ce29407cc9ce8874f89b2122dd537da941bc3e17244b9fedd04'
+    'f55deceee4f59a2512c155ba3d707e6564dcd7171806cc9426269601c75ec8ce'
   );
+  const fireHorseSha256 = CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.get(
+    '@dsh-themes/fire-horse-chronicle@1.0.0'
+  );
+  assert.equal(
+    fireHorseSha256,
+    '6eccabbdc98e00ad92144cbaee608159412e7c8e19d8c4272c8fe76194228455'
+  );
+  assert.equal(
+    classifyHostedArtifact(
+      '@dsh-themes/fire-horse-chronicle',
+      '1.0.0',
+      fireHorseSha256
+    ),
+    'current-installable'
+  );
+  assert.equal(
+    classifyHostedArtifact(
+      '@dsh-themes/fire-horse-chronicle',
+      '1.0.0',
+      shaA
+    ),
+    null
+  );
+  assert.equal(CURRENT_INSTALLABLE_ADD_ARTIFACT_SHA256.has(fireHorseSha256), true);
   assert.deepEqual(
-    [...LEGACY_ROLLBACK_HOSTED_ARTIFACTS.keys()],
+    [...LEGACY_ROLLBACK_HOSTED_ARTIFACTS.keys()].filter((key) =>
+      /(?:arctic-panel|copper-wire|neon-afterline|quiet-matrix|redline-02)@1\.1\.0$/.test(
+        key
+      )
+    ),
     [
-      '@dsh-themes/abyssal-maid@1.0.0',
-      '@dsh-themes/arctic-panel@1.0.0',
       '@dsh-themes/arctic-panel@1.1.0',
-      '@dsh-themes/copper-wire@1.0.0',
-      '@dsh-themes/deep-ocean@1.0.0',
-      '@dsh-themes/deep-ocean@1.1.0',
-      '@dsh-themes/graphite-relay@1.0.0',
-      '@dsh-themes/graphite-relay@1.1.0',
-      '@dsh-themes/high-signal@1.0.0',
-      '@dsh-themes/high-signal@1.1.0',
-      '@dsh-themes/jade-circuit@1.0.0',
-      '@dsh-themes/jade-circuit@1.1.0',
-      '@dsh-themes/neon-afterline@1.0.0',
+      '@dsh-themes/copper-wire@1.1.0',
       '@dsh-themes/neon-afterline@1.1.0',
-      '@dsh-themes/paper-console@1.0.0',
-      '@dsh-themes/paper-console@1.1.0',
-      '@dsh-themes/quiet-matrix@1.0.0',
       '@dsh-themes/quiet-matrix@1.1.0',
-      '@dsh-themes/reasoning-tide@1.0.0',
-      '@dsh-themes/redline-02@1.0.0',
-      '@dsh-themes/solar-trace@1.0.0',
-      '@dsh-themes/solar-trace@1.1.0',
+      '@dsh-themes/redline-02@1.1.0',
     ]
   );
 });
@@ -977,8 +1033,13 @@ test('1.1 to 1.2 upgrade keeps legacy bytes rollback-only and supports a verifie
   }
 });
 
-test('arctic, neon, and quiet 1.1 to 1.2 records all reverse without opening fresh legacy install', async (t) => {
-  for (const slug of ['arctic-panel', 'neon-afterline', 'quiet-matrix']) {
+test('the other four 1.1 to 1.2 records reverse without opening fresh legacy install', async (t) => {
+  for (const slug of [
+    'copper-wire',
+    'neon-afterline',
+    'quiet-matrix',
+    'redline-02',
+  ]) {
     await t.test(slug, async () => {
       const directory = await mkdtemp(join(tmpdir(), `dsh-${slug}-upgrade-`));
       try {
@@ -1497,10 +1558,10 @@ test('remote verifier confines a 307 cookie bootstrap to the exact trusted path'
 });
 
 test('runner policy forces no-open and narrowly allows Skin Center removal', () => {
-  assert.equal(CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.size, 30);
-  assert.equal(LEGACY_ROLLBACK_HOSTED_ARTIFACTS.size, 22);
-  assert.equal(CURRENT_INSTALLABLE_ADD_ARTIFACT_SHA256.size, 31);
-  assert.equal(ALLOWED_ADD_ARTIFACT_SHA256.size, 53);
+  assert.equal(CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.size, 32);
+  assert.equal(LEGACY_ROLLBACK_HOSTED_ARTIFACTS.size, 24);
+  assert.equal(CURRENT_INSTALLABLE_ADD_ARTIFACT_SHA256.size, 33);
+  assert.equal(ALLOWED_ADD_ARTIFACT_SHA256.size, 57);
   assert.equal(
     isAllowedRunnerCommand([
       'plugin',
