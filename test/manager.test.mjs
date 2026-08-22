@@ -784,7 +784,7 @@ test('manager exact-version checks implement the shared SemVer 2.0 vectors', asy
 test('hosted authority pins 30 current artifacts and 22 rollback-only versions', () => {
   assert.equal(
     CURRENT_CATALOG_INDEX_SHA256,
-    '0dd86b35ed13557d8dfa80b20a2290b17476fb03dc096b6f56bf4667c2377645'
+    '628fb4b8a257bda7e682edf48a1f2920e7d3c737d9261fa19d26cd137d2987d9'
   );
   assert.equal(CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.size, 30);
   assert.equal(LEGACY_ROLLBACK_HOSTED_ARTIFACTS.size, 22);
@@ -792,7 +792,7 @@ test('hosted authority pins 30 current artifacts and 22 rollback-only versions',
     createHash('sha256')
       .update(JSON.stringify([...CURRENT_INSTALLABLE_HOSTED_ARTIFACTS]))
       .digest('hex'),
-    'a5ecde8b622c0a15e4d2aced53ac58fc567dab033fd40af7c93cc920c57772dd'
+    '7dbd7905558c30b67dae94c334bf0f5e79b775fa4babb17aef07365d197a855b'
   );
   assert.equal(
     createHash('sha256')

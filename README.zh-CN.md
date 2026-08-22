@@ -23,16 +23,16 @@ DSH-Themes Skills 是一组职责明确的安全工作流，不是主题注册�
 | 证据 | 能证明什么 | 不能证明什么 |
 | --- | --- | --- |
 | **固定的 Manager 兼容证明** | 精确的 DeepSeek Harness `0.1.0-rc.8`、V3 Schema、最终运行时证明，以及 Node.js 22/24 上覆盖 Linux、macOS、Windows 的六项任务矩阵。 | 兼容其他 Harness 版本，或允许安装任意软件包。 |
-| **站内制品发布记录** | 一个精确的 `@dsh-themes/*` tarball、完整 SHA-256、受控同源下载路由，以及固定的 RC.8 兼容对象。Manager 经复核的当前映射固定 30 个精确的软件包—版本—摘要元组。 | 发布者身份、作者身份、素材权利、软件包级运行矩阵已经完成，或其他版本的安装权限。 |
+| **站内制品发布记录** | 一个精确的 `@dsh-themes/*` tarball、完整 SHA-256、受控同源下载路由，以及固定的 RC.8 兼容对象。Manager 经复核的当前映射固定 30 个精确的软件包—版本—摘要元组。 | 发布者身份、作者身份、素材权利、缺少独立绑定 release-set 证据的软件包级运行结果，或其他版本的安装权限。 |
 | **社区运行时权威** | 精确 11 条固定记录；每条均绑定条目级运行验证、最终 Manager 证明、脱敏回执、本地 allowlist 与明确同意。 | 对任意仓库、可变分支或仅展示记录的普遍许可。 |
 | **声明式创作契约** | 完整的亮色/暗色语义 Token、本地栅格素材哈希、兼容信息和来源字段，同时拒绝可执行内容。 | 审核通过，或作者确实拥有其声明的全部权利。 |
 
 两类证据始终保持分离：
 
 - [固定的 RC.8 兼容证明](skills/dsh-theme-manager/references/compatibility.md)回答经过证明的 Manager 运行时能否操作一个精确 Harness 基线。最终 attestation 是不可变的。
-- 站内主题的 **release-set 报告**回答某一批具体主题制品是否通过该次发布的构建、安装、重启、截图、回滚与摘要检查。当前 `full-skins-2026-08` 报告仍标记为 `pending-managed-cold-restart`；在隔离矩阵真正完成前，不得声称已经取得软件包级运行证据。即使矩阵完成，它也不是新的 Manager 认证，不能代替固定的 RC.8 sidecar 或 attestation。
+- 站内主题的 **release-set 报告**回答某一批具体主题制品是否通过该次发布的构建、安装、重启、截图、回滚与摘要检查。`full-skins-2026-08` 现在将全部 24 套 Full Skin 记录为 `certified-rc8`：FS-005 至 FS-024 针对提升后的精确软件包字节完成了一套独立的 20/20 隔离托管冷重启 `certify-final` 矩阵，失败目标为 0，并生成 106 张截图。计划 SHA-256 `0205c8d237834913751aec451411e90f06c3eed5b0437ce321a67dd44df3d06d` 绑定提升前身份；精简提升回执 SHA-256 `b8af1bf145dae15ae3575ad2a7b19b691e802dd58cdc247332fd944262b79198` 绑定通过结果；确定性证据归档 SHA-256 `f572fff1a944f3313e2b95a6702d549ae790bc36264b9dd3b20e34e010ec8276` 由 `SHA256SUMS` SHA-256 `20a8f8dc746b92c9c9b72ac01a7aa1726a3b22f779da50acc3ba5c99d5f7842d` 覆盖；冻结的 20 目标身份 SHA-256 `f0f427dc48670b70a72cb2dd4d556eb2278dcb24244ceb5d16f5c443600cbe59` 确认受测制品集没有漂移。这是软件包级发布证据，不是新的 Manager 认证，也不能代替固定的 RC.8 sidecar 或 attestation。
 
-新的站内主题 slug 会在查询时从实时目录发现，但发现本身永远不会授予执行权限。Manager 当前的发布权威是从已提升索引 SHA-256 `0dd86b35ed13557d8dfa80b20a2290b17476fb03dc096b6f56bf4667c2377645` 生成并复核的 30 条软件包—版本—完整摘要记录；新的站内发布只有在最终制品产生后，才能通过经过复核的 Skills 发布进入这组权威。另有 22 个精确的 V1、V2、V3 前序版本位于独立的仅回滚映射中。全新安装与普通目录验证会拒绝全部 22 个版本；schema-2 回滚或反向恢复还必须让保留的发布记录、本地制品、版本、完整摘要与 payload 摘要完全一致。社区通道则不同：它精确的 11 条记录会一直保持本地固定，除非经过单独复核和重新认证。
+新的站内主题 slug 会在查询时从实时目录发现，但发现本身永远不会授予执行权限。Manager 当前的发布权威是从最终提升索引 SHA-256 `628fb4b8a257bda7e682edf48a1f2920e7d3c737d9261fa19d26cd137d2987d9` 生成并复核的 30 条软件包—版本—完整摘要记录；新的站内发布只有在最终制品产生后，才能通过经过复核的 Skills 发布进入这组权威。当前映射的声明顺序摘要为 `7dbd7905558c30b67dae94c334bf0f5e79b775fa4babb17aef07365d197a855b`。另有 22 个精确的 V1、V2、V3 前序版本位于独立的仅回滚映射中。全新安装与普通目录验证会拒绝全部 22 个版本；schema-2 回滚或反向恢复还必须让保留的发布记录、本地制品、版本、完整摘要与 payload 摘要完全一致。社区通道则不同：它精确的 11 条记录会一直保持本地固定，除非经过单独复核和重新认证。
 
 ## 工作流如何衔接
 
@@ -92,7 +92,7 @@ npx skills add LvvUP/dsh-themes-skills --skill dsh-theme-finder
 ## 兼容性与开发
 
 - 当前已认证通道：**DeepSeek Harness `0.1.0-rc.8`**，官方 tag `dsh-v0.1.0-rc.8`，源码提交 `141eb6fef83422698aef7a981029e843e8161534`，最终 runtime attestation 为 `1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae`。
-- 站内软件包权威：**30 个当前可安装 V3 制品**，另有 **22 个保留的 V1/V2/V3 前序版本，仅供经过验证的回滚/反向恢复使用**。当前 release-set 运行矩阵仍在等待执行，此处不会把它描述成已经完成的证据。
+- 站内软件包权威：**30 个当前可安装 V3 制品**，另有 **22 个保留的 V1/V2/V3 前序版本，仅供经过验证的回滚/反向恢复使用**。`full-skins-2026-08` 软件包 release-set 已为 `certified-rc8`；上文给出了其独立证据摘要，完整边界见 [兼容性说明](skills/dsh-theme-manager/references/compatibility.md)。
 - 历史 `0.1.0-rc.6`/V2 与 `0.1.0-rc.5`/V1 通道在普通验证中只用于审计，永远不会被视为当前可安装版本。只有上文所列的精确保留元组，才能由 schema-2 回滚/反向恢复门槛选中。
 - [`release-state.json`](release-state.json) 是版本通道的信息摘要，不能替代 validator、冻结 runner、发布记录、条目 allowlist、回执或运行时验收。
 - [`rc8-v3-candidate.json`](skills/dsh-theme-manager/references/rc8-v3-candidate.json) 继续保留为历史 pending 证据，永远不能代替最终 attestation。
