@@ -11,7 +11,7 @@
     "status": "certification-pending",
     "enabled": false,
     "evidencePath": "dsh-0.1.1-rc.2.candidate.json",
-    "evidenceSha256": "ea213083de37da43ebe417331780bcda42abe670068a07921518428a94dbcac2"
+    "evidenceSha256": "1765db29cc9b0d9b49a848d8e4edb90e93e32749edd4443e6b64eb8753372075"
   },
   "forbiddenVersionSelectors": ["latest", "next"]
 }
