@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "defaultOperationalLane": "certified",
+  "certified": {
+    "status": "certified-installable",
+    "enabled": true,
+    "installable": true,
+    "catalogPath": "community-catalog.json",
+    "catalogSha256": "343000de2be72848db4a7838be90e3c41191f164a5a62d8198d154bfe0aa5d99",
+    "receiptPath": "runtime-receipt.rc8.json",
+    "receiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1"
+  },
+  "candidate": {
+    "status": "certification-pending",
+    "enabled": false,
+    "installable": false,
+    "evidencePath": "dsh-0.1.1-rc.2.candidate.json",
+    "evidenceSha256": "ea213083de37da43ebe417331780bcda42abe670068a07921518428a94dbcac2",
+    "receiptPath": "runtime-receipt.dsh-0.1.1-rc.2.pending.json",
+    "receiptSha256": "760a3b6fb4c4cd6c3ee501e9f718d6063d0713627bb086b198327e64a6e1e91c"
+  },
+  "forbiddenVersionSelectors": ["latest", "next"]
+}

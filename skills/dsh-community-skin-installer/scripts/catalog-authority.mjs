@@ -368,7 +368,7 @@ export function validateCommunityRecord(
     : validateLegacyRecord(selected, local, catalog);
 
   const runtimeVerified = local.runtimeStatus === 'runtime-verified';
-  const managerRc8Certified =
+  const managerBaselineCertified =
     catalog.managerGate?.certificationStatus === 'certified-installable' &&
     catalog.managerGate?.installable === true &&
     catalog.managerGate?.certifiedDshPackageVersion ===
@@ -391,8 +391,8 @@ export function validateCommunityRecord(
     blockingReasons.push('legacy-record-not-install-authority');
   }
   if (!runtimeVerified) blockingReasons.push('item-runtime-verification-pending');
-  if (!managerRc8Certified) {
-    blockingReasons.push('adjacent-manager-rc8-attestation-not-certified');
+  if (!managerBaselineCertified) {
+    blockingReasons.push('adjacent-manager-baseline-attestation-not-certified');
   }
   const runtimeItem = runtimeReceipt.items?.find(
     (candidate) => candidate.slug === local.slug

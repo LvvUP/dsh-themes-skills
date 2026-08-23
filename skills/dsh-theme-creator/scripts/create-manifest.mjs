@@ -26,9 +26,33 @@ const PRESET = new Set(['glass', 'outline', 'glow']);
 const MAX_ASSET_BYTES = 10 * 1024 * 1024;
 const MAX_ATTRIBUTION_LENGTH = 256;
 
-const COMPATIBILITY = JSON.parse(
-  await readFile(new URL('../references/compatibility-v3.json', import.meta.url), 'utf8'),
+const BASELINE_POLICY = JSON.parse(
+  await readFile(new URL('../references/baseline-policy.json', import.meta.url), 'utf8')
 );
+if (
+  BASELINE_POLICY.defaultOperationalLane !== 'certified' ||
+  BASELINE_POLICY.certified?.status !== 'certified-authoring' ||
+  BASELINE_POLICY.certified?.enabled !== true ||
+  BASELINE_POLICY.candidate?.status !== 'certification-pending' ||
+  BASELINE_POLICY.candidate?.enabled !== false ||
+  JSON.stringify(BASELINE_POLICY.forbiddenVersionSelectors) !==
+    JSON.stringify(['latest', 'next'])
+) {
+  throw new Error('baseline-policy.json is malformed or promotes a candidate');
+}
+const compatibilityBytes = await readFile(
+  new URL(
+    `../references/${BASELINE_POLICY.certified.evidencePath}`,
+    import.meta.url
+  )
+);
+if (
+  createHash('sha256').update(compatibilityBytes).digest('hex') !==
+  BASELINE_POLICY.certified.evidenceSha256
+) {
+  throw new Error('certified authoring sidecar digest differs');
+}
+const COMPATIBILITY = JSON.parse(compatibilityBytes.toString('utf8'));
 
 function parseArgs(argv) {
   const values = {};
@@ -233,7 +257,9 @@ async function main() {
   const licensePolicy = normalizeLicensePolicy(source.licensePolicy, source.license);
   object(source.compatibility, 'compatibility', ['dshPackageVersion']);
   if (source.compatibility.dshPackageVersion !== COMPATIBILITY.dshPackageVersion) {
-    throw new Error('Only the certified DSH 0.1.0-rc.8 V3 baseline is accepted');
+    throw new Error(
+      `Only the certified DSH ${COMPATIBILITY.dshPackageVersion} V3 baseline is accepted`
+    );
   }
   const author = object(source.author, 'author', ['name', 'url']);
   const common = {

@@ -10,8 +10,8 @@ const state = JSON.parse(
 const exactSemver =
   /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 
-test('release state records certified RC.8 plus historical V2 and V1', () => {
-  assert.equal(state.schemaVersion, 2);
+test('release state separates the RC.2 candidate from certified and historical lanes', () => {
+  assert.equal(state.schemaVersion, 3);
   assert.match(state.capturedAt, /^\d{4}-\d{2}-\d{2}$/);
   assert.equal(Number.isNaN(Date.parse(`${state.capturedAt}T00:00:00Z`)), false);
   assert.equal(state.purpose, 'informational-release-state');
@@ -19,6 +19,7 @@ test('release state records certified RC.8 plus historical V2 and V1', () => {
 
   for (const lane of [
     state.upstream,
+    state.candidate,
     state.certified,
     state.historicalV2,
     state.historicalV1,
@@ -26,20 +27,27 @@ test('release state records certified RC.8 plus historical V2 and V1', () => {
     assert.match(lane.dshPackageVersion, exactSemver);
   }
 
-  assert.equal(state.upstream.status, 'released-certified');
-  assert.equal(state.upstream.dshPackageVersion, '0.1.0-rc.8');
+  assert.equal(state.upstream.status, 'released-certification-pending');
+  assert.equal(state.upstream.dshPackageVersion, '0.1.1-rc.2');
   assert.equal(
     state.upstream.sourceTag,
     `dsh-v${state.upstream.dshPackageVersion}`
   );
   assert.match(state.upstream.sourceCommit, /^[a-f0-9]{40}$/);
-  assert.equal(state.upstream.npmDistTag, 'next');
   assert.match(state.upstream.npmIntegrity, /^sha512-[A-Za-z0-9+/]+={0,2}$/);
   assert.match(state.upstream.npmShasum, /^[a-f0-9]{40}$/);
-  assert.equal(state.upstream.installableCurrent, true);
+  assert.equal(state.upstream.installableCurrent, false);
+
+  assert.equal(state.candidate.status, 'certification-pending');
+  assert.equal(state.candidate.dshPackageVersion, state.upstream.dshPackageVersion);
+  assert.equal(state.candidate.installableCurrent, false);
+  assert.equal(state.candidate.matrixJobsCompleted, 0);
+  assert.equal(state.candidate.matrixJobsRequired, 6);
+  assert.equal(state.candidate.communityItemsCompleted, 0);
+  assert.equal(state.candidate.communityItemsRequired, 11);
 
   assert.equal(state.certified.status, 'certified-installable');
-  assert.equal(state.certified.dshPackageVersion, state.upstream.dshPackageVersion);
+  assert.equal(state.certified.dshPackageVersion, '0.1.0-rc.8');
   assert.equal(state.certified.installableCurrent, true);
   assert.equal(
     state.certified.runtimeAttestationSha256,
@@ -55,7 +63,7 @@ test('release state records certified RC.8 plus historical V2 and V1', () => {
   assert.equal(state.historicalV1.installableCurrent, false);
 });
 
-test('release documentation exposes current and historical lanes', async () => {
+test('release documentation exposes candidate, certified, and historical lanes', async () => {
   const documents = [
     'README.md',
     'README.zh-CN.md',
@@ -73,32 +81,25 @@ test('release documentation exposes current and historical lanes', async () => {
   for (const path of documents) {
     const contents = await readFile(new URL(path, root), 'utf8');
     contentsByPath.set(path, contents);
-    assert.ok(
-      contents.includes(state.certified.dshPackageVersion),
-      `${path} must identify certified RC.8`
-    );
+    assert.ok(contents.includes(state.certified.dshPackageVersion));
   }
   const combined = [...contentsByPath.values()].join('\n');
+  assert.ok(combined.includes(state.candidate.dshPackageVersion));
   assert.ok(combined.includes(state.historicalV2.dshPackageVersion));
   assert.ok(combined.includes(state.historicalV1.dshPackageVersion));
 });
 
-test('informational release state cannot change executable RC.8 gates', async () => {
+test('informational release state cannot change executable baseline gates', async () => {
   const operationalFiles = [
     'skills/dsh-theme-creator/scripts/create-manifest.mjs',
     'skills/dsh-theme-submitter/scripts/validate-submission.mjs',
     'skills/dsh-theme-manager/scripts/verify-runner.mjs',
-    'skills/dsh-theme-manager/runtime-rc8/package.json',
-    'skills/dsh-theme-manager/runtime-rc8/attestation.json',
     'skills/dsh-theme-finder/scripts/find-themes.mjs',
   ];
 
   for (const path of operationalFiles) {
     const contents = await readFile(new URL(path, root), 'utf8');
-    assert.ok(
-      contents.includes(state.certified.dshPackageVersion),
-      `${path} must remain pinned to certified RC.8`
-    );
+    assert.match(contents, /baseline-(?:policy|authority)/);
     assert.doesNotMatch(contents, /release-state\.json/);
   }
 });
@@ -132,7 +133,7 @@ test('Manager V3 and the separate 11-record community authority are open only on
   assert.match(finder, /runtimeAttestationSha256/);
   assert.match(manager, /validateV3/);
   assert.doesNotMatch(manager, /rejectPendingV3/);
-  assert.match(communityGate, /managerRc8Certified/);
+  assert.match(communityGate, /managerBaselineCertified/);
   assert.equal(catalog.managerGate.installable, true);
   assert.equal(catalog.managerGate.certificationStatus, 'certified-installable');
   assert.equal(

@@ -7,7 +7,11 @@ description: Validate a local declarative DSH-Themes manifest and guide its auth
 
 Validate locally, then let the user sign in on the website. Never request, read, save, copy, or transmit a browser cookie, session, password, API key, authorization header, or long-lived credential.
 
-Accept only `schemaVersion: "3.0"` manifests whose compatibility object exactly equals the certified `0.1.0-rc.8` final evidence in [references/compatibility-v3.json](references/compatibility-v3.json). Reject partial, candidate, mixed-version, or extra compatibility evidence. RC.6 V2 and RC.5 V1 are historical and are not accepted by this submission path.
+Accept only `schemaVersion: "3.0"` manifests whose compatibility object exactly equals the certified evidence selected by `references/baseline-policy.json` and pinned in [references/compatibility-v3.json](references/compatibility-v3.json). Reject partial, candidate, mixed-version, or extra compatibility evidence. RC.6 V2 and RC.5 V1 are historical and are not accepted by this submission path.
+
+The currently selected certified submission sidecar is DeepSeek Harness `0.1.0-rc.8`; the validator derives that exact value from the pinned sidecar rather than this prose.
+
+`node <skill-dir>/scripts/inspect-baseline.mjs candidate` exposes the RC.2 candidate boundary without enabling submission. Until its six jobs and final receipts exist, it must remain `enabled: false` and cannot enter the website handoff.
 
 ## Preflight
 

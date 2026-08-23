@@ -1,0 +1,44 @@
+name: RC.2 runtime smoke (non-promotional)
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/rc2-runtime-smoke.yml"
+      - "skills/dsh-theme-manager/runtime-dsh-0.1.1-rc.2/**"
+      - "skills/dsh-theme-manager/references/dsh-0.1.1-rc.2.candidate.json"
+      - "skills/dsh-theme-manager/references/baseline-policy.json"
+      - "skills/dsh-theme-manager/scripts/baseline-authority.mjs"
+      - "skills/dsh-theme-manager/scripts/validate-baseline-candidate.mjs"
+
+permissions:
+  contents: read
+
+jobs:
+  isolated-web-smoke:
+    name: Non-promotional web smoke (${{ matrix.os }}, Node ${{ matrix.node }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: [22.19.0, 24.15.0]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Install exact RC.2 candidate closure without lifecycle scripts
+        working-directory: skills/dsh-theme-manager/runtime-dsh-0.1.1-rc.2
+        run: corepack pnpm install --frozen-lockfile --ignore-scripts
+      - name: Validate pending authority and run isolated dsh web smoke
+        run: node skills/dsh-theme-manager/runtime-dsh-0.1.1-rc.2/smoke-runtime.mjs --receipt "${{ runner.temp }}/rc2-smoke-${{ matrix.os }}-node-${{ matrix.node }}.json"
+      - name: Upload non-promotional smoke receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rc2-smoke-${{ matrix.os }}-node-${{ matrix.node }}
+          path: ${{ runner.temp }}/rc2-smoke-${{ matrix.os }}-node-${{ matrix.node }}.json
+          if-no-files-found: error
+          retention-days: 14

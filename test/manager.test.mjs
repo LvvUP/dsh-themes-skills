@@ -519,7 +519,7 @@ test('release validator separates current V3, historical V2/V1, and artifact aut
         historicalCompatibility.selectorCatalogSha256;
       const result = await validateRelease(directory, 'mixed-v3.json', release);
       assert.notEqual(result.code, 0);
-      assert.match(result.stderr, /exact certified RC\.8 evidence/);
+      assert.match(result.stderr, /exact certified evidence/);
     });
 
     await t.test('recognizes exact RC.6 V2 only as historical', async () => {
@@ -727,7 +727,7 @@ test('theme state parses the RC.8 root profile array and rejects ambiguous profi
       const input = await writeJson(directory, 'duplicate.json', [profile, profile]);
       const result = await run(state, ['inspect', '--input', input]);
       assert.notEqual(result.code, 0);
-      assert.match(result.stderr, /exactly one unambiguous RC\.8 profile record/);
+      assert.match(result.stderr, /exactly one unambiguous certified profile record/);
     } finally {
       await rm(directory, { recursive: true, force: true });
     }
@@ -759,7 +759,7 @@ test('theme state parses the RC.8 root profile array and rejects ambiguous profi
         const input = await writeJson(directory, `${name}.json`, payload);
         const result = await run(state, ['inspect', '--input', input]);
         assert.notEqual(result.code, 0);
-        assert.match(result.stderr, /exactly one unambiguous RC\.8 profile record/);
+        assert.match(result.stderr, /exactly one unambiguous certified profile record/);
       }
     } finally {
       await rm(directory, { recursive: true, force: true });

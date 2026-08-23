@@ -12,15 +12,10 @@ import {
   CURRENT_INSTALLABLE_HOSTED_ARTIFACTS,
   LEGACY_ROLLBACK_HOSTED_ARTIFACTS,
 } from './hosted-artifact-authority.mjs';
+import { loadCertifiedAuthority } from './baseline-authority.mjs';
 
 const PACKAGE = /^@dsh-themes\/[a-z0-9]+(?:[._-][a-z0-9]+)*$/;
 const SHA256 = /^[0-9a-f]{64}$/;
-const CURRENT_DSH_PACKAGE_VERSION = '0.1.0-rc.8';
-const CURRENT_RUNTIME_ATTESTATION_SHA256 =
-  '1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae';
-const CURRENT_SOURCE_COMMIT = '141eb6fef83422698aef7a981029e843e8161534';
-const CURRENT_SELECTOR_CATALOG_SHA256 =
-  '663aa5927591ac99076f924ee9cd6f9bd09e6a8a9ee1e6b8b1b0d9e3093df807';
 const HISTORICAL_V2 = Object.freeze({
   dshPackageVersion: '0.1.0-rc.6',
   dshPackageIntegrity:
@@ -41,9 +36,17 @@ const HISTORICAL_V1 = Object.freeze({
     'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926',
 });
 const skillDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const certifiedAuthority = await loadCertifiedAuthority();
+const CURRENT_DSH_PACKAGE_VERSION = certifiedAuthority.version;
+const CURRENT_RUNTIME_ATTESTATION_SHA256 =
+  certifiedAuthority.lane.attestationSha256;
+const CURRENT_SOURCE_COMMIT =
+  certifiedAuthority.attestation.compatibility.officialRelease.sourceCommit;
+const CURRENT_SELECTOR_CATALOG_SHA256 =
+  certifiedAuthority.attestation.compatibility.selectorCatalogSha256;
 const currentAttestationPath = resolve(
   skillDir,
-  'runtime-rc8/attestation.json'
+  certifiedAuthority.lane.attestationPath
 );
 const MAX_ARTIFACT_BYTES = 32 * 1024 * 1024;
 const MAX_EXPANDED_BYTES = 96 * 1024 * 1024;
@@ -99,7 +102,7 @@ function looksLikeProfile(entry) {
 
 function profileEntries(profiles) {
   if (profiles.length !== 1 || !profiles.every(looksLikeProfile)) {
-    throw new Error('Expected exactly one unambiguous RC.8 profile record');
+    throw new Error('Expected exactly one unambiguous certified profile record');
   }
   const [profile] = profiles;
   if (profile.name !== 'dsh-profile-web') {
@@ -110,7 +113,7 @@ function profileEntries(profiles) {
 
 function normalizedThemes(input) {
   if (!Array.isArray(input)) {
-    throw new Error('Expected the RC.8 plugin list root array');
+    throw new Error('Expected the certified plugin list root array');
   }
   const entries = profileEntries(input);
 
@@ -186,7 +189,7 @@ function tarManifest(bytes) {
 async function assertCurrentRuntimeAuthority() {
   const bytes = await readFile(currentAttestationPath);
   if (sha256(bytes) !== CURRENT_RUNTIME_ATTESTATION_SHA256) {
-    throw new Error('Current RC.8 runtime attestation digest differs');
+    throw new Error('Current certified runtime attestation digest differs');
   }
   const attestation = JSON.parse(bytes.toString('utf8'));
   if (
@@ -197,7 +200,7 @@ async function assertCurrentRuntimeAuthority() {
       CURRENT_DSH_PACKAGE_VERSION ||
     attestation.acceptance?.lifecycle?.strategy !== 'managed-cold-restart'
   ) {
-    throw new Error('Current RC.8 runtime attestation is not executable authority');
+    throw new Error('Current certified runtime attestation is not executable authority');
   }
 }
 
@@ -295,7 +298,7 @@ function manifestAuthority(manifest, entry, artifactAuthority) {
   }
   throw new Error(
     artifactAuthority === 'current-installable'
-      ? 'Target artifact is not an exact current RC.8 V3 release'
+      ? 'Target artifact is not an exact current certified V3 release'
       : 'Rollback artifact does not match its exact retained V1, V2, or V3 authority'
   );
 }
@@ -507,7 +510,7 @@ async function inspectRecord(input) {
       previous: normalizeEntryShape(input.previous, true),
       target: normalizeEntryShape(input.target, true),
       executable: false,
-      reason: 'schemaVersion 1 predates RC.8 runtime authority',
+      reason: 'schemaVersion 1 predates the current certified runtime authority',
     };
   }
   return { ...(await validateRollbackRecord(input)), executable: true };

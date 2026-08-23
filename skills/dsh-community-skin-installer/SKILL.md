@@ -1,11 +1,13 @@
 ---
 name: dsh-community-skin-installer
-description: Inspect pinned community-skin evidence and, only after RC.8 certification plus item-level runtime verification, install or recover allowlisted Skin Center entries. Use for the dsh-web-ui and DSH-Themes CSS-adaptation lane, not hosted @dsh-themes artifacts or arbitrary repositories.
+description: Inspect pinned community-skin evidence and, only after certified baseline plus item-level runtime verification, install or recover allowlisted Skin Center entries. Use for the dsh-web-ui and DSH-Themes CSS-adaptation lane, not hosted @dsh-themes artifacts or arbitrary repositories.
 ---
 
 # DSH Community Skin Installer
 
 Inspect only records admitted by the bundled catalog. This is a separate trust lane from `dsh-theme-manager`: Manager handles hosted, declarative `@dsh-themes/*` artifacts, while this Skill handles exactly 11 runtime-verified community records: Maid Atelier plus ten dsh-web-ui appearances. Installation is available only when the bundled item, sanitized receipt, final Manager gate, explicit consent, and selected website record all validate together.
+
+Read `references/baseline-policy.json` before inspection. The certified lane is operational; the RC.2 candidate has an item-level pending receipt with 0/11 verified records and 0/6 matrix jobs. Inspect it with `scripts/inspect-baseline.mjs candidate`; it is never an installation receipt.
 
 ## Boundaries
 

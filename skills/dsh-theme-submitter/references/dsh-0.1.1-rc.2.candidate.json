@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "certificationStatus": "pending",
+  "installable": false,
+  "dshPackageVersion": "0.1.1-rc.2",
+  "officialRelease": {
+    "tag": "dsh-v0.1.1-rc.2",
+    "sourceCommit": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e"
+  },
+  "managerEvidence": {
+    "sidecarSha256": "9ec94c95dc8d6e4fe1aa7bab00de59d8c7fcb414c7342694a5cde20efd9d5888",
+    "pendingAttestationSha256": "83fbaf94740c32e229d190938dd2699e7d7fbd52d31751976c75f2cc09d89e53",
+    "pendingReceiptSha256": "c49d4665d27fd32b35c9ac55d46477ae799eb685be9ccee772e03c2c207b817a"
+  },
+  "matrix": {
+    "platforms": ["linux", "darwin", "win32"],
+    "nodeVersions": ["22.19.0", "24.15.0"],
+    "requiredJobs": 6,
+    "completedJobs": 0,
+    "status": "pending"
+  },
+  "allowedUse": "certification-inspection-only",
+  "forbiddenUse": ["author", "submit", "discover-installable", "install"],
+  "blockers": [
+    "selector-catalog-not-revalidated-on-rc2",
+    "hosted-artifacts-not-repacked-for-rc2",
+    "six-job-runtime-matrix-not-completed",
+    "community-items-not-reverified-on-rc2",
+    "final-runtime-attestation-not-issued"
+  ]
+}

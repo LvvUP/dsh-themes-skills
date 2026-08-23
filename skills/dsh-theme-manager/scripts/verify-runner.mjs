@@ -4,20 +4,26 @@ import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { parse } from '../runtime-rc8/node_modules/yaml/dist/index.js';
+import { loadCertifiedAuthority } from './baseline-authority.mjs';
 
 const skillDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const runtimeDir = resolve(skillDir, 'runtime-rc8');
-const EXPECTED_ATTESTATION_SHA256 =
-  '1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae';
-const EXPECTED_LOCKFILE_SHA256 =
-  'b38b68f1f443b7065f530d665ea7acbc9327275503ba0d9a6edd030b81f915ec';
-const EXPECTED_CLOSURE_SHA256 =
-  '58c78fcf15d2b6c58bad0fc870a4d28dabda33bfae3633cf94794465564a939b';
-const EXPECTED_DSH_CLOSURE_SHA256 =
-  'aa3929a9418b928d9ef200964f8ae4cce54086b1d5bc474cb9b42af90f0a78d8';
+const authority = await loadCertifiedAuthority();
+const runtimeDir = authority.runtimeDir;
+const expectedAttestationSha256 = authority.lane.attestationSha256;
+const expectedVersion = authority.version;
+const pinnedAttestation = authority.attestation;
+const expectedLockfileSha256 = pinnedAttestation.lockfile.sha256;
+const expectedClosureSha256 = pinnedAttestation.productionClosure.sha256;
+const expectedDshClosureSha256 =
+  pinnedAttestation.productionClosure.dshPackagesSha256;
+const expectedPackageCount = pinnedAttestation.productionClosure.packageCount;
+const expectedDshPackageCount =
+  pinnedAttestation.productionClosure.dshPackageCount;
+const { parse } = await import(
+  pathToFileURL(resolve(runtimeDir, 'node_modules/yaml/dist/index.js')).href
+);
 const SHA512 = /^sha512-[A-Za-z0-9+/]+={0,2}$/;
 const quiet = process.argv.length === 3 && process.argv[2] === '--quiet';
 if (process.argv.length > (quiet ? 3 : 2)) {
@@ -28,7 +34,7 @@ const sha256 = (value) =>
   createHash('sha256').update(value).digest('hex');
 
 function fail(message) {
-  throw new Error(`RC.8 certified attestation refused: ${message}`);
+  throw new Error(`certified operational baseline refused: ${message}`);
 }
 
 function packageIdentity(key) {
@@ -60,47 +66,51 @@ const [attestationBytes, lockBytes, dshPackage, pnpmPackage] =
     )
   );
 
-if (sha256(attestationBytes) !== EXPECTED_ATTESTATION_SHA256) {
+if (sha256(attestationBytes) !== expectedAttestationSha256) {
   fail('attestation digest differs');
 }
-if (sha256(lockBytes) !== EXPECTED_LOCKFILE_SHA256) {
+if (sha256(lockBytes) !== expectedLockfileSha256) {
   fail('lockfile digest differs');
 }
 
 const attestation = JSON.parse(attestationBytes.toString('utf8'));
 if (
-  attestation.schemaVersion !== 2 ||
+  !Number.isInteger(attestation.schemaVersion) ||
   attestation.certificationStatus !== 'verified' ||
-  attestation.baseline !== '@deepseek-ai/dsh@0.1.0-rc.8' ||
-  attestation.lockfile?.path !== 'runtime-rc8/pnpm-lock.yaml' ||
-  attestation.lockfile?.sha256 !== EXPECTED_LOCKFILE_SHA256 ||
-  attestation.productionClosure?.packageCount !== 504 ||
-  attestation.productionClosure?.sha256 !== EXPECTED_CLOSURE_SHA256 ||
-  attestation.productionClosure?.dshPackageCount !== 187 ||
+  attestation.baseline !== `@deepseek-ai/dsh@${expectedVersion}` ||
+  attestation.lockfile?.path !==
+    `${authority.lane.runtimeDirectory}/pnpm-lock.yaml` ||
+  attestation.lockfile?.sha256 !== expectedLockfileSha256 ||
+  attestation.productionClosure?.packageCount !== expectedPackageCount ||
+  attestation.productionClosure?.sha256 !== expectedClosureSha256 ||
+  attestation.productionClosure?.dshPackageCount !== expectedDshPackageCount ||
   attestation.productionClosure?.dshPackagesSha256 !==
-    EXPECTED_DSH_CLOSURE_SHA256 ||
-  attestation.compatibility?.dshPackageVersion !== '0.1.0-rc.8' ||
-  attestation.compatibility?.officialRelease?.tag !== 'dsh-v0.1.0-rc.8' ||
-  attestation.compatibility?.officialRelease?.sourceCommit !==
-    '141eb6fef83422698aef7a981029e843e8161534' ||
-  attestation.compatibility?.npmArtifacts?.dsh?.integrity !==
-    'sha512-VQU5NlomrKLRgcXuOf+sxWFvqxPA8q9vMhrKPlPPXiOJEhGlGlAdiyxZvZxkCVI+v0zbhe21cY3/luLyxpSzzA==' ||
-  attestation.compatibility?.selectorCatalogSha256 !==
-    '663aa5927591ac99076f924ee9cd6f9bd09e6a8a9ee1e6b8b1b0d9e3093df807' ||
-  attestation.acceptance?.uiEvidenceSha256 !==
-    '056ab031d6605420adeb4219eaea1a402344cef080007d79558439845b00ea3d' ||
+    expectedDshClosureSha256 ||
+  attestation.compatibility?.dshPackageVersion !== expectedVersion ||
+  attestation.compatibility?.officialRelease?.tag !==
+    `dsh-v${expectedVersion}` ||
+  !/^[0-9a-f]{40}$/.test(
+    attestation.compatibility?.officialRelease?.sourceCommit ?? ''
+  ) ||
+  attestation.compatibility?.npmArtifacts?.dsh?.version !== expectedVersion ||
+  !SHA512.test(
+    attestation.compatibility?.npmArtifacts?.dsh?.integrity ?? ''
+  ) ||
+  !/^[0-9a-f]{64}$/.test(
+    attestation.compatibility?.selectorCatalogSha256 ?? ''
+  ) ||
+  !/^[0-9a-f]{64}$/.test(attestation.acceptance?.uiEvidenceSha256 ?? '') ||
   attestation.acceptance?.selectorScope !==
     'published-artifact-allowlist' ||
   attestation.acceptance?.lifecycle?.strategy !== 'managed-cold-restart' ||
-  attestation.acceptance?.lifecycle?.productionLiveUnload !==
-    'unsupported-by-upstream-rc8' ||
+  typeof attestation.acceptance?.lifecycle?.productionLiveUnload !== 'string' ||
   attestation.acceptance?.lifecycle?.productionLiveHmr !==
     'not-certified-or-promised' ||
-  attestation.certificationRun?.runId !== 32393288849 ||
-  attestation.certificationRun?.runUrl !==
-    'https://github.com/LvvUP/DSH-Themes/actions/runs/32393288849' ||
-  attestation.certificationRun?.headSha !==
-    'e3fe9ac465b8db8070efbdb83ddc6c821f923a73' ||
+  !Number.isInteger(attestation.certificationRun?.runId) ||
+  !/^https:\/\/github\.com\/LvvUP\/DSH-Themes\/actions\/runs\/\d+$/.test(
+    attestation.certificationRun?.runUrl ?? ''
+  ) ||
+  !/^[0-9a-f]{40}$/.test(attestation.certificationRun?.headSha ?? '') ||
   attestation.certificationRun?.conclusion !== 'success' ||
   !Array.isArray(attestation.certificationRun?.matrix) ||
   attestation.certificationRun.matrix.length !== 6 ||
@@ -108,7 +118,7 @@ if (
     (job) => job.conclusion !== 'success'
   )
 ) {
-  fail('attestation fields differ from the certified RC.8 contract');
+  fail('attestation fields differ from the certified baseline contract');
 }
 const matrixIdentities = new Set(
   attestation.certificationRun.matrix.map(
@@ -149,16 +159,16 @@ const dshPackages = packages.filter((entry) =>
   entry.name.startsWith('@deepseek-ai/dsh')
 );
 if (
-  packages.length !== 504 ||
-  closureDigest(packages) !== EXPECTED_CLOSURE_SHA256 ||
-  dshPackages.length !== 187 ||
-  closureDigest(dshPackages) !== EXPECTED_DSH_CLOSURE_SHA256 ||
-  dshPackages.some((entry) => entry.version !== '0.1.0-rc.8')
+  packages.length !== expectedPackageCount ||
+  closureDigest(packages) !== expectedClosureSha256 ||
+  dshPackages.length !== expectedDshPackageCount ||
+  closureDigest(dshPackages) !== expectedDshClosureSha256 ||
+  dshPackages.some((entry) => entry.version !== expectedVersion)
 ) {
   fail('lockfile contains an incomplete or mixed release closure');
 }
 if (
-  JSON.parse(dshPackage).version !== '0.1.0-rc.8' ||
+  JSON.parse(dshPackage).version !== expectedVersion ||
   JSON.parse(pnpmPackage).version !== '11.7.0'
 ) {
   fail('installed CLI or package manager differs from the certified closure');
@@ -168,20 +178,20 @@ const cli = spawnSync(
   [resolve(runtimeDir, 'node_modules/@deepseek-ai/dsh/lib/bin.js'), '--version'],
   { encoding: 'utf8', env: { ...process.env, NO_COLOR: '1' } }
 );
-if (cli.status !== 0 || cli.stdout.trim() !== '0.1.0-rc.8') {
-  fail('certified CLI did not execute as exactly 0.1.0-rc.8');
+if (cli.status !== 0 || cli.stdout.trim() !== expectedVersion) {
+  fail(`certified CLI did not execute as exactly ${expectedVersion}`);
 }
 
 if (!quiet) {
   process.stdout.write(
     `${JSON.stringify({
       status: 'verified',
-      dshVersion: '0.1.0-rc.8',
-      attestationSha256: EXPECTED_ATTESTATION_SHA256,
-      lockfileSha256: EXPECTED_LOCKFILE_SHA256,
+      dshVersion: expectedVersion,
+      attestationSha256: expectedAttestationSha256,
+      lockfileSha256: expectedLockfileSha256,
       packages: packages.length,
       dshPackages: dshPackages.length,
-      certificationRunId: 32393288849,
+      certificationRunId: attestation.certificationRun.runId,
       lifecycle: 'managed-cold-restart',
     })}\n`
   );

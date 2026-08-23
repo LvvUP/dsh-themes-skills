@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "certificationStatus": "pending",
+  "installableCurrent": false,
+  "capturedAt": "2026-08-23",
+  "compatibility": {
+    "dshPackageVersion": "0.1.1-rc.2",
+    "officialRelease": {
+      "tag": "dsh-v0.1.1-rc.2",
+      "sourceCommit": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e"
+    },
+    "npmArtifacts": {
+      "dsh": {
+        "name": "@deepseek-ai/dsh",
+        "version": "0.1.1-rc.2",
+        "integrity": "sha512-UP1UIh6q3Gme/yXRn/QL2P8IsVlv8Shpg22TRJIZPsCRWLm4CBiA1MUvXmJAfsOEETBMLAl+xWPtFw6ICsN3wg==",
+        "shasum": "1a5112369f1c46b13a6e6f21de8af5e6afd45074",
+        "tarballSha256": "47ec05f45ada5ab87779ae18a90456b5ebff5421dc0ff5c179677d65e1c16057",
+        "registryUrl": "https://registry.npmjs.org/@deepseek-ai/dsh/-/dsh-0.1.1-rc.2.tgz",
+        "provenance": "registry-digest-only"
+      },
+      "uiTheme": {
+        "name": "@deepseek-ai/dsh-client-ui-theme",
+        "version": "0.1.1-rc.2",
+        "integrity": "sha512-gRKI92D+EZtOy7UBkRfNvyL4e/3HikZ7exQSfgGpLEJ278/aXMvStNbL5ZgWVC41+MSZsBUk3dZAfbXNjelz2g==",
+        "shasum": "66ba1f4e89b17a71f24ad940e026d278fdf6acdc",
+        "tarballSha256": "dcfb8ae44877c3cea5fd2848561aff1ac0ff55287f2563f2c84d47727146de64",
+        "registryUrl": "https://registry.npmjs.org/@deepseek-ai/dsh-client-ui-theme/-/dsh-client-ui-theme-0.1.1-rc.2.tgz",
+        "provenance": "registry-digest-only"
+      },
+      "webFrontend": {
+        "name": "@deepseek-ai/dsh-web-frontend",
+        "version": "0.1.1-rc.2",
+        "integrity": "sha512-1cjf39g6RW7cgtvwhIF6MSnp5sk3KYRkmRhZM4GETWLXCrTfMD0WCJr3yME1uvJsYPTk28XmKXwwMUPrO3kksQ==",
+        "shasum": "b504ffa318e6376e01ffb033c852a9423cc38520",
+        "tarballSha256": "e5719353a539ce6e0510ff1a3b430de3ff55eca256c847c98320d4438fef2f27",
+        "registryUrl": "https://registry.npmjs.org/@deepseek-ai/dsh-web-frontend/-/dsh-web-frontend-0.1.1-rc.2.tgz",
+        "provenance": "registry-digest-only"
+      }
+    },
+    "uiThemeClientBundleSha256": "86f6ae4775ca2f4af29b7abaf200a18833b6675aa8446942f819342829eba6a5",
+    "uiThemeHostBundleSha256": "296d7e8f03a8a7d9d9cd70c21b39eecc8c4a15049e936cf8d5090eac545e5fae",
+    "tokenCatalogSha256": "fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926",
+    "selectorCatalogSha256": null,
+    "webEntrypoints": {
+      "indexHtml": {
+        "path": "dist/index.html",
+        "sha256": "f64ff1fca53360a2ae76819ed23c64ddb5b92ae8bf43b2323c8139416efcf065"
+      },
+      "mainJavaScript": {
+        "path": "dist/assets/index-ClqxG24t.js",
+        "sha256": "e7e0fe9aa54df4397e42ce3b3231f06c888dca9fef37f171f1748907b5e047e8"
+      },
+      "mainStylesheet": {
+        "path": "dist/assets/index-C6eRlFa6.css",
+        "sha256": "8422b97a5843c0f31bb0e8470febd6adcd5cff78fe4cf22c73b1a29872acced6"
+      },
+      "vendorJavaScript": {
+        "path": "dist/assets/vendor-D22_Mp1f.js",
+        "sha256": "a999d26735448a40f2a8a21bf9cf9748b7815634fae4c5ca51d929843da9a907"
+      },
+      "vendorStylesheet": {
+        "path": "dist/assets/vendor-CjyC-hUb.css",
+        "sha256": "8b86a22c0e3551fb5c3ec2af2b2515232614f75fd1e7ce76d62bec9ce12a6686"
+      }
+    },
+    "webAssetSet": {
+      "algorithm": "sorted-path-tab-size-tab-sha256-lf",
+      "scope": "dist/assets/**",
+      "fileCount": 86,
+      "sha256": "2dc3285f8ad257ea0e15e6c5dfbaef0a3f8ea0ebaa1353e2bf4718f140eb01e1"
+    },
+    "runtimeAttestationSha256": null
+  },
+  "requiredMatrix": {
+    "platforms": [
+      "linux",
+      "darwin",
+      "win32"
+    ],
+    "nodeVersions": [
+      "22.19.0",
+      "24.15.0"
+    ],
+    "scenarios": [
+      "install-list-remove",
+      "light-dark-system",
+      "managed-cold-restart",
+      "rollback-reverse",
+      "malformed-evidence-fails-closed",
+      "mixed-version-evidence-fails-closed"
+    ]
+  },
+  "lockExpectation": {
+    "path": "runtime-dsh-0.1.1-rc.2/pnpm-lock.yaml",
+    "sha256": "b00224c0188c8d4c7b45a3553051da4a4f8e4fd4f89bc98b3a0bb845a3308255",
+    "productionPackagesCount": 505,
+    "productionPackagesSha256": "9c748f661b6ad106383b5e6c835efe0679054efb36889adcf26a3bc09e1b3690",
+    "dshPackagesCount": 188,
+    "dshPackagesSha256": "40bbb3eeac9ab30a8d957df10010102c1442dc255923fc2ab60a0f10413e6630"
+  },
+  "blockers": [
+    "selector-catalog-not-revalidated-on-rc2",
+    "hosted-artifacts-not-repacked-for-rc2",
+    "six-job-runtime-matrix-not-completed",
+    "community-items-not-reverified-on-rc2",
+    "final-runtime-attestation-not-issued"
+  ]
+}
