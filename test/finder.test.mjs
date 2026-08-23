@@ -149,6 +149,75 @@ test('finder returns only published verified exact RC.8 V3 releases', async () =
   assert.equal(output.items[0].license.identifier, 'CC-BY-4.0');
 });
 
+test('finder resolves one beginner selection without asking for package coordinates', async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-finder-selection-'));
+  const catalog = join(directory, 'catalog.json');
+  await writeFile(catalog, JSON.stringify({ items: [directorySkin()] }));
+
+  for (const [label, selection] of [
+    ['catalog number', '#2206'],
+    ['slug', 'dsh-web-ui-qq98'],
+    ['localized name', 'QQ98 Retro'],
+    ['detail URL', 'https://dsh-themes.com/zh/skins/dsh-web-ui-qq98'],
+  ]) {
+    await t.test(label, async () => {
+      const result = await run(finder, [
+        '--catalog', catalog,
+        '--selection', selection,
+      ]);
+      assert.equal(result.code, 0, result.stderr);
+      const output = JSON.parse(result.stdout);
+      assert.equal(output.selection.status, 'resolved');
+      assert.equal(output.selection.catalog, 'user-supplied-trusted-catalog');
+      assert.equal(output.count, 1);
+      assert.equal(output.items[0].catalogId, 2206);
+      assert.equal(output.items[0].slug, 'dsh-web-ui-qq98');
+    });
+  }
+});
+
+test('finder fails closed on ambiguous, foreign, or over-specified selections', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-finder-selection-gates-'));
+  const catalog = join(directory, 'catalog.json');
+  await writeFile(catalog, JSON.stringify({ items: [
+    item(),
+    item({
+      slug: 'ocean-workbench-alt',
+      package: {
+        ...item().package,
+        fileName: 'ocean-workbench-alt-1.0.0.tgz',
+        url: 'https://example.com/api/themes/ocean-workbench-alt/download/1.0.0',
+      },
+    }),
+  ] }));
+
+  const ambiguous = await run(finder, [
+    '--catalog', catalog,
+    '--selection', 'Ocean Workbench',
+  ]);
+  assert.equal(ambiguous.code, 0, ambiguous.stderr);
+  const ambiguousOutput = JSON.parse(ambiguous.stdout);
+  assert.equal(ambiguousOutput.selection.status, 'ambiguous');
+  assert.equal(ambiguousOutput.count, 0);
+  assert.equal(ambiguousOutput.items.length, 0);
+  assert.equal(ambiguousOutput.selection.candidates.length, 2);
+
+  const foreign = await run(finder, [
+    '--catalog', catalog,
+    '--selection', 'https://example.com/skins/ocean-workbench',
+  ]);
+  assert.notEqual(foreign.code, 0);
+  assert.match(foreign.stderr, /dsh-themes\.com/);
+
+  const overSpecified = await run(finder, [
+    '--catalog', catalog,
+    '--query', 'ocean',
+    '--selection', 'ocean-workbench',
+  ]);
+  assert.notEqual(overSpecified.code, 0);
+  assert.match(overSpecified.stderr, /cannot be combined/);
+});
+
 test('finder may audit RC.6 queries but does not relabel V3 artifacts', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-finder-historical-'));
   const catalog = join(directory, 'catalog.json');
