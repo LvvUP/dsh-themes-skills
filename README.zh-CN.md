@@ -20,6 +20,57 @@
 
 这条候选通道**尚未完成认证**。它不能用于创作、投稿、返回可安装的 Finder 结果，也不能安装站内或社区软件包。在真实 RC.2 运行回执满足下述全部晋级门槛之前，保留的 **`0.1.0-rc.8` 已认证通道仍是唯一可运行通道**。
 
+## 还没有安装 DeepSeek Harness？
+
+请先把官方 DeepSeek Harness 的安装与启动作为一个**独立任务**完成，再让 Agent 安装主题、皮肤或界面增强插件。本仓库的安装 Skill 不会替你安装 Harness 或 Node.js。
+
+1. 运行 `node --version`。使用 Node 22 中的 `22.19.0` 或更高版本，或 Node 24 中的 `24.15.0` 或更高版本。如果没有 Node，或者版本不在这些已测试范围内，请先停止并选择 Node 安装方式。Agent 在运行 Homebrew、`apt` 或其他系统级安装器之前，必须先取得你的明确同意。
+2. 启动精确固定的官方 RC.2 软件包；它对应官方 commit `b150a551b8d465e31e418e1b2eaf5e79bbb7d28e`。不要使用可变的 `latest` 或 `next`：
+
+   ```bash
+   npx @deepseek-ai/dsh@0.1.1-rc.2 web
+   ```
+
+3. 只打开 DSH 输出的本机回环地址（`127.0.0.1` 或 `localhost`）。进入 DSH 设置界面配置模型供应商和模型。API Key 应保存在 DSH 自己的凭据/设置流程中，不要粘贴到主题安装提示词里。
+
+如果这套精确 DSH 已经可以正常启动，请直接跳过本节，不要重复安装。先结束 DSH 安装任务，再用下面的一个选择发起新的主题安装任务。
+
+能够启动官方 RC.2，**不等于**本仓库的 RC.2 主题证据已经晋级。当前新安装的 RC.2 可以使用 DSH 内置外观，但主题/皮肤安装必须等待独立的 RC.2 认证门槛完成。Skill 不会把 RC.2 降级，也不会暗中替换为保留的 RC.8 通道。
+
+## 已经安装 DSH？只需告诉 Agent 你想装什么
+
+新手流程只需要一次选择，不需要填写一张“证据表”。
+
+| 你提供 | Skill 在内部解析并验证 |
+| --- | --- |
+| `#2025` 这类卡片编号、`redline-02` 这类 slug、页面显示名称，或 DSH-Themes 详情页 URL | 精确包名和版本、受控制品 URL、完整 `.tgz` SHA-256、固定兼容 sidecar、运行/权利门槛与回滚目标 |
+
+你不需要寻找或抄写这些技术坐标。如果同名条目不止一个，Agent 只会请你做一次简短选择。只有你明确选择离线高级/手动恢复模式时，才会要求本地绝对路径；Skill 会自行计算文件摘要，并继续与固定权威交叉校验。
+
+### 通用安装
+
+只需安装一次 Finder：
+
+```bash
+npx skills add LvvUP/dsh-themes-skills --skill dsh-theme-finder
+```
+
+然后直接告诉 Agent：
+
+```text
+请安装 DSH-Themes 的 redline-02。
+```
+
+Finder 会解析生产目录记录、说明必要的权利与运行风险，并且只有在该条目的认证门槛通过后，才把完整的规范化记录交给 Manager 或 Community Skin Installer。安装器会在真正修改本地 `web` profile 之前向你确认。
+
+如果 Harness 缺失、尚未完成首次启动，或者版本不符合已认证通道，安装器会停止并指向上面的独立安装说明。它不会安装 Harness、修改 Node、降级现有 DSH，也不会把 DSH 安装和所选 `#ID` 合并成一个任务。
+
+### 专属安装
+
+在 [dsh-themes.com](https://dsh-themes.com/zh) 打开喜欢的主题或皮肤详情页，复制该页面的专属安装提示词即可。提示词已经确定当前条目；Agent 会从目录和固定 sidecar 解析技术元组。你不需要分别复制目录 URL、包版本、制品 URL 和哈希。
+
+两种方式使用同一套 fail-closed 安全规则。待验证、无法唯一匹配、证据矛盾或仅供展示的条目只会得到清楚说明，不会被拼装成安装命令。RC.2 认证仍待完成期间，两种方式都只能通过保留的 RC.8 已认证通道运行。
+
 ## 证据状态
 
 | 通道 | 当前已有证据 | 安装状态 |
@@ -44,15 +95,9 @@
 5. 全部 11 个社区条目均重新运行并取得条目级回执。
 6. 使用经过复核的最终 attestation 替换待认证回执，而不是直接修改 pending 状态冒充完成。
 
-## 快速开始
+## 检查证据
 
-使用标准 Skills CLI 安装单个技能：
-
-```bash
-npx skills add LvvUP/dsh-themes-skills --skill dsh-theme-finder
-```
-
-然后要求 Agent 先报告证据：
+在不修改 profile 的情况下要求 Agent 报告证据：
 
 ```text
 请查询我信任的 DSH-Themes 目录，并分别报告权利、运行时行为、
@@ -60,7 +105,7 @@ npx skills add LvvUP/dsh-themes-skills --skill dsh-theme-finder
 不要安装待验证条目或 showcase-only 条目。
 ```
 
-在不修改 profile 的前提下检查两个基线通道：
+在本地检查两个基线通道：
 
 ```bash
 node skills/dsh-theme-manager/scripts/verify-runner.mjs

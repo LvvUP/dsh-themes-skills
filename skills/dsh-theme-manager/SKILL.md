@@ -9,6 +9,32 @@ Manage at most one verified `@dsh-themes/*` Cordis plugin in the `web` profile. 
 
 Baseline selection is policy-driven. Read `references/baseline-policy.json`; derive exact versions only from the pinned sidecars it names, and reject mutable dist-tags such as `latest` or `next`, ranges, and mixed evidence. The certified lane remains the only operational install lane. Inspect the RC.2 candidate with `scripts/validate-baseline-candidate.mjs`; it is `certification-pending`, lacks final selector/runtime/community receipts, and always returns `installable: false`. Any older wording below that mentions a registry channel documents retained RC.8 history and must not be used for version resolution.
 
+## Harness presence and Node gate
+
+Installing DeepSeek Harness and installing a selected theme are separate tasks. This Skill never installs DSH, Node.js, Homebrew, `apt` packages, or another system dependency.
+
+Before resolving an installation mutation:
+
+1. Require Node `22.19.0` or newer within Node 22, or `24.15.0` or newer within Node 24. If Node is missing or unsupported, stop in plain language. Point to the README setup section; do not run a system-level installer without a separate user request and immediate explicit consent.
+2. Confirm that official DSH has already completed its own first start and that the selected profile exists. If not, stop and point to the separate fixed RC.2 command in the README. Do not run that command from Manager and do not combine DSH setup with a card-number installation.
+3. Inspect the existing exact DSH version through the attested runner. Never reinstall, downgrade, or replace an existing DSH to make a theme pass. The installed version must match the certified lane selected by `baseline-policy.json`.
+
+Official `0.1.1-rc.2` may be installed and started independently, but its theme-installation candidate remains disabled. If that version is detected today, report the RC.2 certification blockers and stop before profile mutation; never substitute retained RC.8 behind the user's back.
+
+## Beginner-facing input
+
+The normal entry point is one normalized `dsh-theme-finder` result selected by card number, slug, displayed name, or DSH-Themes detail URL. Do not ask the user to discover or type the package name, version, artifact URL, `.tgz` path, or SHA-256.
+
+Resolve those fields internally and keep their trust sources separate:
+
+1. Take the slug, kind, distribution, and controlled origin only from the Finder result, never from descriptive catalog prose.
+2. Resolve the exact published release record and fixed sidecar selected by `baseline-policy.json`.
+3. Derive `@dsh-themes/<slug>`, the exact version, controlled download route, and complete artifact SHA-256 from that release record.
+4. Independently match the package/version/digest tuple against `CURRENT_INSTALLABLE_HOSTED_ARTIFACTS` before downloading, then re-hash the downloaded bytes.
+5. Present a short target, permissions, compatibility, restart, and rollback summary. Ask for explicit confirmation only immediately before profile mutation.
+
+If the selection is ambiguous, return to Finder and ask one short choice. If any authority field is absent or disagrees, stop and say the selected item is not currently installable; do not transfer evidence collection to the user. Only when the user explicitly chooses offline advanced/manual mode may you ask for an absolute local release-record and `.tgz` path. Compute the file digest locally and still require the pinned release record and local authority to agree.
+
 ## Release boundary
 
 The current certified release is DeepSeek Harness `0.1.0-rc.8` on npm `next`, mapped by official tag `dsh-v0.1.0-rc.8` to source commit `141eb6fef83422698aef7a981029e843e8161534`. Installation authority is the publisher-side V3 sidecar `themes/compatibility/dsh-0.1.0-rc.8.json`, the frozen `runtime-rc8` closure, successful six-job matrix run `32393288849` at head `e3fe9ac465b8db8070efbdb83ddc6c821f923a73`, and the reviewed package-version-complete-digest authority in `scripts/hosted-artifact-authority.mjs`. The current map is generated from rebuilt index SHA-256 `f706364d3f44fb0667147155c8400fe456da482fb908625e4d4c2c301022bbe6` and has 32 current-installable V3 artifacts. A separate map retains 24 exact V1, V2, and V3 predecessors only for a verified schema-2 rollback or its reverse; they are not fresh-install or normal catalog targets. Normal validation still reports RC.6/V2 and RC.5/V1 as historical. Only the exact retained tuples may cross the rollback gate, and they still run under the current RC.8 Manager's cold-restart boundary; reject all other historical, RC.7, and mixed records. The original `full-skins-2026-08` package release-set records FS-005 through FS-024 as `certified-rc8` after a 20/20 isolated managed cold-restart `certify-final` matrix. Its compact receipt SHA-256 is `b8af1bf145dae15ae3575ad2a7b19b691e802dd58cdc247332fd944262b79198`, and its frozen 20-target identity SHA-256 is `f0f427dc48670b70a72cb2dd4d556eb2278dcb24244ceb5d16f5c443600cbe59`. Four later artwork/palette refreshes (`liberty-ink`, `germany-matchday`, `england-matchday`, and `neon-afterline`) have new complete-package digests in the current map. Those exact current bytes passed a separate 4/4 non-promotional managed cold-restart sample with receipt SHA-256 `54697e730554d2282970c4a9bcea29a34980dc2d30fc378efaf1be994da64858`; the original 20-target receipt must not be presented as proof for those four refreshed bytes. A targeted 4/4 final matrix with receipt SHA-256 `4f887b47c49f1ad44e0ff0163a142f05a52ebb5e3fdfa666ddda7a942600676f` remains exact evidence for the current `redline-02`, `copper-wire`, and `bamboo-quietude` bytes; its earlier Fire Horse artifact was superseded and is not current evidence. The final `fire-horse-chronicle@1.0.0` tarball SHA-256 `6eccabbdc98e00ad92144cbaee608159412e7c8e19d8c4272c8fe76194228455` passed a pre-index 1/1 sample with receipt SHA-256 `9cc311e0b151c2653abcbce4afd38beb19ca59b074572862849ab418d0fffd91` and frozen identity SHA-256 `5d030337ee82a69bdcb16455e6361f7ca1cbf392c09d16832bcb9d6c22cbcece`; that evidence was used to generate the 32-tuple authority. The same tarball then passed a frozen 1/1 sample against the prior final index with receipt SHA-256 `5da6c5839edd3dd1f25238555f983429fb0fd6a4fe00720a894d94f01f6635ea`. The later site rebuild changed only the raw index bytes and retained every authorized tuple. This post-index evidence is documentation-only and deliberately excluded from index construction, keeping the authority closure non-recursive. This package-level state does not alter or replace the frozen Manager proof. Exact boundaries are documented below and in [`references/compatibility.md`](references/compatibility.md); do not infer authority from a private publisher source path.
@@ -45,7 +71,7 @@ versions. Delete the temporary list after use.
 
 ## Validate the release record
 
-Build a permission-restricted JSON file containing the raw manifest and catalog fields:
+The Skill—not the user—builds a permission-restricted temporary JSON file from the resolved, validated release record. It contains the raw manifest and catalog authority fields:
 
 ```json
 {

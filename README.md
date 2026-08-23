@@ -20,6 +20,57 @@ Version **0.5.0** adds an exact, fail-closed certification candidate for DeepSee
 
 It is **not certified yet**. The candidate cannot author, submit, return installable Finder results, or install a hosted/community package. The retained **`0.1.0-rc.8` certified lane remains the only operational lane** until real RC.2 runtime receipts pass every promotion gate below.
 
+## New to DeepSeek Harness?
+
+Set up and start official DeepSeek Harness as a **separate task** before asking an Agent to install a theme, skin, or UI extension. The installation Skills in this repository deliberately do not install Harness or Node.js for you.
+
+1. Check `node --version`. Use Node `22.19.0` or newer within Node 22, or `24.15.0` or newer within Node 24. If Node is missing or outside those tested ranges, stop and choose a Node installation method first. An Agent must obtain your explicit consent before running a system-level installer such as Homebrew, `apt`, or a platform package manager.
+2. Start the exact official RC.2 package, mapped to official commit `b150a551b8d465e31e418e1b2eaf5e79bbb7d28e`—never a mutable `latest` or `next` selector:
+
+   ```bash
+   npx @deepseek-ai/dsh@0.1.1-rc.2 web
+   ```
+
+3. Open only the loopback URL printed by DSH (`127.0.0.1` or `localhost`). In the DSH settings UI, configure your model provider and model. Keep API keys in DSH's own credential/settings flow; do not paste them into a theme-installation prompt.
+
+If this exact DSH setup already starts successfully, skip this section—do not install it again. Finish the DSH setup task first, then begin a new theme-installation task with one selection below.
+
+Starting official RC.2 does **not** promote this repository's pending RC.2 theme evidence. At the moment, a new RC.2 setup can run DSH with its built-in appearance, but theme/skin installation must stop until the separate RC.2 certification gate is complete. The Skills never downgrade RC.2 or silently substitute the retained RC.8 lane.
+
+## Already use DeepSeek Harness? Install with one choice
+
+The beginner path asks for one choice, not an evidence worksheet.
+
+| You provide | The Skills resolve and verify internally |
+| --- | --- |
+| A card number such as `#2025`, a slug such as `redline-02`, a displayed name, or a DSH-Themes detail URL | Exact package and version, controlled artifact URL, complete `.tgz` SHA-256, fixed compatibility sidecar, runtime/rights gate, and rollback target |
+
+You should not need to find or transcribe package coordinates. If a displayed name matches more than one item, the Agent asks one short choice. Exact local paths are requested only when you explicitly choose offline advanced/manual recovery; the Skill computes the local digest and still checks it against pinned authority.
+
+### General installation
+
+Add the Finder once:
+
+```bash
+npx skills add LvvUP/dsh-themes-skills --skill dsh-theme-finder
+```
+
+Then tell your Agent what you want:
+
+```text
+Install redline-02 from DSH-Themes.
+```
+
+Finder resolves the canonical directory record, reports the important rights/runtime facts, and hands the complete normalized record to Manager or Community Skin Installer only when that item's certified gate passes. The installer asks for confirmation immediately before it changes the local `web` profile.
+
+If Harness is missing, has never completed its own first start, or does not match the certified lane, the installer stops and points back to the separate setup section. It does not install Harness, change Node, downgrade an existing DSH, or combine setup with the selected `#ID` task.
+
+### Dedicated installation
+
+Open a theme or skin detail page on [dsh-themes.com](https://dsh-themes.com), then copy its dedicated installation prompt. That prompt already identifies the selected record; the Agent resolves the technical tuple from the directory and pinned sidecars. You do not need to copy a catalog URL, package version, artifact URL, and hash separately.
+
+Both paths use the same fail-closed policy. Pending, ambiguous, contradictory, and showcase-only records are explained but never converted into an install command. While RC.2 certification remains pending, these paths can operate only through the retained certified RC.8 lane.
+
 ## Evidence status
 
 | Lane | Evidence available now | Installation status |
@@ -44,15 +95,9 @@ Promotion requires a separate reviewed runtime workflow and receipts proving:
 5. All 11 community items were re-run and received item-level receipts.
 6. A final attestation replaced—not edited into—the pending receipt.
 
-## Quick start
+## Inspect the evidence
 
-Install one skill with the standard Skills CLI:
-
-```bash
-npx skills add LvvUP/dsh-themes-skills --skill dsh-theme-finder
-```
-
-Then ask for evidence before action:
+Ask for evidence without changing a profile:
 
 ```text
 Use the DSH-Themes directory I trust. Report rights, runtime behavior,
@@ -60,7 +105,7 @@ exact compatibility, immutable source revision, distribution, and install gate.
 Do not install pending or showcase-only records.
 ```
 
-Inspect the two baseline lanes without changing a profile:
+Inspect the two baseline lanes locally:
 
 ```bash
 node skills/dsh-theme-manager/scripts/verify-runner.mjs

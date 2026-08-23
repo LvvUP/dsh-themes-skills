@@ -1,4 +1,4 @@
 interface:
   display_name: "DSH Theme Finder"
   short_description: "Classify hosted, community, and showcase directory records"
-  default_prompt: "Use $dsh-theme-finder to search a trusted DSH directory and hand off only records accepted by the pinned certified baseline; report the RC.2 candidate as pending with zero installable results."
+  default_prompt: "Use $dsh-theme-finder to resolve my card number, slug, displayed name, or DSH-Themes detail URL; derive exact authority fields internally and hand off only records accepted by the pinned certified baseline. If DSH setup is incomplete, keep that as a separate task and stop before installer handoff; RC.2 remains pending with zero installable results."

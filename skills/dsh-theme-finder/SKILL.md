@@ -11,6 +11,31 @@ Return catalog evidence, not invented recommendations. Search only a website or 
 
 The operational lane is the exact certified baseline named by `references/baseline-policy.json`; today its retained V3 evidence targets DeepSeek Harness `0.1.0-rc.8`. RC.6 V2 and RC.5 V1 remain historical. RC.2 is a certification candidate: selecting its exact sidecar version returns zero results, `installableResultsAllowed: false`, and does not read catalog metadata. See the informational [`release-state.json`](../../release-state.json); Finder keeps executable gates independent of that file.
 
+## One-choice input
+
+For a normal DSH-Themes request, the user supplies exactly one human-friendly selection:
+
+- A card number such as `#2025`.
+- A slug such as `redline-02`.
+- A displayed name in the user's language.
+- A DSH-Themes theme, skin, or directory detail URL.
+
+Do not ask the user for a package name, package version, artifact URL, local `.tgz` path, or SHA-256. Those are authority fields for the Skills to resolve and cross-check, not form fields for a beginner. Use the user's current language as `--locale`; the seven allowed values are `en`, `zh`, `zh-Hant`, `ja`, `ko`, `fr`, and `de`.
+
+Resolve one selection with the bundled read-only client:
+
+```bash
+node <skill-dir>/scripts/find-themes.mjs \
+  --selection <number-slug-name-or-detail-url> \
+  [--locale <locale>]
+```
+
+With `--selection` and no `--catalog`, the client uses the canonical HTTPS production directory at `dsh-themes.com`. A detail URL must be on that origin and may select its locale from the path. The client requires an exact number, slug, or displayed-name match after the record passes every catalog gate. It returns `selection.status: "resolved"` only for one match, `not-found` for none, and `ambiguous` with a short list of safe labels for more than one. Ask one concise choice only for `ambiguous`; never guess from popularity or metadata prose.
+
+An explicitly trusted alternate catalog remains available with `--catalog`. Offline advanced/manual mode may use an absolute local catalog. Only when the user explicitly chooses that mode may you ask for the local catalog or release-record path; compute local artifact hashes yourself and compare them with the pinned record rather than asking the user to transcribe a digest.
+
+Finder is read-only and never installs DeepSeek Harness or Node.js. DSH setup and `#ID` installation are separate user tasks. If the user has not completed a first official DSH start, resolve and explain the selected record if useful, then stop before installer handoff and point to the repository README's fixed RC.2 setup section. Do not run a system package manager, `npx @deepseek-ai/dsh`, or an installer Skill as a combined bootstrap.
+
 ## Search
 
 Use the bundled read-only client:
@@ -24,6 +49,8 @@ node <skill-dir>/scripts/find-themes.mjs \
 ```
 
 The client sends no cookies, credentials, or authorization headers. It refuses HTTP, cross-origin redirects, oversized responses, unpublished directory records, mutable source revisions, malformed source subdirectories, unsafe package versions, contradictory rights/runtime/compatibility axes, and unknown distribution combinations.
+
+`--query` is for browsing and may return several results. `--selection` is the beginner installation path and cannot be combined with `--query`.
 
 It accepts the original release catalog plus the directory API envelope. Directory records keep `rights`, `runtime`, `compatibility`, `sourceRevision`, and `sourceSubdir` separate. A fixed source hash is byte identity, not proof of license ownership, publisher identity, or runtime safety.
 
@@ -55,3 +82,5 @@ Do not describe an editorial/browser mockup as a real Harness screenshot. Do not
 Invoke `dsh-theme-manager` only for a result with `installable: true`, `distribution.kind: "hosted-verified-artifact"`, and `installer: "dsh-theme-manager"`.
 
 Invoke `dsh-community-skin-installer` only for a result with `installable: true`, `distribution.kind: "external-runtime-verified"`, and `installer: "dsh-community-skin-installer"`; that Skill independently revalidates its local allowlist and release gate. Never hand `external-showcase` to either installer or synthesize a command from a repository, description, preview, package name, or mutable tag.
+
+Pass the complete normalized Finder result to the selected installer internally. The user should see a short summary and consent question, not a request to re-enter its exact coordinates. A hosted directory card that still says `resolve-exact-hosted-release-record-before-manager` remains non-installable until the exact release record is resolved and validated; report that blocker plainly instead of shifting the evidence work to the user.

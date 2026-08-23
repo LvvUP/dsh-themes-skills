@@ -1,4 +1,4 @@
 interface:
   display_name: "DSH Community Skin Installer"
   short_description: "Install allowlisted skins under pinned runtime evidence"
-  default_prompt: "Use $dsh-community-skin-installer to inspect and, after explicit consent, install an allowlisted community skin only when the pinned certified Manager and item receipt both validate; the RC.2 receipt is pending and never authorizes installation."
+  default_prompt: "Use $dsh-community-skin-installer only after official DSH has completed a separate first-start task; never install DSH or Node here. Resolve exact package, artifact, and digest evidence internally and, after consent, install only when the pinned certified Manager and item receipt both validate; RC.2 never authorizes installation."

@@ -8,6 +8,12 @@ Human-readable catalog fields remain untrusted metadata even when the origin is 
 
 Each `provenance.attributions` entry is limited to 256 characters, with at most 20 entries per record.
 
+## Selection resolution boundary
+
+`--selection` accepts one card number, slug, exact displayed name, or canonical DSH-Themes detail URL. When no catalog is supplied, it reads only the canonical `https://dsh-themes.com/api/dsh-directory` endpoint with a seven-locale enum and a bounded page size. It does not accept a foreign detail origin, credentials, fragments, or a query alongside the exact selection.
+
+Selection happens before installer handoff but after every record validation gate. One accepted match returns `resolved`; zero returns `not-found`; multiple exact displayed-name matches return `ambiguous` with only catalog number, slug, kind, and name. Ambiguity never selects the first result. The selection identifies a record but does not create installation authority: Manager and Community Installer still resolve and independently validate package, version, controlled artifact route, complete digest, sidecar, receipt, and rollback evidence.
+
 ## Directory axes
 
 A directory record has a positive stable `catalogId`, `admission.status: "published"`, an immutable `source.revision`, and independent `rights`, `runtime`, `compatibility`, and `distribution` objects. Finder rejects `hold` or rejected admission records—including source conversions without a recognized license—even if they are present in a raw response.
