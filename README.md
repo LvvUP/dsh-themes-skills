@@ -68,7 +68,7 @@ If Harness is missing, has never completed its own first start, or does not matc
 
 ### Dedicated installation
 
-Open a theme or skin detail page on [dsh-themes.com](https://dsh-themes.com), then copy its dedicated installation prompt. That prompt already identifies the selected record; the Agent resolves the technical tuple from the directory and pinned sidecars. You do not need to copy a catalog URL, package version, artifact URL, and hash separately.
+Open a theme, skin, or UI extension detail page on [dsh-themes.com](https://dsh-themes.com), then copy its dedicated installation prompt. That prompt already contains the selected `#ID`; the Agent resolves the technical tuple from the directory and pinned sidecars. You do not need to copy a catalog URL, package version, artifact URL, and hash separately.
 
 Both paths use the same fail-closed policy. Pending, ambiguous, contradictory, and showcase-only records are explained but never converted into an install command. While RC.2 certification remains pending, these paths can operate only through the retained certified RC.8 lane.
 
