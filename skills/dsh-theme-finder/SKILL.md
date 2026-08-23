@@ -35,13 +35,13 @@ Before an installer handoff, confirm that the required companion Skill is alread
 
 ```bash
 npx --yes skills@1.5.23 add \
-  https://github.com/LvvUP/dsh-themes-skills/tree/v0.5.0 \
+  https://github.com/LvvUP/dsh-themes-skills/tree/v0.5.1 \
   --skill dsh-theme-finder \
   --skill dsh-theme-manager \
   --skill dsh-community-skin-installer
 ```
 
-This command is available only after the coordinated `v0.5.0` release tag is published. Before then, stop and report that the candidate is review-only. Do not dynamically fetch, synthesize, or import a missing installer, and never substitute a mutable branch, mutable tag, `latest`, or `next`. After the companion Skills are present, keep the beginner-facing request unchanged: the user provides only the confirmed `#ID`.
+This command is available only after the coordinated `v0.5.1` release tag is published. Before then, stop and report that the candidate is review-only. Do not dynamically fetch, synthesize, or import a missing installer, and never substitute a mutable branch, mutable tag, `latest`, or `next`. After the companion Skills are present, keep the beginner-facing request unchanged: the user provides only the confirmed `#ID`.
 
 An explicitly trusted alternate catalog remains available with `--catalog` for discovery and evidence review. It can never create hosted Manager authority or return a hosted record as installable, even when its fields resemble the production schema. Offline advanced/manual mode may use an absolute local catalog. Only when the user explicitly chooses that mode may you ask for the local catalog or release-record path; compute local artifact hashes yourself and compare them with the pinned record rather than asking the user to transcribe a digest.
 

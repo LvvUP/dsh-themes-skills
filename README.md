@@ -6,7 +6,7 @@
 
 [English](README.md) · [简体中文](README.zh-CN.md)
 
-[![Version 0.5.0](https://img.shields.io/badge/version-0.5.0-246BCE)](package.json)
+[![Version 0.5.1](https://img.shields.io/badge/version-0.5.1-246BCE)](package.json)
 [![Candidate: certification pending](https://img.shields.io/badge/DSH%200.1.1--rc.2-certification%20pending-D97706)](skills/dsh-theme-manager/references/dsh-0.1.1-rc.2.candidate.json)
 [![CI](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml)
 [![Node.js 22/24](https://img.shields.io/badge/Node.js-22.19%20%7C%2024.15-16324F)](package.json)
@@ -16,7 +16,7 @@
 
 </div>
 
-Version **0.5.0** adds an exact, fail-closed certification candidate for DeepSeek Harness **`0.1.1-rc.2`**. It pins the official release, npm integrity, a frozen lock, and the complete dependency closure so reviewers can run the next certification without resolving `latest` or `next`.
+Version **0.5.1** keeps the exact, fail-closed DeepSeek Harness **`0.1.1-rc.2`** certification candidate and makes the website's numeric `#ID` the only public catalog identity from card to package index. It pins the official release, npm integrity, a frozen lock, and the complete dependency closure so reviewers can run the next certification without resolving `latest` or `next`.
 
 It is **not certified yet**. The candidate cannot author, submit, return installable Finder results, or install a hosted/community package. The retained **`0.1.0-rc.8` certified lane remains the only operational lane** until real RC.2 runtime receipts pass every promotion gate below.
 
@@ -41,13 +41,13 @@ Add the coordinated Finder and both companion installers once:
 
 ```bash
 npx --yes skills@1.5.23 add \
-  https://github.com/LvvUP/dsh-themes-skills/tree/v0.5.0 \
+  https://github.com/LvvUP/dsh-themes-skills/tree/v0.5.1 \
   --skill dsh-theme-finder \
   --skill dsh-theme-manager \
   --skill dsh-community-skin-installer
 ```
 
-The fixed `v0.5.0` release reference is published only with the coordinated site release described above. Until that tag exists, this branch is review-only and must not be substituted with `main`, `latest`, or another mutable reference.
+The fixed `v0.5.1` release reference is published only with the coordinated site release described above. Until that tag exists, this branch is review-only and must not be substituted with `main`, `latest`, or another mutable reference.
 
 Then tell your Agent what you want:
 

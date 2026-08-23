@@ -35,6 +35,8 @@ const EXPECTED_RAW_SET_SHA256 =
   "fa8988f2e83b7d50e153f8c7faab06f389a196a46a24be87eb67efa6061fa259";
 const EXPECTED_ARCHIVED_SET_SHA256 =
   "2170e123ae115a8898c49a1b96ba7388b73cc4ed7953317313232abb9b47a0b8";
+const EXPECTED_SMOKE_HOSTED_INDEX_SHA256 =
+  "f706364d3f44fb0667147155c8400fe456da482fb908625e4d4c2c301022bbe6";
 const EXPECTED_SLUGS = [
   "abyssal-maid",
   "arcana-nocturne",
@@ -177,8 +179,13 @@ function validateBundle(index, receipts, authorityDigests) {
   );
   assert.deepEqual(index.authorityBindings, {
     ...authorityDigests,
-    hostedIndexSha256: CURRENT_CATALOG_INDEX_SHA256,
+    hostedIndexSha256: EXPECTED_SMOKE_HOSTED_INDEX_SHA256,
   });
+  assert.notEqual(
+    CURRENT_CATALOG_INDEX_SHA256,
+    EXPECTED_SMOKE_HOSTED_INDEX_SHA256,
+    "the immutable smoke archive should retain its prior index binding while current catalog metadata evolves",
+  );
 
   const slugs = index.receipts.map(({ slug }) => slug);
   assert.deepEqual(slugs, EXPECTED_SLUGS);
