@@ -513,15 +513,34 @@ test('canonical #ID resolves and Manager-validates one exact hosted release inte
   );
 
   assert.equal(output.selection.kind, 'catalog-id');
+  assert.equal(output.selection.input, `#${fixtures.catalogId}`);
   assert.equal(output.selection.authority, 'unique-catalog-id');
   assert.equal(output.selection.status, 'resolved');
   assert.equal(output.count, 1);
   const selected = output.items[0];
   assert.equal(selected.catalogId, fixtures.catalogId);
   assert.equal(selected.slug, fixtures.slug);
+  assert.equal(selected.version, fixtures.version);
   assert.equal(selected.installable, true);
   assert.equal(selected.installer, 'dsh-theme-manager');
   assert.equal(selected.package.name, `@dsh-themes/${fixtures.slug}`);
+  assert.equal(
+    selected.package.sha256,
+    fixtures.releaseData.package.sha256
+  );
+  assert.equal(selected.managerHandoff.catalogId, fixtures.catalogId);
+  assert.equal(
+    selected.managerHandoff.releaseRecord.manifest.slug,
+    fixtures.slug
+  );
+  assert.equal(
+    selected.managerHandoff.releaseRecord.manifest.artifact.name,
+    `@dsh-themes/${fixtures.slug}`
+  );
+  assert.equal(
+    selected.managerHandoff.releaseRecord.manifest.artifact.version,
+    fixtures.version
+  );
   assert.equal(
     selected.managerHandoff.validation.artifactAuthority,
     'current-installable'
@@ -548,6 +567,12 @@ test('canonical #ID resolves and Manager-validates one exact hosted release inte
   assert.equal(managerValidation.status, 'current');
   assert.equal(managerValidation.installableCurrent, true);
   assert.equal(managerValidation.artifactAuthority, 'current-installable');
+  assert.equal(managerValidation.packageName, `@dsh-themes/${fixtures.slug}`);
+  assert.equal(managerValidation.version, fixtures.version);
+  assert.equal(
+    managerValidation.artifactSha256,
+    fixtures.releaseData.package.sha256
+  );
   assert.deepEqual(
     authority.requests.map((request) => new URL(request.url).pathname),
     [
@@ -562,6 +587,55 @@ test('canonical #ID resolves and Manager-validates one exact hosted release inte
     assert.equal(request.init.headers.accept, 'application/json');
     assert.equal('authorization' in request.init.headers, false);
   }
+});
+
+test('legacy and malformed labels are rejected before they can become installation IDs', async () => {
+  for (const selection of [
+    'DSH-2206',
+    'DSH-FS-009',
+    '# 2206',
+    '#02206',
+  ]) {
+    const result = await run(finder, ['--selection', selection]);
+    assert.notEqual(result.code, 0, selection);
+    assert.match(
+      result.stderr,
+      /not public installation IDs|must use exact #digits/,
+      selection
+    );
+  }
+});
+
+test('selecting item A cannot produce a Manager handoff for item B', async () => {
+  const fixtures = await canonicalHostedFixtures();
+  const authority = canonicalFetch(fixtures, (release) => {
+    release.catalogId = fixtures.catalogId + 1;
+    release.slug = 'graphite-relay';
+    release.package = {
+      ...release.package,
+      name: '@dsh-themes/graphite-relay',
+    };
+    return release;
+  });
+  const output = await runFinder(
+    ['--selection', `#${fixtures.catalogId}`],
+    { fetchImpl: authority.fetchImpl }
+  );
+
+  assert.equal(output.selection.input, `#${fixtures.catalogId}`);
+  assert.equal(output.selection.authority, 'unique-catalog-id');
+  assert.equal(output.selection.status, 'resolved');
+  assert.equal(output.count, 1);
+  assert.equal(output.items[0].catalogId, fixtures.catalogId);
+  assert.equal(output.items[0].slug, fixtures.slug);
+  assert.equal(output.items[0].installable, false);
+  assert.equal(output.items[0].installer, null);
+  assert.equal(
+    output.items[0].handoff,
+    'exact-hosted-release-record-not-validated'
+  );
+  assert.equal(output.items[0].managerHandoff.status, 'blocked');
+  assert.equal('package' in output.items[0], false);
 });
 
 test('canonical hosted resolution fails closed when release coordinates are stale or tampered', async () => {
@@ -1199,7 +1273,7 @@ test('canonical #ID keeps the existing community installer path unchanged', asyn
   );
 });
 
-test('finder keeps pending showcases closed and opens only an exact 11-item community match', async () => {
+test('finder keeps local community matches discovery-only without a canonical #ID', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-finder-directory-'));
   const catalog = join(directory, 'catalog.json');
   const spoofedRuntime = runtimeVerifiedDirectorySkin();
@@ -1231,9 +1305,13 @@ test('finder keeps pending showcases closed and opens only an exact 11-item comm
   assert.equal(output.items[0].runtime.status, 'verification-pending');
   assert.equal(output.items[0].source.sourceRevision, directorySkin().source.revision);
   assert.equal(output.items[0].source.sourceSubdir, 'packages/skins/qq98');
-  assert.equal(output.items[1].installable, true);
-  assert.equal(output.items[1].installer, 'dsh-community-skin-installer');
+  assert.equal(output.items[1].installable, false);
+  assert.equal(output.items[1].installer, null);
   assert.equal(output.items[1].distribution.kind, 'external-runtime-verified');
+  assert.equal(
+    output.items[1].handoff,
+    'catalog-id-required-for-community-installation'
+  );
 
   const installable = await run(finder, [
     '--catalog', catalog,
@@ -1243,6 +1321,6 @@ test('finder keeps pending showcases closed and opens only an exact 11-item comm
   assert.equal(installable.code, 0, installable.stderr);
   assert.deepEqual(
     JSON.parse(installable.stdout).items.map((entry) => entry.slug),
-    ['dsh-web-ui-ths']
+    []
   );
 });

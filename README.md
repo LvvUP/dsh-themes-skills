@@ -24,12 +24,12 @@ It is **not certified yet**. The candidate cannot author, submit, return install
 
 ### I already use DeepSeek Harness — install with one ID
 
-Find the unique `#ID` in the top-left of a DSH Themes card or detail page, for example `#2004`, and tell it to your Agent. You do not need to prepare a package name, version, download URL, or checksum.
+Find the unique public `#ID` in the top-left of a DSH Themes card or detail page, for example `#2004`, and tell it to your Agent. This exact `#` plus digits form is the only installation ID. Labels such as `DSH-2206` and `DSH-FS-009` are legacy or internal references, not aliases, and must not authorize an installation. You do not need to prepare a package name, version, download URL, or checksum.
 
 <details>
 <summary>What does the Skill handle behind the scenes?</summary>
 
-The Skill uses the ID to find one exact catalog record. For a hosted item, it then reads the matching release and exact manifest from the trusted site API, cross-checks their identity, version, controlled download route, and digest, and asks Manager to verify the same tuple against its bundled authority. If anything is missing, stale, or inconsistent, it stops and explains the problem in plain language. You never need to collect the technical fields yourself.
+The Skill uses the public ID to find one exact catalog record. For a hosted item, it then reads the matching release and exact manifest from the trusted site API, cross-checks their identity, version, controlled download route, and digest, and asks Manager to verify the same tuple against its bundled authority. Package names, versions, URLs, and hashes remain internal checks rather than a second numbering system. If anything is missing, stale, inconsistent, or identifies a different item, the workflow stops and explains the problem in plain language. You never need to collect the technical fields yourself.
 
 </details>
 
@@ -55,13 +55,13 @@ Then tell your Agent what you want:
 Please install DSH Themes #2004.
 ```
 
-Finder resolves the canonical directory record by `#ID`, reports the important rights/runtime facts, and handles the exact package name, version, URL, and checksum internally. It hands a minimal validated record to Manager, or the existing allowlisted record to Community Skin Installer, only when that item's certified gate passes. The installer independently checks its local authority and asks for confirmation immediately before it changes the local `web` profile.
+Finder resolves the canonical directory record by the exact public `#ID`, reports the important rights/runtime facts, and handles the package name, version, URL, and checksum internally. It hands a minimal validated record to Manager, or the existing allowlisted record to Community Skin Installer, only when the selected ID and every internal coordinate still identify the same item and that item's certified gate passes. The installer independently checks its local authority and asks for confirmation immediately before it changes the local `web` profile.
 
 If Harness is missing, has never completed its own first start, or does not match the certified lane, the installer stops and points back to the separate setup section. It does not install Harness, change Node, downgrade an existing DSH, or combine setup with the selected `#ID` task.
 
 ### Dedicated installation
 
-Open a theme, skin, or UI extension detail page on [dsh-themes.com](https://dsh-themes.com), then copy its dedicated installation prompt. That prompt already contains the selected `#ID`; the Agent resolves and validates the technical tuple from the trusted APIs, pinned sidecars, and local installer authority. You do not need to copy a catalog URL, package version, artifact URL, or hash separately. A displayed name, slug, or detail URL can help you find the card, but it never authorizes a hosted installation by itself.
+Open a theme, skin, or UI extension detail page on [dsh-themes.com](https://dsh-themes.com), then copy its dedicated installation prompt. The prompt uses the same beginner contract as general installation: `Please install DSH Themes #2004.` with that page's own public `#ID`. The Agent resolves and validates the technical tuple from the trusted APIs, pinned sidecars, and local installer authority. You do not need to copy a catalog URL, package version, artifact URL, hash, or internal `DSH-*` label separately. A displayed name, slug, or detail URL can help you find the card, but it never authorizes a hosted installation by itself.
 
 Both paths use the same fail-closed policy. Pending, ambiguous, contradictory, and showcase-only records are explained but never converted into an install command. While RC.2 certification remains pending, these paths can operate only through the retained certified RC.8 lane.
 

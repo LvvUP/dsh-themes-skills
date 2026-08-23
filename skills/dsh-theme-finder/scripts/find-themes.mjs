@@ -297,18 +297,29 @@ function parseSelection(value) {
     value.length > 300 ||
     /[\u0000-\u001f\u007f<>]/.test(value)
   ) {
-    throw new Error('--selection must be a short catalog number, slug, name, or DSH-Themes detail URL');
+    throw new Error('--selection must be an exact public #ID, slug, name, or DSH-Themes detail URL');
   }
   const input = value.trim();
   if (!input) throw new Error('--selection cannot be empty');
 
-  const catalogNumber = /^(?:#\s*|DSH-)(\d{1,9})$/i.exec(input);
+  const catalogNumber = /^#([1-9]\d{0,8})$/.exec(input);
   if (catalogNumber) {
     return {
       input,
       kind: 'catalog-id',
       value: Number.parseInt(catalogNumber[1], 10),
     };
+  }
+
+  if (/^#/u.test(input)) {
+    throw new Error(
+      'Public installation IDs must use exact #digits with no spaces or leading zeroes'
+    );
+  }
+  if (/^DSH-(?:[A-Z]+-)?\d{1,9}$/iu.test(input)) {
+    throw new Error(
+      'Legacy DSH-* labels are not public installation IDs; use the exact #ID shown at the top-left of the card or detail page'
+    );
   }
 
   if (/^https?:\/\//i.test(input)) {
@@ -1124,6 +1135,25 @@ function acceptedDirectory(item, args, catalogOrigin) {
     ) return null;
     const authority = communityAuthorityFor(item, source, rights);
     if (!authority || args.availability === 'showcase') return null;
+    const canonicalIdSelection =
+      args.defaultCatalog === true &&
+      args.selection?.kind === 'catalog-id';
+    if (!canonicalIdSelection) {
+      if (args.availability === 'installable') return null;
+      return {
+        ...base,
+        verified: true,
+        installable: false,
+        installer: null,
+        distribution: EXTERNAL_RUNTIME,
+        communityAuthority: {
+          skinId: authority.skinId,
+          installationMode: authority.installationMode,
+          executableHooks: authority.executableHooks,
+        },
+        handoff: 'catalog-id-required-for-community-installation',
+      };
+    }
     return {
       ...base,
       verified: true,
