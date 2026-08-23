@@ -1,3 +1,5 @@
+* text=auto eol=lf
+
 /skills/dsh-theme-manager/runtime-rc8/* text eol=lf
 /skills/dsh-theme-manager/runtime/attestation.json text eol=lf
 /skills/dsh-theme-manager/runtime/pnpm-lock.yaml text eol=lf
