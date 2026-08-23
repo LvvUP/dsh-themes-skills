@@ -3,7 +3,10 @@
 /skills/dsh-theme-manager/runtime/pnpm-lock.yaml text eol=lf
 /skills/dsh-community-skin-installer/references/runtime-receipt.rc8.json text eol=lf
 /skills/dsh-community-skin-installer/references/runtime-evidence-prepared.json text eol=lf
+/skills/dsh-community-skin-installer/references/community-catalog.json text eol=lf
 /skills/dsh-community-skin-installer/assets/skins/** text eol=lf
+/skills/dsh-theme-finder/references/community-authority.json text eol=lf
+/skills/dsh-theme-creator/references/compatibility-v3.json text eol=lf
 /skills/dsh-theme-submitter/references/compatibility-v3.json text eol=lf
 
 # RC.2 candidate and policy bytes are hashed as immutable evidence. Keep their
