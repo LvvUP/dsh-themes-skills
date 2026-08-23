@@ -79,5 +79,11 @@ test('all five skills expose the same pending RC.2 boundary', async () => {
     assert.equal(output.dshVersion, '0.1.1-rc.2');
     assert.equal(output.status ?? output.baselineStatus, 'certification-pending');
     assert.equal(output.enabled ?? output.installableResultsAllowed, false);
+    if (script.includes('find-themes.mjs')) {
+      assert.equal(output.catalogRead, false);
+      assert.equal(output.installableResultsAllowed, false);
+      assert.equal(output.count, 0);
+      assert.deepEqual(output.items, []);
+    }
   }
 });

@@ -6,7 +6,7 @@
 
 [English](README.md) · [简体中文](README.zh-CN.md)
 
-[![Version 0.5.1](https://img.shields.io/badge/version-0.5.1-246BCE)](package.json)
+[![Version 0.5.2](https://img.shields.io/badge/version-0.5.2-246BCE)](package.json)
 [![候选认证待完成](https://img.shields.io/badge/DSH%200.1.1--rc.2-%E5%80%99%E9%80%89%E8%AE%A4%E8%AF%81%E5%BE%85%E5%AE%8C%E6%88%90-D97706)](skills/dsh-theme-manager/references/dsh-0.1.1-rc.2.candidate.json)
 [![CI](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml)
 [![Node.js 22/24](https://img.shields.io/badge/Node.js-22.19%20%7C%2024.15-16324F)](package.json)
@@ -16,7 +16,7 @@
 
 </div>
 
-版本 **0.5.1** 保留 DeepSeek Harness **`0.1.1-rc.2`** 的精确、fail-closed 认证候选通道，并让网站数字 `#ID` 成为从卡片到 package index 的唯一公开目录身份。它固定官方发布、npm integrity、冻结 lock 与完整依赖闭包，让后续认证不需要解析 `latest` 或 `next`。
+版本 **0.5.2** 保留 DeepSeek Harness **`0.1.1-rc.2`** 的精确、fail-closed 认证候选通道，并让网站数字 `#ID` 成为从卡片到 package index 的唯一公开目录身份。它固定官方发布、npm integrity、冻结 lock 与完整依赖闭包，让后续认证不需要解析 `latest` 或 `next`。
 
 这条候选通道**尚未完成认证**。它不能用于创作、投稿、返回可安装的 Finder 结果，也不能安装站内或社区软件包。在真实 RC.2 运行回执满足下述全部晋级门槛之前，保留的 **`0.1.0-rc.8` 已认证通道仍是唯一可运行通道**。
 
@@ -31,6 +31,8 @@
 
 Skill 会根据公开 `#编号` 找到唯一目录记录。对于站内条目，它会继续从可信站点 API 读取对应发布记录和精确清单，交叉核对身份、版本、受控下载路径与摘要，再让 Manager 用本地固定权威复核同一个元组。包名、版本、URL 和哈希只作为后台校验字段，不会形成第二套用户编号。只要有内容缺失、过期、互相矛盾或指向另一个条目，它就会停止并用简单语言说明原因。你不需要自己收集任何技术字段。
 
+Finder 还会向 Agent 返回两个机器可读的诊断字段：只有真实读取所请求目录后，`catalogRead` 才会变为 `true`；只有本次响应确实包含可安装结果时，`installableResultsAllowed` 才会变为 `true`。在待认证 RC.2 通道中，二者始终为 `false`。
+
 </details>
 
 这次协同发布定义了 **95 个稳定编号**：21 个主题、52 个皮肤和 22 个界面增强插件。`#2027`–`#2029` 是没有可执行软件包的第一方视觉概念；Finder 可以展示它们的固定证据，但永远不会把它们显示为可安装。`/install` 页面、95 条目录、这三个编号和站内发布 API 流程，只有在配套的 DSH Themes 站点版本一同发布后才成为生产契约。在站点版本部署完成前，真实查询可能会正确地失败关闭，而不会声称当前生产站点已经具备这套新契约。
@@ -41,13 +43,13 @@ Skill 会根据公开 `#编号` 找到唯一目录记录。对于站内条目，
 
 ```bash
 npx --yes skills@1.5.23 add \
-  https://github.com/LvvUP/dsh-themes-skills/tree/v0.5.1 \
+  https://github.com/LvvUP/dsh-themes-skills/tree/v0.5.2 \
   --skill dsh-theme-finder \
   --skill dsh-theme-manager \
   --skill dsh-community-skin-installer
 ```
 
-固定的 `v0.5.1` 发布引用只会随上文所述的站点协同版本一同发布。在该标签存在之前，本分支仅供审查，不得用 `main`、`latest` 或其他可变引用替代。
+固定的 `v0.5.2` 发布引用只会随上文所述的站点协同版本一同发布。在该标签存在之前，本分支仅供审查，不得用 `main`、`latest` 或其他可变引用替代。
 
 然后直接告诉 Agent：
 

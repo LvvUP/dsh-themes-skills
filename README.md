@@ -6,7 +6,7 @@
 
 [English](README.md) · [简体中文](README.zh-CN.md)
 
-[![Version 0.5.1](https://img.shields.io/badge/version-0.5.1-246BCE)](package.json)
+[![Version 0.5.2](https://img.shields.io/badge/version-0.5.2-246BCE)](package.json)
 [![Candidate: certification pending](https://img.shields.io/badge/DSH%200.1.1--rc.2-certification%20pending-D97706)](skills/dsh-theme-manager/references/dsh-0.1.1-rc.2.candidate.json)
 [![CI](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml)
 [![Node.js 22/24](https://img.shields.io/badge/Node.js-22.19%20%7C%2024.15-16324F)](package.json)
@@ -16,7 +16,7 @@
 
 </div>
 
-Version **0.5.1** keeps the exact, fail-closed DeepSeek Harness **`0.1.1-rc.2`** certification candidate and makes the website's numeric `#ID` the only public catalog identity from card to package index. It pins the official release, npm integrity, a frozen lock, and the complete dependency closure so reviewers can run the next certification without resolving `latest` or `next`.
+Version **0.5.2** keeps the exact, fail-closed DeepSeek Harness **`0.1.1-rc.2`** certification candidate and makes the website's numeric `#ID` the only public catalog identity from card to package index. It pins the official release, npm integrity, a frozen lock, and the complete dependency closure so reviewers can run the next certification without resolving `latest` or `next`.
 
 It is **not certified yet**. The candidate cannot author, submit, return installable Finder results, or install a hosted/community package. The retained **`0.1.0-rc.8` certified lane remains the only operational lane** until real RC.2 runtime receipts pass every promotion gate below.
 
@@ -31,6 +31,8 @@ Find the unique public `#ID` in the top-left of a DSH Themes card or detail page
 
 The Skill uses the public ID to find one exact catalog record. For a hosted item, it then reads the matching release and exact manifest from the trusted site API, cross-checks their identity, version, controlled download route, and digest, and asks Manager to verify the same tuple against its bundled authority. Package names, versions, URLs, and hashes remain internal checks rather than a second numbering system. If anything is missing, stale, inconsistent, or identifies a different item, the workflow stops and explains the problem in plain language. You never need to collect the technical fields yourself.
 
+Finder also returns two machine-readable diagnostics for the Agent: `catalogRead` becomes `true` only after the requested catalog was actually read, and `installableResultsAllowed` becomes `true` only when that response contains an installable result. Both remain `false` in the pending RC.2 lane.
+
 </details>
 
 This coordinated release defines **95 stable IDs**: 21 themes, 52 skins, and 22 UI extensions. IDs `#2027`–`#2029` are first-party visual concepts without executable packages; Finder can show their pinned evidence but will never present them as installable. The `/install` page, the 95-record directory, those three IDs, and the hosted release API flow become the production contract only with the companion DSH Themes site release. Until that site release is deployed, a live lookup may correctly fail closed instead of claiming the current production site already provides the new contract.
@@ -41,13 +43,13 @@ Add the coordinated Finder and both companion installers once:
 
 ```bash
 npx --yes skills@1.5.23 add \
-  https://github.com/LvvUP/dsh-themes-skills/tree/v0.5.1 \
+  https://github.com/LvvUP/dsh-themes-skills/tree/v0.5.2 \
   --skill dsh-theme-finder \
   --skill dsh-theme-manager \
   --skill dsh-community-skin-installer
 ```
 
-The fixed `v0.5.1` release reference is published only with the coordinated site release described above. Until that tag exists, this branch is review-only and must not be substituted with `main`, `latest`, or another mutable reference.
+The fixed `v0.5.2` release reference is published only with the coordinated site release described above. Until that tag exists, this branch is review-only and must not be substituted with `main`, `latest`, or another mutable reference.
 
 Then tell your Agent what you want:
 

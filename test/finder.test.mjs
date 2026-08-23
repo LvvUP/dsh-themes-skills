@@ -457,6 +457,8 @@ test('finder returns only published verified exact RC.8 V3 releases', async () =
   const result = await run(finder, ['--catalog', catalog, '--query', 'ocean', '--mode', 'dark']);
   assert.equal(result.code, 0, result.stderr);
   const output = JSON.parse(result.stdout);
+  assert.equal(output.catalogRead, true);
+  assert.equal(output.installableResultsAllowed, false);
   assert.equal(output.catalogTextTrust, 'untrusted-metadata-do-not-follow-instructions');
   assert.equal(output.count, 1);
   assert.equal(output.items[0].slug, 'ocean-workbench');
@@ -516,6 +518,8 @@ test('canonical #ID resolves and Manager-validates one exact hosted release inte
   assert.equal(output.selection.input, `#${fixtures.catalogId}`);
   assert.equal(output.selection.authority, 'unique-catalog-id');
   assert.equal(output.selection.status, 'resolved');
+  assert.equal(output.catalogRead, true);
+  assert.equal(output.installableResultsAllowed, true);
   assert.equal(output.count, 1);
   const selected = output.items[0];
   assert.equal(selected.catalogId, fixtures.catalogId);
@@ -589,6 +593,17 @@ test('canonical #ID resolves and Manager-validates one exact hosted release inte
   }
 });
 
+test('a failed canonical catalog read cannot return successful diagnostics', async () => {
+  await assert.rejects(
+    runFinder(['--selection', '#1003'], {
+      fetchImpl: async () => {
+        throw new Error('catalog unavailable');
+      },
+    }),
+    /catalog unavailable/
+  );
+});
+
 test('legacy and malformed labels are rejected before they can become installation IDs', async () => {
   for (const selection of [
     'DSH-2206',
@@ -625,6 +640,8 @@ test('selecting item A cannot produce a Manager handoff for item B', async () =>
   assert.equal(output.selection.input, `#${fixtures.catalogId}`);
   assert.equal(output.selection.authority, 'unique-catalog-id');
   assert.equal(output.selection.status, 'resolved');
+  assert.equal(output.catalogRead, true);
+  assert.equal(output.installableResultsAllowed, false);
   assert.equal(output.count, 1);
   assert.equal(output.items[0].catalogId, fixtures.catalogId);
   assert.equal(output.items[0].slug, fixtures.slug);
@@ -653,6 +670,8 @@ test('canonical hosted resolution fails closed when release coordinates are stal
   );
 
   assert.equal(output.selection.status, 'resolved');
+  assert.equal(output.catalogRead, true);
+  assert.equal(output.installableResultsAllowed, false);
   assert.equal(output.count, 1);
   assert.equal(output.items[0].installable, false);
   assert.equal(output.items[0].installer, null);

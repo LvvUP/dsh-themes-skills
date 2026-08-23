@@ -30,11 +30,13 @@ test('installation skills keep technical coordinates inside the trusted workflow
   assert.match(finder, /never a second user-facing identifier/);
   assert.match(finder, /Do not ask the user for a package name/);
   assert.match(finder, /selection\.status: "resolved"/);
+  assert.match(finder, /`catalogRead` is `true` only after/);
+  assert.match(finder, /`installableResultsAllowed` is `true` only when/);
   assert.match(finder, /Ask one concise choice only for `ambiguous`/);
   assert.match(finder, /DSH setup and `#ID` installation are separate user tasks/);
   assert.match(finder, /stop before installer handoff/);
   assert.match(finder, /confirm that the required companion Skill is already available/);
-  assert.match(finder, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.5\.1/);
+  assert.match(finder, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.5\.2/);
   assert.match(finder, /--skill dsh-theme-finder[\s\\]+--skill dsh-theme-manager[\s\\]+--skill dsh-community-skin-installer/);
   assert.match(finder, /Do not dynamically fetch, synthesize, or import a missing installer/);
 
@@ -108,9 +110,11 @@ test('both README homepages explain general and dedicated installation', async (
   assert.match(english, /`DSH-2206` and `DSH-FS-009`/);
   assert.match(english, /only installation ID/);
   assert.match(english, /Please install DSH Themes #2004\./);
-  assert.match(english, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.5\.1/);
+  assert.match(english, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.5\.2/);
   assert.match(english, /--skill dsh-theme-finder[\s\\]+--skill dsh-theme-manager[\s\\]+--skill dsh-community-skin-installer/);
   assert.match(english, /You do not need to prepare a package name/);
+  assert.match(english, /`catalogRead` becomes `true` only after/);
+  assert.match(english, /`installableResultsAllowed` becomes `true` only when/);
   assert.match(english, /RC\.2 certification remains pending/);
   assert.match(english, /https:\/\/dsh-themes\.com\/install/);
   assert.match(english, /Harness setup and catalog installation are intentionally separate/);
@@ -129,9 +133,11 @@ test('both README homepages explain general and dedicated installation', async (
   assert.match(chinese, /`DSH-2206`、`DSH-FS-009`/);
   assert.match(chinese, /才是安装 ID/);
   assert.match(chinese, /请帮我安装 DSH Themes 的 #2004。/);
-  assert.match(chinese, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.5\.1/);
+  assert.match(chinese, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.5\.2/);
   assert.match(chinese, /--skill dsh-theme-finder[\s\\]+--skill dsh-theme-manager[\s\\]+--skill dsh-community-skin-installer/);
   assert.match(chinese, /你不需要准备包名/);
+  assert.match(chinese, /`catalogRead` 才会变为 `true`/);
+  assert.match(chinese, /`installableResultsAllowed` 才会变为 `true`/);
   assert.match(chinese, /RC\.2 认证仍待完成/);
   assert.match(chinese, /https:\/\/dsh-themes\.com\/zh\/install/);
   assert.match(chinese, /Harness 安装与目录内容安装会始终分开/);
