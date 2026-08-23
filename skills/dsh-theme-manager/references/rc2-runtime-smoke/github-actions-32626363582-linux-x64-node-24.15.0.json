@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "rc2-runtime-smoke-non-promotional",
+  "promotionAuthority": false,
+  "installable": false,
+  "baseline": "@deepseek-ai/dsh@0.1.1-rc.2",
+  "sidecarSha256": "9ec94c95dc8d6e4fe1aa7bab00de59d8c7fcb414c7342694a5cde20efd9d5888",
+  "pendingAttestationSha256": "83fbaf94740c32e229d190938dd2699e7d7fbd52d31751976c75f2cc09d89e53",
+  "startedAt": "2026-08-23T07:44:35.906Z",
+  "environment": {
+    "platform": "linux",
+    "arch": "x64",
+    "nodeVersion": "24.15.0",
+    "githubRunId": "32626363582",
+    "githubRunAttempt": "1",
+    "githubJob": "isolated-web-smoke",
+    "githubSha": "6591581150062a8565f7375964cdd83a4739ee9a"
+  },
+  "isolation": {
+    "temporaryDshHome": true,
+    "profileName": "web",
+    "telemetryDisabled": true,
+    "loopbackOnly": true
+  },
+  "command": [
+    "web",
+    "--host",
+    "127.0.0.1",
+    "--no-open",
+    "--port",
+    "0"
+  ],
+  "status": "smoke-passed",
+  "completedAt": "2026-08-23T07:44:37.139Z",
+  "health": {
+    "url": "http://127.0.0.1:35243",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "bytes": 14556,
+    "sha256": "a1c9e8d395d34fc83466b19d652a36e94b4f643fafef57f840b226b0bfab74de",
+    "hasClientScriptEntry": true
+  },
+  "acceptance": {
+    "webNoOpenLoopbackHealth": "passed",
+    "installListRemove": "pending",
+    "lightDarkSystem": "pending",
+    "managedColdRestart": "pending",
+    "rollbackReverse": "pending",
+    "communityItems": "pending"
+  },
+  "limitation": "This smoke receipt proves only one isolated loopback startup and HTML client entry response. It cannot promote the candidate or authorize installation."
+}

@@ -26,14 +26,14 @@ It is **not certified yet**. The candidate cannot author, submit, return install
 | --- | --- | --- |
 | **Certified operational — `0.1.0-rc.8`** | Immutable Manager attestation, frozen closure, successful 6-job Linux/macOS/Windows × Node 22.19/24.15 run, hosted authority, and 11-item community receipt. | **Enabled**, subject to every item/artifact gate and explicit consent. |
 | **RC.2 candidate — exact inputs** | Official `dsh-v0.1.1-rc.2` / commit `b150a551…`, exact npm integrities, frozen lock, 505-package closure, and 188 DSH packages all at one exact version. | **Disabled** — `certification-pending`, `installable: false`. |
-| **RC.2 candidate — runtime acceptance** | Six required job identities and six acceptance scenarios are declared as a plan. | **Pending: 0/6 jobs**. No final selector catalog, hosted artifacts, runtime attestation, or acceptance receipts. |
+| **RC.2 candidate — runtime acceptance** | Six non-promotional GitHub Actions receipts now prove isolated `dsh web --no-open` startup across Linux/macOS/Windows × Node 22.19/24.15; their manifest binds PR head, merge ref, run URL, sidecar, attestation, and file digests. | **Startup smoke: 6/6. Certification acceptance: 0/6**. No final selector catalog, hosted artifacts, runtime attestation, or full acceptance receipts. |
 | **RC.2 community lane** | Eleven item identities and an immutable link to the retained RC8 receipt. | **Pending: 0/11 items**, 0 installable records. |
 
-The main repository CI is an **evidence-contract matrix**, configured for Linux, macOS, and Windows on Node.js `22.19.0` and `24.15.0`. It checks frozen installs, exact closures, install/list/remove and rollback/reverse unit contracts, malformed/mixed evidence rejection, and the pending state itself. A separate [`RC.2 runtime smoke`](.github/workflows/rc2-runtime-smoke.yml) workflow really starts the exact candidate with an isolated `DSH_HOME`, loopback-only `dsh web --no-open`, fetches the HTML/client entry, and uploads a non-promotional receipt for each matrix job. One local darwin/arm64 Node `24.15.0` run is preserved as a [non-promotional smoke receipt](skills/dsh-theme-manager/references/runtime-smoke.dsh-0.1.1-rc.2.darwin-arm64-node24.15.local.json); because it is not a reviewed CI matrix job, the certification counter remains **0/6**. Neither workflow nor that local receipt claims final RC.2 certification: the smoke does not exercise theme installation, light/dark/system switching, managed cold restart, artifact rollback, or all 11 community items.
+The main repository CI is an **evidence-contract matrix**, configured for Linux, macOS, and Windows on Node.js `22.19.0` and `24.15.0`. It checks frozen installs, exact closures, install/list/remove and rollback/reverse unit contracts, malformed/mixed evidence rejection, and the pending state itself. A separate [`RC.2 runtime smoke`](.github/workflows/rc2-runtime-smoke.yml) workflow really starts the exact candidate with an isolated `DSH_HOME`, loopback-only `dsh web --no-open`, fetches the HTML/client entry, and uploads a non-promotional receipt for each matrix job. The six receipts from [run 32626363582](https://github.com/LvvUP/dsh-themes-skills/actions/runs/32626363582) are preserved under a [digest-bound smoke index](skills/dsh-theme-manager/references/rc2-runtime-smoke/index.json); a separate darwin/arm64 Node `24.15.0` [local smoke receipt](skills/dsh-theme-manager/references/runtime-smoke.dsh-0.1.1-rc.2.darwin-arm64-node24.15.local.json) remains supplementary. These results complete the **startup smoke matrix only**. Certification acceptance remains **0/6**, because smoke does not exercise theme installation, light/dark/system switching, managed cold restart, artifact rollback, or all 11 community items.
 
 Promotion requires a separate reviewed runtime workflow and receipts proving:
 
-1. All six exact OS/Node jobs completed successfully.
+1. All six exact OS/Node **full-acceptance** jobs—not only startup smoke—completed successfully.
 2. Real install/list/remove, light/dark/system, cold-restart, and rollback/reverse scenarios passed.
 3. Malformed and mixed-version evidence failed closed.
 4. RC.2 selectors and hosted artifacts were rebuilt and digest-bound.
@@ -100,6 +100,7 @@ The candidate authority is split deliberately:
 - [`dsh-0.1.1-rc.2.candidate.json`](skills/dsh-theme-manager/references/dsh-0.1.1-rc.2.candidate.json) pins upstream and registry facts.
 - [`runtime-dsh-0.1.1-rc.2`](skills/dsh-theme-manager/runtime-dsh-0.1.1-rc.2) contains the exact lock and pending attestation.
 - [`certification-receipt…pending.json`](skills/dsh-theme-manager/references/certification-receipt.dsh-0.1.1-rc.2.pending.json) records 0/6 completion and cannot grant installation.
+- [`rc2-runtime-smoke/index.json`](skills/dsh-theme-manager/references/rc2-runtime-smoke/index.json) binds six successful web-startup smoke receipts to their workflow run and exact evidence bytes, while explicitly granting no promotion or installation authority.
 
 ## Trust boundary
 

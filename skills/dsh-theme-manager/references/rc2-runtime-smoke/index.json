@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "evidenceKind": "rc2-runtime-smoke-set-non-promotional",
+  "promotionAuthority": false,
+  "installable": false,
+  "baseline": "@deepseek-ai/dsh@0.1.1-rc.2",
+  "capturedAt": "2026-08-23",
+  "source": {
+    "repository": "LvvUP/dsh-themes-skills",
+    "pullRequest": 6,
+    "pullRequestHead": "d76dadf9815bcae2cd1aecec5a224af8d7492341",
+    "mergeRefCommit": "6591581150062a8565f7375964cdd83a4739ee9a",
+    "mergeRefParents": [
+      "feb600b636cd0cd46494b649666b7325a1b6b449",
+      "d76dadf9815bcae2cd1aecec5a224af8d7492341"
+    ],
+    "workflowRunId": "32626363582",
+    "workflowRunAttempt": "1",
+    "workflowRunUrl": "https://github.com/LvvUP/dsh-themes-skills/actions/runs/32626363582",
+    "workflowPath": ".github/workflows/rc2-runtime-smoke.yml"
+  },
+  "authorityBindings": {
+    "candidateSidecar": {
+      "path": "skills/dsh-theme-manager/references/dsh-0.1.1-rc.2.candidate.json",
+      "sha256": "9ec94c95dc8d6e4fe1aa7bab00de59d8c7fcb414c7342694a5cde20efd9d5888"
+    },
+    "pendingRuntimeAttestation": {
+      "path": "skills/dsh-theme-manager/runtime-dsh-0.1.1-rc.2/attestation.json",
+      "sha256": "83fbaf94740c32e229d190938dd2699e7d7fbd52d31751976c75f2cc09d89e53"
+    }
+  },
+  "scope": {
+    "kind": "web-startup-smoke-only",
+    "passedChecks": [
+      "isolated-dsh-home",
+      "dsh-web-no-open-loopback",
+      "html-http-200",
+      "client-script-entry-present"
+    ],
+    "notCovered": [
+      "install-list-remove",
+      "light-dark-system",
+      "managed-cold-restart",
+      "rollback-reverse",
+      "community-items",
+      "final-runtime-attestation"
+    ]
+  },
+  "smokeMatrix": {
+    "status": "smoke-passed",
+    "completedJobs": 6,
+    "requiredJobs": 6,
+    "platforms": [
+      "linux",
+      "darwin",
+      "win32"
+    ],
+    "nodeVersions": [
+      "22.19.0",
+      "24.15.0"
+    ]
+  },
+  "certificationAcceptance": {
+    "status": "pending",
+    "completedJobs": 0,
+    "requiredJobs": 6
+  },
+  "receipts": [
+    {
+      "path": "skills/dsh-theme-manager/references/rc2-runtime-smoke/github-actions-32626363582-darwin-arm64-node-22.19.0.json",
+      "sha256": "f8f22e531e7bdbaea6914c03f362d983a58c0f324c3e2d8d55c8ea0f5d9ef00e",
+      "platform": "darwin",
+      "arch": "arm64",
+      "nodeVersion": "22.19.0"
+    },
+    {
+      "path": "skills/dsh-theme-manager/references/rc2-runtime-smoke/github-actions-32626363582-darwin-arm64-node-24.15.0.json",
+      "sha256": "1bcb2747da73b395aa200a6f67e0733acf8585f41fe8b3c9a98221f5a5319a1c",
+      "platform": "darwin",
+      "arch": "arm64",
+      "nodeVersion": "24.15.0"
+    },
+    {
+      "path": "skills/dsh-theme-manager/references/rc2-runtime-smoke/github-actions-32626363582-linux-x64-node-22.19.0.json",
+      "sha256": "f2da0f681b218dee50ec69049273e6d38d960b5e9941d96ca433d2a92757a316",
+      "platform": "linux",
+      "arch": "x64",
+      "nodeVersion": "22.19.0"
+    },
+    {
+      "path": "skills/dsh-theme-manager/references/rc2-runtime-smoke/github-actions-32626363582-linux-x64-node-24.15.0.json",
+      "sha256": "5bb2029c23cd79f079d0129053056f25d81212fa1431237cfa388ac124391388",
+      "platform": "linux",
+      "arch": "x64",
+      "nodeVersion": "24.15.0"
+    },
+    {
+      "path": "skills/dsh-theme-manager/references/rc2-runtime-smoke/github-actions-32626363582-win32-x64-node-22.19.0.json",
+      "sha256": "6d20ebb659fc406c113c95dce2863f64db04203a89a8b7d6c4c5ea19a9cd5499",
+      "platform": "win32",
+      "arch": "x64",
+      "nodeVersion": "22.19.0"
+    },
+    {
+      "path": "skills/dsh-theme-manager/references/rc2-runtime-smoke/github-actions-32626363582-win32-x64-node-24.15.0.json",
+      "sha256": "175982f1ef5ba174360a379ed15e4a15a14f2fdf1bad1fed4e80a1a09fcd0f23",
+      "platform": "win32",
+      "arch": "x64",
+      "nodeVersion": "24.15.0"
+    }
+  ],
+  "promotionRule": "These receipts prove only isolated web startup smoke. They never satisfy a certification acceptance job, promote the candidate, or authorize installation."
+}

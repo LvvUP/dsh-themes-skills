@@ -26,14 +26,14 @@
 | --- | --- | --- |
 | **已认证运行通道 — `0.1.0-rc.8`** | 不可变 Manager attestation、冻结闭包、Linux/macOS/Windows × Node 22.19/24.15 的六项成功任务、站内权威与 11 条社区回执。 | **已启用**，但仍须通过每个条目/制品门槛并取得用户明确同意。 |
 | **RC.2 候选 — 精确输入** | 官方 `dsh-v0.1.1-rc.2` / commit `b150a551…`、精确 npm integrity、冻结 lock、505 个软件包闭包，以及 188 个版本完全一致的 DSH 软件包。 | **已禁用** — `certification-pending`、`installable: false`。 |
-| **RC.2 候选 — 运行验收** | 已声明六个必需任务身份与六种验收场景，作为后续认证计划。 | **待完成：0/6 项任务**。尚无最终 selector 目录、站内制品、runtime attestation 或验收回执。 |
+| **RC.2 候选 — 运行验收** | 六份非晋级 GitHub Actions 回执已证明 Linux/macOS/Windows × Node 22.19/24.15 上隔离运行 `dsh web --no-open` 可以启动；manifest 固定了 PR head、merge ref、run URL、sidecar、attestation 与各文件摘要。 | **启动 smoke：6/6；认证验收：0/6**。尚无最终 selector 目录、站内制品、runtime attestation 或完整验收回执。 |
 | **RC.2 社区通道** | 已固定 11 个条目身份，并不可变地关联保留的 RC8 回执。 | **待完成：0/11 个条目**，可安装记录为 0。 |
 
-主仓库 CI 是一个**候选证据契约矩阵**，配置为 Linux、macOS、Windows × Node.js `22.19.0`、`24.15.0`。它检查冻结安装、精确闭包、install/list/remove 与 rollback/reverse 单元契约、畸形/混合证据拒绝，以及 pending 状态本身。另有独立的 [`RC.2 runtime smoke`](.github/workflows/rc2-runtime-smoke.yml) workflow：它会使用隔离的 `DSH_HOME` 真正启动精确候选 runner，以仅回环的 `dsh web --no-open` 运行，获取 HTML/client 入口，并为每个矩阵任务上传非晋级 smoke 回执。仓库另行保存了一份 darwin/arm64、Node `24.15.0` 的[本机非晋级 smoke 回执](skills/dsh-theme-manager/references/runtime-smoke.dsh-0.1.1-rc.2.darwin-arm64-node24.15.local.json)；它不是经过复核的 CI 矩阵任务，所以认证计数仍为 **0/6**。两条 workflow 和这份本机回执都**不代表 RC.2 最终认证已经完成**：smoke 尚未执行主题安装、light/dark/system 切换、托管冷重启、制品回滚或全部 11 个社区条目。
+主仓库 CI 是一个**候选证据契约矩阵**，配置为 Linux、macOS、Windows × Node.js `22.19.0`、`24.15.0`。它检查冻结安装、精确闭包、install/list/remove 与 rollback/reverse 单元契约、畸形/混合证据拒绝，以及 pending 状态本身。另有独立的 [`RC.2 runtime smoke`](.github/workflows/rc2-runtime-smoke.yml) workflow：它会使用隔离的 `DSH_HOME` 真正启动精确候选 runner，以仅回环的 `dsh web --no-open` 运行，获取 HTML/client 入口，并为每个矩阵任务上传非晋级 smoke 回执。[run 32626363582](https://github.com/LvvUP/dsh-themes-skills/actions/runs/32626363582) 的六份回执已保存在[摘要绑定的 smoke 索引](skills/dsh-theme-manager/references/rc2-runtime-smoke/index.json)下；另有一份 darwin/arm64、Node `24.15.0` 的[本机 smoke 回执](skills/dsh-theme-manager/references/runtime-smoke.dsh-0.1.1-rc.2.darwin-arm64-node24.15.local.json)作为补充。这些结果只完成了**启动 smoke 矩阵**。认证验收仍为 **0/6**，因为 smoke 尚未执行主题安装、light/dark/system 切换、托管冷重启、制品回滚或全部 11 个社区条目。
 
 晋级必须由独立且经过复核的运行 workflow 与回执证明：
 
-1. 六个精确 OS/Node 任务全部成功完成。
+1. 六个精确 OS/Node **完整验收**任务（而非仅启动 smoke）全部成功完成。
 2. 真实 install/list/remove、light/dark/system、冷重启与 rollback/reverse 场景通过。
 3. 畸形证据和混合版本证据均 fail closed。
 4. RC.2 selector 与站内制品已重新生成并绑定摘要。
@@ -100,6 +100,7 @@ node skills/dsh-theme-finder/scripts/find-themes.mjs \
 - [`dsh-0.1.1-rc.2.candidate.json`](skills/dsh-theme-manager/references/dsh-0.1.1-rc.2.candidate.json) 固定上游与 registry 事实。
 - [`runtime-dsh-0.1.1-rc.2`](skills/dsh-theme-manager/runtime-dsh-0.1.1-rc.2) 保存精确 lock 与 pending attestation。
 - [`certification-receipt…pending.json`](skills/dsh-theme-manager/references/certification-receipt.dsh-0.1.1-rc.2.pending.json) 记录 0/6 完成状态，永远不能授予安装权限。
+- [`rc2-runtime-smoke/index.json`](skills/dsh-theme-manager/references/rc2-runtime-smoke/index.json) 将六份成功的 Web 启动 smoke 回执绑定到对应 workflow run 与精确证据字节，并明确不授予晋级或安装权限。
 
 ## 信任边界
 
