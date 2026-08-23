@@ -26,10 +26,14 @@
 | --- | --- | --- |
 | **已认证运行通道 — `0.1.0-rc.8`** | 不可变 Manager attestation、冻结闭包、Linux/macOS/Windows × Node 22.19/24.15 的六项成功任务、站内权威与 11 条社区回执。 | **已启用**，但仍须通过每个条目/制品门槛并取得用户明确同意。 |
 | **RC.2 候选 — 精确输入** | 官方 `dsh-v0.1.1-rc.2` / commit `b150a551…`、精确 npm integrity、冻结 lock、505 个软件包闭包，以及 188 个版本完全一致的 DSH 软件包。 | **已禁用** — `certification-pending`、`installable: false`。 |
-| **RC.2 候选 — 运行验收** | 六份非晋级 GitHub Actions 回执已证明 Linux/macOS/Windows × Node 22.19/24.15 上隔离运行 `dsh web --no-open` 可以启动；manifest 固定了 PR head、merge ref、run URL、sidecar、attestation 与各文件摘要。 | **启动 smoke：6/6；认证验收：0/6**。尚无最终 selector 目录、站内制品、runtime attestation 或完整验收回执。 |
+| **RC.2 候选 — 运行证据** | 六份公开、非晋级 GitHub Actions 回执记录了 Linux/macOS/Windows × Node 22.19/24.15 上隔离运行 `dsh web --no-open` 的成功启动。另一组经过清理且摘要绑定的本机回执记录了全部 **32/32 份当前站内制品字节元组**在 darwin/arm64、Node 24.15 上完成精确 add/list/remove、两次冷启动、递归客户端模块 HTTP/MIME 检查、卸载与内置主题恢复。 | **启动 smoke：6/6；站内生命周期 smoke：32/32；完整认证验收：0/6**。安装仍禁用：32 份制品仍内嵌 RC8 兼容基线，模式、功能、视觉/无障碍、rollback/reverse、RC.2 重打包/selector 与最终 attestation 门槛仍未完成。 |
 | **RC.2 社区通道** | 已固定 11 个条目身份，并不可变地关联保留的 RC8 回执。 | **待完成：0/11 个条目**，可安装记录为 0。 |
 
-主仓库 CI 是一个**候选证据契约矩阵**，配置为 Linux、macOS、Windows × Node.js `22.19.0`、`24.15.0`。它检查冻结安装、精确闭包、install/list/remove 与 rollback/reverse 单元契约、畸形/混合证据拒绝，以及 pending 状态本身。另有独立的 [`RC.2 runtime smoke`](.github/workflows/rc2-runtime-smoke.yml) workflow：它会使用隔离的 `DSH_HOME` 真正启动精确候选 runner，以仅回环的 `dsh web --no-open` 运行，获取 HTML/client 入口，并为每个矩阵任务上传非晋级 smoke 回执。[run 32626363582](https://github.com/LvvUP/dsh-themes-skills/actions/runs/32626363582) 的六份回执已保存在[摘要绑定的 smoke 索引](skills/dsh-theme-manager/references/rc2-runtime-smoke/index.json)下；另有一份 darwin/arm64、Node `24.15.0` 的[本机 smoke 回执](skills/dsh-theme-manager/references/runtime-smoke.dsh-0.1.1-rc.2.darwin-arm64-node24.15.local.json)作为补充。这些结果只完成了**启动 smoke 矩阵**。认证验收仍为 **0/6**，因为 smoke 尚未执行主题安装、light/dark/system 切换、托管冷重启、制品回滚或全部 11 个社区条目。
+主仓库 CI 是一个**候选证据契约矩阵**，配置为 Linux、macOS、Windows × Node.js `22.19.0`、`24.15.0`。它检查冻结安装、精确闭包、install/list/remove 与 rollback/reverse 单元契约、畸形/混合证据拒绝，以及 pending 状态本身。另有独立的 [`RC.2 runtime smoke`](.github/workflows/rc2-runtime-smoke.yml) workflow：它会使用隔离的 `DSH_HOME` 真正启动精确候选 runner，以仅回环的 `dsh web --no-open` 运行，获取 HTML/client 入口，并为每个矩阵任务上传非晋级 smoke 回执。[run 32626363582](https://github.com/LvvUP/dsh-themes-skills/actions/runs/32626363582) 的六份回执已保存在[摘要绑定的 smoke 索引](skills/dsh-theme-manager/references/rc2-runtime-smoke/index.json)下；另有一份 darwin/arm64、Node `24.15.0` 的[本机 smoke 回执](skills/dsh-theme-manager/references/runtime-smoke.dsh-0.1.1-rc.2.darwin-arm64-node24.15.local.json)作为补充。
+
+[32 项站内生命周期索引](skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/index.json)冻结了第二组覆盖范围更广、但仍不具备晋级权的本机证据。去敏回执记录了全部当前站内字节元组在一次性 profile 中完成精确安装、列举、两次托管冷启动、递归客户端模块 HTTP/MIME 抓取、卸载，以及卸载后的一次内置主题冷启动。公开档案保留原始回执摘要，同时排除本机绝对路径、原始日志、凭据和临时端口；原始回执本身并未公开。它固定公开候选 head `70a58c43…` 与私有运行脚本 head `349b9e67…`。仓库测试会重新计算四项公开候选权威摘要，并将每个 slug/version/制品 SHA 元组与签入的站内权威进行交叉校验。
+
+这仍只是**单机生命周期 smoke，而不是可由公众独立复现的认证**。全部制品仍内嵌 RC8 基线；light/dark/system、功能激活、视觉/无障碍、rollback/reverse、RC.2 重打包/selector、最终 attestation、六项完整验收矩阵及全部 11 个社区条目仍待完成。因此，启动与生命周期 smoke 的成功数量不会改变完整认证验收仍为 **0/6** 的事实。
 
 晋级必须由独立且经过复核的运行 workflow 与回执证明：
 
@@ -90,9 +94,9 @@ node skills/dsh-theme-finder/scripts/find-themes.mjs \
 ## 兼容性边界
 
 - **可运行：**DeepSeek Harness `0.1.0-rc.8`，最终 Manager attestation `1cd9a0b4…`，32 个当前站内制品元组，以及 11 条受独立规则约束的社区记录。
-- **候选：**DeepSeek Harness `0.1.1-rc.2`，最终 attestation 缺失，selector 缺失，站内/社区运行验证待完成，安装已禁用。
+- **候选：**DeepSeek Harness `0.1.1-rc.2`，已归档 32/32 单机站内生命周期 smoke；最终 attestation、RC.2 selector/重打包制品、跨平台完整验收、社区运行验证及安装仍待完成。
 - **历史：**`0.1.0-rc.6` V2 与 `0.1.0-rc.5` V1 在普通验证中仅供审计。只有经过复核的精确保留前序版本才能穿过 rollback/reverse 门槛。
-- [`release-state.json`](release-state.json) 只是信息摘要，不能替代 sidecar、validator、冻结 runner、制品记录、allowlist 或回执。
+- [`release-state.json`](release-state.json) 只是信息摘要；它会将 6/6 启动 smoke、32/32 单机生命周期 smoke 与 0/6 完整验收矩阵分开报告，不能替代 sidecar、validator、冻结 runner、制品记录、allowlist 或回执。
 
 候选权威被有意拆分：
 
@@ -101,6 +105,7 @@ node skills/dsh-theme-finder/scripts/find-themes.mjs \
 - [`runtime-dsh-0.1.1-rc.2`](skills/dsh-theme-manager/runtime-dsh-0.1.1-rc.2) 保存精确 lock 与 pending attestation。
 - [`certification-receipt…pending.json`](skills/dsh-theme-manager/references/certification-receipt.dsh-0.1.1-rc.2.pending.json) 记录 0/6 完成状态，永远不能授予安装权限。
 - [`rc2-runtime-smoke/index.json`](skills/dsh-theme-manager/references/rc2-runtime-smoke/index.json) 将六份成功的 Web 启动 smoke 回执绑定到对应 workflow run 与精确证据字节，并明确不授予晋级或安装权限。
+- [`rc2-hosted-lifecycle-smoke/index.json`](skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/index.json) 将全部 32 个当前站内字节元组的去敏逐项生命周期回执绑定到原始回执与制品摘要；它仍不具备晋级权，也不可安装。
 
 ## 信任边界
 
@@ -118,9 +123,10 @@ node skills/dsh-theme-finder/scripts/find-themes.mjs \
 npm ci --ignore-scripts
 npm test
 npm run validate
+npm run format:check
 ```
 
-`npm test` 使用 Corepack 固定的 `pnpm@11.7.0`、冻结 lockfile 与禁用生命周期脚本，引导保留的已认证 runner 和**待认证候选依赖闭包**。本地或仓库测试为绿色，只能证明证据契约成立；它不能代替尚未完成的 RC.2 真实运行认证 workflow。
+`npm test` 使用 Corepack 固定的 `pnpm@11.7.0`、冻结 lockfile 与禁用生命周期脚本，引导保留的已认证 runner 和**待认证候选依赖闭包**。`npm run format:check` 只使用 Node.js 与 Git，对仓库文本文件检查 UTF-8、LF 换行、末尾换行、行尾空白与 JSON 可解析性。本地或仓库测试为绿色，只能证明证据契约成立；它不能代替尚未完成的 RC.2 真实运行认证 workflow。
 
 提交 Pull Request 前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，安全问题请按 [SECURITY.md](SECURITY.md) 私密报告。本项目由社区独立维护，与 DeepSeek AI 无隶属或背书关系。
 

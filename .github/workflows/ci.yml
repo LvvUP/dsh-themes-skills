@@ -32,3 +32,4 @@ jobs:
       - name: Keep RC.2 runtime certification explicitly pending
         run: node skills/dsh-theme-manager/scripts/validate-baseline-candidate.mjs
       - run: npm run validate
+      - run: npm run format:check

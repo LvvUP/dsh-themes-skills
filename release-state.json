@@ -24,6 +24,44 @@
     "communityItemsCompleted": 0,
     "installableCurrent": false
   },
+  "nonPromotionalSmoke": {
+    "status": "partial-runtime-evidence-only",
+    "promotionAuthority": false,
+    "installable": false,
+    "baseline": "@deepseek-ai/dsh@0.1.1-rc.2",
+    "startupMatrix": {
+      "status": "smoke-passed",
+      "completedJobs": 6,
+      "requiredJobs": 6,
+      "platforms": ["linux", "darwin", "win32"],
+      "nodeVersions": ["22.19.0", "24.15.0"],
+      "evidencePath": "skills/dsh-theme-manager/references/rc2-runtime-smoke/index.json",
+      "evidenceSha256": "1675a3fa592d78748a4a2fa52fd2c9fc0cecc034490867d61e40bee6c9d73c4f"
+    },
+    "hostedLifecycle": {
+      "status": "lifecycle-smoke-passed",
+      "completedItems": 32,
+      "requiredItems": 32,
+      "themeCount": 6,
+      "fullSkinCount": 26,
+      "environment": {
+        "platform": "darwin",
+        "arch": "arm64",
+        "nodeVersion": "24.15.0"
+      },
+      "evidencePath": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/index.json",
+      "evidenceSha256": "80b11721d479a0fd4488bf0fc5a43518ac74eff8662a2d6fc42f4384649f4959",
+      "pendingChecks": [
+        "lightDarkSystem",
+        "featureActivation",
+        "visualAccessibility",
+        "rollbackReverse",
+        "rc2HostedArtifactRepack",
+        "rc2SelectorCatalog",
+        "finalRuntimeAttestation"
+      ]
+    }
+  },
   "certified": {
     "status": "certified-installable",
     "dshPackageVersion": "0.1.0-rc.8",

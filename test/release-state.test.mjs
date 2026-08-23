@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
@@ -6,6 +7,22 @@ const root = new URL('../', import.meta.url);
 const state = JSON.parse(
   await readFile(new URL('release-state.json', root), 'utf8')
 );
+const startupSmokeIndexBytes = await readFile(
+  new URL(
+    'skills/dsh-theme-manager/references/rc2-runtime-smoke/index.json',
+    root
+  )
+);
+const hostedLifecycleIndexBytes = await readFile(
+  new URL(
+    'skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/index.json',
+    root
+  )
+);
+
+function sha256(bytes) {
+  return createHash('sha256').update(bytes).digest('hex');
+}
 
 const exactSemver =
   /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
@@ -45,6 +62,84 @@ test('release state separates the RC.2 candidate from certified and historical l
   assert.equal(state.candidate.matrixJobsRequired, 6);
   assert.equal(state.candidate.communityItemsCompleted, 0);
   assert.equal(state.candidate.communityItemsRequired, 11);
+
+  assert.deepEqual(
+    {
+      status: state.nonPromotionalSmoke.status,
+      promotionAuthority: state.nonPromotionalSmoke.promotionAuthority,
+      installable: state.nonPromotionalSmoke.installable,
+      baseline: state.nonPromotionalSmoke.baseline,
+    },
+    {
+      status: 'partial-runtime-evidence-only',
+      promotionAuthority: false,
+      installable: false,
+      baseline: '@deepseek-ai/dsh@0.1.1-rc.2',
+    }
+  );
+  assert.deepEqual(
+    {
+      status: state.nonPromotionalSmoke.startupMatrix.status,
+      completedJobs: state.nonPromotionalSmoke.startupMatrix.completedJobs,
+      requiredJobs: state.nonPromotionalSmoke.startupMatrix.requiredJobs,
+      platforms: state.nonPromotionalSmoke.startupMatrix.platforms,
+      nodeVersions: state.nonPromotionalSmoke.startupMatrix.nodeVersions,
+    },
+    {
+      status: 'smoke-passed',
+      completedJobs: 6,
+      requiredJobs: 6,
+      platforms: ['linux', 'darwin', 'win32'],
+      nodeVersions: ['22.19.0', '24.15.0'],
+    }
+  );
+  assert.equal(
+    state.nonPromotionalSmoke.startupMatrix.evidencePath,
+    'skills/dsh-theme-manager/references/rc2-runtime-smoke/index.json'
+  );
+  assert.equal(
+    state.nonPromotionalSmoke.startupMatrix.evidenceSha256,
+    sha256(startupSmokeIndexBytes)
+  );
+  assert.deepEqual(
+    {
+      status: state.nonPromotionalSmoke.hostedLifecycle.status,
+      completedItems: state.nonPromotionalSmoke.hostedLifecycle.completedItems,
+      requiredItems: state.nonPromotionalSmoke.hostedLifecycle.requiredItems,
+      themeCount: state.nonPromotionalSmoke.hostedLifecycle.themeCount,
+      fullSkinCount: state.nonPromotionalSmoke.hostedLifecycle.fullSkinCount,
+      environment: state.nonPromotionalSmoke.hostedLifecycle.environment,
+    },
+    {
+      status: 'lifecycle-smoke-passed',
+      completedItems: 32,
+      requiredItems: 32,
+      themeCount: 6,
+      fullSkinCount: 26,
+      environment: {
+        platform: 'darwin',
+        arch: 'arm64',
+        nodeVersion: '24.15.0',
+      },
+    }
+  );
+  assert.equal(
+    state.nonPromotionalSmoke.hostedLifecycle.evidencePath,
+    'skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/index.json'
+  );
+  assert.equal(
+    state.nonPromotionalSmoke.hostedLifecycle.evidenceSha256,
+    sha256(hostedLifecycleIndexBytes)
+  );
+  assert.deepEqual(state.nonPromotionalSmoke.hostedLifecycle.pendingChecks, [
+    'lightDarkSystem',
+    'featureActivation',
+    'visualAccessibility',
+    'rollbackReverse',
+    'rc2HostedArtifactRepack',
+    'rc2SelectorCatalog',
+    'finalRuntimeAttestation',
+  ]);
 
   assert.equal(state.certified.status, 'certified-installable');
   assert.equal(state.certified.dshPackageVersion, '0.1.0-rc.8');

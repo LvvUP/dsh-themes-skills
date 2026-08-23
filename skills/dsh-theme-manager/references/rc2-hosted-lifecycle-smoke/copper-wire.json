@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "rc2-hosted-current-bytes-lifecycle-smoke-sanitized-non-promotional",
+  "promotionAuthority": false,
+  "installable": false,
+  "baseline": "@deepseek-ai/dsh@0.1.1-rc.2",
+  "source": {
+    "publicCandidateRepository": "LvvUP/dsh-themes-skills",
+    "publicCandidateHead": "70a58c43bf95536b07077151b338ca0a9742bc68",
+    "privateRunnerRepository": "LvvUP/DSH-Themes",
+    "privateRunnerHead": "349b9e674e0b20466c223e77c92cbf208c1ab349",
+    "privateRunnerPath": "scripts/dsh-rc2-hosted-lifecycle-smoke.mjs",
+    "privateRunnerGitBlob": "f962741c2e6197dc1de8e4c0ccbfc7f3d359145b",
+    "rawReceipt": {
+      "bytes": 24074,
+      "sha256": "d138f608a86be14490916564aaf5e14f3eb48167e03fd279964fc2f650b1e7b9",
+      "published": false
+    }
+  },
+  "candidate": {
+    "status": "certification-pending",
+    "installable": false,
+    "dshVersion": "0.1.1-rc.2",
+    "sidecarSha256": "9ec94c95dc8d6e4fe1aa7bab00de59d8c7fcb414c7342694a5cde20efd9d5888",
+    "attestationSha256": "83fbaf94740c32e229d190938dd2699e7d7fbd52d31751976c75f2cc09d89e53",
+    "receiptSha256": "c49d4665d27fd32b35c9ac55d46477ae799eb685be9ccee772e03c2c207b817a",
+    "lockfileSha256": "b00224c0188c8d4c7b45a3553051da4a4f8e4fd4f89bc98b3a0bb845a3308255",
+    "packages": 505,
+    "dshPackages": 188,
+    "completedMatrixJobs": 0,
+    "requiredMatrixJobs": 6,
+    "blockers": [
+      "selector-catalog-not-revalidated-on-rc2",
+      "hosted-artifacts-not-repacked-for-rc2",
+      "six-job-runtime-matrix-not-completed",
+      "community-items-not-reverified-on-rc2",
+      "final-runtime-attestation-not-issued"
+    ]
+  },
+  "target": {
+    "slug": "copper-wire",
+    "kind": "full-skin",
+    "packageName": "@dsh-themes/copper-wire",
+    "version": "1.2.0",
+    "artifactFile": "copper-wire-1.2.0.tgz",
+    "artifactSha256": "f9c72ef9de62e0074235bfc42650d8e37cc8a30c8f5b2ee69efd8aeedc7de541",
+    "hostedIndexSha256": "f706364d3f44fb0667147155c8400fe456da482fb908625e4d4c2c301022bbe6",
+    "embeddedCompatibilityBaseline": "0.1.0-rc.8"
+  },
+  "environment": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "nodeVersion": "24.15.0"
+  },
+  "isolation": {
+    "disposableDshHome": true,
+    "profileName": "web",
+    "loopbackOnly": true,
+    "telemetryDisabled": true,
+    "cleanupRequired": false,
+    "profileRemoved": true
+  },
+  "startedAt": "2026-08-23T09:53:24.132Z",
+  "completedAt": "2026-08-23T09:53:31.233Z",
+  "status": "lifecycle-smoke-passed",
+  "steps": [
+    {
+      "label": "initial-list",
+      "startedAt": "2026-08-23T09:53:24.133Z",
+      "completedAt": "2026-08-23T09:53:24.495Z",
+      "code": 0,
+      "signal": null,
+      "processOutput": {
+        "stdout": {
+          "bytes": 219,
+          "sha256": "e69e938787d05e6043ff6a1345389634edb37ed93adcae0676e26eab1188f11a"
+        },
+        "stderr": {
+          "bytes": 173,
+          "sha256": "5e3414c9f6e075a2ba1314c4aafa9ba9e8683d919983cc8c2fb6b535d758c6bb"
+        },
+        "rawLogsExcluded": true
+      }
+    },
+    {
+      "label": "add-exact-artifact",
+      "startedAt": "2026-08-23T09:53:24.495Z",
+      "completedAt": "2026-08-23T09:53:25.003Z",
+      "code": 0,
+      "signal": null,
+      "processOutput": {
+        "stdout": {
+          "bytes": 307,
+          "sha256": "a9e34f65444ef88b1e81760d7573943c3fb0bc50f2cddae3daa7d320a67f0353"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rawLogsExcluded": true
+      }
+    },
+    {
+      "label": "list-after-add",
+      "startedAt": "2026-08-23T09:53:25.003Z",
+      "completedAt": "2026-08-23T09:53:25.698Z",
+      "code": 0,
+      "signal": null,
+      "processOutput": {
+        "stdout": {
+          "bytes": 764,
+          "sha256": "2ef79c86539ac77005d527a35525931c2dbc5cf052fa02009b744ca29985cfbf"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rawLogsExcluded": true
+      }
+    },
+    {
+      "label": "remove-exact-package",
+      "startedAt": "2026-08-23T09:53:29.044Z",
+      "completedAt": "2026-08-23T09:53:29.409Z",
+      "code": 0,
+      "signal": null,
+      "processOutput": {
+        "stdout": {
+          "bytes": 257,
+          "sha256": "7d3dbf14680bf266dd965b9acedad71dc21551f252555ce6f6f344e20446c6d5"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rawLogsExcluded": true
+      }
+    },
+    {
+      "label": "final-list",
+      "startedAt": "2026-08-23T09:53:29.409Z",
+      "completedAt": "2026-08-23T09:53:29.795Z",
+      "code": 0,
+      "signal": null,
+      "processOutput": {
+        "stdout": {
+          "bytes": 219,
+          "sha256": "e69e938787d05e6043ff6a1345389634edb37ed93adcae0676e26eab1188f11a"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rawLogsExcluded": true
+      }
+    }
+  ],
+  "coldStarts": [
+    {
+      "label": "cold-start-1",
+      "loopbackHttp": true,
+      "html": {
+        "bytes": 14819,
+        "sha256": "acf764ca444258959119743a9c0c29f4d75fde40f2d0e8e76dfe3f35ba0a0491",
+        "contentType": "text/html; charset=utf-8"
+      },
+      "clientModuleGraph": {
+        "moduleCount": 24,
+        "totalBytes": 2657777,
+        "modulesSha256": "8e81e8484799aa980f50617fd40171e64e20d3f6099c8db00eea6374cf61bcb3",
+        "graphSha256": "ea7875b7e33bf0c78093da4f1a82f9c1969bffa893acc6f2d39b32583ddc0f68"
+      },
+      "processOutput": {
+        "bytes": 32,
+        "sha256": "2b0afb18bdc6491c3cca17d6294145cbf473827f66a5f37635b0cb378dff90bd",
+        "rawLogExcluded": true
+      }
+    },
+    {
+      "label": "cold-start-2",
+      "loopbackHttp": true,
+      "html": {
+        "bytes": 14819,
+        "sha256": "acf764ca444258959119743a9c0c29f4d75fde40f2d0e8e76dfe3f35ba0a0491",
+        "contentType": "text/html; charset=utf-8"
+      },
+      "clientModuleGraph": {
+        "moduleCount": 24,
+        "totalBytes": 2657777,
+        "modulesSha256": "8e81e8484799aa980f50617fd40171e64e20d3f6099c8db00eea6374cf61bcb3",
+        "graphSha256": "ea7875b7e33bf0c78093da4f1a82f9c1969bffa893acc6f2d39b32583ddc0f68"
+      },
+      "processOutput": {
+        "bytes": 32,
+        "sha256": "65c7cc55b6e4229b9fb0c3a61db01dd4587db7d64aa5a58bbc951f06580e5bc7",
+        "rawLogExcluded": true
+      }
+    }
+  ],
+  "postRemovalBuiltInStart": {
+    "label": "post-removal-built-in-start",
+    "loopbackHttp": true,
+    "html": {
+      "bytes": 14523,
+      "sha256": "379ef06bba0c211f07a2e4dee2daef76c0f3b26cbf7c18aa1f6f7df8c3664794",
+      "contentType": "text/html; charset=utf-8"
+    },
+    "clientModuleGraph": {
+      "moduleCount": 24,
+      "totalBytes": 2657777,
+      "modulesSha256": "8e81e8484799aa980f50617fd40171e64e20d3f6099c8db00eea6374cf61bcb3",
+      "graphSha256": "ea7875b7e33bf0c78093da4f1a82f9c1969bffa893acc6f2d39b32583ddc0f68"
+    },
+    "processOutput": {
+      "bytes": 32,
+      "sha256": "b47221f7fc8b8defdbe928a11f087d08d233ed8388e237c73080aa74ba3d56b6",
+      "rawLogExcluded": true
+    }
+  },
+  "acceptance": {
+    "exactArtifactIdentity": "passed",
+    "installListRemove": "passed",
+    "clientModuleGraphHttpMime": "passed",
+    "twoManagedColdStarts": "passed",
+    "postRemovalBuiltInColdStart": "passed",
+    "lightDarkSystem": "pending",
+    "featureActivation": "pending",
+    "visualAccessibility": "pending",
+    "rollbackReverse": "pending"
+  },
+  "sanitization": {
+    "absoluteLocalPathsExcluded": true,
+    "rawCommandOutputExcluded": true,
+    "credentialsExcluded": true,
+    "loopbackPortsExcluded": true
+  },
+  "limitations": [
+    "single-local-darwin-arm64-node24.15-environment",
+    "hosted-artifact-still-embeds-dsh-0.1.0-rc.8-compatibility",
+    "light-dark-system-pending",
+    "feature-activation-pending",
+    "visual-accessibility-pending",
+    "rollback-reverse-pending",
+    "rc2-repack-selector-and-final-attestation-pending"
+  ]
+}

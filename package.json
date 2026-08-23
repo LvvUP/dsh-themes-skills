@@ -9,7 +9,8 @@
   "scripts": {
     "pretest": "node scripts/bootstrap-runner.mjs",
     "test": "node --test",
-    "validate": "node scripts/validate-skills.mjs"
+    "validate": "node scripts/validate-skills.mjs",
+    "format:check": "node scripts/check-format.mjs"
   },
   "license": "Apache-2.0",
   "dependencies": {

@@ -1,0 +1,422 @@
+{
+  "schemaVersion": 1,
+  "evidenceKind": "rc2-hosted-current-bytes-lifecycle-smoke-set-sanitized-non-promotional",
+  "promotionAuthority": false,
+  "installable": false,
+  "baseline": "@deepseek-ai/dsh@0.1.1-rc.2",
+  "capturedAt": "2026-08-23",
+  "source": {
+    "publicCandidateRepository": "LvvUP/dsh-themes-skills",
+    "publicCandidateHead": "70a58c43bf95536b07077151b338ca0a9742bc68",
+    "privateRunnerRepository": "LvvUP/DSH-Themes",
+    "privateRunnerHead": "349b9e674e0b20466c223e77c92cbf208c1ab349",
+    "privateRunnerPath": "scripts/dsh-rc2-hosted-lifecycle-smoke.mjs",
+    "privateRunnerGitBlob": "f962741c2e6197dc1de8e4c0ccbfc7f3d359145b"
+  },
+  "environment": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "nodeVersion": "24.15.0"
+  },
+  "scope": {
+    "receiptCount": 32,
+    "themeCount": 6,
+    "fullSkinCount": 26,
+    "status": "lifecycle-smoke-passed",
+    "passedChecks": [
+      "exact-artifact-identity",
+      "install-list-remove",
+      "two-managed-cold-starts",
+      "recursive-client-module-http-mime",
+      "post-removal-built-in-cold-start",
+      "disposable-profile-removed"
+    ],
+    "pendingChecks": [
+      "lightDarkSystem",
+      "featureActivation",
+      "visualAccessibility",
+      "rollbackReverse",
+      "rc2HostedArtifactRepack",
+      "rc2SelectorCatalog",
+      "finalRuntimeAttestation"
+    ]
+  },
+  "authorityBindings": {
+    "candidateSidecarSha256": "9ec94c95dc8d6e4fe1aa7bab00de59d8c7fcb414c7342694a5cde20efd9d5888",
+    "pendingRuntimeAttestationSha256": "83fbaf94740c32e229d190938dd2699e7d7fbd52d31751976c75f2cc09d89e53",
+    "pendingCertificationReceiptSha256": "c49d4665d27fd32b35c9ac55d46477ae799eb685be9ccee772e03c2c207b817a",
+    "runnerLockfileSha256": "b00224c0188c8d4c7b45a3553051da4a4f8e4fd4f89bc98b3a0bb845a3308255",
+    "hostedIndexSha256": "f706364d3f44fb0667147155c8400fe456da482fb908625e4d4c2c301022bbe6"
+  },
+  "aggregate": {
+    "ordering": "slug-ascending",
+    "rawReceiptSetAlgorithm": "sha256(utf8 lines: slug TAB rawReceiptSha256 LF)",
+    "rawReceiptSetSha256": "fa8988f2e83b7d50e153f8c7faab06f389a196a46a24be87eb67efa6061fa259",
+    "archivedReceiptSetAlgorithm": "sha256(utf8 lines: slug TAB artifactSha256 TAB rawReceiptSha256 TAB archivedReceiptSha256 LF)",
+    "archivedReceiptSetSha256": "2170e123ae115a8898c49a1b96ba7388b73cc4ed7953317313232abb9b47a0b8"
+  },
+  "receipts": [
+    {
+      "slug": "abyssal-maid",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/abyssal-maid",
+      "version": "1.1.0",
+      "artifactSha256": "d6ac9f9f3fb5efe8c2b26fe276c8364bd55520c9defac0091afbf820f3c46533",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "1f52bf23a9c64dab7c02c4cf7bf73afaeaace88df63b065b47f219b71c6406d2",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/abyssal-maid.json",
+      "sha256": "d29f361b4020acecae7178831c8258124be7b1ef9506f59f9e41394d6af3c205"
+    },
+    {
+      "slug": "arcana-nocturne",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/arcana-nocturne",
+      "version": "1.0.0",
+      "artifactSha256": "6be47f5c778f835923e4443dfbe02f51c7ce22cae4d6108de29dcd091c47510e",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "3febf4fd400c3dcaba98c3ae1cf2207c6dd467c47052602d21d1313835ab4608",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/arcana-nocturne.json",
+      "sha256": "e337b45a231bb5ee0449cef64578c93351e7f768c0227164bbc513a11afc18ba"
+    },
+    {
+      "slug": "arctic-panel",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/arctic-panel",
+      "version": "1.2.0",
+      "artifactSha256": "b63e76dba471bdaf049e7b9431c08b96a008ded34db33c228d60a16bf9a9354c",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "c4bb4223b6aaf7c73fed6d82c75027edad7f2540aaca9c85dd41557869d8dcd7",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/arctic-panel.json",
+      "sha256": "8fd0851d60576aca0e714310ca13a428ffda03ca524854f3c17683f07f941168"
+    },
+    {
+      "slug": "argentina-matchday",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/argentina-matchday",
+      "version": "1.0.0",
+      "artifactSha256": "fe6ea0c510514c401d414b067224f524750c3d934786f9abce603f9d7437a111",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "632385cf9c288a7b6b67126141d71232f81fdc8937fa42087b065b6280241aa0",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/argentina-matchday.json",
+      "sha256": "c2a13305ae5f94f451a8ee16daa698082f94238078847119d500c2d9bbe5b15e"
+    },
+    {
+      "slug": "bamboo-quietude",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/bamboo-quietude",
+      "version": "1.0.0",
+      "artifactSha256": "cf4ca1827178b3aa7f682e97d222a1694907ff6dc8f1299129ed8cf3eb19cebc",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "adf5346e9d159912c8f6bb538d22028a0e303a42d6f8ce7dc6056946e984c569",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/bamboo-quietude.json",
+      "sha256": "83ba0d5e80fa3eb61047bafcef70eff1efac7996f6a471ed94c1ea258a1794cd"
+    },
+    {
+      "slug": "banff-alpine",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/banff-alpine",
+      "version": "1.0.0",
+      "artifactSha256": "1e1462c53c1d1fa772993838f938bff80a5454907ffc52c0731bd20ceb548ab2",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "589d9958261e3be44f839b1c11b8cd684b5785f77ab3848cddfae4efe08e0bc1",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/banff-alpine.json",
+      "sha256": "8996472f3a51cfcfb1a3c4b91f128fadb9523fb7c6358dc1729aae47f2282cb0"
+    },
+    {
+      "slug": "copper-wire",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/copper-wire",
+      "version": "1.2.0",
+      "artifactSha256": "f9c72ef9de62e0074235bfc42650d8e37cc8a30c8f5b2ee69efd8aeedc7de541",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "d138f608a86be14490916564aaf5e14f3eb48167e03fd279964fc2f650b1e7b9",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/copper-wire.json",
+      "sha256": "2fb022f5d280d408c5e31751511c0b29edc6abd620cfb44affed42bb6f5bea49"
+    },
+    {
+      "slug": "deep-ocean",
+      "kind": "theme",
+      "packageName": "@dsh-themes/deep-ocean",
+      "version": "1.2.0",
+      "artifactSha256": "8fca6598f084b47ec07bd00876a686c640ad68f280b5737b789a68fa5df5044f",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "fe8aad86d69cf2c48d52242b163f744eeee499ea6c14d47f4007f13b4c62c0eb",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/deep-ocean.json",
+      "sha256": "594332ecd6f94d021b6f5ad9a31bd6d9ef43ab83a88715e53637759a76778638"
+    },
+    {
+      "slug": "eiffel-lumiere",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/eiffel-lumiere",
+      "version": "1.0.0",
+      "artifactSha256": "7be143cb91b4934db33d99c7e4367a367199ed3138961b5136bb01ced69d400f",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "1d0f632fa0fb4caa6b37c3166a7df7d19dce15964e685cca8a43ab90a5b4b711",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/eiffel-lumiere.json",
+      "sha256": "1a931a3f01587a58495362d9ee8729b681d88df7684b1f58610aca1d6a4310f2"
+    },
+    {
+      "slug": "england-matchday",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/england-matchday",
+      "version": "1.0.0",
+      "artifactSha256": "d8561dcebcd04ac0b6b09e70d15d7ce3e9987a9f22b4f981ffa8eb26c60e2dae",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "00b511254e47e928343e7e9c81f743cdc5c3d4d73488ffc704fdde4970413b6f",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/england-matchday.json",
+      "sha256": "c9ddf32fd7ff4b8992d4b9fb373b89660aea3b965150a86c3737a6362f8a9dfd"
+    },
+    {
+      "slug": "fire-horse-chronicle",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/fire-horse-chronicle",
+      "version": "1.0.0",
+      "artifactSha256": "6eccabbdc98e00ad92144cbaee608159412e7c8e19d8c4272c8fe76194228455",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "93fb03ff4e189a37e1d4905612906c7c9a6825b72f6706f25badc24d58bec724",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/fire-horse-chronicle.json",
+      "sha256": "6a2aed43b456b3e16178eba2519fb40e99332d3453fe7b971a524e26d699a37c"
+    },
+    {
+      "slug": "frontier-ink",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/frontier-ink",
+      "version": "1.0.0",
+      "artifactSha256": "e41c8c261816e29f9b20cd08d65d6778a9c775be9d57cd5b196cd35c65e6c220",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "6a877449e16a19499e4fc097a3fff9c0a783800ae972b0274b5c4290c903e09f",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/frontier-ink.json",
+      "sha256": "57b182b5365619a47ebbd64beac9b8bb8c3790f917b3602907b7dc6254df9b55"
+    },
+    {
+      "slug": "germany-matchday",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/germany-matchday",
+      "version": "1.0.0",
+      "artifactSha256": "4028f77dd5955a73222ddbeb9f03976f76fd9a51bd0ca0add027c6017731c440",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "a9f508ce98858839bbaba05acd763ef9976238cace0dbd3751d02fb7012f79fa",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/germany-matchday.json",
+      "sha256": "a5e1cd89a24ac0dcb36b2a8a1703a89187c066ea6b133faefa53c00f79bd5635"
+    },
+    {
+      "slug": "graphite-relay",
+      "kind": "theme",
+      "packageName": "@dsh-themes/graphite-relay",
+      "version": "1.2.0",
+      "artifactSha256": "6f23cd12796a6373bbe8612ecc2a86b7a7d8e563beb24ecb57ddfd10e86c358c",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "dee598e35cb246532c59c84ddcd323499e54997595e97c51de3769eb0f7e61ad",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/graphite-relay.json",
+      "sha256": "553b691c584ffab09acee40eaa2626434f01e99fc6d6b3d67ee8860dcd0a960f"
+    },
+    {
+      "slug": "harbour-pulse",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/harbour-pulse",
+      "version": "1.0.0",
+      "artifactSha256": "e00926c19fc0a2a2ff508cd25fdf29f9d17b2ad1e1802378fa65c863db5e5901",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "18e7da8a14e4a4f95051d899b714c01bbe88411b211fb5ea5a57cfa7a5e138be",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/harbour-pulse.json",
+      "sha256": "c1c25b2916f96412c710da4cb5f9177852e7d2d1311ab655e47697af6f64d4ce"
+    },
+    {
+      "slug": "high-signal",
+      "kind": "theme",
+      "packageName": "@dsh-themes/high-signal",
+      "version": "1.2.0",
+      "artifactSha256": "01acb404b6273289fa31848c08388d0b99d199b1d8acdad1f958d734d2df14c3",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "d840b0520f595bc3c06f1f0e58df282704e771da20442ca8ac2cf6b5d9d0fe6a",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/high-signal.json",
+      "sha256": "b72fefe83b23024562a859db1736b5efc9a8fc8ba5b83a005e17f963be0b58c3"
+    },
+    {
+      "slug": "jade-circuit",
+      "kind": "theme",
+      "packageName": "@dsh-themes/jade-circuit",
+      "version": "1.2.0",
+      "artifactSha256": "639b3aefc09e204904a5541c82f81310f9c54ca9818473bde8afcaaa958a9fbb",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "14a1e51f09cfad771f85ffd980df3a3bc5e42879c4b51baa6f82867463c0533d",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/jade-circuit.json",
+      "sha256": "bfaa076be9e37b412cc99f72bcbaf3f648b819a2b2fc89ead4049d4d7b36561a"
+    },
+    {
+      "slug": "jianghu-ink",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/jianghu-ink",
+      "version": "1.0.0",
+      "artifactSha256": "2ea8741c46dc9415e3b32c3e5c6d52fe72f06e05dcf5cde1e2b775342271e0b4",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "ca3d46d2f1c9bd861c849c84dd1a5a23a0a52b52c710e62ee4b2b990f7450049",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/jianghu-ink.json",
+      "sha256": "c5a3bfdaedc8c5491d8b898a2d95007a55c6e0e93280da0ebf6471060435daa7"
+    },
+    {
+      "slug": "liberty-ink",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/liberty-ink",
+      "version": "1.0.0",
+      "artifactSha256": "eaa6ca20fc2afc1aadf38d46526ef356d4db998b4d8a6c7b07ca9301578a7ec8",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "01df8ab6316250c3266d0fb5ee12444f161624243cfe3c021ac5f52d05204fb9",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/liberty-ink.json",
+      "sha256": "a0c77992064c02c648de15ddf80bd9acbf5efc132ff49a8997fbff57c7c28b9e"
+    },
+    {
+      "slug": "neon-afterline",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/neon-afterline",
+      "version": "1.2.0",
+      "artifactSha256": "1d4bc56ff6fa646bd4dd347d22b6f69462bc01bde86cdea02a95d869a94813ae",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "b2d58adcf1bd4940748b86a4e77c25f1bd220b6b4b5b52a35b3dbb50cba3602a",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/neon-afterline.json",
+      "sha256": "093919b04a750dd98b4c2a7b17d32970555d7ac8887cc52c1564ef22317ab8fb"
+    },
+    {
+      "slug": "paper-console",
+      "kind": "theme",
+      "packageName": "@dsh-themes/paper-console",
+      "version": "1.2.0",
+      "artifactSha256": "f140a38123331ebbebbd63ee0e5af17ce88268ebcba340e55be4e3db12ff0891",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "fa80e8b793f2cff2caf823a6e2c5e826ed3a9a29cc9f7383482025ab506eaaee",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/paper-console.json",
+      "sha256": "a2231b6041b6be5be01ad992fa46b8c9cb74410b01189bb56026d31dbc3ba885"
+    },
+    {
+      "slug": "quiet-matrix",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/quiet-matrix",
+      "version": "1.2.0",
+      "artifactSha256": "c9259708249cae228e7b92317244418cdd16d3281d2107dbef6803ee266aca0d",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "882e2a8cbcafe1c1f54feb83a53cd284ec56fd3518d16d34787997f231dfe7aa",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/quiet-matrix.json",
+      "sha256": "2890785dbb5e92ca623d80460f03756200ab94941a89a4fe0daaf92981b60523"
+    },
+    {
+      "slug": "reasoning-tide",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/reasoning-tide",
+      "version": "1.1.0",
+      "artifactSha256": "0bdd0ccd1d2c31fbe2baaae31a3c6a5bd0a40c0037c6e6754dcb7df102cac9a6",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "f6340bddd569d536a10efd5709697823dbd0efbbec27457e86e6ed62c85a17c6",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/reasoning-tide.json",
+      "sha256": "af8f33a708806b856cd6f8be76458f2caf02f2444e5d4a69469ea9e40a2c70b1"
+    },
+    {
+      "slug": "redline-02",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/redline-02",
+      "version": "1.2.0",
+      "artifactSha256": "9992031934fe86f3a81a78056d9767380f51bfb9821c9e44632e97964e6fad70",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "23395e25a74da960a539c9d2a16d9e0d70000d626a504a79b8c2f1620781a14e",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/redline-02.json",
+      "sha256": "813c2a403363089d1f3e09139fd5df09782ede0672d18b5cafbdd7687b765031"
+    },
+    {
+      "slug": "sakura-kawaii",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/sakura-kawaii",
+      "version": "1.0.0",
+      "artifactSha256": "7bda784f90d0c34ee8510bc1684e33400d1c053da4094fd8200cd2994df0a2e6",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "9e8b02035510b55b5ac4a2c2882d4834498bca244f8068f47def7d562ba713a3",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/sakura-kawaii.json",
+      "sha256": "55a14ae7672d9f08db9913b1ddab868c1bdcfc9cf5fb8d75b3c5921c328ae0d4"
+    },
+    {
+      "slug": "savanna-horizon",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/savanna-horizon",
+      "version": "1.0.0",
+      "artifactSha256": "84ab6e9139ef71a298bfbbf0f106c2689f11a42208e1edbb14c38bbfb3797562",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "b54fda09655c8e73a43a547ec5af0764c0abd678a7d9d9dc7afa1e75d849a407",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/savanna-horizon.json",
+      "sha256": "9736f32413ccf99fbaafb793a6b9514af602089cbc1435d90134c9055c047628"
+    },
+    {
+      "slug": "solar-trace",
+      "kind": "theme",
+      "packageName": "@dsh-themes/solar-trace",
+      "version": "1.2.0",
+      "artifactSha256": "af447d963e9f5a6cae8454dff553665b16500dfd52a724ab9e75f47f007f56e7",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "32c1130192b7293e87d562ead719cd9192c705d43fd7ffb4bb14c3b2f07bfbf6",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/solar-trace.json",
+      "sha256": "9e9d44f77b258f87a4f740560bce80c8e6809b9eb3c05497f7acf2e19a485ae9"
+    },
+    {
+      "slug": "spain-matchday",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/spain-matchday",
+      "version": "1.0.0",
+      "artifactSha256": "861c9417b0bb4d38898d943aad51a8f6e73ca6ce337114e7a1efbe8dd8b4ac9d",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "a7700cc5ab8d4b5dbae6b543eea8e3cfafa83da060df944972cf29f9eb848d0c",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/spain-matchday.json",
+      "sha256": "f200ed10c09a9268a828808e9a5fe84b64347464571b91fe60fa623c6b2d07c5"
+    },
+    {
+      "slug": "st-basils-avant",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/st-basils-avant",
+      "version": "1.0.0",
+      "artifactSha256": "1ed2136bb88fb3462f585a41763451f192a1ad2dffeaff49d82a0f51cc15c5c9",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "293b20f4098c6320e1aa43372e333513180bc6af26085b77c0a9c359c81dbc02",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/st-basils-avant.json",
+      "sha256": "3d5359dbc2a642041b7170682e22aa21d648a75e730668b5af632d22a2774835"
+    },
+    {
+      "slug": "suomenlinna-nordic",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/suomenlinna-nordic",
+      "version": "1.0.0",
+      "artifactSha256": "d303c2a7312377d970bcce925ad6521b4c0cc491e8432c8be693277e2dd6dcca",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "a5f1d2d7601e2e7e42e582f57d29c830a0419e4f63d5ebefd3efeb3b87b66bae",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/suomenlinna-nordic.json",
+      "sha256": "b81c9fcecb7ae04f3637df53b0d6b81749453c68ff423cb2663c56c977523252"
+    },
+    {
+      "slug": "swanstone-modern",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/swanstone-modern",
+      "version": "1.0.0",
+      "artifactSha256": "7947d3d97417f6bfcbe80d73cba68ba28ab7e594228a6f44c87d3199f547d76c",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "3adcc6fdda41961c190c25a8e7b4af60cdd375877088bb4d57fa7abf711f03ea",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/swanstone-modern.json",
+      "sha256": "28ad489163cf169de2840b51ddb81c47ded8f66c4d1bfd15e0b2a416ac1347a1"
+    },
+    {
+      "slug": "yellowstone-wpa",
+      "kind": "full-skin",
+      "packageName": "@dsh-themes/yellowstone-wpa",
+      "version": "1.0.0",
+      "artifactSha256": "3a2264a375dd079034f86634c6617614963daddfe4cdc1feea4456f37ada6145",
+      "embeddedCompatibilityBaseline": "0.1.0-rc.8",
+      "rawReceiptSha256": "95987972718aeb4d9e61599560a315fde3c2af2b27d4902f45efbf627962b2c9",
+      "path": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/yellowstone-wpa.json",
+      "sha256": "aab09b7713fd6a161dddf7ce2d0e5763c475772b7f64f1a858b294c3872c5b7d"
+    }
+  ],
+  "promotionBlockers": [
+    "light-dark-system-not-verified",
+    "feature-activation-not-verified",
+    "visual-accessibility-not-verified",
+    "rollback-reverse-not-verified",
+    "hosted-artifacts-not-repacked-for-rc2",
+    "selector-catalog-not-revalidated-on-rc2",
+    "final-runtime-attestation-not-issued"
+  ],
+  "promotionRule": "These one-machine receipts prove only the listed lifecycle smoke checks for current hosted bytes. They never promote RC.2, authorize installation, or replace the six-job full-acceptance matrix."
+}
