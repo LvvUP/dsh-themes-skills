@@ -5,7 +5,7 @@
  * here. Every value is the SHA-256 of the complete published `.tgz`.
  */
 export const CURRENT_CATALOG_INDEX_SHA256 =
-  '54686ba2df528b994840ab5ad33b24f06037e7bcdc0d3a034b0fb361456b658a';
+  'f706364d3f44fb0667147155c8400fe456da482fb908625e4d4c2c301022bbe6';
 
 export const CURRENT_INSTALLABLE_HOSTED_ARTIFACTS = new Map([
   ['@dsh-themes/abyssal-maid@1.1.0', 'd6ac9f9f3fb5efe8c2b26fe276c8364bd55520c9defac0091afbf820f3c46533'],
