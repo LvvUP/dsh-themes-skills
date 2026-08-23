@@ -37,15 +37,16 @@ If this exact DSH setup already starts successfully, skip this section—do not 
 
 Starting official RC.2 does **not** promote this repository's pending RC.2 theme evidence. At the moment, a new RC.2 setup can run DSH with its built-in appearance, but theme/skin installation must stop until the separate RC.2 certification gate is complete. The Skills never downgrade RC.2 or silently substitute the retained RC.8 lane.
 
-## Already use DeepSeek Harness? Install with one choice
+## Already use DeepSeek Harness? You only need one ID
 
-The beginner path asks for one choice, not an evidence worksheet.
+Find the unique `#ID` in the top-left of a DSH Themes card or detail page, for example `#2004`, and tell it to your Agent. You do not need to prepare a package name, version, download URL, or checksum.
 
-| You provide | The Skills resolve and verify internally |
-| --- | --- |
-| A card number such as `#2025`, a slug such as `redline-02`, a displayed name, or a DSH-Themes detail URL | Exact package and version, controlled artifact URL, complete `.tgz` SHA-256, fixed compatibility sidecar, runtime/rights gate, and rollback target |
+<details>
+<summary>What does the Skill handle behind the scenes?</summary>
 
-You should not need to find or transcribe package coordinates. If a displayed name matches more than one item, the Agent asks one short choice. Exact local paths are requested only when you explicitly choose offline advanced/manual recovery; the Skill computes the local digest and still checks it against pinned authority.
+The Skill uses the ID to find one exact catalog record, then checks its version, artifact, compatibility evidence, rights status, and recovery target. If the item cannot be installed safely, it stops and explains why in plain language.
+
+</details>
 
 ### General installation
 
@@ -58,7 +59,7 @@ npx skills add LvvUP/dsh-themes-skills --skill dsh-theme-finder
 Then tell your Agent what you want:
 
 ```text
-Install redline-02 from DSH-Themes.
+Please install DSH Themes #2004.
 ```
 
 Finder resolves the canonical directory record, reports the important rights/runtime facts, and hands the complete normalized record to Manager or Community Skin Installer only when that item's certified gate passes. The installer asks for confirmation immediately before it changes the local `web` profile.
@@ -67,7 +68,7 @@ If Harness is missing, has never completed its own first start, or does not matc
 
 ### Dedicated installation
 
-Open a theme or skin detail page on [dsh-themes.com](https://dsh-themes.com), then copy its dedicated installation prompt. That prompt already identifies the selected record; the Agent resolves the technical tuple from the directory and pinned sidecars. You do not need to copy a catalog URL, package version, artifact URL, and hash separately.
+Open a theme, skin, or UI extension detail page on [dsh-themes.com](https://dsh-themes.com), then copy its dedicated installation prompt. That prompt already contains the selected `#ID`; the Agent resolves the technical tuple from the directory and pinned sidecars. You do not need to copy a catalog URL, package version, artifact URL, and hash separately.
 
 Both paths use the same fail-closed policy. Pending, ambiguous, contradictory, and showcase-only records are explained but never converted into an install command. While RC.2 certification remains pending, these paths can operate only through the retained certified RC.8 lane.
 

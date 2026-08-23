@@ -49,7 +49,9 @@ test('both README homepages explain general and dedicated installation', async (
 
   assert.match(english, /### General installation/);
   assert.match(english, /### Dedicated installation/);
-  assert.match(english, /You should not need to find or transcribe package coordinates/);
+  assert.match(english, /unique `#ID` in the top-left/);
+  assert.match(english, /Please install DSH Themes #2004\./);
+  assert.match(english, /You do not need to prepare a package name/);
   assert.match(english, /RC\.2 certification remains pending/);
   assert.match(english, /Set up and start official DeepSeek Harness as a \*\*separate task\*\*/);
   assert.match(english, /npx @deepseek-ai\/dsh@0\.1\.1-rc\.2 web/);
@@ -61,7 +63,9 @@ test('both README homepages explain general and dedicated installation', async (
 
   assert.match(chinese, /### 通用安装/);
   assert.match(chinese, /### 专属安装/);
-  assert.match(chinese, /你不需要寻找或抄写这些技术坐标/);
+  assert.match(chinese, /卡片或详情页左上角找到唯一 `#编号`/);
+  assert.match(chinese, /请帮我安装 DSH Themes 的 #2004。/);
+  assert.match(chinese, /你不需要准备包名/);
   assert.match(chinese, /RC\.2 认证仍待完成/);
   assert.match(chinese, /作为一个\*\*独立任务\*\*完成/);
   assert.match(chinese, /npx @deepseek-ai\/dsh@0\.1\.1-rc\.2 web/);
