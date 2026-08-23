@@ -519,7 +519,7 @@ test('release validator separates current V3, historical V2/V1, and artifact aut
         historicalCompatibility.selectorCatalogSha256;
       const result = await validateRelease(directory, 'mixed-v3.json', release);
       assert.notEqual(result.code, 0);
-      assert.match(result.stderr, /exact certified RC\.8 evidence/);
+      assert.match(result.stderr, /exact certified evidence/);
     });
 
     await t.test('recognizes exact RC.6 V2 only as historical', async () => {
@@ -727,7 +727,7 @@ test('theme state parses the RC.8 root profile array and rejects ambiguous profi
       const input = await writeJson(directory, 'duplicate.json', [profile, profile]);
       const result = await run(state, ['inspect', '--input', input]);
       assert.notEqual(result.code, 0);
-      assert.match(result.stderr, /exactly one unambiguous RC\.8 profile record/);
+      assert.match(result.stderr, /exactly one unambiguous certified profile record/);
     } finally {
       await rm(directory, { recursive: true, force: true });
     }
@@ -759,7 +759,7 @@ test('theme state parses the RC.8 root profile array and rejects ambiguous profi
         const input = await writeJson(directory, `${name}.json`, payload);
         const result = await run(state, ['inspect', '--input', input]);
         assert.notEqual(result.code, 0);
-        assert.match(result.stderr, /exactly one unambiguous RC\.8 profile record/);
+        assert.match(result.stderr, /exactly one unambiguous certified profile record/);
       }
     } finally {
       await rm(directory, { recursive: true, force: true });
@@ -828,7 +828,7 @@ test('manager exact-version checks implement the shared SemVer 2.0 vectors', asy
 test('hosted authority pins 32 current artifacts and 24 rollback-only versions', () => {
   assert.equal(
     CURRENT_CATALOG_INDEX_SHA256,
-    '54686ba2df528b994840ab5ad33b24f06037e7bcdc0d3a034b0fb361456b658a'
+    'f706364d3f44fb0667147155c8400fe456da482fb908625e4d4c2c301022bbe6'
   );
   assert.equal(CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.size, 32);
   assert.equal(LEGACY_ROLLBACK_HOSTED_ARTIFACTS.size, 24);

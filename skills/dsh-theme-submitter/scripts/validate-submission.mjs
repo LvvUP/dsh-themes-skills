@@ -10,18 +10,35 @@ const TOKENS = [
   '--dsw-alias-label-secondary', '--dsw-alias-state-error-primary', '--dsw-alias-state-success-primary',
   '--dsw-alias-state-warn-primary', '--dsw-specific-sidebar-fill',
 ];
-const CURRENT_DSH_VERSION = '0.1.0-rc.8';
-const COMPATIBILITY_SHA256 =
-  '94f707533122d7fa7930558030d13053ecad7d5ee5f003a5fdf38d78fd2fe2e1';
-const compatibilityBytes = await readFile(
-  new URL('../references/compatibility-v3.json', import.meta.url),
+const BASELINE_POLICY = JSON.parse(
+  await readFile(new URL('../references/baseline-policy.json', import.meta.url))
 );
-if (createHash('sha256').update(compatibilityBytes).digest('hex') !== COMPATIBILITY_SHA256) {
-  throw new Error('compatibility-v3.json does not match the certified RC.8 authority');
+if (
+  BASELINE_POLICY.defaultOperationalLane !== 'certified' ||
+  BASELINE_POLICY.certified?.status !== 'certified-submission' ||
+  BASELINE_POLICY.certified?.enabled !== true ||
+  BASELINE_POLICY.candidate?.status !== 'certification-pending' ||
+  BASELINE_POLICY.candidate?.enabled !== false ||
+  JSON.stringify(BASELINE_POLICY.forbiddenVersionSelectors) !==
+    JSON.stringify(['latest', 'next'])
+) {
+  throw new Error('baseline-policy.json is malformed or promotes a candidate');
+}
+const compatibilityBytes = await readFile(
+  new URL(
+    `../references/${BASELINE_POLICY.certified.evidencePath}`,
+    import.meta.url
+  ),
+);
+if (
+  createHash('sha256').update(compatibilityBytes).digest('hex') !==
+  BASELINE_POLICY.certified.evidenceSha256
+) {
+  throw new Error('certified submission sidecar digest differs');
 }
 const COMPATIBILITY = JSON.parse(compatibilityBytes.toString('utf8'));
-if (COMPATIBILITY.dshPackageVersion !== CURRENT_DSH_VERSION) {
-  throw new Error('compatibility-v3.json does not target the certified DSH version');
+if (typeof COMPATIBILITY.dshPackageVersion !== 'string') {
+  throw new Error('certified submission sidecar lacks an exact DSH version');
 }
 const SHA256 = /^[0-9a-f]{64}$/;
 const VERSION = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
@@ -116,7 +133,7 @@ function submissionOrigin(value) {
 function validateCompatibility(value) {
   const input = object(value, 'compatibility');
   if (JSON.stringify(stable(input)) !== JSON.stringify(stable(COMPATIBILITY))) {
-    throw new Error('compatibility must exactly match the certified RC.8 V3 final evidence');
+    throw new Error('compatibility must exactly match the certified V3 evidence');
   }
 }
 

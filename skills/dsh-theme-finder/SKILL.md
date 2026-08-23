@@ -9,7 +9,7 @@ Return catalog evidence, not invented recommendations. Search only a website or 
 
 ## Release boundary
 
-The current certified Manager lane is exact DeepSeek Harness `0.1.0-rc.8` with V3 compatibility and final runtime attestation `1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae`. RC.6 V2 and RC.5 V1 remain historical. See the informational [`release-state.json`](../../release-state.json); Finder keeps executable gates independent of that file.
+The operational lane is the exact certified baseline named by `references/baseline-policy.json`; today its retained V3 evidence targets DeepSeek Harness `0.1.0-rc.8`. RC.6 V2 and RC.5 V1 remain historical. RC.2 is a certification candidate: selecting its exact sidecar version returns zero results, `installableResultsAllowed: false`, and does not read catalog metadata. See the informational [`release-state.json`](../../release-state.json); Finder keeps executable gates independent of that file.
 
 ## Search
 
@@ -20,7 +20,7 @@ node <skill-dir>/scripts/find-themes.mjs \
   --catalog <https-url-or-absolute-json-path> \
   [--query <words>] [--kind theme|skin|full-skin|ui-extension] \
   [--mode light|dark] [--availability all|installable|showcase] \
-  [--dsh-version 0.1.0-rc.8|0.1.0-rc.6] [--limit 10]
+  [--dsh-version <exact-version-from-baseline-policy>] [--limit 10]
 ```
 
 The client sends no cookies, credentials, or authorization headers. It refuses HTTP, cross-origin redirects, oversized responses, unpublished directory records, mutable source revisions, malformed source subdirectories, unsafe package versions, contradictory rights/runtime/compatibility axes, and unknown distribution combinations.

@@ -67,7 +67,7 @@ test('current V3 authorities use RC.8 while RC.6 stays explicitly historical', a
 
 test('operational V3 consumers reject the historical RC.6 selector fingerprint', async () => {
   const files = [
-    'skills/dsh-theme-finder/scripts/find-themes.mjs',
+    'skills/dsh-theme-finder/references/baseline-policy.json',
     'skills/dsh-theme-finder/references/catalog-contract.md',
     'skills/dsh-theme-creator/references/compatibility-v3.json',
     'skills/dsh-theme-submitter/references/compatibility-v3.json',

@@ -1,4 +1,4 @@
 interface:
   display_name: "DSH Community Skin Installer"
-  short_description: "Install one of 11 attested RC.8 community skins"
-  default_prompt: "Use $dsh-community-skin-installer to inspect and, after explicit consent, install an allowlisted RC.8 community skin only when final Manager attestation 1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae and runtime receipt 89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1 both validate."
+  short_description: "Install allowlisted skins under pinned runtime evidence"
+  default_prompt: "Use $dsh-community-skin-installer to inspect and, after explicit consent, install an allowlisted community skin only when the pinned certified Manager and item receipt both validate; the RC.2 receipt is pending and never authorizes installation."

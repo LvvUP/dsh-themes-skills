@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,6 +11,7 @@ import {
   LEGACY_ROLLBACK_HOSTED_ARTIFACTS,
 } from './hosted-artifact-authority.mjs';
 import { validateRollbackRecord } from './theme-state.mjs';
+import { loadCertifiedAuthority } from './baseline-authority.mjs';
 
 const HISTORICAL_V2 = Object.freeze({
   dshPackageVersion: '0.1.0-rc.6',
@@ -37,26 +37,6 @@ const RUNTIME_V1 = Object.freeze({
   frontendBundleSha256: 'a40165a9916acf9c5710e440842c9a56bc472ae9991f37f4675a7664ae784d68',
   frontendStylesheetSha256: '8ecb4b25268f5acae7e6f1b9e5cc8d14e5c5fa17da70a6a7863c896496f257ea',
 });
-const RUNTIME_V2 = Object.freeze({
-  schemaVersion: 2,
-  attestationSha256:
-    '1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae',
-  runnerLockfileSha256:
-    'b38b68f1f443b7065f530d665ea7acbc9327275503ba0d9a6edd030b81f915ec',
-  productionPackagesCount: 504,
-  productionPackagesSha256:
-    '58c78fcf15d2b6c58bad0fc870a4d28dabda33bfae3633cf94794465564a939b',
-  dshPackagesCount: 187,
-  dshPackagesSha256:
-    'aa3929a9418b928d9ef200964f8ae4cce54086b1d5bc474cb9b42af90f0a78d8',
-  packageManagerName: 'pnpm',
-  packageManagerVersion: '11.7.0',
-  dshPackageVersion: '0.1.0-rc.8',
-  certificationRunId: 32393288849,
-  certificationHeadSha:
-    'e3fe9ac465b8db8070efbdb83ddc6c821f923a73',
-  lifecycle: 'managed-cold-restart',
-});
 const HISTORICAL = Object.freeze({
   dshVersion: '0.1.0-rc.5',
   commit: '47f943859bef60e4160492346772ded9b24f765a',
@@ -64,17 +44,24 @@ const HISTORICAL = Object.freeze({
 });
 const SHA256 = /^[0-9a-f]{64}$/;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const skillDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const finalAttestationBytes = await readFile(
-  resolve(skillDir, 'runtime-rc8/attestation.json')
-);
-if (
-  createHash('sha256').update(finalAttestationBytes).digest('hex') !==
-  RUNTIME_V2.attestationSha256
-) {
-  throw new Error('local RC.8 attestation does not match installation authority');
-}
-const finalAttestation = JSON.parse(finalAttestationBytes.toString('utf8'));
+const certifiedAuthority = await loadCertifiedAuthority();
+const finalAttestation = certifiedAuthority.attestation;
+const RUNTIME_V2 = Object.freeze({
+  schemaVersion: finalAttestation.schemaVersion,
+  attestationSha256: certifiedAuthority.lane.attestationSha256,
+  runnerLockfileSha256: finalAttestation.lockfile.sha256,
+  productionPackagesCount: finalAttestation.productionClosure.packageCount,
+  productionPackagesSha256: finalAttestation.productionClosure.sha256,
+  dshPackagesCount: finalAttestation.productionClosure.dshPackageCount,
+  dshPackagesSha256:
+    finalAttestation.productionClosure.dshPackagesSha256,
+  packageManagerName: finalAttestation.packageManager.name,
+  packageManagerVersion: finalAttestation.packageManager.version,
+  dshPackageVersion: finalAttestation.compatibility.dshPackageVersion,
+  certificationRunId: finalAttestation.certificationRun.runId,
+  certificationHeadSha: finalAttestation.certificationRun.headSha,
+  lifecycle: finalAttestation.acceptance.lifecycle.strategy,
+});
 const CURRENT_V3 = Object.freeze({
   ...finalAttestation.compatibility,
   runtimeAttestationSha256: RUNTIME_V2.attestationSha256,
@@ -284,7 +271,7 @@ function validateV3(record, manifest, origin) {
   );
   if (stableJson(compatibility) !== stableJson(CURRENT_V3)) {
     fail(
-      'V3 compatibility must match the exact certified RC.8 evidence; mixed rc.6/rc.7/rc.8 evidence is forbidden'
+      'V3 compatibility must match the exact certified evidence; mixed baseline evidence is forbidden'
     );
   }
 
@@ -325,7 +312,7 @@ function validateV3(record, manifest, origin) {
   return {
     status: 'current',
     installableCurrent: true,
-    dshVersion: '0.1.0-rc.8',
+    dshVersion: CURRENT_V3.dshPackageVersion,
     sourceCommit: CURRENT_V3.officialRelease.sourceCommit,
     packageName: artifact.name,
     version: manifest.version,

@@ -1,0 +1,12 @@
+packages:
+  - .
+
+engineStrict: true
+nodeLinker: isolated
+strictPeerDependencies: true
+
+# Upstream's UI graph is React 18. Pin the peer resolver so a later React 19
+# registry publication cannot create a mixed React 18/19 closure.
+overrides:
+  react: 18.3.1
+  react-dom: 18.3.1

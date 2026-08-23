@@ -66,7 +66,7 @@ test('submitter fails closed on any RC.8 final-evidence drift', async (t) => {
         '--site', 'https://themes.example',
       ]);
       assert.notEqual(result.code, 0);
-      assert.match(result.stderr, /exactly match the certified RC\.8 V3 final evidence/);
+      assert.match(result.stderr, /exactly match the certified V3 evidence/);
     });
   }
 });

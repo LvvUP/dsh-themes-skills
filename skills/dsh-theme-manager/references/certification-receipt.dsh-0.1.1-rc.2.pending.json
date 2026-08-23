@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "status": "certification-pending",
+  "installable": false,
+  "baseline": "@deepseek-ai/dsh@0.1.1-rc.2",
+  "sidecar": {
+    "path": "references/dsh-0.1.1-rc.2.candidate.json",
+    "sha256": "9ec94c95dc8d6e4fe1aa7bab00de59d8c7fcb414c7342694a5cde20efd9d5888"
+  },
+  "runtime": {
+    "path": "runtime-dsh-0.1.1-rc.2",
+    "attestationSha256": "83fbaf94740c32e229d190938dd2699e7d7fbd52d31751976c75f2cc09d89e53",
+    "lockfileSha256": "b00224c0188c8d4c7b45a3553051da4a4f8e4fd4f89bc98b3a0bb845a3308255",
+    "productionPackagesCount": 505,
+    "productionPackagesSha256": "9c748f661b6ad106383b5e6c835efe0679054efb36889adcf26a3bc09e1b3690",
+    "dshPackagesCount": 188,
+    "dshPackagesSha256": "40bbb3eeac9ab30a8d957df10010102c1442dc255923fc2ab60a0f10413e6630"
+  },
+  "matrix": {
+    "status": "pending",
+    "requiredJobs": 6,
+    "completedJobs": 0,
+    "platforms": [
+      "linux",
+      "darwin",
+      "win32"
+    ],
+    "nodeVersions": [
+      "22.19.0",
+      "24.15.0"
+    ]
+  },
+  "acceptance": {
+    "installListRemove": "pending",
+    "lightDarkSystem": "pending",
+    "managedColdRestart": "pending",
+    "rollbackReverse": "pending",
+    "malformedEvidence": "must-fail-closed",
+    "mixedVersionEvidence": "must-fail-closed"
+  },
+  "promotionRule": "Replace this pending receipt only with a separately reviewed final receipt whose six exact jobs succeeded and whose selector, hosted-artifact, community-item, restart, and rollback evidence is complete. This file never grants installation."
+}

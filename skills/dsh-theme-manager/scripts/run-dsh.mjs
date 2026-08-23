@@ -20,9 +20,11 @@ import {
 } from './hosted-artifact-authority.mjs';
 import { validateReleaseRecord } from './validate-release.mjs';
 import { validateRollbackRecord } from './theme-state.mjs';
+import { loadCertifiedAuthority } from './baseline-authority.mjs';
 
 const skillDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const runtimeDir = resolve(skillDir, 'runtime-rc8');
+const certifiedAuthority = await loadCertifiedAuthority();
+const runtimeDir = certifiedAuthority.runtimeDir;
 const dshBin = resolve(runtimeDir, 'node_modules/@deepseek-ai/dsh/lib/bin.js');
 const localBin = resolve(runtimeDir, 'node_modules/.bin');
 function fail(message) {
