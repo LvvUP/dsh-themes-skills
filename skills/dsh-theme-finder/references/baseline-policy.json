@@ -7,6 +7,8 @@
     "installableResultsAllowed": true,
     "evidencePath": "community-authority.json",
     "evidenceSha256": "343000de2be72848db4a7838be90e3c41191f164a5a62d8198d154bfe0aa5d99",
+    "hostedAuthorityPath": "hosted-authority.json",
+    "hostedAuthoritySha256": "57d9fd0fd9d92335c6599afc89700f642f640474c3fced95f2ed20de03b34e64",
     "compatibility": {
       "dshPackageVersion": "0.1.0-rc.8",
       "sourceCommit": "141eb6fef83422698aef7a981029e843e8161534",

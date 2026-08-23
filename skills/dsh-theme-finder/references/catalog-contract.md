@@ -10,9 +10,9 @@ Each `provenance.attributions` entry is limited to 256 characters, with at most 
 
 ## Selection resolution boundary
 
-`--selection` accepts one card number, slug, exact displayed name, or canonical DSH-Themes detail URL. When no catalog is supplied, it reads only the canonical `https://dsh-themes.com/api/dsh-directory` endpoint with a seven-locale enum and a bounded page size. It does not accept a foreign detail origin, credentials, fragments, or a query alongside the exact selection.
+`--selection` accepts one exact public `#ID`, slug, exact displayed name, or canonical DSH-Themes detail URL. The only installation-ID syntax is `#` immediately followed by positive decimal digits. Legacy or internal labels such as `DSH-2206` and `DSH-FS-009` are rejected before any directory request. When no catalog is supplied, Finder reads only the canonical `https://dsh-themes.com/api/dsh-directory` endpoint with a seven-locale enum and a bounded page size. It does not accept a foreign detail origin, credentials, fragments, or a query alongside the exact selection.
 
-Selection happens before installer handoff but after every record validation gate. One accepted match returns `resolved`; zero returns `not-found`; multiple exact displayed-name matches return `ambiguous` with only catalog number, slug, kind, and name. Ambiguity never selects the first result. The selection identifies a record but does not create installation authority: Manager and Community Installer still resolve and independently validate package, version, controlled artifact route, complete digest, sidecar, receipt, and rollback evidence.
+Selection happens before installer handoff but after every record validation gate. One accepted match returns `resolved`; zero returns `not-found`; multiple exact displayed-name matches return `ambiguous` with only public `#ID`, slug, kind, and name. Ambiguity never selects the first result. A name, slug, or detail URL is discovery-only and can report the matching public ID, but it never creates installer authority. Only an exact canonical public `#ID` can proceed to a handoff, and Manager or Community Installer must still resolve and independently validate the same catalog ID, slug, package, version, controlled artifact route, complete digest, sidecar, receipt, and rollback evidence. Package coordinates are internal checks, not a second user-facing identifier.
 
 ## Directory axes
 
@@ -90,7 +90,7 @@ This is a separate community-installer lane, never a Manager package. Its direct
 }
 ```
 
-Finder additionally requires `runtime.status: "runtime-verified"`, `compatibility.status: "verified"`, exact `compatibility.baseline: "0.1.0-rc.8"`, fixed source package/version/revision/subdirectory, non-hold rights, a byte-for-byte match with `references/community-authority.json`, and an authority gate bound to the exact final RC.8 Manager attestation plus final receipt. The record may not supply an artifact URL or install command; the community Skill owns those authorities. Exactly 11 current records enter this class, all with `consentRequired: true`; no descriptive catalog edit can add another.
+Finder additionally requires an exact canonical public `#ID`, `runtime.status: "runtime-verified"`, `compatibility.status: "verified"`, exact `compatibility.baseline: "0.1.0-rc.8"`, fixed source package/version/revision/subdirectory, non-hold rights, a byte-for-byte match with `references/community-authority.json`, and an authority gate bound to the exact final RC.8 Manager attestation plus final receipt. The record may not supply an artifact URL or install command; the community Skill owns those authorities. Exactly 11 current records enter this class, all with `consentRequired: true`; no descriptive catalog edit can add another.
 
 ## External showcase
 

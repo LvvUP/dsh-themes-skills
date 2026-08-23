@@ -1,4 +1,4 @@
 interface:
   display_name: "DSH Theme Manager"
   short_description: "Safely install, verify, and roll back DSH themes"
-  default_prompt: "Use $dsh-theme-manager only after official DSH has completed a separate first-start task; never install DSH or Node here. With the normalized Finder selection, resolve package, version, controlled artifact URL, and SHA-256 internally, then validate, install, cold-restart, and keep a recoverable rollback; never install or downgrade for the pending RC.2 candidate."
+  default_prompt: "Use $dsh-theme-manager only after official DSH has completed a separate first-start task and Finder has validated the exact public #ID shown at the top-left of the selected card or detail page. Reject legacy DSH-* labels and any ID, slug, package, version, URL, or digest mismatch. Keep technical coordinates internal, then validate, install, cold-restart, and preserve rollback; never install or downgrade for the pending RC.2 candidate."

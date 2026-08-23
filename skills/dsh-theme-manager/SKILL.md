@@ -23,13 +23,13 @@ Official `0.1.1-rc.2` may be installed and started independently, but its theme-
 
 ## Beginner-facing input
 
-The normal entry point is one normalized `dsh-theme-finder` result selected by card number, slug, displayed name, or DSH-Themes detail URL. Do not ask the user to discover or type the package name, version, artifact URL, `.tgz` path, or SHA-256.
+The normal hosted entry point is one normalized `dsh-theme-finder` result resolved from the exact public `#ID` shown in the top-left of the card and detail page, such as `#2004`. Require `selection.input` to use exact `#` plus positive decimal digits, `selection.authority: "unique-catalog-id"`, `managerHandoff.status: "validated"`, and one matching `catalogId` through the selected item and handoff. `DSH-2206`, `DSH-FS-009`, package names, and other legacy or internal labels are never public-ID aliases. A slug, displayed name, or DSH-Themes detail URL can help discover the public ID but is never hosted installation authority. Do not ask the user to discover or type the package name, version, artifact URL, `.tgz` path, or SHA-256.
 
 Resolve those fields internally and keep their trust sources separate:
 
-1. Take the slug, kind, distribution, and controlled origin only from the Finder result, never from descriptive catalog prose.
-2. Resolve the exact published release record and fixed sidecar selected by `baseline-policy.json`.
-3. Derive `@dsh-themes/<slug>`, the exact version, controlled download route, and complete artifact SHA-256 from that release record.
+1. Take the minimal technical release record, trusted origin, public catalog ID, slug, kind, and distribution only from Finder's validated handoff, never from descriptive catalog prose. Reject the handoff if the ID selects one item while any slug, package, version, route, or digest identifies another.
+2. Re-run `validate-release.mjs` against the fixed sidecar selected by `baseline-policy.json`; never trust Finder's success flag by itself.
+3. Derive `@dsh-themes/<slug>`, the exact version, controlled download route, and complete artifact SHA-256 from that validated record. These values are internal validation coordinates, not additional user identifiers.
 4. Independently match the package/version/digest tuple against `CURRENT_INSTALLABLE_HOSTED_ARTIFACTS` before downloading, then re-hash the downloaded bytes.
 5. Present a short target, permissions, compatibility, restart, and rollback summary. Ask for explicit confirmation only immediately before profile mutation.
 

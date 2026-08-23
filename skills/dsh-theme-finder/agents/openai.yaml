@@ -1,4 +1,4 @@
 interface:
   display_name: "DSH Theme Finder"
   short_description: "Classify hosted, community, and showcase directory records"
-  default_prompt: "Use $dsh-theme-finder to resolve my card number, slug, displayed name, or DSH-Themes detail URL; derive exact authority fields internally and hand off only records accepted by the pinned certified baseline. If DSH setup is incomplete, keep that as a separate task and stop before installer handoff; RC.2 remains pending with zero installable results."
+  default_prompt: "Use $dsh-theme-finder to resolve the exact public DSH-Themes #ID shown at the top-left of its card or detail page. Reject DSH-2206, DSH-FS-009, and every other legacy or internal label as an installation ID. Treat names, slugs, and detail URLs as discovery-only until I confirm the #ID. Derive package, version, URL, and digest internally, hand off only one fully consistent accepted record, keep DSH setup separate, and leave RC.2 pending."
