@@ -34,7 +34,7 @@ test('installation skills keep technical coordinates inside the trusted workflow
   assert.match(finder, /DSH setup and `#ID` installation are separate user tasks/);
   assert.match(finder, /stop before installer handoff/);
   assert.match(finder, /confirm that the required companion Skill is already available/);
-  assert.match(finder, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.5\.0/);
+  assert.match(finder, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.5\.1/);
   assert.match(finder, /--skill dsh-theme-finder[\s\\]+--skill dsh-theme-manager[\s\\]+--skill dsh-community-skin-installer/);
   assert.match(finder, /Do not dynamically fetch, synthesize, or import a missing installer/);
 
@@ -108,7 +108,7 @@ test('both README homepages explain general and dedicated installation', async (
   assert.match(english, /`DSH-2206` and `DSH-FS-009`/);
   assert.match(english, /only installation ID/);
   assert.match(english, /Please install DSH Themes #2004\./);
-  assert.match(english, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.5\.0/);
+  assert.match(english, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.5\.1/);
   assert.match(english, /--skill dsh-theme-finder[\s\\]+--skill dsh-theme-manager[\s\\]+--skill dsh-community-skin-installer/);
   assert.match(english, /You do not need to prepare a package name/);
   assert.match(english, /RC\.2 certification remains pending/);
@@ -129,7 +129,7 @@ test('both README homepages explain general and dedicated installation', async (
   assert.match(chinese, /`DSH-2206`、`DSH-FS-009`/);
   assert.match(chinese, /才是安装 ID/);
   assert.match(chinese, /请帮我安装 DSH Themes 的 #2004。/);
-  assert.match(chinese, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.5\.0/);
+  assert.match(chinese, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.5\.1/);
   assert.match(chinese, /--skill dsh-theme-finder[\s\\]+--skill dsh-theme-manager[\s\\]+--skill dsh-community-skin-installer/);
   assert.match(chinese, /你不需要准备包名/);
   assert.match(chinese, /RC\.2 认证仍待完成/);

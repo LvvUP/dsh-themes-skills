@@ -6,7 +6,7 @@
 
 [English](README.md) · [简体中文](README.zh-CN.md)
 
-[![Version 0.5.0](https://img.shields.io/badge/version-0.5.0-246BCE)](package.json)
+[![Version 0.5.1](https://img.shields.io/badge/version-0.5.1-246BCE)](package.json)
 [![候选认证待完成](https://img.shields.io/badge/DSH%200.1.1--rc.2-%E5%80%99%E9%80%89%E8%AE%A4%E8%AF%81%E5%BE%85%E5%AE%8C%E6%88%90-D97706)](skills/dsh-theme-manager/references/dsh-0.1.1-rc.2.candidate.json)
 [![CI](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml)
 [![Node.js 22/24](https://img.shields.io/badge/Node.js-22.19%20%7C%2024.15-16324F)](package.json)
@@ -16,7 +16,7 @@
 
 </div>
 
-版本 **0.5.0** 为 DeepSeek Harness **`0.1.1-rc.2`** 增加了一条精确、fail-closed 的认证候选通道。它固定官方发布、npm integrity、冻结 lock 与完整依赖闭包，让后续认证不需要解析 `latest` 或 `next`。
+版本 **0.5.1** 保留 DeepSeek Harness **`0.1.1-rc.2`** 的精确、fail-closed 认证候选通道，并让网站数字 `#ID` 成为从卡片到 package index 的唯一公开目录身份。它固定官方发布、npm integrity、冻结 lock 与完整依赖闭包，让后续认证不需要解析 `latest` 或 `next`。
 
 这条候选通道**尚未完成认证**。它不能用于创作、投稿、返回可安装的 Finder 结果，也不能安装站内或社区软件包。在真实 RC.2 运行回执满足下述全部晋级门槛之前，保留的 **`0.1.0-rc.8` 已认证通道仍是唯一可运行通道**。
 
@@ -41,13 +41,13 @@ Skill 会根据公开 `#编号` 找到唯一目录记录。对于站内条目，
 
 ```bash
 npx --yes skills@1.5.23 add \
-  https://github.com/LvvUP/dsh-themes-skills/tree/v0.5.0 \
+  https://github.com/LvvUP/dsh-themes-skills/tree/v0.5.1 \
   --skill dsh-theme-finder \
   --skill dsh-theme-manager \
   --skill dsh-community-skin-installer
 ```
 
-固定的 `v0.5.0` 发布引用只会随上文所述的站点协同版本一同发布。在该标签存在之前，本分支仅供审查，不得用 `main`、`latest` 或其他可变引用替代。
+固定的 `v0.5.1` 发布引用只会随上文所述的站点协同版本一同发布。在该标签存在之前，本分支仅供审查，不得用 `main`、`latest` 或其他可变引用替代。
 
 然后直接告诉 Agent：
 
