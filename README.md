@@ -20,41 +20,34 @@ Version **0.5.0** adds an exact, fail-closed certification candidate for DeepSee
 
 It is **not certified yet**. The candidate cannot author, submit, return installable Finder results, or install a hosted/community package. The retained **`0.1.0-rc.8` certified lane remains the only operational lane** until real RC.2 runtime receipts pass every promotion gate below.
 
-## New to DeepSeek Harness?
+## Choose one path
 
-Set up and start official DeepSeek Harness as a **separate task** before asking an Agent to install a theme, skin, or UI extension. The installation Skills in this repository deliberately do not install Harness or Node.js for you.
-
-1. Check `node --version`. Use Node `22.19.0` or newer within Node 22, or `24.15.0` or newer within Node 24. If Node is missing or outside those tested ranges, stop and choose a Node installation method first. An Agent must obtain your explicit consent before running a system-level installer such as Homebrew, `apt`, or a platform package manager.
-2. Start the exact official RC.2 package, mapped to official commit `b150a551b8d465e31e418e1b2eaf5e79bbb7d28e`—never a mutable `latest` or `next` selector:
-
-   ```bash
-   npx @deepseek-ai/dsh@0.1.1-rc.2 web
-   ```
-
-3. Open only the loopback URL printed by DSH (`127.0.0.1` or `localhost`). In the DSH settings UI, configure your model provider and model. Keep API keys in DSH's own credential/settings flow; do not paste them into a theme-installation prompt.
-
-If this exact DSH setup already starts successfully, skip this section—do not install it again. Finish the DSH setup task first, then begin a new theme-installation task with one selection below.
-
-Starting official RC.2 does **not** promote this repository's pending RC.2 theme evidence. At the moment, a new RC.2 setup can run DSH with its built-in appearance, but theme/skin installation must stop until the separate RC.2 certification gate is complete. The Skills never downgrade RC.2 or silently substitute the retained RC.8 lane.
-
-## Already use DeepSeek Harness? You only need one ID
+### I already use DeepSeek Harness — install with one ID
 
 Find the unique `#ID` in the top-left of a DSH Themes card or detail page, for example `#2004`, and tell it to your Agent. You do not need to prepare a package name, version, download URL, or checksum.
 
 <details>
 <summary>What does the Skill handle behind the scenes?</summary>
 
-The Skill uses the ID to find one exact catalog record, then checks its version, artifact, compatibility evidence, rights status, and recovery target. If the item cannot be installed safely, it stops and explains why in plain language.
+The Skill uses the ID to find one exact catalog record. For a hosted item, it then reads the matching release and exact manifest from the trusted site API, cross-checks their identity, version, controlled download route, and digest, and asks Manager to verify the same tuple against its bundled authority. If anything is missing, stale, or inconsistent, it stops and explains the problem in plain language. You never need to collect the technical fields yourself.
 
 </details>
 
+This coordinated release defines **95 stable IDs**: 21 themes, 52 skins, and 22 UI extensions. IDs `#2027`–`#2029` are first-party visual concepts without executable packages; Finder can show their pinned evidence but will never present them as installable. The `/install` page, the 95-record directory, those three IDs, and the hosted release API flow become the production contract only with the companion DSH Themes site release. Until that site release is deployed, a live lookup may correctly fail closed instead of claiming the current production site already provides the new contract.
+
 ### General installation
 
-Add the Finder once:
+Add the coordinated Finder and both companion installers once:
 
 ```bash
-npx skills add LvvUP/dsh-themes-skills --skill dsh-theme-finder
+npx --yes skills@1.5.23 add \
+  https://github.com/LvvUP/dsh-themes-skills/tree/v0.5.0 \
+  --skill dsh-theme-finder \
+  --skill dsh-theme-manager \
+  --skill dsh-community-skin-installer
 ```
+
+The fixed `v0.5.0` release reference is published only with the coordinated site release described above. Until that tag exists, this branch is review-only and must not be substituted with `main`, `latest`, or another mutable reference.
 
 Then tell your Agent what you want:
 
@@ -62,15 +55,31 @@ Then tell your Agent what you want:
 Please install DSH Themes #2004.
 ```
 
-Finder resolves the canonical directory record, reports the important rights/runtime facts, and hands the complete normalized record to Manager or Community Skin Installer only when that item's certified gate passes. The installer asks for confirmation immediately before it changes the local `web` profile.
+Finder resolves the canonical directory record by `#ID`, reports the important rights/runtime facts, and handles the exact package name, version, URL, and checksum internally. It hands a minimal validated record to Manager, or the existing allowlisted record to Community Skin Installer, only when that item's certified gate passes. The installer independently checks its local authority and asks for confirmation immediately before it changes the local `web` profile.
 
 If Harness is missing, has never completed its own first start, or does not match the certified lane, the installer stops and points back to the separate setup section. It does not install Harness, change Node, downgrade an existing DSH, or combine setup with the selected `#ID` task.
 
 ### Dedicated installation
 
-Open a theme, skin, or UI extension detail page on [dsh-themes.com](https://dsh-themes.com), then copy its dedicated installation prompt. That prompt already contains the selected `#ID`; the Agent resolves the technical tuple from the directory and pinned sidecars. You do not need to copy a catalog URL, package version, artifact URL, and hash separately.
+Open a theme, skin, or UI extension detail page on [dsh-themes.com](https://dsh-themes.com), then copy its dedicated installation prompt. That prompt already contains the selected `#ID`; the Agent resolves and validates the technical tuple from the trusted APIs, pinned sidecars, and local installer authority. You do not need to copy a catalog URL, package version, artifact URL, or hash separately. A displayed name, slug, or detail URL can help you find the card, but it never authorizes a hosted installation by itself.
 
 Both paths use the same fail-closed policy. Pending, ambiguous, contradictory, and showcase-only records are explained but never converted into an install command. While RC.2 certification remains pending, these paths can operate only through the retained certified RC.8 lane.
+
+### I do not have DeepSeek Harness yet
+
+Go to the [DSH Themes installation page](https://dsh-themes.com/install), copy the separate **Set up DeepSeek Harness** task, and give it to your Agent. Finish that task and confirm DSH opens before returning here to choose a `#ID`.
+
+Harness setup and catalog installation are intentionally separate. The repository Skills do not install Harness or Node.js while installing a theme, skin, or UI extension, and they never attach a catalog item to the Harness setup task.
+
+<details>
+<summary>Advanced: exact tested Harness setup boundary</summary>
+
+- The tested Node ranges are `22.19.0` or newer within Node 22, or `24.15.0` or newer within Node 24. If Node is missing or outside those ranges, an Agent must stop and must obtain your explicit consent before running a system-level installer such as Homebrew or `apt`.
+- The fixed startup command is `npx @deepseek-ai/dsh@0.1.1-rc.2 web`, mapped to official commit `b150a551b8d465e31e418e1b2eaf5e79bbb7d28e`. Mutable `latest` and `next` selectors are forbidden.
+- Open only the loopback URL printed by DSH (`127.0.0.1` or `localhost`). Then configure your model provider and model in Settings. Keep API keys in DSH's own credential flow, never in a theme-installation prompt.
+- Starting RC.2 does not promote this repository's pending RC.2 catalog evidence. A new RC.2 setup can use DSH's built-in appearance, but catalog installation must stop until the separate RC.2 certification gate completes. The Skills never downgrade RC.2 or silently substitute RC.8.
+
+</details>
 
 ## Evidence status
 

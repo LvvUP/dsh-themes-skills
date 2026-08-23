@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 import { createHash } from 'node:crypto';
-import { readFile, stat } from 'node:fs/promises';
+import { readFile, realpath, stat } from 'node:fs/promises';
 import { isAbsolute, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { isExactSemver } from './semver.mjs';
 
@@ -13,6 +14,13 @@ if (
   BASELINE_POLICY.defaultOperationalLane !== 'certified' ||
   BASELINE_POLICY.certified?.status !== 'certified-discovery' ||
   BASELINE_POLICY.certified?.enabled !== true ||
+  typeof BASELINE_POLICY.certified?.hostedAuthorityPath !== 'string' ||
+  !/^[a-z0-9][a-z0-9._-]*\.json$/.test(
+    BASELINE_POLICY.certified.hostedAuthorityPath
+  ) ||
+  !/^[0-9a-f]{64}$/.test(
+    BASELINE_POLICY.certified?.hostedAuthoritySha256
+  ) ||
   BASELINE_POLICY.candidate?.status !== 'certification-pending' ||
   BASELINE_POLICY.candidate?.enabled !== false ||
   BASELINE_POLICY.candidate?.installableResultsAllowed !== false ||
@@ -35,6 +43,18 @@ if (
 const COMMUNITY_AUTHORITY = JSON.parse(
   communityAuthorityBytes.toString('utf8')
 );
+const hostedAuthorityUrl = new URL(
+  `../references/${BASELINE_POLICY.certified.hostedAuthorityPath}`,
+  import.meta.url
+);
+const hostedAuthorityBytes = await readFile(hostedAuthorityUrl);
+if (
+  createHash('sha256').update(hostedAuthorityBytes).digest('hex') !==
+  BASELINE_POLICY.certified.hostedAuthoritySha256
+) {
+  throw new Error('certified hosted authority digest differs');
+}
+const HOSTED_AUTHORITY = JSON.parse(hostedAuthorityBytes.toString('utf8'));
 const candidateBytes = await readFile(
   new URL(
     `../references/${BASELINE_POLICY.candidate.evidencePath}`,
@@ -50,6 +70,8 @@ if (
 const CANDIDATE_BASELINE = JSON.parse(candidateBytes.toString('utf8'));
 
 const MAX_BYTES = 2 * 1024 * 1024;
+const MAX_DIRECTORY_PAGES = 20;
+const DIRECTORY_PAGE_SIZE = 100;
 const MAX_ATTRIBUTION_LENGTH = 256;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const SHA256 = /^[0-9a-f]{64}$/;
@@ -105,6 +127,126 @@ const EXTERNAL_RUNTIME = Object.freeze({
   kind: 'external-runtime-verified',
   installability: 'community-installer',
 });
+const FIRST_PARTY_CONCEPT_REVISION =
+  '81dbb685cc8ca50b2c6329b5380db120434c589f';
+const FIRST_PARTY_CONCEPTS = Object.freeze({
+  2027: Object.freeze({
+    slug: 'mono-bloom',
+    mode: 'light',
+    preview: '/imgs/skins/mono-bloom.svg',
+    previewSha256:
+      '47ac903ae98d0d6c51a6100870225ef48ce9d5db618914d8284c4216491d5ade',
+  }),
+  2028: Object.freeze({
+    slug: 'ember-grid',
+    mode: 'dark',
+    preview: '/imgs/skins/ember-grid.svg',
+    previewSha256:
+      '822d72f30901e716ab891bd335f2d4efc69b851256e2e24eaef771afb4c69846',
+  }),
+  2029: Object.freeze({
+    slug: 'night-ledger',
+    mode: 'dark',
+    preview: '/imgs/skins/night-ledger.svg',
+    previewSha256:
+      '2f7d1691d5bb0705918f647f0e1344e01305df99256dd898fc714197b8130714',
+  }),
+});
+
+function validateHostedAuthority(value) {
+  if (
+    !value ||
+    typeof value !== 'object' ||
+    Array.isArray(value) ||
+    value.schemaVersion !== 1 ||
+    !SHA256.test(value.catalogIndexSha256) ||
+    !SHA256.test(value.manifestCompatibilitySha256) ||
+    Object.keys(value).sort().join(',') !==
+      [
+        'schemaVersion',
+        'catalogIndexSha256',
+        'manifestCompatibilitySha256',
+        'runtimeAttestation',
+        'artifacts',
+      ]
+        .sort()
+        .join(',') ||
+    !value.runtimeAttestation ||
+    typeof value.runtimeAttestation !== 'object' ||
+    Array.isArray(value.runtimeAttestation) ||
+    !Array.isArray(value.artifacts) ||
+    value.artifacts.length !== 32
+  ) {
+    throw new Error('certified hosted authority is malformed');
+  }
+  const runtimeAttestation = value.runtimeAttestation;
+  const runtimeKeys = [
+    'schemaVersion',
+    'attestationSha256',
+    'runnerLockfileSha256',
+    'productionPackagesCount',
+    'productionPackagesSha256',
+    'dshPackagesCount',
+    'dshPackagesSha256',
+    'packageManagerName',
+    'packageManagerVersion',
+    'dshPackageVersion',
+    'certificationRunId',
+    'certificationHeadSha',
+    'lifecycle',
+  ];
+  if (
+    Object.keys(runtimeAttestation).sort().join(',') !==
+      [...runtimeKeys].sort().join(',') ||
+    runtimeAttestation.schemaVersion !== 2 ||
+    runtimeAttestation.attestationSha256 !== RUNTIME_ATTESTATION_SHA256 ||
+    runtimeAttestation.dshPackageVersion !== CERTIFIED_DSH_VERSION ||
+    runtimeAttestation.packageManagerName !== 'pnpm' ||
+    !isExactSemver(runtimeAttestation.packageManagerVersion) ||
+    !Number.isSafeInteger(runtimeAttestation.productionPackagesCount) ||
+    runtimeAttestation.productionPackagesCount < 1 ||
+    !Number.isSafeInteger(runtimeAttestation.dshPackagesCount) ||
+    runtimeAttestation.dshPackagesCount < 1 ||
+    !Number.isSafeInteger(runtimeAttestation.certificationRunId) ||
+    runtimeAttestation.certificationRunId < 1 ||
+    !SOURCE_REVISION.test(runtimeAttestation.certificationHeadSha) ||
+    !SHA256.test(runtimeAttestation.runnerLockfileSha256) ||
+    !SHA256.test(runtimeAttestation.productionPackagesSha256) ||
+    !SHA256.test(runtimeAttestation.dshPackagesSha256) ||
+    runtimeAttestation.lifecycle !== 'managed-cold-restart'
+  ) {
+    throw new Error('certified hosted runtime attestation is malformed');
+  }
+  const artifacts = new Map();
+  for (const tuple of value.artifacts) {
+    if (!Array.isArray(tuple) || tuple.length !== 2) {
+      throw new Error('certified hosted artifact tuple is malformed');
+    }
+    const [key, sha256] = tuple;
+    const match = /^(@dsh-themes\/([a-z0-9]+(?:-[a-z0-9]+)*))@(.+)$/.exec(
+      key
+    );
+    if (!match || !isExactSemver(match[3]) || !SHA256.test(sha256)) {
+      throw new Error('certified hosted artifact tuple is malformed');
+    }
+    if (artifacts.has(key)) {
+      throw new Error('certified hosted artifact tuple is duplicated');
+    }
+    artifacts.set(key, sha256);
+  }
+  return Object.freeze({
+    catalogIndexSha256: value.catalogIndexSha256,
+    manifestCompatibilitySha256: value.manifestCompatibilitySha256,
+    runtimeAttestation: Object.freeze({ ...runtimeAttestation }),
+    artifacts,
+  });
+}
+
+const VALIDATED_HOSTED_AUTHORITY = validateHostedAuthority(HOSTED_AUTHORITY);
+
+function fail(message) {
+  throw new Error(message);
+}
 
 function parseArgs(argv) {
   const values = {};
@@ -218,7 +360,45 @@ function matchesSelection(item, selection) {
   return slug === selection.value || title === selection.value;
 }
 
-async function readCatalog(source) {
+async function readRemoteJson(source, fetchImpl) {
+  const url = source instanceof URL ? source : new URL(source);
+  if (url.protocol !== 'https:' || url.username || url.password) {
+    fail('Remote catalogs must use credential-free HTTPS');
+  }
+  const response = await fetchImpl(url, {
+    redirect: 'error',
+    credentials: 'omit',
+    headers: { accept: 'application/json' },
+    signal: AbortSignal.timeout(15_000),
+  });
+  if (!response.ok) {
+    fail(`Catalog request failed with HTTP ${response.status}`);
+  }
+  const responseUrl = new URL(response.url || url.href);
+  if (responseUrl.href !== url.href) {
+    fail('Remote authority responses cannot redirect or change URL');
+  }
+  const contentType = response.headers.get('content-type') ?? '';
+  if (!/^application\/json(?:;|$)/i.test(contentType)) {
+    fail('Remote authority response must use application/json');
+  }
+  const declared = Number(response.headers.get('content-length'));
+  if (Number.isFinite(declared) && declared > MAX_BYTES) {
+    fail('Remote authority response exceeds 2MB');
+  }
+  if (!response.body) fail('Remote authority response has no body');
+  const chunks = [];
+  let total = 0;
+  for await (const chunk of response.body) {
+    const bytes = Buffer.from(chunk);
+    total += bytes.length;
+    if (total > MAX_BYTES) fail('Remote authority response exceeds 2MB');
+    chunks.push(bytes);
+  }
+  return JSON.parse(Buffer.concat(chunks, total).toString('utf8'));
+}
+
+async function readCatalog(source, { fetchImpl = fetch } = {}) {
   if (!/^https?:\/\//i.test(source)) {
     if (!isAbsolute(source)) throw new Error('Local catalog paths must be absolute');
     const path = resolve(source);
@@ -227,23 +407,61 @@ async function readCatalog(source) {
     return { payload: JSON.parse(await readFile(path, 'utf8')), origin: null };
   }
   const url = new URL(source);
-  if (url.protocol !== 'https:') throw new Error('Remote catalogs must use HTTPS');
-  const response = await fetch(url, { redirect: 'follow', credentials: 'omit', signal: AbortSignal.timeout(15_000) });
-  if (!response.ok) throw new Error(`Catalog request failed with HTTP ${response.status}`);
-  if (new URL(response.url).origin !== url.origin) throw new Error('Redirected catalog URL must remain on the trusted origin');
-  const declared = Number(response.headers.get('content-length'));
-  if (Number.isFinite(declared) && declared > MAX_BYTES) throw new Error('Catalog exceeds 2MB');
-  if (!response.body) throw new Error('Catalog response has no body');
-  const chunks = [];
-  let total = 0;
-  for await (const chunk of response.body) {
-    const bytes = Buffer.from(chunk);
-    total += bytes.length;
-    if (total > MAX_BYTES) throw new Error('Catalog exceeds 2MB');
-    chunks.push(bytes);
+  return {
+    payload: await readRemoteJson(url, fetchImpl),
+    origin: url.origin,
+  };
+}
+
+function canonicalDirectoryPage(payload) {
+  const data = payload?.code === 0 ? payload.data : null;
+  if (
+    !data ||
+    typeof data !== 'object' ||
+    Array.isArray(data) ||
+    !Array.isArray(data.items) ||
+    !Number.isSafeInteger(data.total) ||
+    data.total < 0 ||
+    data.total > MAX_DIRECTORY_PAGES * DIRECTORY_PAGE_SIZE ||
+    data.items.length > DIRECTORY_PAGE_SIZE
+  ) {
+    fail('Canonical directory response is malformed or exceeds the review limit');
   }
-  const bytes = Buffer.concat(chunks, total);
-  return { payload: JSON.parse(bytes.toString('utf8')), origin: new URL(response.url).origin };
+  return data;
+}
+
+async function readCanonicalDirectory(locale, fetchImpl) {
+  const items = [];
+  let expectedTotal = null;
+  for (let page = 1; page <= MAX_DIRECTORY_PAGES; page += 1) {
+    const url = new URL('/api/dsh-directory', DIRECTORY_ORIGIN);
+    url.searchParams.set('page', String(page));
+    url.searchParams.set('pageSize', String(DIRECTORY_PAGE_SIZE));
+    url.searchParams.set('locale', locale);
+    const current = canonicalDirectoryPage(
+      await readRemoteJson(url, fetchImpl)
+    );
+    expectedTotal ??= current.total;
+    if (current.total !== expectedTotal) {
+      fail('Canonical directory total changed while resolving the ID');
+    }
+    items.push(...current.items);
+    if (items.length >= expectedTotal) break;
+    if (current.items.length === 0) {
+      fail('Canonical directory ended before the reported total');
+    }
+  }
+  if (expectedTotal === null || items.length !== expectedTotal) {
+    fail('Canonical directory could not be read completely');
+  }
+  const catalogIds = new Set();
+  for (const item of items) {
+    if (!Number.isSafeInteger(item?.catalogId) || catalogIds.has(item.catalogId)) {
+      fail('Canonical directory contains a missing or duplicate catalog ID');
+    }
+    catalogIds.add(item.catalogId);
+  }
+  return { payload: { items }, origin: DIRECTORY_ORIGIN };
 }
 
 function catalogItems(payload) {
@@ -375,6 +593,23 @@ function exactRecord(value, expected) {
     keys.every((key, index) => key === expectedKeys[index] && value[key] === expected[key]);
 }
 
+function stableJson(value) {
+  const stable = (entry) => {
+    if (Array.isArray(entry)) return entry.map(stable);
+    if (!entry || typeof entry !== 'object') return entry;
+    return Object.fromEntries(
+      Object.keys(entry)
+        .sort()
+        .map((key) => [key, stable(entry[key])])
+    );
+  };
+  return JSON.stringify(stable(value));
+}
+
+function stableJsonSha256(value) {
+  return createHash('sha256').update(stableJson(value)).digest('hex');
+}
+
 function baseItem(item, kind, license, provenance, modes) {
   return {
     slug: item.slug,
@@ -428,8 +663,8 @@ function acceptedHosted(item, args, catalogOrigin, kind, license, modes) {
   ) return null;
   return {
     ...baseItem(item, kind, license, provenance, modes),
-    installable: true,
-    installer: 'dsh-theme-manager',
+    installable: false,
+    installer: null,
     verified: true,
     distribution: HOSTED,
     compatibility: {
@@ -451,6 +686,7 @@ function acceptedHosted(item, args, catalogOrigin, kind, license, modes) {
       sha256: item.package.sha256,
       integrity: item.package.integrity,
     },
+    handoff: 'canonical-catalog-id-required-for-manager-handoff',
   };
 }
 
@@ -599,6 +835,62 @@ function directoryModes(value) {
     .filter((kind) => kind === 'light' || kind === 'dark'))].sort();
 }
 
+function firstPartyConceptAuthority(
+  item,
+  source,
+  rights,
+  runtime,
+  compatibility,
+  distribution
+) {
+  const expected = FIRST_PARTY_CONCEPTS[item.catalogId];
+  const reserved =
+    expected ||
+    Object.values(FIRST_PARTY_CONCEPTS).some(
+      (entry) => entry.slug === item.slug
+    );
+  if (!reserved) return null;
+  const preview = Array.isArray(item.previewAssets)
+    ? item.previewAssets
+    : [];
+  const expectedSourceUrl =
+    `https://github.com/LvvUP/DSH-Themes/blob/${FIRST_PARTY_CONCEPT_REVISION}/themes/skins.json`;
+  const expectedLicenseUrl =
+    `https://github.com/LvvUP/DSH-Themes/blob/${FIRST_PARTY_CONCEPT_REVISION}/LICENSE`;
+  if (
+    !expected ||
+    expected.slug !== item.slug ||
+    item.version !== '0.1.0' ||
+    item.author?.name !== 'DSH Themes' ||
+    source.repository !== 'LvvUP/DSH-Themes' ||
+    source.sourceRevision !== FIRST_PARTY_CONCEPT_REVISION ||
+    source.sourceSubdir !== 'themes/skins.json' ||
+    source.sourceUrl !== expectedSourceUrl ||
+    rights.status !== 'verified' ||
+    rights.license !== 'MIT' ||
+    rights.licenseUrl !== expectedLicenseUrl ||
+    runtime.status !== 'not-applicable' ||
+    compatibility.status !== 'not-applicable' ||
+    compatibility.baseline !== CANDIDATE_DSH_VERSION ||
+    distribution.consentRequired !== false ||
+    preview.length !== 1 ||
+    preview[0]?.kind !== expected.mode ||
+    preview[0]?.url !== expected.preview ||
+    preview[0]?.sha256 !== expected.previewSha256 ||
+    preview[0]?.width !== 1200 ||
+    preview[0]?.height !== 750 ||
+    !Array.isArray(item.tags) ||
+    !item.tags.includes('catalog-canonical')
+  ) {
+    return false;
+  }
+  return {
+    status: 'first-party-concept-showcase',
+    sourceRevision: FIRST_PARTY_CONCEPT_REVISION,
+    previewSha256: expected.previewSha256,
+  };
+}
+
 function expectedCommunitySourcePackage(local) {
   if (local.slug === 'dsh-deep-whale-maid-atelier') {
     return { name: 'dsh-deep-whale-maid-atelier', version: null };
@@ -737,6 +1029,12 @@ function acceptedDirectory(item, args, catalogOrigin) {
   const runtime = item.runtime;
   const compatibility = item.compatibility;
   const distribution = item.distribution;
+  const isReservedConcept = Boolean(
+    FIRST_PARTY_CONCEPTS[item.catalogId] ||
+      Object.values(FIRST_PARTY_CONCEPTS).some(
+        (entry) => entry.slug === item.slug
+      )
+  );
   if (
     !source ||
     !rights ||
@@ -747,7 +1045,8 @@ function acceptedDirectory(item, args, catalogOrigin) {
     typeof compatibility !== 'object' ||
     !['verified', 'claimed', 'verification-pending', 'not-applicable'].includes(compatibility.status) ||
     !isExactSemver(compatibility.baseline) ||
-    compatibility.baseline !== args['dsh-version'] ||
+    (compatibility.baseline !== args['dsh-version'] &&
+      !isReservedConcept) ||
     !distribution ||
     typeof distribution !== 'object'
   ) return null;
@@ -789,7 +1088,11 @@ function acceptedDirectory(item, args, catalogOrigin) {
       rights.status !== 'verified' ||
       distribution.consentRequired !== false
     ) return null;
-    if (args.availability === 'installable' || args.availability === 'showcase') return null;
+    if (args.availability === 'showcase') return null;
+    const canonicalIdSelection =
+      args.defaultCatalog === true &&
+      args.selection?.kind === 'catalog-id';
+    if (args.availability === 'installable' && !canonicalIdSelection) return null;
     const artifactUrl = resolvedHttpsUrl(distribution.artifactUrl, catalogOrigin);
     if (!artifactUrl) return null;
     return {
@@ -802,7 +1105,9 @@ function acceptedDirectory(item, args, catalogOrigin) {
         installability: HOSTED.installability,
         artifactUrl: artifactUrl.href,
       },
-      handoff: 'resolve-exact-hosted-release-record-before-manager',
+      handoff: canonicalIdSelection
+        ? 'resolve-exact-hosted-release-record-before-manager'
+        : 'catalog-id-required-for-hosted-installation',
     };
   }
 
@@ -834,9 +1139,20 @@ function acceptedDirectory(item, args, catalogOrigin) {
   }
 
   if (distribution.kind === SHOWCASE.kind) {
+    const conceptAuthority = firstPartyConceptAuthority(
+      item,
+      source,
+      rights,
+      runtime,
+      compatibility,
+      distribution
+    );
     if (
       distribution.installability !== SHOWCASE.installability ||
-      distribution.consentRequired !== true ||
+      (conceptAuthority
+        ? distribution.consentRequired !== false
+        : distribution.consentRequired !== true) ||
+      conceptAuthority === false ||
       Object.hasOwn(distribution, 'artifactUrl') ||
       Object.hasOwn(distribution, 'installCommand') ||
       !directoryExternalRightsMatch(source, rights)
@@ -851,9 +1167,321 @@ function acceptedDirectory(item, args, catalogOrigin) {
         kind: SHOWCASE.kind,
         installability: SHOWCASE.installability,
       },
+      ...(conceptAuthority
+        ? { showcaseAuthority: conceptAuthority }
+        : {}),
     };
   }
   return null;
+}
+
+function managerRuntimeAttestation() {
+  return { ...VALIDATED_HOSTED_AUTHORITY.runtimeAttestation };
+}
+
+function managerManifestProjection(manifest) {
+  const artifact = manifest.artifact;
+  const payload = manifest.payload;
+  return {
+    schemaVersion: manifest.schemaVersion,
+    kind: manifest.kind,
+    slug: manifest.slug,
+    version: manifest.version,
+    compatibility: manifest.compatibility,
+    artifact: artifact && {
+      name: artifact.name,
+      version: artifact.version,
+      fileName: artifact.fileName,
+      digestScope: artifact.digestScope,
+      sha256: artifact.sha256,
+      integrity: artifact.integrity,
+    },
+    payload: payload && {
+      fileName: payload.fileName,
+      digestScope: payload.digestScope,
+      sha256: payload.sha256,
+      integrity: payload.integrity,
+    },
+    ...(Object.hasOwn(manifest, 'package')
+      ? { package: manifest.package }
+      : {}),
+  };
+}
+
+function integrityFor(sha256) {
+  return `sha256-${Buffer.from(sha256, 'hex').toString('base64')}`;
+}
+
+function validateHostedReleaseRecord(item, normalizedRelease, manifest) {
+  const expectedKind = item.kind === 'skin' ? 'full-skin' : item.kind;
+  const artifact = manifest.artifact;
+  const payload = manifest.payload;
+  const packageName = `@dsh-themes/${item.slug}`;
+  const artifactKey = `${packageName}@${item.version}`;
+  if (
+    manifest.schemaVersion !== '3.0' ||
+    manifest.kind !== expectedKind ||
+    manifest.slug !== item.slug ||
+    manifest.version !== item.version ||
+    manifest.author?.name !== normalizedRelease.author.name ||
+    manifest.license !== normalizedRelease.license.identifier ||
+    stableJsonSha256(manifest.compatibility) !==
+      VALIDATED_HOSTED_AUTHORITY.manifestCompatibilitySha256 ||
+    !artifact ||
+    typeof artifact !== 'object' ||
+    Array.isArray(artifact) ||
+    artifact.name !== packageName ||
+    artifact.version !== item.version ||
+    artifact.fileName !== `${item.slug}-${item.version}.tgz` ||
+    artifact.digestScope !== 'artifact-tgz' ||
+    !SHA256.test(artifact.sha256) ||
+    artifact.integrity !== integrityFor(artifact.sha256) ||
+    artifact.sha256 !== normalizedRelease.package.sha256 ||
+    !payload ||
+    typeof payload !== 'object' ||
+    Array.isArray(payload) ||
+    payload.fileName !== `${item.slug}-${item.version}.payload.tar` ||
+    payload.digestScope !== 'canonical-tar-payload-excluding-manifest' ||
+    !SHA256.test(payload.sha256) ||
+    payload.integrity !== integrityFor(payload.sha256) ||
+    payload.sha256 === artifact.sha256 ||
+    Object.hasOwn(manifest, 'package') ||
+    VALIDATED_HOSTED_AUTHORITY.artifacts.get(artifactKey) !== artifact.sha256
+  ) {
+    fail('Hosted manifest failed the pinned Finder authority');
+  }
+  const artifactUrl = new URL(normalizedRelease.package.url);
+  if (
+    artifactUrl.origin !== DIRECTORY_ORIGIN ||
+    artifactUrl.pathname !==
+      `/api/themes/${item.slug}/download/${item.version}` ||
+    artifactUrl.search ||
+    artifactUrl.hash ||
+    artifactUrl.username ||
+    artifactUrl.password
+  ) {
+    fail('Hosted artifact URL is outside the controlled route');
+  }
+  return {
+    status: 'current',
+    installableCurrent: true,
+    artifactAuthority: 'current-installable',
+    packageName,
+    version: item.version,
+    artifactUrl: artifactUrl.href,
+    artifactSha256: artifact.sha256,
+    payloadSha256: payload.sha256,
+    runtimeAttestationSha256: RUNTIME_ATTESTATION_SHA256,
+  };
+}
+
+function blockedHostedHandoff(item, handoff) {
+  return {
+    ...item,
+    installable: false,
+    installer: null,
+    handoff,
+    managerHandoff: {
+      status: 'blocked',
+      reason: handoff,
+    },
+  };
+}
+
+function releaseEnvelope(payload) {
+  if (
+    payload?.code !== 0 ||
+    !payload.data ||
+    typeof payload.data !== 'object' ||
+    Array.isArray(payload.data)
+  ) {
+    fail('Hosted release API returned a malformed envelope');
+  }
+  return payload.data;
+}
+
+async function resolveCanonicalHostedRelease(item, fetchImpl) {
+  const releaseUrl = new URL(
+    `/api/themes/${encodeURIComponent(item.slug)}`,
+    DIRECTORY_ORIGIN
+  );
+  const release = releaseEnvelope(await readRemoteJson(releaseUrl, fetchImpl));
+  if (
+    release.catalogId !== item.catalogId ||
+    release.slug !== item.slug ||
+    release.kind !== item.kind ||
+    release.status !== 'published' ||
+    release.version !== item.version ||
+    release.latestVersion !== item.version ||
+    typeof release.latestVersionId !== 'string' ||
+    release.latestVersionId.length === 0 ||
+    release.license !== item.rights.license ||
+    !Array.isArray(release.versions)
+  ) {
+    fail('Hosted release identity differs from the canonical directory ID');
+  }
+  const matchingVersions = release.versions.filter(
+    (version) => version?.version === item.version
+  );
+  if (
+    matchingVersions.length !== 1 ||
+    matchingVersions[0].id !== release.latestVersionId ||
+    !matchingVersions[0].manifest ||
+    typeof matchingVersions[0].manifest !== 'object' ||
+    Array.isArray(matchingVersions[0].manifest)
+  ) {
+    fail('Hosted release API did not return one exact current manifest');
+  }
+  const selectedVersion = matchingVersions[0];
+  const manifestUrl = new URL(
+    `/api/themes/${encodeURIComponent(item.slug)}/manifest/${encodeURIComponent(item.version)}`,
+    DIRECTORY_ORIGIN
+  );
+  const manifest = await readRemoteJson(manifestUrl, fetchImpl);
+  if (stableJson(manifest) !== stableJson(selectedVersion.manifest)) {
+    fail('Hosted detail and manifest APIs disagree');
+  }
+
+  const releaseCatalogItem = {
+    slug: release.slug,
+    kind: release.kind === 'skin' ? 'full-skin' : release.kind,
+    name: release.name,
+    description: release.description,
+    status: release.status,
+    verified: release.verified,
+    modes: release.modes,
+    author: { name: release.authorName },
+    license: release.license,
+    version: release.version,
+    licensePolicy: release.licensePolicy,
+    provenance: release.provenance,
+    distribution: release.distribution,
+    compatibility: release.compatibility,
+    package: release.package,
+  };
+  const releaseLicense = normalizeLicense(releaseCatalogItem);
+  const normalizedRelease = releaseLicense
+    ? acceptedHosted(
+        releaseCatalogItem,
+        { 'dsh-version': CERTIFIED_DSH_VERSION },
+        DIRECTORY_ORIGIN,
+        item.kind,
+        releaseLicense,
+        normalizeModes(release.modes)
+      )
+    : null;
+  if (!normalizedRelease) {
+    fail('Hosted release API record failed the certified Finder gate');
+  }
+  const versionPackageUrl = resolvedHttpsUrl(
+    selectedVersion.packageUrl,
+    DIRECTORY_ORIGIN
+  );
+  if (
+    selectedVersion.packageFileName !== normalizedRelease.package.fileName ||
+    versionPackageUrl?.href !== normalizedRelease.package.url ||
+    selectedVersion.packageSha256 !== normalizedRelease.package.sha256 ||
+    selectedVersion.packageIntegrity !== normalizedRelease.package.integrity ||
+    stableJson(selectedVersion.compatibility) !==
+      stableJson(release.compatibility)
+  ) {
+    fail('Hosted release version and installer coordinates disagree');
+  }
+  const directoryArtifactUrl = resolvedHttpsUrl(
+    item.distribution.artifactUrl,
+    DIRECTORY_ORIGIN
+  );
+  if (
+    !directoryArtifactUrl ||
+    directoryArtifactUrl.href !== normalizedRelease.package.url ||
+    item.compatibility.dshPackageVersion !==
+      normalizedRelease.compatibility.dshPackageVersion
+  ) {
+    fail('Hosted release does not match the classified directory record');
+  }
+
+  const rawReleaseRecord = {
+    artifactUrl: normalizedRelease.package.url,
+    artifactSha256: normalizedRelease.package.sha256,
+    verified: true,
+    distribution: { ...HOSTED },
+    runtimeAttestation: managerRuntimeAttestation(),
+    manifest,
+  };
+  const releaseRecord = {
+    ...rawReleaseRecord,
+    manifest: managerManifestProjection(manifest),
+  };
+  const validation = validateHostedReleaseRecord(
+    item,
+    normalizedRelease,
+    manifest
+  );
+  if (
+    validation.status !== 'current' ||
+    validation.installableCurrent !== true ||
+    validation.artifactAuthority !== 'current-installable' ||
+    validation.packageName !== `@dsh-themes/${item.slug}` ||
+    validation.version !== item.version ||
+    validation.artifactUrl !== normalizedRelease.package.url ||
+    validation.artifactSha256 !== normalizedRelease.package.sha256
+  ) {
+    fail('Manager rejected the exact hosted release authority');
+  }
+
+  return {
+    ...item,
+    version: validation.version,
+    verified: true,
+    installable: true,
+    installer: 'dsh-theme-manager',
+    distribution: { ...HOSTED },
+    package: normalizedRelease.package,
+    handoff: 'validated-hosted-release-ready-for-manager',
+    managerHandoff: {
+      status: 'validated',
+      trustedOrigin: DIRECTORY_ORIGIN,
+      catalogId: item.catalogId,
+      releaseApi: releaseUrl.href,
+      manifestApi: manifestUrl.href,
+      validation: {
+        status: validation.status,
+        installableCurrent: validation.installableCurrent,
+        artifactAuthority: validation.artifactAuthority,
+        runtimeAttestationSha256:
+          validation.runtimeAttestationSha256,
+      },
+      releaseRecord,
+    },
+  };
+}
+
+async function resolveCanonicalHostedSelection(item, args, fetchImpl) {
+  if (item.distribution?.kind !== HOSTED.kind) return item;
+  if (args.defaultCatalog !== true) {
+    return {
+      ...item,
+      installable: false,
+      installer: null,
+      handoff: 'canonical-catalog-id-required-for-manager-handoff',
+    };
+  }
+  if (args.selection?.kind !== 'catalog-id') {
+    return {
+      ...item,
+      installable: false,
+      installer: null,
+      handoff: 'catalog-id-required-for-hosted-installation',
+    };
+  }
+  try {
+    return await resolveCanonicalHostedRelease(item, fetchImpl);
+  } catch {
+    return blockedHostedHandoff(
+      item,
+      'exact-hosted-release-record-not-validated'
+    );
+  }
 }
 
 function accepted(item, args, catalogOrigin) {
@@ -881,6 +1509,7 @@ function accepted(item, args, catalogOrigin) {
   }
   if (item.distribution?.kind === HOSTED.kind) {
     if (args.availability === 'showcase') return null;
+    if (args.availability === 'installable') return null;
     return acceptedHosted(item, args, catalogOrigin, kind, license, modes);
   }
   if (item.distribution?.kind === SHOWCASE.kind) {
@@ -890,19 +1519,23 @@ function accepted(item, args, catalogOrigin) {
   return null;
 }
 
-const args = parseArgs(process.argv.slice(2));
-if (args['dsh-version'] === CANDIDATE_DSH_VERSION) {
-  process.stdout.write(`${JSON.stringify({
-    dshVersion: CANDIDATE_DSH_VERSION,
-    baselineStatus: BASELINE_POLICY.candidate.status,
-    installableResultsAllowed: false,
-    catalogRead: false,
-    count: 0,
-    items: [],
-    blockers: CANDIDATE_BASELINE.blockers,
-  }, null, 2)}\n`);
-} else {
-  const input = await readCatalog(args.catalog);
+export async function runFinder(argv, { fetchImpl = fetch } = {}) {
+  const args = parseArgs(argv);
+  if (args['dsh-version'] === CANDIDATE_DSH_VERSION) {
+    return {
+      dshVersion: CANDIDATE_DSH_VERSION,
+      baselineStatus: BASELINE_POLICY.candidate.status,
+      installableResultsAllowed: false,
+      catalogRead: false,
+      count: 0,
+      items: [],
+      blockers: CANDIDATE_BASELINE.blockers,
+    };
+  }
+
+  const input = args.defaultCatalog
+    ? await readCanonicalDirectory(args.locale, fetchImpl)
+    : await readCatalog(args.catalog, { fetchImpl });
   const acceptedResults = catalogItems(input.payload)
     .map((item) => accepted(item, args, input.origin))
     .filter(Boolean);
@@ -914,12 +1547,26 @@ if (args['dsh-version'] === CANDIDATE_DSH_VERSION) {
         ? 'not-found'
         : 'ambiguous'
     : null;
+  const resolvedSelection =
+    selectionStatus === 'resolved'
+      ? [
+          await resolveCanonicalHostedSelection(
+            selectionMatches[0],
+            args,
+            fetchImpl
+          ),
+        ]
+      : [];
+  const visibleSelection =
+    args.availability === 'installable'
+      ? resolvedSelection.filter((item) => item.installable === true)
+      : args.availability === 'showcase'
+        ? resolvedSelection.filter((item) => item.installable !== true)
+        : resolvedSelection;
   const results = args.selection
-    ? selectionStatus === 'resolved'
-      ? selectionMatches
-      : []
+    ? visibleSelection
     : acceptedResults.slice(0, args.limit);
-  process.stdout.write(`${JSON.stringify({
+  return {
     dshVersion: args['dsh-version'],
     baselineStatus:
       args['dsh-version'] === CERTIFIED_DSH_VERSION
@@ -931,20 +1578,45 @@ if (args['dsh-version'] === CANDIDATE_DSH_VERSION) {
           selection: {
             input: args.selection.input,
             kind: args.selection.kind,
+            authority:
+              args.selection.kind === 'catalog-id'
+                ? 'unique-catalog-id'
+                : 'discovery-label-only',
             status: selectionStatus,
-            catalog: args.defaultCatalog ? 'dsh-themes-production-directory' : 'user-supplied-trusted-catalog',
-            candidates: selectionStatus === 'ambiguous'
-              ? selectionMatches.map((entry) => ({
-                  catalogId: entry.catalogId ?? null,
-                  slug: entry.slug,
-                  kind: entry.kind,
-                  name: entry.name,
-                }))
-              : [],
+            catalog: args.defaultCatalog
+              ? 'dsh-themes-production-directory'
+              : 'user-supplied-trusted-catalog',
+            candidates:
+              selectionStatus === 'ambiguous'
+                ? selectionMatches.map((entry) => ({
+                    catalogId: entry.catalogId ?? null,
+                    slug: entry.slug,
+                    kind: entry.kind,
+                    name: entry.name,
+                  }))
+                : [],
           },
         }
       : {}),
     count: results.length,
     items: results,
-  }, null, 2)}\n`);
+  };
+}
+
+async function isMainModule() {
+  if (!process.argv[1]) return false;
+  try {
+    return (
+      (await realpath(resolve(process.argv[1]))) ===
+      (await realpath(fileURLToPath(import.meta.url)))
+    );
+  } catch {
+    return false;
+  }
+}
+
+if (await isMainModule()) {
+  process.stdout.write(
+    `${JSON.stringify(await runFinder(process.argv.slice(2)), null, 2)}\n`
+  );
 }

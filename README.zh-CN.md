@@ -20,41 +20,34 @@
 
 这条候选通道**尚未完成认证**。它不能用于创作、投稿、返回可安装的 Finder 结果，也不能安装站内或社区软件包。在真实 RC.2 运行回执满足下述全部晋级门槛之前，保留的 **`0.1.0-rc.8` 已认证通道仍是唯一可运行通道**。
 
-## 还没有安装 DeepSeek Harness？
+## 请选择一种情况
 
-请先把官方 DeepSeek Harness 的安装与启动作为一个**独立任务**完成，再让 Agent 安装主题、皮肤或界面增强插件。本仓库的安装 Skill 不会替你安装 Harness 或 Node.js。
-
-1. 运行 `node --version`。使用 Node 22 中的 `22.19.0` 或更高版本，或 Node 24 中的 `24.15.0` 或更高版本。如果没有 Node，或者版本不在这些已测试范围内，请先停止并选择 Node 安装方式。Agent 在运行 Homebrew、`apt` 或其他系统级安装器之前，必须先取得你的明确同意。
-2. 启动精确固定的官方 RC.2 软件包；它对应官方 commit `b150a551b8d465e31e418e1b2eaf5e79bbb7d28e`。不要使用可变的 `latest` 或 `next`：
-
-   ```bash
-   npx @deepseek-ai/dsh@0.1.1-rc.2 web
-   ```
-
-3. 只打开 DSH 输出的本机回环地址（`127.0.0.1` 或 `localhost`）。进入 DSH 设置界面配置模型供应商和模型。API Key 应保存在 DSH 自己的凭据/设置流程中，不要粘贴到主题安装提示词里。
-
-如果这套精确 DSH 已经可以正常启动，请直接跳过本节，不要重复安装。先结束 DSH 安装任务，再用下面的一个选择发起新的主题安装任务。
-
-能够启动官方 RC.2，**不等于**本仓库的 RC.2 主题证据已经晋级。当前新安装的 RC.2 可以使用 DSH 内置外观，但主题/皮肤安装必须等待独立的 RC.2 认证门槛完成。Skill 不会把 RC.2 降级，也不会暗中替换为保留的 RC.8 通道。
-
-## 已经安装 DSH？只需一个编号
+### 我已经安装 DeepSeek Harness — 用一个编号安装
 
 在 DSH Themes 的卡片或详情页左上角找到唯一 `#编号`，例如 `#2004`。把它告诉 Agent 就可以了。你不需要准备包名、版本、下载地址或校验值。
 
 <details>
 <summary>Skill 会在后台做什么？</summary>
 
-Skill 会根据编号找到唯一目录记录，再自动核对版本、制品、兼容证据、权利状态和恢复目标。如果无法安全安装，它会停止并用简单语言说明原因。
+Skill 会根据编号找到唯一目录记录。对于站内条目，它会继续从可信站点 API 读取对应发布记录和精确清单，交叉核对身份、版本、受控下载路径与摘要，再让 Manager 用本地固定权威复核同一个元组。只要有内容缺失、过期或互相矛盾，它就会停止并用简单语言说明原因。你不需要自己收集任何技术字段。
 
 </details>
 
+这次协同发布定义了 **95 个稳定编号**：21 个主题、52 个皮肤和 22 个界面增强插件。`#2027`–`#2029` 是没有可执行软件包的第一方视觉概念；Finder 可以展示它们的固定证据，但永远不会把它们显示为可安装。`/install` 页面、95 条目录、这三个编号和站内发布 API 流程，只有在配套的 DSH Themes 站点版本一同发布后才成为生产契约。在站点版本部署完成前，真实查询可能会正确地失败关闭，而不会声称当前生产站点已经具备这套新契约。
+
 ### 通用安装
 
-只需安装一次 Finder：
+一次安装 Finder 和两个配套安装器：
 
 ```bash
-npx skills add LvvUP/dsh-themes-skills --skill dsh-theme-finder
+npx --yes skills@1.5.23 add \
+  https://github.com/LvvUP/dsh-themes-skills/tree/v0.5.0 \
+  --skill dsh-theme-finder \
+  --skill dsh-theme-manager \
+  --skill dsh-community-skin-installer
 ```
+
+固定的 `v0.5.0` 发布引用只会随上文所述的站点协同版本一同发布。在该标签存在之前，本分支仅供审查，不得用 `main`、`latest` 或其他可变引用替代。
 
 然后直接告诉 Agent：
 
@@ -62,15 +55,31 @@ npx skills add LvvUP/dsh-themes-skills --skill dsh-theme-finder
 请帮我安装 DSH Themes 的 #2004。
 ```
 
-Finder 会解析生产目录记录、说明必要的权利与运行风险，并且只有在该条目的认证门槛通过后，才把完整的规范化记录交给 Manager 或 Community Skin Installer。安装器会在真正修改本地 `web` profile 之前向你确认。
+Finder 会用 `#编号` 解析生产目录记录、说明必要的权利与运行风险，并在后台处理精确包名、版本、地址和校验值。只有该条目的认证门槛通过后，它才把最小化的已验证记录交给 Manager，或把既有 allowlist 记录交给 Community Skin Installer。安装器会再次核对自己的本地权威，并在真正修改本地 `web` profile 之前向你确认。
 
 如果 Harness 缺失、尚未完成首次启动，或者版本不符合已认证通道，安装器会停止并指向上面的独立安装说明。它不会安装 Harness、修改 Node、降级现有 DSH，也不会把 DSH 安装和所选 `#ID` 合并成一个任务。
 
 ### 专属安装
 
-在 [dsh-themes.com](https://dsh-themes.com/zh) 打开喜欢的主题、皮肤或界面增强插件详情页，复制该页面的专属安装提示词即可。提示词已经带有当前条目的 `#编号`；Agent 会从目录和固定 sidecar 解析技术元组。你不需要分别复制目录 URL、包版本、制品 URL 和哈希。
+在 [dsh-themes.com](https://dsh-themes.com/zh) 打开喜欢的主题、皮肤或界面增强插件详情页，复制该页面的专属安装提示词即可。提示词已经带有当前条目的 `#编号`；Agent 会通过可信 API、固定 sidecar 与安装器本地权威自动解析并验证技术元组。你不需要分别复制目录 URL、包版本、制品 URL 或哈希。名称、slug 或详情页地址可以帮助找到卡片，但它们本身不能授权站内安装。
 
 两种方式使用同一套 fail-closed 安全规则。待验证、无法唯一匹配、证据矛盾或仅供展示的条目只会得到清楚说明，不会被拼装成安装命令。RC.2 认证仍待完成期间，两种方式都只能通过保留的 RC.8 已认证通道运行。
+
+### 我还没有安装 DeepSeek Harness
+
+请前往 [DSH Themes 安装页面](https://dsh-themes.com/zh/install)，复制独立的**安装 DeepSeek Harness**任务，再交给 Agent。完成该任务并确认 DSH 可以打开后，再回到这里选择一个 `#编号`。
+
+Harness 安装与目录内容安装会始终分开。本仓库的 Skill 在安装主题、皮肤或界面增强插件时，不会顺带安装 Harness 或 Node.js，也不会把某个目录条目混入 Harness 安装任务。
+
+<details>
+<summary>高级说明：精确的 Harness 测试边界</summary>
+
+- 已测试的 Node 范围是 Node 22 中的 `22.19.0` 或更高版本，或 Node 24 中的 `24.15.0` 或更高版本。如果没有 Node，或者版本不在这些范围内，Agent 必须先停止；在运行 Homebrew、`apt` 或其他系统级安装器之前，必须先取得你的明确同意。
+- 固定启动命令是 `npx @deepseek-ai/dsh@0.1.1-rc.2 web`，对应官方 commit `b150a551b8d465e31e418e1b2eaf5e79bbb7d28e`。禁止使用可变的 `latest` 或 `next`。
+- 只打开 DSH 输出的本机回环地址（`127.0.0.1` 或 `localhost`），然后在设置页面配置模型供应商和模型。API Key 只保存在 DSH 自己的凭据流程中，不要放进主题安装提示词。
+- RC.2 能够启动，不代表本仓库待完成的 RC.2 目录证据已经晋级。新安装的 RC.2 可以使用 DSH 内置外观，但目录安装必须等独立认证门槛完成。Skill 不会降级 RC.2，也不会暗中替换成 RC.8。
+
+</details>
 
 ## 证据状态
 
