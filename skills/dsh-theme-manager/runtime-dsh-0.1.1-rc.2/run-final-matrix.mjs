@@ -369,13 +369,16 @@ async function inspectProbeState(profileDir, label, listResult, expectedActive) 
       )
     : [];
   let installedManifestBytes = null;
+  let installedBundlePatchBytes = null;
   try {
-    installedManifestBytes = await readFile(
-      resolve(
-        profileRoot,
-        'node_modules/@dsh-themes/rc2-lifecycle-probe/package.json'
-      )
+    const installedRoot = resolve(
+      profileRoot,
+      'node_modules/@dsh-themes/rc2-lifecycle-probe'
     );
+    [installedManifestBytes, installedBundlePatchBytes] = await Promise.all([
+      readFile(resolve(installedRoot, 'package.json')),
+      readFile(resolve(installedRoot, 'cordis.patch.yml')),
+    ]);
   } catch (error) {
     if (error?.code !== 'ENOENT') throw error;
   }
@@ -395,6 +398,7 @@ async function inspectProbeState(profileDir, label, listResult, expectedActive) 
         typeof dependencySpec === 'string' && dependencySpec.endsWith('.tgz'),
       bundleIndexCount: bundleIndexes.length,
       installedManifestPresent: installedManifest !== null,
+      installedBundlePatchPresent: installedBundlePatchBytes !== null,
       installedNameExact:
         installedManifest?.name === EXPECTED_LIFECYCLE_PROBE.name,
       installedVersionExact:
@@ -407,6 +411,7 @@ async function inspectProbeState(profileDir, label, listResult, expectedActive) 
       !checks.dependencySpecFile ||
       !checks.dependencySpecTarball ||
       checks.bundleIndexCount !== 1 ||
+      !checks.installedBundlePatchPresent ||
       !checks.installedNameExact ||
       !checks.installedVersionExact
     ) {
@@ -419,7 +424,8 @@ async function inspectProbeState(profileDir, label, listResult, expectedActive) 
     listedProbe !== undefined ||
     dependencySpec !== undefined ||
     bundleIndexes.length !== 0 ||
-    installedManifestBytes !== null
+    installedManifestBytes !== null ||
+    installedBundlePatchBytes !== null
   ) {
     fail(`probe remained in the isolated profile after removal: ${label}`);
   }
@@ -439,6 +445,9 @@ async function inspectProbeState(profileDir, label, listResult, expectedActive) 
     lockfileSha256: lockfileBytes ? sha256(lockfileBytes) : null,
     installedManifestSha256: installedManifestBytes
       ? sha256(installedManifestBytes)
+      : null,
+    installedBundlePatchSha256: installedBundlePatchBytes
+      ? sha256(installedBundlePatchBytes)
       : null,
   };
 }
@@ -1012,7 +1021,16 @@ async function runLifecycleAcceptance(dshBin, profileDir, contracts) {
   const commands = [];
   const states = [];
   const launches = [];
-  const listArgs = ['plugin', '--profile', 'web', 'list', '--json'];
+  const listArgs = [
+    'plugin',
+    '--profile',
+    'web',
+    'list',
+    '--json',
+    '--lockfile-only',
+    '--depth',
+    '0',
+  ];
   const addArgs = [
     'plugin',
     '--profile',

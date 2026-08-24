@@ -456,12 +456,43 @@ test('matrix state failures expose only sanitized invariant diagnostics', async 
     'dependencySpecTarball',
     'bundleIndexCount',
     'installedManifestPresent',
+    'installedBundlePatchPresent',
     'installedNameExact',
     'installedVersionExact',
   ]) {
     assert.match(source, new RegExp(`\\b${key}\\b`));
   }
   assert.doesNotMatch(source, /^\s+dependencySpec,$/m);
+});
+
+test('matrix listing binds lockfile resolution and physical installation separately', async () => {
+  const [runnerSource, evidenceSource] = await Promise.all([
+    readFile(
+      resolve(manager, 'runtime-dsh-0.1.1-rc.2/run-final-matrix.mjs'),
+      'utf8'
+    ),
+    readFile(resolve(manager, 'scripts/rc2-final-evidence.mjs'), 'utf8'),
+  ]);
+
+  for (const source of [runnerSource, evidenceSource]) {
+    assert.match(
+      source,
+      /'list',[\s\S]{0,160}'--json',[\s\S]{0,160}'--lockfile-only',[\s\S]{0,120}'--depth',[\s\S]{0,80}'0'/
+    );
+  }
+  assert.match(runnerSource, /installedManifest\?\.name === EXPECTED_LIFECYCLE_PROBE\.name/);
+  assert.match(runnerSource, /installedManifest\?\.version === EXPECTED_LIFECYCLE_PROBE\.version/);
+  assert.match(evidenceSource, /state\.installedManifestSha256/);
+  assert.match(evidenceSource, /state\.installedBundlePatchSha256/);
+  assert.match(evidenceSource, /state\.lockfileSha256/);
+  assert.match(
+    evidenceSource,
+    /installed\.installedManifestSha256\s*!==\s*evidence\.probeArtifact\.packageManifestSha256/
+  );
+  assert.match(
+    evidenceSource,
+    /installed\.installedBundlePatchSha256\s*!==\s*evidence\.probeArtifact\.bundlePatchSha256/
+  );
 });
 
 test('provenance verifier fail-closes before gh for unbound artifact names', async (t) => {
