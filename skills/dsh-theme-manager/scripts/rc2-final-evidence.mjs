@@ -80,6 +80,19 @@ function exactJson(actual, expected, label) {
   }
 }
 
+function canonicalJson(value) {
+  if (Array.isArray(value)) {
+    return `[${value.map((entry) => canonicalJson(entry)).join(',')}]`;
+  }
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value)
+      .sort()
+      .map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`)
+      .join(',')}}`;
+  }
+  return JSON.stringify(value);
+}
+
 function isIsoInstant(value) {
   return (
     typeof value === 'string' &&
@@ -486,6 +499,7 @@ function assertLifecycleState(state, { label, active }) {
       'profileManifestSha256',
       'lockfileSha256',
       'installedManifestSha256',
+      'installedManifestCanonicalSha256',
       'installedBundlePatchSha256',
     ],
     `lifecycle state ${label}`
@@ -521,6 +535,7 @@ function assertLifecycleState(state, { label, active }) {
         state.lockfileVersionArtifactPathSha256 !==
           state.dependencyArtifactPathSha256 ||
         !SHA256.test(state.installedManifestSha256 ?? '') ||
+        !SHA256.test(state.installedManifestCanonicalSha256 ?? '') ||
         !SHA256.test(state.installedBundlePatchSha256 ?? '')
       : state.activePackage !== null ||
         state.lockfileThemeImporterSha256 !== null ||
@@ -532,6 +547,7 @@ function assertLifecycleState(state, { label, active }) {
         state.lockfileSpecifierArtifactPathSha256 !== null ||
         state.lockfileVersionArtifactPathSha256 !== null ||
         state.installedManifestSha256 !== null ||
+        state.installedManifestCanonicalSha256 !== null ||
         state.installedBundlePatchSha256 !== null)
   ) {
     fail(`lifecycle state differs: ${label}`);
@@ -652,6 +668,7 @@ export function validateLifecycleEvidence(evidence, contracts, candidate) {
       'packTool',
       'packageManifestBytes',
       'packageManifestSha256',
+      'packageManifestCanonicalSha256',
       'bundlePatchBytes',
       'bundlePatchSha256',
       'artifactBytes',
@@ -679,6 +696,12 @@ export function validateLifecycleEvidence(evidence, contracts, candidate) {
     evidence.probeArtifact.packTool !== EXPECTED_LIFECYCLE_PROBE.packTool ||
     evidence.probeArtifact.packageManifestBytes !== manifestBytes.length ||
     evidence.probeArtifact.packageManifestSha256 !== sha256(manifestBytes) ||
+    evidence.probeArtifact.packageManifestCanonicalSha256 !==
+      sha256(
+        canonicalJson(
+          contracts.protocol.lifecycleAcceptance.probePackage.packageManifest
+        )
+      ) ||
     evidence.probeArtifact.bundlePatchBytes !== patchBytes.length ||
     evidence.probeArtifact.bundlePatchSha256 !== sha256(patchBytes) ||
     !Number.isSafeInteger(evidence.probeArtifact.artifactBytes) ||
@@ -732,12 +755,14 @@ export function validateLifecycleEvidence(evidence, contracts, candidate) {
   );
   const [, installed, rollback, reverse, final] = evidence.stateSnapshots;
   if (
-    installed.installedManifestSha256 !==
-      evidence.probeArtifact.packageManifestSha256 ||
+    installed.installedManifestCanonicalSha256 !==
+      evidence.probeArtifact.packageManifestCanonicalSha256 ||
     installed.installedBundlePatchSha256 !==
       evidence.probeArtifact.bundlePatchSha256 ||
     installed.installedManifestSha256 !==
       reverse.installedManifestSha256 ||
+    installed.installedManifestCanonicalSha256 !==
+      reverse.installedManifestCanonicalSha256 ||
     reverse.installedBundlePatchSha256 !==
       evidence.probeArtifact.bundlePatchSha256 ||
     installed.lockfileSpecifierSha256 !==

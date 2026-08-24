@@ -445,6 +445,19 @@ function lockfileDependencyFields(value) {
   };
 }
 
+function canonicalJson(value) {
+  if (Array.isArray(value)) {
+    return `[${value.map((entry) => canonicalJson(entry)).join(',')}]`;
+  }
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value)
+      .sort()
+      .map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`)
+      .join(',')}}`;
+  }
+  return JSON.stringify(value);
+}
+
 async function resolveArtifactSpec(spec, baseDir) {
   if (
     typeof spec !== 'string' ||
@@ -654,6 +667,9 @@ async function inspectProbeState(
     installedManifestSha256: installedManifestBytes
       ? sha256(installedManifestBytes)
       : null,
+    installedManifestCanonicalSha256: installedManifest
+      ? sha256(canonicalJson(installedManifest))
+      : null,
     installedBundlePatchSha256: installedBundlePatchBytes
       ? sha256(installedBundlePatchBytes)
       : null,
@@ -707,6 +723,9 @@ async function createLifecycleProbe(profileDir, contract) {
       packTool: contract.probePackage.packTool,
       packageManifestBytes: manifestBytes.length,
       packageManifestSha256: sha256(manifestBytes),
+      packageManifestCanonicalSha256: sha256(
+        canonicalJson(contract.probePackage.packageManifest)
+      ),
       bundlePatchBytes: patchBytes.length,
       bundlePatchSha256: sha256(patchBytes),
       artifactBytes: artifactBytes.length,
@@ -1603,7 +1622,10 @@ async function run() {
   }
 }
 
-export { parseLockfileState, resolveArtifactSpec };
+export {
+  parseLockfileState,
+  resolveArtifactSpec,
+};
 
 const invokedPath = process.argv[1] ? resolve(process.argv[1]) : null;
 if (invokedPath === resolve(fileURLToPath(import.meta.url))) {

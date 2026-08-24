@@ -514,6 +514,7 @@ test('matrix listing binds lockfile resolution and physical installation separat
   assert.match(runnerSource, /resolveArtifactSpec\(lockfileProbe\.version, profileRoot\)/);
   assert.match(runnerSource, /lockfileVersionArtifactExact: versionArtifact === probeArtifact/);
   assert.match(evidenceSource, /state\.installedManifestSha256/);
+  assert.match(evidenceSource, /state\.installedManifestCanonicalSha256/);
   assert.match(evidenceSource, /state\.installedBundlePatchSha256/);
   assert.match(evidenceSource, /state\.lockfileSha256/);
   assert.match(
@@ -533,6 +534,10 @@ test('matrix listing binds lockfile resolution and physical installation separat
     /command-success-json-only-non-authoritative/
   );
   assert.match(
+    evidenceSource,
+    /installed\.installedManifestCanonicalSha256\s*!==\s*evidence\.probeArtifact\.packageManifestCanonicalSha256/
+  );
+  assert.doesNotMatch(
     evidenceSource,
     /installed\.installedManifestSha256\s*!==\s*evidence\.probeArtifact\.packageManifestSha256/
   );
