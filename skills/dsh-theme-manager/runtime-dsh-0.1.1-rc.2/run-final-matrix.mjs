@@ -14,6 +14,8 @@ import { delimiter, dirname, isAbsolute, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { runInNewContext } from 'node:vm';
 
+import { parseDocument as parseYamlDocument } from 'yaml';
+
 import {
   EXPECTED_BASELINE,
   EXPECTED_GITHUB_WORKFLOW_REF,
@@ -342,6 +344,87 @@ function parsePluginList(bytes) {
   return dependencies;
 }
 
+function parseLockfileImporter(bytes) {
+  if (bytes === null) {
+    return { lockfileVersion: null, importer: null, dependencies: {} };
+  }
+  if (bytes.length > 1024 * 1024) {
+    fail('profile lockfile exceeds the isolated-profile size limit');
+  }
+  const document = parseYamlDocument(bytes.toString('utf8'), {
+    prettyErrors: false,
+    uniqueKeys: true,
+  });
+  if (document.errors.length !== 0 || document.warnings.length !== 0) {
+    fail('profile lockfile is not valid YAML');
+  }
+  let value;
+  try {
+    value = document.toJS({ maxAliasCount: 0 });
+  } catch {
+    fail('profile lockfile aliases are not allowed');
+  }
+  if (value?.lockfileVersion !== '9.0') {
+    fail('profile lockfile version differs from pnpm 11');
+  }
+  const importers = value?.importers;
+  if (
+    typeof importers !== 'object' ||
+    importers === null ||
+    Array.isArray(importers) ||
+    JSON.stringify(Object.keys(importers)) !== JSON.stringify(['.'])
+  ) {
+    fail('profile lockfile importer set differs from the isolated profile');
+  }
+  const importer = importers['.'];
+  if (typeof importer !== 'object' || importer === null || Array.isArray(importer)) {
+    fail('profile lockfile importer is malformed');
+  }
+  for (const section of ['devDependencies', 'optionalDependencies']) {
+    const entries = importer?.[section] ?? {};
+    if (
+      typeof entries !== 'object' ||
+      entries === null ||
+      Array.isArray(entries)
+    ) {
+      fail(`profile lockfile ${section} are malformed`);
+    }
+    if (
+      Object.keys(entries).some((name) => name.startsWith('@dsh-themes/'))
+    ) {
+      fail(`theme dependency appeared in lockfile ${section}`);
+    }
+  }
+  const dependencies = importer?.dependencies ?? {};
+  if (
+    typeof dependencies !== 'object' ||
+    dependencies === null ||
+    Array.isArray(dependencies)
+  ) {
+    fail('profile lockfile importer dependencies are malformed');
+  }
+  return { lockfileVersion: value.lockfileVersion, importer: '.', dependencies };
+}
+
+function lockfileDependencyFields(value) {
+  if (value === undefined) {
+    return { specifier: null, version: null };
+  }
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    fail('profile lockfile dependency entry is malformed');
+  }
+  if (
+    JSON.stringify(Object.keys(value).sort()) !==
+    JSON.stringify(['specifier', 'version'])
+  ) {
+    fail('profile lockfile dependency entry keys differ from pnpm 11');
+  }
+  return {
+    specifier: typeof value.specifier === 'string' ? value.specifier : null,
+    version: typeof value.version === 'string' ? value.version : null,
+  };
+}
+
 async function inspectProbeState(profileDir, label, listResult, expectedActive) {
   const profileRoot = resolve(profileDir, 'profiles/web');
   const profileManifestBytes = await readFile(
@@ -355,13 +438,25 @@ async function inspectProbeState(profileDir, label, listResult, expectedActive) 
   }
   const profileManifest = JSON.parse(profileManifestBytes.toString('utf8'));
   const listed = parsePluginList(listResult.stdout);
-  const directThemeEntries = Object.entries(listed).filter(([name]) =>
+  const listedThemeEntries = Object.entries(listed).filter(([name]) =>
     name.startsWith('@dsh-themes/')
   );
   const listedProbe = listed[EXPECTED_LIFECYCLE_PROBE.name];
+  const profileDependencies = profileManifest.dependencies ?? {};
+  const directThemeEntries = Object.entries(profileDependencies).filter(
+    ([name]) => name.startsWith('@dsh-themes/')
+  );
   const dependencySpec = profileManifest.dependencies?.[
     EXPECTED_LIFECYCLE_PROBE.name
   ];
+  const lockfileState = parseLockfileImporter(lockfileBytes);
+  const lockfileDependencies = lockfileState.dependencies;
+  const lockfileThemeEntries = Object.entries(lockfileDependencies).filter(
+    ([name]) => name.startsWith('@dsh-themes/')
+  );
+  const lockfileProbe = lockfileDependencyFields(
+    lockfileDependencies[EXPECTED_LIFECYCLE_PROBE.name]
+  );
   const bundles = profileManifest.dsh?.profile?.bundles;
   const bundleIndexes = Array.isArray(bundles)
     ? bundles.flatMap((name, index) =>
@@ -387,7 +482,8 @@ async function inspectProbeState(profileDir, label, listResult, expectedActive) 
     : null;
   if (expectedActive) {
     const checks = {
-      directThemeCount: directThemeEntries.length,
+      profileDirectThemeCount: directThemeEntries.length,
+      pnpmListDiagnosticThemeCount: listedThemeEntries.length,
       listedProbePresent: listedProbe !== undefined,
       listedVersionExact:
         listedProbe?.version === EXPECTED_LIFECYCLE_PROBE.version,
@@ -396,6 +492,9 @@ async function inspectProbeState(profileDir, label, listResult, expectedActive) 
         typeof dependencySpec === 'string' && dependencySpec.startsWith('file:'),
       dependencySpecTarball:
         typeof dependencySpec === 'string' && dependencySpec.endsWith('.tgz'),
+      lockfileDirectThemeCount: lockfileThemeEntries.length,
+      lockfileSpecifierExact: lockfileProbe.specifier === dependencySpec,
+      lockfileVersionExact: lockfileProbe.version === dependencySpec,
       bundleIndexCount: bundleIndexes.length,
       installedManifestPresent: installedManifest !== null,
       installedBundlePatchPresent: installedBundlePatchBytes !== null,
@@ -405,11 +504,16 @@ async function inspectProbeState(profileDir, label, listResult, expectedActive) 
         installedManifest?.version === EXPECTED_LIFECYCLE_PROBE.version,
     };
     if (
-      checks.directThemeCount !== 1 ||
-      !checks.listedVersionExact ||
+      checks.profileDirectThemeCount !== 1 ||
+      checks.pnpmListDiagnosticThemeCount > 1 ||
+      (checks.pnpmListDiagnosticThemeCount === 1 &&
+        !checks.listedVersionExact) ||
       !checks.dependencySpecString ||
       !checks.dependencySpecFile ||
       !checks.dependencySpecTarball ||
+      checks.lockfileDirectThemeCount !== 1 ||
+      !checks.lockfileSpecifierExact ||
+      !checks.lockfileVersionExact ||
       checks.bundleIndexCount !== 1 ||
       !checks.installedBundlePatchPresent ||
       !checks.installedNameExact ||
@@ -421,8 +525,12 @@ async function inspectProbeState(profileDir, label, listResult, expectedActive) 
     }
   } else if (
     directThemeEntries.length !== 0 ||
+    listedThemeEntries.length !== 0 ||
     listedProbe !== undefined ||
     dependencySpec !== undefined ||
+    lockfileThemeEntries.length !== 0 ||
+    lockfileProbe.specifier !== null ||
+    lockfileProbe.version !== null ||
     bundleIndexes.length !== 0 ||
     installedManifestBytes !== null ||
     installedBundlePatchBytes !== null
@@ -437,9 +545,19 @@ async function inspectProbeState(profileDir, label, listResult, expectedActive) 
           version: EXPECTED_LIFECYCLE_PROBE.version,
         }
       : null,
-    directThemeCount: directThemeEntries.length,
+    profileDirectThemeCount: directThemeEntries.length,
+    pnpmListDiagnosticThemeCount: listedThemeEntries.length,
+    lockfileFormatVersion: lockfileState.lockfileVersion,
+    lockfileImporter: lockfileState.importer,
+    lockfileDirectThemeCount: lockfileThemeEntries.length,
     bundleIndex: expectedActive ? bundleIndexes[0] : null,
     dependencySpecSha256: expectedActive ? sha256(dependencySpec) : null,
+    lockfileSpecifierSha256: expectedActive
+      ? sha256(lockfileProbe.specifier)
+      : null,
+    lockfileVersionSha256: expectedActive
+      ? sha256(lockfileProbe.version)
+      : null,
     listStdoutSha256: sha256(listResult.stdout),
     profileManifestSha256: sha256(profileManifestBytes),
     lockfileSha256: lockfileBytes ? sha256(lockfileBytes) : null,
@@ -1027,7 +1145,6 @@ async function runLifecycleAcceptance(dshBin, profileDir, contracts) {
     'web',
     'list',
     '--json',
-    '--lockfile-only',
     '--depth',
     '0',
   ];
@@ -1346,7 +1463,8 @@ async function run() {
         credentialAuthorizationEvents: 'passed',
         cspBoundary: 'passed-with-strict-csp-not-claimed',
         bwrapProfile: 'passed-static-contract',
-        installListRemove: 'passed',
+        installListRemove:
+          'passed-with-list-rendering-diagnostic-only',
         lightDarkSystem: 'passed',
         managedColdRestart: 'passed',
         rollbackReverse: 'passed',
