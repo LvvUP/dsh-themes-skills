@@ -96,8 +96,8 @@ async function readBoundedRegularFile(path, maxBytes, label) {
   return readFile(path);
 }
 
-async function runGhVerify(args) {
-  const command = [
+export function buildGhVerifyCommand(args) {
+  return [
     'attestation',
     'verify',
     args.artifact,
@@ -105,8 +105,6 @@ async function runGhVerify(args) {
     args.bundle,
     '--repo',
     REPOSITORY,
-    '--signer-workflow',
-    SIGNER_WORKFLOW,
     '--cert-identity',
     CERTIFICATE_IDENTITY,
     '--cert-oidc-issuer',
@@ -123,6 +121,10 @@ async function runGhVerify(args) {
     '--format',
     'json',
   ];
+}
+
+async function runGhVerify(args) {
+  const command = buildGhVerifyCommand(args);
   const child = spawn('gh', command, {
     env: { ...process.env, GH_PAGER: 'cat', NO_COLOR: '1' },
     stdio: ['ignore', 'pipe', 'pipe'],

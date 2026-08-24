@@ -27,7 +27,10 @@ import {
   validateLifecycleEvidence,
   validateLifecycleWebLaunchEvidence,
 } from '../skills/dsh-theme-manager/scripts/rc2-final-evidence.mjs';
-import { validateGithubProvenanceResult } from '../skills/dsh-theme-manager/scripts/verify-rc2-final-provenance.mjs';
+import {
+  buildGhVerifyCommand,
+  validateGithubProvenanceResult,
+} from '../skills/dsh-theme-manager/scripts/verify-rc2-final-provenance.mjs';
 import {
   parseLockfileState,
   resolveArtifactSpec,
@@ -638,21 +641,33 @@ test('provenance verifier fail-closes before gh for unbound artifact names', asy
   assert.match(result.stderr, /filenames are not bound/);
 });
 
-test('provenance verifier enforces GitHub signer, ref, digest, and hosted runner', async () => {
-  const source = await readFile(
-    resolve(manager, 'scripts/verify-rc2-final-provenance.mjs'),
-    'utf8'
-  );
+test('provenance verifier enforces one exact signer identity plus ref, digest, and hosted runner', () => {
+  const sourceSha = 'a'.repeat(40);
+  const command = buildGhVerifyCommand({
+    artifact: '/tmp/final.tar.gz',
+    bundle: '/tmp/final.tar.gz.sigstore.json',
+    sourceSha,
+  });
+  const valueAfter = (flag) => command[command.indexOf(flag) + 1];
 
-  assert.match(source, /--cert-identity/);
-  assert.match(source, /--cert-oidc-issuer/);
-  assert.match(source, /--signer-workflow/);
-  assert.match(source, /--signer-digest/);
-  assert.match(source, /--source-ref/);
-  assert.match(source, /--source-digest/);
-  assert.match(source, /--deny-self-hosted-runners/);
-  assert.match(source, /--bundle/);
-  assert.match(source, /https:\/\/slsa\.dev\/provenance\/v1/);
+  assert.equal(
+    valueAfter('--cert-identity'),
+    'https://github.com/LvvUP/dsh-themes-skills/.github/workflows/rc2-certification.yml@refs/heads/main'
+  );
+  assert.equal(command.includes('--signer-workflow'), false);
+  assert.equal(
+    valueAfter('--cert-oidc-issuer'),
+    'https://token.actions.githubusercontent.com'
+  );
+  assert.equal(valueAfter('--signer-digest'), sourceSha);
+  assert.equal(valueAfter('--source-ref'), 'refs/heads/main');
+  assert.equal(valueAfter('--source-digest'), sourceSha);
+  assert.equal(command.includes('--deny-self-hosted-runners'), true);
+  assert.equal(valueAfter('--bundle'), '/tmp/final.tar.gz.sigstore.json');
+  assert.equal(
+    valueAfter('--predicate-type'),
+    'https://slsa.dev/provenance/v1'
+  );
 });
 
 test('provenance policy rejects signed statements with altered workflow inputs', () => {
