@@ -1,6 +1,6 @@
 # Authoring V3
 
-The normalized output matches the website's RC.8 `FullSkinManifestV3` or `SimpleThemeManifestV3` declaration contract. Creator input selects only `dshPackageVersion`; the generator supplies the exact final compatibility evidence from [compatibility-v3.json](compatibility-v3.json). Authors cannot provide or override attestation evidence, `artifact`, or `payload`.
+The normalized output matches the website's RC.8 `FullSkinManifestV3` or `SimpleThemeManifestV3` declaration contract. Creator input selects only `dshPackageVersion`; the generator supplies the exact final compatibility evidence from [compatibility-v3.json](compatibility-v3.json). Authors cannot provide or override attestation evidence, `artifact`, or `payload`. RC.2 runtime-baseline certification does not supply an authoring sidecar, so RC.2 authoring remains disabled even though the runtime baseline is production-ready.
 
 Use this full-skin authoring shape:
 

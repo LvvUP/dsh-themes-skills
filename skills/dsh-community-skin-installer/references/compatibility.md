@@ -1,4 +1,6 @@
-# RC.8 community-skin certification target
+# Community-skin certification target
+
+DeepSeek Harness `0.1.1-rc.2` has a verified runtime baseline, but the RC.2 community lane remains 0/11 verified and 0 installable. Runtime-baseline certification cannot replace the separate item receipt and never authorizes a community mutation.
 
 The baseline is exact DeepSeek Harness `0.1.0-rc.8`, official tag `dsh-v0.1.0-rc.8`, source commit `141eb6fef83422698aef7a981029e843e8161534`. The adjacent Manager is certified with final attestation `1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae`; community authority remains a separate gate.
 

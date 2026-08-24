@@ -1,6 +1,7 @@
 # Submission checklist
 
 - The manifest was generated from data-only authoring input.
+- RC.2 runtime-baseline certification is not a submission authority; RC.2 submission remains disabled until a separate reviewed submission sidecar exists.
 - The normalized full skin has distinct background, sidebar, card, light-preview, and dark-preview WebP files, each no larger than 10MB and 24MP, with its SHA-256 recorded. JPEG/PNG originals are uploaded through Theme Studio for conversion.
 - The theme contains all 13 `--dsw-*` tokens in light and dark modes.
 - The manifest is schema V3 and compatibility exactly matches [compatibility-v3.json](compatibility-v3.json): DeepSeek Harness `0.1.0-rc.8` official tag/commit, all three npm artifact digests, token/UI/entrypoint/asset-set/selector fingerprints, and the final runtime attestation SHA-256.

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "defaultOperationalLane": "certified",
   "certified": {
     "status": "certified-submission",
@@ -7,8 +7,26 @@
     "evidencePath": "compatibility-v3.json",
     "evidenceSha256": "94f707533122d7fa7930558030d13053ecad7d5ee5f003a5fdf38d78fd2fe2e1"
   },
+  "certifiedRuntimeBaseline": {
+    "status": "baseline-certified",
+    "certificationStatus": "verified-runtime-baseline",
+    "productionReady": true,
+    "installableItems": false,
+    "itemInstallability": "separate-authority-required",
+    "enabled": false,
+    "catalogRead": false,
+    "installableResultsAllowed": false,
+    "authoringEnabled": false,
+    "submissionEnabled": false,
+    "communityItemsPlanned": 11,
+    "communityItemsVerified": 0,
+    "communityInstallableRecords": 0,
+    "evidencePath": "runtime-baseline.dsh-0.1.1-rc.2.json",
+    "evidenceSha256": "450fcefc76026a312def640c6cac5dedf8386469860f4be883050a6c5fa283dc"
+  },
   "candidate": {
     "status": "certification-pending",
+    "historicalAtCapture": true,
     "enabled": false,
     "evidencePath": "dsh-0.1.1-rc.2.candidate.json",
     "evidenceSha256": "1765db29cc9b0d9b49a848d8e4edb90e93e32749edd4443e6b64eb8753372075"

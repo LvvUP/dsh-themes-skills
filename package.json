@@ -1,6 +1,6 @@
 {
   "name": "dsh-themes-skills",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -13,6 +13,8 @@
     "rc2:final:contract": "node skills/dsh-theme-manager/scripts/validate-rc2-final-contract.mjs",
     "rc2:final:validate": "node skills/dsh-theme-manager/scripts/validate-rc2-final-certification.mjs",
     "rc2:final:verify-provenance": "node skills/dsh-theme-manager/scripts/verify-rc2-final-provenance.mjs",
+    "rc2:runtime:validate": "node skills/dsh-theme-manager/scripts/validate-promoted-rc2-runtime-baseline.mjs",
+    "rc2:runtime:verify-provenance": "node skills/dsh-theme-manager/scripts/verify-promoted-rc2-provenance.mjs",
     "validate": "node scripts/validate-skills.mjs",
     "format:check": "node scripts/check-format.mjs"
   },

@@ -1,19 +1,24 @@
 {
-  "schemaVersion": 3,
-  "capturedAt": "2026-08-23",
+  "schemaVersion": 4,
+  "capturedAt": "2026-08-24",
   "purpose": "informational-release-state",
   "controlsSafetyValidation": false,
   "upstream": {
-    "status": "released-certification-pending",
+    "status": "released-runtime-baseline-certified",
     "dshPackageVersion": "0.1.1-rc.2",
     "sourceTag": "dsh-v0.1.1-rc.2",
     "sourceCommit": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
     "npmIntegrity": "sha512-UP1UIh6q3Gme/yXRn/QL2P8IsVlv8Shpg22TRJIZPsCRWLm4CBiA1MUvXmJAfsOEETBMLAl+xWPtFw6ICsN3wg==",
     "npmShasum": "1a5112369f1c46b13a6e6f21de8af5e6afd45074",
-    "installableCurrent": false
+    "runtimeBaselineProductionReady": true,
+    "installableCurrent": false,
+    "itemInstallability": "separate-authority-required"
   },
   "candidate": {
     "status": "certification-pending",
+    "historicalAtCapture": true,
+    "capturedBeforeFinalRun": true,
+    "authorityScope": "historical-certification-inputs-only",
     "dshPackageVersion": "0.1.1-rc.2",
     "sidecarSha256": "9ec94c95dc8d6e4fe1aa7bab00de59d8c7fcb414c7342694a5cde20efd9d5888",
     "pendingAttestationSha256": "83fbaf94740c32e229d190938dd2699e7d7fbd52d31751976c75f2cc09d89e53",
@@ -24,8 +29,36 @@
     "communityItemsCompleted": 0,
     "installableCurrent": false
   },
+  "certifiedRuntimeBaseline": {
+    "status": "baseline-certified",
+    "certificationStatus": "verified-runtime-baseline",
+    "dshPackageVersion": "0.1.1-rc.2",
+    "productionReady": true,
+    "installableItems": false,
+    "itemInstallability": "separate-authority-required",
+    "certificationRunId": 32694257969,
+    "certificationRunAttempt": 1,
+    "certificationSourceSha": "cc7546cb5ccd77002713171328972291ceaa12e6",
+    "attestationSha256": "4c41e96827bb03eb7c4d6138f5723864e91f0324b1aec8bcf3b3a1bc47ba3fb7",
+    "certificationReceiptSha256": "4a649841766b4bf3421c78906f98f29a186d718ea34b03daca96ee52e9a3db98",
+    "matrixReceiptSetSha256": "b3d663b43b257a43d138538454cd40eb976802bdcabf0409295f7956dc07f1ae",
+    "archiveSha256": "0b4f03e9c3f76d241890f46330fce84f32183774a5d9228077835e2258c76f3e",
+    "provenanceSha256": "b520580f05101b4783079aa52f0e159b2aa1a9e239f7e6a68e469f4c5d084b2d",
+    "matrixJobsRequired": 6,
+    "matrixJobsCompleted": 6,
+    "catalogRead": false,
+    "installableResultsAllowed": false,
+    "authoringEnabled": false,
+    "submissionEnabled": false,
+    "communityItemsRequired": 11,
+    "communityItemsCompleted": 0,
+    "communityInstallableRecords": 0
+  },
   "nonPromotionalSmoke": {
     "status": "partial-runtime-evidence-only",
+    "historicalAtCapture": true,
+    "authorityScope": "item-and-hosted-artifact-smoke-only",
+    "runtimeBaselineFinalizerPending": false,
     "promotionAuthority": false,
     "installable": false,
     "baseline": "@deepseek-ai/dsh@0.1.1-rc.2",
@@ -51,14 +84,13 @@
       },
       "evidencePath": "skills/dsh-theme-manager/references/rc2-hosted-lifecycle-smoke/index.json",
       "evidenceSha256": "80b11721d479a0fd4488bf0fc5a43518ac74eff8662a2d6fc42f4384649f4959",
-      "pendingChecks": [
+      "historicalPendingItemChecks": [
         "lightDarkSystem",
         "featureActivation",
         "visualAccessibility",
         "rollbackReverse",
         "rc2HostedArtifactRepack",
-        "rc2SelectorCatalog",
-        "finalRuntimeAttestation"
+        "rc2SelectorCatalog"
       ]
     }
   },

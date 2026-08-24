@@ -11,7 +11,7 @@ Accept only `schemaVersion: "3.0"` manifests whose compatibility object exactly 
 
 The currently selected certified submission sidecar is DeepSeek Harness `0.1.0-rc.8`; the validator derives that exact value from the pinned sidecar rather than this prose.
 
-`node <skill-dir>/scripts/inspect-baseline.mjs candidate` exposes the RC.2 candidate boundary without enabling submission. Until its six jobs and final receipts exist, it must remain `enabled: false` and cannot enter the website handoff.
+`node <skill-dir>/scripts/inspect-baseline.mjs certifiedRuntimeBaseline` exposes the verified RC.2 runtime baseline without enabling submission. It must remain `enabled: false`: the six-job runtime proof is not a submission sidecar and cannot enter the website handoff. The `candidate` view is retained only as immutable historical-at-capture evidence.
 
 ## Preflight
 

@@ -8,6 +8,9 @@ Before opening a pull request, use Node.js `22.19+` within Node 22 or `24.15+` w
 npm ci --ignore-scripts
 npm test
 npm run validate
+npm run format:check
+npm run rc2:runtime:validate
+npm run rc2:runtime:verify-provenance
 ```
 
 Do not substitute a PATH runner. `npm test` uses the exact Corepack
@@ -15,4 +18,6 @@ package manager declared by `runtime-rc8`, installs its frozen lockfile with
 lifecycle scripts disabled, and verifies the committed attestation before tests
 execute. Preserve every file under historical `runtime/` byte-for-byte.
 
-Commits must not contain theme artwork unless its license and source are documented. Current Creator and Submitter output must remain exact RC.8 V3; RC.6 V2 and RC.5 V1 are audit-only under normal validation. Do not add a hosted slug to static authority merely because Finder discovers it. The reviewed current hosted map contains 32 exact package-version-complete-digest tuples derived from one final index. Its separate rollback-only map contains 24 exact retained predecessors; an entry may be added there only with an authoritative old release record and schema-2 upgrade/reverse tests. Never let rollback-only bytes pass fresh install or normal catalog validation, and never describe a pending release-set runtime matrix as completed evidence. Keep Finder's community authority byte-identical to the Installer allowlist, and never promote `external-showcase` by changing descriptive metadata alone. Report security issues privately as described in [SECURITY.md](SECURITY.md).
+Commits must not contain theme artwork unless its license and source are documented. Current Creator and Submitter output must remain exact RC.8 V3; RC.6 V2 and RC.5 V1 are audit-only under normal validation. The certified RC.2 runtime baseline must remain `installableItems: false`: final baseline receipts, the archive, or Sigstore provenance cannot be used as selector, catalog, hosted-artifact, community-item, authoring, or submission authority. Preserve the historical pending and smoke evidence byte-for-byte and describe it as historical-at-capture rather than current 0/6 status.
+
+Do not add a hosted slug to static authority merely because Finder discovers it. The reviewed current hosted map contains 32 exact package-version-complete-digest tuples derived from one final index. Its separate rollback-only map contains 24 exact retained predecessors; an entry may be added there only with an authoritative old release record and schema-2 upgrade/reverse tests. Never let rollback-only bytes pass fresh install or normal catalog validation. Keep Finder's community authority byte-identical to the Installer allowlist, and never promote `external-showcase` by changing descriptive metadata alone. Report security issues privately as described in [SECURITY.md](SECURITY.md).

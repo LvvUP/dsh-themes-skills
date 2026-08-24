@@ -41,12 +41,27 @@ export async function loadBaselinePolicy() {
   const policy = JSON.parse(await readFile(policyPath, 'utf8'));
   const { forbiddenVersionSelectors, ...operationalPolicy } = policy;
   rejectMutableSelectors(operationalPolicy);
+  const runtime = policy.certifiedRuntimeBaseline;
   if (
-    policy.schemaVersion !== 1 ||
+    policy.schemaVersion !== 2 ||
     policy.defaultOperationalLane !== 'certified' ||
     policy.certified?.status !== 'certified-installable' ||
     policy.certified?.installable !== true ||
+    runtime?.status !== 'baseline-certified' ||
+    runtime?.certificationStatus !== 'verified-runtime-baseline' ||
+    runtime?.productionReady !== true ||
+    runtime?.installableItems !== false ||
+    runtime?.itemInstallability !== 'separate-authority-required' ||
+    runtime?.enabled !== false ||
+    runtime?.catalogRead !== false ||
+    runtime?.installableResultsAllowed !== false ||
+    runtime?.authoringEnabled !== false ||
+    runtime?.submissionEnabled !== false ||
+    runtime?.communityItemsPlanned !== 11 ||
+    runtime?.communityItemsVerified !== 0 ||
+    runtime?.communityInstallableRecords !== 0 ||
     policy.candidate?.status !== 'certification-pending' ||
+    policy.candidate?.historicalAtCapture !== true ||
     policy.candidate?.installable !== false ||
     JSON.stringify(forbiddenVersionSelectors) !==
       JSON.stringify(['latest', 'next'])
@@ -54,6 +69,49 @@ export async function loadBaselinePolicy() {
     throw new Error('baseline-policy.json is malformed or promotes a candidate');
   }
   return policy;
+}
+
+export function validateCertifiedRuntimeBaselineProjection(evidence, lane) {
+  if (
+    evidence.evidenceKind !== 'rc2-certified-runtime-baseline-projection' ||
+    evidence.status !== lane.status ||
+    evidence.certificationStatus !== lane.certificationStatus ||
+    evidence.productionReady !== lane.productionReady ||
+    evidence.installableItems !== lane.installableItems ||
+    evidence.itemInstallability !== lane.itemInstallability ||
+    evidence.baseline !== '@deepseek-ai/dsh@0.1.1-rc.2' ||
+    evidence.dshPackageVersion !== '0.1.1-rc.2' ||
+    evidence.capabilities?.catalogRead !== lane.catalogRead ||
+    evidence.capabilities?.installableResultsAllowed !==
+      lane.installableResultsAllowed ||
+    evidence.capabilities?.authoringEnabled !== lane.authoringEnabled ||
+    evidence.capabilities?.submissionEnabled !== lane.submissionEnabled ||
+    evidence.capabilities?.communityItemsPlanned !==
+      lane.communityItemsPlanned ||
+    evidence.capabilities?.communityItemsVerified !==
+      lane.communityItemsVerified ||
+    evidence.capabilities?.communityInstallableRecords !==
+      lane.communityInstallableRecords ||
+    evidence.authorityScope !== 'runtime-baseline-only' ||
+    evidence.itemAuthority !== 'not-granted'
+  ) {
+    throw new Error(
+      'certified runtime baseline projection is malformed or grants item authority'
+    );
+  }
+  return evidence;
+}
+
+export async function loadCertifiedRuntimeBaseline() {
+  const policy = await loadBaselinePolicy();
+  const lane = policy.certifiedRuntimeBaseline;
+  const { bytes, value: evidence } = await readPinnedJson(
+    resolve(skillDir, 'references', lane.evidencePath),
+    lane.evidenceSha256,
+    'certified runtime baseline projection'
+  );
+  validateCertifiedRuntimeBaselineProjection(evidence, lane);
+  return { policy, lane, evidence, evidenceBytes: bytes };
 }
 
 export async function loadCertifiedAuthority() {
