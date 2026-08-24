@@ -430,7 +430,16 @@ function assertCommandEvidence(command, { id, argv, success }) {
 
 function expectedLifecycleCommandArgs(id) {
   if (id.includes('list')) {
-    return ['plugin', '--profile', 'web', 'list', '--json'];
+    return [
+      'plugin',
+      '--profile',
+      'web',
+      'list',
+      '--json',
+      '--lockfile-only',
+      '--depth',
+      '0',
+    ];
   }
   if (id.includes('add-exact-artifact')) {
     return [
@@ -467,6 +476,7 @@ function assertLifecycleState(state, { label, active }) {
       'profileManifestSha256',
       'lockfileSha256',
       'installedManifestSha256',
+      'installedBundlePatchSha256',
     ],
     `lifecycle state ${label}`
   );
@@ -482,11 +492,13 @@ function assertLifecycleState(state, { label, active }) {
         !Number.isSafeInteger(state.bundleIndex) ||
         state.bundleIndex < 0 ||
         !SHA256.test(state.dependencySpecSha256 ?? '') ||
-        !SHA256.test(state.installedManifestSha256 ?? '')
+        !SHA256.test(state.installedManifestSha256 ?? '') ||
+        !SHA256.test(state.installedBundlePatchSha256 ?? '')
       : state.activePackage !== null ||
         state.bundleIndex !== null ||
         state.dependencySpecSha256 !== null ||
-        state.installedManifestSha256 !== null)
+        state.installedManifestSha256 !== null ||
+        state.installedBundlePatchSha256 !== null)
   ) {
     fail(`lifecycle state differs: ${label}`);
   }
@@ -673,7 +685,13 @@ export function validateLifecycleEvidence(evidence, contracts, candidate) {
   const [, installed, rollback, reverse, final] = evidence.stateSnapshots;
   if (
     installed.installedManifestSha256 !==
+      evidence.probeArtifact.packageManifestSha256 ||
+    installed.installedBundlePatchSha256 !==
+      evidence.probeArtifact.bundlePatchSha256 ||
+    installed.installedManifestSha256 !==
       reverse.installedManifestSha256 ||
+    reverse.installedBundlePatchSha256 !==
+      evidence.probeArtifact.bundlePatchSha256 ||
     rollback.profileManifestSha256 !== final.profileManifestSha256 ||
     rollback.lockfileSha256 !== final.lockfileSha256
   ) {
