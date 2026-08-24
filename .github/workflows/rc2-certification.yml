@@ -40,8 +40,6 @@ jobs:
             node: 24.15.0
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
-    env:
-      RECEIPT_PATH: ${{ runner.temp }}/rc2-final-${{ matrix.platform }}-node-${{ matrix.node }}.json
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
@@ -56,6 +54,8 @@ jobs:
           corepack enable
           corepack pnpm install --frozen-lockfile --ignore-scripts
       - name: Validate the fixed contract and exercise the RC.2 web baseline
+        env:
+          RECEIPT_PATH: ${{ runner.temp }}/rc2-final-${{ matrix.platform }}-node-${{ matrix.node }}.json
         shell: bash
         run: >-
           node skills/dsh-theme-manager/runtime-dsh-0.1.1-rc.2/run-final-matrix.mjs
@@ -67,7 +67,7 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: rc2-final-matrix-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.platform }}-node-${{ matrix.node }}
-          path: ${{ env.RECEIPT_PATH }}
+          path: ${{ runner.temp }}/rc2-final-${{ matrix.platform }}-node-${{ matrix.node }}.json
           if-no-files-found: error
           retention-days: 30
 
@@ -82,11 +82,6 @@ jobs:
       artifact-metadata: write
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    env:
-      FINAL_ARCHIVE_PATH: ${{ runner.temp }}/rc2-final-release/rc2-final-baseline-certification-${{ github.sha }}-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}.tar.gz
-      FINAL_BUNDLE_DIR: ${{ runner.temp }}/rc2-final-release/bundle
-      FINAL_PROVENANCE_PATH: ${{ runner.temp }}/rc2-final-release/rc2-final-baseline-certification-${{ github.sha }}-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}.tar.gz.sigstore.json
-      FINAL_RELEASE_DIR: ${{ runner.temp }}/rc2-final-release
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
@@ -94,6 +89,18 @@ jobs:
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 24.15.0
+      - name: Define runner-local final evidence paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          final_release_dir="$RUNNER_TEMP/rc2-final-release"
+          final_name="rc2-final-baseline-certification-${{ github.sha }}-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}.tar.gz"
+          {
+            echo "FINAL_RELEASE_DIR=$final_release_dir"
+            echo "FINAL_BUNDLE_DIR=$final_release_dir/bundle"
+            echo "FINAL_ARCHIVE_PATH=$final_release_dir/$final_name"
+            echo "FINAL_PROVENANCE_PATH=$final_release_dir/$final_name.sigstore.json"
+          } >> "$GITHUB_ENV"
       - name: Install the exact RC.2 closure without lifecycle scripts
         working-directory: skills/dsh-theme-manager/runtime-dsh-0.1.1-rc.2
         run: |

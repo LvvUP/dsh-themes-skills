@@ -332,6 +332,12 @@ test('workflow pins every action and binds every artifact to the run attempt', a
     /actions\/attest@1e69f48acb82d1966a394da916b4c1698aa569d6/
   );
   assert.doesNotMatch(workflow, /actions\/attest-build-provenance@/);
+  assert.doesNotMatch(
+    workflow,
+    /^    env:\n(?:      .*\n)*?      .*\$\{\{ runner\./gm,
+    'runner context is unavailable in job-level env'
+  );
+  assert.match(workflow, /final_release_dir="\$RUNNER_TEMP\/rc2-final-release"/);
   assert.match(workflow, /^      attestations: write$/m);
   assert.match(workflow, /^      id-token: write$/m);
   assert.match(
