@@ -440,6 +440,30 @@ test('matrix runner refuses receipts without the hosted runner image identity', 
   assert.match(result.stderr, /only by the pinned GitHub Actions workflow/);
 });
 
+test('matrix state failures expose only sanitized invariant diagnostics', async () => {
+  const source = await readFile(
+    resolve(manager, 'runtime-dsh-0.1.1-rc.2/run-final-matrix.mjs'),
+    'utf8'
+  );
+
+  assert.match(source, /checks=\$\{JSON\.stringify\(checks\)\}/);
+  for (const key of [
+    'directThemeCount',
+    'listedProbePresent',
+    'listedVersionExact',
+    'dependencySpecString',
+    'dependencySpecFile',
+    'dependencySpecTarball',
+    'bundleIndexCount',
+    'installedManifestPresent',
+    'installedNameExact',
+    'installedVersionExact',
+  ]) {
+    assert.match(source, new RegExp(`\\b${key}\\b`));
+  }
+  assert.doesNotMatch(source, /^\s+dependencySpec,$/m);
+});
+
 test('provenance verifier fail-closes before gh for unbound artifact names', async (t) => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-rc2-provenance-name-'));
   t.after(() => rm(directory, { recursive: true, force: true }));

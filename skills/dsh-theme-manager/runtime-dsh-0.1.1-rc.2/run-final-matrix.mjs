@@ -383,17 +383,36 @@ async function inspectProbeState(profileDir, label, listResult, expectedActive) 
     ? JSON.parse(installedManifestBytes.toString('utf8'))
     : null;
   if (expectedActive) {
+    const checks = {
+      directThemeCount: directThemeEntries.length,
+      listedProbePresent: listedProbe !== undefined,
+      listedVersionExact:
+        listedProbe?.version === EXPECTED_LIFECYCLE_PROBE.version,
+      dependencySpecString: typeof dependencySpec === 'string',
+      dependencySpecFile:
+        typeof dependencySpec === 'string' && dependencySpec.startsWith('file:'),
+      dependencySpecTarball:
+        typeof dependencySpec === 'string' && dependencySpec.endsWith('.tgz'),
+      bundleIndexCount: bundleIndexes.length,
+      installedManifestPresent: installedManifest !== null,
+      installedNameExact:
+        installedManifest?.name === EXPECTED_LIFECYCLE_PROBE.name,
+      installedVersionExact:
+        installedManifest?.version === EXPECTED_LIFECYCLE_PROBE.version,
+    };
     if (
-      directThemeEntries.length !== 1 ||
-      listedProbe?.version !== EXPECTED_LIFECYCLE_PROBE.version ||
-      typeof dependencySpec !== 'string' ||
-      !dependencySpec.startsWith('file:') ||
-      !dependencySpec.endsWith('.tgz') ||
-      bundleIndexes.length !== 1 ||
-      installedManifest?.name !== EXPECTED_LIFECYCLE_PROBE.name ||
-      installedManifest?.version !== EXPECTED_LIFECYCLE_PROBE.version
+      checks.directThemeCount !== 1 ||
+      !checks.listedVersionExact ||
+      !checks.dependencySpecString ||
+      !checks.dependencySpecFile ||
+      !checks.dependencySpecTarball ||
+      checks.bundleIndexCount !== 1 ||
+      !checks.installedNameExact ||
+      !checks.installedVersionExact
     ) {
-      fail(`probe is not the one exact active profile dependency: ${label}`);
+      fail(
+        `probe is not the one exact active profile dependency: ${label}; checks=${JSON.stringify(checks)}`
+      );
     }
   } else if (
     directThemeEntries.length !== 0 ||
