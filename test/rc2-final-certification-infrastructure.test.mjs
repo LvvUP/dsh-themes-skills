@@ -1,8 +1,16 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { access, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import {
+  access,
+  mkdir,
+  mkdtemp,
+  readFile,
+  realpath,
+  rm,
+  writeFile,
+} from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join, relative, resolve } from 'node:path';
 import test from 'node:test';
 
 import {
@@ -20,6 +28,10 @@ import {
   validateLifecycleWebLaunchEvidence,
 } from '../skills/dsh-theme-manager/scripts/rc2-final-evidence.mjs';
 import { validateGithubProvenanceResult } from '../skills/dsh-theme-manager/scripts/verify-rc2-final-provenance.mjs';
+import {
+  parseLockfileState,
+  resolveArtifactSpec,
+} from '../skills/dsh-theme-manager/runtime-dsh-0.1.1-rc.2/run-final-matrix.mjs';
 import { run } from './helpers.mjs';
 
 const manager = resolve('skills/dsh-theme-manager');
@@ -455,9 +467,15 @@ test('matrix state failures expose only sanitized invariant diagnostics', async 
     'dependencySpecString',
     'dependencySpecFile',
     'dependencySpecTarball',
-    'lockfileDirectThemeCount',
+    'lockfileImporterCount',
+    'lockfileThemeImporterCount',
+    'lockfileThemeEntryCount',
+    'lockfileThemeNameExact',
+    'lockfileThemeSectionExact',
     'lockfileSpecifierExact',
-    'lockfileVersionExact',
+    'manifestArtifactExact',
+    'lockfileSpecifierArtifactExact',
+    'lockfileVersionArtifactExact',
     'bundleIndexCount',
     'installedManifestPresent',
     'installedBundlePatchPresent',
@@ -489,14 +507,26 @@ test('matrix listing binds lockfile resolution and physical installation separat
   assert.match(runnerSource, /installedManifest\?\.version === EXPECTED_LIFECYCLE_PROBE\.version/);
   assert.match(runnerSource, /parseYamlDocument\(bytes\.toString\('utf8'\)/);
   assert.match(runnerSource, /document\.toJS\(\{ maxAliasCount: 0 \}\)/);
+  assert.match(runnerSource, /for \(const \[importerKey, importer\] of importerEntries\)/);
+  assert.match(runnerSource, /'dependencies',[\s\S]{0,120}'devDependencies',[\s\S]{0,120}'optionalDependencies'/);
   assert.match(runnerSource, /lockfileProbe\.specifier === dependencySpec/);
-  assert.match(runnerSource, /lockfileProbe\.version === dependencySpec/);
+  assert.doesNotMatch(runnerSource, /lockfileProbe\.version === dependencySpec/);
+  assert.match(runnerSource, /resolveArtifactSpec\(lockfileProbe\.version, profileRoot\)/);
+  assert.match(runnerSource, /lockfileVersionArtifactExact: versionArtifact === probeArtifact/);
   assert.match(evidenceSource, /state\.installedManifestSha256/);
   assert.match(evidenceSource, /state\.installedBundlePatchSha256/);
   assert.match(evidenceSource, /state\.lockfileSha256/);
   assert.match(
     evidenceSource,
     /state\.lockfileSpecifierSha256\s*!==\s*state\.dependencySpecSha256/
+  );
+  assert.doesNotMatch(
+    evidenceSource,
+    /state\.lockfileVersionSha256\s*!==\s*state\.dependencySpecSha256/
+  );
+  assert.match(
+    evidenceSource,
+    /state\.lockfileVersionArtifactPathSha256\s*!==\s*state\.dependencyArtifactPathSha256/
   );
   assert.match(
     evidenceSource,
@@ -510,6 +540,70 @@ test('matrix listing binds lockfile resolution and physical installation separat
     evidenceSource,
     /installed\.installedBundlePatchSha256\s*!==\s*evidence\.probeArtifact\.bundlePatchSha256/
   );
+});
+
+test('matrix lockfile inspection scans every importer and section', () => {
+  const lockfile = Buffer.from(`lockfileVersion: '9.0'
+importers:
+  .:
+    dependencies:
+      '@dsh-themes/rc2-lifecycle-probe':
+        specifier: file:/tmp/probe.tgz
+        version: file:../../probe.tgz
+  windows-profile-key:
+    devDependencies:
+      ordinary-package:
+        specifier: 1.0.0
+        version: 1.0.0
+    optionalDependencies:
+      '@dsh-themes/unexpected':
+        specifier: 1.0.0
+        version: 1.0.0
+`);
+
+  const state = parseLockfileState(lockfile);
+
+  assert.equal(state.importerCount, 2);
+  assert.equal(state.themeImporterCount, 2);
+  assert.equal(state.themeEntries.length, 2);
+  assert.deepEqual(
+    state.themeEntries.map(({ importerKey, section, name }) => ({
+      importerKey,
+      section,
+      name,
+    })),
+    [
+      {
+        importerKey: '.',
+        section: 'dependencies',
+        name: '@dsh-themes/rc2-lifecycle-probe',
+      },
+      {
+        importerKey: 'windows-profile-key',
+        section: 'optionalDependencies',
+        name: '@dsh-themes/unexpected',
+      },
+    ]
+  );
+});
+
+test('matrix artifact identity accepts different absolute and relative file specs', async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), 'dsh-rc2-lock-binding-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  const profileRoot = resolve(directory, 'profiles/web');
+  const artifact = resolve(directory, 'certification-probe/probe.tgz');
+  await mkdir(resolve(directory, 'certification-probe'), { recursive: true });
+  await writeFile(artifact, 'probe');
+
+  const absolute = await resolveArtifactSpec(`file:${artifact}`, profileRoot);
+  const relativeVersion = await resolveArtifactSpec(
+    `file:${relative(profileRoot, artifact)}`,
+    profileRoot
+  );
+  const canonicalArtifact = await realpath(artifact);
+
+  assert.equal(absolute, canonicalArtifact);
+  assert.equal(relativeVersion, canonicalArtifact);
 });
 
 test('provenance verifier fail-closes before gh for unbound artifact names', async (t) => {

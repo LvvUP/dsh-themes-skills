@@ -471,12 +471,17 @@ function assertLifecycleState(state, { label, active }) {
       'profileDirectThemeCount',
       'pnpmListDiagnosticThemeCount',
       'lockfileFormatVersion',
-      'lockfileImporter',
-      'lockfileDirectThemeCount',
+      'lockfileImporterCount',
+      'lockfileThemeImporterCount',
+      'lockfileThemeEntryCount',
+      'lockfileThemeImporterSha256',
       'bundleIndex',
       'dependencySpecSha256',
       'lockfileSpecifierSha256',
       'lockfileVersionSha256',
+      'dependencyArtifactPathSha256',
+      'lockfileSpecifierArtifactPathSha256',
+      'lockfileVersionArtifactPathSha256',
       'listStdoutSha256',
       'profileManifestSha256',
       'lockfileSha256',
@@ -491,7 +496,10 @@ function assertLifecycleState(state, { label, active }) {
     !Number.isSafeInteger(state.pnpmListDiagnosticThemeCount) ||
     state.pnpmListDiagnosticThemeCount < 0 ||
     state.pnpmListDiagnosticThemeCount > (active ? 1 : 0) ||
-    state.lockfileDirectThemeCount !== (active ? 1 : 0) ||
+    !Number.isSafeInteger(state.lockfileImporterCount) ||
+    state.lockfileImporterCount < 0 ||
+    state.lockfileThemeImporterCount !== (active ? 1 : 0) ||
+    state.lockfileThemeEntryCount !== (active ? 1 : 0) ||
     (active
       ? JSON.stringify(state.activePackage) !==
           JSON.stringify({
@@ -499,21 +507,30 @@ function assertLifecycleState(state, { label, active }) {
             version: EXPECTED_LIFECYCLE_PROBE.version,
           }) ||
         state.lockfileFormatVersion !== '9.0' ||
-        state.lockfileImporter !== '.' ||
+        state.lockfileImporterCount < 1 ||
+        !SHA256.test(state.lockfileThemeImporterSha256 ?? '') ||
         !Number.isSafeInteger(state.bundleIndex) ||
         state.bundleIndex < 0 ||
         !SHA256.test(state.dependencySpecSha256 ?? '') ||
         state.lockfileSpecifierSha256 !==
           state.dependencySpecSha256 ||
-        state.lockfileVersionSha256 !==
-          state.dependencySpecSha256 ||
+        !SHA256.test(state.lockfileVersionSha256 ?? '') ||
+        !SHA256.test(state.dependencyArtifactPathSha256 ?? '') ||
+        state.lockfileSpecifierArtifactPathSha256 !==
+          state.dependencyArtifactPathSha256 ||
+        state.lockfileVersionArtifactPathSha256 !==
+          state.dependencyArtifactPathSha256 ||
         !SHA256.test(state.installedManifestSha256 ?? '') ||
         !SHA256.test(state.installedBundlePatchSha256 ?? '')
       : state.activePackage !== null ||
+        state.lockfileThemeImporterSha256 !== null ||
         state.bundleIndex !== null ||
         state.dependencySpecSha256 !== null ||
         state.lockfileSpecifierSha256 !== null ||
         state.lockfileVersionSha256 !== null ||
+        state.dependencyArtifactPathSha256 !== null ||
+        state.lockfileSpecifierArtifactPathSha256 !== null ||
+        state.lockfileVersionArtifactPathSha256 !== null ||
         state.installedManifestSha256 !== null ||
         state.installedBundlePatchSha256 !== null)
   ) {
@@ -527,7 +544,9 @@ function assertLifecycleState(state, { label, active }) {
     }
     if (
       ![null, '9.0'].includes(state.lockfileFormatVersion) ||
-      ![null, '.'].includes(state.lockfileImporter)
+      (state.lockfileFormatVersion === null
+        ? state.lockfileImporterCount !== 0
+        : state.lockfileImporterCount < 1)
     ) {
       fail(`${label} lockfile identity differs`);
     }
@@ -535,7 +554,7 @@ function assertLifecycleState(state, { label, active }) {
     assertDigest(state.lockfileSha256, `${label} lockfile digest`);
     if (
       state.lockfileFormatVersion !== '9.0' ||
-      state.lockfileImporter !== '.'
+      state.lockfileImporterCount < 1
     ) {
       fail(`${label} lockfile identity differs`);
     }
@@ -723,12 +742,13 @@ export function validateLifecycleEvidence(evidence, contracts, candidate) {
       evidence.probeArtifact.bundlePatchSha256 ||
     installed.lockfileSpecifierSha256 !==
       installed.dependencySpecSha256 ||
-    installed.lockfileVersionSha256 !==
-      installed.dependencySpecSha256 ||
     reverse.lockfileSpecifierSha256 !==
       reverse.dependencySpecSha256 ||
-    reverse.lockfileVersionSha256 !==
-      reverse.dependencySpecSha256 ||
+    installed.lockfileThemeImporterSha256 !==
+      reverse.lockfileThemeImporterSha256 ||
+    installed.lockfileVersionSha256 !== reverse.lockfileVersionSha256 ||
+    installed.dependencyArtifactPathSha256 !==
+      reverse.dependencyArtifactPathSha256 ||
     rollback.profileManifestSha256 !== final.profileManifestSha256 ||
     rollback.lockfileSha256 !== final.lockfileSha256
   ) {
