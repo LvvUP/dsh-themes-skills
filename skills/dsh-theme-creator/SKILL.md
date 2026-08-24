@@ -9,7 +9,7 @@ Create data-only schema V3 themes for the exact certified baseline named by `ref
 
 The currently selected certified authoring sidecar is DeepSeek Harness `0.1.0-rc.8`; this sentence is descriptive, while the sidecar remains executable authority.
 
-`node <skill-dir>/scripts/inspect-baseline.mjs candidate` exposes the RC.2 evidence for certification work only. That lane is pending and disabled: do not author or publish against it until a separately reviewed final sidecar replaces the pending evidence.
+`node <skill-dir>/scripts/inspect-baseline.mjs certifiedRuntimeBaseline` exposes the verified RC.2 runtime baseline. It must report `baseline-certified`, `productionReady: true`, and `enabled: false`: runtime certification does not grant an authoring sidecar. The immutable `candidate` view remains historical-at-capture evidence only. Do not author or publish RC.2 manifests until a separately reviewed authoring authority is added.
 
 The generator accepts only `schemaVersion: "3.0"` authoring input that selects the certified sidecar's exact version, then inserts the complete fixed compatibility evidence from [references/compatibility-v3.json](references/compatibility-v3.json). It never accepts author-supplied attestation fields and never emits `artifact` or `payload`. RC.6 V2 and RC.5 V1 remain historical, non-output formats.
 

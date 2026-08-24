@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "evidenceKind": "rc2-final-baseline-attestation",
+  "certificationStatus": "verified-runtime-baseline",
+  "productionReady": true,
+  "installableItems": false,
+  "itemInstallability": "separate-authority-required",
+  "baseline": "@deepseek-ai/dsh@0.1.1-rc.2",
+  "officialRelease": {
+    "tag": "dsh-v0.1.1-rc.2",
+    "sourceCommit": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e"
+  },
+  "issuedAt": "2026-08-24T05:40:04.083Z",
+  "issuer": {
+    "provider": "github-actions",
+    "repository": "LvvUP/dsh-themes-skills",
+    "serverUrl": "https://github.com",
+    "workflow": "RC.2 final baseline certification",
+    "workflowRef": "LvvUP/dsh-themes-skills/.github/workflows/rc2-certification.yml@refs/heads/main",
+    "runId": "32694257969",
+    "runAttempt": "1",
+    "runUrl": "https://github.com/LvvUP/dsh-themes-skills/actions/runs/32694257969/attempts/1",
+    "job": "finalize",
+    "ref": "refs/heads/main",
+    "headSha": "cc7546cb5ccd77002713171328972291ceaa12e6"
+  },
+  "authorityBindings": {
+    "candidateSidecar": {
+      "path": "references/dsh-0.1.1-rc.2.candidate.json",
+      "sha256": "9ec94c95dc8d6e4fe1aa7bab00de59d8c7fcb414c7342694a5cde20efd9d5888"
+    },
+    "pendingAttestation": {
+      "path": "runtime-dsh-0.1.1-rc.2/attestation.json",
+      "sha256": "83fbaf94740c32e229d190938dd2699e7d7fbd52d31751976c75f2cc09d89e53"
+    },
+    "pendingCertificationReceipt": {
+      "path": "references/certification-receipt.dsh-0.1.1-rc.2.pending.json",
+      "sha256": "c49d4665d27fd32b35c9ac55d46477ae799eb685be9ccee772e03c2c207b817a"
+    },
+    "lockfile": {
+      "path": "runtime-dsh-0.1.1-rc.2/pnpm-lock.yaml",
+      "sha256": "b00224c0188c8d4c7b45a3553051da4a4f8e4fd4f89bc98b3a0bb845a3308255"
+    },
+    "protocolContract": {
+      "path": "references/rc2-final-protocol-contract.json",
+      "sha256": "08724201ccc9348fd4ea1d760ecbc3ba5a852e42360b8d7233f6429a99665fc3"
+    },
+    "selectorContract": {
+      "path": "references/rc2-final-selector-contract.json",
+      "sha256": "f99f92a530217a6cfca1bad067837a41cd82a1969ab4bb2fb86e35d8e181d201"
+    }
+  },
+  "matrix": {
+    "status": "passed",
+    "requiredJobs": 6,
+    "completedJobs": 6,
+    "receiptSetAlgorithm": "sorted-platform-tab-node-tab-sha256-lf",
+    "receiptSetSha256": "b3d663b43b257a43d138538454cd40eb976802bdcabf0409295f7956dc07f1ae",
+    "receipts": [
+      {
+        "platform": "darwin",
+        "nodeVersion": "22.19.0",
+        "path": "matrix/darwin-node-22.19.0.json",
+        "sha256": "afea572e791f8476ed56d198dafdbd18faa7c7fef5f8fab13dd325eaace72dab"
+      },
+      {
+        "platform": "darwin",
+        "nodeVersion": "24.15.0",
+        "path": "matrix/darwin-node-24.15.0.json",
+        "sha256": "66fe68a3cf7cc395b92b08f64dd34835a055f8ac7074f0557c67ac10ccff8a2a"
+      },
+      {
+        "platform": "linux",
+        "nodeVersion": "22.19.0",
+        "path": "matrix/linux-node-22.19.0.json",
+        "sha256": "6ad6054f304654de1367fadd8fa0f6750551e937de7b8e860bf5b61227cf4522"
+      },
+      {
+        "platform": "linux",
+        "nodeVersion": "24.15.0",
+        "path": "matrix/linux-node-24.15.0.json",
+        "sha256": "10767a0a5cd242d21b09e40716059e204c2b3d265973232b9660867065da187b"
+      },
+      {
+        "platform": "win32",
+        "nodeVersion": "22.19.0",
+        "path": "matrix/win32-node-22.19.0.json",
+        "sha256": "153f49f1e0d87dfa8acca6eb07584a5447583963d4fb9a9a5fedebb9a0d64b48"
+      },
+      {
+        "platform": "win32",
+        "nodeVersion": "24.15.0",
+        "path": "matrix/win32-node-24.15.0.json",
+        "sha256": "7988fb78f33b48612ec372624f86b851b5d08d81f81924404c9048d911cb2658"
+      }
+    ]
+  },
+  "acceptance": {
+    "exactReleaseAndClosure": "passed",
+    "exactRegistryTarballs": "passed",
+    "fixedSourceProtocol": "passed",
+    "webNoOpenLoopback": "passed",
+    "recursiveClientBundlesAndMime": "passed",
+    "indexInjectionOrder": "passed",
+    "transportBoundary": "passed-with-explicit-served-mode-scope",
+    "staticFrontend404": "passed",
+    "selectorAndUiSlotContract": "passed",
+    "sessionStateWireContract": "passed",
+    "credentialAuthorizationEvents": "passed",
+    "cspBoundary": "passed-with-strict-csp-not-claimed",
+    "bwrapProfile": "passed-static-contract",
+    "installListRemove": "passed-with-list-rendering-diagnostic-only",
+    "lightDarkSystem": "passed",
+    "managedColdRestart": "passed",
+    "rollbackReverse": "passed",
+    "malformedEvidenceFailsClosed": "passed",
+    "mixedVersionEvidenceFailsClosed": "passed"
+  },
+  "scope": {
+    "baselineRuntime": "certified",
+    "fullSkinSelectors": 13,
+    "servedTransportMode": "http-websocket-default",
+    "explicitTransportExecution": "not-exercised-by-served-web",
+    "strictCspCompatibilityClaimed": false,
+    "bwrap": "fixed-profile-contract-only",
+    "lifecycleScenarioClasses": 6,
+    "lifecycleScenarioExecutions": 36,
+    "negativeEvidenceCases": 2,
+    "pluginListRendering": "command-success-json-only-non-authoritative",
+    "themeSkinExtensionInstallability": "not-granted"
+  }
+}

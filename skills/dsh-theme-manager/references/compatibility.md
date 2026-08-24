@@ -1,14 +1,17 @@
 # Verified compatibility baseline
 
-Treat every value below as exact. The current installation contract is RC.8/V3 plus the final runtime attestation; version strings alone are never authority.
+Treat every value below as exact. The current **item installation** contract is RC.8/V3 plus the final runtime attestation; version strings and runtime-baseline certification alone are never item authority.
 
 ## Release lanes
 
 | Lane | Exact release | Status |
 | --- | --- | --- |
-| Current upstream and certified | `0.1.0-rc.8`, npm `next`, tag `dsh-v0.1.0-rc.8`, source `141eb6fef83422698aef7a981029e843e8161534` | Manager-installable only through the exact V3 sidecar and final runtime attestation |
+| Certified runtime baseline | `0.1.1-rc.2`, tag `dsh-v0.1.1-rc.2`, source `b150a551b8d465e31e418e1b2eaf5e79bbb7d28e` | Six-job baseline and detached provenance verified; `productionReady: true`, but `installableItems: false` and item authority remains separate |
+| Operational item authority | `0.1.0-rc.8`, tag `dsh-v0.1.0-rc.8`, source `141eb6fef83422698aef7a981029e843e8161534` | Manager-installable only through the exact V3 sidecar, final runtime attestation, and item artifact authority |
 | Historical V2 | `0.1.0-rc.6` | Audit-only under normal validation; never current-installable. Only exact retained tuples can cross the schema-2 rollback/reverse gate. |
 | Historical V1 | `0.1.0-rc.5`, source `47f943859bef60e4160492346772ded9b24f765a` | Audit-only under normal validation; never current-installable. Only exact retained tuples can cross the schema-2 rollback/reverse gate. |
+
+The RC.2 baseline is bound to run `32694257969` attempt `1`, source SHA `cc7546cb5ccd77002713171328972291ceaa12e6`, final attestation SHA-256 `4c41e96827bb03eb7c4d6138f5723864e91f0324b1aec8bcf3b3a1bc47ba3fb7`, final receipt SHA-256 `4a649841766b4bf3421c78906f98f29a186d718ea34b03daca96ee52e9a3db98`, archive SHA-256 `0b4f03e9c3f76d241890f46330fce84f32183774a5d9228077835e2258c76f3e`, and detached Sigstore bundle SHA-256 `b520580f05101b4783079aa52f0e159b2aa1a9e239f7e6a68e469f4c5d084b2d`. Run `scripts/verify-promoted-rc2-provenance.mjs` to verify the checked-in closure. This evidence authorizes no selector, artifact, catalog result, authoring, submission, or community item.
 
 The final publisher-side sidecar is `themes/compatibility/dsh-0.1.0-rc.8.json`. This public Skill does not rely on a relative link into the private publisher repository: it freezes and validates the corresponding fields through its local attestation and scripts. The sidecar has no blockers and binds publisher GitHub Actions run `32393288849`, head `e3fe9ac465b8db8070efbdb83ddc6c821f923a73`, across Linux, macOS, and Windows on Node `22.19.0` and `24.15.0`. The private run URL is intentionally not presented as a public proof link; the checked-in attestation carries the durable evidence. The earlier `.candidate.json` and candidate attestation remain historical evidence, not alternate authority.
 

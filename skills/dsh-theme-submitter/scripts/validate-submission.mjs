@@ -13,16 +13,47 @@ const TOKENS = [
 const BASELINE_POLICY = JSON.parse(
   await readFile(new URL('../references/baseline-policy.json', import.meta.url))
 );
+const CERTIFIED_RUNTIME = BASELINE_POLICY.certifiedRuntimeBaseline;
 if (
+  BASELINE_POLICY.schemaVersion !== 2 ||
   BASELINE_POLICY.defaultOperationalLane !== 'certified' ||
   BASELINE_POLICY.certified?.status !== 'certified-submission' ||
   BASELINE_POLICY.certified?.enabled !== true ||
+  CERTIFIED_RUNTIME?.status !== 'baseline-certified' ||
+  CERTIFIED_RUNTIME?.certificationStatus !== 'verified-runtime-baseline' ||
+  CERTIFIED_RUNTIME?.productionReady !== true ||
+  CERTIFIED_RUNTIME?.installableItems !== false ||
+  CERTIFIED_RUNTIME?.itemInstallability !== 'separate-authority-required' ||
+  CERTIFIED_RUNTIME?.enabled !== false ||
+  CERTIFIED_RUNTIME?.submissionEnabled !== false ||
   BASELINE_POLICY.candidate?.status !== 'certification-pending' ||
+  BASELINE_POLICY.candidate?.historicalAtCapture !== true ||
   BASELINE_POLICY.candidate?.enabled !== false ||
   JSON.stringify(BASELINE_POLICY.forbiddenVersionSelectors) !==
     JSON.stringify(['latest', 'next'])
 ) {
   throw new Error('baseline-policy.json is malformed or promotes a candidate');
+}
+const runtimeBaselineBytes = await readFile(
+  new URL(`../references/${CERTIFIED_RUNTIME.evidencePath}`, import.meta.url)
+);
+if (
+  createHash('sha256').update(runtimeBaselineBytes).digest('hex') !==
+  CERTIFIED_RUNTIME.evidenceSha256
+) {
+  throw new Error('certified runtime baseline projection digest differs');
+}
+const RUNTIME_BASELINE = JSON.parse(runtimeBaselineBytes.toString('utf8'));
+if (
+  RUNTIME_BASELINE.status !== CERTIFIED_RUNTIME.status ||
+  RUNTIME_BASELINE.certificationStatus !==
+    CERTIFIED_RUNTIME.certificationStatus ||
+  RUNTIME_BASELINE.productionReady !== true ||
+  RUNTIME_BASELINE.installableItems !== false ||
+  RUNTIME_BASELINE.capabilities?.submissionEnabled !== false ||
+  RUNTIME_BASELINE.itemAuthority !== 'not-granted'
+) {
+  throw new Error('certified runtime baseline attempts to enable submission');
 }
 const compatibilityBytes = await readFile(
   new URL(

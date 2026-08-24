@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import {
-  access,
   mkdir,
   mkdtemp,
   readFile,
@@ -31,6 +30,7 @@ import {
   buildGhVerifyCommand,
   validateGithubProvenanceResult,
 } from '../skills/dsh-theme-manager/scripts/verify-rc2-final-provenance.mjs';
+import { validatePromotedRuntimeBaseline } from '../skills/dsh-theme-manager/scripts/validate-promoted-rc2-runtime-baseline.mjs';
 import {
   parseLockfileState,
   resolveArtifactSpec,
@@ -47,7 +47,7 @@ const finalReceipt = resolve(
   'references/certification-receipt.dsh-0.1.1-rc.2.final.json'
 );
 
-test('RC.2 final contract is exact but remains certification-pending offline', async () => {
+test('historical RC.2 offline preparation contract remains certification-pending', async () => {
   const result = await validateFinalContractOffline();
 
   assert.equal(result.status, 'final-infrastructure-ready-certification-pending');
@@ -68,13 +68,33 @@ test('RC.2 final contract is exact but remains certification-pending offline', a
   assert.equal(result.requiredMatrixJobs, 6);
 });
 
-test('no final attestation or certification receipt is checked in', async () => {
-  await assert.rejects(access(finalAttestation));
-  await assert.rejects(access(finalReceipt));
+test('reviewed final evidence is checked in while the historical candidate remains immutable', async () => {
+  const [attestationBytes, receiptBytes, promoted] = await Promise.all([
+    readFile(finalAttestation),
+    readFile(finalReceipt),
+    validatePromotedRuntimeBaseline(),
+  ]);
+
+  assert.equal(
+    createHash('sha256').update(attestationBytes).digest('hex'),
+    '4c41e96827bb03eb7c4d6138f5723864e91f0324b1aec8bcf3b3a1bc47ba3fb7'
+  );
+  assert.equal(
+    createHash('sha256').update(receiptBytes).digest('hex'),
+    '4a649841766b4bf3421c78906f98f29a186d718ea34b03daca96ee52e9a3db98'
+  );
+  assert.equal(promoted.status, 'baseline-certified');
+  assert.equal(promoted.certificationStatus, 'verified-runtime-baseline');
+  assert.equal(promoted.productionReady, true);
+  assert.equal(promoted.installableItems, false);
+  assert.equal(promoted.completedMatrixJobs, 6);
+  assert.equal(promoted.requiredMatrixJobs, 6);
 
   const policy = JSON.parse(
     await readFile(resolve(manager, 'references/baseline-policy.json'), 'utf8')
   );
+  assert.equal(policy.certifiedRuntimeBaseline.status, 'baseline-certified');
+  assert.equal(policy.certifiedRuntimeBaseline.installableItems, false);
   assert.equal(policy.candidate.status, 'certification-pending');
   assert.equal(policy.candidate.installable, false);
   assert.match(policy.candidate.attestationPath, /attestation\.json$/);

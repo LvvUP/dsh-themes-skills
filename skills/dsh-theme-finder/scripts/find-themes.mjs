@@ -10,7 +10,9 @@ import { isExactSemver } from './semver.mjs';
 const BASELINE_POLICY = JSON.parse(
   await readFile(new URL('../references/baseline-policy.json', import.meta.url))
 );
+const CERTIFIED_RUNTIME = BASELINE_POLICY.certifiedRuntimeBaseline;
 if (
+  BASELINE_POLICY.schemaVersion !== 2 ||
   BASELINE_POLICY.defaultOperationalLane !== 'certified' ||
   BASELINE_POLICY.certified?.status !== 'certified-discovery' ||
   BASELINE_POLICY.certified?.enabled !== true ||
@@ -21,7 +23,16 @@ if (
   !/^[0-9a-f]{64}$/.test(
     BASELINE_POLICY.certified?.hostedAuthoritySha256
   ) ||
+  CERTIFIED_RUNTIME?.status !== 'baseline-certified' ||
+  CERTIFIED_RUNTIME?.certificationStatus !== 'verified-runtime-baseline' ||
+  CERTIFIED_RUNTIME?.productionReady !== true ||
+  CERTIFIED_RUNTIME?.installableItems !== false ||
+  CERTIFIED_RUNTIME?.itemInstallability !== 'separate-authority-required' ||
+  CERTIFIED_RUNTIME?.enabled !== false ||
+  CERTIFIED_RUNTIME?.catalogRead !== false ||
+  CERTIFIED_RUNTIME?.installableResultsAllowed !== false ||
   BASELINE_POLICY.candidate?.status !== 'certification-pending' ||
+  BASELINE_POLICY.candidate?.historicalAtCapture !== true ||
   BASELINE_POLICY.candidate?.enabled !== false ||
   BASELINE_POLICY.candidate?.installableResultsAllowed !== false ||
   JSON.stringify(BASELINE_POLICY.forbiddenVersionSelectors) !==
@@ -68,6 +79,30 @@ if (
   throw new Error('candidate discovery sidecar digest differs');
 }
 const CANDIDATE_BASELINE = JSON.parse(candidateBytes.toString('utf8'));
+const runtimeBaselineBytes = await readFile(
+  new URL(`../references/${CERTIFIED_RUNTIME.evidencePath}`, import.meta.url)
+);
+if (
+  createHash('sha256').update(runtimeBaselineBytes).digest('hex') !==
+  CERTIFIED_RUNTIME.evidenceSha256
+) {
+  throw new Error('certified runtime baseline projection digest differs');
+}
+const RUNTIME_BASELINE = JSON.parse(runtimeBaselineBytes.toString('utf8'));
+if (
+  RUNTIME_BASELINE.status !== CERTIFIED_RUNTIME.status ||
+  RUNTIME_BASELINE.certificationStatus !==
+    CERTIFIED_RUNTIME.certificationStatus ||
+  RUNTIME_BASELINE.productionReady !== true ||
+  RUNTIME_BASELINE.installableItems !== false ||
+  RUNTIME_BASELINE.itemInstallability !==
+    'separate-authority-required' ||
+  RUNTIME_BASELINE.capabilities?.catalogRead !== false ||
+  RUNTIME_BASELINE.capabilities?.installableResultsAllowed !== false ||
+  RUNTIME_BASELINE.itemAuthority !== 'not-granted'
+) {
+  throw new Error('certified runtime baseline attempts to grant catalog authority');
+}
 
 const MAX_BYTES = 2 * 1024 * 1024;
 const MAX_DIRECTORY_PAGES = 20;
@@ -111,7 +146,7 @@ const CERTIFIED_DSH_VERSION = CERTIFIED_COMPATIBILITY.dshPackageVersion;
 const HISTORICAL_V2_VERSION =
   BASELINE_POLICY.historicalDiscoveryVersions[0];
 const CERTIFIED_TARGET_VERSION = CERTIFIED_DSH_VERSION;
-const CANDIDATE_DSH_VERSION = CANDIDATE_BASELINE.dshPackageVersion;
+const RUNTIME_BASELINE_DSH_VERSION = RUNTIME_BASELINE.dshPackageVersion;
 const HOSTED = Object.freeze({
   kind: 'hosted-verified-artifact',
   installability: 'manager',
@@ -274,7 +309,7 @@ function parseArgs(argv) {
   values['dsh-version'] ??= CERTIFIED_DSH_VERSION;
   values.availability ??= 'all';
   values.limit ??= '10';
-  if (![HISTORICAL_V2_VERSION, CERTIFIED_DSH_VERSION, CANDIDATE_DSH_VERSION].includes(values['dsh-version'])) {
+  if (!new Set([HISTORICAL_V2_VERSION, CERTIFIED_DSH_VERSION, RUNTIME_BASELINE_DSH_VERSION]).has(values['dsh-version'])) {
     throw new Error('DSH version must be one exact version listed by baseline-policy.json');
   }
   if (values.kind && !['theme', 'skin', 'full-skin', 'ui-extension'].includes(values.kind)) {
@@ -891,7 +926,7 @@ function firstPartyConceptAuthority(
     rights.licenseUrl !== expectedLicenseUrl ||
     runtime.status !== 'not-applicable' ||
     compatibility.status !== 'not-applicable' ||
-    compatibility.baseline !== CANDIDATE_DSH_VERSION ||
+    compatibility.baseline !== RUNTIME_BASELINE_DSH_VERSION ||
     distribution.consentRequired !== false ||
     preview.length !== 1 ||
     preview[0]?.kind !== expected.mode ||
@@ -1560,15 +1595,19 @@ function accepted(item, args, catalogOrigin) {
 
 export async function runFinder(argv, { fetchImpl = fetch } = {}) {
   const args = parseArgs(argv);
-  if (args['dsh-version'] === CANDIDATE_DSH_VERSION) {
+  if (args['dsh-version'] === RUNTIME_BASELINE_DSH_VERSION) {
     return {
-      dshVersion: CANDIDATE_DSH_VERSION,
-      baselineStatus: BASELINE_POLICY.candidate.status,
+      dshVersion: RUNTIME_BASELINE_DSH_VERSION,
+      baselineStatus: CERTIFIED_RUNTIME.status,
+      certificationStatus: CERTIFIED_RUNTIME.certificationStatus,
+      productionReady: CERTIFIED_RUNTIME.productionReady,
+      installableItems: CERTIFIED_RUNTIME.installableItems,
+      itemInstallability: CERTIFIED_RUNTIME.itemInstallability,
       installableResultsAllowed: false,
       catalogRead: false,
       count: 0,
       items: [],
-      blockers: CANDIDATE_BASELINE.blockers,
+      blockingReasons: ['rc2-item-authority-not-granted'],
     };
   }
 

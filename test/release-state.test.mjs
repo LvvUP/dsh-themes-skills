@@ -27,8 +27,8 @@ function sha256(bytes) {
 const exactSemver =
   /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 
-test('release state separates the RC.2 candidate from certified and historical lanes', () => {
-  assert.equal(state.schemaVersion, 3);
+test('release state separates the certified RC.2 runtime baseline from item and historical lanes', () => {
+  assert.equal(state.schemaVersion, 4);
   assert.match(state.capturedAt, /^\d{4}-\d{2}-\d{2}$/);
   assert.equal(Number.isNaN(Date.parse(`${state.capturedAt}T00:00:00Z`)), false);
   assert.equal(state.purpose, 'informational-release-state');
@@ -37,6 +37,7 @@ test('release state separates the RC.2 candidate from certified and historical l
   for (const lane of [
     state.upstream,
     state.candidate,
+    state.certifiedRuntimeBaseline,
     state.certified,
     state.historicalV2,
     state.historicalV1,
@@ -44,7 +45,7 @@ test('release state separates the RC.2 candidate from certified and historical l
     assert.match(lane.dshPackageVersion, exactSemver);
   }
 
-  assert.equal(state.upstream.status, 'released-certification-pending');
+  assert.equal(state.upstream.status, 'released-runtime-baseline-certified');
   assert.equal(state.upstream.dshPackageVersion, '0.1.1-rc.2');
   assert.equal(
     state.upstream.sourceTag,
@@ -53,9 +54,14 @@ test('release state separates the RC.2 candidate from certified and historical l
   assert.match(state.upstream.sourceCommit, /^[a-f0-9]{40}$/);
   assert.match(state.upstream.npmIntegrity, /^sha512-[A-Za-z0-9+/]+={0,2}$/);
   assert.match(state.upstream.npmShasum, /^[a-f0-9]{40}$/);
+  assert.equal(state.upstream.runtimeBaselineProductionReady, true);
   assert.equal(state.upstream.installableCurrent, false);
+  assert.equal(state.upstream.itemInstallability, 'separate-authority-required');
 
   assert.equal(state.candidate.status, 'certification-pending');
+  assert.equal(state.candidate.historicalAtCapture, true);
+  assert.equal(state.candidate.capturedBeforeFinalRun, true);
+  assert.equal(state.candidate.authorityScope, 'historical-certification-inputs-only');
   assert.equal(state.candidate.dshPackageVersion, state.upstream.dshPackageVersion);
   assert.equal(state.candidate.installableCurrent, false);
   assert.equal(state.candidate.matrixJobsCompleted, 0);
@@ -65,13 +71,79 @@ test('release state separates the RC.2 candidate from certified and historical l
 
   assert.deepEqual(
     {
+      status: state.certifiedRuntimeBaseline.status,
+      certificationStatus: state.certifiedRuntimeBaseline.certificationStatus,
+      productionReady: state.certifiedRuntimeBaseline.productionReady,
+      installableItems: state.certifiedRuntimeBaseline.installableItems,
+      itemInstallability: state.certifiedRuntimeBaseline.itemInstallability,
+      runId: state.certifiedRuntimeBaseline.certificationRunId,
+      runAttempt: state.certifiedRuntimeBaseline.certificationRunAttempt,
+      sourceSha: state.certifiedRuntimeBaseline.certificationSourceSha,
+      completed: state.certifiedRuntimeBaseline.matrixJobsCompleted,
+      required: state.certifiedRuntimeBaseline.matrixJobsRequired,
+      catalogRead: state.certifiedRuntimeBaseline.catalogRead,
+      installableResultsAllowed:
+        state.certifiedRuntimeBaseline.installableResultsAllowed,
+      authoringEnabled: state.certifiedRuntimeBaseline.authoringEnabled,
+      submissionEnabled: state.certifiedRuntimeBaseline.submissionEnabled,
+      communityCompleted: state.certifiedRuntimeBaseline.communityItemsCompleted,
+      communityRequired: state.certifiedRuntimeBaseline.communityItemsRequired,
+      communityInstallable:
+        state.certifiedRuntimeBaseline.communityInstallableRecords,
+    },
+    {
+      status: 'baseline-certified',
+      certificationStatus: 'verified-runtime-baseline',
+      productionReady: true,
+      installableItems: false,
+      itemInstallability: 'separate-authority-required',
+      runId: 32694257969,
+      runAttempt: 1,
+      sourceSha: 'cc7546cb5ccd77002713171328972291ceaa12e6',
+      completed: 6,
+      required: 6,
+      catalogRead: false,
+      installableResultsAllowed: false,
+      authoringEnabled: false,
+      submissionEnabled: false,
+      communityCompleted: 0,
+      communityRequired: 11,
+      communityInstallable: 0,
+    }
+  );
+  assert.equal(
+    state.certifiedRuntimeBaseline.attestationSha256,
+    '4c41e96827bb03eb7c4d6138f5723864e91f0324b1aec8bcf3b3a1bc47ba3fb7'
+  );
+  assert.equal(
+    state.certifiedRuntimeBaseline.certificationReceiptSha256,
+    '4a649841766b4bf3421c78906f98f29a186d718ea34b03daca96ee52e9a3db98'
+  );
+  assert.equal(
+    state.certifiedRuntimeBaseline.archiveSha256,
+    '0b4f03e9c3f76d241890f46330fce84f32183774a5d9228077835e2258c76f3e'
+  );
+  assert.equal(
+    state.certifiedRuntimeBaseline.provenanceSha256,
+    'b520580f05101b4783079aa52f0e159b2aa1a9e239f7e6a68e469f4c5d084b2d'
+  );
+
+  assert.deepEqual(
+    {
       status: state.nonPromotionalSmoke.status,
+      historicalAtCapture: state.nonPromotionalSmoke.historicalAtCapture,
+      authorityScope: state.nonPromotionalSmoke.authorityScope,
+      runtimeBaselineFinalizerPending:
+        state.nonPromotionalSmoke.runtimeBaselineFinalizerPending,
       promotionAuthority: state.nonPromotionalSmoke.promotionAuthority,
       installable: state.nonPromotionalSmoke.installable,
       baseline: state.nonPromotionalSmoke.baseline,
     },
     {
       status: 'partial-runtime-evidence-only',
+      historicalAtCapture: true,
+      authorityScope: 'item-and-hosted-artifact-smoke-only',
+      runtimeBaselineFinalizerPending: false,
       promotionAuthority: false,
       installable: false,
       baseline: '@deepseek-ai/dsh@0.1.1-rc.2',
@@ -131,15 +203,17 @@ test('release state separates the RC.2 candidate from certified and historical l
     state.nonPromotionalSmoke.hostedLifecycle.evidenceSha256,
     sha256(hostedLifecycleIndexBytes)
   );
-  assert.deepEqual(state.nonPromotionalSmoke.hostedLifecycle.pendingChecks, [
+  assert.deepEqual(
+    state.nonPromotionalSmoke.hostedLifecycle.historicalPendingItemChecks,
+    [
     'lightDarkSystem',
     'featureActivation',
     'visualAccessibility',
     'rollbackReverse',
     'rc2HostedArtifactRepack',
     'rc2SelectorCatalog',
-    'finalRuntimeAttestation',
-  ]);
+    ]
+  );
 
   assert.equal(state.certified.status, 'certified-installable');
   assert.equal(state.certified.dshPackageVersion, '0.1.0-rc.8');
@@ -158,7 +232,7 @@ test('release state separates the RC.2 candidate from certified and historical l
   assert.equal(state.historicalV1.installableCurrent, false);
 });
 
-test('release documentation exposes candidate, certified, and historical lanes', async () => {
+test('release documentation exposes runtime, item, and historical lanes', async () => {
   const documents = [
     'README.md',
     'README.zh-CN.md',
@@ -180,6 +254,10 @@ test('release documentation exposes candidate, certified, and historical lanes',
   }
   const combined = [...contentsByPath.values()].join('\n');
   assert.ok(combined.includes(state.candidate.dshPackageVersion));
+  assert.ok(combined.includes(state.certifiedRuntimeBaseline.status));
+  assert.ok(combined.includes(state.certifiedRuntimeBaseline.certificationStatus));
+  assert.ok(combined.includes('separate-authority-required'));
+  assert.ok(combined.includes(state.certifiedRuntimeBaseline.certificationSourceSha));
   assert.ok(combined.includes(state.historicalV2.dshPackageVersion));
   assert.ok(combined.includes(state.historicalV1.dshPackageVersion));
 });

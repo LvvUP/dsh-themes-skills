@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "defaultOperationalLane": "certified",
   "certified": {
     "status": "certified-installable",
@@ -10,8 +10,28 @@
     "receiptPath": "runtime-receipt.rc8.json",
     "receiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1"
   },
+  "certifiedRuntimeBaseline": {
+    "status": "baseline-certified",
+    "certificationStatus": "verified-runtime-baseline",
+    "productionReady": true,
+    "installableItems": false,
+    "itemInstallability": "separate-authority-required",
+    "enabled": false,
+    "catalogRead": false,
+    "installableResultsAllowed": false,
+    "authoringEnabled": false,
+    "submissionEnabled": false,
+    "communityItemsPlanned": 11,
+    "communityItemsVerified": 0,
+    "communityInstallableRecords": 0,
+    "evidencePath": "runtime-baseline.dsh-0.1.1-rc.2.json",
+    "evidenceSha256": "450fcefc76026a312def640c6cac5dedf8386469860f4be883050a6c5fa283dc",
+    "receiptPath": "runtime-receipt.dsh-0.1.1-rc.2.pending.json",
+    "receiptSha256": "ab4e72dd0c264fe46d41841fdee24305c4f339e5607000763eaf57a93dec28af"
+  },
   "candidate": {
     "status": "certification-pending",
+    "historicalAtCapture": true,
     "enabled": false,
     "installable": false,
     "evidencePath": "dsh-0.1.1-rc.2.candidate.json",

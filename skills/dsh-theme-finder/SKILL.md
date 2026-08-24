@@ -9,7 +9,7 @@ Return catalog evidence, not invented recommendations. Search only a website or 
 
 ## Release boundary
 
-The operational lane is the exact certified baseline named by `references/baseline-policy.json`; today its retained V3 evidence targets DeepSeek Harness `0.1.0-rc.8`. RC.6 V2 and RC.5 V1 remain historical. RC.2 is a certification candidate: selecting its exact sidecar version returns zero results, `installableResultsAllowed: false`, and does not read catalog metadata. See the informational [`release-state.json`](../../release-state.json); Finder keeps executable gates independent of that file.
+The operational item lane is the exact certified DeepSeek Harness `0.1.0-rc.8` evidence named by `references/baseline-policy.json`; RC.6 V2 and RC.5 V1 remain historical. RC.2 now has a verified runtime baseline, but it has no separate item authority. Selecting `0.1.1-rc.2` therefore returns `baselineStatus: "baseline-certified"`, `catalogRead: false`, `installableResultsAllowed: false`, zero items, and no installer handoff. This is an intentional authority boundary, not an incomplete catalog read. See the informational [`release-state.json`](../../release-state.json); Finder keeps executable gates independent of that file.
 
 ## One-choice input
 
@@ -29,7 +29,7 @@ node <skill-dir>/scripts/find-themes.mjs \
 
 With `--selection` and no `--catalog`, the client reads the complete canonical HTTPS production directory at `dsh-themes.com` with credentials omitted and redirects refused. It returns `selection.status: "resolved"` only for one match, `not-found` for none, and `ambiguous` with a short list of safe labels for more than one. Ask one concise choice only for `ambiguous`; never guess from popularity or metadata prose. A malformed `#ID` or a legacy/internal code fails before the catalog is read.
 
-Every successful Finder response includes two top-level diagnostics for the calling Agent. `catalogRead` is `true` only after the requested catalog has actually been read. `installableResultsAllowed` is `true` only when the returned `items` contain at least one record whose complete gate produced `installable: true`; it is not a baseline claim or a substitute for checking the selected item. A catalog read error returns no successful response, and the pending RC.2 lane returns both diagnostics as `false` without reading catalog metadata.
+Every successful Finder response includes two top-level diagnostics for the calling Agent. `catalogRead` is `true` only after the requested catalog has actually been read. `installableResultsAllowed` is `true` only when the returned `items` contain at least one record whose complete gate produced `installable: true`; it is not a baseline claim or a substitute for checking the selected item. A catalog read error returns no successful response, and the baseline-certified RC.2 lane returns both diagnostics as `false` without reading catalog metadata because item authority is separate and absent.
 
 For an exact canonical `#ID` classified as `hosted-verified-artifact`, Finder then resolves the trusted detail record and exact-version manifest from the same controlled origin. It cross-checks catalog ID, slug, kind, current version ID, license, controlled download route, complete artifact digest, manifest compatibility, and its digest-pinned copy of the current hosted authority. It creates a minimal technical release record before returning `installable: true`; Manager must independently validate that record against its own authority before use. Any missing, stale, conflicting, redirected, malformed, oversized, or locally unauthorized value fails closed as `exact-hosted-release-record-not-validated`; do not ask the user to repair the tuple.
 
@@ -37,13 +37,13 @@ Before an installer handoff, confirm that the required companion Skill is alread
 
 ```bash
 npx --yes skills@1.5.23 add \
-  https://github.com/LvvUP/dsh-themes-skills/tree/v0.5.2 \
+  https://github.com/LvvUP/dsh-themes-skills/tree/v0.6.0 \
   --skill dsh-theme-finder \
   --skill dsh-theme-manager \
   --skill dsh-community-skin-installer
 ```
 
-This command is available only after the coordinated `v0.5.2` release tag is published. Before then, stop and report that the candidate is review-only. Do not dynamically fetch, synthesize, or import a missing installer, and never substitute a mutable branch, mutable tag, `latest`, or `next`. After the companion Skills are present, keep the beginner-facing request unchanged: the user provides only the confirmed `#ID`.
+This command is available only after the coordinated `v0.6.0` release tag is published. Before then, stop and report that the release is review-only. Do not dynamically fetch, synthesize, or import a missing installer, and never substitute a mutable branch, mutable tag, `latest`, or `next`. After the companion Skills are present, keep the beginner-facing request unchanged: the user provides only the confirmed `#ID`.
 
 An explicitly trusted alternate catalog remains available with `--catalog` for discovery and evidence review. It can never create hosted Manager authority or return a hosted record as installable, even when its fields resemble the production schema. Offline advanced/manual mode may use an absolute local catalog. Only when the user explicitly chooses that mode may you ask for the local catalog or release-record path; compute local artifact hashes yourself and compare them with the pinned record rather than asking the user to transcribe a digest.
 

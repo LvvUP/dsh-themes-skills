@@ -1,4 +1,4 @@
 interface:
   display_name: "DSH Theme Creator"
   short_description: "Create deterministic, declarative DSH theme manifests"
-  default_prompt: "Use $dsh-theme-creator to create and validate a data-only V3 manifest under the pinned certified authoring sidecar; treat the RC.2 lane as certification-pending and non-authoring."
+  default_prompt: "Use $dsh-theme-creator to create and validate a data-only V3 manifest under the pinned certified RC.8 authoring sidecar. RC.2 is baseline-certified but has no authoring authority, so keep RC.2 authoring disabled."

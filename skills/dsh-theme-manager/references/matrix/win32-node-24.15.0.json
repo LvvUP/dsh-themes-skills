@@ -1,0 +1,944 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "rc2-final-baseline-matrix-job",
+  "finalizationInput": true,
+  "promotionAuthority": false,
+  "installable": false,
+  "productionReady": false,
+  "baseline": "@deepseek-ai/dsh@0.1.1-rc.2",
+  "officialSourceCommit": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+  "startedAt": "2026-08-24T05:39:10.359Z",
+  "expected": {
+    "platform": "win32",
+    "nodeVersion": "24.15.0"
+  },
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "nodeVersion": "24.15.0",
+    "github": {
+      "provider": "github-actions",
+      "repository": "LvvUP/dsh-themes-skills",
+      "serverUrl": "https://github.com",
+      "workflow": "RC.2 final baseline certification",
+      "workflowRef": "LvvUP/dsh-themes-skills/.github/workflows/rc2-certification.yml@refs/heads/main",
+      "runId": "32694257969",
+      "runAttempt": "1",
+      "runUrl": "https://github.com/LvvUP/dsh-themes-skills/actions/runs/32694257969/attempts/1",
+      "job": "certify",
+      "ref": "refs/heads/main",
+      "headSha": "cc7546cb5ccd77002713171328972291ceaa12e6",
+      "runnerOs": "Windows",
+      "runnerArch": "X64",
+      "imageOs": "win25-vs2026",
+      "imageVersion": "20260818.207.1"
+    }
+  },
+  "status": "passed",
+  "completedAt": "2026-08-24T05:39:31.143Z",
+  "inputAuthorities": {
+    "candidateSidecarSha256": "9ec94c95dc8d6e4fe1aa7bab00de59d8c7fcb414c7342694a5cde20efd9d5888",
+    "pendingAttestationSha256": "83fbaf94740c32e229d190938dd2699e7d7fbd52d31751976c75f2cc09d89e53",
+    "pendingReceiptSha256": "c49d4665d27fd32b35c9ac55d46477ae799eb685be9ccee772e03c2c207b817a",
+    "lockfileSha256": "b00224c0188c8d4c7b45a3553051da4a4f8e4fd4f89bc98b3a0bb845a3308255",
+    "protocolContractSha256": "08724201ccc9348fd4ea1d760ecbc3ba5a852e42360b8d7233f6429a99665fc3",
+    "selectorContractSha256": "f99f92a530217a6cfca1bad067837a41cd82a1969ab4bb2fb86e35d8e181d201",
+    "selectorCatalogSha256": "663aa5927591ac99076f924ee9cd6f9bd09e6a8a9ee1e6b8b1b0d9e3093df807"
+  },
+  "frozenClosure": {
+    "productionPackages": 505,
+    "dshPackages": 188,
+    "allDshPackagesExactRc2": true
+  },
+  "version": {
+    "stdout": "0.1.1-rc.2",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "registryTarballs": [
+    {
+      "name": "@deepseek-ai/dsh",
+      "version": "0.1.1-rc.2",
+      "bytes": 33675,
+      "sha256": "47ec05f45ada5ab87779ae18a90456b5ebff5421dc0ff5c179677d65e1c16057",
+      "shasum": "1a5112369f1c46b13a6e6f21de8af5e6afd45074"
+    },
+    {
+      "name": "@deepseek-ai/dsh-client-ui-theme",
+      "version": "0.1.1-rc.2",
+      "bytes": 30899,
+      "sha256": "dcfb8ae44877c3cea5fd2848561aff1ac0ff55287f2563f2c84d47727146de64",
+      "shasum": "66ba1f4e89b17a71f24ad940e026d278fdf6acdc"
+    },
+    {
+      "name": "@deepseek-ai/dsh-web-frontend",
+      "version": "0.1.1-rc.2",
+      "bytes": 1409794,
+      "sha256": "e5719353a539ce6e0510ff1a3b430de3ff55eca256c847c98320d4438fef2f27",
+      "shasum": "b504ffa318e6376e01ffb033c852a9423cc38520"
+    }
+  ],
+  "fixedSourceProtocol": {
+    "sourceCommit": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+    "files": [
+      {
+        "surface": "index-injection",
+        "path": "packages/host/webserver/src/injections.ts",
+        "bytes": 4415,
+        "sha256": "00449181439d6a2556aaf5a795657b2647eb14b3d3efeaabef5ab652c6f7d612",
+        "semanticAssertions": 3
+      },
+      {
+        "surface": "transport",
+        "path": "packages/client/web/src/boot.ts",
+        "bytes": 6418,
+        "sha256": "5bd9e22db68e6c8c9aeb04c1ab5f2511dd82153faccd731aee5244a36e281cf6",
+        "semanticAssertions": 3
+      },
+      {
+        "surface": "static-frontend-404",
+        "path": "packages/host/frontend-static/src/index.ts",
+        "bytes": 4558,
+        "sha256": "57c2b2b8ba7fdd60e76026aefeccd05a3ad4ba9299eaf6c8576d80a210f2fdbf",
+        "semanticAssertions": 3
+      },
+      {
+        "surface": "ui-slot-chain",
+        "path": "packages/client/ui-slots/src/index.ts",
+        "bytes": 51423,
+        "sha256": "e6864a24048dc40a4d874694d237713b7803e27c2877566c99050d597d9b4c8c",
+        "semanticAssertions": 3
+      },
+      {
+        "surface": "session-state-wire",
+        "path": "packages/session/session-projection/src/index.ts",
+        "bytes": 22226,
+        "sha256": "7c2fbe4a7280d4c8252dd2593f9a992fcf0e702f6e187c3be7701814db42f5cd",
+        "semanticAssertions": 3
+      },
+      {
+        "surface": "credential-events",
+        "path": "packages/credentials/credentials/src/types.ts",
+        "bytes": 3958,
+        "sha256": "1b5c7de44c05539b697d28b25fd86fead6057094c23a16582adf48e00aad416b",
+        "semanticAssertions": 2
+      },
+      {
+        "surface": "authorization-settled",
+        "path": "packages/credentials/authorization/src/index.ts",
+        "bytes": 19065,
+        "sha256": "51070d0519c0a0f31b2673626c543c3205fe004fe41cbea3f7ea0bf201de33aa",
+        "semanticAssertions": 3
+      },
+      {
+        "surface": "schemastery-function-csp-boundary",
+        "path": "vendor/schemastery/src/index.ts",
+        "bytes": 33177,
+        "sha256": "cf8a4de0481969a1a6d44eac390015f3494be1ce19b84d4fcfb7e93e5072cee5",
+        "semanticAssertions": 1
+      },
+      {
+        "surface": "bwrap-private-pid-proc",
+        "path": "packages/sandbox/sandbox-local/src/profiles.ts",
+        "bytes": 2433,
+        "sha256": "20eddafc9d043f48e4500a6d984ed9782e12d0bfe56f24c169ce0727d525a282",
+        "semanticAssertions": 3
+      },
+      {
+        "surface": "module-boot",
+        "path": "packages/client/modules/src/index.ts",
+        "bytes": 23794,
+        "sha256": "1a4a7b128acc7b3b1e450cf6f0992791f587c08a86e431956e3c213b76c8b0e9",
+        "semanticAssertions": 3
+      }
+    ]
+  },
+  "installedProtocol": {
+    "artifacts": [
+      {
+        "package": "@deepseek-ai/dsh-host-frontend-static",
+        "version": "0.1.1-rc.2",
+        "path": "lib/index.js",
+        "copies": 2,
+        "bytes": 3503,
+        "sha256": "798bd9ddc029cb8ed90b755b414c263f36c76c78c1b0b5efe3c52fce84c5c74b",
+        "semanticAssertions": 2
+      },
+      {
+        "package": "@deepseek-ai/dsh-session-projection",
+        "version": "0.1.1-rc.2",
+        "path": "lib/index.js",
+        "copies": 14,
+        "bytes": 13489,
+        "sha256": "d5d091081fdac7a607d82a2109f69a2f2505a3c8f380b56d7f249d0df13432dc",
+        "semanticAssertions": 2
+      },
+      {
+        "package": "@deepseek-ai/dsh-credentials",
+        "version": "0.1.1-rc.2",
+        "path": "lib/index.js",
+        "copies": 8,
+        "bytes": 7062,
+        "sha256": "df1028a8bc4a0c9bc76fa4c8f1847f42e269260565568a810d491469892e0cf9",
+        "semanticAssertions": 2
+      },
+      {
+        "package": "@deepseek-ai/dsh-authorization",
+        "version": "0.1.1-rc.2",
+        "path": "lib/index.js",
+        "copies": 2,
+        "bytes": 10019,
+        "sha256": "d86547a2f450ff7f58f421f5e2a91eab6abc5ac3dc2ae90cd3785d15547002a3",
+        "semanticAssertions": 2
+      },
+      {
+        "package": "@deepseek-ai/dsh-sandbox-local",
+        "version": "0.1.1-rc.2",
+        "path": "lib/index.js",
+        "copies": 2,
+        "bytes": 21532,
+        "sha256": "68cf34f22cba6d01e9f30d05bf5f07592999bec5828a29a23306dec68a12ef70",
+        "semanticAssertions": 3
+      },
+      {
+        "package": "@deepseek-ai/dsh-client-ui-renderer",
+        "version": "0.1.1-rc.2",
+        "path": "lib/client.js",
+        "copies": 2,
+        "bytes": 39235,
+        "sha256": "4361ea099f70506010482babd7075dc700e0f94485e71f0c989b68e4e278c229",
+        "semanticAssertions": 2
+      },
+      {
+        "package": "@deepseek-ai/dsh-client-ui-layout",
+        "version": "0.1.1-rc.2",
+        "path": "lib/client.js",
+        "copies": 4,
+        "bytes": 19364,
+        "sha256": "16f001f89a9bc19c54cfa90e37cf52e191113af0abe5efd593e57d7ab30060ad",
+        "semanticAssertions": 3
+      },
+      {
+        "package": "@deepseek-ai/dsh-client-ui-conversation",
+        "version": "0.1.1-rc.2",
+        "path": "lib/client.js",
+        "copies": 19,
+        "bytes": 447932,
+        "sha256": "fe448ef7e0b1f3e7713dadfc7eff56b9f80d103a2111dfe69c1735ffd0196d61",
+        "semanticAssertions": 2
+      },
+      {
+        "package": "@deepseek-ai/dsh-client-runtime",
+        "version": "0.1.1-rc.2",
+        "path": "lib/client.js",
+        "copies": 38,
+        "bytes": 392229,
+        "sha256": "13a5fe0ee8cddda2306d302eb0dbfdd601e96d14baeb512867b4b6d1d72f6679",
+        "semanticAssertions": 2
+      },
+      {
+        "package": "@deepseek-ai/schemastery",
+        "version": "3.18.1",
+        "path": "lib/index.mjs",
+        "copies": 90,
+        "bytes": 21065,
+        "sha256": "d23d1f48ea69800c68fc8be592f5d1074c9c764b22f35a1d40b84f5eab39ac00",
+        "semanticAssertions": 1
+      },
+      {
+        "package": "@deepseek-ai/dsh-web-frontend",
+        "version": "0.1.1-rc.2",
+        "path": "dist/assets/index-ClqxG24t.js",
+        "copies": 2,
+        "bytes": 399361,
+        "sha256": "e7e0fe9aa54df4397e42ce3b3231f06c888dca9fef37f171f1748907b5e047e8",
+        "semanticAssertions": 3
+      }
+    ],
+    "selectorCatalog": {
+      "algorithm": "declared-order-selector-lf",
+      "selectors": 13,
+      "sha256": "663aa5927591ac99076f924ee9cd6f9bd09e6a8a9ee1e6b8b1b0d9e3093df807"
+    },
+    "uiSlotChain": "verified-exact-source-and-installed-bundles",
+    "sessionStateWire": "verified-exact-source-and-installed-bundle",
+    "credentialAuthorizationEvents": "verified-exact-source-and-installed-bundles",
+    "bwrapPrivatePidProc": "profile-bytes-verified-non-linux-runner"
+  },
+  "web": {
+    "command": [
+      "web",
+      "--host",
+      "127.0.0.1",
+      "--no-open",
+      "--port",
+      "0"
+    ],
+    "root": {
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 14523,
+      "sha256": "379ef06bba0c211f07a2e4dee2daef76c0f3b26cbf7c18aa1f6f7df8c3664794"
+    },
+    "indexInjection": {
+      "order": [
+        "module-loader-queue",
+        "parser-preload",
+        "__DSH_BOOT__",
+        "vite-module-entry"
+      ],
+      "status": "passed"
+    },
+    "bootGraph": {
+      "rev": "8b2404a806ca",
+      "entries": 42,
+      "requiredIds": [
+        "@deepseek-ai/dsh-client-modules",
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-theme",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ],
+      "bundleSetAlgorithm": "sorted-id-tab-url-tab-bytes-tab-sha256-lf",
+      "bundleSetSha256": "b49567f57d57b61bd1539ec5d547b41bc7bd99db5b4d3bc43964ecbe8ee02334"
+    },
+    "transport": {
+      "optionalGlobal": "__DSH_TRANSPORT__",
+      "loadBundleBranchPresent": true,
+      "servedMode": "http-websocket-default",
+      "explicitTransportExecution": "not-exercised-by-served-web"
+    },
+    "assets": {
+      "main": {
+        "url": "/assets/index-ClqxG24t.js",
+        "bytes": 399361,
+        "sha256": "e7e0fe9aa54df4397e42ce3b3231f06c888dca9fef37f171f1748907b5e047e8",
+        "contentType": "text/javascript; charset=utf-8"
+      },
+      "stylesheets": [
+        {
+          "url": "/assets/vendor-CjyC-hUb.css",
+          "bytes": 29642,
+          "sha256": "8b86a22c0e3551fb5c3ec2af2b2515232614f75fd1e7ce76d62bec9ce12a6686"
+        },
+        {
+          "url": "/assets/index-C6eRlFa6.css",
+          "bytes": 35770,
+          "sha256": "8422b97a5843c0f31bb0e8470febd6adcd5cff78fe4cf22c73b1a29872acced6"
+        }
+      ]
+    },
+    "static404": {
+      "missingAsset": {
+        "status": 404,
+        "bytes": 0
+      },
+      "missingRoute": {
+        "status": 404,
+        "bytes": 0
+      },
+      "htmlFallback": false
+    },
+    "csp": {
+      "responseHeader": null,
+      "schemasteryNewFunctionPresent": true,
+      "strictCspCompatibilityClaimed": false
+    },
+    "serverOutputSha256": "75ce106d6f9a9ada7dca22d94784d1864f7f504cdba674e233e64b464b276cad"
+  },
+  "lifecycleEvidence": {
+    "probeArtifact": {
+      "package": {
+        "name": "@dsh-themes/rc2-lifecycle-probe",
+        "version": "0.0.0"
+      },
+      "packTool": "pnpm@11.7.0",
+      "packageManifestBytes": 302,
+      "packageManifestSha256": "c9f766def7a5b41fed87e5bcff86c3578847fdfbd693d7a49863750d92eaf2ae",
+      "packageManifestCanonicalSha256": "54384095f50befb1102ed9564691a86ea93e21e4b2d4569dca5c22841950b316",
+      "bundlePatchBytes": 3,
+      "bundlePatchSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "artifactBytes": 323,
+      "artifactSha256": "ec93a2a421b9bf1c15bce3791e50b99ce83fa29676a819eb3ed8e660acbef817",
+      "packCommand": {
+        "id": "pack-probe",
+        "argv": [
+          "pnpm",
+          "pack",
+          "--pack-destination",
+          "<isolated-output>"
+        ],
+        "exitCode": 0,
+        "signal": null,
+        "stdoutBytes": 238,
+        "stdoutSha256": "e0030ad60738bdeb74d1d71b128cd4c0aa259ea580154e84c656c919ce4dd6ed",
+        "stderrBytes": 0,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "commands": [
+      {
+        "id": "initial-list",
+        "argv": [
+          "plugin",
+          "--profile",
+          "web",
+          "list",
+          "--json",
+          "--depth",
+          "0"
+        ],
+        "exitCode": 0,
+        "signal": null,
+        "stdoutBytes": 160,
+        "stdoutSha256": "af2bd99c7a91c965c4b2f6f969334e82625f2bcf902875d8fdca554a7760bc8c",
+        "stderrBytes": 0,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "id": "add-exact-artifact",
+        "argv": [
+          "plugin",
+          "--profile",
+          "web",
+          "add",
+          "<probe-artifact>",
+          "--save-exact"
+        ],
+        "exitCode": 0,
+        "signal": null,
+        "stdoutBytes": 466,
+        "stdoutSha256": "5dbef0fd0f31fd760a34d5750f76b82ecd64b361cb2a6c39074b818ff2797a34",
+        "stderrBytes": 0,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "id": "list-after-add",
+        "argv": [
+          "plugin",
+          "--profile",
+          "web",
+          "list",
+          "--json",
+          "--depth",
+          "0"
+        ],
+        "exitCode": 0,
+        "signal": null,
+        "stdoutBytes": 160,
+        "stdoutSha256": "af2bd99c7a91c965c4b2f6f969334e82625f2bcf902875d8fdca554a7760bc8c",
+        "stderrBytes": 0,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "id": "remove-exact-package",
+        "argv": [
+          "plugin",
+          "--profile",
+          "web",
+          "remove",
+          "@dsh-themes/rc2-lifecycle-probe"
+        ],
+        "exitCode": 0,
+        "signal": null,
+        "stdoutBytes": 326,
+        "stdoutSha256": "4f1a58d92f5c2230c0a41a2c93bde33c474100f229fd3c5ee265ce4bbebf2be7",
+        "stderrBytes": 0,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "id": "list-after-rollback",
+        "argv": [
+          "plugin",
+          "--profile",
+          "web",
+          "list",
+          "--json",
+          "--depth",
+          "0"
+        ],
+        "exitCode": 0,
+        "signal": null,
+        "stdoutBytes": 160,
+        "stdoutSha256": "af2bd99c7a91c965c4b2f6f969334e82625f2bcf902875d8fdca554a7760bc8c",
+        "stderrBytes": 0,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "id": "reverse-add-exact-artifact",
+        "argv": [
+          "plugin",
+          "--profile",
+          "web",
+          "add",
+          "<probe-artifact>",
+          "--save-exact"
+        ],
+        "exitCode": 0,
+        "signal": null,
+        "stdoutBytes": 526,
+        "stdoutSha256": "50538c1baa2dcd1461dedec7c9270a1d349702a1aae49aacba5ec15bf0de02b9",
+        "stderrBytes": 0,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "id": "list-after-reverse",
+        "argv": [
+          "plugin",
+          "--profile",
+          "web",
+          "list",
+          "--json",
+          "--depth",
+          "0"
+        ],
+        "exitCode": 0,
+        "signal": null,
+        "stdoutBytes": 160,
+        "stdoutSha256": "af2bd99c7a91c965c4b2f6f969334e82625f2bcf902875d8fdca554a7760bc8c",
+        "stderrBytes": 0,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "id": "final-remove-exact-package",
+        "argv": [
+          "plugin",
+          "--profile",
+          "web",
+          "remove",
+          "@dsh-themes/rc2-lifecycle-probe"
+        ],
+        "exitCode": 0,
+        "signal": null,
+        "stdoutBytes": 326,
+        "stdoutSha256": "fdaa343930df2917b2d1995897619501a40912604bffa142de50d80df940c2dc",
+        "stderrBytes": 0,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "id": "final-list",
+        "argv": [
+          "plugin",
+          "--profile",
+          "web",
+          "list",
+          "--json",
+          "--depth",
+          "0"
+        ],
+        "exitCode": 0,
+        "signal": null,
+        "stdoutBytes": 160,
+        "stdoutSha256": "af2bd99c7a91c965c4b2f6f969334e82625f2bcf902875d8fdca554a7760bc8c",
+        "stderrBytes": 0,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "stateSnapshots": [
+      {
+        "label": "initial-list",
+        "activePackage": null,
+        "profileDirectThemeCount": 0,
+        "pnpmListDiagnosticThemeCount": 0,
+        "lockfileFormatVersion": null,
+        "lockfileImporterCount": 0,
+        "lockfileThemeImporterCount": 0,
+        "lockfileThemeEntryCount": 0,
+        "lockfileThemeImporterSha256": null,
+        "bundleIndex": null,
+        "dependencySpecSha256": null,
+        "lockfileSpecifierSha256": null,
+        "lockfileVersionSha256": null,
+        "dependencyArtifactPathSha256": null,
+        "lockfileSpecifierArtifactPathSha256": null,
+        "lockfileVersionArtifactPathSha256": null,
+        "listStdoutSha256": "af2bd99c7a91c965c4b2f6f969334e82625f2bcf902875d8fdca554a7760bc8c",
+        "profileManifestSha256": "210068ddb9ebc4cdf395ebb53020be6ccaaedb917e74dae16296d62394626398",
+        "lockfileSha256": null,
+        "installedManifestSha256": null,
+        "installedManifestCanonicalSha256": null,
+        "installedBundlePatchSha256": null
+      },
+      {
+        "label": "list-after-add",
+        "activePackage": {
+          "name": "@dsh-themes/rc2-lifecycle-probe",
+          "version": "0.0.0"
+        },
+        "profileDirectThemeCount": 1,
+        "pnpmListDiagnosticThemeCount": 0,
+        "lockfileFormatVersion": "9.0",
+        "lockfileImporterCount": 1,
+        "lockfileThemeImporterCount": 1,
+        "lockfileThemeEntryCount": 1,
+        "lockfileThemeImporterSha256": "9d1df8e619bf0aca1d2a7b760a969a953dc188c85fc2b7d4962cbe3183bf395e",
+        "bundleIndex": 2,
+        "dependencySpecSha256": "1b861e3f1601a64b2e2fde475fc0d1ce9a70b277303d50a10ff3a500a57a79c4",
+        "lockfileSpecifierSha256": "1b861e3f1601a64b2e2fde475fc0d1ce9a70b277303d50a10ff3a500a57a79c4",
+        "lockfileVersionSha256": "07374cb3dc8e9b334700c7b4e47046eb8843f5c8d41e0a721ab7648f67d001a5",
+        "dependencyArtifactPathSha256": "c9d82e7d4e088153bf75148e07c52ce2e4355430723b743f0512fe682c9e8420",
+        "lockfileSpecifierArtifactPathSha256": "c9d82e7d4e088153bf75148e07c52ce2e4355430723b743f0512fe682c9e8420",
+        "lockfileVersionArtifactPathSha256": "c9d82e7d4e088153bf75148e07c52ce2e4355430723b743f0512fe682c9e8420",
+        "listStdoutSha256": "af2bd99c7a91c965c4b2f6f969334e82625f2bcf902875d8fdca554a7760bc8c",
+        "profileManifestSha256": "2c7f7086febe7b76adac1ce8de14b6d3bed0b0ad2ac4e2f1a7192a577fe42881",
+        "lockfileSha256": "945480276016fecf06e44e6f850597e52b1de29f76d46d4801fc55f1f31d13c8",
+        "installedManifestSha256": "2db3aadbded46b132b31f4d666120ca8a177d414db945352f19a23223525340a",
+        "installedManifestCanonicalSha256": "54384095f50befb1102ed9564691a86ea93e21e4b2d4569dca5c22841950b316",
+        "installedBundlePatchSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      {
+        "label": "list-after-rollback",
+        "activePackage": null,
+        "profileDirectThemeCount": 0,
+        "pnpmListDiagnosticThemeCount": 0,
+        "lockfileFormatVersion": "9.0",
+        "lockfileImporterCount": 1,
+        "lockfileThemeImporterCount": 0,
+        "lockfileThemeEntryCount": 0,
+        "lockfileThemeImporterSha256": null,
+        "bundleIndex": null,
+        "dependencySpecSha256": null,
+        "lockfileSpecifierSha256": null,
+        "lockfileVersionSha256": null,
+        "dependencyArtifactPathSha256": null,
+        "lockfileSpecifierArtifactPathSha256": null,
+        "lockfileVersionArtifactPathSha256": null,
+        "listStdoutSha256": "af2bd99c7a91c965c4b2f6f969334e82625f2bcf902875d8fdca554a7760bc8c",
+        "profileManifestSha256": "207430228a8315c78dd73ee35c0f4ca6a2092121880031863ac15b38ed3ce5a8",
+        "lockfileSha256": "3492ab9c3f0f60e5be95d539c003ba81ffd592e255faef07cbdc1f3354b2c960",
+        "installedManifestSha256": null,
+        "installedManifestCanonicalSha256": null,
+        "installedBundlePatchSha256": null
+      },
+      {
+        "label": "list-after-reverse",
+        "activePackage": {
+          "name": "@dsh-themes/rc2-lifecycle-probe",
+          "version": "0.0.0"
+        },
+        "profileDirectThemeCount": 1,
+        "pnpmListDiagnosticThemeCount": 0,
+        "lockfileFormatVersion": "9.0",
+        "lockfileImporterCount": 1,
+        "lockfileThemeImporterCount": 1,
+        "lockfileThemeEntryCount": 1,
+        "lockfileThemeImporterSha256": "9d1df8e619bf0aca1d2a7b760a969a953dc188c85fc2b7d4962cbe3183bf395e",
+        "bundleIndex": 2,
+        "dependencySpecSha256": "1b861e3f1601a64b2e2fde475fc0d1ce9a70b277303d50a10ff3a500a57a79c4",
+        "lockfileSpecifierSha256": "1b861e3f1601a64b2e2fde475fc0d1ce9a70b277303d50a10ff3a500a57a79c4",
+        "lockfileVersionSha256": "07374cb3dc8e9b334700c7b4e47046eb8843f5c8d41e0a721ab7648f67d001a5",
+        "dependencyArtifactPathSha256": "c9d82e7d4e088153bf75148e07c52ce2e4355430723b743f0512fe682c9e8420",
+        "lockfileSpecifierArtifactPathSha256": "c9d82e7d4e088153bf75148e07c52ce2e4355430723b743f0512fe682c9e8420",
+        "lockfileVersionArtifactPathSha256": "c9d82e7d4e088153bf75148e07c52ce2e4355430723b743f0512fe682c9e8420",
+        "listStdoutSha256": "af2bd99c7a91c965c4b2f6f969334e82625f2bcf902875d8fdca554a7760bc8c",
+        "profileManifestSha256": "1037ca7d2b6652b081acce26a49b98f26b9fbce6b24f36413bbb71eb8776b60e",
+        "lockfileSha256": "945480276016fecf06e44e6f850597e52b1de29f76d46d4801fc55f1f31d13c8",
+        "installedManifestSha256": "2db3aadbded46b132b31f4d666120ca8a177d414db945352f19a23223525340a",
+        "installedManifestCanonicalSha256": "54384095f50befb1102ed9564691a86ea93e21e4b2d4569dca5c22841950b316",
+        "installedBundlePatchSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      {
+        "label": "final-list",
+        "activePackage": null,
+        "profileDirectThemeCount": 0,
+        "pnpmListDiagnosticThemeCount": 0,
+        "lockfileFormatVersion": "9.0",
+        "lockfileImporterCount": 1,
+        "lockfileThemeImporterCount": 0,
+        "lockfileThemeEntryCount": 0,
+        "lockfileThemeImporterSha256": null,
+        "bundleIndex": null,
+        "dependencySpecSha256": null,
+        "lockfileSpecifierSha256": null,
+        "lockfileVersionSha256": null,
+        "dependencyArtifactPathSha256": null,
+        "lockfileSpecifierArtifactPathSha256": null,
+        "lockfileVersionArtifactPathSha256": null,
+        "listStdoutSha256": "af2bd99c7a91c965c4b2f6f969334e82625f2bcf902875d8fdca554a7760bc8c",
+        "profileManifestSha256": "207430228a8315c78dd73ee35c0f4ca6a2092121880031863ac15b38ed3ce5a8",
+        "lockfileSha256": "3492ab9c3f0f60e5be95d539c003ba81ffd592e255faef07cbdc1f3354b2c960",
+        "installedManifestSha256": null,
+        "installedManifestCanonicalSha256": null,
+        "installedBundlePatchSha256": null
+      }
+    ],
+    "webLaunches": [
+      {
+        "id": "mode-light",
+        "command": [
+          "web",
+          "--host",
+          "127.0.0.1",
+          "--no-open",
+          "--port",
+          "0"
+        ],
+        "processId": 4296,
+        "preference": "light",
+        "probeActive": true,
+        "profileManifestSha256": "2c7f7086febe7b76adac1ce8de14b6d3bed0b0ad2ac4e2f1a7192a577fe42881",
+        "rootBytes": 14522,
+        "rootSha256": "199624bb4546f23218e6648d5e7d7daad3bf00c7febae1a33f7be2da98dc8542",
+        "bootstrapScriptSha256": "a3dd4b7508f434d8c47e5adf566f645f0bfb983c1e32b95c6e9c62c11b0541ba",
+        "bootstrapExecution": [
+          {
+            "systemDark": false,
+            "colorScheme": "light",
+            "bodyDarkAttribute": false
+          },
+          {
+            "systemDark": true,
+            "colorScheme": "light",
+            "bodyDarkAttribute": false
+          }
+        ],
+        "serverOutputSha256": "3b01cfe4bb8423ef83233c4b282fee688f4e1188698512acae2e3bba33509e28",
+        "settings": {
+          "bytes": 30,
+          "sha256": "bc019b568db4c321bba5ff210cd82c0d97a3f9c7d646b191fc007daa8f2ad2e0"
+        }
+      },
+      {
+        "id": "mode-dark",
+        "command": [
+          "web",
+          "--host",
+          "127.0.0.1",
+          "--no-open",
+          "--port",
+          "0"
+        ],
+        "processId": 8104,
+        "preference": "dark",
+        "probeActive": true,
+        "profileManifestSha256": "2c7f7086febe7b76adac1ce8de14b6d3bed0b0ad2ac4e2f1a7192a577fe42881",
+        "rootBytes": 14521,
+        "rootSha256": "339c0ea6a1f5abc9a3835af4e51d21cf9d4c19d0fdc4cbafdebde62cf8f5cfed",
+        "bootstrapScriptSha256": "7a8d9dad2a4cc35ea7139ee64489f1ad0f9532558213b447d75345b521e9def5",
+        "bootstrapExecution": [
+          {
+            "systemDark": false,
+            "colorScheme": "dark",
+            "bodyDarkAttribute": true
+          },
+          {
+            "systemDark": true,
+            "colorScheme": "dark",
+            "bodyDarkAttribute": true
+          }
+        ],
+        "serverOutputSha256": "c69f502d855493cf2d3ea083090865a350d1013125661a2f0638fb0f986182a3",
+        "settings": {
+          "bytes": 29,
+          "sha256": "b517348e70803a8d672be5e3c282100e4a867cb7d291e2a111aff652a7d6202c"
+        }
+      },
+      {
+        "id": "mode-system-first-cold-start",
+        "command": [
+          "web",
+          "--host",
+          "127.0.0.1",
+          "--no-open",
+          "--port",
+          "0"
+        ],
+        "processId": 7068,
+        "preference": "system",
+        "probeActive": true,
+        "profileManifestSha256": "2c7f7086febe7b76adac1ce8de14b6d3bed0b0ad2ac4e2f1a7192a577fe42881",
+        "rootBytes": 14523,
+        "rootSha256": "379ef06bba0c211f07a2e4dee2daef76c0f3b26cbf7c18aa1f6f7df8c3664794",
+        "bootstrapScriptSha256": "da281fe78bcb2e5eadfa2efbcfae5c8280fee0a3b0535c2764488ebd2e65bd49",
+        "bootstrapExecution": [
+          {
+            "systemDark": false,
+            "colorScheme": "light",
+            "bodyDarkAttribute": false
+          },
+          {
+            "systemDark": true,
+            "colorScheme": "dark",
+            "bodyDarkAttribute": true
+          }
+        ],
+        "serverOutputSha256": "218318cc25f29bed5f2ce2620f44e1be41fafa7af805dbd4f53316f34b4ac1b3",
+        "settings": {
+          "bytes": 31,
+          "sha256": "b2e744df7624f4c86db28cd7dbcf69abae626b19105395cdb269312a4065e328"
+        }
+      },
+      {
+        "id": "mode-system-second-cold-start",
+        "command": [
+          "web",
+          "--host",
+          "127.0.0.1",
+          "--no-open",
+          "--port",
+          "0"
+        ],
+        "processId": 6680,
+        "preference": "system",
+        "probeActive": true,
+        "profileManifestSha256": "2c7f7086febe7b76adac1ce8de14b6d3bed0b0ad2ac4e2f1a7192a577fe42881",
+        "rootBytes": 14523,
+        "rootSha256": "379ef06bba0c211f07a2e4dee2daef76c0f3b26cbf7c18aa1f6f7df8c3664794",
+        "bootstrapScriptSha256": "da281fe78bcb2e5eadfa2efbcfae5c8280fee0a3b0535c2764488ebd2e65bd49",
+        "bootstrapExecution": [
+          {
+            "systemDark": false,
+            "colorScheme": "light",
+            "bodyDarkAttribute": false
+          },
+          {
+            "systemDark": true,
+            "colorScheme": "dark",
+            "bodyDarkAttribute": true
+          }
+        ],
+        "serverOutputSha256": "62338781ce3013c38f1102da8c7074ed066d86626026a42bc5761bd7cb5f25b1",
+        "settings": {
+          "bytes": 31,
+          "sha256": "b2e744df7624f4c86db28cd7dbcf69abae626b19105395cdb269312a4065e328"
+        }
+      },
+      {
+        "id": "rollback-built-in-cold-start",
+        "command": [
+          "web",
+          "--host",
+          "127.0.0.1",
+          "--no-open",
+          "--port",
+          "0"
+        ],
+        "processId": 5168,
+        "preference": "system",
+        "probeActive": false,
+        "profileManifestSha256": "207430228a8315c78dd73ee35c0f4ca6a2092121880031863ac15b38ed3ce5a8",
+        "rootBytes": 14523,
+        "rootSha256": "379ef06bba0c211f07a2e4dee2daef76c0f3b26cbf7c18aa1f6f7df8c3664794",
+        "bootstrapScriptSha256": "da281fe78bcb2e5eadfa2efbcfae5c8280fee0a3b0535c2764488ebd2e65bd49",
+        "bootstrapExecution": [
+          {
+            "systemDark": false,
+            "colorScheme": "light",
+            "bodyDarkAttribute": false
+          },
+          {
+            "systemDark": true,
+            "colorScheme": "dark",
+            "bodyDarkAttribute": true
+          }
+        ],
+        "serverOutputSha256": "4034dcffdb5672ac9e1fd2cb707d8ca040a7bbcdcf010c430e616e7f7d5cb3c2",
+        "settings": {
+          "bytes": 31,
+          "sha256": "b2e744df7624f4c86db28cd7dbcf69abae626b19105395cdb269312a4065e328"
+        }
+      },
+      {
+        "id": "reverse-installed-cold-start",
+        "command": [
+          "web",
+          "--host",
+          "127.0.0.1",
+          "--no-open",
+          "--port",
+          "0"
+        ],
+        "processId": 8904,
+        "preference": "system",
+        "probeActive": true,
+        "profileManifestSha256": "1037ca7d2b6652b081acce26a49b98f26b9fbce6b24f36413bbb71eb8776b60e",
+        "rootBytes": 14523,
+        "rootSha256": "379ef06bba0c211f07a2e4dee2daef76c0f3b26cbf7c18aa1f6f7df8c3664794",
+        "bootstrapScriptSha256": "da281fe78bcb2e5eadfa2efbcfae5c8280fee0a3b0535c2764488ebd2e65bd49",
+        "bootstrapExecution": [
+          {
+            "systemDark": false,
+            "colorScheme": "light",
+            "bodyDarkAttribute": false
+          },
+          {
+            "systemDark": true,
+            "colorScheme": "dark",
+            "bodyDarkAttribute": true
+          }
+        ],
+        "serverOutputSha256": "14fb3f8753b44a95696e349c42617eca8dc3ef53641a79be4e866b178a27aa51",
+        "settings": {
+          "bytes": 31,
+          "sha256": "b2e744df7624f4c86db28cd7dbcf69abae626b19105395cdb269312a4065e328"
+        }
+      }
+    ],
+    "negativeEvidence": [
+      {
+        "id": "malformed-evidence-fails-closed",
+        "mutation": "mutable-selector-latest",
+        "inputBytes": 4452,
+        "inputSha256": "de099db1a3d98ccff3e4faed43bcfa7303b34381f85cd0aeb7bfcb2484587c4e",
+        "expectedStderrIncludes": "mutable version selector refused",
+        "command": {
+          "id": "malformed-evidence-fails-closed",
+          "argv": [
+            "validate-baseline-candidate.mjs",
+            "--input",
+            "<isolated-input>"
+          ],
+          "exitCode": 1,
+          "signal": null,
+          "stdoutBytes": 0,
+          "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderrBytes": 1308,
+          "stderrSha256": "a2af8d9b509a7edfd98a11814614ad316523d0898980c2bddb02ea87e7a8d9c5"
+        }
+      },
+      {
+        "id": "mixed-version-evidence-fails-closed",
+        "mutation": "dsh-artifact-version-0.1.0-rc.8",
+        "inputBytes": 4456,
+        "inputSha256": "d482b604d9e7ea7ab1d88acbf657561e6bef2eb1aa6d4e52c22908653f35c2c8",
+        "expectedStderrIncludes": "input sidecar is not the pinned candidate evidence",
+        "command": {
+          "id": "mixed-version-evidence-fails-closed",
+          "argv": [
+            "validate-baseline-candidate.mjs",
+            "--input",
+            "<isolated-input>"
+          ],
+          "exitCode": 1,
+          "signal": null,
+          "stdoutBytes": 0,
+          "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderrBytes": 724,
+          "stderrSha256": "27f8d98bf46dd5575abee3df402d32cff00cd8d1f1cd908c42b5645e2f72e2a1"
+        }
+      }
+    ]
+  },
+  "acceptance": {
+    "exactReleaseAndClosure": "passed",
+    "exactRegistryTarballs": "passed",
+    "fixedSourceProtocol": "passed",
+    "webNoOpenLoopback": "passed",
+    "recursiveClientBundlesAndMime": "passed",
+    "indexInjectionOrder": "passed",
+    "transportBoundary": "passed-with-explicit-served-mode-scope",
+    "staticFrontend404": "passed",
+    "selectorAndUiSlotContract": "passed",
+    "sessionStateWireContract": "passed",
+    "credentialAuthorizationEvents": "passed",
+    "cspBoundary": "passed-with-strict-csp-not-claimed",
+    "bwrapProfile": "passed-static-contract",
+    "installListRemove": "passed-with-list-rendering-diagnostic-only",
+    "lightDarkSystem": "passed",
+    "managedColdRestart": "passed",
+    "rollbackReverse": "passed",
+    "malformedEvidenceFailsClosed": "passed",
+    "mixedVersionEvidenceFailsClosed": "passed"
+  },
+  "limitation": "This is one matrix input. It cannot authorize a baseline or an item by itself. Finalization requires the exact 6/6 GitHub Actions receipt set; theme, skin, and extension installability remains a separate item-level authority."
+}

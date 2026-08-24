@@ -7,7 +7,7 @@ description: Inspect pinned community-skin evidence and, only after certified ba
 
 Inspect only records admitted by the bundled catalog. This is a separate trust lane from `dsh-theme-manager`: Manager handles hosted, declarative `@dsh-themes/*` artifacts, while this Skill handles exactly 11 runtime-verified community records: Maid Atelier plus ten dsh-web-ui appearances. Installation is available only when the bundled item, sanitized receipt, final Manager gate, explicit consent, and selected website record all validate together.
 
-Read `references/baseline-policy.json` before inspection. The certified lane is operational; the RC.2 candidate has an item-level pending receipt with 0/11 verified records and 0/6 matrix jobs. Inspect it with `scripts/inspect-baseline.mjs candidate`; it is never an installation receipt.
+Read `references/baseline-policy.json` before inspection. The certified RC.8 item lane is operational. RC.2 has a verified six-job runtime baseline, but the separate RC.2 community lane remains **0/11 verified, 0 installable**. Inspect it with `scripts/inspect-baseline.mjs certifiedRuntimeBaseline`; baseline certification is never an item installation receipt. The old 0/6 candidate receipt is immutable historical-at-capture evidence, not current runtime status.
 
 ## Beginner-facing input
 

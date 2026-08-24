@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "evidenceKind": "rc2-final-baseline-certification-receipt",
+  "status": "baseline-certified",
+  "productionReady": true,
+  "installableItems": false,
+  "itemInstallability": "separate-authority-required",
+  "baseline": "@deepseek-ai/dsh@0.1.1-rc.2",
+  "officialSourceCommit": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+  "issuedAt": "2026-08-24T05:40:04.083Z",
+  "issuer": {
+    "provider": "github-actions",
+    "repository": "LvvUP/dsh-themes-skills",
+    "serverUrl": "https://github.com",
+    "workflow": "RC.2 final baseline certification",
+    "workflowRef": "LvvUP/dsh-themes-skills/.github/workflows/rc2-certification.yml@refs/heads/main",
+    "runId": "32694257969",
+    "runAttempt": "1",
+    "runUrl": "https://github.com/LvvUP/dsh-themes-skills/actions/runs/32694257969/attempts/1",
+    "job": "finalize",
+    "ref": "refs/heads/main",
+    "headSha": "cc7546cb5ccd77002713171328972291ceaa12e6"
+  },
+  "attestation": {
+    "path": "attestation.dsh-0.1.1-rc.2.final.json",
+    "sha256": "4c41e96827bb03eb7c4d6138f5723864e91f0324b1aec8bcf3b3a1bc47ba3fb7"
+  },
+  "matrix": {
+    "status": "passed",
+    "requiredJobs": 6,
+    "completedJobs": 6
+  },
+  "lifecycle": {
+    "status": "passed",
+    "scenarioClasses": 6,
+    "matrixExecutions": 36,
+    "negativeEvidenceCases": 2
+  },
+  "limitation": "This receipt certifies only the fixed RC.2 baseline. It does not make any theme, skin, or extension installable; each item still requires a separate immutable item-level authority."
+}
