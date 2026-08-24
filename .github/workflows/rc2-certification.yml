@@ -1,0 +1,178 @@
+name: RC.2 final baseline certification
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rc2-final-baseline-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  certify:
+    name: Final baseline evidence (${{ matrix.platform }}, Node ${{ matrix.node }})
+    if: ${{ github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            node: 22.19.0
+          - os: ubuntu-latest
+            platform: linux
+            node: 24.15.0
+          - os: macos-latest
+            platform: darwin
+            node: 22.19.0
+          - os: macos-latest
+            platform: darwin
+            node: 24.15.0
+          - os: windows-latest
+            platform: win32
+            node: 22.19.0
+          - os: windows-latest
+            platform: win32
+            node: 24.15.0
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    env:
+      RECEIPT_PATH: ${{ runner.temp }}/rc2-final-${{ matrix.platform }}-node-${{ matrix.node }}.json
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Install the exact RC.2 closure without lifecycle scripts
+        shell: bash
+        working-directory: skills/dsh-theme-manager/runtime-dsh-0.1.1-rc.2
+        run: |
+          corepack enable
+          corepack pnpm install --frozen-lockfile --ignore-scripts
+      - name: Validate the fixed contract and exercise the RC.2 web baseline
+        shell: bash
+        run: >-
+          node skills/dsh-theme-manager/runtime-dsh-0.1.1-rc.2/run-final-matrix.mjs
+          --receipt "$RECEIPT_PATH"
+          --expected-platform "${{ matrix.platform }}"
+          --expected-node "${{ matrix.node }}"
+      - name: Upload the non-promotional matrix receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: rc2-final-matrix-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.platform }}-node-${{ matrix.node }}
+          path: ${{ env.RECEIPT_PATH }}
+          if-no-files-found: error
+          retention-days: 30
+
+  finalize:
+    name: Bind the complete six-job evidence set
+    needs: certify
+    if: ${{ needs.certify.result == 'success' && github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+      artifact-metadata: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FINAL_ARCHIVE_PATH: ${{ runner.temp }}/rc2-final-release/rc2-final-baseline-certification-${{ github.sha }}-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}.tar.gz
+      FINAL_BUNDLE_DIR: ${{ runner.temp }}/rc2-final-release/bundle
+      FINAL_PROVENANCE_PATH: ${{ runner.temp }}/rc2-final-release/rc2-final-baseline-certification-${{ github.sha }}-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}.tar.gz.sigstore.json
+      FINAL_RELEASE_DIR: ${{ runner.temp }}/rc2-final-release
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 24.15.0
+      - name: Install the exact RC.2 closure without lifecycle scripts
+        working-directory: skills/dsh-theme-manager/runtime-dsh-0.1.1-rc.2
+        run: |
+          corepack enable
+          corepack pnpm install --frozen-lockfile --ignore-scripts
+      - name: Download all six matrix receipts
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+        with:
+          pattern: rc2-final-matrix-${{ github.run_id }}-${{ github.run_attempt }}-*
+          path: ${{ runner.temp }}/rc2-final-receipts
+          merge-multiple: true
+      - name: Issue the acyclic final evidence bundle
+        run: >-
+          node skills/dsh-theme-manager/scripts/finalize-rc2-certification.mjs
+          --receipts "${{ runner.temp }}/rc2-final-receipts"
+          --output "$FINAL_BUNDLE_DIR"
+      - name: Revalidate the self-contained final evidence bundle
+        run: >-
+          node skills/dsh-theme-manager/scripts/validate-rc2-final-certification.mjs
+          --bundle "$FINAL_BUNDLE_DIR"
+      - name: Create the immutable final bundle archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar --sort=name --mtime='UTC 1970-01-01' --owner=0 --group=0 \
+            --numeric-owner --pax-option=delete=atime,delete=ctime \
+            -cf - -C "$FINAL_BUNDLE_DIR" . | gzip -n > "$FINAL_ARCHIVE_PATH"
+      - name: Sign the final bundle with GitHub artifact provenance
+        id: final-bundle-provenance
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
+        with:
+          subject-path: ${{ env.FINAL_ARCHIVE_PATH }}
+      - name: Preserve and verify the detached Sigstore provenance
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp "${{ steps.final-bundle-provenance.outputs.bundle-path }}" "$FINAL_PROVENANCE_PATH"
+          node skills/dsh-theme-manager/scripts/verify-rc2-final-provenance.mjs \
+            --artifact "$FINAL_ARCHIVE_PATH" \
+            --bundle "$FINAL_PROVENANCE_PATH" \
+            --run-id "${{ github.run_id }}" \
+            --run-attempt "${{ github.run_attempt }}" \
+            --source-sha "${{ github.sha }}"
+      - name: Upload final evidence, archive, and detached provenance
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: rc2-final-baseline-certification-${{ github.sha }}-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: ${{ env.FINAL_RELEASE_DIR }}
+          if-no-files-found: error
+          retention-days: 90
+
+  verify-downloaded-provenance:
+    name: Verify the downloaded final provenance
+    needs: finalize
+    if: ${{ needs.finalize.result == 'success' && github.ref == 'refs/heads/main' }}
+    permissions:
+      actions: read
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - name: Download the exact final artifact from this workflow attempt
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+        with:
+          pattern: rc2-final-baseline-certification-${{ github.sha }}-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/rc2-final-download
+          merge-multiple: true
+      - name: Verify the downloaded archive against GitHub's signed provenance
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          node skills/dsh-theme-manager/scripts/verify-rc2-final-provenance.mjs
+          --artifact "${{ runner.temp }}/rc2-final-download/rc2-final-baseline-certification-${{ github.sha }}-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}.tar.gz"
+          --bundle "${{ runner.temp }}/rc2-final-download/rc2-final-baseline-certification-${{ github.sha }}-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}.tar.gz.sigstore.json"
+          --run-id "${{ github.run_id }}"
+          --run-attempt "${{ github.run_attempt }}"
+          --source-sha "${{ github.sha }}"

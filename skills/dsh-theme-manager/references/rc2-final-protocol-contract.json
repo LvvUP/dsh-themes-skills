@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "baseline": "@deepseek-ai/dsh@0.1.1-rc.2",
+  "officialRelease": {
+    "tag": "dsh-v0.1.1-rc.2",
+    "sourceCommit": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+    "rawBaseUrl": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/b150a551b8d465e31e418e1b2eaf5e79bbb7d28e/"
+  },
+  "sourceFiles": [
+    {
+      "surface": "index-injection",
+      "path": "packages/host/webserver/src/injections.ts",
+      "bytes": 4415,
+      "sha256": "00449181439d6a2556aaf5a795657b2647eb14b3d3efeaabef5ab652c6f7d612",
+      "requiredSubstrings": [
+        "export type IndexInjection =",
+        "{ kind: 'script-src'; placement: IndexInjectionPlacement; src: string }",
+        "export function renderIndexInjections"
+      ]
+    },
+    {
+      "surface": "transport",
+      "path": "packages/client/web/src/boot.ts",
+      "bytes": 6418,
+      "sha256": "5bd9e22db68e6c8c9aeb04c1ab5f2511dd82153faccd731aee5244a36e281cf6",
+      "requiredSubstrings": [
+        "__DSH_TRANSPORT__",
+        "loadBundle",
+        "prefetchImmediateTier"
+      ]
+    },
+    {
+      "surface": "static-frontend-404",
+      "path": "packages/host/frontend-static/src/index.ts",
+      "bytes": 4558,
+      "sha256": "57c2b2b8ba7fdd60e76026aefeccd05a3ad4ba9299eaf6c8576d80a210f2fdbf",
+      "requiredSubstrings": [
+        "missing paths return 404",
+        "res.writeHead(404)",
+        "registerFallback"
+      ]
+    },
+    {
+      "surface": "ui-slot-chain",
+      "path": "packages/client/ui-slots/src/index.ts",
+      "bytes": 51423,
+      "sha256": "e6864a24048dc40a4d874694d237713b7803e27c2877566c99050d597d9b4c8c",
+      "requiredSubstrings": [
+        "Declaring is claiming",
+        "is not declared (a parent entry's children table must declare it)",
+        "same-priority second registration throws"
+      ]
+    },
+    {
+      "surface": "session-state-wire",
+      "path": "packages/session/session-projection/src/index.ts",
+      "bytes": 22226,
+      "sha256": "7c2fbe4a7280d4c8252dd2593f9a992fcf0e702f6e187c3be7701814db42f5cd",
+      "requiredSubstrings": [
+        "stateSchema: ZodType<S>",
+        "viewSchema: ZodType<SessionProjectionMap[K]>",
+        "viewSchema.parse"
+      ]
+    },
+    {
+      "surface": "credential-events",
+      "path": "packages/credentials/credentials/src/types.ts",
+      "bytes": 3958,
+      "sha256": "1b5c7de44c05539b697d28b25fd86fead6057094c23a16582adf48e00aad416b",
+      "requiredSubstrings": [
+        "'credentials/reference-updated'",
+        "'credentials/record-updated'"
+      ]
+    },
+    {
+      "surface": "authorization-settled",
+      "path": "packages/credentials/authorization/src/index.ts",
+      "bytes": 19065,
+      "sha256": "51070d0519c0a0f31b2673626c543c3205fe004fe41cbea3f7ea0bf201de33aa",
+      "requiredSubstrings": [
+        "'authorization/settled'",
+        "listener failures",
+        "settle(key: CredentialKey"
+      ]
+    },
+    {
+      "surface": "schemastery-function-csp-boundary",
+      "path": "vendor/schemastery/src/index.ts",
+      "bytes": 33177,
+      "sha256": "cf8a4de0481969a1a6d44eac390015f3494be1ce19b84d4fcfb7e93e5072cee5",
+      "requiredSubstrings": [
+        "new Function('return ' + schema.callback)()"
+      ]
+    },
+    {
+      "surface": "bwrap-private-pid-proc",
+      "path": "packages/sandbox/sandbox-local/src/profiles.ts",
+      "bytes": 2433,
+      "sha256": "20eddafc9d043f48e4500a6d984ed9782e12d0bfe56f24c169ce0727d525a282",
+      "requiredSubstrings": [
+        "'--unshare-pid'",
+        "'--proc', '/proc'",
+        "'--die-with-parent'"
+      ]
+    },
+    {
+      "surface": "module-boot",
+      "path": "packages/client/modules/src/index.ts",
+      "bytes": 23794,
+      "sha256": "1a4a7b128acc7b3b1e450cf6f0992791f587c08a86e431956e3c213b76c8b0e9",
+      "requiredSubstrings": [
+        "export function bootInjections",
+        "kind: 'script-src'",
+        "createClientModuleSystem"
+      ]
+    }
+  ],
+  "installedArtifacts": [
+    {
+      "package": "@deepseek-ai/dsh-host-frontend-static",
+      "version": "0.1.1-rc.2",
+      "path": "lib/index.js",
+      "bytes": 3503,
+      "sha256": "798bd9ddc029cb8ed90b755b414c263f36c76c78c1b0b5efe3c52fce84c5c74b",
+      "requiredSubstrings": ["res.writeHead(404)", "registerFallback"]
+    },
+    {
+      "package": "@deepseek-ai/dsh-session-projection",
+      "version": "0.1.1-rc.2",
+      "path": "lib/index.js",
+      "bytes": 13489,
+      "sha256": "d5d091081fdac7a607d82a2109f69a2f2505a3c8f380b56d7f249d0df13432dc",
+      "requiredSubstrings": ["stateSchema", "viewSchema.parse"]
+    },
+    {
+      "package": "@deepseek-ai/dsh-credentials",
+      "version": "0.1.1-rc.2",
+      "path": "lib/index.js",
+      "bytes": 7062,
+      "sha256": "df1028a8bc4a0c9bc76fa4c8f1847f42e269260565568a810d491469892e0cf9",
+      "requiredSubstrings": ["credentials/reference-updated", "credentials/record-updated"]
+    },
+    {
+      "package": "@deepseek-ai/dsh-authorization",
+      "version": "0.1.1-rc.2",
+      "path": "lib/index.js",
+      "bytes": 10019,
+      "sha256": "d86547a2f450ff7f58f421f5e2a91eab6abc5ac3dc2ae90cd3785d15547002a3",
+      "requiredSubstrings": ["authorization/settled", "listener failures"]
+    },
+    {
+      "package": "@deepseek-ai/dsh-sandbox-local",
+      "version": "0.1.1-rc.2",
+      "path": "lib/index.js",
+      "bytes": 21532,
+      "sha256": "68cf34f22cba6d01e9f30d05bf5f07592999bec5828a29a23306dec68a12ef70",
+      "requiredSubstrings": ["--unshare-pid", "--proc", "/proc"]
+    },
+    {
+      "package": "@deepseek-ai/dsh-client-ui-renderer",
+      "version": "0.1.1-rc.2",
+      "path": "lib/client.js",
+      "bytes": 39235,
+      "sha256": "4361ea099f70506010482babd7075dc700e0f94485e71f0c989b68e4e278c229",
+      "requiredSubstrings": ["\"data-slot\": slotKey", "\"data-slot\": \"root\""]
+    },
+    {
+      "package": "@deepseek-ai/dsh-client-ui-layout",
+      "version": "0.1.1-rc.2",
+      "path": "lib/client.js",
+      "bytes": 19364,
+      "sha256": "16f001f89a9bc19c54cfa90e37cf52e191113af0abe5efd593e57d7ab30060ad",
+      "requiredSubstrings": ["renderSlot(\"sidebar\"", "renderSlot(\"conversation\"", "renderSlot(\"details\""]
+    },
+    {
+      "package": "@deepseek-ai/dsh-client-ui-conversation",
+      "version": "0.1.1-rc.2",
+      "path": "lib/client.js",
+      "bytes": 447932,
+      "sha256": "fe448ef7e0b1f3e7713dadfc7eff56b9f80d103a2111dfe69c1735ffd0196d61",
+      "requiredSubstrings": ["\"data-composer-card\": true", "name: \"conversation\""]
+    },
+    {
+      "package": "@deepseek-ai/dsh-client-runtime",
+      "version": "0.1.1-rc.2",
+      "path": "lib/client.js",
+      "bytes": 392229,
+      "sha256": "13a5fe0ee8cddda2306d302eb0dbfdd601e96d14baeb512867b4b6d1d72f6679",
+      "requiredSubstrings": ["ctx-level renderSlot only renders 'root'", "child slots render through the component props face"]
+    },
+    {
+      "package": "@deepseek-ai/schemastery",
+      "version": "3.18.1",
+      "path": "lib/index.mjs",
+      "bytes": 21065,
+      "sha256": "d23d1f48ea69800c68fc8be592f5d1074c9c764b22f35a1d40b84f5eab39ac00",
+      "requiredSubstrings": ["new Function(\"return \" + schema.callback)()"]
+    },
+    {
+      "package": "@deepseek-ai/dsh-web-frontend",
+      "version": "0.1.1-rc.2",
+      "path": "dist/assets/index-ClqxG24t.js",
+      "bytes": 399361,
+      "sha256": "e7e0fe9aa54df4397e42ce3b3231f06c888dca9fef37f171f1748907b5e047e8",
+      "requiredSubstrings": ["__DSH_TRANSPORT__", "__DSH_BOOT__", "loadBundle"]
+    }
+  ],
+  "lifecycleAcceptance": {
+    "schemaVersion": 1,
+    "probePackage": {
+      "name": "@dsh-themes/rc2-lifecycle-probe",
+      "version": "0.0.0",
+      "packageManifest": {
+        "name": "@dsh-themes/rc2-lifecycle-probe",
+        "version": "0.0.0",
+        "description": "Non-promotional RC.2 lifecycle certification probe",
+        "license": "UNLICENSED",
+        "private": true,
+        "files": ["cordis.patch.yml"],
+        "dsh": {
+          "bundle": {
+            "patch": "./cordis.patch.yml"
+          }
+        }
+      },
+      "bundlePatch": "[]\n",
+      "packTool": "pnpm@11.7.0"
+    },
+    "themePreferences": ["light", "dark", "system"],
+    "commandSequence": [
+      "initial-list",
+      "add-exact-artifact",
+      "list-after-add",
+      "remove-exact-package",
+      "list-after-rollback",
+      "reverse-add-exact-artifact",
+      "list-after-reverse",
+      "final-remove-exact-package",
+      "final-list"
+    ],
+    "webLaunchSequence": [
+      "mode-light",
+      "mode-dark",
+      "mode-system-first-cold-start",
+      "mode-system-second-cold-start",
+      "rollback-built-in-cold-start",
+      "reverse-installed-cold-start"
+    ],
+    "negativeEvidenceCases": [
+      {
+        "id": "malformed-evidence-fails-closed",
+        "mutation": "mutable-selector-latest",
+        "expectedStderrIncludes": "mutable version selector refused"
+      },
+      {
+        "id": "mixed-version-evidence-fails-closed",
+        "mutation": "dsh-artifact-version-0.1.0-rc.8",
+        "expectedStderrIncludes": "input sidecar is not the pinned candidate evidence"
+      }
+    ]
+  },
+  "cspBoundary": {
+    "expectedServedContentSecurityPolicy": null,
+    "strictCspCompatibilityClaimed": false,
+    "reason": "The exact RC.2 server does not emit a CSP header and the exact Schemastery closure still reconstructs callbacks with new Function. The final receipt records this boundary instead of claiming strict-CSP compatibility."
+  }
+}
