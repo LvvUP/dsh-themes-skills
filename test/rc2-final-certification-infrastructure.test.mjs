@@ -448,12 +448,16 @@ test('matrix state failures expose only sanitized invariant diagnostics', async 
 
   assert.match(source, /checks=\$\{JSON\.stringify\(checks\)\}/);
   for (const key of [
-    'directThemeCount',
+    'profileDirectThemeCount',
+    'pnpmListDiagnosticThemeCount',
     'listedProbePresent',
     'listedVersionExact',
     'dependencySpecString',
     'dependencySpecFile',
     'dependencySpecTarball',
+    'lockfileDirectThemeCount',
+    'lockfileSpecifierExact',
+    'lockfileVersionExact',
     'bundleIndexCount',
     'installedManifestPresent',
     'installedBundlePatchPresent',
@@ -477,14 +481,27 @@ test('matrix listing binds lockfile resolution and physical installation separat
   for (const source of [runnerSource, evidenceSource]) {
     assert.match(
       source,
-      /'list',[\s\S]{0,160}'--json',[\s\S]{0,160}'--lockfile-only',[\s\S]{0,120}'--depth',[\s\S]{0,80}'0'/
+      /'list',[\s\S]{0,160}'--json',[\s\S]{0,120}'--depth',[\s\S]{0,80}'0'/
     );
+    assert.doesNotMatch(source, /'--lockfile-only'/);
   }
   assert.match(runnerSource, /installedManifest\?\.name === EXPECTED_LIFECYCLE_PROBE\.name/);
   assert.match(runnerSource, /installedManifest\?\.version === EXPECTED_LIFECYCLE_PROBE\.version/);
+  assert.match(runnerSource, /parseYamlDocument\(bytes\.toString\('utf8'\)/);
+  assert.match(runnerSource, /document\.toJS\(\{ maxAliasCount: 0 \}\)/);
+  assert.match(runnerSource, /lockfileProbe\.specifier === dependencySpec/);
+  assert.match(runnerSource, /lockfileProbe\.version === dependencySpec/);
   assert.match(evidenceSource, /state\.installedManifestSha256/);
   assert.match(evidenceSource, /state\.installedBundlePatchSha256/);
   assert.match(evidenceSource, /state\.lockfileSha256/);
+  assert.match(
+    evidenceSource,
+    /state\.lockfileSpecifierSha256\s*!==\s*state\.dependencySpecSha256/
+  );
+  assert.match(
+    evidenceSource,
+    /command-success-json-only-non-authoritative/
+  );
   assert.match(
     evidenceSource,
     /installed\.installedManifestSha256\s*!==\s*evidence\.probeArtifact\.packageManifestSha256/

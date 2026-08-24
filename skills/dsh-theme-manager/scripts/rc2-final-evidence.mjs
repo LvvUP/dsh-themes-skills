@@ -52,7 +52,7 @@ export const EXPECTED_ACCEPTANCE = Object.freeze({
   credentialAuthorizationEvents: 'passed',
   cspBoundary: 'passed-with-strict-csp-not-claimed',
   bwrapProfile: 'passed-static-contract',
-  installListRemove: 'passed',
+  installListRemove: 'passed-with-list-rendering-diagnostic-only',
   lightDarkSystem: 'passed',
   managedColdRestart: 'passed',
   rollbackReverse: 'passed',
@@ -436,7 +436,6 @@ function expectedLifecycleCommandArgs(id) {
       'web',
       'list',
       '--json',
-      '--lockfile-only',
       '--depth',
       '0',
     ];
@@ -469,9 +468,15 @@ function assertLifecycleState(state, { label, active }) {
     [
       'label',
       'activePackage',
-      'directThemeCount',
+      'profileDirectThemeCount',
+      'pnpmListDiagnosticThemeCount',
+      'lockfileFormatVersion',
+      'lockfileImporter',
+      'lockfileDirectThemeCount',
       'bundleIndex',
       'dependencySpecSha256',
+      'lockfileSpecifierSha256',
+      'lockfileVersionSha256',
       'listStdoutSha256',
       'profileManifestSha256',
       'lockfileSha256',
@@ -482,21 +487,33 @@ function assertLifecycleState(state, { label, active }) {
   );
   if (
     state.label !== label ||
-    state.directThemeCount !== (active ? 1 : 0) ||
+    state.profileDirectThemeCount !== (active ? 1 : 0) ||
+    !Number.isSafeInteger(state.pnpmListDiagnosticThemeCount) ||
+    state.pnpmListDiagnosticThemeCount < 0 ||
+    state.pnpmListDiagnosticThemeCount > (active ? 1 : 0) ||
+    state.lockfileDirectThemeCount !== (active ? 1 : 0) ||
     (active
       ? JSON.stringify(state.activePackage) !==
           JSON.stringify({
             name: EXPECTED_LIFECYCLE_PROBE.name,
             version: EXPECTED_LIFECYCLE_PROBE.version,
           }) ||
+        state.lockfileFormatVersion !== '9.0' ||
+        state.lockfileImporter !== '.' ||
         !Number.isSafeInteger(state.bundleIndex) ||
         state.bundleIndex < 0 ||
         !SHA256.test(state.dependencySpecSha256 ?? '') ||
+        state.lockfileSpecifierSha256 !==
+          state.dependencySpecSha256 ||
+        state.lockfileVersionSha256 !==
+          state.dependencySpecSha256 ||
         !SHA256.test(state.installedManifestSha256 ?? '') ||
         !SHA256.test(state.installedBundlePatchSha256 ?? '')
       : state.activePackage !== null ||
         state.bundleIndex !== null ||
         state.dependencySpecSha256 !== null ||
+        state.lockfileSpecifierSha256 !== null ||
+        state.lockfileVersionSha256 !== null ||
         state.installedManifestSha256 !== null ||
         state.installedBundlePatchSha256 !== null)
   ) {
@@ -508,8 +525,20 @@ function assertLifecycleState(state, { label, active }) {
     if (state.lockfileSha256 !== null) {
       assertDigest(state.lockfileSha256, `${label} lockfile digest`);
     }
+    if (
+      ![null, '9.0'].includes(state.lockfileFormatVersion) ||
+      ![null, '.'].includes(state.lockfileImporter)
+    ) {
+      fail(`${label} lockfile identity differs`);
+    }
   } else {
     assertDigest(state.lockfileSha256, `${label} lockfile digest`);
+    if (
+      state.lockfileFormatVersion !== '9.0' ||
+      state.lockfileImporter !== '.'
+    ) {
+      fail(`${label} lockfile identity differs`);
+    }
   }
 }
 
@@ -692,6 +721,14 @@ export function validateLifecycleEvidence(evidence, contracts, candidate) {
       reverse.installedManifestSha256 ||
     reverse.installedBundlePatchSha256 !==
       evidence.probeArtifact.bundlePatchSha256 ||
+    installed.lockfileSpecifierSha256 !==
+      installed.dependencySpecSha256 ||
+    installed.lockfileVersionSha256 !==
+      installed.dependencySpecSha256 ||
+    reverse.lockfileSpecifierSha256 !==
+      reverse.dependencySpecSha256 ||
+    reverse.lockfileVersionSha256 !==
+      reverse.dependencySpecSha256 ||
     rollback.profileManifestSha256 !== final.profileManifestSha256 ||
     rollback.lockfileSha256 !== final.lockfileSha256
   ) {
@@ -1082,6 +1119,8 @@ export function buildFinalAttestation({ receiptSet, issuer, issuedAt }) {
       lifecycleScenarioClasses: 6,
       lifecycleScenarioExecutions: EXPECTED_MATRIX.length * 6,
       negativeEvidenceCases: EXPECTED_NEGATIVE_EVIDENCE_CASES.length,
+      pluginListRendering:
+        'command-success-json-only-non-authoritative',
       themeSkinExtensionInstallability: 'not-granted',
     },
   };
@@ -1229,6 +1268,8 @@ export async function validateFinalCertificationBundle(bundleDirectory) {
       lifecycleScenarioClasses: 6,
       lifecycleScenarioExecutions: EXPECTED_MATRIX.length * 6,
       negativeEvidenceCases: EXPECTED_NEGATIVE_EVIDENCE_CASES.length,
+      pluginListRendering:
+        'command-success-json-only-non-authoritative',
       themeSkinExtensionInstallability: 'not-granted',
     },
     'final scope'
