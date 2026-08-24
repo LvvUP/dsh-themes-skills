@@ -9,6 +9,10 @@
   "scripts": {
     "pretest": "node scripts/bootstrap-runner.mjs",
     "test": "node --test",
+    "test:rc2-final": "node --test test/rc2-final-certification-infrastructure.test.mjs",
+    "rc2:final:contract": "node skills/dsh-theme-manager/scripts/validate-rc2-final-contract.mjs",
+    "rc2:final:validate": "node skills/dsh-theme-manager/scripts/validate-rc2-final-certification.mjs",
+    "rc2:final:verify-provenance": "node skills/dsh-theme-manager/scripts/verify-rc2-final-provenance.mjs",
     "validate": "node scripts/validate-skills.mjs",
     "format:check": "node scripts/check-format.mjs"
   },

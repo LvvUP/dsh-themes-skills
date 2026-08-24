@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "baseline": "@deepseek-ai/dsh@0.1.1-rc.2",
+  "officialSourceCommit": "b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+  "algorithm": "declared-order-selector-lf",
+  "sha256": "663aa5927591ac99076f924ee9cd6f9bd09e6a8a9ee1e6b8b1b0d9e3093df807",
+  "selectors": [
+    "html",
+    "body",
+    "body[data-ds-dark-theme]",
+    "#root",
+    "[data-slot='root'] > div",
+    "[data-slot='conversation'] > div",
+    "body[data-ds-dark-theme] [data-slot='conversation'] > div",
+    "[data-slot='sidebar'] > div",
+    "body[data-ds-dark-theme] [data-slot='sidebar'] > div",
+    "[data-composer-card='true']",
+    "[data-slot='details']",
+    "body[data-ds-dark-theme] [data-composer-card='true']",
+    "body[data-ds-dark-theme] [data-slot='details']"
+  ],
+  "scope": "DSH-Themes generated Full Skin selectors only",
+  "qualification": "The catalog is certified only when the exact RC.2 UI renderer, layout, conversation and theme bundles are also verified by a final matrix receipt. It is not a general-purpose DOM API."
+}
