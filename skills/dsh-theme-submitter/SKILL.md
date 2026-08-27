@@ -11,6 +11,8 @@ Accept only `schemaVersion: "3.0"` manifests whose compatibility object exactly 
 
 The currently selected certified submission sidecar is DeepSeek Harness `0.1.0-rc.8`; the validator derives that exact value from the pinned sidecar rather than this prose.
 
+Public catalog identity is assigned by the website only after moderation. Creator and Submitter never mint, accept, or preserve a user-chosen public ID or legacy `DSH-*` label; published selections use the site's exact four-digit `#NNNN` contract, while the manifest slug remains discovery metadata rather than installation authority.
+
 `node <skill-dir>/scripts/inspect-baseline.mjs certifiedRuntimeBaseline` exposes the verified RC.2 runtime baseline without enabling submission. It must remain `enabled: false`: the six-job runtime proof is not a submission sidecar and cannot enter the website handoff. The `candidate` view is retained only as immutable historical-at-capture evidence.
 
 ## Preflight

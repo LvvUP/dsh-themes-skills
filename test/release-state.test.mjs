@@ -28,7 +28,8 @@ const exactSemver =
   /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 
 test('release state separates the certified RC.2 runtime baseline from item and historical lanes', () => {
-  assert.equal(state.schemaVersion, 4);
+  assert.equal(state.schemaVersion, 5);
+  assert.equal(state.capturedAt, '2026-08-27');
   assert.match(state.capturedAt, /^\d{4}-\d{2}-\d{2}$/);
   assert.equal(Number.isNaN(Date.parse(`${state.capturedAt}T00:00:00Z`)), false);
   assert.equal(state.purpose, 'informational-release-state');
@@ -38,6 +39,8 @@ test('release state separates the certified RC.2 runtime baseline from item and 
     state.upstream,
     state.candidate,
     state.certifiedRuntimeBaseline,
+    state.currentOperationalItemAuthority,
+    state.promotedHostedCohort,
     state.certified,
     state.historicalV2,
     state.historicalV1,
@@ -213,6 +216,146 @@ test('release state separates the certified RC.2 runtime baseline from item and 
     'rc2HostedArtifactRepack',
     'rc2SelectorCatalog',
     ]
+  );
+
+  assert.deepEqual(
+    {
+      status: state.currentOperationalItemAuthority.status,
+      releaseVersion: state.currentOperationalItemAuthority.releaseVersion,
+      dshPackageVersion:
+        state.currentOperationalItemAuthority.dshPackageVersion,
+      installableCurrent:
+        state.currentOperationalItemAuthority.installableCurrent,
+      hostedArtifactCount:
+        state.currentOperationalItemAuthority.hostedArtifactCount,
+      themeCount: state.currentOperationalItemAuthority.themeCount,
+      fullSkinCount: state.currentOperationalItemAuthority.fullSkinCount,
+      catalogIndexSha256:
+        state.currentOperationalItemAuthority.catalogIndexSha256,
+      tupleSetSha256:
+        state.currentOperationalItemAuthority.tupleSetSha256,
+      rollbackOnlyCount:
+        state.currentOperationalItemAuthority.rollbackOnlyCount,
+      runtimeCertifiedFullSkinCount:
+        state.currentOperationalItemAuthority.runtimeCertifiedFullSkinCount,
+      runtimePendingFullSkinCount:
+        state.currentOperationalItemAuthority.runtimePendingFullSkinCount,
+      communityAllowlistCount:
+        state.currentOperationalItemAuthority.communityAllowlistCount,
+    },
+    {
+      status: 'operational-authority',
+      releaseVersion: '0.7.0',
+      dshPackageVersion: '0.1.0-rc.8',
+      installableCurrent: true,
+      hostedArtifactCount: 45,
+      themeCount: 6,
+      fullSkinCount: 39,
+      catalogIndexSha256:
+        'a894ed95febe69910281f4c603dd7ef392d5a004f8c5fc3f2b25cc67fa08de15',
+      tupleSetSha256:
+        '6806fb4dfa5e59524fd3e29b9c4c7b20e5ece8108b7efec2f4a42ed8f5e4c954',
+      rollbackOnlyCount: 24,
+      runtimeCertifiedFullSkinCount: 39,
+      runtimePendingFullSkinCount: 0,
+      communityAllowlistCount: 11,
+    }
+  );
+  assert.deepEqual(
+    {
+      status: state.promotedHostedCohort.status,
+      releaseVersion: state.promotedHostedCohort.releaseVersion,
+      dshPackageVersion: state.promotedHostedCohort.dshPackageVersion,
+      installableCurrent: state.promotedHostedCohort.installableCurrent,
+      executableAuthority: state.promotedHostedCohort.executableAuthority,
+      managerHandoffAllowed: state.promotedHostedCohort.managerHandoffAllowed,
+      artifactCount: state.promotedHostedCohort.artifactCount,
+      currentHostedArtifactCount:
+        state.promotedHostedCohort.currentHostedArtifactCount,
+      currentThemeCount: state.promotedHostedCohort.currentThemeCount,
+      currentFullSkinCount: state.promotedHostedCohort.currentFullSkinCount,
+      currentCatalogIndexSha256:
+        state.promotedHostedCohort.currentCatalogIndexSha256,
+      currentCatalogTupleSetSha256:
+        state.promotedHostedCohort.currentCatalogTupleSetSha256,
+      historicalFinalCandidateCatalogIndexSha256:
+        state.promotedHostedCohort.historicalFinalCandidateCatalogIndexSha256,
+      runtimeMatrix: state.promotedHostedCohort.runtimeMatrix,
+    },
+    {
+      status: 'two-stage-certified-and-promoted',
+      releaseVersion: '0.7.0',
+      dshPackageVersion: '0.1.0-rc.8',
+      installableCurrent: true,
+      executableAuthority: true,
+      managerHandoffAllowed: true,
+      artifactCount: 13,
+      currentHostedArtifactCount: 45,
+      currentThemeCount: 6,
+      currentFullSkinCount: 39,
+      currentCatalogIndexSha256:
+        'a894ed95febe69910281f4c603dd7ef392d5a004f8c5fc3f2b25cc67fa08de15',
+      currentCatalogTupleSetSha256:
+        '6806fb4dfa5e59524fd3e29b9c4c7b20e5ece8108b7efec2f4a42ed8f5e4c954',
+      historicalFinalCandidateCatalogIndexSha256:
+        'f2701f3af25d90fb72c8c2a68592b1adb4294e8f3c9652f34db8ca487c6f4c63',
+      runtimeMatrix: 'certified-rc8',
+    }
+  );
+  assert.deepEqual(
+    state.promotedHostedCohort.catalogIds,
+    [2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2043]
+  );
+  assert.equal(
+    state.promotedHostedCohort.catalogIds.includes(2042),
+    false
+  );
+  assert.equal(state.promotedHostedCohort.promotedAt, '2026-08-27');
+  assert.deepEqual(
+    state.promotedHostedCohort.captureCandidate,
+    {
+      schemaVersion: 1,
+      phase: 'capture-candidate',
+      status: 'passed',
+      targets: 13,
+      screenshots: 65,
+      evidenceFiles: 1010,
+      planSha256:
+        'f095f964d21357eabd9f9bcad310faa2ccc7292f0a75e9dd49b526140043a940',
+      promotionReceiptSha256:
+        '907ed35fd089b292f41f3daa47297fd9a9ca591b7b12f469d4ab651f6919111d',
+      archiveSha256:
+        'cef82c0db7601b869fa53c3f034e9ad5d77978d89a553b6bc0a646c05f87d029',
+      sha256SumsSha256:
+        'b4ece672e5561816d1cf409b9de2cc8c2cda8afce04bc09dc101672847202863',
+      frozenIdentitySha256:
+        'e1935797b5eff2804cea2012924815fc4aaa6fbed002ec97d0796d8a8d1e0cb9',
+    }
+  );
+  assert.deepEqual(
+    state.promotedHostedCohort.certifyFinal,
+    {
+      schemaVersion: 1,
+      phase: 'certify-final',
+      status: 'passed',
+      targets: 13,
+      screenshots: 65,
+      evidenceFiles: 1010,
+      planSha256:
+        '65eef49f75d873989d27de04b206e17eec55a4a7b4b992261ef856fa1b39b3fc',
+      promotionReceiptSha256:
+        '43bdf28f3947f558afe3273478b92502b015ead2be10278516b2624038d0795a',
+      archiveSha256:
+        'd47520f808ea576b3a24500541397db0364107d54b9c0aee62d0eb0d1a4f5590',
+      sha256SumsSha256:
+        'f2e6a9e05a25139630926c0edca9521912a7ec52ec86ae0057c7e87d9504ce2a',
+      frozenIdentitySha256:
+        '48aa04ac73b5ead54ff7fb992b8c95aa3baa1302f860fca48cf76f7a631d7a2b',
+    }
+  );
+  assert.match(
+    state.promotedHostedCohort.runtimeEvidenceBoundary,
+    /passed real capture-candidate and rebuilt-byte certify-final/i
   );
 
   assert.equal(state.certified.status, 'certified-installable');

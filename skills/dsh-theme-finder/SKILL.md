@@ -1,6 +1,6 @@
 ---
 name: dsh-theme-finder
-description: Search and classify trusted DSH-Themes gallery and UI-extension records across hosted Manager artifacts, allowlisted community runtimes, and non-installable showcases. Use for exact compatibility, rights, provenance, or safe installer handoff decisions.
+description: Search and classify trusted DSH-Themes gallery and plugin records across hosted Manager artifacts, allowlisted community runtimes, and non-installable showcases. Use for exact compatibility, rights, provenance, or safe installer handoff decisions.
 ---
 
 # DSH Theme Finder
@@ -11,9 +11,11 @@ Return catalog evidence, not invented recommendations. Search only a website or 
 
 The operational item lane is the exact certified DeepSeek Harness `0.1.0-rc.8` evidence named by `references/baseline-policy.json`; RC.6 V2 and RC.5 V1 remain historical. RC.2 now has a verified runtime baseline, but it has no separate item authority. Selecting `0.1.1-rc.2` therefore returns `baselineStatus: "baseline-certified"`, `catalogRead: false`, `installableResultsAllowed: false`, zero items, and no installer handoff. This is an intentional authority boundary, not an incomplete catalog read. See the informational [`release-state.json`](../../release-state.json); Finder keeps executable gates independent of that file.
 
+The executable hosted snapshot in [`references/hosted-authority.json`](references/hosted-authority.json) contains exactly 45 artifacts: six Themes and 39 Full Skins. The promoted non-contiguous cohort `#2030–#2041 + #2043` entered this snapshot only after real capture-candidate and exact rebuilt-byte certify-final passed; `#2042` is already issued and excluded. The current index SHA-256 is `a894ed95febe69910281f4c603dd7ef392d5a004f8c5fc3f2b25cc67fa08de15`, and the declared-order tuple set hashes to `6806fb4dfa5e59524fd3e29b9c4c7b20e5ece8108b7efec2f4a42ed8f5e4c954`. Finder must never infer a future executable tuple from descriptive catalog data.
+
 ## One-choice input
 
-For a normal installation request, ask for exactly one public card ID such as `#2025`. The only accepted installation-ID syntax is `#` followed immediately by the positive decimal digits shown in the top-left of both the catalog card and its detail page. `DSH-2206`, `DSH-FS-009`, and similar legacy or internal labels are not aliases and must be rejected rather than translated into a public ID. Do not ask the user for a package name, package version, artifact URL, local `.tgz` path, or SHA-256. Those are internal authority fields for the Skills to resolve and cross-check, never a second user-facing identifier.
+For a normal installation request, ask for exactly one public card ID such as `#2025`. The only accepted installation-ID syntax is exact four-digit `#NNNN`: `#` followed immediately by four decimal digits whose first digit is nonzero, as shown in the top-left of both the catalog card and its detail page. `DSH-2206`, `DSH-FS-009`, and similar legacy or internal labels are not aliases and must be rejected rather than translated into a public ID. Do not ask the user for a package name, package version, artifact URL, local `.tgz` path, or SHA-256. Those are internal authority fields for the Skills to resolve and cross-check, never a second user-facing identifier.
 
 A slug such as `redline-02`, a displayed name, or a DSH-Themes detail URL may still help the user find the right card. Treat each as discovery-only metadata: report the matching public `#ID` and ask the user to confirm that exact ID before any installer handoff. Never treat a name, localized description, slug, detail URL, package coordinate, or legacy `DSH-*` label as installation authority. The existing community path remains independently governed by its exact local allowlist and item receipt, and it also requires the same confirmed production-directory `#ID`; matching display text never extends either installer lane.
 
@@ -37,13 +39,13 @@ Before an installer handoff, confirm that the required companion Skill is alread
 
 ```bash
 npx --yes skills@1.5.23 add \
-  https://github.com/LvvUP/dsh-themes-skills/tree/v0.6.0 \
+  https://github.com/LvvUP/dsh-themes-skills/tree/v0.7.0 \
   --skill dsh-theme-finder \
   --skill dsh-theme-manager \
   --skill dsh-community-skin-installer
 ```
 
-This command is available only after the coordinated `v0.6.0` release tag is published. Before then, stop and report that the release is review-only. Do not dynamically fetch, synthesize, or import a missing installer, and never substitute a mutable branch, mutable tag, `latest`, or `next`. After the companion Skills are present, keep the beginner-facing request unchanged: the user provides only the confirmed `#ID`.
+This command is available only after the coordinated `v0.7.0` release tag is published. Before then, stop and report that the release is review-only. Do not dynamically fetch, synthesize, or import a missing installer, and never substitute a mutable branch, mutable tag, `latest`, or `next`. After the companion Skills are present, keep the beginner-facing request unchanged: the user provides only the confirmed `#ID`.
 
 An explicitly trusted alternate catalog remains available with `--catalog` for discovery and evidence review. It can never create hosted Manager authority or return a hosted record as installable, even when its fields resemble the production schema. Offline advanced/manual mode may use an absolute local catalog. Only when the user explicitly chooses that mode may you ask for the local catalog or release-record path; compute local artifact hashes yourself and compare them with the pinned record rather than asking the user to transcribe a digest.
 
@@ -56,14 +58,16 @@ Use the bundled read-only client:
 ```bash
 node <skill-dir>/scripts/find-themes.mjs \
   --catalog <https-url-or-absolute-json-path> \
-  [--query <words>] [--kind theme|skin|full-skin|ui-extension] \
+  [--query <words>] [--kind theme|skin|full-skin|plugin|ui-extension] \
   [--mode light|dark] [--availability all|installable|showcase] \
   [--dsh-version <exact-version-from-baseline-policy>] [--limit 10]
 ```
 
-The client sends no cookies, credentials, or authorization headers. It refuses HTTP, cross-origin redirects, oversized responses, unpublished directory records, mutable source revisions, malformed source subdirectories, unsafe package versions, contradictory rights/runtime/compatibility axes, and unknown distribution combinations.
+The client sends no cookies, credentials, or authorization headers. It refuses HTTP, cross-origin redirects, oversized responses, mutable source revisions, malformed source subdirectories, unsafe package versions, contradictory rights/runtime/compatibility axes, unknown distribution combinations, and every unpublished directory record.
 
 `--query` is for browsing and may return several results. `--selection` is the beginner installation path and cannot be combined with `--query`.
+
+`plugin` is the canonical Finder kind. During the compatibility period, the legacy input `ui-extension` is accepted only as an alias and normalized to `plugin` in filtering and output. Every directory record must also bind the exact canonical `publicId` derived from `catalogId` and use its reserved kind band: Theme `#1xxx`, Skin `#2xxx`, or Plugin `#3xxx`. Finder rejects cross-band or mismatched identities and always emits the canonical `#NNNN` value.
 
 It accepts the original release catalog plus the directory API envelope. Directory records keep `rights`, `runtime`, `compatibility`, `sourceRevision`, and `sourceSubdir` separate. A fixed source hash is byte identity, not proof of license ownership, publisher identity, or runtime safety.
 

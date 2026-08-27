@@ -191,7 +191,7 @@ function validateBundle(index, receipts, authorityDigests) {
   assert.deepEqual(slugs, EXPECTED_SLUGS);
   assert.equal(new Set(slugs).size, 32);
   assert.equal(receipts.size, 32);
-  assert.equal(CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.size, 32);
+  assert.equal(CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.size, 45);
 
   for (const entry of index.receipts) {
     assert.match(entry.slug, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
@@ -364,7 +364,7 @@ function validateBundle(index, receipts, authorityDigests) {
   assertNoLocalOrSecretMaterial(index, "index");
 }
 
-test("RC.2 hosted lifecycle archive covers all 32 current hosted byte tuples", async () => {
+test("RC.2 hosted lifecycle archive preserves the prior 32-tuple subset of current authority", async () => {
   const bundle = await loadBundle();
   validateBundle(bundle.index, bundle.receipts, bundle.authorityDigests);
 
