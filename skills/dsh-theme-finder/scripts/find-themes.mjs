@@ -164,6 +164,11 @@ const EXTERNAL_RUNTIME = Object.freeze({
 });
 const FIRST_PARTY_CONCEPT_REVISION =
   '81dbb685cc8ca50b2c6329b5380db120434c589f';
+const DIRECTORY_KIND_BANDS = Object.freeze({
+  theme: Object.freeze([1000, 1999]),
+  skin: Object.freeze([2000, 2999]),
+  plugin: Object.freeze([3000, 3999]),
+});
 const FIRST_PARTY_CONCEPTS = Object.freeze({
   2027: Object.freeze({
     slug: 'mono-bloom',
@@ -210,7 +215,7 @@ function validateHostedAuthority(value) {
     typeof value.runtimeAttestation !== 'object' ||
     Array.isArray(value.runtimeAttestation) ||
     !Array.isArray(value.artifacts) ||
-    value.artifacts.length !== 32
+    value.artifacts.length !== 45
   ) {
     throw new Error('certified hosted authority is malformed');
   }
@@ -283,6 +288,44 @@ function fail(message) {
   throw new Error(message);
 }
 
+export function parsePublicCatalogId(value) {
+  const match = typeof value === 'string' ? /^#([1-9]\d{3})$/.exec(value) : null;
+  return match ? Number.parseInt(match[1], 10) : null;
+}
+
+export function formatPublicCatalogId(value) {
+  return Number.isSafeInteger(value) && value >= 1000 && value <= 9999
+    ? `#${value}`
+    : null;
+}
+
+export function directoryKindForCatalogId(value) {
+  if (!Number.isSafeInteger(value)) return null;
+  for (const [kind, [minimum, maximum]] of Object.entries(
+    DIRECTORY_KIND_BANDS
+  )) {
+    if (value >= minimum && value <= maximum) return kind;
+  }
+  return null;
+}
+
+export function validateDirectoryCatalogIdentity(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const kind = value.kind === 'ui-extension' ? 'plugin' : value.kind;
+  const expectedKind = directoryKindForCatalogId(value.catalogId);
+  const publicId = formatPublicCatalogId(value.catalogId);
+  if (
+    !expectedKind ||
+    kind !== expectedKind ||
+    !publicId ||
+    value.publicId !== publicId ||
+    parsePublicCatalogId(value.publicId) !== value.catalogId
+  ) {
+    return null;
+  }
+  return Object.freeze({ catalogId: value.catalogId, publicId, kind });
+}
+
 function parseArgs(argv) {
   const values = {};
   for (let index = 0; index < argv.length; index += 2) {
@@ -312,10 +355,11 @@ function parseArgs(argv) {
   if (!new Set([HISTORICAL_V2_VERSION, CERTIFIED_DSH_VERSION, RUNTIME_BASELINE_DSH_VERSION]).has(values['dsh-version'])) {
     throw new Error('DSH version must be one exact version listed by baseline-policy.json');
   }
-  if (values.kind && !['theme', 'skin', 'full-skin', 'ui-extension'].includes(values.kind)) {
-    throw new Error('--kind must be theme, skin, full-skin, or ui-extension');
+  if (values.kind && !['theme', 'skin', 'full-skin', 'plugin', 'ui-extension'].includes(values.kind)) {
+    throw new Error('--kind must be theme, skin, full-skin, plugin, or legacy ui-extension');
   }
   if (values.kind === 'full-skin') values.kind = 'skin';
+  if (values.kind === 'ui-extension') values.kind = 'plugin';
   if (values.mode && !['light', 'dark'].includes(values.mode)) throw new Error('--mode must be light or dark');
   if (!['all', 'installable', 'showcase'].includes(values.availability)) {
     throw new Error('--availability must be all, installable, or showcase');
@@ -337,18 +381,18 @@ function parseSelection(value) {
   const input = value.trim();
   if (!input) throw new Error('--selection cannot be empty');
 
-  const catalogNumber = /^#([1-9]\d{0,8})$/.exec(input);
-  if (catalogNumber) {
+  const catalogId = parsePublicCatalogId(input);
+  if (catalogId !== null) {
     return {
       input,
       kind: 'catalog-id',
-      value: Number.parseInt(catalogNumber[1], 10),
+      value: catalogId,
     };
   }
 
   if (/^#/u.test(input)) {
     throw new Error(
-      'Public installation IDs must use exact #digits with no spaces or leading zeroes'
+      'Public installation IDs must use exact four-digit #NNNN syntax with no spaces or leading zeroes'
     );
   }
   if (/^DSH-(?:[A-Z]+-)?\d{1,9}$/iu.test(input)) {
@@ -1065,18 +1109,18 @@ function matchesDirectoryQuery(item, args) {
 }
 
 function acceptedDirectory(item, args, catalogOrigin) {
+  const identity = validateDirectoryCatalogIdentity(item);
+  const kind = identity?.kind;
   if (
-    !Number.isSafeInteger(item.catalogId) ||
-    item.catalogId < 1 ||
+    !identity ||
     !SLUG.test(item.slug) ||
-    !['theme', 'skin', 'ui-extension'].includes(item.kind) ||
     item.admission?.status !== 'published' ||
     !safeText(item.title, 100) ||
     !safeText(item.summary, 500) ||
     !safeText(item.author?.name, 100) ||
     (item.version !== undefined && !isExactSemver(item.version))
   ) return null;
-  if (args.kind && item.kind !== args.kind) return null;
+  if (args.kind && kind !== args.kind) return null;
   if (!matchesDirectoryQuery(item, args)) return null;
 
   const source = normalizeDirectorySource(item.source, catalogOrigin);
@@ -1108,9 +1152,10 @@ function acceptedDirectory(item, args, catalogOrigin) {
   if (args.mode && !directoryModes(item.previewAssets).includes(args.mode)) return null;
 
   const base = {
-    catalogId: item.catalogId,
+    catalogId: identity.catalogId,
+    publicId: identity.publicId,
     slug: item.slug,
-    kind: item.kind,
+    kind,
     name: item.title,
     description: item.summary,
     author: {
@@ -1382,6 +1427,8 @@ async function resolveCanonicalHostedRelease(item, fetchImpl) {
   const release = releaseEnvelope(await readRemoteJson(releaseUrl, fetchImpl));
   if (
     release.catalogId !== item.catalogId ||
+    release.publicId !== item.publicId ||
+    !validateDirectoryCatalogIdentity(release) ||
     release.slug !== item.slug ||
     release.kind !== item.kind ||
     release.status !== 'published' ||

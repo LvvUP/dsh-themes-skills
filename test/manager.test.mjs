@@ -19,6 +19,8 @@ import {
   CURRENT_CATALOG_INDEX_SHA256,
   CURRENT_INSTALLABLE_HOSTED_ARTIFACTS,
   LEGACY_ROLLBACK_HOSTED_ARTIFACTS,
+  PENDING_CANDIDATE_CATALOG_INDEX_SHA256,
+  PENDING_CANDIDATE_HOSTED_ARTIFACTS,
 } from '../skills/dsh-theme-manager/scripts/hosted-artifact-authority.mjs';
 import { snapshotAllowedArtifact } from '../skills/dsh-theme-manager/scripts/artifact-snapshot.mjs';
 import { isExactSemver } from '../skills/dsh-theme-manager/scripts/semver.mjs';
@@ -825,19 +827,31 @@ test('manager exact-version checks implement the shared SemVer 2.0 vectors', asy
   }
 });
 
-test('hosted authority pins 32 current artifacts and 24 rollback-only versions', () => {
+test('hosted authority keeps 45 executable, zero pending, and 24 rollback-only tuples disjoint', () => {
   assert.equal(
     CURRENT_CATALOG_INDEX_SHA256,
-    '316c4b9a4ffcc797223438f256cf5c9fd935e4ec8e96f9c17f55b0e254c60721'
+    'a894ed95febe69910281f4c603dd7ef392d5a004f8c5fc3f2b25cc67fa08de15'
   );
-  assert.equal(CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.size, 32);
+  assert.equal(
+    PENDING_CANDIDATE_CATALOG_INDEX_SHA256,
+    'f2701f3af25d90fb72c8c2a68592b1adb4294e8f3c9652f34db8ca487c6f4c63'
+  );
+  assert.equal(CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.size, 45);
+  assert.equal(PENDING_CANDIDATE_HOSTED_ARTIFACTS.size, 0);
   assert.equal(LEGACY_ROLLBACK_HOSTED_ARTIFACTS.size, 24);
-  assert.equal(ALLOWED_ADD_ARTIFACT_SHA256.size, 57);
+  assert.equal(CURRENT_INSTALLABLE_ADD_ARTIFACT_SHA256.size, 46);
+  assert.equal(ALLOWED_ADD_ARTIFACT_SHA256.size, 70);
   assert.equal(
     createHash('sha256')
       .update(JSON.stringify([...CURRENT_INSTALLABLE_HOSTED_ARTIFACTS]))
       .digest('hex'),
-    'e3ed309a499b162041bff48e89f522b04866f612c504614fe80f5f56f2226e5c'
+    '6806fb4dfa5e59524fd3e29b9c4c7b20e5ece8108b7efec2f4a42ed8f5e4c954'
+  );
+  assert.equal(
+    createHash('sha256')
+      .update(JSON.stringify([...PENDING_CANDIDATE_HOSTED_ARTIFACTS]))
+      .digest('hex'),
+    '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945'
   );
   assert.equal(
     createHash('sha256')
@@ -869,6 +883,12 @@ test('hosted authority pins 32 current artifacts and 24 rollback-only versions',
     null
   );
   assert.equal(CURRENT_INSTALLABLE_ADD_ARTIFACT_SHA256.has(fireHorseSha256), true);
+  assert.equal(
+    CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.get(
+      '@dsh-themes/shiba-morning-post@1.0.0'
+    ),
+    '2d5033a5f46c2e2946ba8de90c1fe1f21a069c6cfc29d7c1170dd074ad3a1894'
+  );
   assert.deepEqual(
     [...LEGACY_ROLLBACK_HOSTED_ARTIFACTS.keys()].filter((key) =>
       /(?:arctic-panel|copper-wire|neon-afterline|quiet-matrix|redline-02)@1\.1\.0$/.test(
@@ -883,6 +903,56 @@ test('hosted authority pins 32 current artifacts and 24 rollback-only versions',
       '@dsh-themes/redline-02@1.1.0',
     ]
   );
+});
+
+test('Finder and Manager share one byte-identical 45-tuple current authority', async () => {
+  const finderAuthority = JSON.parse(
+    await readFile(
+      resolve('skills/dsh-theme-finder/references/hosted-authority.json'),
+      'utf8'
+    )
+  );
+  assert.equal(finderAuthority.catalogIndexSha256, CURRENT_CATALOG_INDEX_SHA256);
+  assert.deepEqual(
+    finderAuthority.artifacts,
+    [...CURRENT_INSTALLABLE_HOSTED_ARTIFACTS]
+  );
+  assert.equal(
+    createHash('sha256')
+      .update(JSON.stringify(finderAuthority.artifacts))
+      .digest('hex'),
+    '6806fb4dfa5e59524fd3e29b9c4c7b20e5ece8108b7efec2f4a42ed8f5e4c954'
+  );
+});
+
+test('the exact 13-item v0.7.0 cohort is current and pending authority is empty', () => {
+  const promoted = [
+    ['@dsh-themes/apex-telemetry@1.0.0', 'b710873fad8e62a9517b4d5e06c060372b585771aaf19e8c2151daa48a12569d'],
+    ['@dsh-themes/sunset-court@1.0.0', 'c34eeb787ef7ed6d6f99e058e0246cfa6edf300b8e966f029420be171ff91a39'],
+    ['@dsh-themes/metro-hardwood@1.0.0', '5ab48e59973f01126fa07875a15c2773d7d71aac50bbb4129d903c1fb8724141'],
+    ['@dsh-themes/silver-court@1.0.0', '52eb86c0a81e3098ff1da2de7f9962784ae6c56f7941a95c3ac31fe888bdbd2b'],
+    ['@dsh-themes/hexagon-matchday@1.0.0', '38a0801daeab6c9127d12000d2c9775f133053f607a8baee910c815bdbddae6d'],
+    ['@dsh-themes/tropical-matchday@1.0.0', '702d070fdc5c0cdcfe579bd218dfb9a984465e8574c008ccb73a5106b9ecec0f'],
+    ['@dsh-themes/fjord-matchday@1.0.0', 'df46fa17b4cb38572c729709e18d089e5f18fa4461f90c49c2d352d8910eaa55'],
+    ['@dsh-themes/borough-pinstripe@1.0.0', 'ab1ff0e52a81d2b08f8f1edc5e165235666e2172e97e3058089950fa1df55c35'],
+    ['@dsh-themes/harbor-brick-diamond@1.0.0', 'a937f2b0fad7d556d755004076bac9fb357d86470ed3db2203d67db8dcdd5162'],
+    ['@dsh-themes/pacific-blue-diamond@1.0.0', '659a431d32c9f7238863d0da0d75b1c3ade6f70a39597b961b3cdd6e01fbe682'],
+    ['@dsh-themes/lakeside-ivy-diamond@1.0.0', '7cf34df02e91efb8bd35bc1d6f5c08daa5c02da49c25dc3645d4c12219350931'],
+    ['@dsh-themes/neko-dream-parade@1.0.0', '67b69668ad40485d28c0c35d35dca1bc4e66fd2478f814d0d3e64449f04e5290'],
+    ['@dsh-themes/shiba-morning-post@1.0.0', '2d5033a5f46c2e2946ba8de90c1fe1f21a069c6cfc29d7c1170dd074ad3a1894'],
+  ];
+  assert.equal(promoted.length, 13);
+  assert.equal(PENDING_CANDIDATE_HOSTED_ARTIFACTS.size, 0);
+  for (const [key, digest] of promoted) {
+    const separator = key.lastIndexOf('@');
+    assert.equal(CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.get(key), digest);
+    assert.equal(CURRENT_INSTALLABLE_ADD_ARTIFACT_SHA256.has(digest), true);
+    assert.equal(ALLOWED_ADD_ARTIFACT_SHA256.has(digest), true);
+    assert.equal(
+      classifyHostedArtifact(key.slice(0, separator), key.slice(separator + 1), digest),
+      'current-installable'
+    );
+  }
 });
 
 test('1.1 to 1.2 upgrade keeps legacy bytes rollback-only and supports a verified reverse', async () => {
@@ -1558,10 +1628,10 @@ test('remote verifier confines a 307 cookie bootstrap to the exact trusted path'
 });
 
 test('runner policy forces no-open and narrowly allows Skin Center removal', () => {
-  assert.equal(CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.size, 32);
+  assert.equal(CURRENT_INSTALLABLE_HOSTED_ARTIFACTS.size, 45);
   assert.equal(LEGACY_ROLLBACK_HOSTED_ARTIFACTS.size, 24);
-  assert.equal(CURRENT_INSTALLABLE_ADD_ARTIFACT_SHA256.size, 33);
-  assert.equal(ALLOWED_ADD_ARTIFACT_SHA256.size, 57);
+  assert.equal(CURRENT_INSTALLABLE_ADD_ARTIFACT_SHA256.size, 46);
+  assert.equal(ALLOWED_ADD_ARTIFACT_SHA256.size, 70);
   assert.equal(
     isAllowedRunnerCommand([
       'plugin',

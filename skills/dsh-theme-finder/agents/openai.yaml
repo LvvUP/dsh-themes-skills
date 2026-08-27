@@ -1,4 +1,4 @@
 interface:
   display_name: "DSH Theme Finder"
   short_description: "Classify hosted, community, and showcase directory records"
-  default_prompt: "Use $dsh-theme-finder to resolve the exact public DSH-Themes #ID shown at the top-left of its card or detail page. Reject DSH-2206, DSH-FS-009, and every other legacy or internal label as an installation ID. Treat names, slugs, and detail URLs as discovery-only until I confirm the #ID. Derive technical coordinates internally and keep DSH setup separate. RC.2 is baseline-certified but has no item authority, so return zero items and no handoff for RC.2."
+  default_prompt: "Use $dsh-theme-finder to resolve the exact public four-digit DSH-Themes #ID shown at the top-left of its card or detail page. Normalize legacy ui-extension input to the canonical plugin kind. Reject DSH-2206, DSH-FS-009, and every other legacy or internal label as an installation ID. Treat names, slugs, and detail URLs as discovery-only until I confirm the #ID. Derive technical coordinates internally and keep DSH setup separate. RC.2 is baseline-certified but has no item authority, so return zero items and no handoff for RC.2."

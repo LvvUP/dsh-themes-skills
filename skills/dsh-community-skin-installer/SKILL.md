@@ -11,7 +11,7 @@ Read `references/baseline-policy.json` before inspection. The certified RC.8 ite
 
 ## Beginner-facing input
 
-The normal entry point is one normalized `dsh-theme-finder` result selected by the exact public `#ID` shown in the top-left of the card and detail page. Require `selection.input` to use exact `#` plus positive decimal digits and `selection.authority: "unique-catalog-id"`. Names, slugs, and DSH-Themes detail URLs are discovery-only and must return to Finder for confirmation of the public `#ID` before this installer receives a handoff. `DSH-2206`, `DSH-FS-009`, Skin Center ids, package names, and similar internal or legacy labels are not public installation IDs. Do not ask the user for a package name/version, source revision, Skin Center tarball URL, local `.tgz` path, or SHA-256.
+The normal entry point is one normalized `dsh-theme-finder` result selected by the exact public `#ID` shown in the top-left of the card and detail page. That ID must use the four-digit form `#NNNN`; require `selection.input` to match `^#([1-9]\d{3})$` and `selection.authority: "unique-catalog-id"`. Names, slugs, and DSH-Themes detail URLs are discovery-only and must return to Finder for confirmation of the public `#ID` before this installer receives a handoff. `DSH-2206`, `DSH-FS-009`, Skin Center ids, package names, and similar internal or legacy labels are not public installation IDs. Do not ask the user for a package name/version, source revision, Skin Center tarball URL, local `.tgz` path, or SHA-256.
 
 Resolve and verify those details internally:
 
