@@ -43,7 +43,7 @@ That is the only normal user input. You do not need to prepare a package name, v
 
 `DSH-2206`, `DSH-FS-009`, names, slugs, and detail URLs are legacy, internal, or discovery-only labels. They are **not** a second installation ID.
 
-Install the coordinated Skills once from the fixed `v0.7.1` tag:
+Install the coordinated Skills once the fixed `v0.7.1` tag is published:
 
 ```bash
 npx --yes skills@1.5.23 add \

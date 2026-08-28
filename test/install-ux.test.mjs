@@ -127,7 +127,7 @@ test('both README homepages explain general and dedicated installation', async (
   assert.match(english, /system-level installer requires a separate request and immediate explicit consent/);
   assert.match(english, /configure your model provider and model/);
   assert.match(english, /do not install Node\.js.*DeepSeek Harness.*never downgrade an existing DSH/s);
-  assert.match(english, /fixed `v0\.7\.1` tag/);
+  assert.match(english, /once the fixed `v0\.7\.1` tag is published/);
 
   assert.match(chinese, /### 通用安装/);
   assert.match(chinese, /### 专属安装/);
@@ -150,5 +150,5 @@ test('both README homepages explain general and dedicated installation', async (
   assert.match(chinese, /运行系统级安装器需要单独请求，并在执行前取得即时明确同意/);
   assert.match(chinese, /配置模型供应商和模型/);
   assert.match(chinese, /不会在安装条目时顺带安装 Node\.js.*DeepSeek Harness.*不会在背后降级已有 DSH/s);
-  assert.match(chinese, /固定的 `v0\.7\.1` 标签/);
+  assert.match(chinese, /固定的 `v0\.7\.1` 标签发布后/);
 });
