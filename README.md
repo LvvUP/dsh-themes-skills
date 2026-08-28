@@ -12,7 +12,7 @@
 [![Node.js 22/24](https://img.shields.io/badge/Node.js-22.19%20%7C%2024.15-16324F)](package.json)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-246BCE)](LICENSE)
 
-### [Explore themes on dsh-themes.com →](https://dsh-themes.com/explore)
+### [Explore Themes, Full Skins, and Curated Plugins on dsh-themes.com →](https://dsh-themes.com/explore)
 
 </div>
 
@@ -43,7 +43,7 @@ That is the only normal user input. You do not need to prepare a package name, v
 
 `DSH-2206`, `DSH-FS-009`, names, slugs, and detail URLs are legacy, internal, or discovery-only labels. They are **not** a second installation ID.
 
-Install the coordinated Skills once the fixed `v0.7.1` tag is published:
+Install the coordinated Skills from the published, immutable `v0.7.1` tag:
 
 ```bash
 npx --yes skills@1.5.23 add \
@@ -53,11 +53,11 @@ npx --yes skills@1.5.23 add \
   --skill dsh-community-skin-installer
 ```
 
-Never substitute `main`, `latest`, or `next` for this fixed release reference. Until the tag exists, the promotion branch is review-only.
+Never substitute `main`, `latest`, or `next` for this fixed release reference. The default branch may contain newer documentation or review work; it is not an installation authority.
 
 ### Dedicated installation
 
-Open a theme, skin, or plugin detail page on [dsh-themes.com](https://dsh-themes.com). Finder emits the canonical kind `plugin`; legacy `ui-extension` input remains a temporary compatibility alias. The page's copy button uses the same short request with that page's own public `#ID`:
+Open a Theme, Full Skin, or Curated Plugin detail page on [dsh-themes.com](https://dsh-themes.com). Finder emits the canonical kind `plugin`; legacy `ui-extension` input remains a temporary compatibility alias. The page's copy button uses the same short request with that page's own public `#NNNN`:
 
 The `#NNNN` is a discovery address for every published item, not a promise that every item can be installed. Only an exact hosted or community-authorized record can expose and complete an installer handoff. Most Curated Plugins are showcase records with an official project link; they never hand off to Theme Manager.
 
@@ -69,7 +69,7 @@ General and dedicated installation use the same resolver and the same fail-close
 
 ### I do not have DeepSeek Harness yet
 
-Use the separate **Set up DeepSeek Harness** task on the [DSH Themes installation page](https://dsh-themes.com/install). Finish that task and confirm DSH opens before choosing a `#ID`.
+Use the separate **Set up DeepSeek Harness** task on the [DSH Themes installation page](https://dsh-themes.com/install). Finish that task and confirm DSH opens before choosing a `#NNNN`.
 
 Harness setup and catalog installation are intentionally separate. The theme Skills do not install Node.js, Homebrew, `apt` packages, or DeepSeek Harness while installing an item, and they never downgrade an existing DSH behind your back.
 
@@ -142,14 +142,14 @@ It intentionally reports `baseline-certified`, `catalogRead: false`, `installabl
 
 | Skill | Responsibility |
 | --- | --- |
-| [`dsh-theme-finder`](skills/dsh-theme-finder/SKILL.md) | Resolve one public `#ID`, classify its evidence, and hand off only when the selected item has separate authority. |
+| [`dsh-theme-finder`](skills/dsh-theme-finder/SKILL.md) | Resolve one public `#NNNN`, classify its evidence, and hand off only when the selected item has separate authority. |
 | [`dsh-theme-manager`](skills/dsh-theme-manager/SKILL.md) | Verify, install, switch, remove, and recover one exact hosted item in the operational lane. |
 | [`dsh-community-skin-installer`](skills/dsh-community-skin-installer/SKILL.md) | Install an allowlisted community item only when Manager, item receipt, consent, and rollback gates all pass. |
 | [`dsh-theme-creator`](skills/dsh-theme-creator/SKILL.md) | Create deterministic data-only V3 manifests under the operational RC.8 authoring sidecar. RC.2 authoring stays disabled. |
 | [`dsh-theme-submitter`](skills/dsh-theme-submitter/SKILL.md) | Validate a manifest and open a credential-free website handoff. RC.2 submission stays disabled. |
 
 ```text
-one public #ID
+one public #NNNN
       │
       ▼
    Finder ── hosted item ──▶ Manager

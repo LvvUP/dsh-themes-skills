@@ -12,7 +12,7 @@
 [![Node.js 22/24](https://img.shields.io/badge/Node.js-22.19%20%7C%2024.15-16324F)](package.json)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-246BCE)](LICENSE)
 
-### [前往 dsh-themes.com 探索主题 →](https://dsh-themes.com/zh/explore)
+### [前往 dsh-themes.com 探索 Theme、Full Skin 与精选 Plugin →](https://dsh-themes.com/zh/explore)
 
 </div>
 
@@ -33,7 +33,7 @@
 
 `#NNNN` 首先启动身份解析，而不是直接安装。Finder 可以发现全部已发布的 Theme、Skin 与 Curated Plugin；只有精确匹配站内托管或社区授权的结果才能继续解析制品并安装。其余结果只返回已复核证据或官方来源，然后停止。下面的示例首先要求 Skill 对条目分类。
 
-如果你已经安装了 DeepSeek Harness，请在 DSH Themes 卡片或详情页左上角找到唯一公开的四位 `#编号`（`#NNNN`），例如 `#2004`，然后告诉 Agent：
+如果你已经安装了 DeepSeek Harness，请在 DSH Themes 卡片或详情页左上角找到格式固定为 `#NNNN` 的唯一公开编号，例如 `#2004`，然后告诉 Agent：
 
 ```text
 请帮我安装 DSH Themes 的 #2004。
@@ -43,7 +43,7 @@
 
 `DSH-2206`、`DSH-FS-009`、名称、slug 和详情页地址属于旧标记、内部坐标或查找线索，**不是**第二套安装编号。
 
-固定的 `v0.7.1` 标签发布后，只需安装一次配套 Skill：
+从已发布且不可变的 `v0.7.1` 标签安装一次配套 Skill：
 
 ```bash
 npx --yes skills@1.5.23 add \
@@ -53,11 +53,11 @@ npx --yes skills@1.5.23 add \
   --skill dsh-community-skin-installer
 ```
 
-不要把固定版本替换成 `main`、`latest` 或 `next`。标签发布前，promotion 分支仅供审查。
+不要把固定版本替换成 `main`、`latest` 或 `next`。默认分支可能包含更新的文档或待审工作，不构成安装权威。
 
 ### 专属安装
 
-在 [dsh-themes.com](https://dsh-themes.com/zh) 打开主题、皮肤或插件详情页。Finder 统一输出规范类型 `plugin`；旧输入 `ui-extension` 仅作为兼容别名保留。页面的复制按钮会使用相同的简短提示词，并自动放入当前页面的公开 `#编号`：
+在 [dsh-themes.com](https://dsh-themes.com/zh) 打开 Theme、Full Skin 或精选 Plugin 详情页。Finder 统一输出规范类型 `plugin`；旧输入 `ui-extension` 仅作为兼容别名保留。页面的复制按钮会使用相同的简短提示词，并自动放入当前页面的公开 `#NNNN`：
 
 `#NNNN` 是每个已发布条目的查找地址，并不承诺每个条目都能安装。只有精确匹配站内权威或社区逐项权威的记录，才能显示并完成安装器交接。大多数 Curated Plugin 仅供展示并提供官方项目链接，永远不会交给 Theme Manager。
 
@@ -69,7 +69,7 @@ npx --yes skills@1.5.23 add \
 
 ### 我还没有安装 DeepSeek Harness
 
-请先使用 [DSH Themes 安装页面](https://dsh-themes.com/zh/install)中独立的**安装 DeepSeek Harness**任务。确认 DSH 能正常打开后，再选择一个 `#编号`。
+请先使用 [DSH Themes 安装页面](https://dsh-themes.com/zh/install)中独立的**安装 DeepSeek Harness**任务。确认 DSH 能正常打开后，再选择一个 `#NNNN`。
 
 Harness 安装与目录内容安装会始终分开。主题 Skill 不会在安装条目时顺带安装 Node.js、Homebrew、`apt` 软件包或 DeepSeek Harness，也不会在背后降级已有 DSH。
 
@@ -142,14 +142,14 @@ node skills/dsh-theme-finder/scripts/find-themes.mjs \
 
 | Skill | 职责 |
 | --- | --- |
-| [`dsh-theme-finder`](skills/dsh-theme-finder/SKILL.md) | 解析一个公开 `#编号`、分类证据，且只在所选条目具有独立权威时交给安装器。 |
+| [`dsh-theme-finder`](skills/dsh-theme-finder/SKILL.md) | 解析一个公开 `#NNNN`、分类证据，且只在所选条目具有独立权威时交给安装器。 |
 | [`dsh-theme-manager`](skills/dsh-theme-manager/SKILL.md) | 在可运行通道中验证、安装、切换、移除和恢复一个精确站内条目。 |
 | [`dsh-community-skin-installer`](skills/dsh-community-skin-installer/SKILL.md) | 只有 Manager、条目回执、用户同意和回滚门槛全部通过时，才安装 allowlist 社区条目。 |
 | [`dsh-theme-creator`](skills/dsh-theme-creator/SKILL.md) | 在可运行的 RC.8 创作 sidecar 下创建确定性、纯数据 V3 清单；RC.2 创作仍禁用。 |
 | [`dsh-theme-submitter`](skills/dsh-theme-submitter/SKILL.md) | 验证清单并打开不携带凭据的网站交接；RC.2 投稿仍禁用。 |
 
 ```text
-一个公开 #编号
+一个公开 #NNNN
       │
       ▼
    Finder ── 站内条目 ──▶ Manager
