@@ -6,7 +6,7 @@
 
 [English](README.md) · [简体中文](README.zh-CN.md)
 
-[![Version 0.7.0](https://img.shields.io/badge/version-0.7.0-246BCE)](package.json)
+[![Version 0.7.1](https://img.shields.io/badge/version-0.7.1-246BCE)](package.json)
 [![RC.2 运行基线已认证](https://img.shields.io/badge/DSH%200.1.1--rc.2-%E8%BF%90%E8%A1%8C%E5%9F%BA%E7%BA%BF%E5%B7%B2%E8%AE%A4%E8%AF%81-16836B)](skills/dsh-theme-manager/references/runtime-baseline.dsh-0.1.1-rc.2.json)
 [![CI](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml)
 [![Node.js 22/24](https://img.shields.io/badge/Node.js-22.19%20%7C%2024.15-16324F)](package.json)
@@ -16,7 +16,7 @@
 
 </div>
 
-版本 **0.7.0** 在两项必需运行阶段全部通过后，将 13 个精确 Full Skin 晋级到 DeepSeek Harness **`0.1.0-rc.8` 可运行逐项通道**。当前可执行权威为 45 个站内元组（6 个 Theme + 39 个 Full Skin）；经过加密来源验证的 **`0.1.1-rc.2` 运行基线**仍是独立、非逐项权威：
+版本 **0.7.1** 是基于未改变的 v0.7.0 晋级批次发布的文档一致性补丁。它修正公开安全说明，使其与 Finder 和 Manager 使用的 45 项权威一致；制品字节、摘要、安装权限与历史证据均未改变。13 个精确 Full Skin 只有在两项必需运行阶段全部通过后，才进入 DeepSeek Harness **`0.1.0-rc.8` 可运行逐项通道**。当前可执行权威为 45 个站内元组（6 个 Theme + 39 个 Full Skin）；经过加密来源验证的 **`0.1.1-rc.2` 运行基线**仍是独立、非逐项权威：
 
 - **RC.2 运行基线：**六个操作系统/Node 任务全部通过，最终归档和独立 Sigstore 来源证明校验成功。这说明固定的 Harness 基线可以用于生产验证。
 - **主题、皮肤和插件安装：**RC.2 还没有逐项安装权威，因此 Finder 对 RC.2 返回 0 个条目，也不会交给安装器。基线认证不会自动让某个目录条目变成可安装项目。
@@ -43,11 +43,11 @@
 
 `DSH-2206`、`DSH-FS-009`、名称、slug 和详情页地址属于旧标记、内部坐标或查找线索，**不是**第二套安装编号。
 
-固定 `v0.7.0` 标签发布后，只需安装一次配套 Skill：
+固定的 `v0.7.1` 标签发布后，只需安装一次配套 Skill：
 
 ```bash
 npx --yes skills@1.5.23 add \
-  https://github.com/LvvUP/dsh-themes-skills/tree/v0.7.0 \
+  https://github.com/LvvUP/dsh-themes-skills/tree/v0.7.1 \
   --skill dsh-theme-finder \
   --skill dsh-theme-manager \
   --skill dsh-community-skin-installer
