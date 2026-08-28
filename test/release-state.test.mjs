@@ -245,7 +245,7 @@ test('release state separates the certified RC.2 runtime baseline from item and 
     },
     {
       status: 'operational-authority',
-      releaseVersion: '0.7.1',
+      releaseVersion: '0.7.2',
       dshPackageVersion: '0.1.0-rc.8',
       installableCurrent: true,
       hostedArtifactCount: 45,
