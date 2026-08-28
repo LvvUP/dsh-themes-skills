@@ -6,7 +6,7 @@
 
 [English](README.md) · [简体中文](README.zh-CN.md)
 
-[![Version 0.7.0](https://img.shields.io/badge/version-0.7.0-246BCE)](package.json)
+[![Version 0.7.1](https://img.shields.io/badge/version-0.7.1-246BCE)](package.json)
 [![RC.2 runtime baseline certified](https://img.shields.io/badge/DSH%200.1.1--rc.2-runtime%20baseline%20certified-16836B)](skills/dsh-theme-manager/references/runtime-baseline.dsh-0.1.1-rc.2.json)
 [![CI](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml)
 [![Node.js 22/24](https://img.shields.io/badge/Node.js-22.19%20%7C%2024.15-16324F)](package.json)
@@ -16,7 +16,7 @@
 
 </div>
 
-Version **0.7.0** promotes 13 exact Full Skins into the operational DeepSeek Harness **`0.1.0-rc.8` item lane** after both required runtime stages passed. Current executable authority is 45 hosted tuples (6 themes + 39 Full Skins), while the cryptographically verified **`0.1.1-rc.2` runtime baseline** remains a separate non-item authority:
+Version **0.7.1** is a documentation-consistency patch over the unchanged v0.7.0 promoted cohort. It fixes the public security guidance to name the same 45-item authority used by Finder and Manager; no artifact bytes, digests, install permissions, or historical evidence changed. The 13 exact Full Skins entered the operational DeepSeek Harness **`0.1.0-rc.8` item lane** only after both required runtime stages passed. Current executable authority is 45 hosted tuples (6 themes + 39 Full Skins), while the cryptographically verified **`0.1.1-rc.2` runtime baseline** remains a separate non-item authority:
 
 - **RC.2 runtime baseline:** six operating-system/Node jobs passed; the final archive and detached Sigstore provenance verify. This proves the fixed Harness baseline is production-ready.
 - **Theme, skin, and plugin installation:** RC.2 has no item-level authority yet, so Finder returns 0 RC.2 items and no handoff. Baseline certification never turns a catalog entry into an installable item.
@@ -43,11 +43,11 @@ That is the only normal user input. You do not need to prepare a package name, v
 
 `DSH-2206`, `DSH-FS-009`, names, slugs, and detail URLs are legacy, internal, or discovery-only labels. They are **not** a second installation ID.
 
-Install the coordinated Skills once after the fixed `v0.7.0` tag is published:
+Install the coordinated Skills once from the fixed `v0.7.1` tag:
 
 ```bash
 npx --yes skills@1.5.23 add \
-  https://github.com/LvvUP/dsh-themes-skills/tree/v0.7.0 \
+  https://github.com/LvvUP/dsh-themes-skills/tree/v0.7.1 \
   --skill dsh-theme-finder \
   --skill dsh-theme-manager \
   --skill dsh-community-skin-installer

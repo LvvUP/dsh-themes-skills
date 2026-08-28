@@ -245,7 +245,7 @@ test('release state separates the certified RC.2 runtime baseline from item and 
     },
     {
       status: 'operational-authority',
-      releaseVersion: '0.7.0',
+      releaseVersion: '0.7.1',
       dshPackageVersion: '0.1.0-rc.8',
       installableCurrent: true,
       hostedArtifactCount: 45,
@@ -403,6 +403,15 @@ test('release documentation exposes runtime, item, and historical lanes', async 
   assert.ok(combined.includes(state.certifiedRuntimeBaseline.certificationSourceSha));
   assert.ok(combined.includes(state.historicalV2.dshPackageVersion));
   assert.ok(combined.includes(state.historicalV1.dshPackageVersion));
+  const security = await readFile(new URL('SECURITY.md', root), 'utf8');
+  assert.match(
+    security,
+    /45 package-version-complete-digest tuples \(6 Themes and 39 Full Skins\)/
+  );
+  assert.doesNotMatch(
+    security,
+    /32 package-version-complete-digest tuples in `CURRENT_INSTALLABLE_HOSTED_ARTIFACTS`/
+  );
 });
 
 test('informational release state cannot change executable baseline gates', async () => {

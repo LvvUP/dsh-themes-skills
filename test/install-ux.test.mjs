@@ -36,7 +36,7 @@ test('installation skills keep technical coordinates inside the trusted workflow
   assert.match(finder, /DSH setup and `#ID` installation are separate user tasks/);
   assert.match(finder, /stop before installer handoff/);
   assert.match(finder, /confirm that the required companion Skill is already available/);
-  assert.match(finder, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.7\.0/);
+  assert.match(finder, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.7\.1/);
   assert.match(finder, /--skill dsh-theme-finder[\s\\]+--skill dsh-theme-manager[\s\\]+--skill dsh-community-skin-installer/);
   assert.match(finder, /Do not dynamically fetch, synthesize, or import a missing installer/);
 
@@ -112,7 +112,7 @@ test('both README homepages explain general and dedicated installation', async (
   assert.match(english, /`DSH-2206`, `DSH-FS-009`/);
   assert.match(english, /not.*a second installation ID/s);
   assert.match(english, /Please install DSH Themes #2004\./);
-  assert.match(english, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.7\.0/);
+  assert.match(english, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.7\.1/);
   assert.match(english, /--skill dsh-theme-finder[\s\\]+--skill dsh-theme-manager[\s\\]+--skill dsh-community-skin-installer/);
   assert.match(english, /You do not need to prepare a package name/);
   assert.match(english, /`catalogRead: false`/);
@@ -127,7 +127,7 @@ test('both README homepages explain general and dedicated installation', async (
   assert.match(english, /system-level installer requires a separate request and immediate explicit consent/);
   assert.match(english, /configure your model provider and model/);
   assert.match(english, /do not install Node\.js.*DeepSeek Harness.*never downgrade an existing DSH/s);
-  assert.match(english, /fixed `v0\.7\.0` tag is published/);
+  assert.match(english, /fixed `v0\.7\.1` tag/);
 
   assert.match(chinese, /### 通用安装/);
   assert.match(chinese, /### 专属安装/);
@@ -135,7 +135,7 @@ test('both README homepages explain general and dedicated installation', async (
   assert.match(chinese, /`DSH-2206`、`DSH-FS-009`/);
   assert.match(chinese, /不是.*第二套安装编号/s);
   assert.match(chinese, /请帮我安装 DSH Themes 的 #2004。/);
-  assert.match(chinese, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.7\.0/);
+  assert.match(chinese, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.7\.1/);
   assert.match(chinese, /--skill dsh-theme-finder[\s\\]+--skill dsh-theme-manager[\s\\]+--skill dsh-community-skin-installer/);
   assert.match(chinese, /你不需要准备包名/);
   assert.match(chinese, /`catalogRead: false`/);
@@ -150,5 +150,5 @@ test('both README homepages explain general and dedicated installation', async (
   assert.match(chinese, /运行系统级安装器需要单独请求，并在执行前取得即时明确同意/);
   assert.match(chinese, /配置模型供应商和模型/);
   assert.match(chinese, /不会在安装条目时顺带安装 Node\.js.*DeepSeek Harness.*不会在背后降级已有 DSH/s);
-  assert.match(chinese, /固定 `v0\.7\.0` 标签发布后/);
+  assert.match(chinese, /固定的 `v0\.7\.1` 标签/);
 });
