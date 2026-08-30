@@ -82,6 +82,14 @@ exact npm artifact when present, without running the candidate. A package
 subdirectory is an explicit normalized authority field; it cannot traverse,
 resolve through a symlink, or silently fall back to the repository root.
 Receipts remain explicitly non-installable.
+The same exact checkout receives a separate bounded static-risk inventory. It
+reads tracked Git blobs only and does not execute the candidate. Its receipt
+contains signal IDs, counts, and safe file/line locations, but no source
+snippets, lifecycle command text, credentials, environment values, or
+candidate output. Aggregation requires all 80 unique intake IDs and produces a
+review-priority queue only. Absence of a signal is never proof of safety, and
+the queue cannot approve compatibility, rights, distribution, installation,
+runtime acceptance, or Top10 membership.
 Source-intake rejection permanently records that public ID in
 `replacementPolicy.retiredCatalogIds`; a replacement receives the next unused
 ID beginning at `#3088`. Passing source intake is still not

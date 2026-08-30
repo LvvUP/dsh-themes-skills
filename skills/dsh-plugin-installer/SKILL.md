@@ -24,6 +24,18 @@ exact commit. This lane never executes candidate code and never grants install
 authority. A failed candidate permanently retires its old public ID;
 replacements start at `#3088` and receive a new ID.
 
+The same isolated checkout is also inventoried by
+`scripts/audit-candidate-risk.mjs`. Its closed
+[receipt schema](references/plugin-static-risk-receipt.schema.json) records
+only bounded signal IDs, counts, and safe file/line locations. It does not
+record source snippets, lifecycle commands, credentials, environment values,
+or candidate output. `scripts/aggregate-candidate-risk.mjs` requires one valid
+receipt for every intake ID and emits a non-installable review queue under the
+[summary schema](references/plugin-static-risk-summary.schema.json). A clean
+or low-signal inventory is not compatibility, legal, distribution, runtime,
+installation, or Top10 authority; every candidate still requires manual review
+and the six-task runtime gate.
+
 ## Current result: inspect only
 
 The website currently publishes 80 curated Plugin records, but

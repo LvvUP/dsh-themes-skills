@@ -7,7 +7,9 @@ on:
       - .github/workflows/alpha1-plugin-source-intake.yml
       - skills/dsh-plugin-installer/**
       - test/plugin-candidate-intake.test.mjs
+      - test/plugin-static-risk.test.mjs
       - test/plugin-source-intake.test.mjs
+      - test/plugin-source-intake-workflow.test.mjs
 
 permissions:
   contents: read
@@ -69,17 +71,26 @@ jobs:
       - name: Audit identity, package, license, patch, lockfiles, and exact npm bytes
         shell: bash
         run: |
-          mkdir -p .ci/receipt
+          mkdir -p ci-evidence/receipt
           node authority/skills/dsh-plugin-installer/scripts/audit-candidate-source.mjs \
             --id "#${{ matrix.catalogId }}" \
             --source "${{ github.workspace }}/candidate" \
-            --out "${{ github.workspace }}/.ci/receipt/source-intake-receipt.json"
-      - name: Upload source-only receipt even when the candidate is rejected
+            --out "${{ github.workspace }}/ci-evidence/receipt/source-intake-receipt.json"
+      - name: Inventory bounded static risk without executing candidate code
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          mkdir -p ci-evidence/receipt
+          node authority/skills/dsh-plugin-installer/scripts/audit-candidate-risk.mjs \
+            --id "#${{ matrix.catalogId }}" \
+            --source "${{ github.workspace }}/candidate" \
+            --out "${{ github.workspace }}/ci-evidence/receipt/static-risk-receipt.json"
+      - name: Upload source and risk receipts even when the candidate is rejected
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: alpha1-plugin-source-intake-${{ matrix.catalogId }}
-          path: .ci/receipt/source-intake-receipt.json
+          path: ci-evidence/receipt
           if-no-files-found: error
           retention-days: 14
           compression-level: 9
@@ -104,18 +115,26 @@ jobs:
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           pattern: alpha1-plugin-source-intake-*
-          path: .ci/input
+          path: ci-evidence/input
       - name: Reject missing, duplicate, secret-bearing, or failed source intake
         run: >-
           node skills/dsh-plugin-installer/scripts/aggregate-source-intake.mjs
-          --input "${{ github.workspace }}/.ci/input"
-          --out-dir "${{ github.workspace }}/.ci/summary"
-      - name: Upload non-promotional intake summary
+          --input "${{ github.workspace }}/ci-evidence/input"
+          --out-dir "${{ github.workspace }}/ci-evidence/summary"
+      - name: Build the non-authoritative static-risk review queue
+        if: ${{ always() }}
+        run: >-
+          node skills/dsh-plugin-installer/scripts/aggregate-candidate-risk.mjs
+          --input "${{ github.workspace }}/ci-evidence/input"
+          --out-dir "${{ github.workspace }}/ci-evidence/risk-summary"
+      - name: Upload non-promotional intake and risk summaries
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: alpha1-plugin-source-intake-summary
-          path: .ci/summary/source-intake-summary.json
+          path: |
+            ci-evidence/summary/source-intake-summary.json
+            ci-evidence/risk-summary/static-risk-summary.json
           if-no-files-found: error
           retention-days: 14
           compression-level: 9
