@@ -64,14 +64,21 @@ full-batch preflight and failure rollback, and only then set
 3. The user must provide an explicit absolute `DSH_HOME`; only
    `profiles/web` is in scope. Never infer or broaden it.
 4. Exact pnpm `11.7.0` must already be the executable that alpha.1 resolves on
-   PATH because upstream currently spawns `pnpm` internally. Validate that
-   actual executable and version; never run a separate Corepack command as a
-   substitute, change PATH, install pnpm, or claim a different launcher proves
-   the child process identity. Promotion from 0/80 also requires the six-task
-   receipts to bind that resolved executable identity or a separately reviewed
-   private PATH shim.
+   its input PATH. The installer resolves that first command to one canonical
+   absolute regular file, verifies its bytes and version directly, then creates
+   a transaction-private first-PATH launcher. That launcher rechecks the target
+   size and SHA-256 before every invocation. It does not install pnpm or modify
+   the caller's persistent PATH. On Windows the child environment also sets
+   `NoDefaultCurrentDirectoryInExePath`, so alpha.1's Profile working directory
+   cannot shadow the protected first-PATH launcher. This matches the inspected
+   alpha.1 `apps/cli/src/plugin.ts` behavior, including its Windows
+   `shell: true` `.cmd` boundary. That boundary uses the verified absolute
+   system `cmd.exe`, not an inherited `COMSPEC`, and does not use an unrelated
+   Corepack probe. Promotion receipts must bind both target and
+   private-launcher digests.
    Every pnpm/DSH/Web child receives one frozen minimal environment containing
-   only `DSH_HOME`, `PATH`, required OS user/home/temp fields, and locale fields.
+   `DSH_HOME`, the private pnpm binding plus reviewed PATH, required OS
+   user/home/temp fields, locale fields, and non-secret binding digests/paths.
    `NODE_OPTIONS`, npm/pnpm/Corepack configuration, CI flags, cloud credentials,
    tokens, and unrelated caller variables are never inherited. The preflight
    effective-policy check and the install/remove/recovery process must use that
@@ -84,12 +91,13 @@ full-batch preflight and failure rollback, and only then set
    the cold-Web/inventory probe to the same exact package version. Commands,
    arguments, URLs, scripts, and runner paths are forbidden in this record.
 7. macOS and Linux transactions store their local recovery-authentication key
-   under the explicit `DSH_HOME` with private POSIX permissions. Windows is
-   intentionally promotion-blocked until a six-task-reviewed SID-only,
-   no-inheritance ACL/key-storage implementation exists. Because a committed
-   install without trustworthy remove/recover is not acceptable, the current
-   executor fails before any Windows Profile mutation; do not reinterpret
-   `mode: 0600/0700` as Windows ACL evidence.
+   under the explicit `DSH_HOME` with private POSIX permissions. Windows uses
+   a current-user SID-only trust root and key: the owner must equal the current
+   SID, the DACL is protected with inheritance removed, and exactly one
+   FullControl Allow rule is admitted. The directory rule carries
+   ContainerInherit + ObjectInherit; the key rule carries no inheritance.
+   Existing paths are verified rather than silently repaired. A mismatch
+   fails before Profile mutation; Windows `mode` bits are never ACL evidence.
 
 ## Two fixed distribution lanes
 
@@ -214,7 +222,7 @@ Replace `--id` with `--top10` only for the fixed Top10 set. The script:
    `dangerouslyAllowAllBuilds: false` and `strictDepBuilds: true`, adds only
    package keys whose complete reviewed lifecycle-hook set requires execution
    to `allowBuilds`, and verifies those effective values through the same
-   PATH-resolved pnpm under the same frozen minimal child environment before
+   privately bound pnpm under the same frozen minimal child environment before
    package mutation;
 4. invokes the absolute source-built CLI with a fixed argument array and
    `shell: false` under the frozen minimal child environment;

@@ -22,12 +22,17 @@ import {
   verifyEffectivePnpmBuildPolicy,
 } from './prepare-authorization.mjs';
 import {
+  createPrivatePnpmBinding,
+  pnpmCommandShimShell,
+} from './pnpm-binding.mjs';
+import {
   createProfileSnapshot,
   restoreProfileSnapshot,
   verifyProfileSnapshot,
 } from './profile-snapshot.mjs';
 import { captureProfileClosure, verifyProfileClosure } from './profile-closure.mjs';
 import { validatePrepared } from './prepare-plugin.mjs';
+import { secureWindowsPrivatePath } from './windows-private-acl.mjs';
 import {
   loadAuthority as loadHarnessAuthority,
   validateBuildReceipt,
@@ -240,7 +245,7 @@ export function buildChildEnvironment(dshHome, runtimeRoot, source = process.env
   return Object.freeze(childEnv);
 }
 
-async function createChildRuntimeEnvironment(transactionRoot, dshHome) {
+async function createChildRuntimeEnvironment(transactionRoot, dshHome, profile) {
   const runtimeRoot = join(transactionRoot, 'runtime-environment');
   await mkdir(runtimeRoot, { mode: 0o700 });
   for (const name of [
@@ -251,7 +256,11 @@ async function createChildRuntimeEnvironment(transactionRoot, dshHome) {
   }
   await writeFile(join(runtimeRoot, 'empty-npmrc'), '', { mode: 0o600, flag: 'wx' });
   await writeFile(join(runtimeRoot, 'empty-gitconfig'), '', { mode: 0o600, flag: 'wx' });
-  return buildChildEnvironment(dshHome, runtimeRoot);
+  const baseEnvironment = buildChildEnvironment(dshHome, runtimeRoot);
+  const binding = await createPrivatePnpmBinding(baseEnvironment, runtimeRoot, {
+    commandCwd: profile,
+  });
+  return binding.environment;
 }
 
 function runInvocation(invocation, { cwd, childEnv, capture = false }) {
@@ -307,6 +316,9 @@ async function newTransactionRoot(input, protectedRoots) {
     if (error.code !== 'ENOENT') throw error;
   }
   await mkdir(root, { recursive: false, mode: 0o700 });
+  if (process.platform === 'win32') {
+    await secureWindowsPrivatePath(root, 'directory', 'configure');
+  }
   return realpath(root);
 }
 
@@ -334,14 +346,30 @@ async function verifyHarnessGate(sourceInput, receiptInput, pluginAuthority) {
 }
 
 function verifyPnpm(childEnv) {
+  if (
+    !/^[a-f0-9]{64}$/u.test(childEnv.DSH_PLUGIN_PNPM_TARGET_SHA256 ?? '') ||
+    !/^[a-f0-9]{64}$/u.test(childEnv.DSH_PLUGIN_PNPM_LAUNCHER_SHA256 ?? '') ||
+    typeof childEnv.DSH_PLUGIN_PNPM_LAUNCHER !== 'string' ||
+    !isAbsolute(childEnv.DSH_PLUGIN_PNPM_LAUNCHER) ||
+    typeof childEnv.DSH_PLUGIN_PNPM_NODE !== 'string' ||
+    !isAbsolute(childEnv.DSH_PLUGIN_PNPM_NODE)
+  ) {
+    fail('the source-built DSH plugin command requires one private absolute pnpm PATH binding');
+  }
   const result = spawnSync('pnpm', ['--version'], {
     encoding: 'utf8',
     env: childEnv,
-    shell: false,
+    shell: pnpmCommandShimShell(childEnv),
     timeout: 30_000,
+    windowsHide: true,
   });
-  if (result.status !== 0 || result.stdout.trim() !== '11.7.0') {
-    fail('the source-built DSH plugin command requires pnpm 11.7.0 already on PATH; this Skill will not modify PATH');
+  if (
+    result.error ||
+    result.status !== 0 ||
+    (result.stderr ?? '').trim() !== '' ||
+    (result.stdout ?? '').trim() !== '11.7.0'
+  ) {
+    fail('the source-built DSH plugin command requires the private PATH binding to resolve pnpm 11.7.0');
   }
 }
 
@@ -656,20 +684,19 @@ async function privateWrite(path, value) {
 }
 
 export function assertPrivateRecoveryPlatform(platform = process.platform) {
-  if (platform === 'win32') {
-    fail('Windows Plugin transactions are promotion-blocked until SID-only no-inheritance ACL recovery-key storage is certified');
-  }
-  if (!['darwin', 'linux'].includes(platform)) {
+  if (!['darwin', 'linux', 'win32'].includes(platform)) {
     fail(`private recovery authentication is unsupported on ${platform}`);
   }
 }
 
-async function loadRecoveryKey(dshHome, { create = false } = {}) {
+export async function loadRecoveryKey(dshHome, { create = false } = {}) {
   assertPrivateRecoveryPlatform();
   const trustRoot = join(dshHome, '.dsh-plugin-installer');
+  let rootCreated = false;
   if (create) {
     try {
       await mkdir(trustRoot, { mode: 0o700 });
+      rootCreated = true;
     } catch (error) {
       if (error.code !== 'EEXIST') throw error;
     }
@@ -687,7 +714,15 @@ async function loadRecoveryKey(dshHome, { create = false } = {}) {
   }
   const canonicalRoot = await realpath(trustRoot);
   if (canonicalRoot !== trustRoot) fail('local recovery trust root must not traverse symlinks');
+  if (process.platform === 'win32') {
+    await secureWindowsPrivatePath(
+      canonicalRoot,
+      'directory',
+      rootCreated ? 'configure' : 'verify'
+    );
+  }
   const keyPath = join(canonicalRoot, 'hmac-sha256.key');
+  let keyCreated = false;
   if (create) {
     try {
       const handle = await open(keyPath, 'wx', 0o600);
@@ -696,6 +731,7 @@ async function loadRecoveryKey(dshHome, { create = false } = {}) {
       } finally {
         await handle.close();
       }
+      keyCreated = true;
     } catch (error) {
       if (error.code !== 'EEXIST') throw error;
     }
@@ -710,6 +746,9 @@ async function loadRecoveryKey(dshHome, { create = false } = {}) {
   if (!stat.isFile() || stat.isSymbolicLink() || stat.size !== 32 ||
       (process.platform !== 'win32' && (stat.mode & 0o077) !== 0)) {
     fail('local recovery trust key must be one private 32-byte regular file');
+  }
+  if (process.platform === 'win32') {
+    await secureWindowsPrivatePath(keyPath, 'file', keyCreated ? 'configure' : 'verify');
   }
   return readFile(keyPath);
 }
@@ -869,7 +908,7 @@ export async function executeTransaction(options) {
   }
   await requireColdWebPort();
   const transactionRoot = await newTransactionRoot(transactionRootInput, [dshHome, profile, preparedRoot, harness.source]);
-  const childEnv = await createChildRuntimeEnvironment(transactionRoot, dshHome);
+  const childEnv = await createChildRuntimeEnvironment(transactionRoot, dshHome, profile);
   verifyPnpm(childEnv);
   const snapshot = join(transactionRoot, 'snapshot');
   const baselineClosure = await captureProfileClosure(profile);
@@ -887,6 +926,7 @@ export async function executeTransaction(options) {
   });
   await createProfileSnapshot(profile, snapshot);
   const snapshotManifestSha256 = sha256(await readFile(join(snapshot, 'snapshot.json')));
+  const recoveryKey = await loadRecoveryKey(dshHome, { create: true });
   return runAtomicAcceptanceBoundary(async () => {
     await authorizePrepare(profile, items, { environment: childEnv });
     for (let index = 0; index < items.length; index += 1) {
@@ -922,7 +962,6 @@ export async function executeTransaction(options) {
       terminalInventorySha256: inventorySha256(restartedInventory),
       runtimeAcceptance,
     };
-    const recoveryKey = await loadRecoveryKey(dshHome, { create: true });
     await writeAuthenticatedTerminalState(transactionRoot, state, recoveryKey);
     return { state, transactionRoot, snapshot };
   }, () => restoreAndVerifyBaseline({
@@ -969,7 +1008,7 @@ export async function executeRemovalTransaction(options) {
   for (const item of items) await verifyInstalled(profile, item);
   await requireColdWebPort();
   const transactionRoot = await newTransactionRoot(transactionRootInput, [dshHome, profile, harness.source]);
-  const childEnv = await createChildRuntimeEnvironment(transactionRoot, dshHome);
+  const childEnv = await createChildRuntimeEnvironment(transactionRoot, dshHome, profile);
   verifyPnpm(childEnv);
   const baselineClosure = await captureProfileClosure(profile);
   const baselineInventory = probePluginInventory(harness, childEnv);
@@ -995,6 +1034,7 @@ export async function executeRemovalTransaction(options) {
   });
   await createProfileSnapshot(profile, snapshot);
   const snapshotManifestSha256 = sha256(await readFile(join(snapshot, 'snapshot.json')));
+  const recoveryKey = await loadRecoveryKey(dshHome, { create: true });
   return runAtomicAcceptanceBoundary(async () => {
     await revokePrepare(profile, items, { environment: childEnv });
     for (const item of [...items].reverse()) {
@@ -1029,7 +1069,6 @@ export async function executeRemovalTransaction(options) {
       terminalInventorySha256: inventorySha256(restartedInventory),
       removalVerified: true,
     };
-    const recoveryKey = await loadRecoveryKey(dshHome, { create: true });
     await writeAuthenticatedTerminalState(transactionRoot, state, recoveryKey);
     return { state, transactionRoot, snapshot };
   }, () => restoreAndVerifyBaseline({
@@ -1286,7 +1325,7 @@ export async function executeRecoveryTransaction(options) {
     transactionRootInput,
     [dshHome, profile, harness.source, source.root]
   );
-  const childEnv = await createChildRuntimeEnvironment(transactionRoot, dshHome);
+  const childEnv = await createChildRuntimeEnvironment(transactionRoot, dshHome, profile);
   verifyPnpm(childEnv);
   const currentClosure = await captureProfileClosure(profile);
   const currentInventory = probePluginInventory(harness, childEnv);

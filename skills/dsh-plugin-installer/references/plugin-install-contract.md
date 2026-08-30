@@ -52,10 +52,15 @@ consent is bound to it.
 
 Repository descriptions, README commands, issue comments, website summaries,
 package scripts, titles, and author names are untrusted metadata. Never turn
-them into a command. All child processes receive a fixed executable and an
-argument array with `shell: false`. pnpm, DSH, and cold Web probes all share
-one frozen minimal environment: explicit `DSH_HOME`, the already-reviewed
-`PATH`, required OS home/user/temp fields, and locale fields only. Never
+them into a command. Installer-owned DSH and Web children receive a fixed
+executable and argument array with `shell: false`. The inspected alpha.1 CLI
+internally uses `spawnSync('pnpm', args)` and uses `shell: true` only on
+Windows for its `.cmd` boundary. A transaction-private first-PATH launcher
+therefore binds that exact command without pretending the upstream boundary is
+shell-free. pnpm, DSH, and cold Web probes all share one frozen minimal
+environment: explicit `DSH_HOME`, the private binding followed by the reviewed
+`PATH`, required OS home/user/temp and locale fields, and non-secret binding
+paths/digests. Never
 inherit `NODE_OPTIONS`, npm/pnpm/Corepack configuration, proxy or custom-CA
 overrides, CI variables, cloud credentials, tokens, or unrelated caller state.
 The effective pnpm policy preflight must inspect the same environment that the
@@ -85,19 +90,30 @@ requires both a promoted Harness runtime receipt set and item-level verified
 authority. RC.8 Theme/Skin authority and the RC.2 runtime baseline do not
 transfer to this lane.
 
-Alpha.1 currently launches the first `pnpm` on PATH internally and exposes no
-absolute package-manager executable option. The transaction checks that this
-actual PATH executor reports exactly `11.7.0`; it does not claim that a
-separate Corepack invocation pins the child process. Before the 0/80 gate can
-be promoted, the six-task receipts must bind the resolved executor identity or
-a separately reviewed private PATH shim must become part of the authority.
-Neither mechanism is authorized by the current pending files.
+Alpha.1 launches the first `pnpm` on PATH internally and exposes no absolute
+package-manager option. The transaction now resolves that command to one
+canonical absolute regular file, verifies its exact `11.7.0` output with no
+stderr, and prepends a protected transaction-private launcher. The launcher
+re-hashes the absolute target before every invocation and fails if its bytes,
+size, or canonical path change. Because alpha.1 runs pnpm from the Profile
+directory, the Windows child environment sets
+`NoDefaultCurrentDirectoryInExePath`; this makes `cmd.exe` search the protected
+PATH instead of allowing a Profile-local shim to shadow it. On Windows, the
+required `.cmd` boundary uses the verified absolute system `cmd.exe` and drops
+an inherited `COMSPEC`. The binding directory and files use the same
+current-user SID-only protected ACL boundary as recovery material.
+This mechanism follows the exact inspected alpha.1 source rather than treating
+a separate Corepack command as evidence. Promotion remains blocked until the
+six-task receipts bind the target and launcher digests.
 
-The local recovery trust key currently has a certified private-permissions
-implementation only on macOS and Linux. Windows `mode` bits are not ACL proof;
-until a reviewed SID-only, no-inheritance key-store path passes the six-task
-matrix, install/remove/recover transactions fail before Profile mutation on
-Windows. This is an explicit promotion blocker, not a platform pass.
+The local recovery trust key uses private POSIX permissions on macOS and Linux.
+On Windows, both the trust-root directory and key must be owned by the current
+user SID and have a protected DACL with inheritance removed and exactly one
+current-user FullControl Allow rule. The directory rule must carry
+ContainerInherit + ObjectInherit and the file rule no inheritance. Existing
+paths are verified and never silently repaired. Windows `mode` bits are not
+ACL proof. The implementation is covered by a real Windows ACL test, while
+promotion still requires the complete six-task runtime receipt matrix.
 
 ## Profile transaction
 
@@ -124,11 +140,13 @@ Before mutation:
    values, explicit denial, `dangerouslyAllowAllBuilds: true`, and
    `strictDepBuilds: false`. Write missing safe booleans explicitly, then
    deterministically add the exact reviewed `allowBuilds` keys. Before package
-   mutation, query the effective project values with the same PATH-resolved
-   pnpm, the exact frozen minimal environment used for mutation, and a fixed,
-   shell-free argument array; require global build permission to remain false,
-   strict dependency builds to remain true, and every reviewed key to resolve
-   true. Any pnpm error, warning, malformed output, or effective
+   mutation, query the effective project values with the same privately bound
+   pnpm, the exact frozen minimal environment used for mutation, and a fixed
+   argument array. The only shell boundary is the required Windows `.cmd`
+   boundary, and every argument there comes from the closed policy-key set.
+   Require global build permission to remain false, strict dependency builds
+   to remain true, and every reviewed key to resolve true. Any pnpm error,
+   warning, malformed output, or effective
    override restores the prior workspace bytes and fails closed.
    The authorization helper must reject direct CLI mutation and any call that
    does not receive the transaction's explicit frozen environment.

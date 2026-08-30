@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash, randomBytes } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import {
+  lstat,
   mkdir,
   mkdtemp,
   readFile,
@@ -40,6 +41,7 @@ import {
   executeRecoveryTransaction,
   executeRemovalTransaction,
   executeTransaction,
+  loadRecoveryKey,
   loadRecoverySource,
   parseDumpConfigEntries,
   parsePluginInventory,
@@ -47,7 +49,10 @@ import {
   runAtomicAcceptanceBoundary,
   verifyRuntimeAcceptanceEvidence,
 } from '../skills/dsh-plugin-installer/scripts/install-transaction.mjs';
-import { authorizePrepareText } from '../skills/dsh-plugin-installer/scripts/prepare-authorization.mjs';
+import {
+  authorizePrepareText,
+  verifyEffectivePnpmBuildPolicy,
+} from '../skills/dsh-plugin-installer/scripts/prepare-authorization.mjs';
 import {
   captureProfileClosure,
   verifyProfileClosure,
@@ -62,11 +67,22 @@ import {
   validatePrepared,
 } from '../skills/dsh-plugin-installer/scripts/prepare-plugin.mjs';
 import {
+  createPrivatePnpmBinding,
+  pnpmCommandShimShell,
+  requiresPnpmCommandShimShell,
+  resolvePnpmExecutable,
+} from '../skills/dsh-plugin-installer/scripts/pnpm-binding.mjs';
+import {
   itemAuthoritySha256,
   loadTop10Schema,
   releaseSetPayloadSha256,
   validateTop10ReleaseSet,
 } from '../skills/dsh-plugin-installer/scripts/top10-authority.mjs';
+import {
+  secureWindowsPrivatePath,
+  WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+  WINDOWS_PRIVATE_ACL_TIMEOUT_MS,
+} from '../skills/dsh-plugin-installer/scripts/windows-private-acl.mjs';
 
 function sha256(bytes) {
   return createHash('sha256').update(bytes).digest('hex');
@@ -983,10 +999,8 @@ test('transaction planning resolves exact authority members and production execu
 test('removal planning is authority-bound and removal/recovery executors reject injected operations', async () => {
   assert.doesNotThrow(() => assertPrivateRecoveryPlatform('darwin'));
   assert.doesNotThrow(() => assertPrivateRecoveryPlatform('linux'));
-  assert.throws(
-    () => assertPrivateRecoveryPlatform('win32'),
-    /SID-only no-inheritance ACL recovery-key storage is certified/
-  );
+  assert.doesNotThrow(() => assertPrivateRecoveryPlatform('win32'));
+  assert.throws(() => assertPrivateRecoveryPlatform('freebsd'), /unsupported on freebsd/);
   const loaded = await loadAuthority();
   const first = hostedFixture({ id: 3006, slug: 'remove-one', name: 'dsh-remove-one' });
   const second = hostedFixture({ id: 3052, slug: 'remove-two', name: 'dsh-remove-two' });
@@ -1197,6 +1211,250 @@ test('retained transaction recovery binds plan, baseline, and snapshot digests',
   );
 });
 
+test('recovery trust root creates and reloads one private 32-byte key', async (t) => {
+  const dshHome = await realpath(await workspace(t));
+  const created = await loadRecoveryKey(dshHome, { create: true });
+  assert.equal(created.length, 32);
+  assert.deepEqual(await loadRecoveryKey(dshHome), created);
+  const root = join(dshHome, '.dsh-plugin-installer');
+  const key = join(root, 'hmac-sha256.key');
+  const rootStat = await lstat(root);
+  const keyStat = await lstat(key);
+  assert.equal(rootStat.isDirectory(), true);
+  assert.equal(rootStat.isSymbolicLink(), false);
+  assert.equal(keyStat.isFile(), true);
+  assert.equal(keyStat.isSymbolicLink(), false);
+  if (process.platform !== 'win32') {
+    assert.equal(rootStat.mode & 0o077, 0);
+    assert.equal(keyStat.mode & 0o077, 0);
+  } else {
+    const rootProof = await secureWindowsPrivatePath(root, 'directory', 'verify');
+    const keyProof = await secureWindowsPrivatePath(key, 'file', 'verify');
+    assert.equal(rootProof.ownerSid, rootProof.currentSid);
+    assert.equal(rootProof.ruleCount, 1);
+    assert.equal(rootProof.ruleSid, rootProof.currentSid);
+    assert.equal(rootProof.protected, true);
+    assert.equal(rootProof.inherited, false);
+    assert.equal(rootProof.inheritanceFlags, 3);
+    assert.equal(keyProof.ownerSid, keyProof.currentSid);
+    assert.equal(keyProof.ruleCount, 1);
+    assert.equal(keyProof.ruleSid, keyProof.currentSid);
+    assert.equal(keyProof.protected, true);
+    assert.equal(keyProof.inherited, false);
+    assert.equal(keyProof.inheritanceFlags, 0);
+  }
+});
+
+test('Windows recovery ACL runner uses a bounded cold-start budget and validates SID-only proof', async () => {
+  const calls = [];
+  const execute = async (...args) => {
+    calls.push(args);
+    return {
+      stdout: `${JSON.stringify({
+        schemaVersion: 1,
+        kind: 'directory',
+        currentSid: 'S-1-5-21-1000',
+        ownerSid: 'S-1-5-21-1000',
+        protected: true,
+        ruleCount: 1,
+        ruleSid: 'S-1-5-21-1000',
+        inherited: false,
+        allow: true,
+        fullControl: true,
+        inheritanceFlags: 3,
+        propagationFlags: 0,
+      })}\n`,
+      stderr: '',
+    };
+  };
+  const proof = await secureWindowsPrivatePath(
+    'C:\\private\\trust-root',
+    'directory',
+    'configure',
+    {
+      environment: {
+        SystemRoot: 'C:\\Windows',
+        TEMP: 'C:\\Temp',
+        SECRET_TOKEN: 'must-not-cross-boundary',
+      },
+      execute,
+      platform: 'win32',
+    }
+  );
+  assert.equal(proof.ruleSid, proof.currentSid);
+  assert.equal(WINDOWS_PRIVATE_ACL_TIMEOUT_MS, 60_000);
+  assert.equal(calls.length, 1);
+  const [, args, options] = calls[0];
+  assert.deepEqual(args.slice(0, 6), [
+    '-NoLogo', '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-Command',
+  ]);
+  assert.equal(args[6], WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT);
+  assert.equal(options.timeout, WINDOWS_PRIVATE_ACL_TIMEOUT_MS);
+  assert.equal(options.env.DSH_PLUGIN_PRIVATE_PATH, 'C:\\private\\trust-root');
+  assert.equal(options.env.DSH_PLUGIN_PRIVATE_KIND, 'directory');
+  assert.equal(options.env.DSH_PLUGIN_PRIVATE_ACTION, 'configure');
+  assert.equal(options.env.SECRET_TOKEN, undefined);
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /SetAccessRuleProtection\(\$true, \$false\)/);
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /Rules\.Count -ne 1/i);
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /FileSystemRights -ne \$fullControl/);
+  assert.doesNotMatch(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /S-1-5-18/);
+
+  await assert.rejects(
+    () => secureWindowsPrivatePath('C:\\private\\trust-root', 'directory', 'verify', {
+      environment: { SystemRoot: 'C:\\Windows' },
+      execute: async () => ({
+        stdout: '{"schemaVersion":1,"kind":"directory","currentSid":"S-1-5-21-1000","ownerSid":"S-1-5-18","protected":true,"ruleCount":1,"ruleSid":"S-1-5-21-1000","inherited":false,"allow":true,"fullControl":true,"inheritanceFlags":3,"propagationFlags":0}\n',
+        stderr: '',
+      }),
+      platform: 'win32',
+    }),
+    /malformed or weaker/
+  );
+});
+
+test('private pnpm PATH binding pins the absolute 11.7.0 bytes and detects later replacement', async (t) => {
+  const root = await realpath(await workspace(t));
+  const sourceBin = join(root, 'source-bin');
+  const profileCwd = join(root, 'profile-cwd');
+  const runtimeRoot = join(root, 'runtime');
+  await mkdir(sourceBin);
+  await mkdir(profileCwd);
+  await mkdir(runtimeRoot);
+  const commandName = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
+  const source = join(sourceBin, commandName);
+  const cwdShadow = join(profileCwd, commandName);
+  const sourceBytes = process.platform === 'win32'
+    ? '@echo off\r\necho 11.7.0\r\n'
+    : '#!/bin/sh\nprintf "11.7.0\\n"\n';
+  await writeFile(source, sourceBytes, { mode: 0o700 });
+  await writeFile(
+    cwdShadow,
+    process.platform === 'win32'
+      ? '@echo off\r\necho 99.0.0\r\n'
+      : '#!/bin/sh\nprintf "99.0.0\\n"\n',
+    { mode: 0o700 }
+  );
+  const environment = {
+    PATH: sourceBin,
+    PATHEXT: '.COM;.EXE;.BAT;.CMD',
+    SystemRoot: process.env.SystemRoot,
+    WINDIR: process.env.WINDIR,
+    COMSPEC: process.platform === 'win32'
+      ? join(profileCwd, 'untrusted-command-processor.exe')
+      : process.env.COMSPEC,
+    TEMP: process.env.TEMP ?? tmpdir(),
+    TMP: process.env.TMP ?? tmpdir(),
+  };
+  const identity = await resolvePnpmExecutable(environment, { commandCwd: profileCwd });
+  assert.equal(identity.path, await realpath(source));
+  assert.equal(identity.sha256, sha256(Buffer.from(sourceBytes)));
+
+  const binding = await createPrivatePnpmBinding(environment, runtimeRoot, {
+    commandCwd: profileCwd,
+  });
+  assert.equal(binding.receipt.version, '11.7.0');
+  assert.equal(binding.receipt.targetSha256, identity.sha256);
+  assert.equal(binding.receipt.privatePathPrecedence, true);
+  assert.equal(binding.environment.PATH.split(process.platform === 'win32' ? ';' : ':')[0], join(runtimeRoot, 'pnpm-binding'));
+  assert.equal(
+    binding.environment.NoDefaultCurrentDirectoryInExePath,
+    process.platform === 'win32' ? '1' : undefined
+  );
+  if (process.platform === 'win32') {
+    assert.equal(
+      binding.environment.COMSPEC,
+      await realpath(join(process.env.SystemRoot, 'System32', 'cmd.exe'))
+    );
+  }
+  const before = spawnSync('pnpm', ['--version'], {
+    cwd: profileCwd,
+    encoding: 'utf8',
+    env: binding.environment,
+    shell: process.platform === 'win32',
+    windowsHide: true,
+  });
+  assert.equal(before.status, 0);
+  assert.equal(before.stdout.trim(), '11.7.0');
+
+  await writeFile(source, process.platform === 'win32'
+    ? '@echo off\r\necho 99.0.0\r\n'
+    : '#!/bin/sh\nprintf "99.0.0\\n"\n');
+  const after = spawnSync('pnpm', ['--version'], {
+    cwd: profileCwd,
+    encoding: 'utf8',
+    env: binding.environment,
+    shell: process.platform === 'win32',
+    windowsHide: true,
+  });
+  assert.notEqual(after.status, 0);
+  assert.match(after.stderr, /bound pnpm (?:digest|identity) changed/);
+  assert.doesNotMatch(after.stderr, new RegExp(source.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')));
+});
+
+test('private pnpm binding rejects unsupported execution platforms before PATH resolution', async () => {
+  assert.equal(requiresPnpmCommandShimShell('darwin'), false);
+  assert.equal(requiresPnpmCommandShimShell('linux'), false);
+  assert.equal(requiresPnpmCommandShimShell('win32'), true);
+  assert.equal(pnpmCommandShimShell({}, 'linux'), false);
+  assert.equal(
+    pnpmCommandShimShell({ COMSPEC: 'C:\\Windows\\System32\\cmd.exe' }, 'win32'),
+    'C:\\Windows\\System32\\cmd.exe'
+  );
+  assert.throws(
+    () => pnpmCommandShimShell({ COMSPEC: '\\system\\cmd.exe' }, 'win32'),
+    /absolute/
+  );
+  assert.throws(() => pnpmCommandShimShell({ COMSPEC: 'cmd.exe' }, 'win32'), /absolute/);
+  assert.throws(() => requiresPnpmCommandShimShell('freebsd'), /unsupported on freebsd/);
+  await assert.rejects(
+    () => resolvePnpmExecutable({ PATH: '/not/consulted' }, { platform: 'freebsd' }),
+    /unsupported on freebsd/
+  );
+});
+
+test('effective policy verification executes the platform pnpm shim with only fixed keys', async (t) => {
+  const root = await realpath(await workspace(t));
+  const sourceBin = join(root, 'policy-bin');
+  await mkdir(sourceBin);
+  const commandName = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
+  const source = join(sourceBin, commandName);
+  const sourceText = process.platform === 'win32'
+    ? [
+        '@echo off',
+        'if "%~6"=="allowBuilds" (echo {"@example/plugin":true} & exit /b 0)',
+        'if "%~6"=="dangerouslyAllowAllBuilds" (echo false & exit /b 0)',
+        'if "%~6"=="strictDepBuilds" (echo true & exit /b 0)',
+        'exit /b 2',
+        '',
+      ].join('\r\n')
+    : [
+        '#!/bin/sh',
+        'case "$6" in',
+        "  allowBuilds) printf '%s\\n' '{\"@example/plugin\":true}' ;;",
+        "  dangerouslyAllowAllBuilds) printf '%s\\n' 'false' ;;",
+        "  strictDepBuilds) printf '%s\\n' 'true' ;;",
+        '  *) exit 2 ;;',
+        'esac',
+        '',
+      ].join('\n');
+  await writeFile(source, sourceText, { mode: 0o700 });
+  const environment = {
+    PATH: sourceBin,
+    PATHEXT: '.COM;.EXE;.BAT;.CMD',
+    COMSPEC: process.env.COMSPEC,
+    SystemRoot: process.env.SystemRoot,
+    WINDIR: process.env.WINDIR,
+  };
+  assert.deepEqual(
+    verifyEffectivePnpmBuildPolicy(root, ['@example/plugin'], true, { environment }),
+    {
+      allowBuilds: { '@example/plugin': true },
+      dangerouslyAllowAllBuilds: false,
+      strictDepBuilds: true,
+    }
+  );
+});
+
 test('authority-bound runtime acceptance commits only after dump, inventory, and restart evidence agree', async () => {
   const first = hostedFixture({ id: 3006, slug: 'accept-one', name: 'dsh-accept-one' }).item;
   const second = hostedFixture({ id: 3052, slug: 'accept-two', name: 'dsh-accept-two' }).item;
@@ -1385,7 +1643,7 @@ test('Plugin Skill keeps Top10 and all 80 entries fail closed without receipts',
   assert.match(skill, /fixed argument array and\n+   `shell: false`/);
   assert.match(skill, /writes `state\.json` with `status: "committed"` only after/);
   assert.match(skill, /failed single item or Top10 member restores the entire retained/);
-  assert.match(skill, /Windows is\s+intentionally promotion-blocked/);
+  assert.match(skill, /current-user SID-only/);
   assert.match(transaction, /function buildChildEnvironment/);
   assert.doesNotMatch(transaction, /env:\s*\{\s*\.\.\.process\.env/);
   assert.doesNotMatch(skill, /awaiting-runtime-acceptance/);

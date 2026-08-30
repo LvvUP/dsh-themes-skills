@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { isAlias, isMap, isPair, isScalar, parseDocument } from 'yaml';
 
 import { validateItem } from './authority.mjs';
+import { pnpmCommandShimShell } from './pnpm-binding.mjs';
 import { validateWebProfile } from './profile-snapshot.mjs';
 
 const MAX_WORKSPACE_YAML_BYTES = 64 * 1024;
@@ -140,7 +141,9 @@ function readEffectivePnpmConfig(profile, key, environment) {
     encoding: 'utf8',
     env: environment,
     maxBuffer: MAX_PNPM_CONFIG_OUTPUT_BYTES,
-    shell: false,
+    // Node 24 refuses to execute Windows .cmd shims without a shell. The
+    // command and every argument here come from the fixed policy-key set.
+    shell: pnpmCommandShimShell(environment),
     windowsHide: true,
   }), key);
 }
