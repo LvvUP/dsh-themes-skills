@@ -9,6 +9,7 @@ import {
   lifecycleHooksFromManifest,
   loadAuthority,
   normalizeCatalogId,
+  normalizeBundlePatch,
   resolveItems,
   validateItem,
 } from './authority.mjs';
@@ -80,9 +81,13 @@ export async function fetchBoundedExact({
   maxBytes,
   expectedBytes = null,
   expectedSha256 = null,
+  accept = 'application/octet-stream',
   fetchImpl = globalThis.fetch,
 }) {
   if (typeof fetchImpl !== 'function') fail('Fetch implementation is unavailable');
+  if (!['application/json', 'application/octet-stream', 'application/vnd.github+json'].includes(accept)) {
+    fail('authority-bound fetch Accept value is not an approved fixed media type');
+  }
   let current = safeUrl(input, expectedOrigin);
   let redirects = 0;
   for (;;) {
@@ -93,7 +98,7 @@ export async function fetchBoundedExact({
         redirect: 'manual',
         credentials: 'omit',
         headers: {
-          accept: 'application/octet-stream, application/json;q=0.9',
+          accept,
           'user-agent': 'dsh-themes-skills-source-verifier/0.8.0',
         },
         signal: AbortSignal.timeout(30_000),
@@ -249,6 +254,7 @@ export async function fetchAuthorityBoundSource({
       expectedOrigin: 'https://registry.npmjs.org',
       maxBytes: MAX_METADATA_BYTES,
       expectedSha256: source.metadataSha256,
+      accept: 'application/json',
       fetchImpl,
     });
     validateExactNpmMetadata(metadata.bytes, item);
@@ -289,6 +295,7 @@ export async function fetchAuthorityBoundSource({
       url: `https://api.github.com/repos/${base}/git/commits/${source.commit}`,
       expectedOrigin: 'https://api.github.com',
       maxBytes: MAX_METADATA_BYTES,
+      accept: 'application/vnd.github+json',
       fetchImpl,
     });
     let commitDocument;
@@ -322,7 +329,7 @@ export async function fetchAuthorityBoundSource({
       fail('Git commit package manifest is not valid JSON');
     }
     if (manifestDocument.name !== item.package.name || manifestDocument.version !== item.package.version ||
-        manifestDocument.dsh?.bundle?.patch !== item.package.bundlePatch ||
+        normalizeBundlePatch(manifestDocument.dsh?.bundle?.patch) !== item.package.bundlePatch ||
         JSON.stringify(lifecycleHooksFromManifest(manifestDocument)) !==
           JSON.stringify(item.package.lifecycle.hooks)) {
       fail('Git commit manifest identity, patch, or lifecycle map mismatch');

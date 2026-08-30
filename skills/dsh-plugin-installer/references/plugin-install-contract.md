@@ -75,6 +75,16 @@ six-task counters are zero. No provisional Top10 IDs are published. Plugins
 cannot be prepared or installed. Do not manufacture package
 coordinates, receipts, or an authority item to make a prompt succeed.
 
+The separate `plugin-candidate-intake.json` is source-review input only. Its
+workflow checks exact Git identity, the root package manifest, license bytes,
+the declared bundle patch, lockfiles, and an exact npm artifact when present,
+without running the candidate. Receipts remain explicitly non-installable.
+Source-intake rejection permanently records that public ID in
+`replacementPolicy.retiredCatalogIds`; a replacement receives the next unused
+ID beginning at `#3088`. Passing source intake is still not
+redistribution approval, a runtime pass, or permission to publish a hosted
+artifact.
+
 Promotion is all-or-nothing: published catalog count, required verified
 count, verified count, authority count, and actual item count must all be
 exactly 80. Public IDs and package names must be unique. Top10 becomes

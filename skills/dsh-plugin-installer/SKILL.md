@@ -15,6 +15,15 @@ before preparing or mutating a Profile. Read
 [references/plugin-authority.schema.json](references/plugin-authority.schema.json)
 only when reviewing or publishing authority changes.
 
+When reviewing or replacing the 80 editorial inputs, read
+[references/plugin-candidate-intake.json](references/plugin-candidate-intake.json)
+and its
+[schema](references/plugin-candidate-intake.schema.json), then use
+`scripts/audit-candidate-source.mjs` only against an isolated checkout of the
+exact commit. This lane never executes candidate code and never grants install
+authority. A failed candidate permanently retires its old public ID;
+replacements start at `#3088` and receive a new ID.
+
 ## Current result: inspect only
 
 The website currently publishes 80 curated Plugin records, but

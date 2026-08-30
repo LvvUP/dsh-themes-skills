@@ -5,7 +5,7 @@ import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
 
-import { lifecycleHooksFromManifest } from './authority.mjs';
+import { lifecycleHooksFromManifest, normalizeBundlePatch } from './authority.mjs';
 
 const MAX_COMPRESSED_BYTES = 256 * 1024 * 1024;
 const MAX_UNCOMPRESSED_BYTES = 512 * 1024 * 1024;
@@ -209,7 +209,7 @@ export function validateHostedArtifact(bytes, item) {
     fail('hosted package manifest digest mismatch');
   }
   if (manifest.name !== item.package.name || manifest.version !== item.package.version ||
-      manifest.dsh?.bundle?.patch !== item.package.bundlePatch) {
+      normalizeBundlePatch(manifest.dsh?.bundle?.patch) !== item.package.bundlePatch) {
     fail('hosted package manifest identity or dsh.bundle patch mismatch');
   }
   for (const [hook, script] of Object.entries(lifecycleHooksFromManifest(manifest))) {
@@ -267,7 +267,7 @@ export function validateUpstreamArtifact(bytes, item) {
     fail(`upstream package manifest is invalid JSON: ${error.message}`);
   }
   if (manifest.name !== item.package.name || manifest.version !== item.package.version ||
-      manifest.dsh?.bundle?.patch !== item.package.bundlePatch) {
+      normalizeBundlePatch(manifest.dsh?.bundle?.patch) !== item.package.bundlePatch) {
     fail('upstream package manifest identity or dsh.bundle patch mismatch');
   }
   const lifecycle = lifecycleHooksFromManifest(manifest);

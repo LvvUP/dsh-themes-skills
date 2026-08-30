@@ -10,6 +10,7 @@ import {
   lifecycleHooksFromManifest,
   loadAuthority,
   normalizeCatalogId,
+  normalizeBundlePatch,
   resolveItems,
   validateItem,
 } from './authority.mjs';
@@ -175,7 +176,9 @@ export async function prepareUpstream({
         sha256(lockfileBytes) !== source.lockfileSha256) fail('upstream manifest or lockfile digest mismatch');
     const manifest = JSON.parse(manifestBytes.toString('utf8'));
     if (manifest.name !== item.package.name || manifest.version !== item.package.version ||
-        manifest.dsh?.bundle?.patch !== item.package.bundlePatch) fail('upstream package identity or bundle patch mismatch');
+        normalizeBundlePatch(manifest.dsh?.bundle?.patch) !== item.package.bundlePatch) {
+      fail('upstream package identity or bundle patch mismatch');
+    }
     const lifecycle = lifecycleHooksFromManifest(manifest);
     if (JSON.stringify(lifecycle) !== JSON.stringify(item.package.lifecycle.hooks)) {
       fail('upstream lifecycle hook map does not match its complete reviewed authority');

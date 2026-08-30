@@ -109,6 +109,15 @@ function safeRelativePath(value, label, { file = false } = {}) {
   if (file && value.endsWith('/')) fail(`${label} must name a file`);
 }
 
+export function normalizeBundlePatch(value, label = 'package bundle patch') {
+  const normalized = typeof value === 'string' && value.startsWith('./')
+    ? value.slice(2)
+    : value;
+  safeRelativePath(normalized, label, { file: true });
+  if (!/\.ya?ml$/u.test(normalized)) fail(`${label} must be a YAML file`);
+  return normalized;
+}
+
 export function normalizeCatalogId(input) {
   if (typeof input === 'number' && Number.isSafeInteger(input) && input >= 3000 && input <= 3999) return input;
   if (typeof input === 'string' && /^#[3]\d{3}$/.test(input)) return Number(input.slice(1));
@@ -227,7 +236,12 @@ export function validateItem(item, index = 0) {
     'name', 'version', 'bundlePatch', 'lifecycle', 'lifecycleAuthorization',
   ], `${label}.package`);
   if (!PACKAGE.test(item.package.name) || !SEMVER.test(item.package.version)) fail(`${label} package identity is malformed`);
-  safeRelativePath(item.package.bundlePatch, `${label}.package.bundlePatch`, { file: true });
+  if (
+    normalizeBundlePatch(item.package.bundlePatch, `${label}.package.bundlePatch`) !==
+    item.package.bundlePatch
+  ) {
+    fail(`${label}.package.bundlePatch must use canonical relative form without ./`);
+  }
   exactKeys(item.package.lifecycle, [
     'hooks', 'hooksSha256', 'transitiveDependencyRisk',
   ], `${label}.package.lifecycle`);

@@ -389,7 +389,12 @@ test('bounded fetch uses manual allowlisted redirects, exact bytes, and streamin
     expectedBytes: body.length,
     expectedSha256: digest,
     fetchImpl: async (url, options) => {
-      calls.push({ url: String(url), redirect: options.redirect, credentials: options.credentials });
+      calls.push({
+        url: String(url),
+        redirect: options.redirect,
+        credentials: options.credentials,
+        accept: options.headers.accept,
+      });
       if (calls.length === 1) {
         return new Response(null, {
           status: 302,
@@ -405,6 +410,23 @@ test('bounded fetch uses manual allowlisted redirects, exact bytes, and streamin
     { redirect: 'manual', credentials: 'omit' },
     { redirect: 'manual', credentials: 'omit' },
   ]);
+  assert.deepEqual(calls.map(({ accept }) => accept), [
+    'application/octet-stream',
+    'application/octet-stream',
+  ]);
+
+  const json = Buffer.from('{"name":"exact-metadata"}');
+  const metadata = await fetchBoundedExact({
+    url: 'https://registry.npmjs.org/exact-metadata/1.0.0',
+    expectedOrigin: 'https://registry.npmjs.org',
+    maxBytes: 1024,
+    accept: 'application/json',
+    fetchImpl: async (_url, options) => {
+      assert.equal(options.headers.accept, 'application/json');
+      return new Response(json, { status: 200 });
+    },
+  });
+  assert.deepEqual(metadata.bytes, json);
 
   await assert.rejects(
     fetchBoundedExact({
@@ -426,6 +448,16 @@ test('bounded fetch uses manual allowlisted redirects, exact bytes, and streamin
       fetchImpl: async () => new Response(Buffer.from('four'), { status: 200 }),
     }),
     /byte limit/u
+  );
+  await assert.rejects(
+    fetchBoundedExact({
+      url: 'https://registry.npmjs.org/pkg/1.0.0',
+      expectedOrigin: 'https://registry.npmjs.org',
+      maxBytes: 1024,
+      accept: 'text/html',
+      fetchImpl: async () => new Response('unused', { status: 200 }),
+    }),
+    /approved fixed media type/u
   );
 });
 

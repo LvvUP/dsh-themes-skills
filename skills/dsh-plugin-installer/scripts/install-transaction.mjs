@@ -13,6 +13,7 @@ import { parseDocument } from 'yaml';
 import {
   loadAuthority,
   normalizeCatalogId,
+  normalizeBundlePatch,
   resolveItems,
   validateAuthority,
 } from './authority.mjs';
@@ -386,7 +387,7 @@ async function verifyInstalled(profile, item) {
   if (inside.startsWith('..') || isAbsolute(inside)) fail(`installed package ${item.package.name} escapes profile node_modules`);
   const installed = JSON.parse(await readFile(target, 'utf8'));
   if (installed.name !== item.package.name || installed.version !== item.package.version ||
-      installed.dsh?.bundle?.patch !== item.package.bundlePatch) {
+      normalizeBundlePatch(installed.dsh?.bundle?.patch) !== item.package.bundlePatch) {
     fail(`installed package ${item.package.name} identity mismatch`);
   }
 }
