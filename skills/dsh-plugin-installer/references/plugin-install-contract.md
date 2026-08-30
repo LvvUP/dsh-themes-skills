@@ -76,9 +76,12 @@ cannot be prepared or installed. Do not manufacture package
 coordinates, receipts, or an authority item to make a prompt succeed.
 
 The separate `plugin-candidate-intake.json` is source-review input only. Its
-workflow checks exact Git identity, the root package manifest, license bytes,
-the declared bundle patch, lockfiles, and an exact npm artifact when present,
-without running the candidate. Receipts remain explicitly non-installable.
+workflow checks exact Git identity, the fixed package subdirectory manifest,
+repository-root license and lock bytes, the package-root bundle patch, and an
+exact npm artifact when present, without running the candidate. A package
+subdirectory is an explicit normalized authority field; it cannot traverse,
+resolve through a symlink, or silently fall back to the repository root.
+Receipts remain explicitly non-installable.
 Source-intake rejection permanently records that public ID in
 `replacementPolicy.retiredCatalogIds`; a replacement receives the next unused
 ID beginning at `#3088`. Passing source intake is still not

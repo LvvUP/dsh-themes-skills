@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
@@ -24,6 +24,24 @@ async function sourceFixture(t, manifest) {
   return { source, commit };
 }
 
+async function monorepoFixture(t, manifest) {
+  const source = await mkdtemp(join(tmpdir(), 'dsh-plugin-monorepo-intake-'));
+  t.after(() => rm(source, { recursive: true, force: true }));
+  execFileSync('git', ['init', '--quiet'], { cwd: source });
+  execFileSync('git', ['config', 'user.email', 'tests@example.invalid'], { cwd: source });
+  execFileSync('git', ['config', 'user.name', 'DSH Tests'], { cwd: source });
+  const packageRoot = join(source, 'packages', 'example-plugin');
+  await mkdir(packageRoot, { recursive: true });
+  await writeFile(join(packageRoot, 'package.json'), `${JSON.stringify(manifest, null, 2)}\n`);
+  await writeFile(join(packageRoot, 'cordis.patch.yml'), '- id: example\n  name: example-plugin\n');
+  await writeFile(join(source, 'LICENSE'), 'Permission is hereby granted.\n');
+  await writeFile(join(source, 'pnpm-lock.yaml'), 'lockfileVersion: \'9.0\'\n');
+  execFileSync('git', ['add', '.'], { cwd: source });
+  execFileSync('git', ['commit', '--quiet', '-m', 'fixture'], { cwd: source });
+  const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: source, encoding: 'utf8' }).trim();
+  return { source, commit };
+}
+
 function candidate(commit) {
   return {
     catalogId: 3088,
@@ -36,6 +54,13 @@ function candidate(commit) {
     primaryUseCase: 'build-and-review',
     editorialScore: 80,
     status: 'source-intake-pending',
+  };
+}
+
+function monorepoCandidate(commit) {
+  return {
+    ...candidate(commit),
+    sourceSubdir: 'packages/example-plugin',
   };
 }
 
@@ -70,6 +95,24 @@ test('source intake proves a clean exact DSH package without executing candidate
   assert.equal(receipt.review.distributionApproved, false);
 });
 
+test('source intake binds a monorepo package subdirectory while retaining repository-root license and lock evidence', async (t) => {
+  const fixture = await monorepoFixture(t, {
+    name: 'example-plugin',
+    version: '1.2.3',
+    dsh: { bundle: { patch: './cordis.patch.yml' }, client: { platform: 'web' } },
+  });
+  const receipt = await auditCandidateCheckout({
+    candidate: monorepoCandidate(fixture.commit),
+    source: fixture.source,
+    fetchImpl: npmMissing,
+  });
+  assert.equal(receipt.status, 'source-intake-audited');
+  assert.equal(receipt.source.sourceSubdir, 'packages/example-plugin');
+  assert.equal(receipt.source.licensePath, 'LICENSE');
+  assert.equal(receipt.source.lockfiles[0].path, 'pnpm-lock.yaml');
+  assert.equal(receipt.package.name, 'example-plugin');
+});
+
 test('source intake rejects a repository root that is not a DSH bundle package', async (t) => {
   const fixture = await sourceFixture(t, {
     name: 'unrelated-root',
@@ -84,6 +127,29 @@ test('source intake rejects a repository root that is not a DSH bundle package',
   assert.equal(receipt.candidateExecuted, false);
   assert.equal(receipt.review.replacementRequired, true);
   assert.match(receipt.review.reasons[0], /versioned DSH bundle package/);
+});
+
+test('source intake rejects packages that inject a client package removed from alpha.1', async (t) => {
+  const fixture = await sourceFixture(t, {
+    name: 'legacy-client-plugin',
+    version: '1.0.0',
+    dsh: {
+      bundle: { patch: 'cordis.patch.yml' },
+      client: {
+        platform: 'web',
+        inject: ['@deepseek-ai/dsh-client-runtime'],
+      },
+    },
+  });
+  const receipt = await auditCandidateCheckout({
+    candidate: candidate(fixture.commit),
+    source: fixture.source,
+    fetchImpl: npmMissing,
+  });
+  assert.equal(receipt.status, 'source-intake-rejected');
+  assert.equal(receipt.review.replacementRequired, true);
+  assert.match(receipt.review.reasons[0], /absent from the exact alpha\.1 source baseline/);
+  assert.match(receipt.review.reasons[0], /dsh-client-runtime/);
 });
 
 test('source intake excludes unbindable npm bytes without discarding exact Git source evidence', async (t) => {

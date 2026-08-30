@@ -11,6 +11,7 @@ const REPOSITORY = /^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\.gi
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 const SAFE_TEXT = /^[^\u0000-\u001f\u007f]{1,100}$/u;
 const SAFE_PATH = /^(?:[A-Za-z0-9._-]+\/)*[A-Za-z0-9._-]+$/u;
+const SAFE_SUBDIR = /^(?:\.|[A-Za-z0-9_-]+(?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?(?:\/[A-Za-z0-9_-]+(?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?)*)$/u;
 const USE_CASES = new Set([
   'build-and-review',
   'collaborate-and-notify',
@@ -53,7 +54,7 @@ export function validateCandidateIntake(intake) {
     'candidate intake'
   );
   if (
-    intake.schemaVersion !== 1 ||
+    intake.schemaVersion !== 2 ||
     intake.purpose !== 'dsh-plugin-alpha1-candidate-intake' ||
     !/^\d{4}-\d{2}-\d{2}$/u.test(intake.capturedAt)
   ) {
@@ -115,13 +116,11 @@ export function validateCandidateIntake(intake) {
     fail('candidate intake must contain exactly 80 editorial inputs');
   }
   const ids = [];
-  const repositories = [];
+  const sourceCoordinates = [];
   const slugs = [];
   for (const [index, item] of intake.items.entries()) {
     const label = `candidate intake items[${index}]`;
-    exactKeys(
-      item,
-      [
+    const requiredKeys = [
         'catalogId',
         'slug',
         'title',
@@ -132,9 +131,17 @@ export function validateCandidateIntake(intake) {
         'primaryUseCase',
         'editorialScore',
         'status',
-      ],
-      label
-    );
+      ];
+    const actualKeys = Object.keys(item).sort();
+    const withoutSubdir = [...requiredKeys].sort();
+    const withSubdir = [...requiredKeys, 'sourceSubdir'].sort();
+    if (
+      JSON.stringify(actualKeys) !== JSON.stringify(withoutSubdir) &&
+      JSON.stringify(actualKeys) !== JSON.stringify(withSubdir)
+    ) {
+      fail(`${label} keys mismatch`);
+    }
+    const sourceSubdir = item.sourceSubdir ?? '.';
     if (
       !Number.isSafeInteger(item.catalogId) ||
       item.catalogId < 3000 ||
@@ -142,6 +149,7 @@ export function validateCandidateIntake(intake) {
       !SLUG.test(item.slug) ||
       !SAFE_TEXT.test(item.title) ||
       !REPOSITORY.test(item.repository) ||
+      !SAFE_SUBDIR.test(sourceSubdir) ||
       !COMMIT.test(item.commit) ||
       !SAFE_TEXT.test(item.licenseExpression) ||
       !SAFE_PATH.test(item.licenseEvidencePath) ||
@@ -154,7 +162,7 @@ export function validateCandidateIntake(intake) {
       fail(`${label} is malformed or claims more than source-intake-pending`);
     }
     ids.push(item.catalogId);
-    repositories.push(item.repository.toLowerCase());
+    sourceCoordinates.push(`${item.repository.toLowerCase()}::${sourceSubdir.toLowerCase()}`);
     slugs.push(item.slug);
   }
   if (JSON.stringify(ids) !== JSON.stringify([...ids].sort((left, right) => left - right))) {
@@ -164,8 +172,8 @@ export function validateCandidateIntake(intake) {
   if (ids.some((catalogId) => retiredIds.includes(catalogId))) {
     fail('candidate intake rebinds a permanently retired public ID');
   }
-  if (new Set(repositories).size !== repositories.length) {
-    fail('candidate intake contains duplicate repositories');
+  if (new Set(sourceCoordinates).size !== sourceCoordinates.length) {
+    fail('candidate intake contains duplicate repository/package coordinates');
   }
   if (new Set(slugs).size !== slugs.length) fail('candidate intake contains duplicate slugs');
   return intake;
@@ -191,6 +199,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
               .replace(/^https:\/\/github\.com\//u, '')
               .replace(/\.git$/u, ''),
             commit: item.commit,
+            sourceSubdir: item.sourceSubdir ?? '.',
           })),
         })}\n`
       );

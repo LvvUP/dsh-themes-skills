@@ -28,6 +28,10 @@ const MAX_LOCKFILE_BYTES = 32 * 1024 * 1024;
 const MAX_NPM_METADATA_BYTES = 4 * 1024 * 1024;
 const MAX_NPM_TARBALL_BYTES = 256 * 1024 * 1024;
 const LOCKFILES = ['pnpm-lock.yaml', 'package-lock.json', 'yarn.lock', 'npm-shrinkwrap.json'];
+const ALPHA1_REMOVED_PACKAGES = new Set([
+  '@deepseek-ai/dsh-client-runtime',
+  '@deepseek-ai/dsh-host-apiproxy',
+]);
 
 function fail(message) {
   throw new Error(message);
@@ -98,6 +102,28 @@ async function readBounded(path, maximum, label) {
   return bounded(await readFile(path), maximum, label);
 }
 
+async function containedUnlinkedPath(root, relativePath, label, expectedType) {
+  const normalized = relativePath === '.' ? [] : relativePath.split('/');
+  let current = root;
+  for (const segment of normalized) {
+    current = join(current, segment);
+    const stat = await lstat(current);
+    if (stat.isSymbolicLink()) fail(`${label} must not traverse a symbolic link`);
+  }
+  const target = normalized.length === 0 ? root : current;
+  const targetReal = await realpath(target);
+  const inside = relative(root, targetReal);
+  if (inside.startsWith('..') || isAbsolute(inside)) {
+    fail(`${label} escapes the candidate checkout`);
+  }
+  const stat = await lstat(targetReal);
+  if ((expectedType === 'directory' && !stat.isDirectory()) ||
+      (expectedType === 'file' && (!stat.isFile() || stat.isSymbolicLink()))) {
+    fail(`${label} is not one real ${expectedType}`);
+  }
+  return targetReal;
+}
+
 function normalizeRepository(value) {
   if (typeof value !== 'string') return null;
   let normalized = value.trim().replace(/^git\+/u, '').replace(/^git:\/\//u, 'https://');
@@ -112,6 +138,26 @@ function normalizeRepository(value) {
   } catch {
     return null;
   }
+}
+
+function alpha1RemovedPackageReferences(manifest) {
+  const references = new Set();
+  const inject = manifest?.dsh?.client?.inject;
+  if (Array.isArray(inject)) {
+    for (const name of inject) {
+      if (ALPHA1_REMOVED_PACKAGES.has(name)) references.add(name);
+    }
+  }
+  for (const field of ['dependencies', 'optionalDependencies', 'peerDependencies']) {
+    const dependencies = manifest?.[field];
+    if (dependencies === null || typeof dependencies !== 'object' || Array.isArray(dependencies)) {
+      continue;
+    }
+    for (const name of Object.keys(dependencies)) {
+      if (ALPHA1_REMOVED_PACKAGES.has(name)) references.add(name);
+    }
+  }
+  return [...references].sort();
 }
 
 function tarManifest(entries) {
@@ -182,6 +228,10 @@ async function inspectExactNpm(manifest, candidate, fetchImpl) {
   ) {
     fail('exact npm tarball package identity or dsh.bundle.patch differs from the pinned source');
   }
+  const removedPackageReferences = alpha1RemovedPackageReferences(packed.manifest);
+  if (removedPackageReferences.length > 0) {
+    fail(`exact npm tarball references packages absent from alpha.1: ${removedPackageReferences.join(', ')}`);
+  }
   const patchName = `package/${normalizeBundlePatch(manifest.dsh.bundle.patch)}`;
   if (!entries.some((entry) => entry.name === patchName && entry.type === '0')) {
     fail('exact npm tarball omits its declared DSH bundle patch');
@@ -220,7 +270,7 @@ async function inspectExactNpm(manifest, candidate, fetchImpl) {
 
 function rejectedReceipt(candidate, source, reasons) {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     status: 'source-intake-rejected',
     candidateExecuted: false,
     catalogId: candidate.catalogId,
@@ -266,7 +316,7 @@ export function validateSourceIntakeReceipt(receipt, candidate) {
     'source-intake receipt'
   );
   if (
-    receipt.schemaVersion !== 1 ||
+    receipt.schemaVersion !== 2 ||
     !['source-intake-audited', 'source-intake-rejected'].includes(receipt.status) ||
     receipt.candidateExecuted !== false ||
     receipt.catalogId !== candidate.catalogId
@@ -279,6 +329,7 @@ export function validateSourceIntakeReceipt(receipt, candidate) {
       'repository',
       'commit',
       'tree',
+      'sourceSubdir',
       'manifestSha256',
       'licensePath',
       'licenseSha256',
@@ -290,6 +341,7 @@ export function validateSourceIntakeReceipt(receipt, candidate) {
   if (
     receipt.source.repository !== candidate.repository ||
     receipt.source.commit !== candidate.commit ||
+    receipt.source.sourceSubdir !== (candidate.sourceSubdir ?? '.') ||
     !SHA40.test(receipt.source.tree) ||
     receipt.source.licensePath !== candidate.licenseEvidencePath ||
     !Array.isArray(receipt.source.lockfiles) ||
@@ -427,6 +479,7 @@ export async function auditCandidateCheckout({
   fetchImpl = globalThis.fetch,
 }) {
   const source = await canonicalCheckout(sourceInput);
+  const sourceSubdir = candidate.sourceSubdir ?? '.';
   const head = runGit(source, ['rev-parse', 'HEAD']);
   const tree = runGit(source, ['rev-parse', 'HEAD^{tree}']);
   const dirty = runGit(source, ['status', '--porcelain=v1', '--untracked-files=no']);
@@ -437,24 +490,36 @@ export async function auditCandidateCheckout({
     repository: candidate.repository,
     commit: head,
     tree,
+    sourceSubdir,
     manifestSha256: null,
     licensePath: candidate.licenseEvidencePath,
     licenseSha256: null,
     bundlePatchSha256: null,
     lockfiles: [],
   };
+  let packageRoot;
+  try {
+    packageRoot = await containedUnlinkedPath(
+      source,
+      sourceSubdir,
+      'candidate package subdirectory',
+      'directory'
+    );
+  } catch (error) {
+    return rejectedReceipt(candidate, sourceEvidence, [error.message]);
+  }
   let manifestBytes;
   let manifest;
   try {
     manifestBytes = await readBounded(
-      join(source, 'package.json'),
+      join(packageRoot, 'package.json'),
       MAX_MANIFEST_BYTES,
       'candidate package manifest'
     );
     manifest = JSON.parse(manifestBytes.toString('utf8'));
   } catch (error) {
     return rejectedReceipt(candidate, sourceEvidence, [
-      `root package manifest failed validation: ${error.message}`,
+      `package manifest failed validation: ${error.message}`,
     ]);
   }
   sourceEvidence.manifestSha256 = sha256(manifestBytes);
@@ -470,20 +535,35 @@ export async function auditCandidateCheckout({
     !SAFE_PATH.test(patch ?? '');
   if (invalidPackage) {
     return rejectedReceipt(candidate, sourceEvidence, [
-      'root package.json is not one versioned DSH bundle package with a safe dsh.bundle.patch',
+      'package.json at the fixed source subdirectory is not one versioned DSH bundle package with a safe dsh.bundle.patch',
     ]);
   }
-  const patchPath = resolve(source, patch);
-  const inside = relative(source, patchPath);
-  if (inside.startsWith('..') || isAbsolute(inside)) {
-    return rejectedReceipt(candidate, sourceEvidence, ['dsh.bundle.patch escapes the source checkout']);
+  const removedPackageReferences = alpha1RemovedPackageReferences(manifest);
+  if (removedPackageReferences.length > 0) {
+    return rejectedReceipt(candidate, sourceEvidence, [
+      `package.json references packages absent from the exact alpha.1 source baseline: ${removedPackageReferences.join(', ')}`,
+    ]);
   }
   let licenseBytes;
   let patchBytes;
   try {
+    const [licensePath, patchPath] = await Promise.all([
+      containedUnlinkedPath(
+        source,
+        candidate.licenseEvidencePath,
+        'candidate license evidence',
+        'file'
+      ),
+      containedUnlinkedPath(
+        packageRoot,
+        patch,
+        'candidate DSH bundle patch',
+        'file'
+      ),
+    ]);
     [licenseBytes, patchBytes] = await Promise.all([
       readBounded(
-        join(source, candidate.licenseEvidencePath),
+        licensePath,
         MAX_LICENSE_BYTES,
         'candidate license evidence'
       ),
@@ -496,8 +576,14 @@ export async function auditCandidateCheckout({
   sourceEvidence.bundlePatchSha256 = sha256(patchBytes);
   for (const lockfile of LOCKFILES) {
     try {
+      const lockfilePath = await containedUnlinkedPath(
+        source,
+        lockfile,
+        `candidate ${lockfile}`,
+        'file'
+      );
       const bytes = await readBounded(
-        join(source, lockfile),
+        lockfilePath,
         MAX_LOCKFILE_BYTES,
         `candidate ${lockfile}`
       );
@@ -521,7 +607,7 @@ export async function auditCandidateCheckout({
       'Published npm bytes could not be bound to the pinned source and are excluded; only a separately reviewed fixed Git commit or Release asset may proceed.';
   }
   return validateSourceIntakeReceipt({
-    schemaVersion: 1,
+    schemaVersion: 2,
     status: 'source-intake-audited',
     candidateExecuted: false,
     catalogId: candidate.catalogId,

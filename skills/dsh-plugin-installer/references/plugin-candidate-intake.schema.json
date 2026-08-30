@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dsh-themes.com/schemas/dsh-plugin-alpha1-candidate-intake-v1.json",
+  "$id": "https://dsh-themes.com/schemas/dsh-plugin-alpha1-candidate-intake-v2.json",
   "title": "DSH alpha.1 Plugin candidate intake",
   "type": "object",
   "additionalProperties": false,
@@ -14,7 +14,7 @@
     "items"
   ],
   "properties": {
-    "schemaVersion": { "const": 1 },
+    "schemaVersion": { "const": 2 },
     "capturedAt": { "type": "string", "format": "date" },
     "purpose": { "const": "dsh-plugin-alpha1-candidate-intake" },
     "baseline": {
@@ -86,6 +86,10 @@
         "repository": {
           "type": "string",
           "pattern": "^https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\\.git$"
+        },
+        "sourceSubdir": {
+          "type": "string",
+          "pattern": "^(?:\\.|[A-Za-z0-9_-]+(?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?(?:/[A-Za-z0-9_-]+(?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?)*)$"
         },
         "commit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
         "licenseExpression": { "type": "string", "minLength": 1, "maxLength": 80 },
