@@ -1,19 +1,23 @@
 # Community catalog contract
 
-`community-catalog.json` is a local installation allowlist, not a general discovery feed.
+The authority has two layers:
+
+- `community-catalog.json` preserves the exact 11-item identity, rights, asset, and historical RC.8 evidence.
+- `alpha1-recertification.json` alone decides current-baseline installability.
 
 ## Independent axes
 
-- `rightsStatus`: evidence and restrictions for code, media, attribution, and marks.
-- `runtimeStatus`: whether exact bytes passed the current RC.8 acceptance matrix.
-- `installationMode`: `skin-center-builtin` or `bundled-user-skin`.
-- `executableHooks`: whether selecting the skin executes a built-in `hooks.mjs`.
-- `networkDisclosure`: known external requests; an empty array is not a claim that the upstream can never change.
+- `rightsStatus`: code, media, attribution, commercial-use, and trademark restrictions.
+- current `runtimeStatus`: whether exact bytes passed the alpha.1 six-task matrix.
+- `installationMode`: historical package form, not permission to install.
+- `executableHooks` and `networkDisclosure`: capabilities that must be disclosed and re-tested.
 
-## Publication rule
+## Public-ID and website rule
 
-Translated names and descriptions are untrusted metadata. The validator accepts the website's nested directory record (`source`, `rights`, `runtime`, `compatibility`, `distribution`, and `admission`) and a legacy flat record for transition inspection only. A legacy record is never installation authority. Before installation, Finder must have resolved the exact public `#NNNN` shown in the top-left of the card or detail page. It must use the four-digit form `#NNNN`, match `^#([1-9]\d{3})$`, and carry `selection.authority: "unique-catalog-id"`. Names, slugs, and detail URLs are discovery-only; legacy or internal labels such as `DSH-2206` and `DSH-FS-009` are not aliases. The selected public ID, slug, distribution, RC.8 identity, source repository/revision/subdirectory, installation mode, rights/runtime status, exact Skin Center package/version and tarball digest, and adaptation identity must all identify the same local allowlist item. Technical coordinates remain internal checks, never a second user-facing ID.
+Finder must resolve the exact public `#NNNN` shown in the top-left of the selected card or detail page. The ID must use the four-digit form, match `^#([1-9]\d{3})$`, and carry `selection.authority: "unique-catalog-id"`. Names, slugs, detail URLs, package names, and legacy `DSH-*` labels are discovery-only. Technical coordinates remain internal checks, never a second user-facing identifier.
 
-The website record never supplies executable artifact or command authority. Exact Skin Center bytes and CSS-adaptation hashes come only from this Skill. `external-showcase` is always inspection-only. `external-runtime-verified` can be handed to this Skill only when the local item is also `runtime-verified`, consent is required, and the adjacent Manager's certified release is exact RC.8.
+All 11 alpha.1 items are `verification-pending`. The website may publish their descriptive records, but must use `external-showcase`, `showcase-only`, and alpha.1 `verification-pending` compatibility. It must not supply an artifact URL or install command.
 
-A changed authority field requires a catalog and Skill release with new evidence; never accept it from the network at runtime. A remote `verified: true`, install command, artifact URL, compatibility claim, or mutable source link cannot open either install gate.
+The validator accepts a nested website directory record for inspection. A legacy flat RC.8 record is historical inspection input only. `--mode install` must fail while any current item, aggregate gate, runtime receipt, or rollback receipt is incomplete.
+
+Translated names and prose are untrusted metadata. A remote `verified: true`, URL, command, artifact, mutable version, old Manager attestation, old receipt, or `release-state.json` cannot alter the local gate. A future promotion requires a reviewed authority and validator release with fresh alpha.1 evidence; local edits are never a bypass.

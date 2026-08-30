@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 2,
+  "capturedAt": "2026-08-30",
+  "purpose": "dsh-plugin-install-authority",
+  "harness": {
+    "tag": "dsh-v0.1.2-alpha.1",
+    "commit": "cd5ef8148158c3a752a658978873241fdf8e2bbc",
+    "tree": "a712eec535b48badc4fefb4df5176a7002e4280b",
+    "lockfileSha256": "506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1",
+    "sourceBuildAuthoritySha256": "2ee9343fea9a2f1e15dd8e3d4870e3040f730bb85e19bb13c4ba90c6212c2da3",
+    "runtimeStatus": "source-build-evidence-pending",
+    "runtimeReceiptSetSha256": null,
+    "installable": false
+  },
+  "supportedDistributionKinds": [
+    "hosted-plugin-verified",
+    "upstream-plugin-verified"
+  ],
+  "publication": {
+    "status": "plugin-evidence-pending",
+    "publishedInstallable": false,
+    "publishedCatalogPluginCount": 80,
+    "requiredVerifiedInstallableCount": 80,
+    "verifiedInstallableCount": 0,
+    "authorityItemCount": 0
+  },
+  "top10ReleaseSet": {
+    "path": "top10-release-set.json",
+    "sha256": "125b8787f0cfa983fd1e6aab0888811ce202e626b30bc8fa04b49bfc68075234"
+  },
+  "items": []
+}

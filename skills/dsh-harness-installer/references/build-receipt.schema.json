@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh-themes.com/schemas/dsh-alpha1-source-build-receipt-v1.json",
+  "title": "DSH alpha.1 local source-build receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "scope",
+    "source",
+    "toolchain",
+    "result",
+    "privacy"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "status": { "const": "local-source-build-passed" },
+    "scope": { "const": "one-machine-local-build-only" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tag", "commit", "tree", "lockfileSha256"],
+      "properties": {
+        "tag": { "const": "dsh-v0.1.2-alpha.1" },
+        "commit": { "const": "cd5ef8148158c3a752a658978873241fdf8e2bbc" },
+        "tree": { "const": "a712eec535b48badc4fefb4df5176a7002e4280b" },
+        "lockfileSha256": { "const": "506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1" }
+      }
+    },
+    "toolchain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["platform", "arch", "nodeVersion", "packageManager", "packageManagerVersion"],
+      "properties": {
+        "platform": { "enum": ["linux", "darwin", "win32"] },
+        "arch": { "type": "string", "pattern": "^[a-z0-9_-]{2,24}$" },
+        "nodeVersion": { "enum": ["22.19.0", "24.15.0"] },
+        "packageManager": { "const": "pnpm" },
+        "packageManagerVersion": { "const": "11.7.0" }
+      }
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["buildScript", "builtCliPath", "builtCliSha256", "reportedVersion", "pathInstalled"],
+      "properties": {
+        "buildScript": { "const": "build:official" },
+        "builtCliPath": { "const": "apps/cli/lib/bin.js" },
+        "builtCliSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "reportedVersion": { "const": "0.1.2-alpha.1" },
+        "pathInstalled": { "const": false }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["capturesProcessOutput", "capturesEnvironment", "capturesBrowserCredentials", "capturesCredentialDerivedDigest"],
+      "properties": {
+        "capturesProcessOutput": { "const": false },
+        "capturesEnvironment": { "const": false },
+        "capturesBrowserCredentials": { "const": false },
+        "capturesCredentialDerivedDigest": { "const": false }
+      }
+    }
+  }
+}

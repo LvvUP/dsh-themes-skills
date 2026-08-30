@@ -1,6 +1,6 @@
 {
   "name": "dsh-themes-skills",
-  "version": "0.7.2",
+  "version": "0.8.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -10,6 +10,7 @@
     "pretest": "node scripts/bootstrap-runner.mjs",
     "test": "node --test",
     "test:rc2-final": "node --test test/rc2-final-certification-infrastructure.test.mjs",
+    "test:installers": "node --test test/harness-installer.test.mjs test/plugin-installer.test.mjs test/public-authority-hardening.test.mjs",
     "rc2:final:contract": "node skills/dsh-theme-manager/scripts/validate-rc2-final-contract.mjs",
     "rc2:final:validate": "node skills/dsh-theme-manager/scripts/validate-rc2-final-certification.mjs",
     "rc2:final:verify-provenance": "node skills/dsh-theme-manager/scripts/verify-rc2-final-provenance.mjs",
@@ -20,6 +21,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "sharp": "0.35.2"
+    "sharp": "0.35.2",
+    "yaml": "2.9.0"
   }
 }

@@ -1,0 +1,304 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh-themes.com/schemas/dsh-plugin-authority-v2.json",
+  "title": "DSH plugin installation authority",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "capturedAt", "purpose", "harness", "supportedDistributionKinds", "publication", "top10ReleaseSet", "items"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "capturedAt": { "type": "string", "format": "date" },
+    "purpose": { "const": "dsh-plugin-install-authority" },
+    "harness": { "$ref": "#/$defs/harness" },
+    "supportedDistributionKinds": { "const": ["hosted-plugin-verified", "upstream-plugin-verified"] },
+    "publication": { "$ref": "#/$defs/publication" },
+    "top10ReleaseSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "const": "top10-release-set.json" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "items": { "type": "array", "maxItems": 80, "items": { "$ref": "#/$defs/item" } }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "catalogId": { "type": "integer", "minimum": 3000, "maximum": 3999 },
+    "packageName": { "type": "string", "pattern": "^(?:@[a-z0-9._-]+/)?[a-z0-9._-]+$" },
+    "semver": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$" },
+    "harness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tag", "commit", "tree", "lockfileSha256", "sourceBuildAuthoritySha256", "runtimeStatus", "runtimeReceiptSetSha256", "installable"],
+      "properties": {
+        "tag": { "const": "dsh-v0.1.2-alpha.1" },
+        "commit": { "const": "cd5ef8148158c3a752a658978873241fdf8e2bbc" },
+        "tree": { "const": "a712eec535b48badc4fefb4df5176a7002e4280b" },
+        "lockfileSha256": { "const": "506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1" },
+        "sourceBuildAuthoritySha256": { "$ref": "#/$defs/sha256" },
+        "runtimeStatus": { "enum": ["source-build-evidence-pending", "runtime-receipt-verified"] },
+        "runtimeReceiptSetSha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "installable": { "type": "boolean" }
+      }
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "publishedInstallable", "publishedCatalogPluginCount", "requiredVerifiedInstallableCount", "verifiedInstallableCount", "authorityItemCount"],
+      "properties": {
+        "status": { "enum": ["plugin-evidence-pending", "verified-installable"] },
+        "publishedInstallable": { "type": "boolean" },
+        "publishedCatalogPluginCount": { "const": 80 },
+        "requiredVerifiedInstallableCount": { "const": 80 },
+        "verifiedInstallableCount": { "type": "integer", "minimum": 0, "maximum": 80 },
+        "authorityItemCount": { "type": "integer", "minimum": 0, "maximum": 80 }
+      }
+    },
+    "lifecycleHooks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prepublish", "prepare", "prepublishOnly", "prepack", "postpack", "dependencies", "preinstall", "install", "postinstall", "preversion", "version", "postversion", "prestart", "start", "poststart", "prestop", "stop", "poststop", "prerestart", "restart", "postrestart"],
+      "properties": {
+        "prepublish": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "prepare": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "prepublishOnly": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "prepack": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "postpack": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "dependencies": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "preinstall": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "install": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "postinstall": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "preversion": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "version": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "postversion": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "prestart": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "start": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "poststart": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "prestop": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "stop": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "poststop": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "prerestart": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "restart": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 },
+        "postrestart": { "type": ["string", "null"], "minLength": 1, "maxLength": 200 }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hooks", "hooksSha256", "transitiveDependencyRisk"],
+      "properties": {
+        "hooks": { "$ref": "#/$defs/lifecycleHooks" },
+        "hooksSha256": { "$ref": "#/$defs/sha256" },
+        "transitiveDependencyRisk": { "const": "pnpm-may-run-transitive-dependency-lifecycle-scripts" }
+      }
+    },
+    "lifecycleAuthorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "packageKey", "authorizedHooks", "hooksSha256"],
+      "properties": {
+        "required": { "type": "boolean" },
+        "packageKey": { "oneOf": [{ "$ref": "#/$defs/packageName" }, { "type": "null" }] },
+        "authorizedHooks": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "hooksSha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] }
+      }
+    },
+    "hostedDistribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "assetName", "artifactUrl", "artifactBytes", "artifactSha256", "artifactIntegrity", "manifestSha256", "licenseFile", "sbom"],
+      "properties": {
+        "kind": { "const": "hosted-plugin-verified" },
+        "assetName": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}\\.tgz$" },
+        "artifactUrl": { "type": "string", "pattern": "^https://github\\.com/LvvUP/dsh-themes-skills/releases/download/v0\\.8\\.0/[A-Za-z0-9][A-Za-z0-9._-]{0,159}\\.tgz$" },
+        "artifactBytes": { "type": "integer", "minimum": 1, "maximum": 268435456 },
+        "artifactSha256": { "$ref": "#/$defs/sha256" },
+        "artifactIntegrity": { "type": "string", "pattern": "^sha256-[A-Za-z0-9+/]{43}=$" },
+        "manifestSha256": { "$ref": "#/$defs/sha256" },
+        "licenseFile": { "$ref": "#/$defs/evidenceFile" },
+        "sbom": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["format", "path", "sha256"],
+          "properties": {
+            "format": { "const": "cyclonedx-json" },
+            "path": { "type": "string", "pattern": "^(?:[A-Za-z0-9._-]+/)*[A-Za-z0-9._-]+$" },
+            "sha256": { "$ref": "#/$defs/sha256" }
+          }
+        }
+      }
+    },
+    "evidenceFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "pattern": "^(?:[A-Za-z0-9._-]+/)*[A-Za-z0-9._-]+$" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "npmSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "registry", "packageName", "version", "installSpec", "metadataSha256", "tarballUrl", "tarballBytes", "tarballSha256", "distIntegrity"],
+      "properties": {
+        "type": { "const": "npm-package-version" },
+        "registry": { "const": "https://registry.npmjs.org" },
+        "packageName": { "$ref": "#/$defs/packageName" },
+        "version": { "$ref": "#/$defs/semver" },
+        "installSpec": { "type": "string", "pattern": "^(?:@[a-z0-9._-]+/)?[a-z0-9._-]+@[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$" },
+        "metadataSha256": { "$ref": "#/$defs/sha256" },
+        "tarballUrl": { "type": "string", "pattern": "^https://registry\\.npmjs\\.org/[^?#]+\\.tgz$" },
+        "tarballBytes": { "type": "integer", "minimum": 1, "maximum": 268435456 },
+        "tarballSha256": { "$ref": "#/$defs/sha256" },
+        "distIntegrity": { "type": "string", "pattern": "^sha512-[A-Za-z0-9+/]+={0,2}$" }
+      }
+    },
+    "githubReleaseSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "repository", "tag", "assetName", "assetUrl", "assetBytes", "assetSha256", "assetIntegrity", "manifestSha256"],
+      "properties": {
+        "type": { "const": "github-release-asset" },
+        "repository": { "type": "string", "pattern": "^https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+        "tag": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,99}$" },
+        "assetName": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}\\.tgz$" },
+        "assetUrl": { "type": "string", "pattern": "^https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/releases/download/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+\\.tgz$" },
+        "assetBytes": { "type": "integer", "minimum": 1, "maximum": 268435456 },
+        "assetSha256": { "$ref": "#/$defs/sha256" },
+        "assetIntegrity": { "type": "string", "pattern": "^sha256-[A-Za-z0-9+/]{43}=$" },
+        "manifestSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "gitCommitSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "repository", "commit", "tree", "subdir", "installSpec", "manifestSha256", "lockfilePath", "lockfileSha256"],
+      "properties": {
+        "type": { "const": "git-commit" },
+        "repository": { "type": "string", "pattern": "^https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\\.git$" },
+        "commit": { "$ref": "#/$defs/sha1" },
+        "tree": { "$ref": "#/$defs/sha1" },
+        "subdir": { "const": "." },
+        "installSpec": { "type": "string", "pattern": "^git\\+https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\\.git#[a-f0-9]{40}$" },
+        "manifestSha256": { "$ref": "#/$defs/sha256" },
+        "lockfilePath": { "enum": ["pnpm-lock.yaml", "package-lock.json", "yarn.lock", "npm-shrinkwrap.json"] },
+        "lockfileSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "upstreamDistribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "source"],
+      "properties": {
+        "kind": { "const": "upstream-plugin-verified" },
+        "source": { "oneOf": [{ "$ref": "#/$defs/npmSource" }, { "$ref": "#/$defs/githubReleaseSource" }, { "$ref": "#/$defs/gitCommitSource" }] }
+      }
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["catalogId", "slug", "title", "status", "profile", "distribution", "package", "runtimeAcceptance", "safety", "rights", "rollback", "receipts"],
+      "properties": {
+        "catalogId": { "$ref": "#/$defs/catalogId" },
+        "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "status": { "const": "verified-installable" },
+        "profile": { "const": "web" },
+        "distribution": { "oneOf": [{ "$ref": "#/$defs/hostedDistribution" }, { "$ref": "#/$defs/upstreamDistribution" }] },
+        "package": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "version", "bundlePatch", "lifecycle", "lifecycleAuthorization"],
+          "properties": {
+            "name": { "$ref": "#/$defs/packageName" },
+            "version": { "$ref": "#/$defs/semver" },
+            "bundlePatch": { "type": "string", "pattern": "^(?:[A-Za-z0-9._-]+/)*[A-Za-z0-9._-]+\\.(?:ya?ml)$" },
+            "lifecycle": { "$ref": "#/$defs/lifecycle" },
+            "lifecycleAuthorization": { "$ref": "#/$defs/lifecycleAuthorization" }
+          }
+        },
+        "runtimeAcceptance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["schemaVersion", "dumpConfig", "functionalProbe"],
+          "properties": {
+            "schemaVersion": { "const": 1 },
+            "dumpConfig": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "entryId", "packageName", "occurrence"],
+              "properties": {
+                "kind": { "const": "exact-cordis-entry" },
+                "entryId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]{0,127}$" },
+                "packageName": { "$ref": "#/$defs/packageName" },
+                "occurrence": { "const": "exactly-one" }
+              }
+            },
+            "functionalProbe": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "packageName", "version", "unauthenticatedRootStatus"],
+              "properties": {
+                "kind": { "const": "cold-web-start-with-plugin-inventory" },
+                "packageName": { "$ref": "#/$defs/packageName" },
+                "version": { "$ref": "#/$defs/semver" },
+                "unauthenticatedRootStatus": { "const": 401 }
+              }
+            }
+          }
+        },
+        "safety": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["consentRequired", "permissions", "network", "processes", "files"],
+          "anyOf": [
+            { "properties": { "permissions": { "minItems": 1 } } },
+            { "properties": { "network": { "minItems": 1 } } },
+            { "properties": { "processes": { "minItems": 1 } } },
+            { "properties": { "files": { "minItems": 1 } } }
+          ],
+          "properties": {
+            "consentRequired": { "const": true },
+            "permissions": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 160 } },
+            "network": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 160 } },
+            "processes": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 160 } },
+            "files": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 160 } }
+          }
+        },
+        "rights": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["licenseExpression", "sourceUrl", "redistribution"],
+          "properties": {
+            "licenseExpression": { "type": "string", "minLength": 1, "maxLength": 80 },
+            "sourceUrl": { "type": "string", "pattern": "^https://" },
+            "redistribution": { "enum": ["allowed", "upstream-only"] }
+          }
+        },
+        "rollback": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["removePackageName", "coldRestartRequired"],
+          "properties": {
+            "removePackageName": { "$ref": "#/$defs/packageName" },
+            "coldRestartRequired": { "const": true }
+          }
+        },
+        "receipts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "runtimeReceiptSha256", "platformNodeMatrixSha256"],
+          "properties": {
+            "status": { "const": "verified" },
+            "runtimeReceiptSha256": { "$ref": "#/$defs/sha256" },
+            "platformNodeMatrixSha256": { "$ref": "#/$defs/sha256" }
+          }
+        }
+      }
+    }
+  }
+}

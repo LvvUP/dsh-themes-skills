@@ -429,7 +429,7 @@ test('informational release state cannot change executable baseline gates', asyn
   }
 });
 
-test('Manager V3 and the separate 11-record community authority are open only on final RC.8 evidence', async () => {
+test('Manager keeps RC.8 history while the separate community lane is closed on alpha.1', async () => {
   const finder = await readFile(
     new URL('skills/dsh-theme-finder/scripts/find-themes.mjs', root),
     'utf8'
@@ -454,11 +454,52 @@ test('Manager V3 and the separate 11-record community authority are open only on
       'utf8'
     )
   );
+  const communityPolicy = JSON.parse(
+    await readFile(
+      new URL(
+        'skills/dsh-community-skin-installer/references/baseline-policy.json',
+        root
+      ),
+      'utf8'
+    )
+  );
+  const alpha1Recertification = JSON.parse(
+    await readFile(
+      new URL(
+        'skills/dsh-community-skin-installer/references/alpha1-recertification.json',
+        root
+      ),
+      'utf8'
+    )
+  );
 
   assert.match(finder, /runtimeAttestationSha256/);
   assert.match(manager, /validateV3/);
   assert.doesNotMatch(manager, /rejectPendingV3/);
-  assert.match(communityGate, /managerBaselineCertified/);
+  assert.match(communityGate, /alpha1GateCertified/);
+  assert.match(communityGate, /ALPHA1_RECERTIFICATION_SHA256/);
+  assert.equal(communityPolicy.defaultOperationalLane, 'currentAlpha1');
+  assert.equal(communityPolicy.currentAlpha1.installable, false);
+  assert.equal(
+    communityPolicy.currentAlpha1.websiteDistribution,
+    'external-showcase'
+  );
+  assert.equal(
+    communityPolicy.currentAlpha1.websiteInstallability,
+    'showcase-only'
+  );
+  assert.equal(
+    communityPolicy.currentAlpha1.websiteCompatibility,
+    'verification-pending'
+  );
+  assert.equal(
+    alpha1Recertification.baseline.sourceCommit,
+    'cd5ef8148158c3a752a658978873241fdf8e2bbc'
+  );
+  assert.equal(alpha1Recertification.gate.requiredItems, 11);
+  assert.equal(alpha1Recertification.gate.completedItems, 0);
+  assert.equal(alpha1Recertification.gate.installable, false);
+  assert.equal(alpha1Recertification.historicalAuthority.mayAuthorizeAlpha1, false);
   assert.equal(catalog.managerGate.installable, true);
   assert.equal(catalog.managerGate.certificationStatus, 'certified-installable');
   assert.equal(
@@ -473,5 +514,8 @@ test('Manager V3 and the separate 11-record community authority are open only on
   assert.ok(
     catalog.skins.every((skin) => skin.runtimeStatus === 'runtime-verified')
   );
+  assert.equal(communityPolicy.certified.historicalAtCapture, true);
+  assert.equal(communityPolicy.certified.installableAtCapture, true);
+  assert.equal(communityPolicy.certified.installable, false);
   assert.match(communityGate, /RUNTIME_RECEIPT_SHA256/);
 });

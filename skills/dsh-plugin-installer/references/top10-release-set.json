@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-30",
+  "purpose": "dsh-plugin-top10-release-set",
+  "releaseSet": "top10-alpha1-candidate-2026-08",
+  "status": "candidate-pending",
+  "frozen": false,
+  "baseline": {
+    "tag": "dsh-v0.1.2-alpha.1",
+    "commit": "cd5ef8148158c3a752a658978873241fdf8e2bbc"
+  },
+  "scoring": {
+    "weights": {
+      "userValueAndUseCaseClarity": 25,
+      "stabilityMaintenanceAndAlpha1Fit": 25,
+      "securityAndPermissionRestraint": 15,
+      "crossPlatformInstallRemoveRollback": 15,
+      "nonTechnicalUsabilityAndDocs": 10,
+      "combinationComplementarity": 10
+    },
+    "minimumUseCaseCategories": 8,
+    "coveredUseCaseCategories": [],
+    "coverageStatus": "candidate-unverified",
+    "tieBreakOrder": [
+      "stability-plus-security",
+      "maintenance-activity",
+      "lower-public-id"
+    ]
+  },
+  "entries": [],
+  "gate": {
+    "requiredPublishedPluginCount": 80,
+    "verifiedPluginCount": 0,
+    "requiredMatrixTasksPerItem": 6,
+    "verifiedMatrixTasksPerItem": 0,
+    "itemAuthorityComplete": false,
+    "allEightyVerified": false,
+    "sixTaskMatrixVerified": false,
+    "transactionPreflightVerified": false,
+    "transactionRollbackVerified": false,
+    "webCoexistenceVerified": false,
+    "conflictMatrixVerified": false,
+    "transactionPreflightReceiptSha256": null,
+    "transactionRollbackReceiptSha256": null,
+    "webCoexistenceReceiptSha256": null,
+    "conflictMatrixReceiptSha256": null,
+    "itemAuthoritySetSha256": null,
+    "platformNodeMatrixSetSha256": null
+  },
+  "releaseSetPayloadSha256": "8fc4bc6b2d5281a947ea0f31d3cabfa2b2e2318acea1f1f4e63d4b065a384d8f"
+}

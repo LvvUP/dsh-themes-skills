@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh-themes.com/schemas/dsh-alpha1-runtime-receipt-v1.json",
+  "title": "DSH alpha.1 one-platform runtime receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "scope", "source", "task", "build", "probes", "ci", "privacy"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "status": { "const": "alpha1-runtime-task-passed" },
+    "scope": { "const": "one-platform-node-task" },
+    "source": { "$ref": "#/$defs/source" },
+    "task": { "$ref": "#/$defs/task" },
+    "build": { "$ref": "#/$defs/build" },
+    "probes": { "$ref": "#/$defs/probes" },
+    "ci": { "$ref": "#/$defs/ci" },
+    "privacy": { "$ref": "#/$defs/privacy" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tag", "commit", "tree", "lockfileSha256"],
+      "properties": {
+        "tag": { "const": "dsh-v0.1.2-alpha.1" },
+        "commit": { "const": "cd5ef8148158c3a752a658978873241fdf8e2bbc" },
+        "tree": { "const": "a712eec535b48badc4fefb4df5176a7002e4280b" },
+        "lockfileSha256": { "const": "506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1" }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["platform", "arch", "nodeVersion"],
+      "properties": {
+        "platform": { "enum": ["linux", "darwin", "win32"] },
+        "arch": { "enum": ["x64", "arm64"] },
+        "nodeVersion": { "enum": ["22.19.0", "24.15.0"] }
+      }
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["buildReceiptSha256", "builtCliSha256"],
+      "properties": {
+        "buildReceiptSha256": { "$ref": "#/$defs/sha256" },
+        "builtCliSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "probes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cli", "profile", "browserAuth", "webProtocol"],
+      "properties": {
+        "cli": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["reportedVersion"],
+          "properties": { "reportedVersion": { "const": "0.1.2-alpha.1" } }
+        },
+        "profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "dumpConfigPassed"],
+          "properties": { "name": { "const": "web" }, "dumpConfigPassed": { "const": true } }
+        },
+        "browserAuth": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["unauthenticatedRootStatus", "oneTimeExchangeStatus", "authenticatedSessionStatus", "forgedHostStatus", "restartStatus"],
+          "properties": {
+            "unauthenticatedRootStatus": { "const": 401 },
+            "oneTimeExchangeStatus": { "const": 303 },
+            "authenticatedSessionStatus": { "const": 200 },
+            "forgedHostStatus": { "const": 403 },
+            "restartStatus": { "const": "prior-session-rejected-new-exchange-required" }
+          }
+        },
+        "webProtocol": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["entriesAndBatches", "comboUrl", "revision404", "javascriptMime", "sourceMapMime", "gzip", "identity", "cache", "bootReady"],
+          "properties": {
+            "entriesAndBatches": { "const": true },
+            "comboUrl": { "const": true },
+            "revision404": { "const": true },
+            "javascriptMime": { "enum": ["text/javascript", "application/javascript"] },
+            "sourceMapMime": { "const": "application/json" },
+            "gzip": { "const": true },
+            "identity": { "const": true },
+            "cache": { "const": true },
+            "bootReady": { "const": true }
+          }
+        }
+      }
+    },
+    "ci": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "workflowPath", "workflowSha256", "runId", "runAttempt", "jobId", "headSha"],
+      "properties": {
+        "repository": { "const": "LvvUP/dsh-themes-skills" },
+        "workflowPath": { "const": ".github/workflows/alpha1-runtime-certification.yml" },
+        "workflowSha256": { "$ref": "#/$defs/sha256" },
+        "runId": { "type": "string", "pattern": "^[1-9][0-9]{0,19}$" },
+        "runAttempt": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "jobId": { "type": "string", "pattern": "^[A-Za-z0-9._-]{1,100}$" },
+        "headSha": { "$ref": "#/$defs/sha1" }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["capturesProcessOutput", "capturesEnvironment", "capturesBrowserSecrets", "capturesSecretDerivedDigest"],
+      "properties": {
+        "capturesProcessOutput": { "const": false },
+        "capturesEnvironment": { "const": false },
+        "capturesBrowserSecrets": { "const": false },
+        "capturesSecretDerivedDigest": { "const": false }
+      }
+    }
+  }
+}

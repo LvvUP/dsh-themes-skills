@@ -1,4 +1,4 @@
 interface:
   display_name: "DSH Community Skin Installer"
-  short_description: "Install allowlisted skins under pinned runtime evidence"
-  default_prompt: "Use $dsh-community-skin-installer only after official DSH has completed a separate first-start task and Finder has validated the exact public #NNNN shown at the top-left of the selected card or detail page. Reject legacy DSH-* labels and every cross-item mismatch. Keep technical coordinates internal; after consent, install only when the pinned Manager and item receipt both validate. RC.2 is baseline-certified but has 0/11 item authority and never authorizes installation."
+  short_description: "Inspect 11 skins while alpha.1 re-certification is pending"
+  default_prompt: "Use $dsh-community-skin-installer to inspect the selected exact public #NNNN shown in the top-left, reject legacy labels, and explain why installation is blocked until fresh DeepSeek Harness 0.1.2-alpha.1 runtime and rollback evidence passes."
