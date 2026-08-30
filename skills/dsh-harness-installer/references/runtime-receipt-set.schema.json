@@ -34,6 +34,11 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["platform", "arch", "nodeVersion", "receiptSha256", "jobId"],
+      "oneOf": [
+        { "properties": { "platform": { "const": "linux" }, "arch": { "const": "x64" } } },
+        { "properties": { "platform": { "const": "darwin" }, "arch": { "const": "arm64" } } },
+        { "properties": { "platform": { "const": "win32" }, "arch": { "const": "x64" } } }
+      ],
       "properties": {
         "platform": { "enum": ["linux", "darwin", "win32"] },
         "arch": { "enum": ["x64", "arm64"] },

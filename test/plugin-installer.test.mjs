@@ -697,10 +697,10 @@ test('authority validator accepts exact hosted/upstream records and rejects comm
     GITHUB_TOKEN: 'never-inherit',
   });
   assert.equal(Object.isFrozen(childEnv), true);
-  assert.equal(childEnv.HOME, '/private/runtime/home');
-  assert.equal(childEnv.USERPROFILE, '/private/runtime/home');
-  assert.equal(childEnv.NPM_CONFIG_USERCONFIG, '/private/runtime/empty-npmrc');
-  assert.equal(childEnv.GIT_CONFIG_GLOBAL, '/private/runtime/empty-gitconfig');
+  assert.equal(childEnv.HOME, join('/private/runtime', 'home'));
+  assert.equal(childEnv.USERPROFILE, join('/private/runtime', 'home'));
+  assert.equal(childEnv.NPM_CONFIG_USERCONFIG, join('/private/runtime', 'empty-npmrc'));
+  assert.equal(childEnv.GIT_CONFIG_GLOBAL, join('/private/runtime', 'empty-gitconfig'));
   assert.equal(childEnv.LANG, 'en_US.UTF-8');
   assert.equal(childEnv.PATH, '/trusted/bin');
   assert.equal(childEnv.DSH_HOME, '/private/dsh-home');

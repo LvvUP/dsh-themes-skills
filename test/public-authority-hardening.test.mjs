@@ -33,6 +33,7 @@ import {
 } from '../skills/dsh-plugin-installer/scripts/top10-authority.mjs';
 import { loadAuthority as loadHarnessAuthority } from '../skills/dsh-harness-installer/scripts/authority.mjs';
 import {
+  runtimeProvenanceSetSha256,
   runtimeReceiptSetPayloadSha256,
   runtimeSha256,
   validateRuntimeReceipt,
@@ -715,10 +716,12 @@ test('Harness runtime set accepts only the canonical six-task shared-run matrix 
         profile: { name: 'web', dumpConfigPassed: true },
         browserAuth: {
           unauthenticatedRootStatus: 401,
-          oneTimeExchangeStatus: 303,
+          launchExchangeStatus: 303,
           authenticatedSessionStatus: 200,
-          forgedHostStatus: 403,
-          restartStatus: 'prior-session-rejected-new-exchange-required',
+          hostOnlyRejectionStatus: 403,
+          originOnlyRejectionStatus: 403,
+          crossSiteRejectionStatus: 403,
+          restartStatus: 'prior-session-persisted-launch-credential-rotated',
         },
         webProtocol: {
           entriesAndBatches: true,
@@ -752,9 +755,10 @@ test('Harness runtime set accepts only the canonical six-task shared-run matrix 
     workflow,
     requiredReceiptCount: 6,
     receipts: entries,
-    provenanceSetSha256: '7'.repeat(64),
+    provenanceSetSha256: '0'.repeat(64),
     receiptSetPayloadSha256: '0'.repeat(64),
   };
+  receiptSet.provenanceSetSha256 = runtimeProvenanceSetSha256(receiptSet);
   receiptSet.receiptSetPayloadSha256 = runtimeReceiptSetPayloadSha256(receiptSet);
   validateRuntimeReceiptSet(receiptSet, { authority, receiptBytesBySha256 });
 
@@ -767,6 +771,7 @@ test('Harness runtime set accepts only the canonical six-task shared-run matrix 
 
   const leakedSet = structuredClone(receiptSet);
   leakedSet.receipts[0].jobId = 'A'.repeat(43);
+  leakedSet.provenanceSetSha256 = runtimeProvenanceSetSha256(leakedSet);
   leakedSet.receiptSetPayloadSha256 = runtimeReceiptSetPayloadSha256(leakedSet);
   assert.throws(
     () => validateRuntimeReceiptSet(leakedSet, { authority, receiptBytesBySha256 }),
@@ -775,6 +780,7 @@ test('Harness runtime set accepts only the canonical six-task shared-run matrix 
 
   const reordered = structuredClone(receiptSet);
   [reordered.receipts[0], reordered.receipts[1]] = [reordered.receipts[1], reordered.receipts[0]];
+  reordered.provenanceSetSha256 = runtimeProvenanceSetSha256(reordered);
   reordered.receiptSetPayloadSha256 = runtimeReceiptSetPayloadSha256(reordered);
   assert.throws(
     () => validateRuntimeReceiptSet(reordered, { authority, receiptBytesBySha256 }),

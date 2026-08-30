@@ -25,6 +25,17 @@ schemas plus `scripts/runtime-authority.mjs` reject partial, duplicate,
 out-of-order, cross-run, or source-mismatched matrices. No runtime receipt set
 is bundled yet, so the current completed count remains 0/6.
 
+The public workflow is manual-only and emits candidate evidence, never an
+authority mutation. A candidate contains six canonical tuple receipts, one
+receipt set, and a manifest that states `authorityEffect: none`. Its workflow
+SHA-256 is computed from the checked-out workflow bytes at run time; promotion
+re-hashes the same bundled path, requires the exact candidate HEAD in a clean
+checkout, and validates every receipt byte and both aggregate digests. It then
+requires a GitHub OIDC/Sigstore statement binding the exact receipt-set bytes
+to the `main` workflow, hosted runner, source SHA, run ID, and attempt before a
+same-directory atomic replacement. Missing or changed evidence leaves the
+pending authority byte-for-byte unchanged.
+
 ## Filesystem and process boundary
 
 - Clone into a new absolute destination. Refuse an existing destination,
@@ -62,3 +73,18 @@ an individual receipt or runtime receipt set. A source, tree, or lockfile digest
 public source bytes rather than a credential.
 The built CLI SHA-256 is also permitted: it binds local executable bytes and
 is not derived from BrowserAuth state.
+
+The live runtime probe holds the startup URL and browser session only in
+bounded memory and immediately replaces process-output listeners with discard
+handlers after readiness. It proves root 401, launch exchange 303,
+authenticated root 200, a valid `settings/describe` RPC, independent Host-only,
+Origin-only, and cross-site Fetch Metadata 403 responses, and alpha.1's exact
+cold-restart behavior: the persistent
+authority-bound cookie remains valid while the process launch credential
+rotates, followed by a successful new exchange. It also proves strict Profile
+YAML, entries+batches, combo URLs,
+revision 404, JavaScript/source-map MIME, identity and gzip bytes, immutable
+cache headers, and `__DSH_BOOT_READY__`. It records only the fixed outcome
+fields in the closed receipt schema. If observed alpha.1 restart behavior does
+not match the existing authority contract, the tuple fails; do not translate
+the observation into the expected string or relax the receipt after the run.

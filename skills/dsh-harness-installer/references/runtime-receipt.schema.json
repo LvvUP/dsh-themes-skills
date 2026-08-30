@@ -34,6 +34,11 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["platform", "arch", "nodeVersion"],
+      "oneOf": [
+        { "properties": { "platform": { "const": "linux" }, "arch": { "const": "x64" } } },
+        { "properties": { "platform": { "const": "darwin" }, "arch": { "const": "arm64" } } },
+        { "properties": { "platform": { "const": "win32" }, "arch": { "const": "x64" } } }
+      ],
       "properties": {
         "platform": { "enum": ["linux", "darwin", "win32"] },
         "arch": { "enum": ["x64", "arm64"] },
@@ -69,13 +74,17 @@
         "browserAuth": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["unauthenticatedRootStatus", "oneTimeExchangeStatus", "authenticatedSessionStatus", "forgedHostStatus", "restartStatus"],
+          "required": ["unauthenticatedRootStatus", "launchExchangeStatus", "authenticatedSessionStatus", "hostOnlyRejectionStatus", "originOnlyRejectionStatus", "crossSiteRejectionStatus", "restartStatus"],
           "properties": {
             "unauthenticatedRootStatus": { "const": 401 },
-            "oneTimeExchangeStatus": { "const": 303 },
+            "launchExchangeStatus": { "const": 303 },
             "authenticatedSessionStatus": { "const": 200 },
-            "forgedHostStatus": { "const": 403 },
-            "restartStatus": { "const": "prior-session-rejected-new-exchange-required" }
+            "hostOnlyRejectionStatus": { "const": 403 },
+            "originOnlyRejectionStatus": { "const": 403 },
+            "crossSiteRejectionStatus": { "const": 403 },
+            "restartStatus": {
+              "const": "prior-session-persisted-launch-credential-rotated"
+            }
           }
         },
         "webProtocol": {

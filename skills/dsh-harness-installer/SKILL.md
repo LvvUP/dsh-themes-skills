@@ -18,7 +18,10 @@ publication gate, read
 [references/runtime-receipt.schema.json](references/runtime-receipt.schema.json)
 and
 [references/runtime-receipt-set.schema.json](references/runtime-receipt-set.schema.json),
-then use `scripts/runtime-authority.mjs` to validate the canonical matrix.
+then read
+[references/runtime-certification.md](references/runtime-certification.md).
+Use `scripts/runtime-authority.mjs` to validate the canonical matrix and
+`scripts/runtime-certification.mjs` to verify a downloaded candidate.
 
 ## Current authority
 
@@ -145,3 +148,38 @@ must prove CLI/Profile/Web, BrowserAuth, module protocol, MIME, compression,
 cache, and boot readiness without retaining BrowserAuth material. Missing,
 partial, synthetic, copied, or redacted-after-capture evidence keeps the lane
 closed.
+
+The manual-only `alpha1-runtime-certification.yml` workflow creates candidate
+artifacts and has no authority mutation step. Every tuple builds the exact
+source, runs the built CLI, parses the `web` Profile, performs a cold Web
+restart, and probes BrowserAuth plus the entries/batches module protocol. The
+runner retains startup credentials and session cookies only in bounded memory;
+they are drained, never printed, never persisted, and never hashed.
+
+After downloading a candidate from one successful six-task run, verify it
+against the workflow bytes in the exact checkout:
+
+```bash
+node <skill-dir>/scripts/runtime-certification.mjs verify \
+  --candidate <absolute-candidate-directory> \
+  --workflow <absolute-repository>/.github/workflows/alpha1-runtime-certification.yml
+```
+
+This still does not publish alpha.1. A reviewer must explicitly run the
+separate promotion script on a clean POSIX checkout whose HEAD equals the
+candidate workflow run. It validates all receipt bytes again, verifies the
+detached GitHub OIDC/Sigstore provenance for the exact receipt set, and
+atomically replaces only the bundled authority:
+
+```bash
+node <skill-dir>/scripts/promote-runtime-authority.mjs \
+  --candidate <absolute-candidate-directory> \
+  --provenance <absolute-runtime-receipt-set.json.sigstore.json> \
+  --authority <skill-dir>/references/alpha1-source-authority.json \
+  --gh <absolute-byte-pinned-gh-binary>
+```
+
+Promotion on Windows is intentionally refused because this implementation has
+not certified an atomic replace with the same durability guarantees. The
+current bundled authority remains 0/6 until real candidate evidence is
+reviewed and explicitly promoted.

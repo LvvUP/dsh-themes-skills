@@ -8,14 +8,14 @@ import { validateAuthority } from './authority.mjs';
 const SHA40 = /^[a-f0-9]{40}$/;
 const SHA64 = /^[a-f0-9]{64}$/;
 const SAFE_JOB = /^[A-Za-z0-9._-]{1,100}$/;
-const PLATFORMS = [
+export const RUNTIME_PLATFORMS = [
   ['linux', 'x64'],
   ['darwin', 'arm64'],
   ['win32', 'x64'],
 ];
-const NODE_VERSIONS = ['22.19.0', '24.15.0'];
-const WORKFLOW = '.github/workflows/alpha1-runtime-certification.yml';
-const REPOSITORY = 'LvvUP/dsh-themes-skills';
+export const RUNTIME_NODE_VERSIONS = ['22.19.0', '24.15.0'];
+export const RUNTIME_WORKFLOW = '.github/workflows/alpha1-runtime-certification.yml';
+export const RUNTIME_REPOSITORY = 'LvvUP/dsh-themes-skills';
 const FORBIDDEN_VALUE = /(?:[?&]token=|\bcookie\s*:|\bauthorization\s*:|bearer\s+[a-z0-9._~-]+)/iu;
 const BASE64URL_SECRET = /(?:^|[^A-Za-z0-9_-])[A-Za-z0-9_-]{43}(?:$|[^A-Za-z0-9_-])/;
 
@@ -55,6 +55,29 @@ export function runtimeReceiptSetPayloadSha256(receiptSet) {
   return runtimeSha256(Buffer.from(`${JSON.stringify(stable(payload))}\n`, 'utf8'));
 }
 
+export function runtimeProvenanceSet(receiptSet) {
+  return stable({
+    authorityEffect: 'none',
+    kind: 'dsh-alpha1-runtime-provenance-set',
+    receipts: receiptSet.receipts,
+    schemaVersion: receiptSet.schemaVersion,
+    source: receiptSet.source,
+    workflow: receiptSet.workflow,
+  });
+}
+
+export function runtimeProvenanceSetSha256(receiptSet) {
+  return runtimeSha256(Buffer.from(
+    `${JSON.stringify(runtimeProvenanceSet(receiptSet), null, 2)}\n`,
+    'utf8'
+  ));
+}
+
+export function runtimeTasks() {
+  return RUNTIME_PLATFORMS.flatMap(([platform, arch]) =>
+    RUNTIME_NODE_VERSIONS.map((nodeVersion) => ({ platform, arch, nodeVersion })));
+}
+
 function inspectPrivacy(value, path = 'runtimeReceipt') {
   if (Array.isArray(value)) {
     value.forEach((entry, index) => inspectPrivacy(entry, `${path}[${index}]`));
@@ -82,7 +105,7 @@ function validateCi(ci, label) {
   exactKeys(ci, [
     'repository', 'workflowPath', 'workflowSha256', 'runId', 'runAttempt', 'jobId', 'headSha',
   ], label);
-  if (ci.repository !== REPOSITORY || ci.workflowPath !== WORKFLOW ||
+  if (ci.repository !== RUNTIME_REPOSITORY || ci.workflowPath !== RUNTIME_WORKFLOW ||
       !SHA64.test(ci.workflowSha256) || !/^[1-9]\d{0,19}$/.test(ci.runId) ||
       !Number.isSafeInteger(ci.runAttempt) || ci.runAttempt < 1 || ci.runAttempt > 1000 ||
       !SAFE_JOB.test(ci.jobId) || !SHA40.test(ci.headSha)) {
@@ -100,8 +123,8 @@ export function validateRuntimeReceipt(receipt, authorityInput) {
       receipt.scope !== 'one-platform-node-task') fail('runtime receipt header mismatch');
   validateSource(receipt.source, authority, 'runtime receipt source');
   exactKeys(receipt.task, ['platform', 'arch', 'nodeVersion'], 'runtime receipt task');
-  const expectedArch = new Map(PLATFORMS).get(receipt.task.platform);
-  if (receipt.task.arch !== expectedArch || !NODE_VERSIONS.includes(receipt.task.nodeVersion)) {
+  const expectedArch = new Map(RUNTIME_PLATFORMS).get(receipt.task.platform);
+  if (receipt.task.arch !== expectedArch || !RUNTIME_NODE_VERSIONS.includes(receipt.task.nodeVersion)) {
     fail('runtime receipt task is outside the exact platform/Node matrix');
   }
   exactKeys(receipt.build, ['buildReceiptSha256', 'builtCliSha256'], 'runtime receipt build');
@@ -116,14 +139,18 @@ export function validateRuntimeReceipt(receipt, authorityInput) {
     fail('runtime Profile probe mismatch');
   }
   exactKeys(receipt.probes.browserAuth, [
-    'unauthenticatedRootStatus', 'oneTimeExchangeStatus', 'authenticatedSessionStatus',
-    'forgedHostStatus', 'restartStatus',
+    'unauthenticatedRootStatus', 'launchExchangeStatus', 'authenticatedSessionStatus',
+    'hostOnlyRejectionStatus', 'originOnlyRejectionStatus',
+    'crossSiteRejectionStatus', 'restartStatus',
   ], 'runtime receipt BrowserAuth probe');
   if (receipt.probes.browserAuth.unauthenticatedRootStatus !== 401 ||
-      receipt.probes.browserAuth.oneTimeExchangeStatus !== 303 ||
+      receipt.probes.browserAuth.launchExchangeStatus !== 303 ||
       receipt.probes.browserAuth.authenticatedSessionStatus !== 200 ||
-      receipt.probes.browserAuth.forgedHostStatus !== 403 ||
-      receipt.probes.browserAuth.restartStatus !== 'prior-session-rejected-new-exchange-required') {
+      receipt.probes.browserAuth.hostOnlyRejectionStatus !== 403 ||
+      receipt.probes.browserAuth.originOnlyRejectionStatus !== 403 ||
+      receipt.probes.browserAuth.crossSiteRejectionStatus !== 403 ||
+      receipt.probes.browserAuth.restartStatus !==
+        'prior-session-persisted-launch-credential-rotated') {
     fail('runtime BrowserAuth probe mismatch');
   }
   exactKeys(receipt.probes.webProtocol, [
@@ -159,6 +186,7 @@ export function validateRuntimeReceiptSet(receiptSet, {
   if (receiptSet.schemaVersion !== 1 || receiptSet.status !== 'alpha1-runtime-matrix-verified' ||
       receiptSet.requiredReceiptCount !== 6 || !SHA64.test(receiptSet.provenanceSetSha256) ||
       !SHA64.test(receiptSet.receiptSetPayloadSha256) ||
+      runtimeProvenanceSetSha256(receiptSet) !== receiptSet.provenanceSetSha256 ||
       runtimeReceiptSetPayloadSha256(receiptSet) !== receiptSet.receiptSetPayloadSha256) {
     fail('runtime receipt-set header or digest mismatch');
   }
@@ -167,8 +195,7 @@ export function validateRuntimeReceiptSet(receiptSet, {
     'repository', 'workflowPath', 'workflowSha256', 'runId', 'runAttempt', 'headSha',
   ], 'runtime receipt-set workflow');
   validateCi({ ...receiptSet.workflow, jobId: 'receipt-set' }, 'runtime receipt-set workflow');
-  const expectedTasks = PLATFORMS.flatMap(([platform, arch]) =>
-    NODE_VERSIONS.map((nodeVersion) => ({ platform, arch, nodeVersion })));
+  const expectedTasks = runtimeTasks();
   if (!Array.isArray(receiptSet.receipts) || receiptSet.receipts.length !== expectedTasks.length ||
       !(receiptBytesBySha256 instanceof Map) || receiptBytesBySha256.size !== expectedTasks.length) {
     fail('runtime receipt set requires exactly six independently supplied receipt byte records');

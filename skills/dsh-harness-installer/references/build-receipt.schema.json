@@ -32,9 +32,14 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["platform", "arch", "nodeVersion", "packageManager", "packageManagerVersion"],
+      "oneOf": [
+        { "properties": { "platform": { "const": "linux" }, "arch": { "const": "x64" } } },
+        { "properties": { "platform": { "const": "darwin" }, "arch": { "const": "arm64" } } },
+        { "properties": { "platform": { "const": "win32" }, "arch": { "const": "x64" } } }
+      ],
       "properties": {
         "platform": { "enum": ["linux", "darwin", "win32"] },
-        "arch": { "type": "string", "pattern": "^[a-z0-9_-]{2,24}$" },
+        "arch": { "enum": ["x64", "arm64"] },
         "nodeVersion": { "enum": ["22.19.0", "24.15.0"] },
         "packageManager": { "const": "pnpm" },
         "packageManagerVersion": { "const": "11.7.0" }

@@ -9,6 +9,7 @@
   "scripts": {
     "pretest": "node scripts/bootstrap-runner.mjs",
     "test": "node --test",
+    "test:alpha1-runtime": "node --test test/alpha1-runtime-certification-infrastructure.test.mjs",
     "test:rc2-final": "node --test test/rc2-final-certification-infrastructure.test.mjs",
     "test:installers": "node --test test/harness-installer.test.mjs test/plugin-installer.test.mjs test/public-authority-hardening.test.mjs",
     "rc2:final:contract": "node skills/dsh-theme-manager/scripts/validate-rc2-final-contract.mjs",

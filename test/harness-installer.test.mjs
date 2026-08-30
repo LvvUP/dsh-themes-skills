@@ -114,10 +114,17 @@ test('build receipt schema is closed and the validator excludes browser credenti
   assert.equal(schema.additionalProperties, false);
   assert.equal(schema.properties.source.additionalProperties, false);
   assert.equal(schema.properties.toolchain.additionalProperties, false);
+  assert.equal(schema.properties.toolchain.oneOf.length, 3);
   assert.equal(schema.properties.result.additionalProperties, false);
   assert.match(schema.properties.result.properties.builtCliSha256.pattern, /64/);
   assert.equal(schema.properties.privacy.additionalProperties, false);
   assert.doesNotThrow(() => validateBuildReceipt(receipt(authority), authority));
+  const crossPaired = receipt(authority);
+  crossPaired.toolchain.arch = 'x64';
+  assert.throws(
+    () => validateBuildReceipt(crossPaired, authority),
+    /platform and architecture pair/u
+  );
 
   const attacks = [
     (value) => { value.token = 'fixture'; },

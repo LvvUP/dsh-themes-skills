@@ -9,7 +9,7 @@ const receiptSchemaUrl = new URL('../references/build-receipt.schema.json', impo
 
 const SHA40 = /^[a-f0-9]{40}$/;
 const SHA64 = /^[a-f0-9]{64}$/;
-const SAFE_ARCH = /^[a-z0-9_-]{2,24}$/;
+const SAFE_JOB = /^[A-Za-z0-9._-]{1,100}$/;
 const FORBIDDEN_RECEIPT_KEY =
   /token|cookie|credential|authorization|secret|launchurl|authenticatedurl|headers|environment|stdout|stderr|session.*(?:id|digest|hash)|(?:token|cookie|credential).*sha/i;
 const FORBIDDEN_RECEIPT_VALUE =
@@ -124,12 +124,43 @@ export function validateAuthority(authority) {
   exactKeys(authority.publication, [
     'status', 'publishedInstallable', 'completedReceipts', 'receiptSetSha256', 'boundary',
   ], 'publication');
-  if (authority.publication.status !== 'source-build-evidence-pending' ||
-      authority.publication.publishedInstallable !== false ||
-      authority.publication.receiptSetSha256 !== null ||
-      !Array.isArray(authority.publication.completedReceipts) ||
-      authority.publication.completedReceipts.length !== 0) {
-    fail('alpha.1 publication authority must fail closed until real receipts are promoted');
+  if (!Array.isArray(authority.publication.completedReceipts)) {
+    fail('publication.completedReceipts must be an array');
+  }
+  const pending = authority.publication.status === 'source-build-evidence-pending' &&
+    authority.publication.publishedInstallable === false &&
+    authority.publication.receiptSetSha256 === null &&
+    authority.publication.completedReceipts.length === 0;
+  const promoted = authority.publication.status === 'runtime-receipt-verified' &&
+    authority.publication.publishedInstallable === true &&
+    SHA64.test(authority.publication.receiptSetSha256 ?? '') &&
+    authority.publication.completedReceipts.length === 6;
+  if (!pending && !promoted) {
+    fail('alpha.1 publication authority must be exactly pending or a complete promoted matrix');
+  }
+  if (promoted) {
+    const tasks = [
+      ['linux', 'x64', '22.19.0'],
+      ['linux', 'x64', '24.15.0'],
+      ['darwin', 'arm64', '22.19.0'],
+      ['darwin', 'arm64', '24.15.0'],
+      ['win32', 'x64', '22.19.0'],
+      ['win32', 'x64', '24.15.0'],
+    ];
+    const seen = new Set();
+    authority.publication.completedReceipts.forEach((entry, index) => {
+      exactKeys(entry, [
+        'platform', 'arch', 'nodeVersion', 'receiptSha256', 'jobId',
+      ], `publication.completedReceipts[${index}]`);
+      const [platform, arch, nodeVersion] = tasks[index];
+      if (entry.platform !== platform || entry.arch !== arch ||
+          entry.nodeVersion !== nodeVersion || !SHA64.test(entry.receiptSha256) ||
+          !SAFE_JOB.test(entry.jobId) || BASE64URL_SECRET.test(entry.jobId) ||
+          seen.has(entry.receiptSha256)) {
+        fail(`publication.completedReceipts[${index}] is not a canonical unique task`);
+      }
+      seen.add(entry.receiptSha256);
+    });
   }
   if (!/not an official binary/i.test(authority.publication.boundary)) {
     fail('publication boundary must disclose the non-binary source build');
@@ -183,7 +214,14 @@ export function validateBuildReceipt(receipt, authority) {
   }
   exactKeys(receipt.toolchain, ['platform', 'arch', 'nodeVersion', 'packageManager', 'packageManagerVersion'], 'receipt.toolchain');
   if (!authority.runtimeMatrix.platforms.includes(receipt.toolchain.platform)) fail('receipt platform is not admitted');
-  if (!SAFE_ARCH.test(receipt.toolchain.arch)) fail('receipt arch is malformed');
+  if (![
+    ['linux', 'x64'],
+    ['darwin', 'arm64'],
+    ['win32', 'x64'],
+  ].some(([platform, arch]) =>
+    receipt.toolchain.platform === platform && receipt.toolchain.arch === arch)) {
+    fail('receipt platform and architecture pair is not admitted');
+  }
   if (!authority.runtimeMatrix.nodeVersions.includes(receipt.toolchain.nodeVersion)) fail('receipt Node version is not admitted');
   if (receipt.toolchain.packageManager !== 'pnpm' ||
       receipt.toolchain.packageManagerVersion !== authority.source.packageManagerVersion) {

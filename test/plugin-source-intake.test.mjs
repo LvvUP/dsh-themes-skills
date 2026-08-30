@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -64,6 +65,7 @@ test('source intake proves a clean exact DSH package without executing candidate
   assert.equal(receipt.package.bundlePatch, 'cordis.patch.yml');
   assert.equal(receipt.package.lifecycle.hooks.prepare, 'node build.mjs');
   assert.equal(receipt.npm, null);
+  assert.match(receipt.review.reasons[0], /fixed Git commit or Release asset/);
   assert.equal(receipt.review.runtimeCertified, false);
   assert.equal(receipt.review.distributionApproved, false);
 });
@@ -82,6 +84,41 @@ test('source intake rejects a repository root that is not a DSH bundle package',
   assert.equal(receipt.candidateExecuted, false);
   assert.equal(receipt.review.replacementRequired, true);
   assert.match(receipt.review.reasons[0], /versioned DSH bundle package/);
+});
+
+test('source intake excludes unbindable npm bytes without discarding exact Git source evidence', async (t) => {
+  const fixture = await sourceFixture(t, {
+    name: 'example-plugin',
+    version: '1.2.3',
+    dsh: { bundle: { patch: './cordis.patch.yml' }, client: { platform: 'web' } },
+  });
+  const invalidTarball = Buffer.from('not a tar archive', 'utf8');
+  const integrity = `sha512-${createHash('sha512').update(invalidTarball).digest('base64')}`;
+  const metadata = Buffer.from(JSON.stringify({
+    name: 'example-plugin',
+    version: '1.2.3',
+    dist: {
+      tarball: 'https://registry.npmjs.org/example-plugin/-/example-plugin-1.2.3.tgz',
+      integrity,
+    },
+  }), 'utf8');
+  const fetchImpl = async (url) => {
+    const body = String(url).endsWith('.tgz') ? invalidTarball : metadata;
+    return new Response(body, {
+      status: 200,
+      headers: { 'content-length': String(body.length) },
+    });
+  };
+  const receipt = await auditCandidateCheckout({
+    candidate: candidate(fixture.commit),
+    source: fixture.source,
+    fetchImpl,
+  });
+  assert.equal(receipt.status, 'source-intake-audited');
+  assert.equal(receipt.npm, null);
+  assert.match(receipt.review.reasons[0], /Published npm bytes could not be bound/);
+  assert.match(receipt.source.manifestSha256, /^[a-f0-9]{64}$/u);
+  assert.equal(receipt.review.replacementRequired, false);
 });
 
 test('source intake fails closed when checkout HEAD differs from the fixed candidate commit', async (t) => {

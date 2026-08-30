@@ -507,7 +507,19 @@ export async function auditCandidateCheckout({
     }
   }
   const lifecycle = lifecycleHooksFromManifest(manifest);
-  const npm = await inspectExactNpm(manifest, candidate, fetchImpl);
+  let npm = null;
+  let reviewReason =
+    'No exact npm version was bound during static intake; any future distribution must use a separately reviewed fixed Git commit or Release asset.';
+  try {
+    npm = await inspectExactNpm(manifest, candidate, fetchImpl);
+    if (npm !== null) {
+      reviewReason =
+        'Static source and exact npm intake passed; legal distribution, permissions, runtime, removal, and rollback still require review.';
+    }
+  } catch {
+    reviewReason =
+      'Published npm bytes could not be bound to the pinned source and are excluded; only a separately reviewed fixed Git commit or Release asset may proceed.';
+  }
   return validateSourceIntakeReceipt({
     schemaVersion: 1,
     status: 'source-intake-audited',
@@ -529,9 +541,7 @@ export async function auditCandidateCheckout({
       runtimeCertified: false,
       distributionApproved: false,
       replacementRequired: false,
-      reasons: [
-        'Static source intake passed; legal distribution, permissions, runtime, removal, and rollback still require review.',
-      ],
+      reasons: [reviewReason],
     },
     privacy: {
       capturesCredentials: false,
