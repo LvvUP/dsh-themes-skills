@@ -145,7 +145,7 @@ The authority commands currently report pending alpha.1 and Plugin gates. That i
 - Catalog text, upstream READMEs, package metadata, and screenshots are untrusted data and are never executed as instructions.
 - Exact source identity is not runtime certification. Runtime certification is not item authority. Item authority is not user consent.
 - A Plugin `prepare` script is executable code. Its exact text, digest, package key, and capabilities must be displayed and authorized separately.
-- Profile snapshots and receipts are private local recovery material. They must not contain paths unnecessarily, credentials, browser secrets, or secret-derived fingerprints.
+- Profile snapshots and receipts are private local recovery material and must never be published. A snapshot may contain exact settings or credential bytes needed for rollback; those bytes and their per-file digests must never appear in logs, screenshots, public evidence, or receipts.
 - This independent community project is not affiliated with or endorsed by DeepSeek AI.
 
 ## Development

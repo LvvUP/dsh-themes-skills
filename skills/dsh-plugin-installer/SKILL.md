@@ -22,7 +22,36 @@ and its
 `scripts/audit-candidate-source.mjs` only against an isolated checkout of the
 exact commit. This lane never executes candidate code and never grants install
 authority. A failed candidate permanently retires its old public ID;
-replacements start at `#3088` and receive a new ID.
+the current next replacement ID is `#3089`, as fixed by the intake authority,
+and every replacement receives a new ID.
+
+When the exact source references an RC-era aggregate client runtime, APIProxy,
+legacy client service property, raw Web route, or shell slot, read
+[references/alpha1-plugin-migration-map.md](references/alpha1-plugin-migration-map.md)
+before proposing a hosted adaptation or accepting a newer upstream artifact.
+The map is an implementation boundary only: it never grants install authority
+or replaces the six-task runtime receipts.
+
+For a license-permitted hosted derivative, require one closed
+[`plugin-hosted-adaptation.schema.json`](references/plugin-hosted-adaptation.schema.json)
+recipe and one closed
+[`plugin-runtime-probe.schema.json`](references/plugin-runtime-probe.schema.json)
+contract. `scripts/build-hosted-adaptation.mjs` accepts only the exact clean
+source commit/tree, digest-bound reviewed replacement files, exact alpha.1
+peer versions, the preserved upstream license, an Acorn-parsed JavaScript AST,
+and a zero-computed-syntax policy: runtime JavaScript may contain no AST node
+whose `computed` flag is true, including members, properties, methods, or class
+fields. It also rejects Node built-ins, indirect dependency loading, and
+React/DOM shapes outside the checked-in reviewed
+allowlist, while flagging direct or statically foldable external CSS reference
+syntax.
+It strips every lifecycle script and uncontrolled dependency field, emits a
+normalized tarball, CycloneDX SBOM, and modification notice, and never executes
+candidate code.
+This AST gate is defense in depth for digest-bound, manually reviewed
+replacements; it is not a JavaScript sandbox and is not runtime certification.
+Its receipt is always non-installable and runtime-uncertified; only the six
+real runtime tasks can promote the resulting bytes.
 
 The same isolated checkout is also inventoried by
 `scripts/audit-candidate-risk.mjs`. Its closed
@@ -119,6 +148,28 @@ full-batch preflight and failure rollback, and only then set
    ContainerInherit + ObjectInherit; the key rule carries no inheritance.
    Existing paths are verified rather than silently repaired. A mismatch
    fails before Profile mutation; Windows `mode` bits are never ACL evidence.
+8. Install, removal, and recovery share one cross-platform exclusive lock
+   below the explicit `DSH_HOME` trust root. The fixed executor acquires it
+   before snapshotting and holds it until commit or a verified rollback. A
+   failed interrupted recovery that cannot verify a complete closure rollback
+   retains its takeover lock under the fail-closed rule below.
+   Install/removal never age out, overwrite, or otherwise steal an existing
+   lock. Only an explicit recovery for the matching retained transaction may
+   take over a lock whose recorded process is no longer alive; an active,
+   malformed, or mismatched lock fails closed. Every acquisition first owns
+   one fixed private takeover guard; a leftover guard fails closed for manual
+   inspection. Stale takeover re-reads the owner under that guard and then
+   atomically renames the exact lock into an ID-bound quarantine before
+   creating the recovery lock, so concurrent recoveries cannot both win.
+9. Every safety-critical directory entry is crash-durable before the Profile
+   can mutate. macOS/Linux sync the created or renamed path's parent
+   directory. Windows first creates and ACL-verifies an empty same-volume
+   sibling, then uses fixed `MoveFileExW` with `MOVEFILE_WRITE_THROUGH` and
+   verifies the final ACL. This applies to the trust root, key, transaction
+   and snapshot roots, lock/guard transitions, private journals, and restored
+   governed files. A failed stale-lock takeover keeps the new lock unless a
+   complete rollback is verified; it never reopens ordinary transactions on
+   a potentially partial Profile.
 
 ## Two fixed distribution lanes
 
@@ -128,6 +179,11 @@ byte count, SHA-256, SRI, safe tar structure, package name/version, manifest,
 bundle patch, rights, receipts, authority-bound license and CycloneDX SBOM files, and
 absence of lifecycle scripts match authority. Non-zero tar tails, unsafe
 portable paths, dangerous modes, links, and special entries fail closed.
+
+The repository's hosted adaptation workflow builds every checked-in recipe
+twice from its exact source checkout and rejects byte drift. These staging
+artifacts are review evidence only, not Release assets or installation
+authority.
 
 ```bash
 node <skill-dir>/scripts/prepare-plugin.mjs \
@@ -237,8 +293,13 @@ Replace `--id` with `--top10` only for the fixed Top10 set. The script:
 1. revalidates Harness, item, prepared, safety, rights, receipt, and plan
    authority before mutation, resolves IDs internally, and re-hashes the built
    CLI against its receipt;
-2. snapshots all four exact Web Profile files plus the prior dependency
-   closure and Plugin inventory to a private directory;
+2. acquires the exclusive `DSH_HOME` transaction lock, then snapshots the four
+   exact Web Profile files and the governed `DSH_HOME`
+   state (`settings.yaml`, root `cordis.patch.yml`, `.credentials.yaml`, and
+   `.anonymous-user-id`, recording optional absence), plus the prior
+   dependency closure and Plugin inventory, to a private directory; snapshot
+   schema v3 preserves and verifies POSIX permission bits, while Windows
+   restores the current-user SID-only ACL boundary;
 3. rejects `dangerouslyAllowAllBuilds: true`, fixes the project policy at
    `dangerouslyAllowAllBuilds: false` and `strictDepBuilds: true`, adds only
    package keys whose complete reviewed lifecycle-hook set requires execution
@@ -262,7 +323,13 @@ Replace `--id` with `--top10` only for the fixed Top10 set. The script:
    requires exact files, actual package versions, ordered bundles, inventory,
    a fresh credential-free Profile probe, and a real `web --no-open` cold
    start whose token-bearing output is discarded and whose bare root returns
-   BrowserAuth 401 before calling rollback complete.
+   BrowserAuth 401 before calling rollback complete. The rollback boundary
+   begins as soon as the eight-file snapshot succeeds: if closure capture,
+   the initial inventory probe, evidence writes, or recovery-key loading fails
+   before a complete baseline exists, all eight governed file states are still
+   restored and verified. Once closure plus inventory are captured, every
+   later failure requires the complete file/closure/inventory/cold-start
+   rollback before the lock can be released.
 
 The fixed executor, not an authority-provided command, performs these probes.
 It never stores raw `dump-config` output and never captures Web startup output.
@@ -326,20 +393,51 @@ node <skill-dir>/scripts/install-transaction.mjs recover \
 
 Recovery accepts no Plugin selector, prepared artifact, injected runner, or
 caller-provided snapshot. It validates the source plan, state, baseline and
-snapshot digests, reconstructs the exact source plan from current Plugin
+snapshot bindings, reconstructs the exact source plan from current Plugin
 authority, and authenticates the retained transaction with a private 32-byte
-HMAC trust key held under the same explicit `DSH_HOME`. The installer creates
-that key with private permissions during the first consented install or remove
-transaction, never prints it, and never stores it inside a transaction
-directory. A self-hashed or copied directory without the local trust binding
-is not recoverable. Recovery also requires the current Profile closure and
+HMAC trust key held under the same explicit `DSH_HOME`. Every transaction uses
+a fresh private 32-byte nonce stored only in its protected recovery-auth file;
+domain-separated HMAC bindings cover the rollback baseline and private
+snapshot manifest, plus the terminal closure and inventory used for drift
+checks. Ordinary SHA-256 of the secret-bearing manifest or potentially private
+dependency closure is never copied into state, a recovery plan, or CLI output,
+and the opaque bindings are also omitted from CLI output. A separate random
+public transaction ID, independent of Profile bytes, binds recovery consent to
+one exact retained transaction without becoming a secret fingerprint. The
+installer creates that key with private permissions during the first consented
+install or remove transaction, never prints it, and never stores it inside a
+transaction directory. A self-hashed or copied directory without the local
+trust binding is not recoverable. Recovery also requires the current Profile closure and
 inventory to match the authenticated terminal state of that source
 transaction; later Profile drift must be handled explicitly and is never
-silently overwritten. The executor snapshots the current Profile before
-restoring, performs a frozen install and exact
-closure/inventory/cold-start verification, and writes `status: "recovered"`
-only at the end. If recovery fails, it restores the complete pre-recovery
-state instead of leaving a mixed Profile.
+silently overwritten. While holding the exclusive `DSH_HOME` lock, the
+executor also recomputes a private HMAC over the existence, POSIX mode, and
+exact bytes of all eight governed Profile/`DSH_HOME` files; settings or
+credential drift blocks recovery before a recovery snapshot or mutation.
+Private transaction JSON is opened without following symlinks and is
+validated and read through the same private, single-link file handle. The
+executor snapshots the current Profile before restoring. When it captures a
+complete valid current dependency-closure snapshot and inventory, a recovery
+failure atomically restores and verifies that complete pre-recovery state. An
+interrupted source can instead make valid closure capture impossible. If
+frozen dependency restoration has begun in that exceptional path and a later
+step fails, the executor restores and verifies only the eight governed file
+states, deliberately retains the takeover lock, and requires manual inspection
+of the dependency closure. It must not report a complete rollback or reopen
+ordinary transactions. Only a successful frozen install plus exact
+closure/inventory/cold-start verification may write `status: "recovered"`.
+
+Before the first Profile mutation, install and removal also persist one
+private `in-progress.json` rollback journal authenticated by the same local
+HMAC key and transaction nonce. Its authentication binds the public
+transaction ID, exact plan, rollback baseline, snapshot manifest, and exact
+original lock holder. It is usable only when `state.json` does not exist, that
+exact holder is stale, the fixed lock takeover succeeds, and the user grants
+new explicit consent to the interrupted-recovery plan digest. A terminal
+`committed` or `removed` `state.json` is the durable marker: terminal recovery
+never opens or replays the earlier journal, and successful finalization removes
+it. A missing, active, replaced, concurrently claimed, or mismatched holder
+fails closed.
 
 ## Prepare authorization and privacy
 
@@ -361,12 +459,18 @@ pnpm may run lifecycle scripts from transitive dependencies. The installer
 never executes authority script text itself.
 
 Profile snapshots, prepared artifacts, build receipts, and transaction state
-are private local recovery material. Do not publish them. Never capture
-Harness Web startup output, browser tokens, cookies, authorization headers,
-credentials, or hashes derived from those secrets. Child process output is
-streamed to the live terminal and is not inserted into transaction receipts.
-The local recovery HMAC key is also private recovery material: do not copy,
-publish, print, hash into a public receipt, or place it inside a transaction.
+are private local recovery material. Do not publish them. A private snapshot
+may necessarily contain the exact pre-transaction settings and credential
+bytes; the installer never returns, prints, or copies those bytes or their
+per-file digests into a receipt. Never capture Harness Web startup output,
+browser tokens, cookies, authorization headers, credentials, or hashes derived
+from those secrets in logs, screenshots, public evidence, or receipts. Child
+process output is streamed to the live terminal and is not inserted into
+transaction receipts.
+The local recovery HMAC key and per-transaction nonce are also private recovery
+material: do not copy, publish, print, hash into a public receipt, or place the
+key inside a transaction. The nonce lives only in the protected authentication
+record and is never included in plans, terminal state, or CLI output.
 Losing or replacing that key intentionally makes retained transactions
 unrecoverable; preserve it only as part of a protected private `DSH_HOME`
 backup.

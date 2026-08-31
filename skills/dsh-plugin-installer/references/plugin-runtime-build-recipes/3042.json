@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "purpose": "dsh-alpha1-hosted-plugin-adaptation",
+  "catalogId": 3042,
+  "slug": "dsh-wikilink",
+  "baseline": {
+    "tag": "dsh-v0.1.2-alpha.1",
+    "commit": "cd5ef8148158c3a752a658978873241fdf8e2bbc",
+    "tree": "a712eec535b48badc4fefb4df5176a7002e4280b"
+  },
+  "source": {
+    "repository": "https://github.com/zhaoscsc/dsh-wikilink.git",
+    "commit": "7f0203b6690588f30b7a9a35af37c1978a7caacc",
+    "tree": "aefb3d89dd6dffb9b3a0b5b43adfbbe6a1c5b4e3",
+    "sourceSubdir": ".",
+    "manifestSha256": "8c4ec7e23a2dc3b9e724105563454b01112a23c7703bf8291c87109e216794cd",
+    "packageName": "dsh-wikilink",
+    "packageVersion": "0.2.0",
+    "bundlePatch": "cordis.patch.yml"
+  },
+  "output": {
+    "packageName": "@dsh-themes/dsh-wikilink",
+    "packageVersion": "0.2.0-dsh.alpha1.1",
+    "description": "Obsidian-style [[ Markdown note picker backed by the standard path-only fileReferences service for DeepSeek Harness 0.1.2-alpha.1",
+    "assetName": "dsh-wikilink-0.2.0-dsh.alpha1.1.tgz",
+    "hostEntry": "lib/index.js",
+    "clientEntry": "lib/client.js",
+    "bundlePatch": "cordis.patch.yml",
+    "clientInject": [
+      "@deepseek-ai/dsh-api-remotes",
+      "@deepseek-ai/dsh-client-locale",
+      "@deepseek-ai/dsh-client-ui-conversation",
+      "@deepseek-ai/dsh-client-ui-renderer"
+    ],
+    "peerDependencies": {
+      "@deepseek-ai/cordis": "4.0.1",
+      "@deepseek-ai/dsh-api-remotes": "0.1.2-alpha.1",
+      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.1",
+      "@deepseek-ai/dsh-client-ui-conversation": "0.1.2-alpha.1",
+      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.1",
+      "react": "18.3.1"
+    },
+    "files": [
+      {
+        "outputPath": "lib/index.js",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "lib/index.js",
+          "sourceSha256": "ee6884faa37f61f4c9c43a3c88c7f2a4433082c8cf869cbcf731de8f39acf974",
+          "replacementPath": "assets/hosted-adaptations/3042/lib/index.js",
+          "replacementSha256": "c5944e23f88cabe4969a2d0cbcec5ef95ce4986c66dda4c3d5b1f28992559f24"
+        }
+      },
+      {
+        "outputPath": "lib/client.js",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "lib/client.js",
+          "sourceSha256": "c140cafe01d99c31a287d1d5d0eaf976f7f415d68b0ff926e5765f84426514c5",
+          "replacementPath": "assets/hosted-adaptations/3042/lib/client.js",
+          "replacementSha256": "4b66159e2acba55a30052f173d348728f562eecd319dd34051b38dab3a0bb441"
+        }
+      },
+      {
+        "outputPath": "cordis.patch.yml",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "cordis.patch.yml",
+          "sourceSha256": "9664ac1fd8670defe1063fd1a9be4927066ec1bdab276c591b6b88f600478d01",
+          "replacementPath": "assets/hosted-adaptations/3042/cordis.patch.yml",
+          "replacementSha256": "74d7866d47362133d12c0f2ad7c9c5096f0d1f6dd8eb89b11bfed4e0ff7a6f12"
+        }
+      },
+      {
+        "outputPath": "LICENSE",
+        "input": {
+          "kind": "copy-exact-upstream",
+          "sourcePath": "LICENSE",
+          "sha256": "639f7efb39948110960b8051295e809ac83ae8f6f049d5db521c23a03dbf8dc6"
+        }
+      }
+    ]
+  },
+  "rights": {
+    "licenseExpression": "MIT",
+    "licensePath": "LICENSE",
+    "licenseSha256": "639f7efb39948110960b8051295e809ac83ae8f6f049d5db521c23a03dbf8dc6",
+    "copyrightNotice": "Copyright (c) 2026 dsh-wikilink contributors",
+    "redistribution": "allowed-with-license-and-modification-notice"
+  },
+  "staticPolicy": {
+    "computedMembers": [],
+    "forbiddenUtf8": [
+      "@deepseek-ai/dsh-client-runtime",
+      "@deepseek-ai/dsh-host-apiproxy",
+      "@deepseek-ai/dsh-typert-protocol",
+      "@deepseek-ai/dsh-agent",
+      "@deepseek-ai/dsh-settings",
+      "ctx.webServer",
+      "ctx.connection",
+      "ctx.typert",
+      "ctx.remote.$mount",
+      "agent/pre-step",
+      "createUserMessage",
+      "fetch(",
+      "XMLHttpRequest",
+      "WebSocket",
+      "EventSource",
+      "localStorage",
+      "sessionStorage",
+      "document.cookie",
+      "addEventListener(",
+      "removeEventListener(",
+      "innerHTML",
+      "outerHTML",
+      "insertAdjacentHTML",
+      "dangerouslySetInnerHTML",
+      "node:child_process",
+      "node:fs",
+      "node:path",
+      "process.env",
+      "error.message",
+      "eval(",
+      "new Function"
+    ],
+    "requiredUtf8": [
+      "window.__ModuleLoader__.load",
+      "const inject = ['slots', 'locale', 'remote', 'remote.fileReferences']",
+      "ctx.remote.fileReferences.list(sessionId, query, signal)",
+      "ctx.slots.inject('conversation.input.overlay'",
+      "name: 'conversation.input.overlay'",
+      "id: 'dsh-wikilink-picker'",
+      "ctx.locale.register(NS, { zh, en })",
+      "candidate.kind !== 'file'",
+      ".endsWith('.md')",
+      "props.inputActions.setDraft",
+      "new AbortController()",
+      "DSH3042_PROBE:OFFICIAL_FILE_REFERENCES_V1",
+      "DSH3042_PROBE:STANDARD_AT_PATH_V1",
+      "DSH3042_PROBE:ADDITIVE_OVERLAY_V1",
+      "DSH3042_PROBE:LOCALES_EIGHT_V1",
+      "DSH3042_PROBE:DISPOSE_CLEAN_V1"
+    ]
+  },
+  "runtimeProbe": {
+    "contractPath": "references/plugin-runtime-probes/3042.json",
+    "contractSha256": "698e927d7f0a77de3f435ca21e492cd6a1895e35590ec6a34c3680b4ff32958d",
+    "requiredAssertions": [
+      "package.exact-entry",
+      "boot.ready-picker-once",
+      "feature.markdown-wikilink-picker",
+      "feature.standard-reference-writeback",
+      "security.official-file-references-only",
+      "ui.keyboard-zoom-locales",
+      "dispose.zero-residue",
+      "combine.additive-overlay-rollback"
+    ]
+  }
+}

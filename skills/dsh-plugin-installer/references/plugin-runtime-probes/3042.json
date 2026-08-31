@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "purpose": "dsh-plugin-alpha1-fixed-runtime-probe",
+  "authorityEffect": "contract-only-not-runtime-authority",
+  "candidateExecuted": false,
+  "catalogId": 3042,
+  "baseline": {
+    "tag": "dsh-v0.1.2-alpha.1",
+    "commit": "cd5ef8148158c3a752a658978873241fdf8e2bbc",
+    "tree": "a712eec535b48badc4fefb4df5176a7002e4280b"
+  },
+  "package": {
+    "name": "@dsh-themes/dsh-wikilink",
+    "version": "0.2.0-dsh.alpha1.1",
+    "profile": "web",
+    "cordisEntryId": "dsh-plugin-3042-wikilink"
+  },
+  "capabilities": {
+    "permissions": [
+      "query the official path-only fileReferences index after the user types an open [[ token",
+      "replace that open token with one standard @path reference only after an explicit note selection"
+    ],
+    "network": [
+      "authenticated in-origin fileReferences Remote only"
+    ],
+    "processes": [],
+    "files": [
+      "read bounded relative path metadata only through fileReferences.list; no file content access"
+    ],
+    "clientServices": [
+      "slots",
+      "locale",
+      "remote.fileReferences",
+      "conversation input standard props"
+    ],
+    "remoteMethods": [
+      "fileReferences.list"
+    ],
+    "browserPersistence": "none"
+  },
+  "combination": {
+    "additiveSlots": [
+      "conversation.input.overlay:dsh-wikilink-picker"
+    ],
+    "exclusiveResources": [],
+    "officialSurfacePreserved": true
+  },
+  "assertions": [
+    {
+      "id": "package.exact-entry",
+      "class": "package-graph",
+      "expected": "The exact package and Cordis entry occur once; every declared DeepSeek peer resolves to 0.1.2-alpha.1 and no removed aggregate runtime resolves."
+    },
+    {
+      "id": "boot.ready-picker-once",
+      "class": "cold-web-boot",
+      "expected": "A cold Web start reaches __DSH_BOOT_READY__; one dormant wikilink overlay occupant, one owned style, and eight locale dictionaries are present with no Host behavior."
+    },
+    {
+      "id": "feature.markdown-wikilink-picker",
+      "class": "feature-contract",
+      "expected": "An open [[ or 【【 token queries the official path-only index, keeps only bounded Markdown files, renders title and relative path, and never sends the message while the user is choosing."
+    },
+    {
+      "id": "feature.standard-reference-writeback",
+      "class": "feature-contract",
+      "expected": "A pointer or keyboard activation replaces only the open end-of-draft token with the safe standard @path or quoted @\"path\" form; file content remains subject to the ordinary Harness read-tool policy."
+    },
+    {
+      "id": "security.official-file-references-only",
+      "class": "security-boundary",
+      "expected": "Only fileReferences.list is called through the authenticated Harness Remote; no custom Remote, Host listener, direct file read, hidden message injection, raw route, outbound request, credential, process, settings, or browser persistence occurs."
+    },
+    {
+      "id": "ui.keyboard-zoom-locales",
+      "class": "accessibility-responsive",
+      "expected": "Native option buttons, local Arrow and Escape handling, status text, narrow layout, 200 percent zoom, 12/14/17 pixel font settings, light and dark schemes, and all eight dictionaries remain usable."
+    },
+    {
+      "id": "dispose.zero-residue",
+      "class": "teardown-rollback",
+      "expected": "Removal aborts in-flight list requests and leaves zero plugin slots, styles, locale dictionaries, Host listeners, package rows, client graph entries, or dependency-closure changes; governed Home and Profile bytes match the snapshot."
+    },
+    {
+      "id": "combine.additive-overlay-rollback",
+      "class": "combination",
+      "expected": "The uniquely identified additive overlay coexists with the official composer, reference, command, todo, goal, and queue surfaces; a later injected batch failure restores every prior entry without partial success."
+    }
+  ]
+}

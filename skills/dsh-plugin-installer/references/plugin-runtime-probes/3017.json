@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "purpose": "dsh-plugin-alpha1-fixed-runtime-probe",
+  "authorityEffect": "contract-only-not-runtime-authority",
+  "candidateExecuted": false,
+  "catalogId": 3017,
+  "baseline": {
+    "tag": "dsh-v0.1.2-alpha.1",
+    "commit": "cd5ef8148158c3a752a658978873241fdf8e2bbc",
+    "tree": "a712eec535b48badc4fefb4df5176a7002e4280b"
+  },
+  "package": {
+    "name": "@dsh-themes/plugin-list-plus",
+    "version": "0.1.0-dsh.alpha1.1",
+    "profile": "web",
+    "cordisEntryId": "dsh-themes-plugin-list-plus"
+  },
+  "capabilities": {
+    "permissions": [
+      "read the authenticated Harness plugin inventory after the user opens the tab"
+    ],
+    "network": [
+      "authenticated in-origin pluginInventory Remote only"
+    ],
+    "processes": [],
+    "files": [],
+    "clientServices": [
+      "slots",
+      "locale",
+      "remote.pluginInventory"
+    ],
+    "remoteMethods": [
+      "pluginInventory.list"
+    ],
+    "browserPersistence": "none"
+  },
+  "combination": {
+    "additiveSlots": [
+      "settings.plugins.tab:dsh-themes-plus"
+    ],
+    "exclusiveResources": [],
+    "officialSurfacePreserved": true
+  },
+  "assertions": [
+    {
+      "id": "package.exact-entry",
+      "class": "package-graph",
+      "expected": "The exact package and Cordis entry occur once; every declared DeepSeek peer resolves to 0.1.2-alpha.1 and no removed aggregate runtime resolves."
+    },
+    {
+      "id": "boot.ready-inventory-once",
+      "class": "cold-web-boot",
+      "expected": "A cold Web start reaches __DSH_BOOT_READY__; the tab is contributed once and the inventory Remote remains unused until first mount."
+    },
+    {
+      "id": "feature.neutral-groups-search",
+      "class": "feature-contract",
+      "expected": "A fixed hostile-text fixture is grouped only by namespace shape, searchable by module or entry ID, collapsible, escaped as text, and never converted to a link."
+    },
+    {
+      "id": "security.remote-only-no-persistence",
+      "class": "security-boundary",
+      "expected": "Only pluginInventory.list is called through the authenticated Harness Remote; no raw route, outbound browser request, credential access, file, process, or browser persistence occurs."
+    },
+    {
+      "id": "ui.keyboard-zoom-themes",
+      "class": "accessibility-responsive",
+      "expected": "Keyboard labels, focus, reduced motion, narrow layout, 200 percent zoom, and light and dark schemes remain usable without clipping essential controls."
+    },
+    {
+      "id": "dispose.zero-residue",
+      "class": "teardown-rollback",
+      "expected": "Removal leaves zero plugin slots, style tags, package rows, client graph entries, or dependency-closure changes, and the governed Home and Profile bytes match the snapshot."
+    },
+    {
+      "id": "combine.official-inventory-preserved",
+      "class": "combination",
+      "expected": "The official Plugin list remains present beside the unique dsh-themes-plus tab, with no slot shadowing and full-batch rollback after an injected later failure."
+    }
+  ]
+}

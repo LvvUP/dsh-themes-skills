@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "purpose": "dsh-alpha1-hosted-plugin-adaptation",
+  "catalogId": 3017,
+  "slug": "dsh-plugin-list-plus",
+  "baseline": {
+    "tag": "dsh-v0.1.2-alpha.1",
+    "commit": "cd5ef8148158c3a752a658978873241fdf8e2bbc",
+    "tree": "a712eec535b48badc4fefb4df5176a7002e4280b"
+  },
+  "source": {
+    "repository": "https://github.com/yibiner/dsh-plugin-list-plus.git",
+    "commit": "f62e6ba7be47f42accae372bb84dc879972d071a",
+    "tree": "8fa40ba5c5f3ba78a54db05a39487b4a79a81f34",
+    "sourceSubdir": ".",
+    "manifestSha256": "d67053db2c44f01969854a9d386752eb40395fa748dd14f9c73c0966aeb8e64b",
+    "packageName": "dsh-plugin-list-plus",
+    "packageVersion": "0.1.0",
+    "bundlePatch": "cordis.patch.yml"
+  },
+  "output": {
+    "packageName": "@dsh-themes/plugin-list-plus",
+    "packageVersion": "0.1.0-dsh.alpha1.1",
+    "description": "Read-only enhanced plugin inventory for DeepSeek Harness 0.1.2-alpha.1",
+    "assetName": "dsh-plugin-list-plus-0.1.0-dsh.alpha1.1.tgz",
+    "hostEntry": "index.mjs",
+    "clientEntry": "client.js",
+    "bundlePatch": "cordis.patch.yml",
+    "clientInject": [
+      "@deepseek-ai/dsh-api-remotes",
+      "@deepseek-ai/dsh-client-ui-settings",
+      "@deepseek-ai/dsh-client-locale"
+    ],
+    "peerDependencies": {
+      "@deepseek-ai/cordis": "4.0.1",
+      "@deepseek-ai/dsh-api-remotes": "0.1.2-alpha.1",
+      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.1",
+      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.1",
+      "@deepseek-ai/dsh-client-ui-settings": "0.1.2-alpha.1",
+      "react": "18.3.1"
+    },
+    "files": [
+      {
+        "outputPath": "index.mjs",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "src/index.ts",
+          "sourceSha256": "ecebbf91ef7f0ca285d3ce391a07575d88704e60694e12b07ae689d470d55f2b",
+          "replacementPath": "assets/hosted-adaptations/3017/index.mjs",
+          "replacementSha256": "0fd620a85b145321bfe5c594e10fe6f79cca28fb7e0a26b577dc2499854db3d3"
+        }
+      },
+      {
+        "outputPath": "client.js",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "src/client/index.ts",
+          "sourceSha256": "6b9cc4f08ab96f03e500de6480457b34b0fa257d04f0ea9c8bfd4410a291a3d3",
+          "replacementPath": "assets/hosted-adaptations/3017/client.js",
+          "replacementSha256": "8d562d845e72bf31d3cf9eb2ac43bf37814bdac606d1cc23bd21806cab4d2e17"
+        }
+      },
+      {
+        "outputPath": "client/index.tsx",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "src/client/index.ts",
+          "sourceSha256": "6b9cc4f08ab96f03e500de6480457b34b0fa257d04f0ea9c8bfd4410a291a3d3",
+          "replacementPath": "assets/hosted-adaptations/3017/client/index.tsx",
+          "replacementSha256": "62e2d1a2a5e9b75ce93eb5ac1a070009d20d0ce8f0cd7edddda60f5c6bccf56a"
+        }
+      },
+      {
+        "outputPath": "cordis.patch.yml",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "cordis.patch.yml",
+          "sourceSha256": "cfdf5485c76e1f331348acfb897054f5fac30ef9708ac1957520bb4760026e59",
+          "replacementPath": "assets/hosted-adaptations/3017/cordis.patch.yml",
+          "replacementSha256": "1074c058672487366922ecc4f8f3a4f7185de9a5b1f3ee56b99861f1d4c2a5fd"
+        }
+      },
+      {
+        "outputPath": "LICENSE",
+        "input": {
+          "kind": "copy-exact-upstream",
+          "sourcePath": "LICENSE",
+          "sha256": "a67733d2190ffd92ae980587eae3020930fb17776eb8b4e1a1f73aa5e38480d8"
+        }
+      }
+    ]
+  },
+  "rights": {
+    "licenseExpression": "MIT",
+    "licensePath": "LICENSE",
+    "licenseSha256": "a67733d2190ffd92ae980587eae3020930fb17776eb8b4e1a1f73aa5e38480d8",
+    "copyrightNotice": "Copyright (c) 2026 Yibin",
+    "redistribution": "allowed-with-license-and-modification-notice"
+  },
+  "staticPolicy": {
+    "computedMembers": [],
+    "forbiddenUtf8": [
+      "@deepseek-ai/dsh-client-runtime",
+      "@deepseek-ai/dsh-host-apiproxy",
+      "ctx.webServer",
+      "ctx.connection.fetch",
+      "fetch(",
+      "XMLHttpRequest",
+      "WebSocket",
+      "EventSource",
+      "localStorage",
+      "sessionStorage",
+      "document.cookie",
+      "innerHTML",
+      "outerHTML",
+      "insertAdjacentHTML",
+      "dangerouslySetInnerHTML",
+      "node:child_process",
+      "node:fs",
+      "process.env",
+      "eval(",
+      "new Function"
+    ],
+    "requiredUtf8": [
+      "window.__ModuleLoader__.load",
+      "ctx.remote.pluginInventory.list()",
+      "settings.plugins.tab",
+      "dsh-themes-plus",
+      "ctx.effect",
+      "@deepseek-ai/dsh-api-remotes",
+      "@deepseek-ai/dsh-client-ui-settings",
+      "@deepseek-ai/dsh-client-locale"
+    ]
+  },
+  "runtimeProbe": {
+    "contractPath": "references/plugin-runtime-probes/3017.json",
+    "contractSha256": "5e3fe6a42ba540d2e7b5bcb6b6c102a80f13ac864cab96efa215c7534c669fe1",
+    "requiredAssertions": [
+      "package.exact-entry",
+      "boot.ready-inventory-once",
+      "feature.neutral-groups-search",
+      "security.remote-only-no-persistence",
+      "ui.keyboard-zoom-themes",
+      "dispose.zero-residue",
+      "combine.official-inventory-preserved"
+    ]
+  }
+}

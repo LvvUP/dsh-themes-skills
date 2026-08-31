@@ -3,7 +3,8 @@
 import { spawn, spawnSync } from 'node:child_process';
 import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { once } from 'node:events';
-import { lstat, mkdir, open, readFile, realpath, writeFile } from 'node:fs/promises';
+import { constants as fsConstants } from 'node:fs';
+import { lstat, mkdir, open, readFile, readdir, realpath, rename, rm, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:net';
 import { basename, dirname, isAbsolute, join, parse, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -27,6 +28,8 @@ import {
   pnpmCommandShimShell,
 } from './pnpm-binding.mjs';
 import {
+  captureManagedFileBindingInput,
+  captureSnapshotManagedFileBindingInput,
   createProfileSnapshot,
   restoreProfileSnapshot,
   verifyProfileSnapshot,
@@ -34,6 +37,7 @@ import {
 import { captureProfileClosure, verifyProfileClosure } from './profile-closure.mjs';
 import { validatePrepared } from './prepare-plugin.mjs';
 import { secureWindowsPrivatePath } from './windows-private-acl.mjs';
+import { moveWindowsPathDurably } from './windows-durable-move.mjs';
 import {
   loadAuthority as loadHarnessAuthority,
   validateBuildReceipt,
@@ -62,8 +66,45 @@ function jsonBytes(value) {
   return Buffer.from(`${JSON.stringify(value, null, 2)}\n`, 'utf8');
 }
 
-function inventorySha256(inventory) {
-  return sha256(Buffer.from(`${JSON.stringify(stable(inventory))}\n`, 'utf8'));
+async function syncDirectory(path) {
+  if (process.platform === 'win32') return false;
+  const handle = await open(path, fsConstants.O_RDONLY);
+  try {
+    await handle.sync();
+  } finally {
+    await handle.close();
+  }
+  return true;
+}
+
+async function createPrivateDirectoryDurably(path) {
+  if (process.platform !== 'win32') {
+    await mkdir(path, { mode: 0o700 });
+    await syncDirectory(dirname(path));
+    return;
+  }
+  const temporary = `${path}.dsh-plugin-installer-${randomBytes(16).toString('hex')}.tmp`;
+  let moved = false;
+  try {
+    await mkdir(temporary, { mode: 0o700 });
+    await secureWindowsPrivatePath(temporary, 'directory', 'configure');
+    await secureWindowsPrivatePath(temporary, 'directory', 'verify');
+    await moveWindowsPathDurably(temporary, path);
+    moved = true;
+    await secureWindowsPrivatePath(path, 'directory', 'verify');
+  } catch (error) {
+    if (!moved) await rm(temporary, { recursive: true, force: true }).catch(() => {});
+    throw error;
+  }
+}
+
+async function movePathDurably(source, target) {
+  if (process.platform === 'win32') {
+    return moveWindowsPathDurably(source, target);
+  }
+  await rename(source, target);
+  await syncDirectory(dirname(target));
+  return true;
 }
 
 export function buildPlan(authority, selections, {
@@ -212,15 +253,33 @@ const CHILD_ENV_ALLOWLIST = [
   'SystemRoot', 'USER', 'USERDOMAIN', 'USERNAME', 'WINDIR',
 ];
 
-export function buildChildEnvironment(dshHome, runtimeRoot, source = process.env) {
+function allowedEnvironmentValue(source, key, platform) {
+  const matches = platform === 'win32'
+    ? Object.keys(source).filter((candidate) => candidate.toLowerCase() === key.toLowerCase())
+    : Object.hasOwn(source, key) ? [key] : [];
+  if (matches.length === 0) return undefined;
+  const values = matches.map((candidate) => source[candidate]);
+  if (matches.length > 1 && values.some((value) => value !== values[0])) {
+    fail(`child environment contains ambiguous Windows ${key} entries`);
+  }
+  return values[0];
+}
+
+export function buildChildEnvironment(
+  dshHome,
+  runtimeRoot,
+  source = process.env,
+  platform = process.platform
+) {
   if (typeof dshHome !== 'string' || dshHome.length === 0 || dshHome.includes('\0') ||
       typeof runtimeRoot !== 'string' || !isAbsolute(runtimeRoot) || runtimeRoot.includes('\0') ||
-      source === null || typeof source !== 'object' || Array.isArray(source)) {
+      source === null || typeof source !== 'object' || Array.isArray(source) ||
+      !['darwin', 'linux', 'win32'].includes(platform)) {
     fail('child environment requires explicit DSH_HOME/runtime roots and an environment mapping');
   }
   const childEnv = {};
   for (const key of CHILD_ENV_ALLOWLIST) {
-    const value = source[key];
+    const value = allowedEnvironmentValue(source, key, platform);
     if (typeof value === 'string' && value.length > 0 && !value.includes('\0')) {
       childEnv[key] = value;
     }
@@ -262,6 +321,44 @@ async function createChildRuntimeEnvironment(transactionRoot, dshHome, profile) 
     commandCwd: profile,
   });
   return binding.environment;
+}
+
+async function makeTransactionPrivateDirectory(path) {
+  await createPrivateDirectoryDurably(path);
+}
+
+export async function stagePreparedForTransaction(transactionRootInput, preparedRootInput, items) {
+  const transactionRoot = await canonicalDirectory(transactionRootInput, 'transaction root');
+  const preparedRoot = await canonicalDirectory(preparedRootInput, 'prepared root');
+  if (!Array.isArray(items) || items.length === 0) fail('transaction staging requires exact authority items');
+  const stagingRoot = join(transactionRoot, 'prepared-staging');
+  await makeTransactionPrivateDirectory(stagingRoot);
+  const staged = [];
+  try {
+    for (const item of items) {
+      const source = await validatePrepared(join(preparedRoot, String(item.catalogId)), item);
+      const stagedDirectory = join(stagingRoot, String(item.catalogId));
+      await makeTransactionPrivateDirectory(stagedDirectory);
+      await privateWrite(join(stagedDirectory, 'prepared.json'), source.record);
+      if (source.record.install.artifactFile !== null) {
+        const bytes = await readFile(source.installSpec);
+        try {
+          await writePrivateBytes(
+            join(stagedDirectory, source.record.install.artifactFile),
+            bytes
+          );
+        } finally {
+          bytes.fill(0);
+        }
+      }
+      staged.push(await validatePrepared(stagedDirectory, item));
+    }
+    return Object.freeze(staged);
+  } catch (error) {
+    await rm(stagingRoot, { recursive: true, force: true }).catch(() => {});
+    await syncDirectory(transactionRoot).catch(() => {});
+    throw error;
+  }
 }
 
 function runInvocation(invocation, { cwd, childEnv, capture = false }) {
@@ -316,10 +413,7 @@ async function newTransactionRoot(input, protectedRoots) {
   } catch (error) {
     if (error.code !== 'ENOENT') throw error;
   }
-  await mkdir(root, { recursive: false, mode: 0o700 });
-  if (process.platform === 'win32') {
-    await secureWindowsPrivatePath(root, 'directory', 'configure');
-  }
+  await createPrivateDirectoryDurably(root);
   return realpath(root);
 }
 
@@ -673,15 +767,114 @@ async function probeColdWebStart(harness, childEnv) {
   return true;
 }
 
-async function privateWrite(path, value) {
-  const bytes = jsonBytes(value);
-  const handle = await open(path, 'wx', 0o600);
+async function writePrivateBytes(path, bytes) {
+  const writePath = process.platform === 'win32'
+    ? `${path}.dsh-plugin-installer-${randomBytes(16).toString('hex')}.tmp`
+    : path;
+  const handle = await open(writePath, 'wx', 0o600);
+  let closed = false;
+  let installed = false;
   try {
+    if (process.platform === 'win32') {
+      await secureWindowsPrivatePath(writePath, 'file', 'configure');
+      await secureWindowsPrivatePath(writePath, 'file', 'verify');
+    }
     await handle.writeFile(bytes);
+    await handle.sync();
+    await handle.close();
+    closed = true;
+    if (process.platform === 'win32') {
+      await moveWindowsPathDurably(writePath, path);
+      installed = true;
+      await secureWindowsPrivatePath(path, 'file', 'verify');
+    } else {
+      await syncDirectory(dirname(path));
+      installed = true;
+    }
+  } catch (error) {
+    if (!closed) await handle.close().catch(() => {});
+    if (!installed) {
+      await rm(writePath, { force: true }).catch(() => {});
+      if (process.platform !== 'win32') {
+        await syncDirectory(dirname(writePath)).catch(() => {});
+      }
+    }
+    throw error;
+  }
+}
+
+async function readPrivateBytes(path, label, { allowMissing = false } = {}) {
+  const flags = fsConstants.O_RDONLY | (fsConstants.O_NOFOLLOW ?? 0);
+  let before;
+  let handle;
+  try {
+    handle = await open(path, flags);
+  } catch (error) {
+    if (allowMissing && error.code === 'ENOENT') {
+      try {
+        await lstat(path);
+        fail(`${label} appeared while its absence was checked`);
+      } catch (absenceError) {
+        if (absenceError.code === 'ENOENT') return null;
+        throw absenceError;
+      }
+    }
+    throw error;
+  }
+  try {
+    before = await lstat(path);
+    const stat = await handle.stat();
+    if (!before.isFile() || before.isSymbolicLink() || !stat.isFile() ||
+        before.dev !== stat.dev || before.ino !== stat.ino || stat.nlink !== 1 ||
+        stat.size < 2 || stat.size > 2 * 1024 * 1024) {
+      fail(`${label} must be one bounded regular single-link file`);
+    }
+    if (process.platform !== 'win32' && (stat.mode & 0o077) !== 0) {
+      fail(`${label} must not be readable or writable by group or others`);
+    }
+    if (process.platform === 'win32') {
+      await secureWindowsPrivatePath(path, 'file', 'verify');
+      const afterAcl = await lstat(path);
+      if (!afterAcl.isFile() || afterAcl.isSymbolicLink() ||
+          afterAcl.dev !== stat.dev || afterAcl.ino !== stat.ino ||
+          afterAcl.nlink !== stat.nlink || afterAcl.size !== stat.size ||
+          afterAcl.mtimeMs !== stat.mtimeMs || afterAcl.ctimeMs !== stat.ctimeMs) {
+        fail(`${label} changed while its private ACL was verified`);
+      }
+    }
+    const bytes = await handle.readFile();
+    const after = await handle.stat();
+    let afterPath;
+    try {
+      afterPath = await lstat(path);
+    } catch {
+      bytes.fill(0);
+      fail(`${label} changed while it was read`);
+    }
+    const final = await handle.stat();
+    if (!afterPath.isFile() || afterPath.isSymbolicLink() ||
+        afterPath.dev !== stat.dev || afterPath.ino !== stat.ino ||
+        afterPath.nlink !== stat.nlink || afterPath.size !== stat.size ||
+        afterPath.mtimeMs !== stat.mtimeMs || afterPath.ctimeMs !== stat.ctimeMs ||
+        after.dev !== stat.dev || after.ino !== stat.ino || after.nlink !== 1 ||
+        after.size !== stat.size || after.mtimeMs !== stat.mtimeMs ||
+        after.ctimeMs !== stat.ctimeMs ||
+        final.dev !== stat.dev || final.ino !== stat.ino || final.nlink !== 1 ||
+        final.size !== stat.size || final.mtimeMs !== stat.mtimeMs ||
+        final.ctimeMs !== stat.ctimeMs || bytes.length !== stat.size) {
+      bytes.fill(0);
+      fail(`${label} changed while it was read`);
+    }
+    return bytes;
   } finally {
     await handle.close();
   }
-  return sha256(bytes);
+}
+
+async function privateWrite(path, value) {
+  const bytes = jsonBytes(value);
+  await writePrivateBytes(path, bytes);
+  return bytes;
 }
 
 export function assertPrivateRecoveryPlatform(platform = process.platform) {
@@ -690,14 +883,12 @@ export function assertPrivateRecoveryPlatform(platform = process.platform) {
   }
 }
 
-export async function loadRecoveryKey(dshHome, { create = false } = {}) {
+async function ensureRecoveryTrustRoot(dshHome, { create = false } = {}) {
   assertPrivateRecoveryPlatform();
   const trustRoot = join(dshHome, '.dsh-plugin-installer');
-  let rootCreated = false;
   if (create) {
     try {
-      await mkdir(trustRoot, { mode: 0o700 });
-      rootCreated = true;
+      await createPrivateDirectoryDurably(trustRoot);
     } catch (error) {
       if (error.code !== 'EEXIST') throw error;
     }
@@ -716,25 +907,22 @@ export async function loadRecoveryKey(dshHome, { create = false } = {}) {
   const canonicalRoot = await realpath(trustRoot);
   if (canonicalRoot !== trustRoot) fail('local recovery trust root must not traverse symlinks');
   if (process.platform === 'win32') {
-    await secureWindowsPrivatePath(
-      canonicalRoot,
-      'directory',
-      rootCreated ? 'configure' : 'verify'
-    );
+    await secureWindowsPrivatePath(canonicalRoot, 'directory', 'verify');
   }
+  return canonicalRoot;
+}
+
+export async function loadRecoveryKey(dshHome, { create = false } = {}) {
+  const canonicalRoot = await ensureRecoveryTrustRoot(dshHome, { create });
   const keyPath = join(canonicalRoot, 'hmac-sha256.key');
-  let keyCreated = false;
   if (create) {
+    const keyBytes = randomBytes(32);
     try {
-      const handle = await open(keyPath, 'wx', 0o600);
-      try {
-        await handle.writeFile(randomBytes(32));
-      } finally {
-        await handle.close();
-      }
-      keyCreated = true;
+      await writePrivateBytes(keyPath, keyBytes);
     } catch (error) {
       if (error.code !== 'EEXIST') throw error;
+    } finally {
+      keyBytes.fill(0);
     }
   }
   let stat;
@@ -749,41 +937,537 @@ export async function loadRecoveryKey(dshHome, { create = false } = {}) {
     fail('local recovery trust key must be one private 32-byte regular file');
   }
   if (process.platform === 'win32') {
-    await secureWindowsPrivatePath(keyPath, 'file', keyCreated ? 'configure' : 'verify');
+    await secureWindowsPrivatePath(keyPath, 'file', 'verify');
   }
-  return readFile(keyPath);
+  const key = await readPrivateBytes(keyPath, 'local recovery trust key');
+  if (key.length !== 32) fail('local recovery trust key must be one private 32-byte regular file');
+  return key;
 }
 
-export function buildRecoveryAuthentication(state, recoveryKey) {
+function defaultProcessAlive(pid) {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (error) {
+    return error.code !== 'ESRCH';
+  }
+}
+
+async function defaultProcessIdentity(pid) {
+  if (process.platform === 'linux') {
+    try {
+      const stat = await readFile(`/proc/${pid}/stat`, 'utf8');
+      const close = stat.lastIndexOf(')');
+      const fields = close >= 0 ? stat.slice(close + 1).trim().split(/\s+/u) : [];
+      const startTicks = fields[19];
+      return /^\d+$/u.test(startTicks ?? '') ? `linux-proc-start:${startTicks}` : null;
+    } catch {
+      return null;
+    }
+  }
+  if (process.platform === 'darwin') {
+    const result = spawnSync('/bin/ps', ['-o', 'lstart=', '-p', String(pid)], {
+      encoding: 'utf8',
+      shell: false,
+      timeout: 5_000,
+    });
+    const started = result.status === 0 ? result.stdout.trim() : '';
+    return started.length > 0 ? `darwin-ps-start:${started}` : null;
+  }
+  // Node exposes no handle-bound, cross-version Windows process creation time.
+  // A live/reused PID therefore remains fail-closed on Windows.
+  return null;
+}
+
+async function readTransactionLock(lockRoot) {
+  const stat = await lstat(lockRoot);
+  if (!stat.isDirectory() || stat.isSymbolicLink() ||
+      (process.platform !== 'win32' && (stat.mode & 0o077) !== 0)) {
+    fail('DSH_HOME transaction lock is not a private real directory');
+  }
+  if (process.platform === 'win32') {
+    await secureWindowsPrivatePath(lockRoot, 'directory', 'verify');
+  }
+  const entries = await readdir(lockRoot);
+  if (JSON.stringify(entries.sort()) !== JSON.stringify(['owner.json'])) {
+    fail('DSH_HOME transaction lock is malformed; explicit manual recovery is required');
+  }
+  const ownerRecord = await readPrivateJson(lockRoot, 'owner.json', 'DSH_HOME transaction lock owner');
+  const owner = ownerRecord.value;
+  exactObjectKeys(
+    owner,
+    [
+      'schemaVersion', 'lockId', 'pid', 'processIdentity', 'operation', 'transactionRoot',
+      'recoverySourceTransactionRoot',
+    ],
+    'DSH_HOME transaction lock owner'
+  );
+  if (owner.schemaVersion !== 2 || !/^[a-f0-9]{64}$/u.test(owner.lockId ?? '') ||
+      !Number.isSafeInteger(owner.pid) || owner.pid <= 0 ||
+      (owner.processIdentity !== null &&
+        (typeof owner.processIdentity !== 'string' || owner.processIdentity.length > 256)) ||
+      !['install', 'remove', 'recover'].includes(owner.operation) ||
+      typeof owner.transactionRoot !== 'string' || !isAbsolute(owner.transactionRoot) ||
+      (owner.recoverySourceTransactionRoot !== null &&
+        (typeof owner.recoverySourceTransactionRoot !== 'string' ||
+          !isAbsolute(owner.recoverySourceTransactionRoot)))) {
+    fail('DSH_HOME transaction lock owner is malformed; explicit manual recovery is required');
+  }
+  return owner;
+}
+
+function validateInProgressHolder(holder, sourceRoot, action) {
+  exactObjectKeys(
+    holder,
+    ['schemaVersion', 'lockId', 'pid', 'processIdentity', 'operation', 'transactionRoot'],
+    'interrupted transaction lock holder'
+  );
+  if (holder.schemaVersion !== 1 || !/^[a-f0-9]{64}$/u.test(holder.lockId ?? '') ||
+      !Number.isSafeInteger(holder.pid) || holder.pid <= 0 ||
+      (holder.processIdentity !== null &&
+        (typeof holder.processIdentity !== 'string' || holder.processIdentity.length > 256)) ||
+      holder.operation !== action || !['install', 'remove'].includes(holder.operation) ||
+      holder.transactionRoot !== sourceRoot) {
+    fail('authenticated interrupted journal holder does not match its source transaction');
+  }
+  return holder;
+}
+
+function sameLockOwner(first, second) {
+  return JSON.stringify(stable(first)) === JSON.stringify(stable(second));
+}
+
+function staleOwnerMatchesJournal(owner, holder) {
+  return owner.lockId === holder.lockId && owner.pid === holder.pid &&
+    owner.processIdentity === holder.processIdentity && owner.operation === holder.operation &&
+    owner.transactionRoot === holder.transactionRoot && owner.recoverySourceTransactionRoot === null;
+}
+
+async function acquireTakeoverGuard(trustRoot, pid) {
+  const guardRoot = join(trustRoot, 'transaction-takeover.guard');
+  try {
+    await createPrivateDirectoryDurably(guardRoot);
+  } catch (error) {
+    if (error.code === 'EEXIST') {
+      fail('DSH_HOME transaction takeover guard exists; explicit manual inspection is required');
+    }
+    throw error;
+  }
+  const guardId = randomBytes(32).toString('hex');
+  try {
+    if (process.platform === 'win32') {
+      await secureWindowsPrivatePath(guardRoot, 'directory', 'configure');
+      await secureWindowsPrivatePath(guardRoot, 'directory', 'verify');
+    }
+    await privateWrite(join(guardRoot, 'owner.json'), {
+      schemaVersion: 1,
+      guardId,
+      pid,
+    });
+    return Object.freeze({ guardRoot, guardId, pid });
+  } catch (error) {
+    await rm(guardRoot, { recursive: true, force: true }).catch(() => {});
+    await syncDirectory(trustRoot).catch(() => {});
+    throw error;
+  }
+}
+
+async function releaseTakeoverGuard(guard) {
+  const record = await readPrivateJson(
+    guard.guardRoot,
+    'owner.json',
+    'DSH_HOME transaction takeover guard owner'
+  );
+  exactObjectKeys(record.value, ['schemaVersion', 'guardId', 'pid'], 'DSH_HOME transaction takeover guard owner');
+  if (record.value.schemaVersion !== 1 || record.value.guardId !== guard.guardId ||
+      record.value.pid !== guard.pid) {
+    fail('DSH_HOME transaction takeover guard ownership changed before release');
+  }
+  const parent = dirname(guard.guardRoot);
+  await rm(guard.guardRoot, { recursive: true, force: false });
+  await syncDirectory(parent);
+}
+
+export async function acquireTransactionLock(dshHomeInput, transactionRootInput, {
+  operation,
+  recoverySourceTransactionRoot = null,
+  expectedRecoveryHolder = null,
+  pid = process.pid,
+  processAlive = defaultProcessAlive,
+  processIdentity = defaultProcessIdentity,
+} = {}) {
+  if (!['install', 'remove', 'recover'].includes(operation) ||
+      !Number.isSafeInteger(pid) || pid <= 0 || typeof processAlive !== 'function' ||
+      typeof processIdentity !== 'function' ||
+      (expectedRecoveryHolder !== null &&
+        (operation !== 'recover' || typeof expectedRecoveryHolder !== 'object' ||
+          Array.isArray(expectedRecoveryHolder)))) {
+    fail('DSH_HOME transaction lock request is malformed');
+  }
+  const dshHome = await canonicalDirectory(dshHomeInput, 'DSH_HOME');
+  const transactionRoot = await canonicalDirectory(transactionRootInput, 'transaction root');
+  const recoverySource = recoverySourceTransactionRoot === null
+    ? null
+    : await canonicalDirectory(recoverySourceTransactionRoot, 'recovery source transaction root');
+  if ((operation === 'recover') !== (recoverySource !== null)) {
+    fail('only explicit recovery may name a recovery source transaction root');
+  }
+  const trustRoot = await ensureRecoveryTrustRoot(dshHome, { create: true });
+  const guard = await acquireTakeoverGuard(trustRoot, pid);
+  const lockRoot = join(trustRoot, 'transaction.lock');
+  let created = false;
+  let quarantine = null;
+  let takeoverOwner = null;
+  let retainTakeoverGuard = false;
+  try {
+    try {
+      await createPrivateDirectoryDurably(lockRoot);
+      created = true;
+    } catch (error) {
+      if (error.code !== 'EEXIST') throw error;
+    }
+    if (!created) {
+      if (operation !== 'recover') {
+        fail('another DSH_HOME transaction is locked; a crashed lock requires explicit recovery');
+      }
+      const owner = await readTransactionLock(lockRoot);
+      const sourceMatches = owner.transactionRoot === recoverySource ||
+        owner.recoverySourceTransactionRoot === recoverySource;
+      if (!sourceMatches) {
+        fail('crashed DSH_HOME transaction lock does not match the explicit recovery source');
+      }
+      if (expectedRecoveryHolder !== null && !staleOwnerMatchesJournal(owner, expectedRecoveryHolder)) {
+        fail('stale DSH_HOME transaction lock does not exactly match the authenticated interrupted journal holder');
+      }
+      const alive = await processAlive(owner.pid);
+      if (typeof alive !== 'boolean') fail('DSH_HOME transaction holder liveness check is malformed');
+      if (alive) {
+        const observedIdentity = await processIdentity(owner.pid);
+        if (owner.processIdentity === null || observedIdentity === null ||
+            owner.processIdentity === observedIdentity) {
+          fail('DSH_HOME transaction lock holder is still active; recovery cannot take it over');
+        }
+      }
+      // Every acquire holds the fixed guard, so this rename is the only stale
+      // takeover transition. No caller ever recursively deletes transaction.lock.
+      quarantine = join(trustRoot, `transaction.lock.quarantine-${owner.lockId}`);
+      try {
+        await lstat(quarantine);
+        fail('stale transaction lock quarantine already exists; manual inspection is required');
+      } catch (error) {
+        if (error.code !== 'ENOENT') throw error;
+      }
+      const confirmedOwner = await readTransactionLock(lockRoot);
+      if (!sameLockOwner(confirmedOwner, owner)) {
+        fail('stale DSH_HOME transaction lock changed during guarded takeover validation');
+      }
+      await movePathDurably(lockRoot, quarantine);
+      const quarantinedOwner = await readTransactionLock(quarantine);
+      if (!sameLockOwner(quarantinedOwner, owner)) {
+        fail('atomic stale-lock quarantine did not capture the validated lock owner');
+      }
+      takeoverOwner = owner;
+      await createPrivateDirectoryDurably(lockRoot);
+      created = true;
+    } else if (expectedRecoveryHolder !== null) {
+      fail('interrupted recovery requires the matching stale DSH_HOME transaction lock');
+    }
+
+    const lockId = randomBytes(32).toString('hex');
+    const holderIdentity = await processIdentity(pid);
+    if (process.platform === 'win32') {
+      await secureWindowsPrivatePath(lockRoot, 'directory', 'configure');
+      await secureWindowsPrivatePath(lockRoot, 'directory', 'verify');
+    }
+    await privateWrite(join(lockRoot, 'owner.json'), {
+      schemaVersion: 2,
+      lockId,
+      pid,
+      processIdentity: holderIdentity,
+      operation,
+      transactionRoot,
+      recoverySourceTransactionRoot: recoverySource,
+    });
+    return Object.freeze({
+      lockRoot,
+      lockId,
+      pid,
+      processIdentity: holderIdentity,
+      takeoverOwner: takeoverOwner === null ? null : Object.freeze({ ...takeoverOwner }),
+    });
+  } catch (error) {
+    if (created) {
+      const current = await readTransactionLock(lockRoot).catch(() => null);
+      if (current === null || current.pid === pid) {
+        await rm(lockRoot, { recursive: true, force: true }).catch(() => {});
+      }
+    }
+    if (quarantine !== null) {
+      let lockMissing = false;
+      try {
+        await lstat(lockRoot);
+      } catch (missing) {
+        if (missing.code === 'ENOENT') {
+          lockMissing = true;
+        } else {
+          retainTakeoverGuard = true;
+          throw new AggregateError(
+            [error, missing],
+            `${error.message}; stale-lock quarantine state could not be inspected and the takeover guard was retained`
+          );
+        }
+      }
+      if (lockMissing) {
+        try {
+          await movePathDurably(quarantine, lockRoot);
+        } catch (restoreError) {
+          retainTakeoverGuard = true;
+          throw new AggregateError(
+            [error, restoreError],
+            `${error.message}; stale lock could not be restored from quarantine and the takeover guard was retained`
+          );
+        }
+      }
+    }
+    await syncDirectory(trustRoot).catch(() => {});
+    throw error;
+  } finally {
+    if (!retainTakeoverGuard) await releaseTakeoverGuard(guard);
+  }
+}
+
+export async function releaseTransactionLock(lock) {
+  if (lock === null || typeof lock !== 'object' ||
+      typeof lock.lockRoot !== 'string' || !isAbsolute(lock.lockRoot) ||
+      !/^[a-f0-9]{64}$/u.test(lock.lockId ?? '') ||
+      !Number.isSafeInteger(lock.pid) || lock.pid <= 0) {
+    fail('DSH_HOME transaction lock release is malformed');
+  }
+  const owner = await readTransactionLock(lock.lockRoot);
+  if (owner.lockId !== lock.lockId || owner.pid !== lock.pid) {
+    fail('DSH_HOME transaction lock ownership changed before release');
+  }
+  await rm(lock.lockRoot, { recursive: true, force: false });
+  await syncDirectory(dirname(lock.lockRoot));
+}
+
+export async function validateInterruptedRecoveryLock(dshHomeInput, source, {
+  processAlive = defaultProcessAlive,
+  processIdentity = defaultProcessIdentity,
+} = {}) {
+  if (source?.kind !== 'interrupted' || typeof processAlive !== 'function' ||
+      typeof processIdentity !== 'function') {
+    fail('interrupted recovery lock validation requires one authenticated interrupted source');
+  }
+  const dshHome = await canonicalDirectory(dshHomeInput, 'DSH_HOME');
+  const trustRoot = await ensureRecoveryTrustRoot(dshHome);
+  const owner = await readTransactionLock(join(trustRoot, 'transaction.lock'));
+  if (!staleOwnerMatchesJournal(owner, source.holder)) {
+    fail('stale DSH_HOME transaction lock does not exactly match the authenticated interrupted journal holder');
+  }
+  const alive = await processAlive(owner.pid);
+  if (typeof alive !== 'boolean') fail('DSH_HOME transaction holder liveness check is malformed');
+  if (alive) {
+    const observedIdentity = await processIdentity(owner.pid);
+    if (owner.processIdentity === null || observedIdentity === null ||
+        owner.processIdentity === observedIdentity) {
+      fail('DSH_HOME transaction lock holder is still active; interrupted recovery requires a stale owner');
+    }
+  }
+  return { stale: true, ownerMatchesAuthenticatedJournal: true };
+}
+
+const PRIVATE_BINDING_PATTERN = /^hmac256:v1:[A-Za-z0-9_-]{43}$/u;
+
+function validateRecoveryMaterial(recoveryKey, transactionNonce) {
   if (!Buffer.isBuffer(recoveryKey) || recoveryKey.length !== 32) {
     fail('recovery authentication requires the private 32-byte local trust key');
   }
+  if (!Buffer.isBuffer(transactionNonce) || transactionNonce.length !== 32) {
+    fail('recovery authentication requires one private 32-byte transaction nonce');
+  }
+}
+
+export function buildPrivateRecoveryBinding(bytes, recoveryKey, transactionNonce, purpose) {
+  validateRecoveryMaterial(recoveryKey, transactionNonce);
+  if (!Buffer.isBuffer(bytes) || ![
+    'rollback-baseline',
+    'snapshot-manifest',
+    'terminal-closure',
+    'terminal-inventory',
+    'terminal-managed-files',
+  ].includes(purpose)) {
+    fail('private recovery binding input is malformed');
+  }
+  const digest = createHmac('sha256', recoveryKey)
+    .update('dsh-plugin-installer/private-artifact-binding/v1\0', 'utf8')
+    .update(transactionNonce)
+    .update('\0', 'utf8')
+    .update(purpose, 'utf8')
+    .update('\0', 'utf8')
+    .update(String(bytes.length), 'utf8')
+    .update('\0', 'utf8')
+    .update(bytes)
+    .digest('base64url');
+  return `hmac256:v1:${digest}`;
+}
+
+function privateBindingMatches(actual, bytes, recoveryKey, transactionNonce, purpose) {
+  if (!PRIVATE_BINDING_PATTERN.test(actual ?? '')) return false;
+  const expected = buildPrivateRecoveryBinding(bytes, recoveryKey, transactionNonce, purpose);
+  return timingSafeEqual(Buffer.from(actual, 'utf8'), Buffer.from(expected, 'utf8'));
+}
+
+export function buildRecoveryAuthentication(state, recoveryKey, transactionNonce) {
+  validateRecoveryMaterial(recoveryKey, transactionNonce);
+  const terminal = state?.status === 'committed' || state?.status === 'removed';
+  const inProgress = state?.status === 'in-progress';
+  if (!/^[a-f0-9]{32}$/u.test(state?.transactionId ?? '') ||
+      !PRIVATE_BINDING_PATTERN.test(state?.rollbackBaselineBinding ?? '') ||
+      !PRIVATE_BINDING_PATTERN.test(state?.snapshotManifestBinding ?? '') ||
+      (!terminal && !inProgress) ||
+      (terminal && (!PRIVATE_BINDING_PATTERN.test(state?.terminalClosureBinding ?? '') ||
+        !PRIVATE_BINDING_PATTERN.test(state?.terminalInventoryBinding ?? '') ||
+        !PRIVATE_BINDING_PATTERN.test(state?.terminalManagedFilesBinding ?? ''))) ||
+      (inProgress && (state.holder === null || typeof state.holder !== 'object'))) {
+    fail('recovery state lacks opaque private-artifact bindings');
+  }
   const payload = {
-    schemaVersion: 1,
+    schemaVersion: 2,
+    transactionId: state.transactionId,
     status: state.status,
     planSha256: state.planSha256,
     stateSha256: sha256(jsonBytes(state)),
-    rollbackBaselineSha256: state.rollbackBaselineSha256,
-    snapshotManifestSha256: state.snapshotManifestSha256,
+    rollbackBaselineBinding: state.rollbackBaselineBinding,
+    snapshotManifestBinding: state.snapshotManifestBinding,
+    terminalClosureBinding: terminal ? state.terminalClosureBinding : null,
+    terminalInventoryBinding: terminal ? state.terminalInventoryBinding : null,
+    terminalManagedFilesBinding: terminal ? state.terminalManagedFilesBinding : null,
   };
   const payloadBytes = Buffer.from(`${JSON.stringify(stable(payload))}\n`, 'utf8');
   return {
-    schemaVersion: 1,
-    algorithm: 'hmac-sha256',
+    schemaVersion: 2,
+    algorithm: 'hmac-sha256-private-nonce-v1',
+    transactionNonce: transactionNonce.toString('base64url'),
     payload,
-    mac: createHmac('sha256', recoveryKey).update(payloadBytes).digest('hex'),
+    mac: createHmac('sha256', recoveryKey)
+      .update('dsh-plugin-installer/recovery-authentication/v2\0', 'utf8')
+      .update(transactionNonce)
+      .update('\0', 'utf8')
+      .update(payloadBytes)
+      .digest('hex'),
   };
 }
 
-async function writeAuthenticatedTerminalState(transactionRoot, state, recoveryKey) {
-  const authentication = buildRecoveryAuthentication(state, recoveryKey);
+async function buildManagedFilesBinding(dshHome, profile, recoveryKey, transactionNonce, {
+  requireValidProfile = true,
+} = {}) {
+  const bytes = await captureManagedFileBindingInput(dshHome, profile, { requireValidProfile });
+  try {
+    return buildPrivateRecoveryBinding(
+      bytes,
+      recoveryKey,
+      transactionNonce,
+      'terminal-managed-files'
+    );
+  } finally {
+    bytes.fill(0);
+  }
+}
+
+export async function verifyTerminalManagedFilesBinding(
+  source,
+  dshHome,
+  profile,
+  recoveryKey
+) {
+  if (source?.kind !== 'terminal' ||
+      !PRIVATE_BINDING_PATTERN.test(source?.state?.terminalManagedFilesBinding ?? '')) {
+    fail('terminal managed-file verification requires an authenticated terminal source');
+  }
+  const actual = await buildManagedFilesBinding(
+    dshHome,
+    profile,
+    recoveryKey,
+    source.transactionNonce
+  );
+  if (!timingSafeEqual(
+    Buffer.from(actual, 'utf8'),
+    Buffer.from(source.state.terminalManagedFilesBinding, 'utf8')
+  )) {
+    fail('current Profile or governed DSH_HOME files have drifted from the authenticated terminal state');
+  }
+  return true;
+}
+
+export async function verifyTerminalSnapshotManagedFilesBinding(
+  source,
+  snapshot,
+  recoveryKey
+) {
+  if (source?.kind !== 'terminal' ||
+      !PRIVATE_BINDING_PATTERN.test(source?.state?.terminalManagedFilesBinding ?? '')) {
+    fail('terminal snapshot verification requires an authenticated terminal source');
+  }
+  const bytes = await captureSnapshotManagedFileBindingInput(snapshot);
+  try {
+    const actual = buildPrivateRecoveryBinding(
+      bytes,
+      recoveryKey,
+      source.transactionNonce,
+      'terminal-managed-files'
+    );
+    if (!timingSafeEqual(
+      Buffer.from(actual, 'utf8'),
+      Buffer.from(source.state.terminalManagedFilesBinding, 'utf8')
+    )) {
+      fail('new recovery snapshot does not match the authenticated terminal managed-file state');
+    }
+  } finally {
+    bytes.fill(0);
+  }
+  return true;
+}
+
+function lockHolderRecord(lock, operation, transactionRoot) {
+  return {
+    schemaVersion: 1,
+    lockId: lock.lockId,
+    pid: lock.pid,
+    processIdentity: lock.processIdentity,
+    operation,
+    transactionRoot,
+  };
+}
+
+async function writeAuthenticatedInProgressState(
+  transactionRoot,
+  state,
+  recoveryKey,
+  transactionNonce
+) {
+  const authentication = buildRecoveryAuthentication(state, recoveryKey, transactionNonce);
+  await privateWrite(join(transactionRoot, 'in-progress.json'), {
+    schemaVersion: 1,
+    state,
+    authentication,
+  });
+}
+
+async function writeAuthenticatedTerminalState(transactionRoot, state, recoveryKey, transactionNonce) {
+  const authentication = buildRecoveryAuthentication(state, recoveryKey, transactionNonce);
   await privateWrite(join(transactionRoot, 'recovery-auth.json'), authentication);
   await privateWrite(join(transactionRoot, 'state.json'), state);
+  await rm(join(transactionRoot, 'in-progress.json'), { force: true });
+  await syncDirectory(transactionRoot);
 }
 
 function rollbackIsComplete(rollback) {
-  return rollback?.attempted === true && rollback.filesRestored === true &&
-    rollback.closureRestored === true && rollback.inventoryRestored === true &&
+  if (rollback?.attempted !== true || rollback.filesRestored !== true) return false;
+  if (rollback.baselineAvailable === false) {
+    return rollback.dependencyClosureMutationStarted !== true && rollback.managedFilesVerified === 8;
+  }
+  return rollback.closureRestored === true && rollback.inventoryRestored === true &&
     rollback.coldStartProbePassed === true;
 }
 
@@ -798,13 +1482,14 @@ export async function runAtomicAcceptanceBoundary(operation, rollbackOperation) 
   } catch (transactionError) {
     let rollback = {
       attempted: true,
+      baselineAvailable: true,
       filesRestored: false,
       closureRestored: false,
       inventoryRestored: false,
       coldStartProbePassed: false,
     };
     try {
-      rollback = { ...rollback, ...await rollbackOperation() };
+      rollback = { ...rollback, ...await rollbackOperation(transactionError) };
     } catch (rollbackError) {
       rollback.error = rollbackError.message;
     }
@@ -817,23 +1502,69 @@ export async function runAtomicAcceptanceBoundary(operation, rollbackOperation) 
   }
 }
 
+async function restoreAndVerifyManagedFiles({ dshHome, profile, snapshot }) {
+  const rollback = {
+    attempted: true,
+    baselineAvailable: false,
+    filesRestored: false,
+    managedFilesVerified: 0,
+  };
+  try {
+    await restoreProfileSnapshot(dshHome, profile, snapshot);
+    const verified = await verifyProfileSnapshot(dshHome, profile, snapshot);
+    rollback.filesRestored = verified.matches;
+    rollback.managedFilesVerified = verified.matches ? verified.filesProtected : 0;
+  } catch (error) {
+    rollback.error = error.message;
+  }
+  return rollback;
+}
+
+async function runWithHeldTransactionLock(lock, operation, canReleaseAfterError) {
+  try {
+    const result = await operation();
+    await releaseTransactionLock(lock);
+    return result;
+  } catch (error) {
+    if (canReleaseAfterError(error)) {
+      try {
+        await releaseTransactionLock(lock);
+      } catch (releaseError) {
+        throw new AggregateError(
+          [error, releaseError],
+          `${error.message}; transaction rollback completed but the DSH_HOME lock could not be released`
+        );
+      }
+    }
+    throw error;
+  }
+}
+
+export function canReleaseTransactionLockAfterError(lock, snapshotCreated, error) {
+  const rollbackComplete = rollbackIsComplete(error?.details);
+  if (lock?.takeoverOwner !== null) return rollbackComplete;
+  return snapshotCreated !== true || rollbackComplete;
+}
+
 async function restoreAndVerifyBaseline({
   baselineClosure,
   baselineInventory,
   childEnv,
+  dshHome,
   harness,
   profile,
   snapshot,
 }) {
   const rollback = {
     attempted: true,
+    baselineAvailable: true,
     filesRestored: false,
     closureRestored: false,
     inventoryRestored: false,
     coldStartProbePassed: false,
   };
-  await restoreProfileSnapshot(profile, snapshot);
-  rollback.filesRestored = (await verifyProfileSnapshot(profile, snapshot)).matches;
+  await restoreProfileSnapshot(dshHome, profile, snapshot);
+  rollback.filesRestored = (await verifyProfileSnapshot(dshHome, profile, snapshot)).matches;
   verifyEffectivePnpmBuildPolicy(profile, [], false, { environment: childEnv });
   const invocation = buildDshInvocation(harness.builtCli, [
     'plugin', '--profile', 'web', 'install', '--frozen-lockfile',
@@ -845,6 +1576,10 @@ async function restoreAndVerifyBaseline({
   rollback.inventoryRestored =
     JSON.stringify(restoredInventory) === JSON.stringify(baselineInventory);
   rollback.coldStartProbePassed = await probeColdWebStart(harness, childEnv);
+  // DSH startup may create optional DSH_HOME state (for example an anonymous user id).
+  // Restore once more after every probe so rollback ends at the exact pre-transaction bytes.
+  await restoreProfileSnapshot(dshHome, profile, snapshot);
+  rollback.filesRestored = (await verifyProfileSnapshot(dshHome, profile, snapshot)).matches;
   return rollback;
 }
 
@@ -911,68 +1646,133 @@ export async function executeTransaction(options) {
   const transactionRoot = await newTransactionRoot(transactionRootInput, [dshHome, profile, preparedRoot, harness.source]);
   const childEnv = await createChildRuntimeEnvironment(transactionRoot, dshHome, profile);
   verifyPnpm(childEnv);
+  const stagedPrepared = await stagePreparedForTransaction(transactionRoot, preparedRoot, items);
   const snapshot = join(transactionRoot, 'snapshot');
-  const baselineClosure = await captureProfileClosure(profile);
-  const baselineInventory = probePluginInventory(harness, childEnv);
-  await privateWrite(join(transactionRoot, 'plan.json'), {
-    schemaVersion: 1,
-    planSha256,
-    catalogIds: items.map((item) => item.catalogId),
-    plan,
-  });
-  const rollbackBaselineSha256 = await privateWrite(join(transactionRoot, 'rollback-baseline.json'), {
-    schemaVersion: 1,
-    closure: baselineClosure,
-    inventory: baselineInventory,
-  });
-  await createProfileSnapshot(profile, snapshot);
-  const snapshotManifestSha256 = sha256(await readFile(join(snapshot, 'snapshot.json')));
-  const recoveryKey = await loadRecoveryKey(dshHome, { create: true });
-  return runAtomicAcceptanceBoundary(async () => {
-    await authorizePrepare(profile, items, { environment: childEnv });
-    for (let index = 0; index < items.length; index += 1) {
-      const invocation = buildDshInvocation(harness.builtCli, [
-        'plugin', '--profile', 'web', 'add', prepared[index].installSpec, '--save-exact',
-      ]);
-      const result = runInvocation(invocation, { cwd: harness.source, childEnv });
-      if (result.error || result.code !== 0) fail(`plugin #${items[index].catalogId} installation failed`);
-      await verifyInstalled(profile, items[index]);
-    }
-    const installedInventory = probePluginInventory(harness, childEnv);
-    const dumpConfigOutput = probeDumpConfig(harness, childEnv);
-    await probeColdWebStart(harness, childEnv);
-    const restartedInventory = probePluginInventory(harness, childEnv);
-    for (const item of items) await verifyInstalled(profile, item);
-    const runtimeAcceptance = verifyRuntimeAcceptanceEvidence(items, {
-      baselineInventory,
-      dumpConfigOutput,
-      installedInventory,
-      restartedInventory,
-    });
-    const terminalClosure = await captureProfileClosure(profile);
-    const state = {
-      schemaVersion: 1,
-      status: 'committed',
-      planSha256,
-      catalogIds: items.map((item) => item.catalogId),
-      atomic: items.length > 1,
-      coldRestartVerified: true,
-      rollbackBaselineSha256,
-      snapshotManifestSha256,
-      terminalClosureSha256: terminalClosure.closureSha256,
-      terminalInventorySha256: inventorySha256(restartedInventory),
-      runtimeAcceptance,
-    };
-    await writeAuthenticatedTerminalState(transactionRoot, state, recoveryKey);
-    return { state, transactionRoot, snapshot };
-  }, () => restoreAndVerifyBaseline({
-    baselineClosure,
-    baselineInventory,
-    childEnv,
-    harness,
-    profile,
-    snapshot,
-  }));
+  const lock = await acquireTransactionLock(dshHome, transactionRoot, { operation: 'install' });
+  let snapshotCreated = false;
+  return runWithHeldTransactionLock(lock, async () => {
+    await createProfileSnapshot(dshHome, profile, snapshot);
+    snapshotCreated = true;
+    let baselineClosure;
+    let baselineInventory;
+    let completeBaseline = false;
+    return runAtomicAcceptanceBoundary(async () => {
+      const snapshotManifestBytes = await readFile(join(snapshot, 'snapshot.json'));
+      baselineClosure = await captureProfileClosure(profile);
+      baselineInventory = probePluginInventory(harness, childEnv);
+      completeBaseline = true;
+      await privateWrite(join(transactionRoot, 'plan.json'), {
+        schemaVersion: 1,
+        planSha256,
+        catalogIds: items.map((item) => item.catalogId),
+        plan,
+      });
+      const rollbackBaselineBytes = await privateWrite(join(transactionRoot, 'rollback-baseline.json'), {
+        schemaVersion: 1,
+        closure: baselineClosure,
+        inventory: baselineInventory,
+      });
+      const recoveryKey = await loadRecoveryKey(dshHome, { create: true });
+      const transactionNonce = randomBytes(32);
+      const transactionId = randomBytes(16).toString('hex');
+      const rollbackBaselineBinding = buildPrivateRecoveryBinding(
+        rollbackBaselineBytes,
+        recoveryKey,
+        transactionNonce,
+        'rollback-baseline'
+      );
+      const snapshotManifestBinding = buildPrivateRecoveryBinding(
+        snapshotManifestBytes,
+        recoveryKey,
+        transactionNonce,
+        'snapshot-manifest'
+      );
+      const inProgressState = {
+        schemaVersion: 2,
+        transactionId,
+        status: 'in-progress',
+        action: 'install',
+        planSha256,
+        catalogIds: items.map((item) => item.catalogId),
+        atomic: items.length > 1,
+        rollbackBaselineBinding,
+        snapshotManifestBinding,
+        holder: lockHolderRecord(lock, 'install', transactionRoot),
+      };
+      await writeAuthenticatedInProgressState(
+        transactionRoot,
+        inProgressState,
+        recoveryKey,
+        transactionNonce
+      );
+      await authorizePrepare(profile, items, { environment: childEnv });
+      for (let index = 0; index < items.length; index += 1) {
+        const invocation = buildDshInvocation(harness.builtCli, [
+          'plugin', '--profile', 'web', 'add', stagedPrepared[index].installSpec, '--save-exact',
+        ]);
+        const result = runInvocation(invocation, { cwd: harness.source, childEnv });
+        if (result.error || result.code !== 0) fail(`plugin #${items[index].catalogId} installation failed`);
+        await verifyInstalled(profile, items[index]);
+      }
+      const installedInventory = probePluginInventory(harness, childEnv);
+      const dumpConfigOutput = probeDumpConfig(harness, childEnv);
+      await probeColdWebStart(harness, childEnv);
+      const restartedInventory = probePluginInventory(harness, childEnv);
+      for (const item of items) await verifyInstalled(profile, item);
+      const runtimeAcceptance = verifyRuntimeAcceptanceEvidence(items, {
+        baselineInventory,
+        dumpConfigOutput,
+        installedInventory,
+        restartedInventory,
+      });
+      const terminalClosure = await captureProfileClosure(profile);
+      const terminalClosureBinding = buildPrivateRecoveryBinding(
+        jsonBytes(stable(terminalClosure)),
+        recoveryKey,
+        transactionNonce,
+        'terminal-closure'
+      );
+      const terminalInventoryBinding = buildPrivateRecoveryBinding(
+        jsonBytes(stable(restartedInventory)),
+        recoveryKey,
+        transactionNonce,
+        'terminal-inventory'
+      );
+      const terminalManagedFilesBinding = await buildManagedFilesBinding(
+        dshHome,
+        profile,
+        recoveryKey,
+        transactionNonce
+      );
+      const state = {
+        schemaVersion: 2,
+        transactionId,
+        status: 'committed',
+        planSha256,
+        catalogIds: items.map((item) => item.catalogId),
+        atomic: items.length > 1,
+        coldRestartVerified: true,
+        rollbackBaselineBinding,
+        snapshotManifestBinding,
+        terminalClosureBinding,
+        terminalInventoryBinding,
+        terminalManagedFilesBinding,
+        runtimeAcceptance,
+      };
+      await writeAuthenticatedTerminalState(transactionRoot, state, recoveryKey, transactionNonce);
+      return { state, transactionRoot, snapshot };
+    }, () => completeBaseline
+      ? restoreAndVerifyBaseline({
+          baselineClosure,
+          baselineInventory,
+          childEnv,
+          dshHome,
+          harness,
+          profile,
+          snapshot,
+        })
+      : restoreAndVerifyManagedFiles({ dshHome, profile, snapshot }));
+  }, (error) => canReleaseTransactionLockAfterError(lock, snapshotCreated, error));
 }
 
 export async function executeRemovalTransaction(options) {
@@ -1011,90 +1811,149 @@ export async function executeRemovalTransaction(options) {
   const transactionRoot = await newTransactionRoot(transactionRootInput, [dshHome, profile, harness.source]);
   const childEnv = await createChildRuntimeEnvironment(transactionRoot, dshHome, profile);
   verifyPnpm(childEnv);
-  const baselineClosure = await captureProfileClosure(profile);
-  const baselineInventory = probePluginInventory(harness, childEnv);
-  for (const item of items) {
-    if (baselineInventory[item.package.name] !== item.package.version) {
-      fail(`plugin #${item.catalogId} is not installed at its authority-bound version`);
-    }
-  }
-  const expectedInventory = { ...baselineInventory };
-  for (const item of items) delete expectedInventory[item.package.name];
-  const normalizedExpectedInventory = stable(expectedInventory);
   const snapshot = join(transactionRoot, 'snapshot');
-  await privateWrite(join(transactionRoot, 'plan.json'), {
-    schemaVersion: 1,
-    planSha256,
-    catalogIds: items.map((item) => item.catalogId),
-    plan,
-  });
-  const rollbackBaselineSha256 = await privateWrite(join(transactionRoot, 'rollback-baseline.json'), {
-    schemaVersion: 1,
-    closure: baselineClosure,
-    inventory: baselineInventory,
-  });
-  await createProfileSnapshot(profile, snapshot);
-  const snapshotManifestSha256 = sha256(await readFile(join(snapshot, 'snapshot.json')));
-  const recoveryKey = await loadRecoveryKey(dshHome, { create: true });
-  return runAtomicAcceptanceBoundary(async () => {
-    await revokePrepare(profile, items, { environment: childEnv });
-    for (const item of [...items].reverse()) {
-      const invocation = buildDshInvocation(harness.builtCli, [
-        'plugin', '--profile', 'web', 'remove', item.rollback.removePackageName,
-      ]);
-      const result = runInvocation(invocation, { cwd: harness.source, childEnv });
-      if (result.error || result.code !== 0) fail(`plugin #${item.catalogId} removal failed`);
-      await verifyRemoved(profile, item);
-    }
-    const removedInventory = probePluginInventory(harness, childEnv);
-    if (JSON.stringify(removedInventory) !== JSON.stringify(normalizedExpectedInventory)) {
-      fail('post-remove plugin inventory does not match the authority-bound removal plan');
-    }
-    await probeColdWebStart(harness, childEnv);
-    const restartedInventory = probePluginInventory(harness, childEnv);
-    if (JSON.stringify(restartedInventory) !== JSON.stringify(normalizedExpectedInventory)) {
-      fail('post-restart plugin inventory does not match the authority-bound removal plan');
-    }
-    for (const item of items) await verifyRemoved(profile, item);
-    const terminalClosure = await captureProfileClosure(profile);
-    const state = {
-      schemaVersion: 1,
-      status: 'removed',
-      planSha256,
-      catalogIds: items.map((item) => item.catalogId),
-      atomic: items.length > 1,
-      coldRestartVerified: true,
-      rollbackBaselineSha256,
-      snapshotManifestSha256,
-      terminalClosureSha256: terminalClosure.closureSha256,
-      terminalInventorySha256: inventorySha256(restartedInventory),
-      removalVerified: true,
-    };
-    await writeAuthenticatedTerminalState(transactionRoot, state, recoveryKey);
-    return { state, transactionRoot, snapshot };
-  }, () => restoreAndVerifyBaseline({
-    baselineClosure,
-    baselineInventory,
-    childEnv,
-    harness,
-    profile,
-    snapshot,
-  }));
+  const lock = await acquireTransactionLock(dshHome, transactionRoot, { operation: 'remove' });
+  let snapshotCreated = false;
+  return runWithHeldTransactionLock(lock, async () => {
+    await createProfileSnapshot(dshHome, profile, snapshot);
+    snapshotCreated = true;
+    let baselineClosure;
+    let baselineInventory;
+    let completeBaseline = false;
+    return runAtomicAcceptanceBoundary(async () => {
+      const snapshotManifestBytes = await readFile(join(snapshot, 'snapshot.json'));
+      baselineClosure = await captureProfileClosure(profile);
+      baselineInventory = probePluginInventory(harness, childEnv);
+      completeBaseline = true;
+      for (const item of items) {
+        if (baselineInventory[item.package.name] !== item.package.version) {
+          fail(`plugin #${item.catalogId} is not installed at its authority-bound version`);
+        }
+      }
+      const expectedInventory = { ...baselineInventory };
+      for (const item of items) delete expectedInventory[item.package.name];
+      const normalizedExpectedInventory = stable(expectedInventory);
+      await privateWrite(join(transactionRoot, 'plan.json'), {
+        schemaVersion: 1,
+        planSha256,
+        catalogIds: items.map((item) => item.catalogId),
+        plan,
+      });
+      const rollbackBaselineBytes = await privateWrite(join(transactionRoot, 'rollback-baseline.json'), {
+        schemaVersion: 1,
+        closure: baselineClosure,
+        inventory: baselineInventory,
+      });
+      const recoveryKey = await loadRecoveryKey(dshHome, { create: true });
+      const transactionNonce = randomBytes(32);
+      const transactionId = randomBytes(16).toString('hex');
+      const rollbackBaselineBinding = buildPrivateRecoveryBinding(
+        rollbackBaselineBytes,
+        recoveryKey,
+        transactionNonce,
+        'rollback-baseline'
+      );
+      const snapshotManifestBinding = buildPrivateRecoveryBinding(
+        snapshotManifestBytes,
+        recoveryKey,
+        transactionNonce,
+        'snapshot-manifest'
+      );
+      const inProgressState = {
+        schemaVersion: 2,
+        transactionId,
+        status: 'in-progress',
+        action: 'remove',
+        planSha256,
+        catalogIds: items.map((item) => item.catalogId),
+        atomic: items.length > 1,
+        rollbackBaselineBinding,
+        snapshotManifestBinding,
+        holder: lockHolderRecord(lock, 'remove', transactionRoot),
+      };
+      await writeAuthenticatedInProgressState(
+        transactionRoot,
+        inProgressState,
+        recoveryKey,
+        transactionNonce
+      );
+      await revokePrepare(profile, items, { environment: childEnv });
+      for (const item of [...items].reverse()) {
+        const invocation = buildDshInvocation(harness.builtCli, [
+          'plugin', '--profile', 'web', 'remove', item.rollback.removePackageName,
+        ]);
+        const result = runInvocation(invocation, { cwd: harness.source, childEnv });
+        if (result.error || result.code !== 0) fail(`plugin #${item.catalogId} removal failed`);
+        await verifyRemoved(profile, item);
+      }
+      const removedInventory = probePluginInventory(harness, childEnv);
+      if (JSON.stringify(removedInventory) !== JSON.stringify(normalizedExpectedInventory)) {
+        fail('post-remove plugin inventory does not match the authority-bound removal plan');
+      }
+      await probeColdWebStart(harness, childEnv);
+      const restartedInventory = probePluginInventory(harness, childEnv);
+      if (JSON.stringify(restartedInventory) !== JSON.stringify(normalizedExpectedInventory)) {
+        fail('post-restart plugin inventory does not match the authority-bound removal plan');
+      }
+      for (const item of items) await verifyRemoved(profile, item);
+      const terminalClosure = await captureProfileClosure(profile);
+      const terminalClosureBinding = buildPrivateRecoveryBinding(
+        jsonBytes(stable(terminalClosure)),
+        recoveryKey,
+        transactionNonce,
+        'terminal-closure'
+      );
+      const terminalInventoryBinding = buildPrivateRecoveryBinding(
+        jsonBytes(stable(restartedInventory)),
+        recoveryKey,
+        transactionNonce,
+        'terminal-inventory'
+      );
+      const terminalManagedFilesBinding = await buildManagedFilesBinding(
+        dshHome,
+        profile,
+        recoveryKey,
+        transactionNonce
+      );
+      const state = {
+        schemaVersion: 2,
+        transactionId,
+        status: 'removed',
+        planSha256,
+        catalogIds: items.map((item) => item.catalogId),
+        atomic: items.length > 1,
+        coldRestartVerified: true,
+        rollbackBaselineBinding,
+        snapshotManifestBinding,
+        terminalClosureBinding,
+        terminalInventoryBinding,
+        terminalManagedFilesBinding,
+        removalVerified: true,
+      };
+      await writeAuthenticatedTerminalState(transactionRoot, state, recoveryKey, transactionNonce);
+      return { state, transactionRoot, snapshot };
+    }, () => completeBaseline
+      ? restoreAndVerifyBaseline({
+          baselineClosure,
+          baselineInventory,
+          childEnv,
+          dshHome,
+          harness,
+          profile,
+          snapshot,
+        })
+      : restoreAndVerifyManagedFiles({ dshHome, profile, snapshot }));
+  }, (error) => canReleaseTransactionLockAfterError(lock, snapshotCreated, error));
 }
 
-async function readPrivateJson(root, name, label) {
+async function readPrivateJson(root, name, label, { allowMissing = false } = {}) {
   const path = join(root, name);
-  const stat = await lstat(path);
-  if (!stat.isFile() || stat.isSymbolicLink() || stat.size < 2 || stat.size > 2 * 1024 * 1024) {
-    fail(`${label} must be a bounded regular JSON file`);
-  }
-  if (process.platform !== 'win32' && (stat.mode & 0o077) !== 0) {
-    fail(`${label} must not be readable or writable by group or others`);
-  }
-  const bytes = await readFile(path);
+  const bytes = await readPrivateBytes(path, label, { allowMissing });
+  if (bytes === null) return null;
   try {
-    return { bytes, value: JSON.parse(bytes) };
+    return { path, bytes, value: JSON.parse(bytes) };
   } catch {
+    bytes.fill(0);
     fail(`${label} is not valid JSON`);
   }
 }
@@ -1134,77 +1993,168 @@ export async function loadRecoverySource(input, recoveryKey) {
   if (process.platform !== 'win32' && (rootStat.mode & 0o077) !== 0) {
     fail('source transaction root must not be accessible by group or others');
   }
+  if (process.platform === 'win32') {
+    await secureWindowsPrivatePath(root, 'directory', 'verify');
+  }
   const planRecord = await readPrivateJson(root, 'plan.json', 'source transaction plan');
   const baselineRecord = await readPrivateJson(root, 'rollback-baseline.json', 'source rollback baseline');
-  const stateRecord = await readPrivateJson(root, 'state.json', 'source transaction state');
-  const authenticationRecord = await readPrivateJson(root, 'recovery-auth.json', 'source recovery authentication');
   exactObjectKeys(planRecord.value, ['schemaVersion', 'planSha256', 'catalogIds', 'plan'], 'source transaction plan');
   exactObjectKeys(baselineRecord.value, ['schemaVersion', 'closure', 'inventory'], 'source rollback baseline');
-  const status = stateRecord.value?.status;
-  const stateKeys = status === 'committed'
-    ? ['schemaVersion', 'status', 'planSha256', 'catalogIds', 'atomic', 'coldRestartVerified',
-        'rollbackBaselineSha256', 'snapshotManifestSha256', 'terminalClosureSha256',
-        'terminalInventorySha256', 'runtimeAcceptance']
-    : status === 'removed'
-      ? ['schemaVersion', 'status', 'planSha256', 'catalogIds', 'atomic', 'coldRestartVerified',
-          'rollbackBaselineSha256', 'snapshotManifestSha256', 'terminalClosureSha256',
-          'terminalInventorySha256', 'removalVerified']
-      : [];
-  exactObjectKeys(stateRecord.value, stateKeys, 'source transaction state');
   const { planSha256, catalogIds, plan } = planRecord.value;
   if (planRecord.value.schemaVersion !== 1 || baselineRecord.value.schemaVersion !== 1 ||
-      stateRecord.value.schemaVersion !== 1 || !/^[a-f0-9]{64}$/u.test(planSha256 ?? '') ||
+      !/^[a-f0-9]{64}$/u.test(planSha256 ?? '') ||
       !Array.isArray(catalogIds) || catalogIds.length === 0 ||
       catalogIds.some((id) => !Number.isInteger(id) || id < 3000 || id > 3999) ||
-      JSON.stringify(stateRecord.value.catalogIds) !== JSON.stringify(catalogIds) ||
-      stateRecord.value.planSha256 !== planSha256 || stateRecord.value.coldRestartVerified !== true ||
-      stateRecord.value.atomic !== (catalogIds.length > 1) ||
-      !/^[a-f0-9]{64}$/u.test(stateRecord.value.terminalClosureSha256 ?? '') ||
-      !/^[a-f0-9]{64}$/u.test(stateRecord.value.terminalInventorySha256 ?? '') ||
-      (status === 'removed' && stateRecord.value.removalVerified !== true)) {
-    fail('source transaction state does not match its plan');
+      !['install', 'remove'].includes(plan?.action) ||
+      JSON.stringify(plan.plugins?.map((plugin) => plugin.catalogId)) !== JSON.stringify(catalogIds)) {
+    fail('source transaction plan or rollback baseline is malformed');
   }
   const canonicalPlanSha256 = sha256(Buffer.from(`${JSON.stringify(stable(plan))}\n`, 'utf8'));
-  if (canonicalPlanSha256 !== planSha256 ||
-      !['install', 'remove'].includes(plan?.action) ||
-      (status === 'committed' && plan.action !== 'install') ||
-      (status === 'removed' && plan.action !== 'remove') ||
-      JSON.stringify(plan.plugins?.map((plugin) => plugin.catalogId)) !== JSON.stringify(catalogIds)) {
-    fail('source transaction plan digest or action mismatch');
-  }
-  if (sha256(baselineRecord.bytes) !== stateRecord.value.rollbackBaselineSha256) {
-    fail('source rollback baseline digest mismatch');
-  }
+  if (canonicalPlanSha256 !== planSha256) fail('source transaction plan digest or action mismatch');
   const snapshot = await canonicalDirectory(join(root, 'snapshot'), 'source transaction snapshot');
   const snapshotManifest = await readPrivateJson(snapshot, 'snapshot.json', 'source snapshot manifest');
-  if (sha256(snapshotManifest.bytes) !== stateRecord.value.snapshotManifestSha256) {
-    fail('source snapshot manifest digest mismatch');
+
+  // state.json is the durable terminal marker. If it exists, recovery never
+  // opens in-progress.json, so a completed install/removal cannot replay its
+  // earlier rollback journal even if a stale copy was left behind.
+  const stateRecord = await readPrivateJson(
+    root,
+    'state.json',
+    'source transaction state',
+    { allowMissing: true }
+  );
+  let kind;
+  let state;
+  let authenticationRecord;
+  let holder = null;
+  if (stateRecord !== null) {
+    kind = 'terminal';
+    state = stateRecord.value;
+    authenticationRecord = await readPrivateJson(
+      root,
+      'recovery-auth.json',
+      'source recovery authentication'
+    );
+    const status = state?.status;
+    const stateKeys = status === 'committed'
+      ? ['schemaVersion', 'transactionId', 'status', 'planSha256', 'catalogIds', 'atomic', 'coldRestartVerified',
+          'rollbackBaselineBinding', 'snapshotManifestBinding', 'terminalClosureBinding',
+          'terminalInventoryBinding', 'terminalManagedFilesBinding', 'runtimeAcceptance']
+      : status === 'removed'
+        ? ['schemaVersion', 'transactionId', 'status', 'planSha256', 'catalogIds', 'atomic', 'coldRestartVerified',
+            'rollbackBaselineBinding', 'snapshotManifestBinding', 'terminalClosureBinding',
+            'terminalInventoryBinding', 'terminalManagedFilesBinding', 'removalVerified']
+        : [];
+    exactObjectKeys(state, stateKeys, 'source transaction state');
+    if (state.schemaVersion !== 2 || !/^[a-f0-9]{32}$/u.test(state.transactionId ?? '') ||
+        JSON.stringify(state.catalogIds) !== JSON.stringify(catalogIds) ||
+        state.planSha256 !== planSha256 || state.coldRestartVerified !== true ||
+        state.atomic !== (catalogIds.length > 1) ||
+        !PRIVATE_BINDING_PATTERN.test(state.rollbackBaselineBinding ?? '') ||
+        !PRIVATE_BINDING_PATTERN.test(state.snapshotManifestBinding ?? '') ||
+        !PRIVATE_BINDING_PATTERN.test(state.terminalClosureBinding ?? '') ||
+        !PRIVATE_BINDING_PATTERN.test(state.terminalInventoryBinding ?? '') ||
+        !PRIVATE_BINDING_PATTERN.test(state.terminalManagedFilesBinding ?? '') ||
+        (status === 'removed' && state.removalVerified !== true) ||
+        (status === 'committed' && plan.action !== 'install') ||
+        (status === 'removed' && plan.action !== 'remove')) {
+      fail('source transaction state does not match its plan');
+    }
+  } else {
+    kind = 'interrupted';
+    const journalRecord = await readPrivateJson(
+      root,
+      'in-progress.json',
+      'source authenticated interrupted journal'
+    );
+    exactObjectKeys(
+      journalRecord.value,
+      ['schemaVersion', 'state', 'authentication'],
+      'source authenticated interrupted journal'
+    );
+    if (journalRecord.value.schemaVersion !== 1) {
+      fail('source authenticated interrupted journal schema is invalid');
+    }
+    state = journalRecord.value.state;
+    authenticationRecord = { value: journalRecord.value.authentication };
+    exactObjectKeys(
+      state,
+      [
+        'schemaVersion', 'transactionId', 'status', 'action', 'planSha256', 'catalogIds',
+        'atomic', 'rollbackBaselineBinding', 'snapshotManifestBinding', 'holder',
+      ],
+      'source interrupted transaction state'
+    );
+    if (state.schemaVersion !== 2 || state.status !== 'in-progress' ||
+        !/^[a-f0-9]{32}$/u.test(state.transactionId ?? '') ||
+        state.action !== plan.action || !['install', 'remove'].includes(state.action) ||
+        state.planSha256 !== planSha256 ||
+        JSON.stringify(state.catalogIds) !== JSON.stringify(catalogIds) ||
+        state.atomic !== (catalogIds.length > 1) ||
+        !PRIVATE_BINDING_PATTERN.test(state.rollbackBaselineBinding ?? '') ||
+        !PRIVATE_BINDING_PATTERN.test(state.snapshotManifestBinding ?? '')) {
+      fail('source interrupted transaction state does not match its plan');
+    }
+    holder = validateInProgressHolder(state.holder, root, state.action);
   }
   exactObjectKeys(
     authenticationRecord.value,
-    ['schemaVersion', 'algorithm', 'payload', 'mac'],
+    ['schemaVersion', 'algorithm', 'transactionNonce', 'payload', 'mac'],
     'source recovery authentication'
   );
-  const expectedAuthentication = buildRecoveryAuthentication(stateRecord.value, recoveryKey);
+  const nonceText = authenticationRecord.value.transactionNonce;
+  if (!/^[A-Za-z0-9_-]{43}$/u.test(nonceText ?? '')) {
+    fail('source recovery authentication nonce is malformed');
+  }
+  const transactionNonce = Buffer.from(nonceText, 'base64url');
+  if (transactionNonce.length !== 32 || transactionNonce.toString('base64url') !== nonceText) {
+    fail('source recovery authentication nonce is malformed');
+  }
+  const expectedAuthentication = buildRecoveryAuthentication(
+    state,
+    recoveryKey,
+    transactionNonce
+  );
   const actualMac = authenticationRecord.value.mac;
-  if (authenticationRecord.value.schemaVersion !== 1 ||
-      authenticationRecord.value.algorithm !== 'hmac-sha256' ||
+  if (authenticationRecord.value.schemaVersion !== 2 ||
+      authenticationRecord.value.algorithm !== 'hmac-sha256-private-nonce-v1' ||
       JSON.stringify(authenticationRecord.value.payload) !== JSON.stringify(expectedAuthentication.payload) ||
       !/^[a-f0-9]{64}$/u.test(actualMac ?? '') ||
       !timingSafeEqual(Buffer.from(actualMac, 'hex'), Buffer.from(expectedAuthentication.mac, 'hex'))) {
     fail('source transaction is not authenticated by this DSH_HOME recovery trust root');
   }
+  if (!privateBindingMatches(
+    state.rollbackBaselineBinding,
+    baselineRecord.bytes,
+    recoveryKey,
+    transactionNonce,
+    'rollback-baseline'
+  )) {
+    fail('source rollback baseline private binding mismatch');
+  }
+  if (!privateBindingMatches(
+    state.snapshotManifestBinding,
+    snapshotManifest.bytes,
+    recoveryKey,
+    transactionNonce,
+    'snapshot-manifest'
+  )) {
+    fail('source snapshot manifest private binding mismatch');
+  }
   const baselineInventory = normalizeInventory(baselineRecord.value.inventory, 'source baseline plugin inventory');
   const baselineClosure = validateClosureRecord(baselineRecord.value.closure);
   return {
+    kind,
     root,
     snapshot,
-    state: stateRecord.value,
+    state,
     plan,
     planSha256,
     catalogIds,
     baselineInventory,
     baselineClosure,
+    transactionNonce,
+    holder,
   };
 }
 
@@ -1214,17 +2164,20 @@ export function buildRecoveryPlan(source) {
     action: 'recover',
     profile: 'web',
     sourceTransaction: {
+      transactionId: source.state.transactionId,
       status: source.state.status,
+      recoveryMode: source.kind === 'interrupted'
+        ? 'authenticated-interrupted-rollback-from-matching-stale-holder'
+        : 'authenticated-terminal-rollback',
       planSha256: source.planSha256,
       catalogIds: source.catalogIds,
-      rollbackBaselineSha256: source.state.rollbackBaselineSha256,
-      snapshotManifestSha256: source.state.snapshotManifestSha256,
-      terminalClosureSha256: source.state.terminalClosureSha256,
-      terminalInventorySha256: source.state.terminalInventorySha256,
+      authenticatedPrivateSnapshot: true,
+      authenticatedTerminalState: source.kind === 'terminal',
+      authenticatedInterruptedJournal: source.kind === 'interrupted',
     },
     restoreTarget: {
-      closureSha256: source.baselineClosure.closureSha256,
-      inventorySha256: sha256(Buffer.from(`${JSON.stringify(stable(source.baselineInventory))}\n`, 'utf8')),
+      authenticatedPrivateClosure: true,
+      authenticatedPrivateInventory: true,
     },
     coldRestartRequired: true,
     failureRollback: 'restore-complete-pre-recovery-snapshot',
@@ -1328,57 +2281,162 @@ export async function executeRecoveryTransaction(options) {
   );
   const childEnv = await createChildRuntimeEnvironment(transactionRoot, dshHome, profile);
   verifyPnpm(childEnv);
-  const currentClosure = await captureProfileClosure(profile);
-  const currentInventory = probePluginInventory(harness, childEnv);
-  if (currentClosure.closureSha256 !== source.state.terminalClosureSha256 ||
-      inventorySha256(currentInventory) !== source.state.terminalInventorySha256) {
-    fail('current Profile has drifted from the authenticated source transaction terminal state');
-  }
   const snapshot = join(transactionRoot, 'snapshot');
-  await privateWrite(join(transactionRoot, 'plan.json'), {
-    schemaVersion: 1,
-    planSha256,
-    catalogIds: source.catalogIds,
-    plan,
+  const lock = await acquireTransactionLock(dshHome, transactionRoot, {
+    operation: 'recover',
+    recoverySourceTransactionRoot: source.root,
+    expectedRecoveryHolder: source.kind === 'interrupted' ? source.holder : null,
   });
-  const rollbackBaselineSha256 = await privateWrite(join(transactionRoot, 'rollback-baseline.json'), {
-    schemaVersion: 1,
-    closure: currentClosure,
-    inventory: currentInventory,
-  });
-  await createProfileSnapshot(profile, snapshot);
-  const snapshotManifestSha256 = sha256(await readFile(join(snapshot, 'snapshot.json')));
-  return runAtomicAcceptanceBoundary(async () => {
-    const recovery = await restoreAndVerifyBaseline({
-      baselineClosure: source.baselineClosure,
-      baselineInventory: source.baselineInventory,
-      childEnv,
-      harness,
-      profile,
-      snapshot: source.snapshot,
-    });
-    if (!rollbackIsComplete(recovery)) fail('source transaction recovery verification failed');
-    const state = {
-      schemaVersion: 1,
-      status: 'recovered',
-      planSha256,
-      sourcePlanSha256: source.planSha256,
-      catalogIds: source.catalogIds,
-      coldRestartVerified: true,
-      rollbackBaselineSha256,
-      snapshotManifestSha256,
-      recoveryVerified: true,
-    };
-    await privateWrite(join(transactionRoot, 'state.json'), state);
-    return { state, transactionRoot, snapshot };
-  }, () => restoreAndVerifyBaseline({
-    baselineClosure: currentClosure,
-    baselineInventory: currentInventory,
-    childEnv,
-    harness,
-    profile,
-    snapshot,
-  }));
+  let snapshotCreated = false;
+  return runWithHeldTransactionLock(lock, async () => {
+    // Re-authenticate after the exclusive lock is held so recovery never acts
+    // on source evidence that changed between planning and Profile mutation.
+    const lockedSource = await loadRecoverySource(source.root, recoveryKey);
+    bindRecoverySourceToAuthority(
+      lockedSource,
+      authorityContext,
+      authority,
+      validationOptions
+    );
+    if (lockedSource.kind !== source.kind ||
+        lockedSource.planSha256 !== source.planSha256 ||
+        JSON.stringify(lockedSource.state) !== JSON.stringify(source.state) ||
+        !timingSafeEqual(lockedSource.transactionNonce, source.transactionNonce)) {
+      fail('authenticated recovery source changed before the DSH_HOME lock was acquired');
+    }
+    if (lockedSource.kind === 'interrupted') {
+      if (lock.takeoverOwner === null ||
+          !staleOwnerMatchesJournal(lock.takeoverOwner, lockedSource.holder)) {
+        fail('interrupted recovery did not take over its exact authenticated stale lock holder');
+      }
+    } else {
+      await verifyTerminalManagedFilesBinding(
+        lockedSource,
+        dshHome,
+        profile,
+        recoveryKey
+      );
+    }
+    await createProfileSnapshot(dshHome, profile, snapshot);
+    snapshotCreated = true;
+    if (lockedSource.kind === 'terminal') {
+      await verifyTerminalSnapshotManagedFilesBinding(
+        lockedSource,
+        snapshot,
+        recoveryKey
+      );
+    }
+    let currentClosure;
+    let currentInventory;
+    let completeBaseline = false;
+    let dependencyClosureMutationStarted = false;
+    return runAtomicAcceptanceBoundary(async () => {
+      if (lockedSource.kind === 'terminal') {
+        currentClosure = await captureProfileClosure(profile);
+        currentInventory = probePluginInventory(harness, childEnv);
+        completeBaseline = true;
+        if (!privateBindingMatches(
+          lockedSource.state.terminalClosureBinding,
+          jsonBytes(stable(currentClosure)),
+          recoveryKey,
+          lockedSource.transactionNonce,
+          'terminal-closure'
+        ) || !privateBindingMatches(
+          lockedSource.state.terminalInventoryBinding,
+          jsonBytes(stable(currentInventory)),
+          recoveryKey,
+          lockedSource.transactionNonce,
+          'terminal-inventory'
+        )) {
+          fail('current Profile has drifted from the authenticated source transaction terminal state');
+        }
+      } else {
+        // A crashed add/remove may leave an intentionally invalid partial
+        // closure. Best-effort capture improves failure rollback, but failure
+        // to probe that partial state must not block restoring the authenticated
+        // pre-mutation baseline.
+        try {
+          currentClosure = await captureProfileClosure(profile);
+          currentInventory = probePluginInventory(harness, childEnv);
+          completeBaseline = true;
+        } catch {
+          currentClosure = undefined;
+          currentInventory = undefined;
+          completeBaseline = false;
+        }
+      }
+      await privateWrite(join(transactionRoot, 'plan.json'), {
+        schemaVersion: 1,
+        planSha256,
+        catalogIds: lockedSource.catalogIds,
+        plan,
+      });
+      if (completeBaseline) {
+        await privateWrite(join(transactionRoot, 'rollback-baseline.json'), {
+          schemaVersion: 1,
+          closure: currentClosure,
+          inventory: currentInventory,
+        });
+      }
+      if (lockedSource.kind === 'terminal') {
+        const stillFrozen = await verifyProfileSnapshot(dshHome, profile, snapshot);
+        if (!stillFrozen.matches) {
+          fail(
+            'current Profile drifted after terminal recovery snapshot capture; lock retained for manual inspection',
+            { preserveConcurrentManagedFileDrift: true }
+          );
+        }
+      }
+      dependencyClosureMutationStarted = true;
+      const recovery = await restoreAndVerifyBaseline({
+        baselineClosure: lockedSource.baselineClosure,
+        baselineInventory: lockedSource.baselineInventory,
+        childEnv,
+        dshHome,
+        harness,
+        profile,
+        snapshot: lockedSource.snapshot,
+      });
+      if (!rollbackIsComplete(recovery)) fail('source transaction recovery verification failed');
+      const state = {
+        schemaVersion: 2,
+        status: 'recovered',
+        recoveryMode: lockedSource.kind,
+        planSha256,
+        sourceTransactionId: lockedSource.state.transactionId,
+        sourcePlanSha256: lockedSource.planSha256,
+        catalogIds: lockedSource.catalogIds,
+        coldRestartVerified: true,
+        privateRollbackRetained: true,
+        recoveryVerified: true,
+      };
+      await privateWrite(join(transactionRoot, 'state.json'), state);
+      return { state, transactionRoot, snapshot };
+    }, (transactionError) => transactionError?.details?.preserveConcurrentManagedFileDrift === true
+      ? {
+          attempted: false,
+          baselineAvailable: completeBaseline,
+          filesRestored: false,
+          closureRestored: false,
+          inventoryRestored: false,
+          coldStartProbePassed: false,
+          concurrentDriftPreserved: true,
+        }
+      : completeBaseline
+        ? restoreAndVerifyBaseline({
+          baselineClosure: currentClosure,
+          baselineInventory: currentInventory,
+          childEnv,
+          dshHome,
+          harness,
+          profile,
+          snapshot,
+          })
+        : restoreAndVerifyManagedFiles({ dshHome, profile, snapshot }).then((rollback) => ({
+            ...rollback,
+            dependencyClosureMutationStarted,
+          })));
+  }, (error) => canReleaseTransactionLockAfterError(lock, snapshotCreated, error));
 }
 
 export async function preflightPrepared(preparedRootInput, items) {
@@ -1430,6 +2488,9 @@ async function resolveRecoveryContext(options) {
   const recoveryKey = await loadRecoveryKey(dshHome);
   const source = await loadRecoverySource(options.sourcetransactionroot, recoveryKey);
   bindRecoverySourceToAuthority(source, authorityContext, authority, validationOptions);
+  if (source.kind === 'interrupted') {
+    await validateInterruptedRecoveryLock(dshHome, source);
+  }
   return { authorityContext, source, ...buildRecoveryPlan(source) };
 }
 
@@ -1508,6 +2569,18 @@ function parseArgs(argv) {
   return { command, ...options };
 }
 
+export function publicTerminalState(state) {
+  const {
+    rollbackBaselineBinding: _rollbackBaselineBinding,
+    snapshotManifestBinding: _snapshotManifestBinding,
+    terminalClosureBinding: _terminalClosureBinding,
+    terminalInventoryBinding: _terminalInventoryBinding,
+    terminalManagedFilesBinding: _terminalManagedFilesBinding,
+    ...publicState
+  } = state;
+  return publicState;
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   try {
     const options = parseArgs(process.argv.slice(2));
@@ -1547,7 +2620,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
           transactionRoot: options.transactionroot,
         });
         process.stdout.write(`${JSON.stringify({
-          ...result.state,
+          ...publicTerminalState(result.state),
           transactionRoot: '<private-transaction-root>',
         }, null, 2)}\n`);
       } else if (options.command === 'remove') {
@@ -1565,7 +2638,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
           transactionRoot: options.transactionroot,
         });
         process.stdout.write(`${JSON.stringify({
-          ...result.state,
+          ...publicTerminalState(result.state),
           transactionRoot: '<private-transaction-root>',
         }, null, 2)}\n`);
       } else {
@@ -1584,7 +2657,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
           transactionRoot: options.transactionroot,
         });
         process.stdout.write(`${JSON.stringify({
-          ...result.state,
+          ...publicTerminalState(result.state),
           transactionRoot: '<private-transaction-root>',
         }, null, 2)}\n`);
       }

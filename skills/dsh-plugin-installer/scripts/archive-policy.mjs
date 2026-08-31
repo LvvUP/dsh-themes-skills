@@ -10,6 +10,8 @@ import { lifecycleHooksFromManifest, normalizeBundlePatch } from './authority.mj
 const MAX_COMPRESSED_BYTES = 256 * 1024 * 1024;
 const MAX_UNCOMPRESSED_BYTES = 512 * 1024 * 1024;
 const MAX_ENTRIES = 5000;
+const PACKAGE = /^(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+$/u;
+const SEMVER = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/u;
 
 function fail(message) {
   throw new Error(message);
@@ -24,50 +26,77 @@ function npmPurl(name, version) {
   return `pkg:npm/${encodedName}@${version}`;
 }
 
-function componentSha256(component) {
-  if (!Array.isArray(component?.hashes)) return null;
-  const matches = component.hashes.filter((entry) =>
+function componentManifestSha256(component) {
+  if (component?.hashes !== undefined) return null;
+  if (!Array.isArray(component?.properties) || component.properties.length !== 1) return null;
+  const matches = component.properties.filter((entry) =>
     entry !== null && typeof entry === 'object' && !Array.isArray(entry) &&
-    entry.alg === 'SHA-256' && /^[a-f0-9]{64}$/.test(entry.content));
+    JSON.stringify(Object.keys(entry).sort()) === JSON.stringify(['name', 'value']) &&
+    entry.name === 'dsh-themes:package-manifest-sha256' &&
+    /^[a-f0-9]{64}$/.test(entry.value));
   if (matches.length !== 1) return null;
-  return matches[0].content;
+  return matches[0].value;
 }
 
-export function validateCycloneDxSbom(document, item) {
+function exactObjectKeys(value, expected) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value) &&
+    JSON.stringify(Object.keys(value).sort()) === JSON.stringify([...expected].sort());
+}
+
+function manifestPeerDependencies(manifest) {
+  if (manifest === null || typeof manifest !== 'object' || Array.isArray(manifest)) {
+    fail('hosted artifact SBOM validation requires the actual package manifest');
+  }
+  const peerDependencies = manifest.peerDependencies ?? {};
+  if (peerDependencies === null || typeof peerDependencies !== 'object' ||
+      Array.isArray(peerDependencies) || Object.keys(peerDependencies).length > 5000 ||
+      Object.entries(peerDependencies).some(([name, version]) =>
+        !PACKAGE.test(name) || !SEMVER.test(version))) {
+    fail('hosted package manifest peerDependencies are not exact package versions');
+  }
+  return Object.entries(peerDependencies)
+    .sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0)
+    .map(([name, version]) => ({
+      name,
+      version,
+      reference: npmPurl(name, version),
+    }));
+}
+
+export function validateCycloneDxSbom(document, item, manifest) {
   if (document === null || typeof document !== 'object' || Array.isArray(document) ||
       document.bomFormat !== 'CycloneDX' || !['1.5', '1.6'].includes(document.specVersion) ||
       document.metadata === null || typeof document.metadata !== 'object' || Array.isArray(document.metadata) ||
-      !Array.isArray(document.components) || document.components.length < 1 || document.components.length > 5000 ||
+      !Array.isArray(document.components) || document.components.length > 5000 ||
       !Array.isArray(document.dependencies) || document.dependencies.length < 1 || document.dependencies.length > 5000) {
     fail('hosted artifact SBOM must be a bounded CycloneDX 1.5 or 1.6 document with components and dependencies');
   }
+  const expectedDependencies = manifestPeerDependencies(manifest);
   const expectedPurl = npmPurl(item.package.name, item.package.version);
   const root = document.metadata.component;
   if (root === null || typeof root !== 'object' || Array.isArray(root) ||
-      !['application', 'library'].includes(root.type) || root.name !== item.package.name ||
+      root.type !== 'library' || root.name !== item.package.name ||
       root.version !== item.package.version || root.purl !== expectedPurl ||
-      typeof root['bom-ref'] !== 'string' || root['bom-ref'].length < 1 || root['bom-ref'].length > 500 ||
-      componentSha256(root) !== item.distribution.manifestSha256) {
+      root['bom-ref'] !== expectedPurl ||
+      componentManifestSha256(root) !== item.distribution.manifestSha256) {
     fail('hosted artifact SBOM metadata component does not bind the exact package identity, purl, and manifest SHA-256');
   }
-  const references = new Map();
-  for (const [index, component] of document.components.entries()) {
-    if (component === null || typeof component !== 'object' || Array.isArray(component) ||
-        typeof component['bom-ref'] !== 'string' || component['bom-ref'].length < 1 || component['bom-ref'].length > 500 ||
-        typeof component.name !== 'string' || component.name.length < 1 || component.name.length > 214 ||
-        typeof component.version !== 'string' || component.version.length < 1 || component.version.length > 100 ||
-        typeof component.purl !== 'string' || !component.purl.startsWith('pkg:') || component.purl.length > 500 ||
-        /[\u0000-\u001f\u007f]/u.test(component.purl)) {
-      fail(`hosted artifact SBOM components[${index}] is malformed`);
-    }
-    if (references.has(component['bom-ref'])) fail('hosted artifact SBOM contains duplicate component references');
-    references.set(component['bom-ref'], component);
+  const references = new Map([[root['bom-ref'], root]]);
+  if (document.components.length !== expectedDependencies.length) {
+    fail('hosted artifact SBOM components do not exactly match manifest peerDependencies');
   }
-  const rootComponent = document.components.find((component) => component['bom-ref'] === root['bom-ref']);
-  if (!rootComponent || rootComponent.name !== item.package.name ||
-      rootComponent.version !== item.package.version || rootComponent.purl !== expectedPurl ||
-      componentSha256(rootComponent) !== item.distribution.manifestSha256) {
-    fail('hosted artifact SBOM components do not contain the exact root artifact component');
+  for (const [index, component] of document.components.entries()) {
+    const expected = expectedDependencies[index];
+    if (!exactObjectKeys(component, ['bom-ref', 'name', 'purl', 'scope', 'type', 'version']) ||
+        component.type !== 'library' || component.name !== expected.name ||
+        component.version !== expected.version || component.purl !== expected.reference ||
+        component['bom-ref'] !== expected.reference || component.scope !== 'required') {
+      fail(`hosted artifact SBOM components[${index}] does not exactly bind manifest peerDependencies`);
+    }
+    if (references.has(component['bom-ref'])) {
+      fail('hosted artifact SBOM contains duplicate or root-colliding component references');
+    }
+    references.set(component['bom-ref'], component);
   }
   const dependencyReferences = new Set();
   for (const [index, dependency] of document.dependencies.entries()) {
@@ -85,6 +114,18 @@ export function validateCycloneDxSbom(document, item) {
   if (dependencyReferences.size !== references.size ||
       [...references.keys()].some((reference) => !dependencyReferences.has(reference))) {
     fail('hosted artifact SBOM dependency graph must enumerate every component exactly once');
+  }
+  const rootDependency = document.dependencies.find((dependency) => dependency.ref === expectedPurl);
+  const expectedReferences = expectedDependencies.map((dependency) => dependency.reference);
+  if (!rootDependency ||
+      JSON.stringify(rootDependency.dependsOn) !== JSON.stringify(expectedReferences)) {
+    fail('hosted artifact SBOM root dependsOn does not exactly match manifest peerDependencies');
+  }
+  for (const expected of expectedDependencies) {
+    const dependency = document.dependencies.find((entry) => entry.ref === expected.reference);
+    if (!dependency || dependency.dependsOn.length !== 0) {
+      fail('hosted artifact SBOM peer dependency graph must contain exact leaf edges');
+    }
   }
   return document;
 }
@@ -121,6 +162,34 @@ function safeEntryPath(name) {
   if (name !== 'package' && !name.startsWith('package/')) {
     fail(`archive entry is outside package/: ${name}`);
   }
+}
+
+export function assertSafeArchiveEntryPath(name) {
+  safeEntryPath(name);
+  return name;
+}
+
+export function assertNoRegularFilePathConflicts(entries, label = 'path set') {
+  if (!Array.isArray(entries) || entries.some((entry) =>
+    entry === null || typeof entry !== 'object' || Array.isArray(entry) ||
+    typeof entry.name !== 'string' || !['0', '5'].includes(entry.type))) {
+    fail(`${label} is not a regular-file/directory entry list`);
+  }
+  const normalized = new Map(entries.map((entry) => [
+    entry.name.normalize('NFC').toLocaleLowerCase('en-US'),
+    entry,
+  ]));
+  for (const entry of entries) {
+    const parts = entry.name.normalize('NFC').toLocaleLowerCase('en-US').split('/');
+    for (let length = 1; length < parts.length; length += 1) {
+      const ancestor = normalized.get(parts.slice(0, length).join('/'));
+      if (ancestor?.type === '0') {
+        fail(`${label} contains regular-file ancestor/descendant conflict between ` +
+          `${JSON.stringify(ancestor.name)} and ${JSON.stringify(entry.name)}`);
+      }
+    }
+  }
+  return entries;
 }
 
 export function inspectTarEntries(compressed) {
@@ -188,6 +257,7 @@ export function inspectTarEntries(compressed) {
       new Set(names.map((name) => name.normalize('NFC').toLocaleLowerCase('en-US'))).size !== names.length) {
     fail('archive contains non-portable Unicode or case-colliding paths');
   }
+  assertNoRegularFilePathConflicts(entries, 'archive');
   return entries;
 }
 
@@ -235,7 +305,7 @@ export function validateHostedArtifact(bytes, item) {
   } catch (error) {
     fail(`hosted artifact SBOM is not valid JSON: ${error.message}`);
   }
-  validateCycloneDxSbom(sbomDocument, item);
+  validateCycloneDxSbom(sbomDocument, item, manifest);
   return { packageName: manifest.name, version: manifest.version, artifactSha256: digest, entries: entries.length };
 }
 

@@ -2,11 +2,15 @@ import assert from 'node:assert/strict';
 import { createHash, randomBytes } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import {
+  chmod,
+  link,
   lstat,
   mkdir,
   mkdtemp,
+  open,
   readFile,
   realpath,
+  rename,
   rm,
   writeFile,
 } from 'node:fs/promises';
@@ -30,14 +34,17 @@ import {
   validateUpstreamArtifact,
 } from '../skills/dsh-plugin-installer/scripts/archive-policy.mjs';
 import {
+  acquireTransactionLock,
   assertPrivateRecoveryPlatform,
   bindRecoverySourceToAuthority,
   buildChildEnvironment,
   buildDshInvocation,
   buildPlan,
+  buildPrivateRecoveryBinding,
   buildRecoveryAuthentication,
   buildRecoveryPlan,
   buildRemovalPlan,
+  canReleaseTransactionLockAfterError,
   executeRecoveryTransaction,
   executeRemovalTransaction,
   executeTransaction,
@@ -46,7 +53,12 @@ import {
   parseDumpConfigEntries,
   parsePluginInventory,
   preflightPrepared,
+  publicTerminalState,
+  releaseTransactionLock,
   runAtomicAcceptanceBoundary,
+  validateInterruptedRecoveryLock,
+  verifyTerminalManagedFilesBinding,
+  verifyTerminalSnapshotManagedFilesBinding,
   verifyRuntimeAcceptanceEvidence,
 } from '../skills/dsh-plugin-installer/scripts/install-transaction.mjs';
 import {
@@ -58,8 +70,13 @@ import {
   verifyProfileClosure,
 } from '../skills/dsh-plugin-installer/scripts/profile-closure.mjs';
 import {
+  atomicRestoreWrite,
+  captureManagedFileBindingInput,
+  captureSnapshotManagedFileBindingInput,
   createProfileSnapshot,
+  loadVerifiedProfileSnapshot,
   restoreProfileSnapshot,
+  verifyProfileSnapshot,
 } from '../skills/dsh-plugin-installer/scripts/profile-snapshot.mjs';
 import {
   prepareHosted,
@@ -175,14 +192,17 @@ function hostedFixture({ id = 3006, slug = 'fixture-hosted', name = 'dsh-fixture
     version,
     purl: bomRef,
     'bom-ref': bomRef,
-    hashes: [{ alg: 'SHA-256', content: manifestSha256 }],
+    properties: [{
+      name: 'dsh-themes:package-manifest-sha256',
+      value: manifestSha256,
+    }],
   };
   const sbom = Buffer.from(`${JSON.stringify({
     bomFormat: 'CycloneDX',
     specVersion: '1.6',
     version: 1,
     metadata: { component },
-    components: [component],
+    components: [],
     dependencies: [{ ref: bomRef, dependsOn: [] }],
   })}\n`);
   const bytes = tar([
@@ -707,6 +727,28 @@ test('authority validator accepts exact hosted/upstream records and rejects comm
   assert.equal(Object.hasOwn(childEnv, 'NODE_OPTIONS'), false);
   assert.equal(Object.hasOwn(childEnv, 'npm_config_registry'), false);
   assert.equal(Object.hasOwn(childEnv, 'AWS_SECRET_ACCESS_KEY'), false);
+  const windowsChildEnv = buildChildEnvironment(
+    '/private/dsh-home',
+    '/private/runtime',
+    {
+      Path: String.raw`C:\trusted\bin`,
+      SystemRoot: String.raw`C:\Windows`,
+      SECRET: 'never-inherit',
+    },
+    'win32'
+  );
+  assert.equal(windowsChildEnv.PATH, String.raw`C:\trusted\bin`);
+  assert.equal(windowsChildEnv.SystemRoot, String.raw`C:\Windows`);
+  assert.equal(Object.hasOwn(windowsChildEnv, 'Path'), false);
+  assert.throws(
+    () => buildChildEnvironment(
+      '/private/dsh-home',
+      '/private/runtime',
+      { PATH: String.raw`C:\first`, Path: String.raw`C:\second` },
+      'win32'
+    ),
+    /ambiguous Windows PATH entries/
+  );
   assert.deepEqual(
     parsePluginInventory(JSON.stringify([{
       name: 'dsh-profile-web',
@@ -1094,9 +1136,10 @@ test('removal planning is authority-bound and removal/recovery executors reject 
   );
 });
 
-test('retained transaction recovery binds plan, baseline, and snapshot digests', async (t) => {
-  const root = await workspace(t);
-  const profile = join(root, 'profile');
+test('retained recovery uses nonce-scoped opaque bindings instead of secret-derived public digests', async (t) => {
+  const root = await realpath(await workspace(t));
+  const dshHome = join(root, 'dsh-home');
+  const profile = join(dshHome, 'profiles', 'web');
   const transaction = join(root, 'source-transaction');
   const snapshot = join(transaction, 'snapshot');
   await mkdir(profile, { recursive: true });
@@ -1118,8 +1161,10 @@ test('retained transaction recovery binds plan, baseline, and snapshot digests',
     'packages:\n  - .\n\nnodeLinker: hoisted\nautoInstallPeers: false\n'
   );
   await writeFile(join(profile, 'cordis.patch.yml'), '[]\n');
+  const credentialBytes = Buffer.from('provider:\n  token: private-recovery-fixture\n');
+  await writeFile(join(dshHome, '.credentials.yaml'), credentialBytes, { mode: 0o600 });
   const closure = await captureProfileClosure(profile);
-  await createProfileSnapshot(profile, snapshot);
+  await createProfileSnapshot(dshHome, profile, snapshot);
 
   const loaded = await loadAuthority();
   const fixture = hostedFixture({ id: 3006, slug: 'recover-one', name: 'dsh-recover-one' });
@@ -1137,21 +1182,73 @@ test('retained transaction recovery binds plan, baseline, and snapshot digests',
   const baselineRecord = { schemaVersion: 1, closure, inventory: {} };
   const baselineBytes = Buffer.from(`${JSON.stringify(baselineRecord, null, 2)}\n`);
   const snapshotManifestBytes = await readFile(join(snapshot, 'snapshot.json'));
+  const recoveryKey = randomBytes(32);
+  const transactionNonce = randomBytes(32);
+  const rollbackBaselineBinding = buildPrivateRecoveryBinding(
+    baselineBytes,
+    recoveryKey,
+    transactionNonce,
+    'rollback-baseline'
+  );
+  const snapshotManifestBinding = buildPrivateRecoveryBinding(
+    snapshotManifestBytes,
+    recoveryKey,
+    transactionNonce,
+    'snapshot-manifest'
+  );
+  const terminalClosureBinding = buildPrivateRecoveryBinding(
+    Buffer.from(`${JSON.stringify(stable(closure), null, 2)}\n`),
+    recoveryKey,
+    transactionNonce,
+    'terminal-closure'
+  );
+  const terminalInventoryBinding = buildPrivateRecoveryBinding(
+    Buffer.from('{}\n'),
+    recoveryKey,
+    transactionNonce,
+    'terminal-inventory'
+  );
+  const terminalManagedBytes = await captureManagedFileBindingInput(dshHome, profile);
+  const terminalManagedFilesBinding = buildPrivateRecoveryBinding(
+    terminalManagedBytes,
+    recoveryKey,
+    transactionNonce,
+    'terminal-managed-files'
+  );
+  terminalManagedBytes.fill(0);
   const state = {
-    schemaVersion: 1,
+    schemaVersion: 2,
+    transactionId: randomBytes(16).toString('hex'),
     status: 'removed',
     planSha256: removal.planSha256,
     catalogIds: [3006],
     atomic: false,
     coldRestartVerified: true,
-    rollbackBaselineSha256: sha256(baselineBytes),
-    snapshotManifestSha256: sha256(snapshotManifestBytes),
-    terminalClosureSha256: closure.closureSha256,
-    terminalInventorySha256: sha256(Buffer.from('{}\n')),
+    rollbackBaselineBinding,
+    snapshotManifestBinding,
+    terminalClosureBinding,
+    terminalInventoryBinding,
+    terminalManagedFilesBinding,
     removalVerified: true,
   };
-  const recoveryKey = randomBytes(32);
-  const authentication = buildRecoveryAuthentication(state, recoveryKey);
+  const authentication = buildRecoveryAuthentication(state, recoveryKey, transactionNonce);
+  const secondNonceBinding = buildPrivateRecoveryBinding(
+    snapshotManifestBytes,
+    recoveryKey,
+    randomBytes(32),
+    'snapshot-manifest'
+  );
+  assert.notEqual(snapshotManifestBinding, sha256(snapshotManifestBytes));
+  assert.notEqual(snapshotManifestBinding, secondNonceBinding);
+  assert.doesNotMatch(JSON.stringify(state), new RegExp(sha256(snapshotManifestBytes)));
+  assert.doesNotMatch(JSON.stringify(state), new RegExp(sha256(credentialBytes)));
+  assert.doesNotMatch(JSON.stringify(state), new RegExp(closure.closureSha256));
+  const publicState = publicTerminalState(state);
+  assert.equal(Object.hasOwn(publicState, 'rollbackBaselineBinding'), false);
+  assert.equal(Object.hasOwn(publicState, 'snapshotManifestBinding'), false);
+  assert.equal(Object.hasOwn(publicState, 'terminalClosureBinding'), false);
+  assert.equal(Object.hasOwn(publicState, 'terminalInventoryBinding'), false);
+  assert.equal(Object.hasOwn(publicState, 'terminalManagedFilesBinding'), false);
   await writeFile(
     join(transaction, 'plan.json'),
     `${JSON.stringify(planRecord, null, 2)}\n`,
@@ -1168,8 +1265,69 @@ test('retained transaction recovery binds plan, baseline, and snapshot digests',
     `${JSON.stringify(authentication, null, 2)}\n`,
     { mode: 0o600 }
   );
+  await writeFile(join(transaction, 'in-progress.json'), 'not-json-and-must-never-be-read\n', {
+    mode: 0o666,
+  });
 
   const source = await loadRecoverySource(transaction, recoveryKey);
+  assert.equal(source.kind, 'terminal');
+  assert.equal(
+    await verifyTerminalManagedFilesBinding(source, dshHome, profile, recoveryKey),
+    true
+  );
+  assert.equal(
+    await verifyTerminalSnapshotManagedFilesBinding(
+      source,
+      snapshot,
+      recoveryKey
+    ),
+    true
+  );
+  await writeFile(join(dshHome, 'settings.yaml'), 'unexpected-terminal-setting: true\n', {
+    mode: 0o600,
+  });
+  await assert.rejects(
+    () => verifyTerminalManagedFilesBinding(source, dshHome, profile, recoveryKey),
+    /governed DSH_HOME files have drifted/
+  );
+  await rm(join(dshHome, 'settings.yaml'));
+  await writeFile(join(dshHome, '.credentials.yaml'), 'provider:\n  token: changed-after-terminal\n', {
+    mode: 0o600,
+  });
+  await assert.rejects(
+    () => verifyTerminalManagedFilesBinding(source, dshHome, profile, recoveryKey),
+    /governed DSH_HOME files have drifted/
+  );
+  await writeFile(join(dshHome, '.credentials.yaml'), credentialBytes, { mode: 0o600 });
+  if (process.platform !== 'win32') {
+    await chmod(join(dshHome, '.credentials.yaml'), 0o640);
+    await assert.rejects(
+      () => verifyTerminalManagedFilesBinding(source, dshHome, profile, recoveryKey),
+      /governed DSH_HOME files have drifted/
+    );
+    await chmod(join(dshHome, '.credentials.yaml'), 0o600);
+  }
+  const statePath = join(transaction, 'state.json');
+  const stateAlias = join(transaction, 'state-hardlink.json');
+  await link(statePath, stateAlias);
+  await assert.rejects(
+    () => loadRecoverySource(transaction, recoveryKey),
+    /single-link file/
+  );
+  await rm(stateAlias);
+  const retainedStatePath = join(transaction, 'state.retained.json');
+  await rename(statePath, retainedStatePath);
+  await writeFile(
+    statePath,
+    `${JSON.stringify({ ...state, coldRestartVerified: false }, null, 2)}\n`,
+    { mode: 0o600 }
+  );
+  await assert.rejects(
+    () => loadRecoverySource(transaction, recoveryKey),
+    /does not match its plan|not authenticated/
+  );
+  await rm(statePath);
+  await rename(retainedStatePath, statePath);
   bindRecoverySourceToAuthority(
     source,
     { top10ReleaseSet: promoted.top10ReleaseSet },
@@ -1178,8 +1336,15 @@ test('retained transaction recovery binds plan, baseline, and snapshot digests',
   );
   const recovery = buildRecoveryPlan(source);
   assert.equal(recovery.plan.action, 'recover');
+  assert.equal(recovery.plan.sourceTransaction.transactionId, state.transactionId);
   assert.equal(recovery.plan.sourceTransaction.status, 'removed');
-  assert.equal(recovery.plan.restoreTarget.closureSha256, closure.closureSha256);
+  assert.equal(recovery.plan.restoreTarget.authenticatedPrivateClosure, true);
+  assert.equal(recovery.plan.restoreTarget.authenticatedPrivateInventory, true);
+  assert.equal(recovery.plan.sourceTransaction.authenticatedPrivateSnapshot, true);
+  assert.equal(recovery.plan.sourceTransaction.authenticatedTerminalState, true);
+  assert.equal(Object.hasOwn(recovery.plan.sourceTransaction, 'snapshotManifestBinding'), false);
+  assert.doesNotMatch(JSON.stringify(recovery.plan), new RegExp(sha256(snapshotManifestBytes)));
+  assert.doesNotMatch(JSON.stringify(recovery.plan), new RegExp(closure.closureSha256));
   assert.equal(
     recovery.planSha256,
     sha256(Buffer.from(`${JSON.stringify(stable(recovery.plan))}\n`))
@@ -1207,7 +1372,7 @@ test('retained transaction recovery binds plan, baseline, and snapshot digests',
   );
   await assert.rejects(
     () => loadRecoverySource(transaction, recoveryKey),
-    /rollback baseline digest mismatch/
+    /rollback baseline private binding mismatch/
   );
 });
 
@@ -1243,6 +1408,310 @@ test('recovery trust root creates and reloads one private 32-byte key', async (t
     assert.equal(keyProof.inherited, false);
     assert.equal(keyProof.inheritanceFlags, 0);
   }
+});
+
+test('DSH_HOME transaction lock is exclusive and only explicit matching recovery takes stale ownership', async (t) => {
+  const root = await realpath(await workspace(t));
+  const dshHome = join(root, 'dsh-home');
+  const firstTransaction = join(root, 'first-transaction');
+  const secondTransaction = join(root, 'second-transaction');
+  const recoveryTransaction = join(root, 'recovery-transaction');
+  await mkdir(dshHome);
+  await mkdir(firstTransaction);
+  await mkdir(secondTransaction);
+  await mkdir(recoveryTransaction);
+
+  const stalePid = 2_000_000_000;
+  const firstLock = await acquireTransactionLock(dshHome, firstTransaction, {
+    operation: 'install',
+    pid: stalePid,
+  });
+  await assert.rejects(
+    () => acquireTransactionLock(dshHome, secondTransaction, { operation: 'remove' }),
+    /another DSH_HOME transaction is locked.*explicit recovery/
+  );
+  await assert.rejects(
+    () => acquireTransactionLock(dshHome, recoveryTransaction, {
+      operation: 'recover',
+      recoverySourceTransactionRoot: secondTransaction,
+      processAlive: () => false,
+    }),
+    /does not match the explicit recovery source/
+  );
+  await assert.rejects(
+    () => acquireTransactionLock(dshHome, recoveryTransaction, {
+      operation: 'recover',
+      recoverySourceTransactionRoot: firstTransaction,
+      processAlive: () => true,
+    }),
+    /lock holder is still active/
+  );
+
+  const recoveryLock = await acquireTransactionLock(dshHome, recoveryTransaction, {
+    operation: 'recover',
+    recoverySourceTransactionRoot: firstTransaction,
+    processAlive: () => false,
+  });
+  assert.notEqual(recoveryLock.lockId, firstLock.lockId);
+  await releaseTransactionLock(recoveryLock);
+  await assert.rejects(() => lstat(recoveryLock.lockRoot), { code: 'ENOENT' });
+});
+
+test('authenticated interrupted journal requires exact stale holder, separate consent, and single-winner takeover', async (t) => {
+  const root = await realpath(await workspace(t));
+  const dshHome = join(root, 'dsh-home');
+  const profile = join(dshHome, 'profiles', 'web');
+  const sourceTransaction = join(root, 'interrupted-source');
+  const snapshot = join(sourceTransaction, 'snapshot');
+  const recoveryOne = join(root, 'recovery-one');
+  const recoveryTwo = join(root, 'recovery-two');
+  const blockedTransaction = join(root, 'blocked-transaction');
+  await mkdir(profile, { recursive: true });
+  await mkdir(sourceTransaction, { mode: 0o700 });
+  await mkdir(recoveryOne, { mode: 0o700 });
+  await mkdir(recoveryTwo, { mode: 0o700 });
+  await mkdir(blockedTransaction, { mode: 0o700 });
+  await writeFile(join(profile, 'package.json'), `${JSON.stringify({
+    name: 'dsh-profile-web',
+    private: true,
+    dependencies: {},
+    dsh: {
+      profile: {
+        bundles: ['@deepseek-ai/dsh-base', '@deepseek-ai/dsh-web-app'],
+        patchReload: 'live',
+      },
+    },
+  }, null, 2)}\n`);
+  await writeFile(join(profile, 'pnpm-lock.yaml'), 'lockfileVersion: 9.0\n');
+  await writeFile(
+    join(profile, 'pnpm-workspace.yaml'),
+    'packages:\n  - .\n\nnodeLinker: hoisted\nautoInstallPeers: false\n'
+  );
+  await writeFile(join(profile, 'cordis.patch.yml'), '[]\n');
+  const closure = await captureProfileClosure(profile);
+  await createProfileSnapshot(dshHome, profile, snapshot);
+
+  const loaded = await loadAuthority();
+  const fixture = hostedFixture({ id: 3006, slug: 'interrupted-one', name: 'dsh-interrupted-one' });
+  const promoted = promotedContext(loaded, fullItemSet([fixture.item]));
+  const removal = buildRemovalPlan(promoted.authority, ['#3006'], {
+    top10ReleaseSet: promoted.top10ReleaseSet,
+    validationOptions: promoted.validationOptions,
+  });
+  const planRecord = {
+    schemaVersion: 1,
+    planSha256: removal.planSha256,
+    catalogIds: [3006],
+    plan: removal.plan,
+  };
+  const baselineRecord = { schemaVersion: 1, closure, inventory: {} };
+  const baselineBytes = Buffer.from(`${JSON.stringify(baselineRecord, null, 2)}\n`);
+  const snapshotManifestBytes = await readFile(join(snapshot, 'snapshot.json'));
+  await writeFile(
+    join(sourceTransaction, 'plan.json'),
+    `${JSON.stringify(planRecord, null, 2)}\n`,
+    { mode: 0o600 }
+  );
+  await writeFile(join(sourceTransaction, 'rollback-baseline.json'), baselineBytes, { mode: 0o600 });
+  const recoveryKey = await loadRecoveryKey(dshHome, { create: true });
+  const stalePid = 2_000_000_000;
+  const staleLock = await acquireTransactionLock(dshHome, sourceTransaction, {
+    operation: 'remove',
+    pid: stalePid,
+  });
+  const transactionNonce = randomBytes(32);
+  const state = {
+    schemaVersion: 2,
+    transactionId: randomBytes(16).toString('hex'),
+    status: 'in-progress',
+    action: 'remove',
+    planSha256: removal.planSha256,
+    catalogIds: [3006],
+    atomic: false,
+    rollbackBaselineBinding: buildPrivateRecoveryBinding(
+      baselineBytes,
+      recoveryKey,
+      transactionNonce,
+      'rollback-baseline'
+    ),
+    snapshotManifestBinding: buildPrivateRecoveryBinding(
+      snapshotManifestBytes,
+      recoveryKey,
+      transactionNonce,
+      'snapshot-manifest'
+    ),
+    holder: {
+      schemaVersion: 1,
+      lockId: staleLock.lockId,
+      pid: staleLock.pid,
+      processIdentity: staleLock.processIdentity,
+      operation: 'remove',
+      transactionRoot: sourceTransaction,
+    },
+  };
+  const authentication = buildRecoveryAuthentication(state, recoveryKey, transactionNonce);
+  const journalPath = join(sourceTransaction, 'in-progress.json');
+  const journal = { schemaVersion: 1, state, authentication };
+  const journalBytes = Buffer.from(`${JSON.stringify(journal, null, 2)}\n`);
+  await writeFile(journalPath, journalBytes, { mode: 0o600 });
+
+  const source = await loadRecoverySource(sourceTransaction, recoveryKey);
+  assert.equal(source.kind, 'interrupted');
+  assert.equal(source.state.transactionId, state.transactionId);
+  bindRecoverySourceToAuthority(
+    source,
+    { top10ReleaseSet: promoted.top10ReleaseSet },
+    promoted.authority,
+    promoted.validationOptions
+  );
+  assert.deepEqual(
+    await validateInterruptedRecoveryLock(dshHome, source, {
+      processAlive: () => false,
+      processIdentity: () => null,
+    }),
+    { stale: true, ownerMatchesAuthenticatedJournal: true }
+  );
+  await assert.rejects(
+    () => validateInterruptedRecoveryLock(dshHome, source, {
+      processAlive: () => true,
+      processIdentity: () => null,
+    }),
+    /holder is still active/
+  );
+  const recovery = buildRecoveryPlan(source);
+  assert.equal(
+    recovery.plan.sourceTransaction.recoveryMode,
+    'authenticated-interrupted-rollback-from-matching-stale-holder'
+  );
+  assert.equal(recovery.plan.sourceTransaction.authenticatedTerminalState, false);
+  assert.equal(recovery.plan.sourceTransaction.authenticatedInterruptedJournal, true);
+  const authorityBytes = Buffer.from(`${JSON.stringify(promoted.authority, null, 2)}\n`);
+  const executableAuthorityContext = {
+    ...promoted,
+    authorityBytes,
+    authoritySha256: sha256(authorityBytes),
+    harnessAuthorityBytes: loaded.harnessAuthorityBytes,
+    top10ReleaseSetSha256: sha256(promoted.top10ReleaseSetBytes),
+  };
+  await assert.rejects(
+    () => executeRecoveryTransaction({
+      authorityContext: executableAuthorityContext,
+      consentSha256: '0'.repeat(64),
+      dshHome,
+      harnessReceipt: join(root, 'unreached-receipt.json'),
+      harnessSource: root,
+      sourceTransactionRoot: sourceTransaction,
+      transactionRoot: join(root, 'unreached-recovery'),
+    }),
+    /explicit consent is not bound to this exact recovery plan digest/
+  );
+
+  const forgedState = structuredClone(state);
+  forgedState.transactionId = randomBytes(16).toString('hex');
+  await writeFile(
+    journalPath,
+    `${JSON.stringify({ ...journal, state: forgedState }, null, 2)}\n`,
+    { mode: 0o600 }
+  );
+  await assert.rejects(
+    () => loadRecoverySource(sourceTransaction, recoveryKey),
+    /not authenticated by this DSH_HOME recovery trust root/
+  );
+  await writeFile(journalPath, journalBytes, { mode: 0o600 });
+
+  const mismatchedHolderState = structuredClone(state);
+  mismatchedHolderState.holder.lockId = 'f'.repeat(64);
+  const mismatchedJournal = {
+    schemaVersion: 1,
+    state: mismatchedHolderState,
+    authentication: buildRecoveryAuthentication(mismatchedHolderState, recoveryKey, transactionNonce),
+  };
+  await writeFile(journalPath, `${JSON.stringify(mismatchedJournal, null, 2)}\n`, { mode: 0o600 });
+  const mismatchedSource = await loadRecoverySource(sourceTransaction, recoveryKey);
+  await assert.rejects(
+    () => validateInterruptedRecoveryLock(dshHome, mismatchedSource, {
+      processAlive: () => false,
+      processIdentity: () => null,
+    }),
+    /does not exactly match the authenticated interrupted journal holder/
+  );
+  await writeFile(journalPath, journalBytes, { mode: 0o600 });
+
+  const attempts = await Promise.allSettled([
+    acquireTransactionLock(dshHome, recoveryOne, {
+      operation: 'recover',
+      recoverySourceTransactionRoot: sourceTransaction,
+      expectedRecoveryHolder: source.holder,
+      processAlive: () => false,
+      processIdentity: () => null,
+    }),
+    acquireTransactionLock(dshHome, recoveryTwo, {
+      operation: 'recover',
+      recoverySourceTransactionRoot: sourceTransaction,
+      expectedRecoveryHolder: source.holder,
+      processAlive: () => false,
+      processIdentity: () => null,
+    }),
+  ]);
+  const winners = attempts.filter((attempt) => attempt.status === 'fulfilled');
+  const losers = attempts.filter((attempt) => attempt.status === 'rejected');
+  assert.equal(winners.length, 1);
+  assert.equal(losers.length, 1);
+  assert.match(
+    losers[0].reason.message,
+    /takeover guard exists|does not exactly match the authenticated interrupted journal holder/
+  );
+  assert.equal(winners[0].value.takeoverOwner.lockId, staleLock.lockId);
+  assert.equal(
+    canReleaseTransactionLockAfterError(winners[0].value, false, new Error('pre-snapshot failure')),
+    false
+  );
+  assert.equal(
+    canReleaseTransactionLockAfterError(winners[0].value, true, new Error('post-snapshot failure')),
+    false
+  );
+  const completedRollbackError = new Error('verified rollback');
+  completedRollbackError.details = {
+    attempted: true,
+    baselineAvailable: true,
+    filesRestored: true,
+    closureRestored: true,
+    inventoryRestored: true,
+    coldStartProbePassed: true,
+  };
+  assert.equal(
+    canReleaseTransactionLockAfterError(winners[0].value, true, completedRollbackError),
+    true
+  );
+  const incompleteClosureRollbackError = new Error('dependency closure may be mixed');
+  incompleteClosureRollbackError.details = {
+    attempted: true,
+    baselineAvailable: false,
+    filesRestored: true,
+    managedFilesVerified: 8,
+    dependencyClosureMutationStarted: true,
+  };
+  assert.equal(
+    canReleaseTransactionLockAfterError(
+      winners[0].value,
+      true,
+      incompleteClosureRollbackError
+    ),
+    false
+  );
+  assert.equal(
+    canReleaseTransactionLockAfterError({ takeoverOwner: null }, false, new Error('fresh failure')),
+    true
+  );
+  await releaseTransactionLock(winners[0].value);
+
+  const guardRoot = join(dshHome, '.dsh-plugin-installer', 'transaction-takeover.guard');
+  await mkdir(guardRoot, { mode: 0o700 });
+  await assert.rejects(
+    () => acquireTransactionLock(dshHome, blockedTransaction, { operation: 'install' }),
+    /takeover guard exists; explicit manual inspection is required/
+  );
+  await rm(guardRoot, { recursive: true });
 });
 
 test('Windows recovery ACL runner uses a bounded cold-start budget and validates SID-only proof', async () => {
@@ -1310,6 +1779,87 @@ test('Windows recovery ACL runner uses a bounded cold-start budget and validates
     }),
     /malformed or weaker/
   );
+});
+
+test('Windows atomic restore secures an empty temp before writing and retains backup through target verification', async (t) => {
+  const root = await realpath(await workspace(t));
+  const target = join(root, 'managed.yaml');
+  await writeFile(target, 'original\n');
+  const events = [];
+  let id = 0;
+  const openFile = async (...args) => {
+    const handle = await open(...args);
+    return {
+      writeFile: async (...writeArgs) => {
+        events.push('write-temp');
+        return handle.writeFile(...writeArgs);
+      },
+      sync: async () => {
+        events.push('sync-temp');
+        return handle.sync();
+      },
+      close: () => handle.close(),
+    };
+  };
+  const securePath = async (path, kind, action) => {
+    events.push(`acl-${action}-${path === target ? 'target' : 'temp'}`);
+    assert.equal(kind, 'file');
+  };
+  const renamePath = async (from, to) => {
+    events.push(`rename-${from === target ? 'original' : 'temp'}-${to === target ? 'target' : 'backup'}`);
+    return rename(from, to);
+  };
+  const removePath = async (path, options) => {
+    events.push(`remove-${path === target ? 'target' : path.endsWith('.bak') ? 'backup' : 'temp'}`);
+    return rm(path, options);
+  };
+
+  await atomicRestoreWrite(target, Buffer.from('restored\n'), null, {
+    platform: 'win32',
+    securePath,
+    openFile,
+    renamePath,
+    removePath,
+    randomId: () => (++id === 1 ? 'temporary' : 'backup'),
+  });
+  assert.equal(await readFile(target, 'utf8'), 'restored\n');
+  assert.ok(events.indexOf('acl-configure-temp') < events.indexOf('write-temp'));
+  assert.ok(events.indexOf('acl-verify-temp') < events.indexOf('write-temp'));
+  assert.ok(events.indexOf('sync-temp') < events.indexOf('rename-original-backup'));
+  assert.ok(events.indexOf('rename-temp-target') < events.indexOf('acl-verify-target'));
+  assert.ok(events.indexOf('acl-verify-target') < events.indexOf('remove-backup'));
+});
+
+test('Windows atomic restore rolls back a failed target ACL verification, including absent originals', async (t) => {
+  const root = await realpath(await workspace(t));
+  const existingTarget = join(root, 'existing.yaml');
+  const absentTarget = join(root, 'absent.yaml');
+  await writeFile(existingTarget, 'original\n');
+  const failingAcl = async (path, _kind, action) => {
+    if ((path === existingTarget || path === absentTarget) && action === 'verify') {
+      throw new Error('simulated final ACL verification failure');
+    }
+  };
+
+  await assert.rejects(
+    () => atomicRestoreWrite(existingTarget, Buffer.from('unsafe replacement\n'), null, {
+      platform: 'win32',
+      securePath: failingAcl,
+      renamePath: rename,
+    }),
+    /simulated final ACL verification failure/
+  );
+  assert.equal(await readFile(existingTarget, 'utf8'), 'original\n');
+
+  await assert.rejects(
+    () => atomicRestoreWrite(absentTarget, Buffer.from('unsafe new target\n'), null, {
+      platform: 'win32',
+      securePath: failingAcl,
+      renamePath: rename,
+    }),
+    /simulated final ACL verification failure/
+  );
+  await assert.rejects(() => lstat(absentTarget), { code: 'ENOENT' });
 });
 
 test('private pnpm PATH binding pins the absolute 11.7.0 bytes and detects later replacement', async (t) => {
@@ -1500,6 +2050,63 @@ test('authority-bound runtime acceptance commits only after dump, inventory, and
   assert.equal(rollbackCalls, 0);
 });
 
+test('post-snapshot failure is complete after all eight governed files are restored before a baseline exists', async () => {
+  await assert.rejects(
+    () => runAtomicAcceptanceBoundary(
+      async () => {
+        throw new Error('simulated baseline inventory probe failure');
+      },
+      async () => ({
+        attempted: true,
+        baselineAvailable: false,
+        filesRestored: true,
+        managedFilesVerified: 8,
+      })
+    ),
+    (error) => {
+      assert.match(error.message, /baseline inventory probe failure; atomic rollback completed/);
+      assert.equal(error.details.baselineAvailable, false);
+      assert.equal(error.details.managedFilesVerified, 8);
+      return true;
+    }
+  );
+
+  await assert.rejects(
+    () => runAtomicAcceptanceBoundary(
+      async () => {
+        throw new Error('simulated incomplete snapshot restore');
+      },
+      async () => ({
+        attempted: true,
+        baselineAvailable: false,
+        filesRestored: true,
+        managedFilesVerified: 7,
+      })
+    ),
+    /rollback is incomplete/
+  );
+
+  await assert.rejects(
+    () => runAtomicAcceptanceBoundary(
+      async () => {
+        throw new Error('simulated dependency restoration failure');
+      },
+      async () => ({
+        attempted: true,
+        baselineAvailable: false,
+        filesRestored: true,
+        managedFilesVerified: 8,
+        dependencyClosureMutationStarted: true,
+      })
+    ),
+    (error) => {
+      assert.match(error.message, /dependency restoration failure; rollback is incomplete/);
+      assert.equal(error.details.dependencyClosureMutationStarted, true);
+      return true;
+    }
+  );
+});
+
 test('authority-bound functional probe failure restores the whole batch with no partial success', async () => {
   const first = hostedFixture({ id: 3006, slug: 'rollback-one', name: 'dsh-rollback-one' }).item;
   const second = hostedFixture({ id: 3052, slug: 'rollback-two', name: 'dsh-rollback-two' }).item;
@@ -1587,9 +2194,10 @@ test('missing or executable runtime probe authority is rejected and rolled back'
   );
 });
 
-test('four-file snapshot restores exact bytes and closure verification detects leftover installed packages', async (t) => {
-  const root = await workspace(t);
-  const profile = join(root, 'profile');
+test('snapshot v3 restores bytes, existence, and POSIX modes without leaking private state', async (t) => {
+  const root = await realpath(await workspace(t));
+  const dshHome = join(root, 'dsh-home');
+  const profile = join(dshHome, 'profiles', 'web');
   const snapshot = join(root, 'snapshot');
   await mkdir(profile, { recursive: true });
   const baselineManifest = {
@@ -1603,23 +2211,130 @@ test('four-file snapshot restores exact bytes and closure verification detects l
       },
     },
   };
-  await writeFile(join(profile, 'package.json'), `${JSON.stringify(baselineManifest, null, 2)}\n`);
-  await writeFile(join(profile, 'pnpm-lock.yaml'), 'lockfileVersion: 9.0\n');
+  await writeFile(join(profile, 'package.json'), `${JSON.stringify(baselineManifest, null, 2)}\n`, { mode: 0o640 });
+  await writeFile(join(profile, 'pnpm-lock.yaml'), 'lockfileVersion: 9.0\n', { mode: 0o600 });
   await writeFile(
     join(profile, 'pnpm-workspace.yaml'),
-    'packages:\n  - .\n\nnodeLinker: hoisted\nautoInstallPeers: false\n'
+    'packages:\n  - .\n\nnodeLinker: hoisted\nautoInstallPeers: false\n',
+    { mode: 0o644 }
   );
-  await writeFile(join(profile, 'cordis.patch.yml'), '[]\n');
+  await writeFile(join(profile, 'cordis.patch.yml'), '[]\n', { mode: 0o640 });
+  const baselineSettings = 'telemetry: false\nprivate-setting: settings-secret-never-print\n';
+  const baselineHomePatch = '- id: home-root\n  name: safe-root-patch\n';
+  const baselineCredentials = 'provider:\n  token: credential-secret-never-print\n';
+  await writeFile(join(dshHome, 'settings.yaml'), baselineSettings, { mode: 0o600 });
+  await writeFile(join(dshHome, 'cordis.patch.yml'), baselineHomePatch, { mode: 0o640 });
+  await writeFile(join(dshHome, '.credentials.yaml'), baselineCredentials, { mode: 0o600 });
   const baselineClosure = await captureProfileClosure(profile);
-  await createProfileSnapshot(profile, snapshot);
+  const created = await createProfileSnapshot(dshHome, profile, snapshot);
+  const liveManagedBytes = await captureManagedFileBindingInput(dshHome, profile);
+  const snapshotManagedBytes = await captureSnapshotManagedFileBindingInput(snapshot);
+  assert.deepEqual(snapshotManagedBytes, liveManagedBytes);
+  liveManagedBytes.fill(0);
+  snapshotManagedBytes.fill(0);
+  const publicResult = JSON.stringify(created);
+  assert.doesNotMatch(publicResult, /settings-secret-never-print|credential-secret-never-print/);
+  assert.doesNotMatch(publicResult, new RegExp(sha256(Buffer.from(baselineCredentials))));
+  assert.equal(Object.hasOwn(created, 'manifest'), false);
+
+  const snapshotManifest = JSON.parse(await readFile(join(snapshot, 'snapshot.json'), 'utf8'));
+  assert.equal(snapshotManifest.schemaVersion, 3);
+  assert.deepEqual(
+    snapshotManifest.files.map(({ root: fileRoot, path, present }) => ({ root: fileRoot, path, present })),
+    [
+      { root: 'profile', path: 'package.json', present: true },
+      { root: 'profile', path: 'pnpm-lock.yaml', present: true },
+      { root: 'profile', path: 'pnpm-workspace.yaml', present: true },
+      { root: 'profile', path: 'cordis.patch.yml', present: true },
+      { root: 'home', path: 'settings.yaml', present: true },
+      { root: 'home', path: 'cordis.patch.yml', present: true },
+      { root: 'home', path: '.credentials.yaml', present: true },
+      { root: 'home', path: '.anonymous-user-id', present: false },
+    ]
+  );
+  assert.equal(await readFile(join(snapshot, 'home', '.credentials.yaml'), 'utf8'), baselineCredentials);
+  if (process.platform !== 'win32') {
+    assert.deepEqual(
+      snapshotManifest.files.map(({ posixMode }) => posixMode),
+      [0o640, 0o600, 0o644, 0o640, 0o600, 0o640, 0o600, null]
+    );
+  }
+
+  const loadedSnapshot = await loadVerifiedProfileSnapshot(snapshot);
+  const cachedCredentials = loadedSnapshot.verifiedFiles.get('home/.credentials.yaml');
+  const snapshotCredentialPath = join(snapshot, 'home', '.credentials.yaml');
+  const retainedSnapshotCredentialPath = join(snapshot, 'home', '.credentials.retained.yaml');
+  await rename(snapshotCredentialPath, retainedSnapshotCredentialPath);
+  await writeFile(snapshotCredentialPath, 'provider:\n  token: replaced-snapshot\n', { mode: 0o600 });
+  assert.equal(cachedCredentials.toString('utf8'), baselineCredentials);
+  await assert.rejects(
+    () => loadVerifiedProfileSnapshot(snapshot),
+    /snapshot file home\/\.credentials\.yaml digest mismatch/
+  );
+  await rm(snapshotCredentialPath);
+  await rename(retainedSnapshotCredentialPath, snapshotCredentialPath);
+
   await writeFile(join(profile, 'package.json'), '{"broken":true}\n');
   await writeFile(join(profile, 'pnpm-lock.yaml'), 'lockfileVersion: broken\n');
-  await restoreProfileSnapshot(profile, snapshot);
+  await writeFile(join(profile, 'pnpm-workspace.yaml'), 'packages: []\n');
+  await writeFile(join(profile, 'cordis.patch.yml'), '- broken: true\n');
+  await writeFile(join(dshHome, 'settings.yaml'), 'mutated: true\n');
+  await writeFile(join(dshHome, 'cordis.patch.yml'), '- mutated: true\n');
+  await writeFile(join(dshHome, '.credentials.yaml'), 'stolen: no\n');
+  await writeFile(join(dshHome, '.anonymous-user-id'), 'created-during-transaction\n');
+  if (process.platform !== 'win32') {
+    await chmod(join(profile, 'package.json'), 0o600);
+    await chmod(join(dshHome, 'cordis.patch.yml'), 0o600);
+  }
+  assert.equal((await verifyProfileSnapshot(dshHome, profile, snapshot)).matches, false);
+  await restoreProfileSnapshot(dshHome, profile, snapshot);
   assert.deepEqual(
     JSON.parse(await readFile(join(profile, 'package.json'), 'utf8')),
     baselineManifest
   );
   assert.equal(await readFile(join(profile, 'pnpm-lock.yaml'), 'utf8'), 'lockfileVersion: 9.0\n');
+  assert.equal(
+    await readFile(join(profile, 'pnpm-workspace.yaml'), 'utf8'),
+    'packages:\n  - .\n\nnodeLinker: hoisted\nautoInstallPeers: false\n'
+  );
+  assert.equal(await readFile(join(profile, 'cordis.patch.yml'), 'utf8'), '[]\n');
+  assert.equal(await readFile(join(dshHome, 'settings.yaml'), 'utf8'), baselineSettings);
+  assert.equal(await readFile(join(dshHome, 'cordis.patch.yml'), 'utf8'), baselineHomePatch);
+  assert.equal(await readFile(join(dshHome, '.credentials.yaml'), 'utf8'), baselineCredentials);
+  if (process.platform !== 'win32') {
+    assert.equal((await lstat(join(profile, 'package.json'))).mode & 0o7777, 0o640);
+    assert.equal((await lstat(join(profile, 'pnpm-lock.yaml'))).mode & 0o7777, 0o600);
+    assert.equal((await lstat(join(profile, 'pnpm-workspace.yaml'))).mode & 0o7777, 0o644);
+    assert.equal((await lstat(join(profile, 'cordis.patch.yml'))).mode & 0o7777, 0o640);
+    assert.equal((await lstat(join(dshHome, 'settings.yaml'))).mode & 0o7777, 0o600);
+    assert.equal((await lstat(join(dshHome, 'cordis.patch.yml'))).mode & 0o7777, 0o640);
+    assert.equal((await lstat(join(dshHome, '.credentials.yaml'))).mode & 0o7777, 0o600);
+  }
+  await assert.rejects(() => lstat(join(dshHome, '.anonymous-user-id')), { code: 'ENOENT' });
+  assert.deepEqual(await verifyProfileSnapshot(dshHome, profile, snapshot), {
+    snapshot,
+    schemaVersion: 3,
+    profile: 'web',
+    filesProtected: 8,
+    matches: true,
+    mismatches: [],
+  });
+
+  const packageAlias = join(root, 'profile-package-hardlink.json');
+  await link(join(profile, 'package.json'), packageAlias);
+  await assert.rejects(
+    () => captureManagedFileBindingInput(dshHome, profile),
+    /regular single-link file/
+  );
+  await rm(packageAlias);
+
+  const alternateHome = join(root, 'alternate-home');
+  await mkdir(join(alternateHome, 'profiles'), { recursive: true });
+  await assert.rejects(
+    () => verifyProfileSnapshot(alternateHome, profile, snapshot),
+    /exactly DSH_HOME\/profiles\/web/
+  );
+
   const rogue = join(profile, 'node_modules', 'rogue');
   await mkdir(rogue, { recursive: true });
   await writeFile(join(rogue, 'package.json'), '{"name":"rogue","version":"9.9.9"}\n');
@@ -1644,7 +2359,34 @@ test('Plugin Skill keeps Top10 and all 80 entries fail closed without receipts',
   assert.match(skill, /writes `state\.json` with `status: "committed"` only after/);
   assert.match(skill, /failed single item or Top10 member restores the entire retained/);
   assert.match(skill, /current-user SID-only/);
+  assert.match(skill, /exclusive `DSH_HOME` transaction lock/);
+  assert.match(skill, /fresh private 32-byte nonce/);
+  assert.match(skill, /all eight governed file states are still\n+   restored and verified/);
   assert.match(transaction, /function buildChildEnvironment/);
+  assert.doesNotMatch(
+    transaction,
+    /snapshotManifestSha256|rollbackBaselineSha256|terminalClosureSha256|terminalInventorySha256/
+  );
+  assert.match(transaction, /retainTakeoverGuard = true[\s\S]+takeover guard was retained/u);
+  assert.match(
+    transaction,
+    /finally \{\s*if \(!retainTakeoverGuard\) await releaseTakeoverGuard\(guard\)/u
+  );
+  const installExecutor = transaction.slice(
+    transaction.indexOf('export async function executeTransaction'),
+    transaction.indexOf('export async function executeRemovalTransaction')
+  );
+  const recoveryExecutor = transaction.slice(
+    transaction.indexOf('export async function executeRecoveryTransaction')
+  );
+  assert.doesNotMatch(
+    installExecutor,
+    /\blockedSource\b|verifyTerminalSnapshotManagedFilesBinding/
+  );
+  assert.match(
+    recoveryExecutor,
+    /await createProfileSnapshot[\s\S]+await verifyTerminalSnapshotManagedFilesBinding[\s\S]+await restoreAndVerifyBaseline/
+  );
   assert.doesNotMatch(transaction, /env:\s*\{\s*\.\.\.process\.env/);
   assert.doesNotMatch(skill, /awaiting-runtime-acceptance/);
 });

@@ -92,9 +92,38 @@ the queue cannot approve compatibility, rights, distribution, installation,
 runtime acceptance, or Top10 membership.
 Source-intake rejection permanently records that public ID in
 `replacementPolicy.retiredCatalogIds`; a replacement receives the next unused
-ID beginning at `#3088`. Passing source intake is still not
+ID fixed by `replacementPolicy.nextReplacementCatalogId` (currently `#3089`).
+Passing source intake is still not
 redistribution approval, a runtime pass, or permission to publish a hosted
 artifact.
+
+An RC-era candidate also follows
+[`alpha1-plugin-migration-map.md`](alpha1-plugin-migration-map.md). alpha.1 has
+no aggregate runtime or APIProxy facade, so a package-name substitution is not
+compatibility evidence. The owning service, disposer, BrowserAuth boundary,
+capability disclosure, and matching dynamic probe must all be explicit.
+
+A license-permitted hosted derivative additionally uses a closed
+`plugin-hosted-adaptation.schema.json` recipe and a closed
+`plugin-runtime-probe.schema.json` contract. The fixed builder verifies the
+exact clean source commit/tree and every original/replacement digest, preserves
+the exact upstream license, constructs a minimal script-free manifest with an
+exact own-property peer closure, parses each JavaScript output into an Acorn AST,
+and rejects all computed members/properties plus the closed high-risk capability
+set, Node built-ins, indirect dependency loading, and React/DOM shapes outside
+the checked-in reviewed allowlist. It also rejects
+direct or statically foldable external CSS reference syntax; this is a bounded
+static signal, not a proof about every runtime string composition. Every recipe
+must bind an empty `computedMembers` array. The AST check is
+defense in depth for digest-bound, manually reviewed replacements, not a
+JavaScript sandbox or runtime certificate. The builder emits a normalized
+tarball, CycloneDX SBOM, and modification notice, and executes no candidate
+code. A successful build receipt remains
+`candidateExecuted: false`, `installable: false`, and
+`runtimeCertified: false`; deterministic staging bytes are not Release or
+runtime authority. At present #3006, #3017, #3040, #3041, #3042, and #3050 are
+the first six review-bound staging candidates; all remain non-installable,
+while the promoted authority still contains zero installable items.
 
 Promotion is all-or-nothing: published catalog count, required verified
 count, verified count, authority count, and actual item count must all be
@@ -146,17 +175,42 @@ Before mutation:
 2. Resolve one absolute `DSH_HOME`; the only target is its `profiles/web`
    directory. Refuse roots, symlinks, malformed profile manifests, and any
    mismatch with the source-built alpha.1 runner. Require `private: true`, the
-   exact ordered base bundles, and all four snapshot targets as regular files.
-3. Snapshot `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, and
-   `cordis.patch.yml` to a new private directory. Never publish the snapshot or
-   its manifest; dependency specs may be sensitive.
-4. Construct a deterministic plan. Show ordered IDs, packages, exact sources,
+   exact ordered base bundles, and all four Profile snapshot targets as regular
+   files.
+3. Atomically acquire the one private cross-platform transaction lock below
+   the explicit `DSH_HOME` trust root. Hold it from before snapshot creation
+   through commit or the last successful rollback verification. A normal
+   install/removal never treats age or a dead PID as permission to steal a
+   lock. Only explicit recovery for the same retained source may replace a
+   recorded dead holder; active, malformed, and mismatched locks fail closed.
+   All acquisition paths serialize through one fixed private takeover guard.
+   A leftover guard blocks automatically. Under the guard, stale takeover
+   validates and re-reads the owner before atomically renaming that exact lock
+   to an ID-bound quarantine; at most one concurrent recovery can own the new
+   lock.
+4. Snapshot Profile `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`,
+   and `cordis.patch.yml`, plus the governed root `DSH_HOME` files
+   `settings.yaml`, `cordis.patch.yml`, `.credentials.yaml`, and
+   `.anonymous-user-id`, to a new private directory. Root files are optional;
+   their prior absence is authoritative and rollback removes a file created by
+   the transaction. Snapshot schema v3 also preserves and verifies every
+   present file's POSIX permission bits on macOS and Linux. On Windows,
+   restored files are re-secured to the current-user SID-only boundary instead
+   of treating portable `mode` bits as ACL evidence. Never publish, print, or
+   return the snapshot, manifest,
+   private per-file digests, settings, or credential bytes. After this snapshot
+   succeeds, a failure while capturing closure, probing initial inventory,
+   writing private evidence, or loading/creating the recovery key must still
+   restore and verify all eight governed file states. After closure and
+   inventory both exist, the full closure/inventory/cold-start rollback is
+   mandatory.
+5. Construct a deterministic plan. Show ordered IDs, packages, exact sources,
    complete lifecycle hooks and authorization,
    permission/network/process/file disclosures, rights,
    restart requirement, and rollback target. Before consent, validate every
    prepared member as one full preflight. Bind one aggregate consent to the
    plan digest only after that preflight passes.
-5. Only after explicit consent, parse workspace YAML with a strict AST,
+6. Only after explicit consent, parse workspace YAML with a strict AST,
    reject aliases, merge keys, duplicate keys, custom tags, non-boolean
    values, explicit denial, `dangerouslyAllowAllBuilds: true`, and
    `strictDepBuilds: false`. Write missing safe booleans explicitly, then
@@ -192,12 +246,27 @@ Report rollback failure separately; never label a partially restored profile
 successful. The Top10 release set is atomic: no partial-success state is an
 accepted outcome.
 
+On Windows, every restored present file is written through a same-directory
+temporary file that is created empty. Before any private byte is written, the
+temporary file receives and verifies the current-user SID-only protected ACL;
+only then is it written, synced, closed, and moved on the same volume with the
+fixed Win32 `MoveFileExW(..., MOVEFILE_WRITE_THROUGH)` boundary. The same
+write-through move creates every trust, transaction, snapshot, guard, lock,
+and journal directory entry before Profile mutation. macOS and Linux instead
+sync the exact parent directory after each critical create or rename. If an original target
+exists, its backup is retained until the renamed target passes a second ACL
+verification. Any later failure removes the replacement and restores that
+backup; when the original target was absent, failure removes the newly created
+target. CI exercises the fixed helper on both supported Node lines and performs
+a real file-plus-directory move on Windows; mocked tests also reject weak
+proofs, cross-volume targets, inherited environment, and target replacement.
+
 ## Removal and retained-snapshot recovery
 
 Removal uses the same promoted item authority and a separate digest-bound
 plan. Before mutation it requires every selected authority package at its
-exact version, captures the complete current four-file snapshot, dependency
-closure, and Plugin inventory, then removes only those items' exact
+exact version, captures the complete governed Profile and `DSH_HOME` snapshot,
+dependency closure, and Plugin inventory, then removes only those items' exact
 `allowBuilds: true` entries (preserving explicit false denials and unrelated
 entries), verifies the effective safe policy, and removes packages in reverse plan order
 with the fixed source-built CLI and `shell: false`. Commit only after every
@@ -206,21 +275,54 @@ a real cold Web start, and BrowserAuth still returns 401 at the bare root.
 Failure restores the entire pre-remove snapshot and frozen closure.
 
 `recover-plan` and `recover` operate only on a retained private transaction
-directory created by this executor. The source plan, terminal state,
-rollback-baseline bytes, and snapshot-manifest bytes must match their stored
-SHA-256 bindings, and the full source plan must equal a fresh reconstruction
-from current authority. Self-hashes are not an authenticity boundary, so the
-terminal state is authenticated by a private 32-byte HMAC key stored outside
-transactions under the same explicit `DSH_HOME`. The key is created with
+directory created by this executor. The source plan and terminal state must
+equal a fresh reconstruction from current authority. Self-hashes are not an
+authenticity boundary: a fresh private 32-byte per-transaction nonce plus the
+private 32-byte HMAC key stored outside transactions under the same explicit
+`DSH_HOME` create domain-separated opaque bindings for the rollback-baseline
+and snapshot-manifest bytes and for the terminal closure/inventory drift
+checks. The nonce exists only in the protected local authentication record.
+Neither ordinary snapshot-manifest or potentially private dependency-closure
+SHA-256 nor the nonce is copied into state, a recovery plan, or CLI output;
+opaque bindings in private state are also suppressed from CLI output. Recovery
+plans instead bind one random public transaction ID that is independent of all
+Profile bytes, so consent identifies one retained transaction without
+disclosing a secret-derived fingerprint. The key is created with
 private permissions only after consent to the first install/removal mutation,
 is never printed or published, and must not be placed in transaction evidence.
 Recovery never accepts a caller-provided snapshot object, item record,
 prepared package, runner, or alternate key. It snapshots the current Profile
 into a new transaction and refuses recovery if its exact closure or inventory
-has drifted from the authenticated source transaction terminal state. Only
+has drifted from the authenticated source transaction terminal state. While
+the exclusive lock is held and before that snapshot, it also authenticates
+the existence, POSIX mode, and exact bytes of all eight governed files against
+the terminal managed-file HMAC. Every private JSON artifact is opened without
+following symlinks and is permission-, identity-, link-count-, and size-checked
+and read through that same file handle. Only
 then may it restore the authenticated source snapshot, run a frozen install,
-and verify exact files, closure, inventory, and a
-fresh cold Web 401. A recovery failure atomically restores the pre-recovery
-state. Install, remove, and recovery directories remain private local material
-and must not contain Web output, tokens, cookies, credentials, recovery keys,
-or their derived hashes.
+and verify exact files, closure, inventory, and a fresh cold Web 401. When the
+current closure and inventory were captured, a recovery failure atomically
+restores that pre-recovery state. An interrupted source may already have an
+invalid closure that cannot be captured: after frozen dependency restoration
+starts, any later failure restores the governed files but deliberately retains
+the takeover lock for manual closure inspection rather than claiming a complete
+rollback. If the recovery process itself is terminated between those durable
+steps, its exclusive lock likewise remains fail-closed; the executor does not
+guess at, delete, or automatically steal that recovery lock. Install, remove,
+and recovery directories remain private local material.
+The snapshot may contain exact settings and credential bytes required for
+recovery; no plan, state receipt, log, screenshot, Web output, or public
+evidence may contain those bytes, browser tokens, cookies, authorization
+headers, recovery keys, or secret-derived fingerprints.
+
+Install and removal write an authenticated `in-progress.json` immediately
+before the first Profile mutation. Its state and HMAC bind the transaction ID,
+exact plan digest and catalog IDs, rollback-baseline binding,
+snapshot-manifest binding, action, atomicity, and original lock holder. An
+interrupted recovery plan is a separate consent object and is available only
+while `state.json` is absent and the authenticated holder exactly equals a
+stale `transaction.lock`; execution repeats that comparison under the takeover
+guard. If `state.json` exists, it is the terminal marker and the loader does
+not open `in-progress.json`, so a committed or removed transaction cannot
+replay its rollback journal. Successful terminal finalization removes the
+journal after the authenticated state is durable.

@@ -171,11 +171,12 @@ function hostedFixture() {
   const name = 'dsh-hosted-fixture';
   const version = '1.0.0';
   const slug = 'hosted-fixture';
-  const manifest = Buffer.from(`${JSON.stringify({
+  const manifestDocument = {
     name,
     version,
     dsh: { bundle: { patch: 'cordis.patch.yml' } },
-  })}\n`);
+  };
+  const manifest = Buffer.from(`${JSON.stringify(manifestDocument)}\n`);
   const manifestSha256 = sha256(manifest);
   const purl = `pkg:npm/${name}@${version}`;
   const component = {
@@ -184,14 +185,17 @@ function hostedFixture() {
     version,
     purl,
     'bom-ref': purl,
-    hashes: [{ alg: 'SHA-256', content: manifestSha256 }],
+    properties: [{
+      name: 'dsh-themes:package-manifest-sha256',
+      value: manifestSha256,
+    }],
   };
   const sbomDocument = {
     bomFormat: 'CycloneDX',
     specVersion: '1.6',
     version: 1,
     metadata: { component },
-    components: [component],
+    components: [],
     dependencies: [{ ref: purl, dependsOn: [] }],
   };
   const license = Buffer.from('MIT License\n');
@@ -222,7 +226,7 @@ function hostedFixture() {
       sbom: { format: 'cyclonedx-json', path: 'SBOM.cdx.json', sha256: sha256(sbom) },
     },
   });
-  return { artifact, item, sbomDocument };
+  return { artifact, item, manifestDocument, sbomDocument };
 }
 
 test('pending Plugin and Top10 authorities expose no install item or provisional ranked ID', async () => {
@@ -237,7 +241,7 @@ test('pending Plugin and Top10 authorities expose no install item or provisional
 test('hosted authority binds the v0.8.0 Release coordinate, manifest-rooted SBOM, and non-empty safety', () => {
   const fixture = hostedFixture();
   validateItem(fixture.item);
-  validateCycloneDxSbom(fixture.sbomDocument, fixture.item);
+  validateCycloneDxSbom(fixture.sbomDocument, fixture.item, fixture.manifestDocument);
 
   const wrongRepository = structuredClone(fixture.item);
   wrongRepository.distribution.artifactUrl = wrongRepository.distribution.artifactUrl
@@ -253,8 +257,25 @@ test('hosted authority binds the v0.8.0 Release coordinate, manifest-rooted SBOM
   assert.throws(() => validateItem(commandDsl), /keys must be exactly/u);
 
   const selfReference = structuredClone(fixture.sbomDocument);
-  selfReference.metadata.component.hashes[0].content = fixture.item.distribution.artifactSha256;
-  assert.throws(() => validateCycloneDxSbom(selfReference, fixture.item), /manifest SHA-256/u);
+  selfReference.metadata.component.properties[0].value = fixture.item.distribution.artifactSha256;
+  assert.throws(
+    () => validateCycloneDxSbom(selfReference, fixture.item, fixture.manifestDocument),
+    /manifest SHA-256/u
+  );
+
+  const misleadingComponentHash = structuredClone(fixture.sbomDocument);
+  misleadingComponentHash.metadata.component.hashes = [{
+    alg: 'SHA-256',
+    content: fixture.item.distribution.manifestSha256,
+  }];
+  assert.throws(
+    () => validateCycloneDxSbom(
+      misleadingComponentHash,
+      fixture.item,
+      fixture.manifestDocument
+    ),
+    /manifest SHA-256/u
+  );
 });
 
 test('workspace prepare authorization enforces strict bytes, depth, and AST node ceilings', () => {
