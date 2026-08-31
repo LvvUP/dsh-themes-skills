@@ -1,90 +1,86 @@
-# Alpha.1 source-build contract
+# DSH 0.1.2-alpha.2 runtime and source cross-build contract
 
-Use this reference only when preparing, building, validating, or launching the
-pinned alpha.1 checkout.
+## Two independent artifact chains
 
-## Identity and publication boundary
+The operational candidate is the official npm package
+`@deepseek-ai/dsh@0.1.2-alpha.2`. It is pinned by tarball URL, npm integrity,
+registry signature metadata, tarball SHA-256, frozen dependency lock, and the
+installed CLI SHA-256 in `alpha2-release-authority.json`.
 
-The only admitted source is official tag `dsh-v0.1.2-alpha.1`, commit
-`cd5ef8148158c3a752a658978873241fdf8e2bbc`, and Git tree
-`a712eec535b48badc4fefb4df5176a7002e4280b`. The root lockfile is exactly
-765,312 bytes with SHA-256
-`506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1`.
+The source cross-build is the official tag `dsh-v0.1.2-alpha.2`, commit
+`0a53fb55bea101816fa226bb964ae2bed71c343b`, tree
+`64ccbfa8e0caa4711cd4a75717ef9e022657961b`, and root `pnpm-lock.yaml` SHA-256
+`6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0`.
 
-The official GitHub release has no binary assets, and the alpha.1 npm package
-family is not published. A successful run of this Skill therefore produces a
-local build from pinned official source. Never call it an official binary or
-an npm installation.
+The npm metadata supplies neither `gitHead` nor a provenance attestation.
+Consequently the two chains prove consistent identity and version behavior but
+do not prove byte-for-byte or cryptographic source-to-package equivalence.
+Receipts must state that boundary explicitly.
 
-`references/alpha1-source-authority.json` is still evidence-pending. One local
-receipt never promotes it. Published installation requires all six exact
-Linux/macOS/Windows × Node 22.19.0/24.15.0 receipts, an independently validated
-receipt-set digest, provenance-set digest, immutable workflow/run identity,
-review, and an explicit authority promotion. The strict receipt and set
-schemas plus `scripts/runtime-authority.mjs` reject partial, duplicate,
-out-of-order, cross-run, or source-mismatched matrices. No runtime receipt set
-is bundled yet, so the current completed count remains 0/6.
+The authority separately binds the exact upstream `SAFETY.md` path, tag and
+commit URLs, Git blob, byte count, and SHA-256. `verify-source.mjs` checks those
+bytes before build. Preserve that official experimental-safety statement; it
+does not itself certify this installer or authorize publication.
 
-The public workflow is manual-only and emits candidate evidence, never an
-authority mutation. A candidate contains six canonical tuple receipts, one
-receipt set, and a manifest that states `authorityEffect: none`. Its workflow
-SHA-256 is computed from the checked-out workflow bytes at run time; promotion
-re-hashes the same bundled path, requires the exact candidate HEAD in a clean
-checkout, and validates every receipt byte and both aggregate digests. It then
-requires a GitHub OIDC/Sigstore statement binding the exact receipt-set bytes
-to the `main` workflow, hosted runner, source SHA, run ID, and attempt before a
-same-directory atomic replacement. Missing or changed evidence leaves the
-pending authority byte-for-byte unchanged.
+## Official npm installation
 
-## Filesystem and process boundary
+The versioned user install uses the bundled exact resolution:
 
-- Clone into a new absolute destination. Refuse an existing destination,
-  symlinks, mutable branches, tag-only assumptions, or a dirty checkout.
-- Verify tag, commit, tree, lockfile bytes, lockfile digest, root package
-  manager, root version, and the four named package manifests before install.
-- Invoke pinned pnpm as
-  `corepack pnpm@11.7.0 install --frozen-lockfile --ignore-scripts`; do not use
-  `latest`, a global pnpm version, `npm install`, an unlocked update, or
-  dependency lifecycle scripts.
-- Build with the fixed `build:official` source script. This selects the
-  upstream build profile; it does not convert the result into an official
-  distributed binary.
-- Hash the resulting `apps/cli/lib/bin.js` bytes into the private build
-  receipt. Every later launcher or Plugin transaction must re-hash the exact
-  regular file before trusting it; a matching Git tree alone is insufficient
-  because generated `lib/` output is ignored by Git.
-- Never add a symlink, shell alias, shim, package-manager global install, or
-  PATH entry. Launch only with the absolute source-built
-  `apps/cli/lib/bin.js` through the current Node executable.
+- `package.json` SHA-256
+  `5caa5cce90cb4e3d61c4a38573ae892263336c2a08b5439ac4c7be2eed80a5c0`
+- `pnpm-workspace.yaml` SHA-256
+  `35f7101cc78d762bd0f88518fdb1af2f8d9cb812aa8c43df0d35c2a93f4bfb97`
+- `pnpm-lock.yaml` SHA-256
+  `083152c5eaf99bd2ecad3db1b5a04aca2141b5347e7db97caca82e0ce5a09b1c`
+- pnpm `11.7.0`, materialized from the bundled digest-closed archive
+- integrity-checked `fetch --frozen-lockfile --ignore-scripts`, followed by
+  `install --frozen-lockfile --ignore-scripts --offline`
 
-## Receipt privacy boundary
+The upstream dependency graph contains a React peer-range disagreement. The
+bundled resolution records `strictPeerDependencies: false` and labels the
+decision `upstream-compatible-locked-resolution`; it does not silently relax
+any other identity, version, lifecycle, or digest check. The six real runtime
+tasks are required to demonstrate that this exact resolution functions.
 
-Alpha.1 Web startup prints a URL containing a random `?token=` value and later
-uses an authenticated browser cookie. Never redirect startup output into a
-receipt or evidence file. A build receipt contains only the fields allowed by
-`references/build-receipt.schema.json`.
+The destination must be a new `dsh-v0.1.2-alpha.2-npm` directory below the
+current user's home. The package-manager store and temporary toolchain are
+private install material and are removed before activation. POSIX activates by
+an atomic sibling rename. Windows installs at the final path so pnpm junctions
+cannot be invalidated by relocation, and an incomplete marker keeps that path
+unlaunchable until final verification succeeds. PATH is never modified.
 
-Reject any added receipt property or value related to tokens, cookies,
-credentials, authorization headers, launch URLs, captured output, environment
-variables, browser-session secrets, or a hash/digest derived from any such
-value. Build and runtime receipt validators also reject a standalone
-43-character base64url value, the exact BrowserAuth secret shape, anywhere in
-an individual receipt or runtime receipt set. A source, tree, or lockfile digest is permitted because it identifies
-public source bytes rather than a credential.
-The built CLI SHA-256 is also permitted: it binds local executable bytes and
-is not derived from BrowserAuth state.
+## Exact source cross-build
 
-The live runtime probe holds the startup URL and browser session only in
-bounded memory and immediately replaces process-output listeners with discard
-handlers after readiness. It proves root 401, launch exchange 303,
-authenticated root 200, a valid `settings/describe` RPC, independent Host-only,
-Origin-only, and cross-site Fetch Metadata 403 responses, and alpha.1's exact
-cold-restart behavior: the persistent
-authority-bound cookie remains valid while the process launch credential
-rotates, followed by a successful new exchange. It also proves strict Profile
-YAML, entries+batches, combo URLs,
-revision 404, JavaScript/source-map MIME, identity and gzip bytes, immutable
-cache headers, and `__DSH_BOOT_READY__`. It records only the fixed outcome
-fields in the closed receipt schema. If observed alpha.1 restart behavior does
-not match the existing authority contract, the tuple fails; do not translate
-the observation into the expected string or relax the receipt after the run.
+The source checkout must be clean, detached, and have the exact origin, tag,
+commit, tree, lockfile, package-manager declaration, Node engine, build script,
+and four product package manifests. Accepted task tuples are only:
+
+- Linux x64 / Node 22.19.0 or 24.15.0
+- macOS arm64 / Node 22.19.0 or 24.15.0
+- Windows x64 / Node 22.19.0 or 24.15.0
+
+The source lane materializes the same bundled exact pnpm `11.7.0`, performs an
+integrity-checked fetch, then runs `install --frozen-lockfile --ignore-scripts
+--offline`, followed by the upstream `build:official` script. Dependency
+lifecycle scripts stay disabled; the explicit project build is separately
+visible and reviewable. A source build receipt is private local evidence only
+and can never authorize publication on its own.
+
+## Profile and BrowserAuth safety
+
+Before a launch can mutate an existing `web` Profile, the eight governed
+Profile/Home files must be copied into one new, verified, private snapshot. An
+empty new `DSH_HOME` is the only no-snapshot case.
+
+The local Web launch credential and authenticated cookie exist only in the live
+process or bounded CI probe memory. Process output, request headers, credential
+values, and credential-derived hashes are excluded from install, build, and
+runtime receipts.
+
+## Publication state
+
+Upstream publication and project certification are different facts. The
+official prerelease and npm package exist, while the DSH Themes authority stays
+`official-npm-runtime-evidence-pending` until the complete signed six-task
+candidate is explicitly reviewed and promoted. Alpha.1, RC.8, and RC.2 evidence
+remains historical and is never overwritten.

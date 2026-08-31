@@ -10,7 +10,7 @@ const releaseSetSchemaUrl = new URL('../references/top10-release-set.schema.json
 const SHA64 = /^[a-f0-9]{64}$/;
 const WEIGHTS = {
   userValueAndUseCaseClarity: 25,
-  stabilityMaintenanceAndAlpha1Fit: 25,
+  stabilityMaintenanceAndAlpha2Fit: 25,
   securityAndPermissionRestraint: 15,
   crossPlatformInstallRemoveRollback: 15,
   nonTechnicalUsabilityAndDocs: 10,
@@ -68,8 +68,8 @@ export function validateTop10ReleaseSet(releaseSet, { authority = null } = {}) {
       !/^\d{4}-\d{2}-\d{2}$/.test(releaseSet.capturedAt) ||
       !/^[a-z0-9-]{8,80}$/.test(releaseSet.releaseSet)) fail('Top10 release-set header mismatch');
   exactKeys(releaseSet.baseline, ['tag', 'commit'], 'Top10 baseline');
-  if (releaseSet.baseline.tag !== 'dsh-v0.1.2-alpha.1' ||
-      releaseSet.baseline.commit !== 'cd5ef8148158c3a752a658978873241fdf8e2bbc') fail('Top10 baseline mismatch');
+  if (releaseSet.baseline.tag !== 'dsh-v0.1.2-alpha.2' ||
+      releaseSet.baseline.commit !== '0a53fb55bea101816fa226bb964ae2bed71c343b') fail('Top10 baseline mismatch');
   exactKeys(releaseSet.scoring, [
     'weights', 'minimumUseCaseCategories', 'coveredUseCaseCategories',
     'coverageStatus', 'tieBreakOrder',
@@ -182,9 +182,9 @@ export function validateTop10ReleaseSet(releaseSet, { authority = null } = {}) {
       authority.items?.length !== 80) fail('frozen Top10 release set lacks the complete 80/80 six-task gate');
   const ranked = [...releaseSet.entries].sort((left, right) => {
     if (left.totalScore !== right.totalScore) return right.totalScore - left.totalScore;
-    const leftSubtotal = left.scores.stabilityMaintenanceAndAlpha1Fit +
+    const leftSubtotal = left.scores.stabilityMaintenanceAndAlpha2Fit +
       left.scores.securityAndPermissionRestraint;
-    const rightSubtotal = right.scores.stabilityMaintenanceAndAlpha1Fit +
+    const rightSubtotal = right.scores.stabilityMaintenanceAndAlpha2Fit +
       right.scores.securityAndPermissionRestraint;
     if (leftSubtotal !== rightSubtotal) return rightSubtotal - leftSubtotal;
     if (left.maintenanceActivityAt !== right.maintenanceActivityAt) {

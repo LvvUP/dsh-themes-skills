@@ -1,5 +1,5 @@
 name: One isolated Plugin runtime task
-description: Runs exactly one candidate on exactly one alpha.1 platform/Node tuple
+description: Runs exactly one candidate on exactly one alpha.2 platform/Node tuple
 
 inputs:
   batch-id:
@@ -27,11 +27,11 @@ runs:
         fetch-depth: 1
         persist-credentials: false
 
-    - name: Check out the exact official alpha.1 source without credentials
+    - name: Check out the exact official alpha.2 source without credentials
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       with:
         repository: deepseek-ai/deepseek-harness
-        ref: dsh-v0.1.2-alpha.1
+        ref: dsh-v0.1.2-alpha.2
         path: .ci/upstream
         fetch-depth: 1
         fetch-tags: true
@@ -53,17 +53,17 @@ runs:
       shell: bash
       run: |
         test "$(git -C .ci/candidate rev-parse HEAD)" = "${{ inputs.commit }}"
-        test "$(git -C .ci/upstream rev-parse HEAD)" = "cd5ef8148158c3a752a658978873241fdf8e2bbc"
-        test "$(git -C .ci/upstream rev-parse HEAD^{tree})" = "a712eec535b48badc4fefb4df5176a7002e4280b"
+        test "$(git -C .ci/upstream rev-parse HEAD)" = "0a53fb55bea101816fa226bb964ae2bed71c343b"
+        test "$(git -C .ci/upstream rev-parse HEAD^{tree})" = "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
         node authority/skills/dsh-harness-installer/scripts/verify-source.mjs \
           --source "${{ github.workspace }}/.ci/upstream"
 
-    - name: Build the official alpha.1 source for this tuple
+    - name: Build the official alpha.2 source for this tuple
       shell: bash
       run: |
         node authority/skills/dsh-harness-installer/scripts/build-source.mjs \
           --source "${{ github.workspace }}/.ci/upstream" \
-          --receipt "${{ runner.temp }}/alpha1-private-build-receipt.json" >/dev/null
+          --receipt "${{ runner.temp }}/alpha2-private-build-receipt.json" >/dev/null
 
     - name: Require a reviewed true functional probe before candidate execution
       shell: bash
@@ -72,7 +72,7 @@ runs:
           --catalog-id "${{ inputs.catalog-id }}" \
           --candidate-source "${{ github.workspace }}/.ci/candidate" \
           --harness-source "${{ github.workspace }}/.ci/upstream" \
-          --build-receipt "${{ runner.temp }}/alpha1-private-build-receipt.json" \
+          --build-receipt "${{ runner.temp }}/alpha2-private-build-receipt.json" \
           --artifact-output "${{ runner.temp }}/candidate-artifact.tgz" \
           --output "${{ runner.temp }}/plugin-runtime-stage-evidence.json" \
           --tuple "${{ inputs.tuple }}"
@@ -86,7 +86,7 @@ runs:
           --candidate-source "${{ github.workspace }}/.ci/candidate" \
           --evidence "${{ runner.temp }}/plugin-runtime-stage-evidence.json" \
           --output "${{ runner.temp }}/plugin-runtime-receipt/${{ inputs.catalog-id }}-${{ inputs.tuple }}.json" \
-          --workflow "${{ github.workspace }}/authority/.github/workflows/alpha1-plugin-runtime-certification.yml" \
+          --workflow "${{ github.workspace }}/authority/.github/workflows/alpha2-plugin-runtime-certification.yml" \
           --catalog-id "${{ inputs.catalog-id }}" \
           --tuple "${{ inputs.tuple }}"
 

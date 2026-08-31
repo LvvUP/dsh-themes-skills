@@ -364,13 +364,14 @@ if (command === 'install') {
   command === 'remove' ||
   command === 'recover'
 ) {
-  const currentGate = currentAuthority.alpha1Recertification.gate;
+  const currentGate = currentAuthority.alpha2Recertification.gate;
   if (
     currentGate?.status !== 'certified-installable' ||
-    currentGate?.installable !== true
+    currentGate?.installable !== true ||
+    currentGate?.publicationAllowed !== true
   ) {
     fail(
-      `${command} is blocked: alpha1-recertification-gate-not-certified; the Profile was not inspected or changed`
+      `${command} is blocked: alpha2-recertification-gate-not-certified; the Profile was not inspected or changed`
     );
   }
 }

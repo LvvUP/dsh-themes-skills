@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh-themes.com/schemas/community-alpha2-recertification.schema.json",
+  "title": "DSH Themes community skin alpha.2 recertification authority",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "purpose", "baseline", "matrix", "gate", "items", "historicalAuthority"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "purpose": { "const": "alpha2-community-skin-item-recertification" },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baselineId", "dshPackageName", "dshPackageVersion", "officialTag", "sourceCommit", "sourceTree", "officialNpmTarballSha256", "officialNpmIntegrity", "harnessAuthorityPath", "harnessAuthoritySha256", "artifactRelationship"],
+      "properties": {
+        "baselineId": { "const": "deepseek-harness/dsh-v0.1.2-alpha.2@0a53fb55bea101816fa226bb964ae2bed71c343b" },
+        "dshPackageName": { "const": "@deepseek-ai/dsh" },
+        "dshPackageVersion": { "const": "0.1.2-alpha.2" },
+        "officialTag": { "const": "dsh-v0.1.2-alpha.2" },
+        "sourceCommit": { "const": "0a53fb55bea101816fa226bb964ae2bed71c343b" },
+        "sourceTree": { "const": "64ccbfa8e0caa4711cd4a75717ef9e022657961b" },
+        "officialNpmTarballSha256": { "const": "5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47" },
+        "officialNpmIntegrity": { "const": "sha512-4TvTC5kRKlgtSU2UTBv+cID9a2Z+6+m6mpvjXWJfVzuTkflCff6s4MsQpFJTCmwFh/k7zNWe7qFXcLYMV/5VvA==" },
+        "harnessAuthorityPath": { "const": "../../dsh-harness-installer/references/alpha2-release-authority.json" },
+        "harnessAuthoritySha256": { "pattern": "^[a-f0-9]{64}$" },
+        "artifactRelationship": { "const": "official-npm-runtime-and-exact-source-cross-build-are-independent" }
+      }
+    },
+    "matrix": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["platforms", "nodeVersions", "requiredTasksPerItem", "requiredTotalTasks"],
+      "properties": {
+        "platforms": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["os", "arch"],
+            "properties": {
+              "os": { "enum": ["darwin", "linux", "win32"] },
+              "arch": { "enum": ["arm64", "x64"] }
+            }
+          }
+        },
+        "nodeVersions": { "const": ["22.19.0", "24.15.0"] },
+        "requiredTasksPerItem": { "const": 6 },
+        "requiredTotalTasks": { "const": 66 }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "requiredItems", "completedItems", "completedTasks", "installable", "publicationAllowed", "runtimeReceiptSetSha256", "rollbackReceiptSetSha256", "publicationRule"],
+      "properties": {
+        "status": { "const": "alpha2-item-runtime-evidence-pending" },
+        "requiredItems": { "const": 11 },
+        "completedItems": { "const": 0 },
+        "completedTasks": { "const": 0 },
+        "installable": { "const": false },
+        "publicationAllowed": { "const": false },
+        "runtimeReceiptSetSha256": { "type": "null" },
+        "rollbackReceiptSetSha256": { "type": "null" },
+        "publicationRule": { "type": "string", "minLength": 120 }
+      }
+    },
+    "items": {
+      "type": "array",
+      "minItems": 11,
+      "maxItems": 11,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["catalogId", "slug", "status", "completedTasks", "runtimeReceiptSetSha256", "rollbackReceiptSetSha256"],
+        "properties": {
+          "catalogId": { "type": "integer", "minimum": 1000, "maximum": 9999 },
+          "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "status": { "const": "verification-pending" },
+          "completedTasks": { "const": 0 },
+          "runtimeReceiptSetSha256": { "type": "null" },
+          "rollbackReceiptSetSha256": { "type": "null" }
+        }
+      }
+    },
+    "historicalAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alpha1Path", "alpha1Sha256", "alpha1MayAuthorizeAlpha2", "rc8CatalogPath", "rc8CatalogSha256", "rc8ReceiptPath", "rc8ReceiptSha256", "rc8MayAuthorizeAlpha2"],
+      "properties": {
+        "alpha1Path": { "const": "alpha1-recertification.json" },
+        "alpha1Sha256": { "pattern": "^[a-f0-9]{64}$" },
+        "alpha1MayAuthorizeAlpha2": { "const": false },
+        "rc8CatalogPath": { "const": "community-catalog.json" },
+        "rc8CatalogSha256": { "pattern": "^[a-f0-9]{64}$" },
+        "rc8ReceiptPath": { "const": "runtime-receipt.rc8.json" },
+        "rc8ReceiptSha256": { "pattern": "^[a-f0-9]{64}$" },
+        "rc8MayAuthorizeAlpha2": { "const": false }
+      }
+    }
+  }
+}

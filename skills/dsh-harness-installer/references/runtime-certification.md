@@ -1,115 +1,92 @@
-# Alpha.1 runtime certification
+# Alpha.2 runtime certification
 
-This gate certifies runtime behavior of a local build from the pinned official
-source. It does not certify or create an official binary.
+## Authority effect
 
-## Exact six-task workflow
+`.github/workflows/alpha2-runtime-certification.yml` is manual-only and runs
+only from `main`. It cannot edit authority. Its first output is an unsigned
+candidate; signing and verification produce review evidence, not automatic
+promotion.
 
-`.github/workflows/alpha1-runtime-certification.yml` is `workflow_dispatch`
-only and issues promotable evidence only from `refs/heads/main`. Its matrix is
-exactly:
+The matrix contains exactly six independently executed tasks: Linux x64,
+macOS arm64, and Windows x64 on exact Node 22.19.0 and 24.15.0.
 
-- Linux x64 with Node 22.19.0 and 24.15.0.
-- macOS arm64 with Node 22.19.0 and 24.15.0.
-- Windows x64 with Node 22.19.0 and 24.15.0.
+## Per-task inputs
 
-Every external action is pinned by a full commit SHA. Each tuple checks out the
-fixed upstream tag, verifies its commit/tree/origin/lock authority, installs
-with the frozen lock while suppressing dependency lifecycle scripts, executes
-the reviewed `build:official` project build, and probes the resulting regular
-`apps/cli/lib/bin.js` file. The tuple uploads only its closed runtime receipt;
-the private build receipt and runtime home remain runner-local.
+Every task independently:
 
-## Real probes and privacy
+1. checks out and verifies the exact official tag, commit, tree, and source
+   lockfile;
+2. installs the exact official npm runtime into a versioned user directory,
+   using the bundled `pnpm@11.7.0` archive and frozen resolution;
+3. creates a private install receipt;
+4. performs the exact source cross-build and creates a private build receipt;
+5. validates both receipts and their tuple binding;
+6. runs all operational probes against the official npm CLI, not the source
+   build;
+7. runs a version cross-check against the source-built CLI without asserting
+   binary equivalence.
 
-The probe uses a fresh runner-local runtime root (mode `0700` where filesystem
-semantics support it), removes it after the probe, and supplies a minimal child
-environment. It does not inherit arbitrary CI credentials, proxy settings,
-`NODE_OPTIONS`, npm/pnpm overrides, or cloud-provider secrets. CLI output is
-bounded and retained only long enough to parse `--version` or strict
-`--profile web --dump-config` YAML.
+The public tuple receipt includes the official tarball, installed CLI,
+resolution-lock, private-install-receipt, source-built CLI, and
+private-build-receipt digests. It also records that npm supplied no `gitHead`
+or provenance attestation and that binary equivalence is not claimed.
 
-Web startup output is also bounded and memory-only because it contains the
-process launch BrowserAuth URL. After the URL is parsed, the listeners drain and
-discard further output. The token and cookie are never printed, written,
-included in an exception, hashed, or copied into a receipt. The tuple proves:
+## Required probes
 
-- unauthenticated root 401, launch exchange 303, authenticated root 200, a
-  successful `settings/describe` RPC, then independent Host-only, Origin-only,
-  and cross-site Fetch Metadata 403 responses, and alpha.1's cold-restart behavior: the prior signed cookie
-  remains valid while the in-memory process launch credential rotates;
-- `entries+batches`, bootstrap/application assignment, combo routes, stale
-  revision 404, JavaScript and source-map MIME, identity/gzip equivalence,
-  immutable cache headers, and `__DSH_BOOT_READY__`.
+- CLI reports exactly `0.1.2-alpha.2`.
+- `--profile web --dump-config` returns a valid composed Cordis entry list.
+- Unauthenticated root returns `401`.
+- One-time launch exchange returns `303` and establishes the protected session.
+- Authenticated root returns `200`.
+- Host-only, Origin-only, and cross-site request attacks return `403`.
+- Cold restart matches the bound alpha.2 session/launch-credential contract.
+- Boot graph provides canonical `entries` and `batches`, bootstrap and
+  application combo URLs, unique entry revisions, and one graph revision.
+- Stale revision requests return `404`.
+- JavaScript and source-map MIME types are correct.
+- Both gzip and identity paths work, cache behavior is stable, and
+  `__DSH_BOOT_READY__` becomes ready.
 
-Before upload, a separate evidence scan rejects credential query strings,
-cookie/authorization fields, credential-derived digest fields, session
-assignments, private keys, GitHub credentials, and any standalone 43-character
-base64url value.
+## BrowserAuth privacy
+
+Startup output is held only in bounded process memory long enough to extract
+the launch URL. The token and cookie are cleared after use. They, request
+headers, launch URLs, session identifiers, and any related digest or HMAC are
+forbidden in tuple receipts, aggregate candidates, logs, screenshots, and
+attestations. The privacy scanner fails the task before upload if it detects
+credential-shaped material.
 
 ## Candidate aggregation
 
-The unprivileged aggregate job downloads six exact artifact names for its own
-run ID and attempt (no wildcard merge). It requires exactly the six canonical filenames, regular non-symlink
-bounded files, unique digests, one source identity, one workflow digest, one
-run identity, canonical task order, and closed receipt fields. It recomputes
-the separately persisted provenance-set file and digest plus the receipt-set
-payload digest, scans the completed bundle again, and uploads a candidate whose
-manifest says
-`authorityEffect: none`.
+Aggregation accepts exactly one canonical receipt for each tuple. All six must
+share repository, workflow path, workflow bytes, run ID, run attempt, and head
+SHA. Receipt digests must be unique. The aggregate binds:
 
-The workflow gives OIDC only to a separate signer job that checks out no code,
-installs no dependencies, and consumes only the already-verified handoff. It
-signs the exact canonical `runtime-receipt-set.json` subject with GitHub artifact
-provenance and also publishes a custom full-six-receipt predicate through the
-GitHub Attestations API and Sigstore transparency log. That attestation remains
-queryable after the 90-day convenience artifact expires. A final unprivileged
-job verifies both bundles and validates the provenance certificate's immutable
-repository/workflow/run extensions using a byte-pinned GitHub CLI. A locally fabricated set
-can pass structural tests, but it cannot satisfy this signed promotion gate.
+- all six canonical receipt bytes;
+- a receipt-set payload digest;
+- a full provenance-set digest;
+- the exact workflow digest;
+- a durable evidence predicate and candidate manifest.
 
-Run the same strict verifier after downloading the artifact:
+Any missing task, cross-run copy, reordering, duplicate, altered workflow,
+altered receipt, malformed privacy field, or invalid probe fails closed.
 
-```bash
-node skills/dsh-harness-installer/scripts/runtime-certification.mjs verify \
-  --candidate <absolute-candidate-directory> \
-  --workflow <absolute-repository>/.github/workflows/alpha1-runtime-certification.yml
-```
+## Signing and explicit promotion
 
-## Explicit promotion
+GitHub Actions signs the exact receipt-set bytes and the durable evidence
+predicate using GitHub OIDC/Sigstore. A separate unprivileged job verifies the
+detached bundles and repository/workflow/run identity. Retained signed evidence
+is still candidate evidence.
 
-Candidate creation never edits authority. Promotion is a separate reviewer
-action and requires four absolute paths explicitly:
+Review locally with:
 
 ```bash
-node skills/dsh-harness-installer/scripts/promote-runtime-authority.mjs \
+node <skill-dir>/scripts/runtime-certification.mjs verify \
   --candidate <absolute-candidate-directory> \
-  --provenance <absolute-runtime-receipt-set.json.sigstore.json> \
-  --authority <absolute-repository>/skills/dsh-harness-installer/references/alpha1-source-authority.json \
-  --gh <absolute-byte-pinned-gh-binary>
+  --workflow <absolute-repository>/.github/workflows/alpha2-runtime-certification.yml
 ```
 
-The script accepts only the bundled authority path, the pending 0/6 state, a
-candidate that verifies again against the bundled workflow bytes, and a clean
-checkout at the exact workflow-run HEAD. It verifies the supplied GitHub CLI's
-platform-specific digest before invoking that absolute binary against the
-detached bundle under the closed OIDC/SLSA policy; no unsigned candidate can
-reach the write. On POSIX it fsyncs a new same-directory
-file and atomically renames it over the authority. Before rename, errors remove
-the temporary file and leave the pending authority unchanged. If directory
-fsync fails after rename, the script reports that promotion is already present
-but durability is unconfirmed; it does not falsely claim rollback. Windows promotion
-is fail-closed until an equivalent atomic replacement is certified.
-
-The accepted verifier is GitHub CLI 2.93.0 with extracted executable SHA-256
-`014fcd614de4de5b4a1441d298175684bad99f713d10296c5fcaaba47ac332d1`
-on Linux x64 or
-`a38e8ea1b9794a445a1ce746392e36111ca00a3242a6447b49cd4c162cb191a7`
-on macOS arm64. The workflow additionally binds the Linux release archive to
-SHA-256
-`02d1290eba130e0b896f3709ffff22e1c75a51475ddb70476a85abc6b5807af0`.
-
-No real six-task candidate is bundled by this infrastructure change. Until a
-workflow run succeeds and a reviewer performs the explicit step, publication
-must remain `source-build-evidence-pending`, `publishedInstallable: false`, and
-0/6.
+Only the explicit promotion command may change the bundled publication state,
+and only on a clean POSIX checkout whose HEAD and workflow match the signed run.
+Windows promotion is refused. Failure at any point keeps the authority at 0/6;
+there is no fallback to alpha.1 or RC.2.

@@ -104,7 +104,7 @@ export async function aggregateCandidateStaticRisk({ input: inputPath, output: o
       tree: receipt.source.tree,
       requiresElevatedStaticReview: receipt.classification.requiresElevatedStaticReview,
       rawWebRouteAuthState: receipt.classification.rawWebRouteAuthState,
-      alpha1RemovedPackages: receipt.classification.alpha1RemovedPackages,
+      baselineAbsentPackages: receipt.classification.baselineAbsentPackages,
       highReviewSignalIds: receipt.scan.findings
         .filter((finding) => finding.severity === 'high-review')
         .map((finding) => finding.id)
@@ -134,8 +134,8 @@ export async function aggregateCandidateStaticRisk({ input: inputPath, output: o
       .filter((receipt) =>
         receipt.rawWebRouteAuthState === 'raw-route-without-official-auth-reference')
       .map((receipt) => receipt.catalogId),
-    alpha1RemovedPackageCatalogIds: receipts
-      .filter((receipt) => receipt.alpha1RemovedPackages.length > 0)
+    baselineAbsentPackageCatalogIds: receipts
+      .filter((receipt) => receipt.baselineAbsentPackages.length > 0)
       .map((receipt) => receipt.catalogId),
     signalCounts: Object.fromEntries([...signalCounts.entries()].sort(([left], [right]) =>
       left.localeCompare(right))),

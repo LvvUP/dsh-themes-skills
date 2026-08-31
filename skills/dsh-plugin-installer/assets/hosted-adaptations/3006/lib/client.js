@@ -1,5 +1,5 @@
 /**
- * Public plugin #3006 alpha.1 reviewed replacement — browser half.
+ * Public plugin #3006 alpha.2 reviewed replacement — browser half.
  *
  * Review properties:
  * - no direct browser key-value persistence access;
@@ -379,7 +379,7 @@ window.__ModuleLoader__.load({
     }
 
     /**
-     * Keep favorites behind the official alpha.1 SettingsScope. Host writes
+     * Keep favorites behind the official alpha.2 SettingsScope. Host writes
      * are never treated as successful until the post-write scope snapshot
      * exactly matches the requested list. Non-loopback memory mode remains
      * process-local and deliberately uses no browser persistence primitive.

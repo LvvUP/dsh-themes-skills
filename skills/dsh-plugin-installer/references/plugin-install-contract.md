@@ -1,7 +1,7 @@
 # Plugin installation contract
 
-Read this reference when preparing an artifact or source checkout, granting a
-reviewed lifecycle-hook set, or executing a single/Top10 transaction.
+Read this reference when preparing an artifact or source checkout, rejecting or
+isolating lifecycle-build requirements, or executing a single/Top10 transaction.
 
 ## Two admitted distributions
 
@@ -24,22 +24,35 @@ full 40-hex Git commit. No legacy distribution name is accepted.
   resolution drift fail closed.
 - GitHub Release binds repository, non-`latest` tag, asset name/URL/size,
   SHA-256/SRI and package-manifest digest.
-- Git commit binds repository, full commit, tree, repository-root manifest,
-  exact lockfile path/digest, and canonical `git+https` spec. Branches, short
-  commits and monorepo subfolders are unsupported.
+- Git commit binds repository, full commit, tree, repository-root manifest and
+  canonical `git+https` spec. Runtime dependencies or any standard lifecycle
+  hook require an exact lockfile path/digest. A null lockfile pair is admitted
+  only for an already-built package whose exact manifest has no runtime or peer
+  dependency graph and no standard lifecycle hook. Branches, short commits and
+  monorepo subfolders are unsupported.
 
 Every source binds the complete standard npm lifecycle-hook map and digest.
-Lifecycle authorization enumerates every non-null hook in standard order,
-including `prepare`, `install`, and `postinstall`; any undeclared hook fails
-preparation. The transaction plan discloses all hook names and exact script
-text before the user grants one aggregate consent and before the exact package
-key is added to Profile `allowBuilds`.
+Lifecycle metadata enumerates every non-null hook in standard order, including
+`prepare`, `install`, and `postinstall`; any undeclared hook fails preparation.
+The v0.8.0 transaction rejects every package that requires a live lifecycle
+build before consent. Supporting such a candidate requires an isolated,
+preferably network-denied build review followed by a digest-bound script-free
+artifact when redistribution rights allow; otherwise the candidate is replaced.
+
+A selected package receives an explicit negative rule for its peer-normalized
+lockfile depPath. A positive rule already
+present for that same exact depPath fails closed instead of being overwritten.
+Each negative rule newly added by the installer carries the exact
+`dsh-plugin-installer-owned-v1` value comment. The comment is provenance for
+bounded stale-rule cleanup, not an authorization token.
 
 Every safety record must contain at least one concrete disclosure across
 permissions, network, processes, or files; four empty arrays are not an
-acceptable safety review. Both lanes disclose that pnpm may run lifecycle scripts from transitive
-dependencies. Item authority and consent must carry that risk; validating the
-selected package does not suppress every transitive dependency script.
+acceptable safety review. Both lanes disclose transitive lifecycle risk, but
+the installer grants no implicit transitive build permission: every depPath
+newly introduced by the script-disabled resolution phase is written
+`allowBuilds: false`. A plugin that requires such a build cannot pass runtime
+acceptance under this authority.
 
 Every item also carries a closed `runtimeAcceptance` record. Its only admitted
 probe is `exact-cordis-entry`, with one bounded Cordis entry ID, the same exact
@@ -53,13 +66,14 @@ consent is bound to it.
 Repository descriptions, README commands, issue comments, website summaries,
 package scripts, titles, and author names are untrusted metadata. Never turn
 them into a command. Installer-owned DSH and Web children receive a fixed
-executable and argument array with `shell: false`. The inspected alpha.1 CLI
-internally uses `spawnSync('pnpm', args)` and uses `shell: true` only on
-Windows for its `.cmd` boundary. A transaction-private first-PATH launcher
-therefore binds that exact command without pretending the upstream boundary is
-shell-free. pnpm, DSH, and cold Web probes all share one frozen minimal
-environment: explicit `DSH_HOME`, the private binding followed by the reviewed
-`PATH`, required OS home/user/temp and locale fields, and non-secret binding
+executable and argument array with `shell: false`. The pinned Harness CLI
+internally invokes `pnpm` by name and uses a Windows shell for its `.cmd`
+boundary. A transaction-private first-PATH wrapper therefore binds only that
+upstream boundary; installer-owned resolution executes the verified private
+`pnpm.cjs` through the certified absolute Node without a shell. pnpm, DSH, and
+cold Web probes all share one frozen minimal
+environment: explicit `DSH_HOME`, a PATH containing only the private binding,
+required OS home/user/temp and locale fields, and non-secret binding
 paths/digests. Never
 inherit `NODE_OPTIONS`, npm/pnpm/Corepack configuration, proxy or custom-CA
 overrides, CI variables, cloud credentials, tokens, or unrelated caller state.
@@ -98,7 +112,7 @@ redistribution approval, a runtime pass, or permission to publish a hosted
 artifact.
 
 An RC-era candidate also follows
-[`alpha1-plugin-migration-map.md`](alpha1-plugin-migration-map.md). alpha.1 has
+[`alpha2-plugin-migration-map.md`](alpha2-plugin-migration-map.md). alpha.2 has
 no aggregate runtime or APIProxy facade, so a package-name substitution is not
 compatibility evidence. The owning service, disposer, BrowserAuth boundary,
 capability disclosure, and matching dynamic probe must all be explicit.
@@ -135,26 +149,32 @@ authority hashes, overall payload digest, six-task matrix, Web coexistence,
 pairwise conflict receipts, full preflight, and failure rollback gates all
 validate and `frozen` is true.
 
-Alpha.1 itself also remains source-build-evidence-pending. Plugin installation
+Alpha.2 itself remains official-npm-runtime-evidence-pending at 0/6 tasks. Plugin installation
 requires both a promoted Harness runtime receipt set and item-level verified
 authority. RC.8 Theme/Skin authority and the RC.2 runtime baseline do not
 transfer to this lane.
 
-Alpha.1 launches the first `pnpm` on PATH internally and exposes no absolute
-package-manager option. The transaction now resolves that command to one
-canonical absolute regular file, verifies its exact `11.7.0` output with no
-stderr, and prepends a protected transaction-private launcher. The launcher
-re-hashes the absolute target before every invocation and fails if its bytes,
-size, or canonical path change. Because alpha.1 runs pnpm from the Profile
-directory, the Windows child environment sets
-`NoDefaultCurrentDirectoryInExePath`; this makes `cmd.exe` search the protected
-PATH instead of allowing a Profile-local shim to shadow it. On Windows, the
-required `.cmd` boundary uses the verified absolute system `cmd.exe` and drops
-an inherited `COMSPEC`. The binding directory and files use the same
-current-user SID-only protected ACL boundary as recovery material.
-This mechanism follows the exact inspected alpha.1 source rather than treating
-a separate Corepack command as evidence. Promotion remains blocked until the
-six-task receipts bind the target and launcher digests.
+The installer carries the official pnpm `11.7.0` registry tarball under a
+closed authority that fixes its immutable URL, bytes, SHA-256, registry
+SHA-512 integrity, manifest, entry count, unpacked bytes, whole-closure
+SHA-512, MIT license, and notice. Network retrieval is a maintenance action,
+never part of an install transaction. Each transaction verifies the archive
+and extracts exactly its declared regular-file closure into a private root;
+extra, missing, renamed, duplicate, case/Unicode-colliding, linked, special,
+unsafe or over-limit entries fail closed. The certified absolute Node executes
+the private `package/bin/pnpm.cjs` directly. No PATH pnpm or Corepack closure is
+an implementation fallback.
+
+Because Harness itself exposes no absolute package-manager option, its fixed
+commands receive a protected transaction-private first-PATH wrapper. The
+wrapper revalidates the fixed Node and private CLI and must answer a fresh
+nonce with a closed structured launch proof before use. The bound child PATH
+contains only this private directory; there is no caller-command fallback.
+Windows fixes `PATHEXT` to `.CMD;.EXE;.COM;.BAT`, places the private
+`pnpm.cmd` first, sets `NoDefaultCurrentDirectoryInExePath`, and uses the
+verified absolute system `cmd.exe`; neither a Profile-local command nor a
+later-path `pnpm.exe` can win. Promotion remains blocked until the six-task
+receipts bind artifact, closure, Node, wrapper, and wrapper-runner digests.
 
 The local recovery trust key uses private POSIX permissions on macOS and Linux.
 On Windows, both the trust-root directory and key must be owned by the current
@@ -162,7 +182,13 @@ user SID and have a protected DACL with inheritance removed and exactly one
 current-user FullControl Allow rule. The directory rule must carry
 ContainerInherit + ObjectInherit and the file rule no inheritance. Existing
 paths are verified and never silently repaired. Windows `mode` bits are not
-ACL proof. The implementation is covered by a real Windows ACL test, while
+ACL proof. Strict directory configuration and closed-file verification use
+`FileShare.Read` only and exclude Write/Delete. The sole relaxed action is
+initial ACL configuration while the installer's own Node file-writer handle is
+still open; it admits Write but never Delete, and closing that handle must be
+followed by strict verification before movement. PowerShell `Add-Type` runs
+only with a fresh local NTFS TEMP/TMP protected to one current-user SID rule.
+The implementation is covered by a real Windows ACL test, while
 promotion still requires the complete six-task runtime receipt matrix.
 
 ## Profile transaction
@@ -174,7 +200,7 @@ Before mutation:
    package, and rollback name.
 2. Resolve one absolute `DSH_HOME`; the only target is its `profiles/web`
    directory. Refuse roots, symlinks, malformed profile manifests, and any
-   mismatch with the source-built alpha.1 runner. Require `private: true`, the
+   mismatch with the source-built alpha.2 runner. Require `private: true`, the
    exact ordered base bundles, and all four Profile snapshot targets as regular
    files.
 3. Atomically acquire the one private cross-platform transaction lock below
@@ -210,24 +236,38 @@ Before mutation:
    restart requirement, and rollback target. Before consent, validate every
    prepared member as one full preflight. Bind one aggregate consent to the
    plan digest only after that preflight passes.
-6. Only after explicit consent, parse workspace YAML with a strict AST,
+6. Only after explicit consent, run the exact add spec through the certified
+   absolute Node plus transaction-private `pnpm.cjs`, with `shell: false`, an
+   explicit `--` option terminator, and `--ignore-scripts --lockfile-only`.
+   This resolution phase deliberately
+   bypasses alpha.2's Windows `dsh plugin` cmd forwarding, which cannot retain
+   an artifact path containing spaces as one literal argument. Strictly parse
+   the bounded resulting
+   `pnpm-lock.yaml`, bind each direct plugin to its exact depPath, and compute
+   the complete package-key delta from the pre-transaction lockfile. Do not
+   materialize packages or execute lifecycle scripts in this phase.
+7. Parse workspace YAML with a strict AST,
    reject aliases, merge keys, duplicate keys, custom tags, non-boolean
    values, explicit denial, `dangerouslyAllowAllBuilds: true`, and
-   `strictDepBuilds: false`. Write missing safe booleans explicitly, then
-   deterministically add the exact reviewed `allowBuilds` keys. Before package
-   mutation, query the effective project values with the same privately bound
-   pnpm, the exact frozen minimal environment used for mutation, and a fixed
-   argument array. The only shell boundary is the required Windows `.cmd`
-   boundary, and every argument there comes from the closed policy-key set.
+   `strictDepBuilds: false`. Write missing safe booleans explicitly, add
+   `false` for the entire newly resolved peer-normalized depPath closure and
+   never add a new positive lifecycle rule. Before package materialization,
+   query the effective project values with the same privately bound pnpm
+   closure, the exact frozen minimal environment used for mutation, and a
+   fixed argument array. A Windows `.cmd` wrapper is invoked only through the
+   trusted system `cmd.exe` after its structured launch proof. Every argument
+   comes from the closed policy-key set or the exact prepared artifact path.
    Require global build permission to remain false, strict dependency builds
-   to remain true, and every reviewed key to resolve true. Any pnpm error,
+   to remain true, and every transaction key to remain denied. Any pnpm error,
    warning, malformed output, or effective
    override restores the prior workspace bytes and fails closed.
    The authorization helper must reject direct CLI mutation and any call that
    does not receive the transaction's explicit frozen environment.
 
-Install sequentially with the absolute source-built CLI. After every add,
-require exact profile package state. Before commit, invoke the fixed
+Materialize the resolved batch once with the absolute source-built CLI using
+`--frozen-lockfile --ignore-scripts --ignore-pnpmfile`; require the lockfile
+bytes to remain identical and every exact package state to match. Before commit,
+invoke the fixed
 `--profile web --dump-config` argument array, parse its bounded output as
 strict YAML without evaluating tags, and require exactly one authority-bound
 entry for each item. Require the exact post-install inventory, start the fixed
@@ -249,7 +289,10 @@ accepted outcome.
 On Windows, every restored present file is written through a same-directory
 temporary file that is created empty. Before any private byte is written, the
 temporary file receives and verifies the current-user SID-only protected ACL;
-only then is it written, synced, closed, and moved on the same volume with the
+the only temporary relaxation admits the installer's already-open writer but
+never a delete share. Only then is it written and synced; after the handle is
+closed, strict no-write/no-delete verification must succeed before it is moved
+on the same volume with the
 fixed Win32 `MoveFileExW(..., MOVEFILE_WRITE_THROUGH)` boundary. The same
 write-through move creates every trust, transaction, snapshot, guard, lock,
 and journal directory entry before Profile mutation. macOS and Linux instead
@@ -260,16 +303,33 @@ backup; when the original target was absent, failure removes the newly created
 target. CI exercises the fixed helper on both supported Node lines and performs
 a real file-plus-directory move on Windows; mocked tests also reject weak
 proofs, cross-volume targets, inherited environment, and target replacement.
+Every helper that compiles its fixed C# boundary resolves PowerShell below the
+trusted loaded Windows system root, ignores caller SystemRoot/WINDIR, and gives
+`Add-Type` only the SID-only local NTFS bootstrap temp. Native move and
+existence checks receive `\\?\` drive/UNC long paths throughout.
 
 ## Removal and retained-snapshot recovery
 
 Removal uses the same promoted item authority and a separate digest-bound
 plan. Before mutation it requires every selected authority package at its
 exact version, captures the complete governed Profile and `DSH_HOME` snapshot,
-dependency closure, and Plugin inventory, then removes only those items' exact
-`allowBuilds: true` entries (preserving explicit false denials and unrelated
-entries), verifies the effective safe policy, and removes packages in reverse plan order
-with the fixed source-built CLI and `shell: false`. Commit only after every
+dependency closure, and Plugin inventory, then removes only provenance-safe
+exact historical depPath authorizations while preserving explicit false
+denials and unrelated entries. A legacy broad package-name `true` without
+installer provenance fails closed for explicit migration. It verifies the
+effective safe policy and removes packages in reverse plan order with the fixed
+source-built CLI using only `--lockfile-only`, `shell: false`, and an explicit
+`--` option terminator before every package name. After every reverse-order
+resolution succeeds, it performs one fixed
+`install --frozen-lockfile --ignore-scripts --ignore-pnpmfile` materialization,
+requires the resolved lockfile bytes to remain identical, and only then checks
+physical absence. After that frozen materialization, strict YAML and lockfile
+parsers atomically remove only installer-marked `false` rules whose
+peer-normalized key is absent from both current packages and snapshots maps.
+Unmarked user denials, reachable marked denials, and every `true` value are
+preserved. Forging the marker cannot enable a build because cleanup never
+creates or changes a positive value and `strictDepBuilds: true` remains
+mandatory. Commit only after every
 selected package is absent, the remaining inventory is exact before and after
 a real cold Web start, and BrowserAuth still returns 401 at the bare root.
 Failure restores the entire pre-remove snapshot and frozen closure.

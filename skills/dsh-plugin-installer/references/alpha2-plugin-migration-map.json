@@ -1,0 +1,1636 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-31",
+  "purpose": "dsh-plugin-alpha2-static-migration-evidence",
+  "baseline": {
+    "tag": "dsh-v0.1.2-alpha.2",
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b",
+    "removedPackages": [
+      "@deepseek-ai/dsh-client-runtime",
+      "@deepseek-ai/dsh-host-apiproxy"
+    ]
+  },
+  "awesomeSnapshot": {
+    "repository": "https://github.com/awesome-dsh-plugin/awesome-dsh-plugin.git",
+    "commit": "db181e1aed39ad4a041cb9d379f0d713edfc49bb",
+    "tree": "24c75117d9fe59fd832359c7ef2ab14632fd543d"
+  },
+  "publication": {
+    "status": "static-reviewed-pending-runtime",
+    "installable": false,
+    "runtimeCertifiedCount": 0
+  },
+  "counts": {
+    "reviewedRejected": 44,
+    "directPinRetained": 6,
+    "hostedAdaptationRetained": 10,
+    "retired": 28,
+    "replacementCandidates": 44,
+    "replacementDirectUpstream": 35,
+    "replacementHostedAdaptation": 9
+  },
+  "idPolicy": {
+    "firstEligibleReplacementCatalogId": 3089,
+    "idsToIssueAfterCertification": 28,
+    "allocateOnlyAfterSixTaskRuntimePass": true,
+    "neverRebindRetiredIds": true,
+    "candidatePublicIdsAllocated": false
+  },
+  "directPinRetained": [
+    {
+      "catalogId": 3021,
+      "repository": "https://github.com/PerryLink/dsh-mcp-panel.git",
+      "commit": "cb98f2749845be5dfcb0fdc84e7c296a95677bcd",
+      "tree": "0a7a3a8d3aa0050dd98fb70b30eaa2e832faa8c1",
+      "packageCoordinate": "dsh-mcp-panel@0.6.2",
+      "decision": "retain-direct-pin",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["alpha2-surface-clean"]
+    },
+    {
+      "catalogId": 3022,
+      "repository": "https://github.com/PerryLink/dsh-session-pin.git",
+      "commit": "118fbc0aad229c7879d0cc890646b04fce91f859",
+      "tree": "17be9f155bd93bca4a824a0ad68281ed8c067874",
+      "packageCoordinate": "dsh-session-pin@0.7.0",
+      "decision": "retain-direct-pin",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["alpha2-surface-clean"]
+    },
+    {
+      "catalogId": 3032,
+      "repository": "https://github.com/bowenliang123/dsh-context.git",
+      "commit": "115e183de0c264c75fb6dd0e184a99d1caeffbac",
+      "tree": "ef0a4f074d1b0ec86454bbc38eddaccffb228d02",
+      "packageCoordinate": "dsh-context@0.38.5",
+      "decision": "retain-direct-pin",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["alpha2-surface-clean"]
+    },
+    {
+      "catalogId": 3039,
+      "repository": "https://github.com/omdsh-dev/DSH-better-sidebar.git",
+      "commit": "d70db8fb026d002b22ae97efd893ff08ee9f0d10",
+      "tree": "1a7696e3ea02713c214e6d8081349081dbcf2f4b",
+      "packageCoordinate": "dsh-better-sidebar@0.18.0-alpha.0",
+      "decision": "retain-direct-pin",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["alpha2-surface-clean"]
+    },
+    {
+      "catalogId": 3066,
+      "repository": "https://github.com/omdsh-dev/dsh-llm-fallbacks.git",
+      "commit": "ea55abb205b3811329f859d85a44fd630de59e01",
+      "tree": "6c82c106aad60e7b472a5fb8b6cf2bdf3403739a",
+      "packageCoordinate": "dsh-llm-fallbacks@0.4.0-alpha.1",
+      "decision": "retain-direct-pin",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["alpha2-surface-clean"]
+    },
+    {
+      "catalogId": 3076,
+      "repository": "https://github.com/NanmiCoder/dsh-agent-teams.git",
+      "commit": "232a338fc9a0d393f118912386f67e7f3a6c67d6",
+      "tree": "b86bb07df0d5a109d0db2f9498233c8a7741c90a",
+      "packageCoordinate": "@nanmicoder/dsh-agent-teams@0.1.15",
+      "decision": "retain-direct-pin",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["alpha2-surface-clean"]
+    }
+  ],
+  "hostedAdaptationRetained": [
+    {
+      "catalogId": 3004,
+      "repository": "https://github.com/0xsline/dsh-spotlight.git",
+      "commit": "b3565e8629d9a393d764681e96f4c41100cc12fa",
+      "tree": "f5310d52bb46ad62acb33374e3b17efe32848fcc",
+      "packageCoordinate": "@0xsline/dsh-spotlight@0.0.2",
+      "decision": "retain-hosted-adaptation",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "hosted-rewrite-bounded"]
+    },
+    {
+      "catalogId": 3006,
+      "repository": "https://github.com/Khellendros97/dsh-better-model-selector.git",
+      "commit": "4781f4c215f1ad4d55a44e1409bafe58f05b721f",
+      "tree": "8840140ed08a525005e3468348e8d5370416e371",
+      "packageCoordinate": "dsh-better-model-selector@1.0.0",
+      "decision": "retain-hosted-adaptation",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "hosted-rewrite-bounded"]
+    },
+    {
+      "catalogId": 3008,
+      "repository": "https://github.com/NigelYao/dsh-view-modes.git",
+      "commit": "a57d237e03b6488875cb7cc2a90bf6a37512632d",
+      "tree": "5f84cf31a180a1aced2496e8e391f0751d836e41",
+      "packageCoordinate": "dsh-view-modes@1.0.0",
+      "decision": "retain-hosted-adaptation",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "hosted-rewrite-bounded"]
+    },
+    {
+      "catalogId": 3010,
+      "repository": "https://github.com/ZSeven-W/dsh-openpencil.git",
+      "commit": "99e05cdbae5e26c920cc20e0793c66446685b0cd",
+      "tree": "6c20cfaf67190014bca428b65f9f27bc16b3bae7",
+      "packageCoordinate": "@zseven-w/dsh-openpencil@0.1.0-rc.9",
+      "decision": "retain-hosted-adaptation",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "hosted-rewrite-bounded"]
+    },
+    {
+      "catalogId": 3011,
+      "repository": "https://github.com/GooodWei/arcana.git",
+      "commit": "82f910c0b5e645c65c2a34be0b0e47035d0489a7",
+      "tree": "36cb0b3210b87a8c57d9d13845d8b1564842b126",
+      "packageCoordinate": "arcana@0.1.0",
+      "decision": "retain-hosted-adaptation",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "hosted-rewrite-bounded"]
+    },
+    {
+      "catalogId": 3017,
+      "repository": "https://github.com/yibiner/dsh-plugin-list-plus.git",
+      "commit": "f62e6ba7be47f42accae372bb84dc879972d071a",
+      "tree": "8fa40ba5c5f3ba78a54db05a39487b4a79a81f34",
+      "packageCoordinate": "dsh-plugin-list-plus@0.1.0",
+      "decision": "retain-hosted-adaptation",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "hosted-rewrite-bounded"]
+    },
+    {
+      "catalogId": 3040,
+      "repository": "https://github.com/Ericwong5021/dsh-kanban.git",
+      "commit": "f7fa24c14db47ee4827cad5c827ad7aa3fd13434",
+      "tree": "322fe7f98155d8cee98918f235ce4602ffe3cbc3",
+      "packageCoordinate": "dsh-kanban@0.1.1",
+      "decision": "retain-hosted-adaptation",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "hosted-rewrite-bounded"]
+    },
+    {
+      "catalogId": 3041,
+      "repository": "https://github.com/GooodWei/context-vista.git",
+      "commit": "fdde2e6da8524cd5ea27598c19eae744d4a1078a",
+      "tree": "1dcfc8e5952365ec142eafcc6ddd007e0b6fb6b5",
+      "packageCoordinate": "context-vista@0.1.0",
+      "decision": "retain-hosted-adaptation",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "hosted-rewrite-bounded"]
+    },
+    {
+      "catalogId": 3042,
+      "repository": "https://github.com/zhaoscsc/dsh-wikilink.git",
+      "commit": "7f0203b6690588f30b7a9a35af37c1978a7caacc",
+      "tree": "aefb3d89dd6dffb9b3a0b5b43adfbbe6a1c5b4e3",
+      "packageCoordinate": "dsh-wikilink@0.2.0",
+      "decision": "retain-hosted-adaptation",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "hosted-rewrite-bounded"]
+    },
+    {
+      "catalogId": 3050,
+      "repository": "https://github.com/titanwings/dsh-automation.git",
+      "commit": "b0c1a6a10bd47b6cb54dd1090311347537e0a3ea",
+      "tree": "04d3f5a09ac3dcefa27531b655b0b78161720358",
+      "packageCoordinate": "@dsh-external/dsh-automation@0.1.7",
+      "decision": "retain-hosted-adaptation",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "hosted-rewrite-bounded"]
+    }
+  ],
+  "retired": [
+    {
+      "catalogId": 3009,
+      "repository": "https://github.com/Laplace-bit/dsh-smooth-stream.git",
+      "commit": "adebd1964b30b6c1e8821cc92fb4a870ffe98d0c",
+      "tree": "bd9c16257d5218ed4c67fbab96baec78da55a40c",
+      "packageCoordinate": "dsh-smooth-stream@0.4.1",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3012,
+      "repository": "https://github.com/GitHubJiKe/dsh-markdown-preview.git",
+      "commit": "f63cdf45b814eb56b7fb33c5744686baaea1550f",
+      "tree": "a691ebd7a6c92a1afda3720c84b6978de649c43c",
+      "packageCoordinate": "dsh-markdown-preview@0.3.0",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3013,
+      "repository": "https://github.com/Semidia/dsh-i18n.git",
+      "commit": "27a722e408cbb1c8ace6aa5cca0f77eca6fd4d72",
+      "tree": "f5b2103193bf297801b8291a15c965ce2070e258",
+      "packageCoordinate": "dsh-i18n@1.0.0",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "bundle-missing", "retirement-selected"]
+    },
+    {
+      "catalogId": 3014,
+      "repository": "https://github.com/Semidia/dsh-settings-tuner.git",
+      "commit": "c76736b140f680b457f5b6aeb47c82805d00bdbe",
+      "tree": "69f024534a34bdaa2f89aee53622216d274542b6",
+      "packageCoordinate": "dsh-settings-tuner@1.0.0",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "bundle-missing", "retirement-selected"]
+    },
+    {
+      "catalogId": 3015,
+      "repository": "https://github.com/0imzero/dsh-workspace-menu.git",
+      "commit": "afd55510f82821cde60a8364e42f752e244b5b31",
+      "tree": "71d2a60f8364a79cdbb2433318cf6c0438e81068",
+      "packageCoordinate": "@dsh-external/dsh-workspace-menu@1.2.0",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3018,
+      "repository": "https://github.com/Starfie1d1272/dsh-builtin-toggles.git",
+      "commit": "bc86c777564a6f192c01582698696d9dd7ac7014",
+      "tree": "17e44e34852b32514f85f44157b069ac7c885e40",
+      "packageCoordinate": "dsh-builtin-toggles@0.3.2",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3020,
+      "repository": "https://github.com/a903067276-rgb/dsh-file-mentions.git",
+      "commit": "ee163609352ad400fda4eddb7fd5feced4da15eb",
+      "tree": "2976394950202124dfed8919bdb00d04d72fd6e1",
+      "packageCoordinate": "dsh-file-mentions@1.0.13",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3026,
+      "repository": "https://github.com/lhh010/dsh-ui-whale.git",
+      "commit": "697937c6409f072631cbfa604bd2895f9c1a2a0d",
+      "tree": "fda4201edc13a57e403af39980e0b1692cacfecf",
+      "packageCoordinate": "@dsh-external/dsh-ui-whale@0.3.8",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["bundle-missing", "retirement-selected"]
+    },
+    {
+      "catalogId": 3034,
+      "repository": "https://github.com/xiaobright/dsh-anchored-standard.git",
+      "commit": "9298a07d940dbf311fd34f9db7bc354f4752fbf9",
+      "tree": "88e0158a0dfe5570b4239d3b9f18df6c7a3a43f9",
+      "packageCoordinate": "dsh-anchored-standard@source-only",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["bundle-missing", "retirement-selected"]
+    },
+    {
+      "catalogId": 3035,
+      "repository": "https://github.com/xmanrui/dsh-im.git",
+      "commit": "38096d1589f6e434a77bb188962db2f7b40ca84b",
+      "tree": "5f75f0bf8556078102a5b8d7e0a5e34e4fff238f",
+      "packageCoordinate": "@xmanrui/dsh-im@4.2.1",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3037,
+      "repository": "https://github.com/wuxiangru915/dsh-review-loop.git",
+      "commit": "eb4190498ef76daec21dfcf5c24c44f337a61ed3",
+      "tree": "bdc5f17bdb7c7fafd8345c929a6bedb085b58c66",
+      "packageCoordinate": "@dsh-plugin/dsh-review-loop@0.1.0",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3043,
+      "repository": "https://github.com/omdsh-dev/dsh-open-in-vscode.git",
+      "commit": "8aed144abdc158a332aa73bce42fc217d962f751",
+      "tree": "f69bdbde473d67496271e44df04d3d375742ed5c",
+      "packageCoordinate": "dsh-open-in-vscode@0.1.6",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3044,
+      "repository": "https://github.com/omdsh-dev/dsh-notification.git",
+      "commit": "ddec603395a223deb46c75b74274c41849c6a131",
+      "tree": "48f1ffa4d60e125d8ec90040080bfd93644f45d1",
+      "packageCoordinate": "dsh-notification@0.1.3",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3047,
+      "repository": "https://github.com/gxpppp/dsh-search-mcp.git",
+      "commit": "ae3a247aa104c952f720736cb4dfa3f024f01551",
+      "tree": "cb9ff0710083f8b526a531fb8595c6880a162a04",
+      "packageCoordinate": "dsh-search-mcp@0.2.0",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3055,
+      "repository": "https://github.com/titanwings/dsh-plannotator.git",
+      "commit": "053c982f96b77fd750360ee66384bf90d5c1e603",
+      "tree": "886c4d5d817e834d9f7ebd1236c7203edbab5ff7",
+      "packageCoordinate": "@dsh-external/dsh-plannotator@0.1.4",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3056,
+      "repository": "https://github.com/hellodigua/dsh-share.git",
+      "commit": "c109330b755c793cbc701a4e6a972d620a6667da",
+      "tree": "d5509bd778005e3c32b1f811a1fb0f3bf902dc5c",
+      "packageCoordinate": "dsh-share@0.3.1",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3057,
+      "repository": "https://github.com/Proton1917/dsh-live-stats.git",
+      "commit": "ebd44aa89c40d8de2519c932c2237ce474f8558e",
+      "tree": "b5f842b07f4f2010d36635803ee1aded5bbb9428",
+      "packageCoordinate": "@proton1917/dsh-live-stats@0.1.0",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3059,
+      "repository": "https://github.com/SiYue-ZO/dsh-translator.git",
+      "commit": "7ab238541380bb194478df088607d5dc5c351b77",
+      "tree": "143c9e4e7efb5a7a5c56bd7af7304d2f96622dcb",
+      "packageCoordinate": "dsh-translator@0.2.0",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3060,
+      "repository": "https://github.com/Lum1104/dsh-browser.git",
+      "commit": "122de0e45ee97cba3428920d3d48b16e646b6db4",
+      "tree": "9fb11f35457848ec592154a50672116380e06100",
+      "packageCoordinate": "dsh-browser@0.1.2",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["bundle-missing", "retirement-selected"]
+    },
+    {
+      "catalogId": 3061,
+      "repository": "https://github.com/Anionex/dsh-computer-use.git",
+      "commit": "387eae931b1852e3c3433e0e004fa460d3da2883",
+      "tree": "a24a72a612c7000cadd0b94beaa994cc899279d7",
+      "packageCoordinate": "@anionex/dsh-computer-use@0.1.0",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3065,
+      "repository": "https://github.com/Anionex/dsh-turn-rewind.git",
+      "commit": "df0a18e565043ba48150b82f5243533099b1922d",
+      "tree": "8fa246d9868dc9affb51c7667cfdfce9ff98d6b4",
+      "packageCoordinate": "@anionex/dsh-turn-rewind@0.2.0",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3071,
+      "repository": "https://github.com/fakechris/dsh-track.git",
+      "commit": "fd000f69da4ab79973a1ffe6e168da74fca6355e",
+      "tree": "b1c56c7df7bc231270c879cb32092b0031d9052e",
+      "packageCoordinate": "@fakechris/dsh-track@0.6.0",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3072,
+      "repository": "https://github.com/havingautism/dsh-deepresearch.git",
+      "commit": "31db81744225edc4296d1f12095460fc645dfe98",
+      "tree": "a1fe81216ea4a79354ccd14ad13d8050623a337b",
+      "packageCoordinate": "@deepseek-ai/dsh-deepresearch@0.2.2",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3073,
+      "repository": "https://github.com/HuanLinOTO/dsh-plugin-yet-another-subagent.git",
+      "commit": "30f39804dfdbef434887169958019f186be5b8d2",
+      "tree": "9530fa346c79b867a6ce9b25402f7aa6a0e709f4",
+      "packageCoordinate": "dsh-plugin-yet-another-subagent@source-only",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": [
+        "removed-client-runtime-import",
+        "removed-host-apiproxy-import",
+        "retirement-selected"
+      ]
+    },
+    {
+      "catalogId": 3078,
+      "repository": "https://github.com/Chinesezjc/dsh-interconnect.git",
+      "commit": "65bf651e7b54bdca8c11b8a1684bf4f767f4d5e5",
+      "tree": "6bf1b335a718af4cc07f7f1a567bf9d82b3b9936",
+      "packageCoordinate": "dsh-interconnect@0.10.0",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-host-apiproxy-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3079,
+      "repository": "https://github.com/haytham818/dsh-notify.git",
+      "commit": "d8b29a13ed029207b6da8277b05091ceefcbe754",
+      "tree": "90faf31b4acfa6c9b430d78f2bd99497d033738e",
+      "packageCoordinate": "dsh-notify@0.1.0",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["bundle-missing", "retirement-selected"]
+    },
+    {
+      "catalogId": 3080,
+      "repository": "https://github.com/havingautism/dsh-notebooks.git",
+      "commit": "28ac98ae35d65d4c99357dca4f21b83e333a36cb",
+      "tree": "251b94faa807f5c0d20faf1498a079b3902b3a13",
+      "packageCoordinate": "@deepseek-ai/dsh-notebooks@0.2.0",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["removed-client-runtime-import", "retirement-selected"]
+    },
+    {
+      "catalogId": 3086,
+      "repository": "https://github.com/FlashingChen/dsh-worktree.git",
+      "commit": "d61ce0f6c2498c94e996c63459c0dfb7c376c514",
+      "tree": "363c0280b444ac5b6af583ea1e3f709298993632",
+      "packageCoordinate": "dsh-worktree@0.1.0",
+      "decision": "retire-permanently",
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "reasonCodes": ["bundle-missing", "retirement-selected"]
+    }
+  ],
+  "replacementCandidates": [
+    {
+      "rank": 1,
+      "candidateKey": "FuRongJun-1999/dsh-memory",
+      "repository": "https://github.com/FuRongJun-1999/dsh-memory.git",
+      "sourceSubdir": ".",
+      "commit": "cbafcef78320d37353634e13e0af1ad6e4fb7e52",
+      "tree": "e90fca6daebeb85081719b3ad823e4a793a8cf98",
+      "licenseExpression": "MIT",
+      "category": "memory",
+      "packageName": "@furongjun1999/dsh-memory",
+      "packageVersion": "0.4.2",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "npm-exact",
+        "direct": true,
+        "exactCoordinate": "npm:@furongjun1999/dsh-memory@0.4.2"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 84,
+        "summary": "Active, well-documented local memory system with a precise npm artifact."
+      }
+    },
+    {
+      "rank": 2,
+      "candidateKey": "ADWMC/helm-d#packages/helmd",
+      "repository": "https://github.com/ADWMC/helm-d.git",
+      "sourceSubdir": "packages/helmd",
+      "commit": "5bf19263e60f369563df45ce92b0324481f67033",
+      "tree": "94bcd951f2baf92c4a086e9540eeafd0abbe22fe",
+      "licenseExpression": "MIT",
+      "category": "security",
+      "packageName": "@dsh-security/helmd",
+      "packageVersion": "0.2.1",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/ADWMC/helm-d/releases/download/v0.2.1/dsh-security-helmd-0.2.1.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 32,
+        "summary": "Focused security toolkit with a versioned prebuilt release artifact."
+      }
+    },
+    {
+      "rank": 3,
+      "candidateKey": "DeepTrial/dsh-bash-rtk",
+      "repository": "https://github.com/DeepTrial/dsh-bash-rtk.git",
+      "sourceSubdir": ".",
+      "commit": "2ed878009f2ac2045fc014048fe387f5fe883263",
+      "tree": "0dfdd7561acc457c12186f5a2262168af8115ea0",
+      "licenseExpression": "MIT",
+      "category": "developer-tools",
+      "packageName": "@deeptrial/dsh-bash-rtk",
+      "packageVersion": "0.1.1",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "npm-exact",
+        "direct": true,
+        "exactCoordinate": "npm:@deeptrial/dsh-bash-rtk@0.1.1"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 10,
+        "summary": "Narrow shell-output compression purpose and an exact npm publication."
+      }
+    },
+    {
+      "rank": 4,
+      "candidateKey": "zhujunpeng12/dsh-memory-system",
+      "repository": "https://github.com/zhujunpeng12/dsh-memory-system.git",
+      "sourceSubdir": ".",
+      "commit": "71d48bd105a91d0196e6c7489839dabd049182d4",
+      "tree": "a6c6183fc9e0aff4a8391fd1b08a2febec7a57a2",
+      "licenseExpression": "MIT",
+      "category": "memory",
+      "packageName": "dsh-memory-system",
+      "packageVersion": "0.1.1",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/zhujunpeng12/dsh-memory-system/releases/download/v0.1.1/zhujunpeng12-dsh-memory-system-0.1.1.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 9,
+        "summary": "Local-first memory with bounded recall and a versioned release bundle."
+      }
+    },
+    {
+      "rank": 5,
+      "candidateKey": "00080000/dsh-project-memory",
+      "repository": "https://github.com/00080000/dsh-project-memory.git",
+      "sourceSubdir": ".",
+      "commit": "40089e1449d561eb2fd9c10aaa2f2968a0ae0b46",
+      "tree": "a73aa3f911ecfdd2ba462231a9d14f1c79483d1e",
+      "licenseExpression": "MIT",
+      "category": "memory",
+      "packageName": "@yolk_vat-y/dsh-project-memory",
+      "packageVersion": "0.3.3",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "npm-exact",
+        "direct": true,
+        "exactCoordinate": "npm:@yolk_vat-y/dsh-project-memory@0.3.3"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 4,
+        "summary": "Project-scoped retrieval with source citations and a current npm artifact."
+      }
+    },
+    {
+      "rank": 6,
+      "candidateKey": "tafcear/kimi-tide#packages/dsh-kimi-tide",
+      "repository": "https://github.com/tafcear/kimi-tide.git",
+      "sourceSubdir": "packages/dsh-kimi-tide",
+      "commit": "023d49d61c542bdb30016a9d4eb85a193d4d3da6",
+      "tree": "6b715e08ddc486fb12abedb4dcada1abe23cea52",
+      "licenseExpression": "MIT",
+      "category": "model-routing",
+      "packageName": "dsh-kimi-tide",
+      "packageVersion": "1.0.1",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/tafcear/kimi-tide/releases/download/v1.0.1/dsh-kimi-tide-1.0.1.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 7,
+        "summary": "Per-step model routing with explicit rules and a prebuilt versioned artifact."
+      }
+    },
+    {
+      "rank": 7,
+      "candidateKey": "SuCriss/dsh-version-update",
+      "repository": "https://github.com/SuCriss/dsh-version-update.git",
+      "sourceSubdir": ".",
+      "commit": "0805410a5db07836a1c85ea1c714c6430d36f95a",
+      "tree": "2bee7e8514ea59c530c23cf9959400032ff9a681",
+      "licenseExpression": "Apache-2.0",
+      "category": "developer-tools",
+      "packageName": "dsh-version-update",
+      "packageVersion": "1.0.6",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "npm-exact",
+        "direct": true,
+        "exactCoordinate": "npm:dsh-version-update@1.0.6"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 4,
+        "summary": "Version management and rollback workflow with an exact npm release."
+      }
+    },
+    {
+      "rank": 8,
+      "candidateKey": "squirrel20/dsh-cron",
+      "repository": "https://github.com/squirrel20/dsh-cron.git",
+      "sourceSubdir": ".",
+      "commit": "f3f881bcdcd3bcdd6d2a34af63327c4eb795c86f",
+      "tree": "e60eb1b41df84c7c52a7e3d4ff03a4b164d9c460",
+      "licenseExpression": "MIT",
+      "category": "workflow",
+      "packageName": "dsh-cron",
+      "packageVersion": "0.12.1",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/squirrel20/dsh-cron/releases/download/v0.12.1/dsh-cron.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 2,
+        "summary": "Persisted scheduler with overlap and misfire policy controls."
+      }
+    },
+    {
+      "rank": 9,
+      "candidateKey": "baisama-cloud/dsh-stt-input",
+      "repository": "https://github.com/baisama-cloud/dsh-stt-input.git",
+      "sourceSubdir": ".",
+      "commit": "2f751d5ea14a6bfa9513d4439a45880f4b7a97de",
+      "tree": "5c6ed01a0e4a16cfea701a7c6a375e2f5a6019d6",
+      "licenseExpression": "MIT",
+      "category": "voice",
+      "packageName": "dsh-stt-input",
+      "packageVersion": "0.1.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/baisama-cloud/dsh-stt-input/releases/download/v0.1.0/dsh-stt-input-0.1.0.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 4,
+        "summary": "Useful browser and Whisper speech input with explicit provider choices."
+      }
+    },
+    {
+      "rank": 10,
+      "candidateKey": "Yu-tao-Li/dsh-reference-checker",
+      "repository": "https://github.com/Yu-tao-Li/dsh-reference-checker.git",
+      "sourceSubdir": ".",
+      "commit": "b6c1cf95937e4d19837702d1cd14f7679762a61e",
+      "tree": "2937bc99e01901a04486f6e05906bd5545893ef4",
+      "licenseExpression": "MIT",
+      "category": "developer-tools",
+      "packageName": "dsh-reference-checker",
+      "packageVersion": "1.1.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "npm-exact",
+        "direct": true,
+        "exactCoordinate": "npm:dsh-reference-checker@1.1.0"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 5,
+        "summary": "Source-aware bibliography verification with a concrete research use case."
+      }
+    },
+    {
+      "rank": 11,
+      "candidateKey": "kui123456789/dsh-codex-workflow",
+      "repository": "https://github.com/kui123456789/dsh-codex-workflow.git",
+      "sourceSubdir": ".",
+      "commit": "0be09fd3860254993f13ffdf8809131c67101f81",
+      "tree": "810970d43eb1639e7d2063213040b4b38380b0a0",
+      "licenseExpression": "MIT",
+      "category": "workflow",
+      "packageName": "dsh-codex-workflow",
+      "packageVersion": "1.0.12",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "npm-exact",
+        "direct": true,
+        "exactCoordinate": "npm:dsh-codex-workflow@1.0.12"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 4,
+        "summary": "Clear planning and independent-review orchestration workflow."
+      }
+    },
+    {
+      "rank": 12,
+      "candidateKey": "victorzhong0110/dsh-outcome-loop",
+      "repository": "https://github.com/victorzhong0110/dsh-outcome-loop.git",
+      "sourceSubdir": ".",
+      "commit": "4953d8cc4ee6da45753658a49ae91e9cd02b5e4c",
+      "tree": "fb463a9b7de489046670ba8b048fd84fac8c85e8",
+      "licenseExpression": "MIT",
+      "category": "workflow",
+      "packageName": "dsh-outcome-loop",
+      "packageVersion": "0.1.0-beta.8",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/victorzhong0110/dsh-outcome-loop/releases/download/v0.1.0-beta.8/dsh-outcome-loop-0.1.0-beta.8.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 3,
+        "summary": "Deterministic acceptance evidence and digest-bound outcome export."
+      }
+    },
+    {
+      "rank": 13,
+      "candidateKey": "zizhongfeiyang/dsh-settings-drawer",
+      "repository": "https://github.com/zizhongfeiyang/dsh-settings-drawer.git",
+      "sourceSubdir": ".",
+      "commit": "9482b9f53679ba50e1f94f07c2380b8345ad739a",
+      "tree": "8ee67531dab123d5a885660c4e36cc05e7df5a38",
+      "licenseExpression": "MIT",
+      "category": "web-ui",
+      "packageName": "dsh-settings-drawer",
+      "packageVersion": "1.2.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/zizhongfeiyang/dsh-settings-drawer/releases/download/v1.2.0/dsh-settings-drawer-1.2.0.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 4,
+        "summary": "Small settings-navigation customization surface and prebuilt release."
+      }
+    },
+    {
+      "rank": 14,
+      "candidateKey": "ruisenbai/dsh-annotation",
+      "repository": "https://github.com/ruisenbai/dsh-annotation.git",
+      "sourceSubdir": ".",
+      "commit": "25f652e8b13c8f12e2fa2c528591debe35b23650",
+      "tree": "46ab23ed2ec15b5fa7399a011b0433f1455257f1",
+      "licenseExpression": "MIT",
+      "category": "web-ui",
+      "packageName": "dsh-annotation",
+      "packageVersion": "0.3.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/ruisenbai/dsh-annotation/releases/download/v0.3.0/dsh-annotation.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 3,
+        "summary": "Structured inline annotation workflow for completed assistant replies."
+      }
+    },
+    {
+      "rank": 15,
+      "candidateKey": "Raphaelutumn/dsh-change-budget",
+      "repository": "https://github.com/Raphaelutumn/dsh-change-budget.git",
+      "sourceSubdir": ".",
+      "commit": "e38a859ca811a49da2ec212002715241b82bd485",
+      "tree": "190722a90824fe9faa7e35459e65406f07742e38",
+      "licenseExpression": "MIT",
+      "category": "developer-tools",
+      "packageName": "@raphelutumn/dsh-change-budget",
+      "packageVersion": "0.1.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "npm-exact",
+        "direct": true,
+        "exactCoordinate": "npm:@raphelutumn/dsh-change-budget@0.1.0"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 2,
+        "summary": "Bounded file-mutation limits with an auditable narrow capability."
+      }
+    },
+    {
+      "rank": 16,
+      "candidateKey": "uigdwunm/dsh-process-fold",
+      "repository": "https://github.com/uigdwunm/dsh-process-fold.git",
+      "sourceSubdir": ".",
+      "commit": "786e786f110bf93d772f6252d88177c4e3624ab2",
+      "tree": "c41fcd8d71395731ad4159cb9f92d54275ce150a",
+      "licenseExpression": "MIT",
+      "category": "web-ui",
+      "packageName": "dsh-process-fold",
+      "packageVersion": "0.1.1",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/uigdwunm/dsh-process-fold/releases/download/v0.1.1/dsh-process-fold-0.1.1.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 2,
+        "summary": "Conversation process folding with a bounded additive Web UI surface."
+      }
+    },
+    {
+      "rank": 17,
+      "candidateKey": "wyouwd1/dsh-opencode-models",
+      "repository": "https://github.com/wyouwd1/dsh-opencode-models.git",
+      "sourceSubdir": ".",
+      "commit": "9f6451ac58885b39d038e085d5475467f2746e97",
+      "tree": "c083d0bd7e743639c87c89816baa39d68c61955f",
+      "licenseExpression": "MIT",
+      "category": "model-routing",
+      "packageName": "dsh-opencode-models",
+      "packageVersion": "0.1.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/wyouwd1/dsh-opencode-models/releases/download/v0.1.0/dsh-opencode-models.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 2,
+        "summary": "Model catalog drift inspection and guarded settings updates."
+      }
+    },
+    {
+      "rank": 18,
+      "candidateKey": "yxqfg/phone-lens#packages/phone-lens",
+      "repository": "https://github.com/yxqfg/phone-lens.git",
+      "sourceSubdir": "packages/phone-lens",
+      "commit": "1bc5f5f7fad29ac3c2351188b085b4b82aee81f5",
+      "tree": "f7906d98cce78a30cff557545da6dee075c54e63",
+      "licenseExpression": "MIT",
+      "category": "vision",
+      "packageName": "phone-lens",
+      "packageVersion": "0.3.1",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "npm-exact",
+        "direct": true,
+        "exactCoordinate": "npm:phone-lens@0.3.1"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 4,
+        "summary": "Phone-camera input with a concrete LAN or USB visual workflow."
+      }
+    },
+    {
+      "rank": 19,
+      "candidateKey": "Ruixinhua/dsh-universe-api",
+      "repository": "https://github.com/Ruixinhua/dsh-universe-api.git",
+      "sourceSubdir": ".",
+      "commit": "1b33fda3c87295406123253f8e0c5d1f3c4ad9c5",
+      "tree": "1f638005d9ca181e70dbcfb3ed3358d642723d1d",
+      "licenseExpression": "MIT",
+      "category": "developer-tools",
+      "packageName": "dsh-universe-api",
+      "packageVersion": "0.1.2",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "npm-exact",
+        "direct": true,
+        "exactCoordinate": "npm:dsh-universe-api@0.1.2"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 0,
+        "summary": "Recently maintained deterministic public API catalog with exact filtering."
+      }
+    },
+    {
+      "rank": 20,
+      "candidateKey": "baisama-cloud/dsh-session-mover",
+      "repository": "https://github.com/baisama-cloud/dsh-session-mover.git",
+      "sourceSubdir": ".",
+      "commit": "ab3d6e8ef2f6aae2348b76e26ef15e4278f8d1f1",
+      "tree": "2a69839de2650fd39212ee2fea4e7b0624f4d739",
+      "licenseExpression": "MIT",
+      "category": "sessions",
+      "packageName": "dsh-session-mover",
+      "packageVersion": "0.1.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/baisama-cloud/dsh-session-mover/releases/download/v0.1.0/dsh-session-mover-0.1.0.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 3,
+        "summary": "Session relocation workflow with an explicit archive-after-clone model."
+      }
+    },
+    {
+      "rank": 21,
+      "candidateKey": "wssfk12138/dsh-damage-pulse",
+      "repository": "https://github.com/wssfk12138/dsh-damage-pulse.git",
+      "sourceSubdir": ".",
+      "commit": "3b311a66fa4c8192d77911dca46ace6857740213",
+      "tree": "fed9637d90b8b34593cfdff4cd33c56b459c064f",
+      "licenseExpression": "MIT",
+      "category": "usage",
+      "packageName": "dsh-damage-pulse",
+      "packageVersion": "4.0.3",
+      "distributionClass": "hosted-adaptation-required",
+      "upstreamInstall": {
+        "mode": "hosted-adaptation-required",
+        "direct": false,
+        "exactCoordinate": "github-commit:3b311a66fa4c8192d77911dca46ace6857740213"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "removed-package-imports-require-adaptation",
+      "qualitySignals": {
+        "starsAtReview": 145,
+        "summary": "Strong adoption and clear usage visualization, but alpha.2 needs a hosted rewrite."
+      }
+    },
+    {
+      "rank": 22,
+      "candidateKey": "chenzheshushi-commits/dsh-evolve",
+      "repository": "https://github.com/chenzheshushi-commits/dsh-evolve.git",
+      "sourceSubdir": ".",
+      "commit": "4becf9040e64d3b51d09ff5e52dd96a830900a05",
+      "tree": "c08dd37af8432b00f9284af73ba4c6c771342843",
+      "licenseExpression": "MIT",
+      "category": "memory",
+      "packageName": "dsh-evolve",
+      "packageVersion": "0.5.0",
+      "distributionClass": "hosted-adaptation-required",
+      "upstreamInstall": {
+        "mode": "hosted-adaptation-required",
+        "direct": false,
+        "exactCoordinate": "github-commit:4becf9040e64d3b51d09ff5e52dd96a830900a05"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "removed-package-imports-require-adaptation",
+      "qualitySignals": {
+        "starsAtReview": 6,
+        "summary": "Detailed memory governance model, blocked on a bounded client-surface migration."
+      }
+    },
+    {
+      "rank": 23,
+      "candidateKey": "Hanmiao33/dsh-bubble-explain",
+      "repository": "https://github.com/Hanmiao33/dsh-bubble-explain.git",
+      "sourceSubdir": ".",
+      "commit": "117e5da071bca9355a6f25f878810256573c2893",
+      "tree": "eefa3bd00dea67d905f6f7e86c52abf4bdb10d72",
+      "licenseExpression": "BSD-3-Clause",
+      "category": "web-ui",
+      "packageName": "dsh-bubble-explain",
+      "packageVersion": "0.0.2",
+      "distributionClass": "hosted-adaptation-required",
+      "upstreamInstall": {
+        "mode": "hosted-adaptation-required",
+        "direct": false,
+        "exactCoordinate": "github-commit:117e5da071bca9355a6f25f878810256573c2893"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "removed-package-imports-require-adaptation",
+      "qualitySignals": {
+        "starsAtReview": 6,
+        "summary": "High-value inline explanation UI with a contained alpha.2 migration boundary."
+      }
+    },
+    {
+      "rank": 24,
+      "candidateKey": "MengYuil/dsh-ponytail",
+      "repository": "https://github.com/MengYuil/dsh-ponytail.git",
+      "sourceSubdir": ".",
+      "commit": "4bf5b3938e32c8bbd7a6f6f1a926a12317f0c34a",
+      "tree": "3e8e31df2030004fc52a8d2c24e9e0dd71b31ebd",
+      "licenseExpression": "MIT",
+      "category": "identity",
+      "packageName": "@mengyuly/dsh-ponytail",
+      "packageVersion": "0.3.2",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "npm-exact",
+        "direct": true,
+        "exactCoordinate": "npm:@mengyuly/dsh-ponytail@0.3.2"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 7,
+        "summary": "Maintained persona and review skill pack with a precise npm artifact."
+      }
+    },
+    {
+      "rank": 25,
+      "candidateKey": "3361805598-gif/dsh-md-annotator",
+      "repository": "https://github.com/3361805598-gif/dsh-md-annotator.git",
+      "sourceSubdir": ".",
+      "commit": "1b7bbf96b7d2df262ad8159b94dc5669baffa73b",
+      "tree": "699f0f9e6fdeb6d36c7dec697f41994a1720f545",
+      "licenseExpression": "MIT",
+      "category": "documentation",
+      "packageName": "dsh-md-annotator",
+      "packageVersion": "0.6.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/3361805598-gif/dsh-md-annotator/releases/download/v0.6.0/dsh-md-annotator-0.6.0.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 4,
+        "summary": "Structured Markdown review surface that composes with retained sidebar support."
+      }
+    },
+    {
+      "rank": 26,
+      "candidateKey": "1052326311/dsh-plan-lattice",
+      "repository": "https://github.com/1052326311/dsh-plan-lattice.git",
+      "sourceSubdir": ".",
+      "commit": "ea4d4f7d726681466e86d11f93e4cc38a6c0d3f3",
+      "tree": "a0542580992f1686fa9754a0dde4f752e1b4c7ea",
+      "licenseExpression": "MIT",
+      "category": "workflow",
+      "packageName": "dsh-plan-lattice",
+      "packageVersion": "0.4.0-rc.8",
+      "distributionClass": "hosted-adaptation-required",
+      "upstreamInstall": {
+        "mode": "hosted-adaptation-required",
+        "direct": false,
+        "exactCoordinate": "github-commit:ea4d4f7d726681466e86d11f93e4cc38a6c0d3f3"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "artifact-gap-requires-adaptation",
+      "qualitySignals": {
+        "starsAtReview": 3,
+        "summary": "Strong long-task evidence gates, but the current source lacks a matching artifact."
+      }
+    },
+    {
+      "rank": 27,
+      "candidateKey": "SuCriss/dsh-leekbox",
+      "repository": "https://github.com/SuCriss/dsh-leekbox.git",
+      "sourceSubdir": ".",
+      "commit": "56502e5dc224384854d99f161c2142bba2cef399",
+      "tree": "37e88fadb64c89a189efd40cff788dfea2297909",
+      "licenseExpression": "MIT",
+      "category": "market-data",
+      "packageName": "dsh-leekbox",
+      "packageVersion": "0.5.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "npm-exact",
+        "direct": true,
+        "exactCoordinate": "npm:dsh-leekbox@0.5.0"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 3,
+        "summary": "Feature-rich market dashboard with an exact npm artifact."
+      }
+    },
+    {
+      "rank": 28,
+      "candidateKey": "Jstn-1g/dsh-live-voice",
+      "repository": "https://github.com/Jstn-1g/dsh-live-voice.git",
+      "sourceSubdir": ".",
+      "commit": "3b135d56e8449605b1ccd0986f06525111359efa",
+      "tree": "230070afd2ee0bbdcc9a4bba3b6a8115aad72fa2",
+      "licenseExpression": "MIT",
+      "category": "voice",
+      "packageName": "dsh-live-voice",
+      "packageVersion": "0.3.0-preview.5",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/Jstn-1g/dsh-live-voice/releases/download/v0.3.0-preview.5/dsh-live-voice-0.3.0-preview.5.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 1,
+        "summary": "Consent-bound voice preview with explicit session isolation and no auto-submit."
+      }
+    },
+    {
+      "rank": 29,
+      "candidateKey": "baisama-cloud/dsh-omni-bridge",
+      "repository": "https://github.com/baisama-cloud/dsh-omni-bridge.git",
+      "sourceSubdir": ".",
+      "commit": "cdb51787173ba9b46e0e8ee4ebfc38b9ae0f2dcd",
+      "tree": "dc7e84210483ef7b7cedb1418647f3aecf3ec792",
+      "licenseExpression": "MIT",
+      "category": "notifications",
+      "packageName": "dsh-omni-bridge",
+      "packageVersion": "0.2.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/baisama-cloud/dsh-omni-bridge/releases/download/v0.2.0/dsh-omni-bridge-0.2.0.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 3,
+        "summary": "Multi-channel messaging bridge with per-channel sessions and reply deduplication."
+      }
+    },
+    {
+      "rank": 30,
+      "candidateKey": "lengquan88/dsh-dual-auto",
+      "repository": "https://github.com/lengquan88/dsh-dual-auto.git",
+      "sourceSubdir": ".",
+      "commit": "79585271cc01621ec73d9b6c6d82e832c4b8b462",
+      "tree": "08fea60c16d5edee49f8a2b9cf701161b8aff143",
+      "licenseExpression": "MIT",
+      "category": "model-routing",
+      "packageName": "@lengquan88/dsh-dual-auto",
+      "packageVersion": "0.1.2",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "npm-exact",
+        "direct": true,
+        "exactCoordinate": "npm:@lengquan88/dsh-dual-auto@0.1.2"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 2,
+        "summary": "Dual-model escalation with persisted error-fingerprint learning."
+      }
+    },
+    {
+      "rank": 31,
+      "candidateKey": "JasonQQ/dsh-btw-plugin",
+      "repository": "https://github.com/JasonQQ/dsh-btw-plugin.git",
+      "sourceSubdir": ".",
+      "commit": "600e040647a7cdc7e9068d0fe2339be91b85ee3e",
+      "tree": "a864d18e28d03296ba96a643916eb707dba0ffdd",
+      "licenseExpression": "MIT",
+      "category": "sessions",
+      "packageName": "dsh-btw-plugin",
+      "packageVersion": "0.1.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/JasonQQ/dsh-btw-plugin/releases/download/v0.1.0/jasonqq-dsh-btw-plugin-0.1.0.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 3,
+        "summary": "Side-question isolation through a conversation-seeded subagent."
+      }
+    },
+    {
+      "rank": 32,
+      "candidateKey": "lsh2002/dsh-custom-fonts",
+      "repository": "https://github.com/lsh2002/dsh-custom-fonts.git",
+      "sourceSubdir": ".",
+      "commit": "648efa35ef90ebd1375e545598c4a2da86f22bed",
+      "tree": "28766aed3c6e065ee47695f11d0af86c5442a891",
+      "licenseExpression": "MIT",
+      "category": "web-ui",
+      "packageName": "dsh-custom-fonts",
+      "packageVersion": "1.1.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/lsh2002/dsh-custom-fonts/releases/download/v1.1.0/dsh-custom-fonts-1.1.0.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 1,
+        "summary": "Accessible font and size customization with live preview and reset."
+      }
+    },
+    {
+      "rank": 33,
+      "candidateKey": "Harzva/dsh-agent-project-sync",
+      "repository": "https://github.com/Harzva/dsh-agent-project-sync.git",
+      "sourceSubdir": ".",
+      "commit": "5ff9b30f5a3cc4d798af7288920c539ac2d84515",
+      "tree": "1d9083358f1702802103032b0605d6f1ce0e95b5",
+      "licenseExpression": "MIT",
+      "category": "developer-tools",
+      "packageName": "dsh-agent-project-sync",
+      "packageVersion": "0.1.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/Harzva/dsh-agent-project-sync/releases/download/v0.1.0/dsh-agent-project-sync-0.1.0.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 2,
+        "summary": "Practical discovery of Codex and Claude project directories as workspaces."
+      }
+    },
+    {
+      "rank": 34,
+      "candidateKey": "nickkkkkk123123/dsh-resume-on-restart",
+      "repository": "https://github.com/nickkkkkk123123/dsh-resume-on-restart.git",
+      "sourceSubdir": ".",
+      "commit": "63281f8bf23dbcc48663fd7bea2c09e3796598b9",
+      "tree": "854f59609ff72007e204bb0196521d10ff15485f",
+      "licenseExpression": "MIT",
+      "category": "sessions",
+      "packageName": "dsh-resume-on-restart",
+      "packageVersion": "0.1.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/nickkkkkk123123/dsh-resume-on-restart/releases/download/v0.1.0/dsh-resume-on-restart-0.1.0.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 0,
+        "summary": "Narrow restart recovery behavior using plain Cordis context."
+      }
+    },
+    {
+      "rank": 35,
+      "candidateKey": "zhubaohi/dsh-qwen38-compaction-fix",
+      "repository": "https://github.com/zhubaohi/dsh-qwen38-compaction-fix.git",
+      "sourceSubdir": ".",
+      "commit": "8ee6e7ba85d7db02fe2308c2ec0c4a90aac089b9",
+      "tree": "ac6f6e2a0b65587fee246f71f33c1b7bf67e6465",
+      "licenseExpression": "MIT",
+      "category": "model-routing",
+      "packageName": "dsh-qwen38-ninfer-compaction-fix",
+      "packageVersion": "1.1.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "npm-exact",
+        "direct": true,
+        "exactCoordinate": "npm:dsh-qwen38-ninfer-compaction-fix@1.1.0"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 1,
+        "summary": "Provider-specific compaction budget fix with a precise scope."
+      }
+    },
+    {
+      "rank": 36,
+      "candidateKey": "hatsuyuki0103/oh-my-deepseek-harness",
+      "repository": "https://github.com/hatsuyuki0103/oh-my-deepseek-harness.git",
+      "sourceSubdir": ".",
+      "commit": "30b6858c2f198c2793cd1a80ebfc21f9616645bc",
+      "tree": "235916c685fa8d83dff2067d99c6f72dbafb22c9",
+      "licenseExpression": "MIT",
+      "category": "skills",
+      "packageName": "oh-my-deepseek-harness",
+      "packageVersion": "1.2.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/hatsuyuki0103/oh-my-deepseek-harness/releases/download/v1.2.0/oh-my-deepseek-harness.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 2,
+        "summary": "Broad native workflow skill set with a versioned prebuilt bundle."
+      }
+    },
+    {
+      "rank": 37,
+      "candidateKey": "dff652/deepseek-harness-community-plugins#packages/dsh-agent-mail",
+      "repository": "https://github.com/dff652/deepseek-harness-community-plugins.git",
+      "sourceSubdir": "packages/dsh-agent-mail",
+      "commit": "a846540ba57d1ca8c67eedc7b8b15e6202a25b27",
+      "tree": "1790416b16a25460b313a8078c377f90b5f8e80f",
+      "licenseExpression": "MIT",
+      "category": "developer-tools",
+      "packageName": "dsh-agent-mail",
+      "packageVersion": "0.1.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/dff652/deepseek-harness-community-plugins/releases/download/dsh-agent-mail-v0.1.0/dff652-dsh-agent-mail-0.1.0.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 2,
+        "summary": "Reviewed Agent Mail MCP bridge with non-human approval execution denied."
+      }
+    },
+    {
+      "rank": 38,
+      "candidateKey": "dff652/deepseek-harness-community-plugins#packages/dsh-ai-asset-hub",
+      "repository": "https://github.com/dff652/deepseek-harness-community-plugins.git",
+      "sourceSubdir": "packages/dsh-ai-asset-hub",
+      "commit": "a846540ba57d1ca8c67eedc7b8b15e6202a25b27",
+      "tree": "1790416b16a25460b313a8078c377f90b5f8e80f",
+      "licenseExpression": "MIT",
+      "category": "developer-tools",
+      "packageName": "dsh-ai-asset-hub",
+      "packageVersion": "0.1.1",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/dff652/deepseek-harness-community-plugins/releases/download/dsh-ai-asset-hub-v0.1.1/dff652-dsh-ai-asset-hub-0.1.1.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 2,
+        "summary": "Read-only AI asset MCP bridge with eight bounded tools."
+      }
+    },
+    {
+      "rank": 39,
+      "candidateKey": "initial-d/dsh-plugin-mlquant-benchmark",
+      "repository": "https://github.com/initial-d/dsh-plugin-mlquant-benchmark.git",
+      "sourceSubdir": ".",
+      "commit": "3468ab731c561c1fad8344e4981a0d3b3addff1e",
+      "tree": "336d52230fa67cb9a938ab83e19ce977af8b9b4a",
+      "licenseExpression": "MIT",
+      "category": "developer-tools",
+      "packageName": "dsh-plugin-mlquant-benchmark",
+      "packageVersion": "0.1.0",
+      "distributionClass": "direct-upstream-exact",
+      "upstreamInstall": {
+        "mode": "github-release-exact",
+        "direct": true,
+        "exactCoordinate": "https://github.com/initial-d/dsh-plugin-mlquant-benchmark/releases/download/v0.1.0/dsh-plugin-mlquant-benchmark-0.1.0.tgz"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "no-removed-package-imports-found",
+      "qualitySignals": {
+        "starsAtReview": 3,
+        "summary": "Deterministic benchmark validation with explicit local prerequisites."
+      }
+    },
+    {
+      "rank": 40,
+      "candidateKey": "JoFe2/kaleidosphere-dsh-plugin",
+      "repository": "https://github.com/JoFe2/kaleidosphere-dsh-plugin.git",
+      "sourceSubdir": ".",
+      "commit": "f2d94d7a87236adf99409b4b4018cc29696a7ba5",
+      "tree": "a23cefc8104699fb3de264ccd35890ad5824e983",
+      "licenseExpression": "Apache-2.0",
+      "category": "developer-tools",
+      "packageName": "kaleidosphere-dsh-plugin",
+      "packageVersion": "0.1.0-preview.5",
+      "distributionClass": "hosted-adaptation-required",
+      "upstreamInstall": {
+        "mode": "hosted-adaptation-required",
+        "direct": false,
+        "exactCoordinate": "github-commit:f2d94d7a87236adf99409b4b4018cc29696a7ba5"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "artifact-gap-requires-adaptation",
+      "qualitySignals": {
+        "starsAtReview": 2,
+        "summary": "Read-only database analysis tools, but the published artifact trails source."
+      }
+    },
+    {
+      "rank": 41,
+      "candidateKey": "Harzva/dsh-cli-store",
+      "repository": "https://github.com/Harzva/dsh-cli-store.git",
+      "sourceSubdir": ".",
+      "commit": "9d9994817b97f22bfbda927a2f408ebdfea8ce61",
+      "tree": "d8183bccf81c71f6f39d898c3856b6da00f690f0",
+      "licenseExpression": "MIT",
+      "category": "market-data",
+      "packageName": "dsh-cli-store",
+      "packageVersion": "0.3.1",
+      "distributionClass": "hosted-adaptation-required",
+      "upstreamInstall": {
+        "mode": "hosted-adaptation-required",
+        "direct": false,
+        "exactCoordinate": "github-commit:9d9994817b97f22bfbda927a2f408ebdfea8ce61"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "artifact-gap-requires-adaptation",
+      "qualitySignals": {
+        "starsAtReview": 2,
+        "summary": "Guarded CLI catalog, but source 0.3.1 lacks a matching release artifact."
+      }
+    },
+    {
+      "rank": 42,
+      "candidateKey": "geguanming/dsh-office-plugin",
+      "repository": "https://github.com/geguanming/dsh-office-plugin.git",
+      "sourceSubdir": ".",
+      "commit": "befffd5afbdeba9bca29f35f7b3e4fbad4a6d470",
+      "tree": "6a8f8ebbb11b195a0373591660da09ef849702d7",
+      "licenseExpression": "MIT",
+      "category": "web-ui",
+      "packageName": "dsh-office-plugin",
+      "packageVersion": "0.2.0",
+      "distributionClass": "hosted-adaptation-required",
+      "upstreamInstall": {
+        "mode": "hosted-adaptation-required",
+        "direct": false,
+        "exactCoordinate": "github-commit:befffd5afbdeba9bca29f35f7b3e4fbad4a6d470"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "removed-package-imports-require-adaptation",
+      "qualitySignals": {
+        "starsAtReview": 4,
+        "summary": "Distinctive multi-agent activity UI, pending client-runtime migration."
+      }
+    },
+    {
+      "rank": 43,
+      "candidateKey": "guchang/draw2code",
+      "repository": "https://github.com/guchang/draw2code.git",
+      "sourceSubdir": ".",
+      "commit": "0d7e33e2f3dd5aa38bb1a405f75452b5f054d8ae",
+      "tree": "a8a9725a8df8f308226e9ce96708b321c693529c",
+      "licenseExpression": "Apache-2.0",
+      "category": "web-ui",
+      "packageName": "draw2code",
+      "packageVersion": "0.5.0",
+      "distributionClass": "hosted-adaptation-required",
+      "upstreamInstall": {
+        "mode": "hosted-adaptation-required",
+        "direct": false,
+        "exactCoordinate": "github-commit:0d7e33e2f3dd5aa38bb1a405f75452b5f054d8ae"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "removed-package-imports-require-adaptation",
+      "qualitySignals": {
+        "starsAtReview": 3,
+        "summary": "Collaborative prototype workflow, blocked on client migration and artifact refresh."
+      }
+    },
+    {
+      "rank": 44,
+      "candidateKey": "qys0012/dsh-hotspots",
+      "repository": "https://github.com/qys0012/dsh-hotspots.git",
+      "sourceSubdir": ".",
+      "commit": "55378b2360e13878e2a5428e87044a5aadffc5da",
+      "tree": "4a49d036ffbff8e1955661a28f89a806e5216335",
+      "licenseExpression": "MIT",
+      "category": "web-ui",
+      "packageName": "dsh-hotspots",
+      "packageVersion": "1.1.0",
+      "distributionClass": "hosted-adaptation-required",
+      "upstreamInstall": {
+        "mode": "hosted-adaptation-required",
+        "direct": false,
+        "exactCoordinate": "github-commit:55378b2360e13878e2a5428e87044a5aadffc5da"
+      },
+      "staticReviewStatus": "static-reviewed",
+      "runtimeStatus": "pending-runtime",
+      "alpha2SurfaceAssessment": "removed-package-imports-require-adaptation",
+      "qualitySignals": {
+        "starsAtReview": 2,
+        "summary": "Useful news panel with a precise npm version, pending client-surface adaptation."
+      }
+    }
+  ]
+}

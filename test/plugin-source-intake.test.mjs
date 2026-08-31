@@ -129,7 +129,7 @@ test('source intake rejects a repository root that is not a DSH bundle package',
   assert.match(receipt.review.reasons[0], /versioned DSH bundle package/);
 });
 
-test('source intake rejects packages that inject a client package removed from alpha.1', async (t) => {
+test('source intake rejects packages that inject a client package removed from alpha.2', async (t) => {
   const fixture = await sourceFixture(t, {
     name: 'legacy-client-plugin',
     version: '1.0.0',
@@ -148,7 +148,7 @@ test('source intake rejects packages that inject a client package removed from a
   });
   assert.equal(receipt.status, 'source-intake-rejected');
   assert.equal(receipt.review.replacementRequired, true);
-  assert.match(receipt.review.reasons[0], /absent from the exact alpha\.1 source baseline/);
+  assert.match(receipt.review.reasons[0], /absent from the exact alpha\.2 source baseline/);
   assert.match(receipt.review.reasons[0], /dsh-client-runtime/);
 });
 

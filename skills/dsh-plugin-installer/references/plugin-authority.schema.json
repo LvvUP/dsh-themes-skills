@@ -1,16 +1,17 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dsh-themes.com/schemas/dsh-plugin-authority-v2.json",
+  "$id": "https://dsh-themes.com/schemas/dsh-plugin-authority-v3.json",
   "title": "DSH plugin installation authority",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "capturedAt", "purpose", "harness", "supportedDistributionKinds", "publication", "top10ReleaseSet", "items"],
+  "required": ["schemaVersion", "capturedAt", "purpose", "harness", "supportedDistributionKinds", "migrationReview", "publication", "top10ReleaseSet", "items"],
   "properties": {
-    "schemaVersion": { "const": 2 },
+    "schemaVersion": { "const": 3 },
     "capturedAt": { "type": "string", "format": "date" },
     "purpose": { "const": "dsh-plugin-install-authority" },
     "harness": { "$ref": "#/$defs/harness" },
     "supportedDistributionKinds": { "const": ["hosted-plugin-verified", "upstream-plugin-verified"] },
+    "migrationReview": { "$ref": "#/$defs/migrationReview" },
     "publication": { "$ref": "#/$defs/publication" },
     "top10ReleaseSet": {
       "type": "object",
@@ -27,21 +28,42 @@
     "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
     "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
     "catalogId": { "type": "integer", "minimum": 3000, "maximum": 3999 },
-    "packageName": { "type": "string", "pattern": "^(?:@[a-z0-9._-]+/)?[a-z0-9._-]+$" },
+    "packageName": { "type": "string", "pattern": "^(?:@[a-z0-9][a-z0-9._-]*/)?[a-z0-9][a-z0-9._-]*$" },
     "semver": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$" },
     "harness": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["tag", "commit", "tree", "lockfileSha256", "sourceBuildAuthoritySha256", "runtimeStatus", "runtimeReceiptSetSha256", "installable"],
+      "required": ["tag", "commit", "tree", "lockfileSha256", "officialNpmPackage", "officialNpmVersion", "officialNpmTarballSha256", "harnessReleaseAuthoritySha256", "runtimeStatus", "runtimeReceiptSetSha256", "installable"],
       "properties": {
-        "tag": { "const": "dsh-v0.1.2-alpha.1" },
-        "commit": { "const": "cd5ef8148158c3a752a658978873241fdf8e2bbc" },
-        "tree": { "const": "a712eec535b48badc4fefb4df5176a7002e4280b" },
-        "lockfileSha256": { "const": "506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1" },
-        "sourceBuildAuthoritySha256": { "$ref": "#/$defs/sha256" },
-        "runtimeStatus": { "enum": ["source-build-evidence-pending", "runtime-receipt-verified"] },
+        "tag": { "const": "dsh-v0.1.2-alpha.2" },
+        "commit": { "const": "0a53fb55bea101816fa226bb964ae2bed71c343b" },
+        "tree": { "const": "64ccbfa8e0caa4711cd4a75717ef9e022657961b" },
+        "lockfileSha256": { "const": "6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0" },
+        "officialNpmPackage": { "const": "@deepseek-ai/dsh" },
+        "officialNpmVersion": { "const": "0.1.2-alpha.2" },
+        "officialNpmTarballSha256": { "const": "5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47" },
+        "harnessReleaseAuthoritySha256": { "$ref": "#/$defs/sha256" },
+        "runtimeStatus": { "enum": ["official-npm-runtime-evidence-pending", "runtime-receipt-verified"] },
         "runtimeReceiptSetSha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
         "installable": { "type": "boolean" }
+      }
+    },
+    "migrationReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "schemaPath", "schemaSha256", "sha256", "candidateIntakePath", "candidateIntakeSha256", "status", "retainedCurrentCatalogCount", "retiredCatalogCount", "replacementCandidateCount", "replacementIdsAllocated"],
+      "properties": {
+        "path": { "const": "alpha2-plugin-migration-map.json" },
+        "schemaPath": { "const": "alpha2-plugin-migration-map.schema.json" },
+        "schemaSha256": { "$ref": "#/$defs/sha256" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "candidateIntakePath": { "const": "plugin-candidate-intake.json" },
+        "candidateIntakeSha256": { "$ref": "#/$defs/sha256" },
+        "status": { "const": "static-reviewed-pending-runtime" },
+        "retainedCurrentCatalogCount": { "const": 52 },
+        "retiredCatalogCount": { "const": 28 },
+        "replacementCandidateCount": { "const": 44 },
+        "replacementIdsAllocated": { "const": false }
       }
     },
     "publication": {
@@ -109,7 +131,7 @@
     "hostedDistribution": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["kind", "assetName", "artifactUrl", "artifactBytes", "artifactSha256", "artifactIntegrity", "manifestSha256", "licenseFile", "sbom"],
+      "required": ["kind", "assetName", "artifactUrl", "artifactBytes", "artifactSha256", "artifactIntegrity", "manifestSha256", "licenseFile", "noticeFile", "sbom"],
       "properties": {
         "kind": { "const": "hosted-plugin-verified" },
         "assetName": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,159}\\.tgz$" },
@@ -119,6 +141,15 @@
         "artifactIntegrity": { "type": "string", "pattern": "^sha256-[A-Za-z0-9+/]{43}=$" },
         "manifestSha256": { "$ref": "#/$defs/sha256" },
         "licenseFile": { "$ref": "#/$defs/evidenceFile" },
+        "noticeFile": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256"],
+          "properties": {
+            "path": { "const": "NOTICE.md" },
+            "sha256": { "$ref": "#/$defs/sha256" }
+          }
+        },
         "sbom": {
           "type": "object",
           "additionalProperties": false,
@@ -149,7 +180,7 @@
         "registry": { "const": "https://registry.npmjs.org" },
         "packageName": { "$ref": "#/$defs/packageName" },
         "version": { "$ref": "#/$defs/semver" },
-        "installSpec": { "type": "string", "pattern": "^(?:@[a-z0-9._-]+/)?[a-z0-9._-]+@[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$" },
+        "installSpec": { "type": "string", "pattern": "^(?:@[a-z0-9][a-z0-9._-]*/)?[a-z0-9][a-z0-9._-]*@[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$" },
         "metadataSha256": { "$ref": "#/$defs/sha256" },
         "tarballUrl": { "type": "string", "pattern": "^https://registry\\.npmjs\\.org/[^?#]+\\.tgz$" },
         "tarballBytes": { "type": "integer", "minimum": 1, "maximum": 268435456 },
@@ -185,9 +216,33 @@
         "subdir": { "const": "." },
         "installSpec": { "type": "string", "pattern": "^git\\+https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\\.git#[a-f0-9]{40}$" },
         "manifestSha256": { "$ref": "#/$defs/sha256" },
-        "lockfilePath": { "enum": ["pnpm-lock.yaml", "package-lock.json", "yarn.lock", "npm-shrinkwrap.json"] },
-        "lockfileSha256": { "$ref": "#/$defs/sha256" }
-      }
+        "lockfilePath": {
+          "oneOf": [
+            { "enum": ["pnpm-lock.yaml", "package-lock.json", "yarn.lock", "npm-shrinkwrap.json"] },
+            { "type": "null" }
+          ]
+        },
+        "lockfileSha256": {
+          "oneOf": [
+            { "$ref": "#/$defs/sha256" },
+            { "type": "null" }
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "lockfilePath": { "type": "string" },
+            "lockfileSha256": { "$ref": "#/$defs/sha256" }
+          }
+        },
+        {
+          "properties": {
+            "lockfilePath": { "type": "null" },
+            "lockfileSha256": { "type": "null" }
+          }
+        }
+      ]
     },
     "upstreamDistribution": {
       "type": "object",

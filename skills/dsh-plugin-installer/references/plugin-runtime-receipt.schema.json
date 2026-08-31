@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dsh-themes.com/schemas/dsh-plugin-alpha1-runtime-receipt-v1.json",
-  "title": "One isolated DSH Plugin alpha.1 runtime task",
+  "$id": "https://dsh-themes.com/schemas/dsh-plugin-alpha2-runtime-receipt-v1.json",
+  "title": "One isolated DSH Plugin alpha.2 runtime task",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -63,10 +63,10 @@
       "additionalProperties": false,
       "required": ["tag", "commit", "tree", "lockfileSha256"],
       "properties": {
-        "tag": { "const": "dsh-v0.1.2-alpha.1" },
-        "commit": { "const": "cd5ef8148158c3a752a658978873241fdf8e2bbc" },
-        "tree": { "const": "a712eec535b48badc4fefb4df5176a7002e4280b" },
-        "lockfileSha256": { "const": "506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1" }
+        "tag": { "const": "dsh-v0.1.2-alpha.2" },
+        "commit": { "const": "0a53fb55bea101816fa226bb964ae2bed71c343b" },
+        "tree": { "const": "64ccbfa8e0caa4711cd4a75717ef9e022657961b" },
+        "lockfileSha256": { "const": "6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0" }
       }
     },
     "task": {
@@ -98,7 +98,7 @@
       "required": ["repository", "workflowPath", "workflowSha256", "event", "ref", "runId", "runAttempt", "headSha", "jobKey", "matrixIdentity"],
       "properties": {
         "repository": { "const": "LvvUP/dsh-themes-skills" },
-        "workflowPath": { "const": ".github/workflows/alpha1-plugin-runtime-certification.yml" },
+        "workflowPath": { "const": ".github/workflows/alpha2-plugin-runtime-certification.yml" },
         "workflowSha256": { "$ref": "#/$defs/sha256" },
         "event": { "const": "workflow_dispatch" },
         "ref": { "const": "refs/heads/main" },

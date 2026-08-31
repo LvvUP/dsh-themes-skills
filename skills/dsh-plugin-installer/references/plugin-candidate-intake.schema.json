@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dsh-themes.com/schemas/dsh-plugin-alpha1-candidate-intake-v2.json",
-  "title": "DSH alpha.1 Plugin candidate intake",
+  "$id": "https://dsh-themes.com/schemas/dsh-plugin-alpha2-candidate-intake-v2.json",
+  "title": "DSH alpha.2 Plugin candidate intake",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -16,14 +16,14 @@
   "properties": {
     "schemaVersion": { "const": 2 },
     "capturedAt": { "type": "string", "format": "date" },
-    "purpose": { "const": "dsh-plugin-alpha1-candidate-intake" },
+    "purpose": { "const": "dsh-plugin-alpha2-candidate-intake" },
     "baseline": {
       "type": "object",
       "additionalProperties": false,
       "required": ["tag", "commit"],
       "properties": {
-        "tag": { "const": "dsh-v0.1.2-alpha.1" },
-        "commit": { "const": "cd5ef8148158c3a752a658978873241fdf8e2bbc" }
+        "tag": { "const": "dsh-v0.1.2-alpha.2" },
+        "commit": { "const": "0a53fb55bea101816fa226bb964ae2bed71c343b" }
       }
     },
     "publication": {

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "purpose": "alpha2-community-skin-item-recertification",
+  "baseline": {
+    "baselineId": "deepseek-harness/dsh-v0.1.2-alpha.2@0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "dshPackageName": "@deepseek-ai/dsh",
+    "dshPackageVersion": "0.1.2-alpha.2",
+    "officialTag": "dsh-v0.1.2-alpha.2",
+    "sourceCommit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "sourceTree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b",
+    "officialNpmTarballSha256": "5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47",
+    "officialNpmIntegrity": "sha512-4TvTC5kRKlgtSU2UTBv+cID9a2Z+6+m6mpvjXWJfVzuTkflCff6s4MsQpFJTCmwFh/k7zNWe7qFXcLYMV/5VvA==",
+    "harnessAuthorityPath": "../../dsh-harness-installer/references/alpha2-release-authority.json",
+    "harnessAuthoritySha256": "f8be99bda583c2b8b1458746eaf07fe64c5a846348cbe0fffc1d4ff699211e11",
+    "artifactRelationship": "official-npm-runtime-and-exact-source-cross-build-are-independent"
+  },
+  "matrix": {
+    "platforms": [
+      { "os": "darwin", "arch": "arm64" },
+      { "os": "linux", "arch": "x64" },
+      { "os": "win32", "arch": "x64" }
+    ],
+    "nodeVersions": ["22.19.0", "24.15.0"],
+    "requiredTasksPerItem": 6,
+    "requiredTotalTasks": 66
+  },
+  "gate": {
+    "status": "alpha2-item-runtime-evidence-pending",
+    "requiredItems": 11,
+    "completedItems": 0,
+    "completedTasks": 0,
+    "installable": false,
+    "publicationAllowed": false,
+    "runtimeReceiptSetSha256": null,
+    "rollbackReceiptSetSha256": null,
+    "publicationRule": "All 11 exact items must pass macOS arm64, Linux x64, and Windows x64 on Node 22.19.0 and 24.15.0. Each sanitized task receipt must prove web Profile snapshot, exact install, dump-config, cold restart, functional probe, removal, complete rollback, and restored-state verification before any installation entry can reopen."
+  },
+  "items": [
+    { "catalogId": 2101, "slug": "dsh-deep-whale-maid-atelier", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2201, "slug": "dsh-web-ui-blue-fantasy", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2202, "slug": "dsh-web-ui-dragon-heir", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2203, "slug": "dsh-web-ui-harbor", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2204, "slug": "dsh-web-ui-miku", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2205, "slug": "dsh-web-ui-minecraft", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2206, "slug": "dsh-web-ui-qq98", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2207, "slug": "dsh-web-ui-ths", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2208, "slug": "dsh-web-ui-trading", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2209, "slug": "dsh-web-ui-whale-song", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2210, "slug": "dsh-web-ui-xp", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null }
+  ],
+  "historicalAuthority": {
+    "alpha1Path": "alpha1-recertification.json",
+    "alpha1Sha256": "9ecc86474cba557c445ae21b8e479aa3f1b55cb8b2768faa6ed73952cc7b1552",
+    "alpha1MayAuthorizeAlpha2": false,
+    "rc8CatalogPath": "community-catalog.json",
+    "rc8CatalogSha256": "343000de2be72848db4a7838be90e3c41191f164a5a62d8198d154bfe0aa5d99",
+    "rc8ReceiptPath": "runtime-receipt.rc8.json",
+    "rc8ReceiptSha256": "89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1",
+    "rc8MayAuthorizeAlpha2": false
+  }
+}

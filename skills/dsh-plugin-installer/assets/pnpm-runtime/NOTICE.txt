@@ -1,0 +1,10 @@
+DSH Plugin Installer includes the unmodified pnpm 11.7.0 npm registry tarball
+for deterministic, offline transaction execution.
+
+pnpm is Copyright (c) 2015-2016 Rico Sta. Cruz and other contributors and
+Copyright (c) 2016-2025 Zoltan Kochan and other contributors. It is distributed
+under the MIT License. The complete upstream license is preserved inside the
+official tarball at package/LICENSE.
+
+Upstream project: https://github.com/pnpm/pnpm
+Registry artifact: https://registry.npmjs.org/pnpm/-/pnpm-11.7.0.tgz

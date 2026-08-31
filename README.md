@@ -2,13 +2,14 @@
 
 # DSH-Themes Skills
 
-**Find the right Theme, Full Skin, or Plugin by use case. Copy one `#NNNN` prompt. Install with an exact authority and a rollback path.**
+**Choose a Theme, Full Skin, or Plugin by use case. Copy one public `#NNNN`. Let the Skills resolve exact authority, ask before mutation, and keep a rollback path.**
 
 [English](README.md) · [简体中文](README.zh-CN.md)
 
-[![Version 0.8.0](https://img.shields.io/badge/version-0.8.0-246BCE)](package.json)
-[![alpha.1 source identity pinned](https://img.shields.io/badge/DSH%200.1.2--alpha.1-source%20identity%20pinned-5B67D8)](skills/dsh-harness-installer/references/alpha1-source-authority.json)
-[![alpha.1 runtime matrix pending](https://img.shields.io/badge/alpha.1%20runtime-0%2F6%20pending-C58B20)](skills/dsh-harness-installer/references/alpha1-source-authority.json)
+[![Repository version 0.8.0](https://img.shields.io/badge/repository-0.8.0-246BCE)](package.json)
+[![DSH baseline 0.1.2-alpha.2](https://img.shields.io/badge/DSH-0.1.2--alpha.2-5B67D8)](skills/dsh-harness-installer/references/alpha2-release-authority.json)
+[![Harness promotion 0 of 6](https://img.shields.io/badge/Harness%20promotion-0%2F6-C58B20)](skills/dsh-harness-installer/references/alpha2-release-authority.json)
+[![Plugin authority 0 of 80](https://img.shields.io/badge/Plugin%20authority-0%2F80-C58B20)](skills/dsh-plugin-installer/references/plugin-authority.json)
 [![CI](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-246BCE)](LICENSE)
 
@@ -16,147 +17,169 @@
 
 </div>
 
-DSH Themes is a discovery and installation layer for DeepSeek Harness. The website helps people choose by purpose; this repository provides the Skills that resolve the public ID, inspect the exact authority, explain permissions, snapshot the selected Profile, and roll back a failed change.
+> [!IMPORTANT]
+> This repository's `0.8.0` line is still under certification. It is not presented here as a published, installable Skills release. The official upstream `@deepseek-ai/dsh@0.1.2-alpha.2` npm prerelease exists, but DSH Themes has promoted **0/6** required runtime tasks. Plugin authority remains **0/80**, and Top10 remains closed.
 
-Version 0.8.0 adds two narrowly scoped Skills:
+## What this gives you
 
-- `dsh-harness-installer` prepares a local build from the exact official `dsh-v0.1.2-alpha.1` source. It is not an official binary and does not modify `PATH`.
-- `dsh-plugin-installer` supports a future mixed distribution model: immutable hosted tarballs where redistribution is allowed, and exact upstream versions or commits where it is not.
+DSH Themes separates choosing from installing. The website helps a person compare outcomes; this repository gives an Agent the narrow Skills needed to resolve one public ID, show the exact source and capabilities, obtain consent, snapshot the selected Web Profile, and restore it if acceptance fails.
 
-The new boundaries are implemented, but evidence is not being invented to make the release look complete. The alpha.1 runtime matrix is currently **0/6**, Plugin authority is **0/80**, and the candidate Top 10 is **not installable**. Those lanes remain closed until real receipts are reviewed and pinned.
+- **One user-facing identifier:** copy the four-digit `#NNNN` printed on a catalog card. Names, slugs, package coordinates, URLs, and hashes are never alternate selectors.
+- **One responsible installer:** Finder classifies the record and routes only to the installer that owns that kind.
+- **A useful refusal:** missing, stale, partial, or unpromoted authority stops before Profile mutation and explains which evidence is absent.
+- **A recoverable transaction:** mutating lanes preflight the complete plan, ask once, snapshot first, cold-start and probe, then commit or restore.
 
-## Release status
+## Verifiable proof
 
-| Lane | Evidence in this branch | Install result |
+### Evidence available now
+
+| Claim | Checked-in evidence | Current boundary |
 | --- | --- | --- |
-| Official alpha.1 source identity | Exact tag, commit, tree, lockfile digest, Node range, and `pnpm@11.7.0` are pinned | A consented local source build may be prepared; it must be described as source-built, never as an official binary |
-| Alpha.1 public runtime authority | Six Linux/macOS/Windows × Node 22.19/24.15 receipts are required; **0/6 are promoted** | Public alpha.1 installation authority remains closed |
-| Alpha.1 Plugins | The website has 80 curated records; machine authority has **0 verified items** | No single Plugin or Top 10 batch may install |
-| RC.8 (`0.1.0-rc.8`) item authority | Frozen historical authority contains 45 hosted tuples and a separately governed 11-record community allowlist | Preserved as history; it cannot authorize alpha.1 items, and the 11 community records remain inspect-only pending fresh receipts |
-| RC.2 runtime authority | Frozen six-job runtime baseline remains `verified-runtime-baseline` and its provenance stays available | Historical Harness baseline only; it never authorizes an item |
+| Official alpha.2 npm runtime | Exact `@deepseek-ai/dsh@0.1.2-alpha.2`, registry signature, integrity, tarball SHA-256, and installed CLI SHA-256 are pinned in [`alpha2-release-authority.json`](skills/dsh-harness-installer/references/alpha2-release-authority.json) | The upstream package exists; DSH Themes promotion is **0/6** and `publishedInstallable: false` |
+| Exact alpha.2 source cross-build | Official tag `dsh-v0.1.2-alpha.2`, commit, tree, lockfile, Node tuples, and `pnpm@11.7.0` are pinned separately | Source evidence is not proof that its built bytes equal the npm package |
+| Plugin catalog | The website exposes 80 curated records; [`plugin-authority.json`](skills/dsh-plugin-installer/references/plugin-authority.json) validates structurally | Verified installable items: **0/80**; authority item count: **0** |
+| Top10 | [`top10-release-set.json`](skills/dsh-plugin-installer/references/top10-release-set.json) contains the closed release-set gate | No entries, not frozen, not installable |
+| Historical baselines | RC.8 item authority and the RC.2 six-job runtime baseline remain checked in and immutable | They authorize only their exact historical scopes; neither promotes alpha.2 |
 
-Baseline certification and item certification are separate on purpose. A green Harness test cannot authorize a Theme, Skin, or Plugin whose exact bytes and rollback recipe were not reviewed.
+You can reproduce the two current counters without changing a Profile:
 
-## Real product proof
+```bash
+node skills/dsh-harness-installer/scripts/authority.mjs
+node skills/dsh-plugin-installer/scripts/authority.mjs
+```
 
-These are committed screenshots of the rendered DSH Themes product, not mockups. They prove the product surface shown to users; screenshots are never installation authority.
+The expected result today is a valid authority document with closed publication gates—not an installation success.
 
-![DSH Themes gallery on desktop](docs/readme-assets/gallery-1440-light.png)
+### Real product surface
 
-| Mobile gallery | Curated Plugin directory |
-| --- | --- |
-| ![DSH Themes gallery on mobile](docs/readme-assets/gallery-390-light.png) | ![DSH Themes curated Plugin directory](docs/readme-assets/plugins-1440-light.png) |
+These are committed screenshots of the rendered DSH Themes product, not generated mockups. They prove the catalog surface that users browse. They do **not** prove package identity, runtime behavior, redistribution rights, or installability.
+
+![DSH Themes gallery rendered on desktop](docs/readme-assets/gallery-1440-light.png)
+
+![DSH Themes curated Plugin directory rendered on desktop](docs/readme-assets/plugins-1440-light.png)
+
+<p align="center">
+  <img src="docs/readme-assets/gallery-390-light.png" width="320" alt="DSH Themes gallery rendered on a mobile viewport">
+</p>
+
+That boundary is intentional: the proof board shows the product; the linked JSON authorities and receipts govern mutation.
 
 ## First use
 
-### 1. Install the coordinated Skills
+### 1. Browse by outcome
 
-Use the immutable release tag after `v0.8.0` is published and verified:
+Open [dsh-themes.com](https://dsh-themes.com/explore), compare the visible use cases, and open the card that fits your goal.
 
-```bash
-npx --yes skills@1.5.23 add \
-  https://github.com/LvvUP/dsh-themes-skills/tree/v0.8.0 \
-  --skill dsh-theme-finder \
-  --skill dsh-theme-manager \
-  --skill dsh-community-skin-installer \
-  --skill dsh-harness-installer \
-  --skill dsh-plugin-installer
-```
+### 2. Copy the exact public ID
 
-Never replace the tag with `main`, `latest`, a branch name, or another mutable reference.
+Use only the four-digit value printed on the card or detail page, such as `#3006`. Do not substitute a display name, repository, package, or legacy `DSH-*` label.
 
-### 2. Choose on the website
-
-Open a card or detail page and copy its four-digit public ID. Names, slugs, repository URLs, package names, and screenshots are discovery metadata, not alternate installation selectors.
-
-### 3. Ask with one short prompt
+### 3. Ask for an authority-aware check
 
 ```text
-Please install DSH Themes #2004.
+Please inspect DSH Themes #3006. Install only if its exact current authority is verified; otherwise explain the closed gate and do not change my Profile.
 ```
 
-That is the normal user input. Finder resolves the kind and status. The matching installer proceeds only when it can bind the request to exact, reviewed authority; otherwise it explains the missing evidence and stops without changing the Profile.
+Finder resolves kind and status. A matching installer may continue only after every exact gate passes and the user approves the displayed plan.
 
-### I do not have DeepSeek Harness yet
+### 4. Expect a fail-closed result on current alpha.2 lanes
 
-Ask your Agent to use `dsh-harness-installer` to prepare the pinned alpha.1 source build. The Skill checks prerequisites, asks before cloning and again before dependency installation/build, writes into a versioned user-selected directory, keeps the receipt private, and prints an explicit launch command. It does not install Node, modify `PATH`, or pretend that a nonexistent alpha.1 npm package exists.
+At the current **0/6 Harness** and **0/80 Plugin** state, alpha.2 setup and Plugin requests are inspection/certification workflows, not ordinary installation paths. A correct result is often: identify the item, show the missing evidence, and stop without mutation.
 
-## From public ID to rollback
+### Skills package availability
 
-![Deterministic DSH Themes installer route](docs/readme-assets/id-installer-flow.svg)
+There is intentionally no `v0.8.0` install command in this README yet. Do not install this line from `main`, `latest`, a branch name, or another mutable reference. An end-user command belongs here only after an immutable Skills release and its stated authority have been published and verified.
 
-`#NNNN` starts exact identity resolution; it is not an installation promise. Every mutating installer must preflight its full selection, show one explicit authorization, snapshot the Web Profile, use argument arrays rather than shell-constructed commands, cold-start and probe the result, and restore the whole snapshot when acceptance fails.
+## From `#ID` to the correct installer
+
+![Deterministic routing from a public DSH Themes ID through Finder to the installer responsible for that item kind](docs/assets/readme/id-finder-installer-flow.svg)
+
+| Finder result | Owning Skill | Current behavior |
+| --- | --- | --- |
+| `#1xxx` Theme or hosted `#2xxx` Full Skin | `dsh-theme-manager` | Accepts only its exact item authority; alpha.2 authority is not inferred from history |
+| Community `#2xxx` Skin | `dsh-community-skin-installer` | Inspect-only until the current baseline's item and rollback receipts are promoted |
+| `#3xxx` Plugin | `dsh-plugin-installer` | Inspect/certify only while authority is 0/80 |
+| Harness setup, no catalog ID | `dsh-harness-installer` | Separate official-npm and source-cross-build lanes; ordinary promotion remains 0/6 |
+
+`#NNNN` starts exact identity resolution; it never promises installation. Finder is read-only, and it does not combine Harness bootstrap with item mutation.
+
+## Two alpha.2 Harness evidence lanes
+
+[`dsh-harness-installer`](skills/dsh-harness-installer/SKILL.md) keeps the upstream runtime and source cross-check separate:
+
+| Lane | Exact identity | What it proves—and does not prove |
+| --- | --- | --- |
+| Official npm runtime | `@deepseek-ai/dsh@0.1.2-alpha.2`; tarball SHA-256 `5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47`; CLI SHA-256 `dc23f6c5dd7df8834e3e38bdb9609d77b459834681ae9b7133b417b0c35f3166` | This is the official upstream distributed prerelease runtime. It has a registry signature, but no npm provenance attestation and no `gitHead`. DSH Themes still requires six promoted tasks before ordinary use. |
+| Exact source cross-build | Tag `dsh-v0.1.2-alpha.2`; commit `0a53fb55bea101816fa226bb964ae2bed71c343b`; tree `64ccbfa8e0caa4711cd4a75717ef9e022657961b`; lockfile SHA-256 `6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0` | This verifies a clean, frozen source build with `pnpm@11.7.0`. It is independent evidence, not an official binary and not a claim of byte-for-byte equivalence with npm. |
+
+The six-task gate is Linux x64, macOS arm64, and Windows x64 across Node `22.19.0` and `24.15.0`. The installer never modifies `PATH`, installs Node, or records browser tokens, cookies, authorization headers, or credential-derived digests.
+The same authority preserves the exact upstream [SAFETY.md](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.1.2-alpha.2/SAFETY.md) bytes; that experimental-safety statement remains part of the user-visible boundary.
+
+## Mixed Plugin distribution and Top10
+
+[`dsh-plugin-installer`](skills/dsh-plugin-installer/SKILL.md) recognizes two future item-level authority classes:
+
+- **`hosted-plugin-verified`** — only when redistribution is permitted. A reviewed, immutable tarball is bound to exact source/replacement bytes, manifest digest, license and modification notices, CycloneDX SBOM, and runtime/rollback receipts. Candidate code is not executed during static preparation, and lifecycle scripts are stripped.
+- **`upstream-plugin-verified`** — an exact npm version, versioned GitHub Release asset, or full Git commit when redistribution is not permitted or needed. Mutable aliases, ranges, branches, shortened commits, hidden redirects, and unreviewed `prepare` scripts are rejected.
+
+The [alpha.2 migration map](skills/dsh-plugin-installer/references/alpha2-plugin-migration-map.md) is static review evidence only. Its direct pins, hosted-adaptation paths, retired IDs, and replacement pool do not grant authority.
+
+Top10 is fail-closed. It can become an exact ordered transaction only after all 80 catalog records have item authority, every selected item passes its six-task matrix, the set is deterministically scored and frozen with at least eight use-case categories, and coexistence, conflict, full preflight, and full rollback receipts all validate. One failed member restores the whole batch; there is no partial-success state.
 
 ## Seven focused Skills
 
 | Skill | One responsibility |
 | --- | --- |
-| [`dsh-theme-finder`](skills/dsh-theme-finder/SKILL.md) | Resolve one public `#NNNN`, report its status, and hand off only to the installer for that kind. |
-| [`dsh-theme-manager`](skills/dsh-theme-manager/SKILL.md) | Verify, install, switch, remove, and recover one exact hosted Theme or Full Skin in an authorized item lane. |
-| [`dsh-community-skin-installer`](skills/dsh-community-skin-installer/SKILL.md) | Inspect the 11 allowlisted community Skins and block mutation until fresh alpha.1 item and rollback receipts pass. |
-| [`dsh-harness-installer`](skills/dsh-harness-installer/SKILL.md) | Prepare, build, receipt, and launch the fixed official alpha.1 source without changing `PATH`. |
-| [`dsh-plugin-installer`](skills/dsh-plugin-installer/SKILL.md) | Prepare a future verified hosted/upstream Plugin and execute single-item or fixed-set atomic rollback. |
-| [`dsh-theme-creator`](skills/dsh-theme-creator/SKILL.md) | Create deterministic, data-only manifests and local raster assets within the supported authoring lane. |
+| [`dsh-theme-finder`](skills/dsh-theme-finder/SKILL.md) | Resolve one public `#NNNN`, report evidence and status, and hand off only to the owning installer. |
+| [`dsh-theme-manager`](skills/dsh-theme-manager/SKILL.md) | Validate and transact one exact hosted Theme or Full Skin within its own item authority. |
+| [`dsh-community-skin-installer`](skills/dsh-community-skin-installer/SKILL.md) | Inspect the governed community-Skin lane and block mutation until current receipts pass. |
+| [`dsh-harness-installer`](skills/dsh-harness-installer/SKILL.md) | Verify the official alpha.2 npm runtime and independently cross-build the pinned source without changing `PATH`. |
+| [`dsh-plugin-installer`](skills/dsh-plugin-installer/SKILL.md) | Inspect, prepare, certify, and eventually transact exact hosted/upstream Plugins with atomic rollback. |
+| [`dsh-theme-creator`](skills/dsh-theme-creator/SKILL.md) | Create deterministic, data-only manifests and local raster assets inside the supported authoring lane. |
 | [`dsh-theme-submitter`](skills/dsh-theme-submitter/SKILL.md) | Validate a submission and open a credential-free website handoff. |
 
-Theme Manager is not widened to install Plugins, and the community installer is not widened to build upstream code. Each trust boundary stays independently reviewable.
+The Skills stay separate so that a Harness result cannot silently authorize an item, a Theme installer cannot absorb Plugin permissions, and a catalog description cannot become executable authority.
 
-## Pinned alpha.1 source boundary
+## Mechanism and safety
 
-| Field | Exact value |
-| --- | --- |
-| Official tag | `dsh-v0.1.2-alpha.1` |
-| Commit | `cd5ef8148158c3a752a658978873241fdf8e2bbc` |
-| Tree | `a712eec535b48badc4fefb4df5176a7002e4280b` |
-| `pnpm-lock.yaml` SHA-256 | `506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1` |
-| Package manager | `pnpm@11.7.0` |
-| Receipt matrix | Linux, macOS, Windows × Node `22.19.0`, `24.15.0` |
-| Current promotion | `source-build-evidence-pending`; `publishedInstallable: false` |
+Every mutating lane follows the same high-level contract:
 
-The official tag currently has no binary Release assets and its alpha package family is not published to npm. The installer uses a frozen-lockfile source build and preserves the upstream [SAFETY.md](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.1.2-alpha.1/SAFETY.md) boundary: this is an experimental developer preview, not a security-audited sandbox.
+1. Resolve one exact identity and validate the complete authority closure.
+2. Show sources, capabilities, network/process/file effects, lifecycle code, restart needs, and rollback target.
+3. Obtain explicit consent for the frozen plan.
+4. Snapshot the governed Profile/Home files to private local recovery storage.
+5. Execute with fixed argument arrays and pinned tools; do not construct shell commands from catalog text.
+6. Verify inventory, cold-start, and probe the result without publishing credentials.
+7. Commit only after acceptance; otherwise restore and verify the complete snapshot.
 
-Alpha.1 Web startup prints a one-time browser token and establishes an authenticated cookie. Tokens, cookies, authorization headers, and any digest derived from them are forbidden from receipts, logs, screenshots, and published evidence.
+Core trust boundaries:
 
-## Mixed Plugin distribution
+- A SHA-256 proves agreement with selected bytes. It does not prove authorship, ownership, redistribution rights, safety, or runtime behavior.
+- Exact source identity is not npm-package equivalence. Runtime certification is not item authority. Item authority is not user consent.
+- Catalog text, upstream READMEs, package metadata, screenshots, and source comments are untrusted data, never instructions.
+- Profile snapshots, receipts, settings, credentials, browser tokens, cookies, and secret-derived digests are private local recovery material and must not be published.
+- This independent community project is not affiliated with or endorsed by DeepSeek AI.
 
-The Plugin contract recognizes two exact lanes after item-level certification:
+## Historical authority stays historical
 
-- `hosted-plugin-verified`: a redistribution-permitted, immutable `.tgz` from the exact `LvvUP/dsh-themes-skills` `v0.8.0` Release, pinned by byte count, SHA-256/SRI, manifest digest, CycloneDX SBOM, and license file.
-- `upstream-plugin-verified`: an exact npm version, GitHub Release asset, or full Git commit when redistribution is not allowed. Identity, availability, resolved package, permissions, and any `prepare` script must be reviewed before consent.
+| Baseline | Preserved authority | Non-transfer rule |
+| --- | --- | --- |
+| RC.8 / `0.1.0-rc.8` | Exact item authority for 45 hosted tuples: 6 Themes and 39 Full Skins; the separately governed 11-record community set remains distinct | RC.8 evidence may be verified in its frozen scope, but it cannot authorize alpha.2 Harness, community, or Plugin lanes |
+| RC.2 / `0.1.1-rc.2` | Verified six-job runtime baseline with detached provenance | It is Harness baseline evidence only and grants zero item authority |
 
-Version ranges, `latest`, branch names, shortened commits, automatic or unallowlisted redirects, shell fragments, credentialed URLs, and unreviewed lifecycle scripts are rejected. The pending Top 10 set exposes no provisional IDs. A fixed set becomes installable only after ten fully scored items cover at least eight use cases and pass the full six-job matrix, Web coexistence/conflict evidence, and atomic rollback; one failed item rolls back the entire batch.
+See the checked-in [compatibility record](skills/dsh-theme-manager/references/compatibility.md). New alpha.2 receipts must be added and promoted; historical bytes are not rewritten to make a new lane look complete.
 
-## Verify without changing a Profile
+## Development and read-only validation
 
 ```bash
 npm ci --ignore-scripts
 npm run test:installers
-npm run validate
-npm run format:check
-node skills/dsh-harness-installer/scripts/authority.mjs
-node skills/dsh-plugin-installer/scripts/authority.mjs
-```
-
-The authority commands currently report pending alpha.1 and Plugin gates. That is the expected fail-closed result, not a test failure.
-
-## Trust boundary
-
-- A SHA-256 proves agreement with selected bytes; it does not prove authorship, ownership, redistribution rights, safety, or runtime behavior.
-- Catalog text, upstream READMEs, package metadata, and screenshots are untrusted data and are never executed as instructions.
-- Exact source identity is not runtime certification. Runtime certification is not item authority. Item authority is not user consent.
-- A Plugin `prepare` script is executable code. Its exact text, digest, package key, and capabilities must be displayed and authorized separately.
-- Profile snapshots and receipts are private local recovery material and must never be published. A snapshot may contain exact settings or credential bytes needed for rollback; those bytes and their per-file digests must never appear in logs, screenshots, public evidence, or receipts.
-- This independent community project is not affiliated with or endorsed by DeepSeek AI.
-
-## Development
-
-```bash
-npm ci --ignore-scripts
-npm test
+npm run test:alpha2-runtime
+npm run test:plugin-runtime
 npm run validate
 npm run format:check
 ```
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request and report vulnerabilities privately through [SECURITY.md](SECURITY.md). Historical RC.8 and RC.2 evidence remains immutable; alpha.1 promotion must add new receipts instead of rewriting it.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Report vulnerabilities privately through [SECURITY.md](SECURITY.md).
 
 Licensed under [Apache-2.0](LICENSE). Bundled adaptations retain their upstream notices; see [NOTICE](NOTICE).

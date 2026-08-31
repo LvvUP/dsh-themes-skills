@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "purpose": "dsh-plugin-alpha2-fixed-runtime-probe",
+  "authorityEffect": "contract-only-not-runtime-authority",
+  "candidateExecuted": false,
+  "catalogId": 3010,
+  "baseline": {
+    "tag": "dsh-v0.1.2-alpha.2",
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
+  },
+  "package": {
+    "name": "@dsh-themes/dsh-openpencil",
+    "version": "0.1.0-dsh.alpha2.1",
+    "profile": "web",
+    "cordisEntryId": "dsh-plugin-3010-openpencil"
+  },
+  "capabilities": {
+    "permissions": [
+      "query the official path-only fileReferences index after the user types the explicit [[op: trigger",
+      "replace that trigger with a localized read-only review or reversible change-plan draft only after an explicit design action click"
+    ],
+    "network": [
+      "authenticated in-origin fileReferences Remote only"
+    ],
+    "processes": [],
+    "files": [
+      "read bounded relative .op path metadata only through fileReferences.list; no document content, render output, or file mutation"
+    ],
+    "clientServices": [
+      "slots",
+      "locale",
+      "remote.fileReferences",
+      "conversation input standard props"
+    ],
+    "remoteMethods": [
+      "fileReferences.list"
+    ],
+    "browserPersistence": "none"
+  },
+  "combination": {
+    "additiveSlots": [
+      "conversation.input.overlay:dsh-openpencil-review-picker"
+    ],
+    "exclusiveResources": [],
+    "officialSurfacePreserved": true
+  },
+  "assertions": [
+    {
+      "id": "package.exact-entry",
+      "class": "package-graph",
+      "expected": "The exact hosted package and Cordis entry occur once; every declared DeepSeek peer resolves to 0.1.2-alpha.2 and no removed aggregate runtime resolves."
+    },
+    {
+      "id": "boot.ready-picker-once",
+      "class": "cold-web-boot",
+      "expected": "A cold Web start reaches __DSH_BOOT_READY__; one dormant OpenPencil composer overlay and eight reversible locale dictionaries are present with no Host behavior."
+    },
+    {
+      "id": "feature.op-path-discovery",
+      "class": "feature-contract",
+      "expected": "An open [[op: trigger queries the official path-only index, admits at most twenty unique bounded file entries ending in .op, and exposes no document bytes."
+    },
+    {
+      "id": "feature.explicit-review-draft",
+      "class": "feature-contract",
+      "expected": "A direct Review or Plan changes click replaces only the active trigger with a localized standard @path request; it changes the composer draft but never submits, renders, opens, or modifies the design."
+    },
+    {
+      "id": "security.official-paths-only",
+      "class": "security-boundary",
+      "expected": "Only fileReferences.list is called through the authenticated Harness Remote; no custom Remote, Host route, file content read, render binary, process, raw DOM, browser storage, secret, hidden message, automatic submission, or mutation occurs."
+    },
+    {
+      "id": "ui.keyboard-zoom-locales",
+      "class": "accessibility-responsive",
+      "expected": "Semantic headings, status text, lists, native action buttons, narrow layouts, 200 percent zoom, 12/14/17 pixel font settings, light and dark schemes, and all eight dictionaries remain usable without raw DOM focus manipulation."
+    },
+    {
+      "id": "dispose.zero-residue",
+      "class": "teardown-rollback",
+      "expected": "Removal aborts an in-flight path query and leaves zero overlay entries, locale dictionaries, draft-side plugin state, package rows, client graph entries, or dependency-closure changes; governed Home and Profile bytes match the snapshot."
+    },
+    {
+      "id": "combine.additive-overlay-rollback",
+      "class": "combination",
+      "expected": "The uniquely identified additive overlay coexists with official composer, reference, command, todo, goal, queue, and model surfaces; a later injected batch failure restores every prior entry without partial success."
+    }
+  ]
+}

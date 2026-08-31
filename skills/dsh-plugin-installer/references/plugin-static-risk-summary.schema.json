@@ -14,7 +14,7 @@
     "priorityReviewCount",
     "rawRouteReviewCatalogIds",
     "rawRouteWithoutOfficialAuthReferenceCatalogIds",
-    "alpha1RemovedPackageCatalogIds",
+    "baselineAbsentPackageCatalogIds",
     "signalCounts",
     "receipts",
     "publication"
@@ -29,7 +29,7 @@
     "priorityReviewCount": { "type": "integer", "minimum": 0, "maximum": 80 },
     "rawRouteReviewCatalogIds": { "$ref": "#/$defs/catalogIds" },
     "rawRouteWithoutOfficialAuthReferenceCatalogIds": { "$ref": "#/$defs/catalogIds" },
-    "alpha1RemovedPackageCatalogIds": { "$ref": "#/$defs/catalogIds" },
+    "baselineAbsentPackageCatalogIds": { "$ref": "#/$defs/catalogIds" },
     "signalCounts": {
       "type": "object",
       "propertyNames": { "$ref": "#/$defs/signalId" },
@@ -52,7 +52,7 @@
           "tree",
           "requiresElevatedStaticReview",
           "rawWebRouteAuthState",
-          "alpha1RemovedPackages",
+          "baselineAbsentPackages",
           "highReviewSignalIds"
         ],
         "properties": {
@@ -67,7 +67,7 @@
               "raw-route-with-auth-reference-manual-review-required"
             ]
           },
-          "alpha1RemovedPackages": {
+          "baselineAbsentPackages": {
             "type": "array",
             "uniqueItems": true,
             "maxItems": 2,

@@ -1,13 +1,17 @@
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 
+import {
+  ALPHA1_RECERTIFICATION_SHA256,
+  ALPHA2_HARNESS_AUTHORITY_SHA256,
+  ALPHA2_RECERTIFICATION_SCHEMA_SHA256,
+  ALPHA2_RECERTIFICATION_SHA256,
+  loadAlpha2RecertificationAuthority,
+} from './alpha2-recertification-authority.mjs';
+
 const catalogUrl = new URL('../references/community-catalog.json', import.meta.url);
 const baselinePolicyUrl = new URL(
   '../references/baseline-policy.json',
-  import.meta.url
-);
-const alpha1RecertificationUrl = new URL(
-  '../references/alpha1-recertification.json',
   import.meta.url
 );
 const runtimeReceiptUrl = new URL(
@@ -34,8 +38,6 @@ const MAIN_RUNTIME_RECEIPT_SHA256 =
   '0b09909a0b7cafba5dd68f066bd3959d5666afc519a39c5c52f3d3bd9126b4c2';
 const COMMUNITY_CATALOG_SHA256 =
   '343000de2be72848db4a7838be90e3c41191f164a5a62d8198d154bfe0aa5d99';
-const ALPHA1_RECERTIFICATION_SHA256 =
-  '9ecc86474cba557c445ae21b8e479aa3f1b55cb8b2768faa6ed73952cc7b1552';
 
 function fail(message) {
   throw new Error(message);
@@ -321,28 +323,18 @@ function validateLegacyRecord(selected, local, catalog) {
 }
 
 export async function loadCommunityAuthority() {
-  const [
-    catalogBytes,
-    baselinePolicyText,
-    alpha1RecertificationBytes,
-    runtimeReceiptBytes,
-    preparedEvidenceBytes,
-  ] = await Promise.all([
-    readFile(catalogUrl),
-    readFile(baselinePolicyUrl, 'utf8'),
-    readFile(alpha1RecertificationUrl),
-    readFile(runtimeReceiptUrl),
-    readFile(preparedEvidenceUrl),
-  ]);
+  const [catalogBytes, baselinePolicyText, runtimeReceiptBytes, preparedEvidenceBytes, alpha2] =
+    await Promise.all([
+      readFile(catalogUrl),
+      readFile(baselinePolicyUrl, 'utf8'),
+      readFile(runtimeReceiptUrl),
+      readFile(preparedEvidenceUrl),
+      loadAlpha2RecertificationAuthority(),
+    ]);
   exact(
     sha256(catalogBytes),
     COMMUNITY_CATALOG_SHA256,
     'historical community catalog sha256'
-  );
-  exact(
-    sha256(alpha1RecertificationBytes),
-    ALPHA1_RECERTIFICATION_SHA256,
-    'alpha1 recertification sha256'
   );
   exact(
     sha256(runtimeReceiptBytes),
@@ -356,47 +348,61 @@ export async function loadCommunityAuthority() {
   );
   const catalog = JSON.parse(catalogBytes.toString('utf8'));
   const baselinePolicy = JSON.parse(baselinePolicyText);
-  const alpha1Recertification = JSON.parse(
-    alpha1RecertificationBytes.toString('utf8')
-  );
   const runtimeReceipt = JSON.parse(runtimeReceiptBytes.toString('utf8'));
+  const alpha2Recertification = alpha2.authority;
+  const alpha1Recertification = alpha2.alpha1;
 
-  exact(baselinePolicy.schemaVersion, 3, 'baseline policy schemaVersion');
+  exact(baselinePolicy.schemaVersion, 4, 'baseline policy schemaVersion');
   exact(
     baselinePolicy.defaultOperationalLane,
-    'currentAlpha1',
+    'currentAlpha2',
     'default operational lane'
   );
   const currentLane = record(
-    baselinePolicy.currentAlpha1,
-    'current alpha1 baseline lane'
+    baselinePolicy.currentAlpha2,
+    'current alpha2 baseline lane'
   );
   exact(
     currentLane.status,
-    'alpha1-item-runtime-evidence-pending',
-    'current alpha1 lane status'
+    'alpha2-item-runtime-evidence-pending',
+    'current alpha2 lane status'
   );
-  exact(currentLane.enabled, true, 'current alpha1 inspection lane enabled');
-  exact(currentLane.inspectionEnabled, true, 'current alpha1 inspection status');
-  exact(currentLane.installable, false, 'current alpha1 installability');
-  exact(currentLane.dshPackageVersion, '0.1.2-alpha.1', 'current alpha1 version');
-  exact(currentLane.sourceTag, 'dsh-v0.1.2-alpha.1', 'current alpha1 tag');
+  exact(currentLane.enabled, true, 'current alpha2 inspection lane enabled');
+  exact(currentLane.inspectionEnabled, true, 'current alpha2 inspection status');
+  exact(currentLane.installable, false, 'current alpha2 installability');
+  exact(currentLane.dshPackageVersion, '0.1.2-alpha.2', 'current alpha2 version');
+  exact(currentLane.sourceTag, 'dsh-v0.1.2-alpha.2', 'current alpha2 tag');
   exact(
     currentLane.sourceCommit,
-    'cd5ef8148158c3a752a658978873241fdf8e2bbc',
-    'current alpha1 commit'
+    '0a53fb55bea101816fa226bb964ae2bed71c343b',
+    'current alpha2 commit'
   );
   exact(
     currentLane.sourceTree,
-    'a712eec535b48badc4fefb4df5176a7002e4280b',
-    'current alpha1 tree'
+    '64ccbfa8e0caa4711cd4a75717ef9e022657961b',
+    'current alpha2 tree'
   );
-  exact(currentLane.officialBinaryArtifact, false, 'current alpha1 binary status');
+  exact(currentLane.officialNpmPackage, '@deepseek-ai/dsh', 'current alpha2 npm package');
+  exact(
+    currentLane.officialNpmTarballSha256,
+    '5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47',
+    'current alpha2 npm tarball sha256'
+  );
   exact(currentLane.catalogPath, 'community-catalog.json', 'current catalog path');
   exact(
     currentLane.evidencePath,
-    'alpha1-recertification.json',
+    'alpha2-recertification.json',
     'current evidence path'
+  );
+  exact(
+    currentLane.evidenceSchemaPath,
+    'alpha2-recertification.schema.json',
+    'current evidence schema path'
+  );
+  exact(
+    currentLane.harnessAuthorityPath,
+    '../../dsh-harness-installer/references/alpha2-release-authority.json',
+    'current Harness authority path'
   );
   exact(
     currentLane.catalogSha256,
@@ -405,11 +411,23 @@ export async function loadCommunityAuthority() {
   );
   exact(
     currentLane.evidenceSha256,
-    ALPHA1_RECERTIFICATION_SHA256,
+    ALPHA2_RECERTIFICATION_SHA256,
     'current lane evidence sha256'
+  );
+  exact(
+    currentLane.evidenceSchemaSha256,
+    ALPHA2_RECERTIFICATION_SCHEMA_SHA256,
+    'current lane evidence schema sha256'
+  );
+  exact(
+    currentLane.harnessAuthoritySha256,
+    ALPHA2_HARNESS_AUTHORITY_SHA256,
+    'current lane Harness authority sha256'
   );
   exact(currentLane.communityItemsRequired, 11, 'current required items');
   exact(currentLane.communityItemsCompleted, 0, 'current completed items');
+  exact(currentLane.communityTasksRequired, 66, 'current required tasks');
+  exact(currentLane.communityTasksCompleted, 0, 'current completed tasks');
   exact(
     currentLane.communityInstallableRecords,
     0,
@@ -421,6 +439,32 @@ export async function loadCommunityAuthority() {
     currentLane.websiteCompatibility,
     'verification-pending',
     'website compatibility'
+  );
+  const alpha1Lane = record(
+    baselinePolicy.currentAlpha1,
+    'historical alpha1 baseline lane'
+  );
+  exact(
+    alpha1Lane.status,
+    'historical-alpha1-item-runtime-evidence-pending',
+    'historical alpha1 lane status'
+  );
+  exact(alpha1Lane.historicalAtCapture, true, 'historical alpha1 marker');
+  exact(alpha1Lane.enabled, false, 'historical alpha1 lane enabled');
+  exact(alpha1Lane.inspectionEnabled, false, 'historical alpha1 inspection status');
+  exact(alpha1Lane.installable, false, 'historical alpha1 current installability');
+  exact(alpha1Lane.mayAuthorizeCurrent, false, 'historical alpha1 authority scope');
+  exact(alpha1Lane.evidencePath, 'alpha1-recertification.json', 'historical alpha1 path');
+  exact(
+    alpha1Lane.evidenceSha256,
+    ALPHA1_RECERTIFICATION_SHA256,
+    'historical alpha1 sha256'
+  );
+  exact(alpha1Lane.dshPackageVersion, '0.1.2-alpha.1', 'historical alpha1 version');
+  exact(
+    alpha1Lane.sourceCommit,
+    'cd5ef8148158c3a752a658978873241fdf8e2bbc',
+    'historical alpha1 commit'
   );
   const historicalLane = record(
     baselinePolicy.certified,
@@ -461,78 +505,15 @@ export async function loadCommunityAuthority() {
     ['latest', 'next'],
     'forbidden version selectors'
   );
-
-  exact(alpha1Recertification.schemaVersion, 1, 'alpha1 schemaVersion');
-  exact(
-    alpha1Recertification.baseline?.baselineId,
-    currentLane.baselineId,
-    'alpha1 baseline id'
-  );
-  exact(
-    alpha1Recertification.baseline?.dshPackageVersion,
-    '0.1.2-alpha.1',
-    'alpha1 baseline version'
-  );
-  exact(
-    alpha1Recertification.baseline?.officialTag,
-    'dsh-v0.1.2-alpha.1',
-    'alpha1 official tag'
-  );
-  exact(
-    alpha1Recertification.baseline?.sourceCommit,
-    'cd5ef8148158c3a752a658978873241fdf8e2bbc',
-    'alpha1 baseline commit'
-  );
-  exact(
-    alpha1Recertification.baseline?.sourceTree,
-    'a712eec535b48badc4fefb4df5176a7002e4280b',
-    'alpha1 source tree'
-  );
-  exact(
-    alpha1Recertification.baseline?.pnpmLockfileSha256,
-    '506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1',
-    'alpha1 pnpm lockfile sha256'
-  );
-  exact(
-    alpha1Recertification.baseline?.officialBinaryArtifact,
-    false,
-    'alpha1 binary artifact status'
-  );
-  exact(
-    alpha1Recertification.gate?.status,
-    'alpha1-item-runtime-evidence-pending',
-    'alpha1 gate status'
-  );
-  exact(alpha1Recertification.gate?.installable, false, 'alpha1 installability');
-  exact(alpha1Recertification.gate?.requiredItems, 11, 'alpha1 required items');
-  exact(alpha1Recertification.gate?.completedItems, 0, 'alpha1 completed items');
-  exact(alpha1Recertification.gate?.requiredTasksPerItem, 6, 'alpha1 tasks per item');
-  exact(alpha1Recertification.gate?.completedTasksPerItem, 0, 'alpha1 completed tasks');
-  exact(alpha1Recertification.gate?.runtimeReceiptSetSha256, null, 'alpha1 runtime receipt set');
-  exact(alpha1Recertification.gate?.rollbackReceiptSetSha256, null, 'alpha1 rollback receipt set');
-  if (
-    alpha1Recertification.items?.length !== 11 ||
-    catalog.skins?.length !== 11
-  ) {
-    fail('alpha1 recertification set must bind the exact 11 historical items');
-  }
-  const currentKeys = new Set();
-  for (const item of alpha1Recertification.items) {
-    const key = `${item.catalogId}:${item.slug}`;
-    if (currentKeys.has(key)) fail(`duplicate alpha1 recertification item: ${key}`);
-    currentKeys.add(key);
-    const historical = catalog.skins.find(
-      (skin) => skin.catalogId === item.catalogId && skin.slug === item.slug
-    );
-    if (!historical || item.status !== 'verification-pending') {
-      fail(`alpha1 recertification item is invalid: ${item.slug}`);
-    }
-  }
-  exact(
-    alpha1Recertification.historicalAuthority?.mayAuthorizeAlpha1,
-    false,
-    'historical RC.8 alpha1 authority'
-  );
+  exact(alpha2Recertification.baseline?.baselineId, currentLane.baselineId, 'alpha2 baseline id');
+  exact(alpha2Recertification.gate?.status, currentLane.status, 'alpha2 gate status');
+  exact(alpha2Recertification.gate?.installable, false, 'alpha2 installability');
+  exact(alpha2Recertification.gate?.publicationAllowed, false, 'alpha2 publication status');
+  exact(alpha2Recertification.gate?.requiredItems, 11, 'alpha2 required items');
+  exact(alpha2Recertification.gate?.completedItems, 0, 'alpha2 completed items');
+  exact(alpha2Recertification.gate?.completedTasks, 0, 'alpha2 completed tasks');
+  exact(alpha2Recertification.gate?.runtimeReceiptSetSha256, null, 'alpha2 runtime receipt set');
+  exact(alpha2Recertification.gate?.rollbackReceiptSetSha256, null, 'alpha2 rollback receipt set');
 
   exact(
     runtimeReceipt.status,
@@ -590,6 +571,7 @@ export async function loadCommunityAuthority() {
   return {
     catalog,
     baselinePolicy,
+    alpha2Recertification,
     alpha1Recertification,
     runtimeReceipt,
   };
@@ -597,7 +579,7 @@ export async function loadCommunityAuthority() {
 
 export function validateCommunityRecord(
   raw,
-  { catalog, alpha1Recertification },
+  { catalog, alpha2Recertification },
   { mode = 'inspect' } = {}
 ) {
   if (mode !== 'inspect' && mode !== 'install') {
@@ -606,10 +588,10 @@ export function validateCommunityRecord(
   const selected = record(raw, 'Catalog record');
   const local = catalog.skins.find((skin) => skin.slug === selected.slug);
   if (!local) fail('Catalog slug is not in the local community allowlist');
-  const currentItem = alpha1Recertification.items.find(
+  const currentItem = alpha2Recertification.items.find(
     (item) => item.catalogId === local.catalogId && item.slug === local.slug
   );
-  if (!currentItem) fail('Catalog slug is not in the alpha1 recertification set');
+  if (!currentItem) fail('Catalog slug is not in the alpha2 recertification set');
 
   const normalized = Number.isSafeInteger(selected.catalogId)
     ? validateDirectoryRecord(
@@ -617,32 +599,33 @@ export function validateCommunityRecord(
         local,
         catalog,
         currentItem,
-        alpha1Recertification.baseline
+        alpha2Recertification.baseline
       )
     : validateLegacyRecord(selected, local, catalog);
 
   const runtimeVerified = currentItem.status === 'runtime-verified';
-  const alpha1GateCertified =
-    alpha1Recertification.gate?.status === 'certified-installable' &&
-    alpha1Recertification.gate?.installable === true &&
-    alpha1Recertification.gate?.completedItems ===
-      alpha1Recertification.gate?.requiredItems &&
+  const alpha2GateCertified =
+    alpha2Recertification.gate?.status === 'certified-installable' &&
+    alpha2Recertification.gate?.installable === true &&
+    alpha2Recertification.gate?.publicationAllowed === true &&
+    alpha2Recertification.gate?.completedItems ===
+      alpha2Recertification.gate?.requiredItems &&
     /^[a-f0-9]{64}$/.test(
-      alpha1Recertification.gate?.runtimeReceiptSetSha256 ?? ''
+      alpha2Recertification.gate?.runtimeReceiptSetSha256 ?? ''
     ) &&
     /^[a-f0-9]{64}$/.test(
-      alpha1Recertification.gate?.rollbackReceiptSetSha256 ?? ''
+      alpha2Recertification.gate?.rollbackReceiptSetSha256 ?? ''
     );
   const blockingReasons = [];
   if (normalized.shape !== 'directory-v1') {
     blockingReasons.push('legacy-record-not-install-authority');
   }
   if (!runtimeVerified) blockingReasons.push('item-runtime-verification-pending');
-  if (!alpha1GateCertified) {
-    blockingReasons.push('alpha1-recertification-gate-not-certified');
+  if (!alpha2GateCertified) {
+    blockingReasons.push('alpha2-recertification-gate-not-certified');
   }
-  if (runtimeVerified || alpha1GateCertified) {
-    blockingReasons.push('alpha1-runtime-receipt-verifier-not-implemented');
+  if (runtimeVerified || alpha2GateCertified) {
+    blockingReasons.push('alpha2-runtime-receipt-verifier-not-implemented');
   }
   const installable = blockingReasons.length === 0;
   if (mode === 'install' && !installable) {
@@ -655,7 +638,7 @@ export function validateCommunityRecord(
     recordShape: normalized.shape,
     installable,
     blockingReasons,
-    baseline: alpha1Recertification.baseline,
+    baseline: alpha2Recertification.baseline,
     historicalBaseline: catalog.baseline,
     skinCenter: catalog.skinCenter,
     skin: {

@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "purpose": "dsh-alpha1-hosted-plugin-adaptation",
+  "purpose": "dsh-alpha2-hosted-plugin-adaptation",
   "catalogId": 3050,
   "slug": "dsh-automation",
   "baseline": {
-    "tag": "dsh-v0.1.2-alpha.1",
-    "commit": "cd5ef8148158c3a752a658978873241fdf8e2bbc",
-    "tree": "a712eec535b48badc4fefb4df5176a7002e4280b"
+    "tag": "dsh-v0.1.2-alpha.2",
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
   },
   "source": {
     "repository": "https://github.com/titanwings/dsh-automation.git",
@@ -20,9 +20,9 @@
   },
   "output": {
     "packageName": "@dsh-themes/dsh-automation",
-    "packageVersion": "0.1.7-dsh.alpha1.1",
-    "description": "Consent-first planning and root-session Schedule requests for DeepSeek Harness 0.1.2-alpha.1",
-    "assetName": "dsh-automation-0.1.7-dsh.alpha1.1.tgz",
+    "packageVersion": "0.1.7-dsh.alpha2.1",
+    "description": "Consent-first planning and root-session Schedule requests for DeepSeek Harness 0.1.2-alpha.2",
+    "assetName": "dsh-automation-0.1.7-dsh.alpha2.1.tgz",
     "hostEntry": "lib/index.js",
     "clientEntry": "lib/client.js",
     "bundlePatch": "cordis.patch.yml",
@@ -36,12 +36,12 @@
     ],
     "peerDependencies": {
       "@deepseek-ai/cordis": "4.0.1",
-      "@deepseek-ai/dsh-api-session-controller": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-layout": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-session": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-sidebar": "0.1.2-alpha.1",
+      "@deepseek-ai/dsh-api-session-controller": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-layout": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-session": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-sidebar": "0.1.2-alpha.2",
       "react": "18.3.1"
     },
     "files": [
@@ -52,7 +52,7 @@
           "sourcePath": "src/index.ts",
           "sourceSha256": "2d523eb149cc7611fd519b170f0e38d7d14978122aff3e97130e67a34e0b6546",
           "replacementPath": "assets/hosted-adaptations/3050/lib/index.js",
-          "replacementSha256": "b3c5f7f24b16349364d58621ef0504e0c9e41a3d4ab7a655de46c517ef32f696"
+          "replacementSha256": "d26f53506f1b992b7621f2113a69a4f67bc76f0102fe44a77f708f4015f416f8"
         }
       },
       {
@@ -62,7 +62,7 @@
           "sourcePath": "src/client/AutomationView.tsx",
           "sourceSha256": "2720c53618db86be98c88ae125a9eab14662a71e8abc61fdb8ab14f12f2f306a",
           "replacementPath": "assets/hosted-adaptations/3050/lib/client.js",
-          "replacementSha256": "ae38aa51f8c585840d1856e2ecfeb9eddf3756d83fe909bf7e8fb091074131bf"
+          "replacementSha256": "f63d46956c1e501f649b888f1c749d8c421902e8c3d2bd68ba8e088609c3954f"
         }
       },
       {
@@ -72,7 +72,7 @@
           "sourcePath": "cordis.patch.yml",
           "sourceSha256": "290b6bb961b44fede56fcd0d5be13189d0c6102090fdce4b779f05eb39097044",
           "replacementPath": "assets/hosted-adaptations/3050/cordis.patch.yml",
-          "replacementSha256": "c27f319c37583fbaec484002c2814589d0519170bc80160dba47698c193154e4"
+          "replacementSha256": "0d704b8499859d521639ed634fe77fe96873d397d27543531ee66a8de2640edf"
         }
       },
       {
@@ -151,7 +151,7 @@
   },
   "runtimeProbe": {
     "contractPath": "references/plugin-runtime-probes/3050.json",
-    "contractSha256": "2bafd679d08da87a6c77976e0fe1110cbffff3b9cd6a8433a30db16655692226",
+    "contractSha256": "88b7d36715c8826dcadd94598be7e73cc6ccf0d5e766ef8a2c0029c67cc42ede",
     "requiredAssertions": [
       "package.exact-entry",
       "boot.ready-context-once",

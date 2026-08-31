@@ -22,18 +22,18 @@ const SHA256 = /^[a-f0-9]{64}$/u;
 const SAFE_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 const ASSERTION_ID = /^[a-z0-9]+(?:[._:-][a-z0-9]+)*$/u;
 const ASCII_PATH = /^(?:[A-Za-z0-9_-](?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?\/)*[A-Za-z0-9_-](?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?$/u;
-const PACKAGE = /^(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+$/u;
+const PACKAGE = /^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/u;
 const SEMVER = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/u;
 const SCRIPT_ENTRY = /\.(?:js|mjs|cjs)$/u;
 const MAX_FILE_BYTES = 16 * 1024 * 1024;
 const MAX_TAR_BYTES = 256 * 1024 * 1024;
 const OFFICIAL_BASELINE = Object.freeze({
-  tag: 'dsh-v0.1.2-alpha.1',
-  commit: 'cd5ef8148158c3a752a658978873241fdf8e2bbc',
-  tree: 'a712eec535b48badc4fefb4df5176a7002e4280b',
+  tag: 'dsh-v0.1.2-alpha.2',
+  commit: '0a53fb55bea101816fa226bb964ae2bed71c343b',
+  tree: '64ccbfa8e0caa4711cd4a75717ef9e022657961b',
 });
 const LICENSES = new Set(['MIT', 'Apache-2.0', 'BSD-3-Clause', 'AGPL-3.0']);
-const REMOVED_ALPHA1_PACKAGES = new Set([
+const BASELINE_ABSENT_PACKAGES = new Set([
   '@deepseek-ai/dsh-client-runtime',
   '@deepseek-ai/dsh-host-apiproxy',
 ]);
@@ -176,14 +176,14 @@ export function validateHostedAdaptationRecipe(recipe) {
     'schemaVersion', 'purpose', 'catalogId', 'slug', 'baseline', 'source',
     'output', 'rights', 'staticPolicy', 'runtimeProbe',
   ], 'hosted adaptation');
-  if (recipe.schemaVersion !== 1 || recipe.purpose !== 'dsh-alpha1-hosted-plugin-adaptation' ||
+  if (recipe.schemaVersion !== 1 || recipe.purpose !== 'dsh-alpha2-hosted-plugin-adaptation' ||
       !Number.isSafeInteger(recipe.catalogId) || recipe.catalogId < 3000 ||
       recipe.catalogId > 9999 || !SAFE_ID.test(recipe.slug ?? '')) {
     fail('hosted adaptation identity is malformed');
   }
   exactKeys(recipe.baseline, ['tag', 'commit', 'tree'], 'adaptation baseline');
   if (JSON.stringify(recipe.baseline) !== JSON.stringify(OFFICIAL_BASELINE)) {
-    fail('hosted adaptation baseline is not the exact official alpha.1 source');
+    fail('hosted adaptation baseline is not the exact official alpha.2 source');
   }
   exactKeys(recipe.source, [
     'repository', 'commit', 'tree', 'sourceSubdir', 'manifestSha256',
@@ -223,11 +223,11 @@ export function validateHostedAdaptationRecipe(recipe) {
       recipe.output.files.length > 64) {
     fail('hosted adaptation output authority is malformed');
   }
-  uniqueStrings(recipe.output.clientInject, PACKAGE, 'adaptation client inject');
   if (recipe.output.clientInject.some((name) =>
     RESERVED_DEPENDENCY_NAMES.has(name) || NODE_BUILTIN_DEPENDENCIES.has(name))) {
     fail('adaptation client inject contains a reserved or Node builtin dependency name');
   }
+  uniqueStrings(recipe.output.clientInject, PACKAGE, 'adaptation client inject');
   const peerDependencies = recipe.output.peerDependencies !== null &&
     typeof recipe.output.peerDependencies === 'object' &&
     !Array.isArray(recipe.output.peerDependencies)
@@ -237,13 +237,13 @@ export function validateHostedAdaptationRecipe(recipe) {
       Object.keys(peerDependencies).length < 1 ||
       Object.keys(peerDependencies).length > 32 ||
       Object.entries(peerDependencies).some(([name, version]) =>
-        !PACKAGE.test(name) || !SEMVER.test(version) || REMOVED_ALPHA1_PACKAGES.has(name) ||
+        !PACKAGE.test(name) || !SEMVER.test(version) || BASELINE_ABSENT_PACKAGES.has(name) ||
         RESERVED_DEPENDENCY_NAMES.has(name) || NODE_BUILTIN_DEPENDENCIES.has(name) ||
-        (name.startsWith('@deepseek-ai/dsh-') && version !== '0.1.2-alpha.1')) ||
+        (name.startsWith('@deepseek-ai/dsh-') && version !== '0.1.2-alpha.2')) ||
       Object.hasOwn(peerDependencies, recipe.output.packageName) ||
       recipe.output.clientInject.some((name) =>
         !Object.hasOwn(peerDependencies, name))) {
-    fail('hosted adaptation peer dependency closure is malformed or not alpha.1-exact');
+    fail('hosted adaptation peer dependency closure is malformed or not alpha.2-exact');
   }
   recipe.output.files.forEach(validateFile);
   const outputPaths = recipe.output.files.map((file) => file.outputPath);
@@ -420,7 +420,7 @@ function outputManifest(sourceManifest, recipe, recipeSha256) {
 function noticeBytes(recipe) {
   return Buffer.from(
     `# Modification notice\n\n` +
-    `This package is a DSH Themes hosted alpha.1 adaptation of ` +
+    `This package is a DSH Themes hosted alpha.2 adaptation of ` +
     `${recipe.source.packageName}@${recipe.source.packageVersion}.\n\n` +
     `- Upstream: ${recipe.source.repository}\n` +
     `- Commit: ${recipe.source.commit}\n` +

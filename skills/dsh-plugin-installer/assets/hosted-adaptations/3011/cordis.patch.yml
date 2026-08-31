@@ -1,0 +1,5 @@
+# Review evidence only: this immutable package is not installable until the
+# alpha.2 runtime probe is completed and promoted by separate authority work.
+- insert:
+    - id: dsh-plugin-3011-arcana
+      name: '@dsh-themes/arcana'

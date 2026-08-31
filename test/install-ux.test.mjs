@@ -100,54 +100,50 @@ test('general and dedicated prompts share one public-ID contract across entrypoi
   assert.match(communityContract, /Technical coordinates remain internal checks/);
 });
 
-test('both README homepages explain the v0.8 first-use and separate Harness paths', async () => {
+test('both README homepages explain the fail-closed v0.8 first-use and separate alpha.2 evidence lanes', async () => {
   const [english, chinese] = await Promise.all([
     text(files.readme),
     text(files.readmeZh),
   ]);
 
   assert.match(english, /## First use/);
-  assert.match(english, /### 1\. Install the coordinated Skills/);
-  assert.match(english, /### 2\. Choose on the website/);
-  assert.match(english, /### 3\. Ask with one short prompt/);
-  assert.match(english, /four-digit public ID/);
-  assert.match(english, /not alternate installation selectors/);
-  assert.match(english, /Please install DSH Themes #2004\./);
-  assert.match(english, /dsh-themes-skills\/tree\/v0\.8\.0/);
-  assert.match(
-    english,
-    /--skill dsh-theme-finder[\s\\]+--skill dsh-theme-manager[\s\\]+--skill dsh-community-skin-installer[\s\\]+--skill dsh-harness-installer[\s\\]+--skill dsh-plugin-installer/
-  );
-  assert.match(english, /### I do not have DeepSeek Harness yet/);
-  assert.match(english, /use `dsh-harness-installer`/);
-  assert.match(english, /does not install Node, modify `PATH`/);
-  assert.match(english, /nonexistent alpha\.1 npm package/);
+  assert.match(english, /### 1\. Browse by outcome/);
+  assert.match(english, /### 2\. Copy the exact public ID/);
+  assert.match(english, /### 3\. Ask for an authority-aware check/);
+  assert.match(english, /four-digit `#NNNN`/);
+  assert.match(english, /never alternate selectors/);
+  assert.match(english, /Please inspect DSH Themes #3006\./);
+  assert.match(english, /no `v0\.8\.0` install command/);
+  assert.match(english, /## Two alpha\.2 Harness evidence lanes/);
+  assert.match(english, /official npm runtime/i);
+  assert.match(english, /Exact source cross-build/);
+  assert.match(english, /without changing `PATH`/);
   assert.match(english, /`#NNNN` starts exact identity resolution/);
-  assert.match(english, /alpha\.1 runtime matrix is currently \*\*0\/6\*\*/);
-  assert.match(english, /Plugin authority is \*\*0\/80\*\*/);
-  assert.match(english, /candidate Top 10 is \*\*not installable\*\*/);
+  assert.match(english, /0\/6 Harness/);
+  assert.match(english, /0\/80 Plugin/);
+  assert.match(english, /Top10 remains closed/);
   assert.match(english, /`hosted-plugin-verified`/);
   assert.match(english, /`upstream-plugin-verified`/);
-  assert.doesNotMatch(english, /npx @deepseek-ai\/dsh/);
+  assert.doesNotMatch(english, /npx(?: --yes)? @deepseek-ai\/dsh/);
   assert.doesNotMatch(english, /@deepseek-ai\/dsh@(latest|next)/);
 
   assert.match(chinese, /## 首次使用/);
-  assert.match(chinese, /### 1\. 安装配套 Skills/);
-  assert.match(chinese, /### 2\. 在网站选择/);
-  assert.match(chinese, /### 3\. 使用一条简短提示词/);
-  assert.match(chinese, /复制四位公开编号/);
-  assert.match(chinese, /不是另一套安装选择器/);
-  assert.match(chinese, /请帮我安装 DSH Themes 的 #2004。/);
-  assert.match(chinese, /dsh-themes-skills\/tree\/v0\.8\.0/);
-  assert.match(chinese, /### 我还没有安装 DeepSeek Harness/);
-  assert.match(chinese, /使用 `dsh-harness-installer`/);
-  assert.match(chinese, /不会安装 Node、修改 `PATH`/);
-  assert.match(chinese, /并未发布的 alpha\.1 npm 包/);
-  assert.match(chinese, /`#NNNN` 用于启动精确身份解析/);
-  assert.match(chinese, /运行矩阵当前为 \*\*0\/6\*\*/);
-  assert.match(chinese, /Plugin 权威为 \*\*0\/80\*\*/);
-  assert.match(chinese, /候选 Top 10 \*\*不可安装\*\*/);
+  assert.match(chinese, /### 1\. 按结果浏览/);
+  assert.match(chinese, /### 2\. 复制精确公开编号/);
+  assert.match(chinese, /### 3\. 发出一条理解权威边界的请求/);
+  assert.match(chinese, /四位 `#NNNN`/);
+  assert.match(chinese, /都不是替代选择器/);
+  assert.match(chinese, /请检查 DSH Themes #3006。/);
+  assert.match(chinese, /暂不提供 `v0\.8\.0` 安装命令/);
+  assert.match(chinese, /## 两条 alpha\.2 Harness 证据通道/);
+  assert.match(chinese, /官方 npm 运行时/);
+  assert.match(chinese, /精确源码交叉构建/);
+  assert.match(chinese, /不修改 `PATH`/);
+  assert.match(chinese, /`#NNNN` 只负责启动精确身份解析/);
+  assert.match(chinese, /Harness 0\/6/);
+  assert.match(chinese, /Plugin 0\/80/);
+  assert.match(chinese, /Top10 也保持关闭/);
   assert.match(chinese, /`hosted-plugin-verified`/);
   assert.match(chinese, /`upstream-plugin-verified`/);
-  assert.doesNotMatch(chinese, /npx @deepseek-ai\/dsh/);
+  assert.doesNotMatch(chinese, /npx(?: --yes)? @deepseek-ai\/dsh/);
 });

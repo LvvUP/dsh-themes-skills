@@ -55,15 +55,15 @@ export function validateCandidateIntake(intake) {
   );
   if (
     intake.schemaVersion !== 2 ||
-    intake.purpose !== 'dsh-plugin-alpha1-candidate-intake' ||
+    intake.purpose !== 'dsh-plugin-alpha2-candidate-intake' ||
     !/^\d{4}-\d{2}-\d{2}$/u.test(intake.capturedAt)
   ) {
     fail('candidate intake header mismatch');
   }
   exactKeys(intake.baseline, ['tag', 'commit'], 'candidate intake baseline');
   if (
-    intake.baseline.tag !== 'dsh-v0.1.2-alpha.1' ||
-    intake.baseline.commit !== 'cd5ef8148158c3a752a658978873241fdf8e2bbc'
+    intake.baseline.tag !== 'dsh-v0.1.2-alpha.2' ||
+    intake.baseline.commit !== '0a53fb55bea101816fa226bb964ae2bed71c343b'
   ) {
     fail('candidate intake baseline mismatch');
   }

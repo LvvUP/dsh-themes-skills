@@ -186,18 +186,18 @@ test('hosted adaptation builds exact license, notice, SBOM, and script-free byte
     const [commit, tree] = git(root, ['rev-parse', 'HEAD', 'HEAD^{tree}']).split(/\r?\n/u);
     const probe = {
       schemaVersion: 1,
-      purpose: 'dsh-plugin-alpha1-fixed-runtime-probe',
+      purpose: 'dsh-plugin-alpha2-fixed-runtime-probe',
       authorityEffect: 'contract-only-not-runtime-authority',
       candidateExecuted: false,
       catalogId: 3999,
       baseline: {
-        tag: 'dsh-v0.1.2-alpha.1',
-        commit: 'cd5ef8148158c3a752a658978873241fdf8e2bbc',
-        tree: 'a712eec535b48badc4fefb4df5176a7002e4280b',
+        tag: 'dsh-v0.1.2-alpha.2',
+        commit: '0a53fb55bea101816fa226bb964ae2bed71c343b',
+        tree: '64ccbfa8e0caa4711cd4a75717ef9e022657961b',
       },
       package: {
         name: 'fixture-plugin',
-        version: '1.0.0-dsh.alpha1.1',
+        version: '1.0.0-dsh.alpha2.1',
         profile: 'web',
         cordisEntryId: 'fixture-plugin',
       },
@@ -229,13 +229,13 @@ test('hosted adaptation builds exact license, notice, SBOM, and script-free byte
     await writeFile(join(recipeRoot, 'references', 'plugin-runtime-probes', '3999.json'), probeBytes);
     const recipe = {
       schemaVersion: 1,
-      purpose: 'dsh-alpha1-hosted-plugin-adaptation',
+      purpose: 'dsh-alpha2-hosted-plugin-adaptation',
       catalogId: 3999,
       slug: 'fixture-plugin',
       baseline: {
-        tag: 'dsh-v0.1.2-alpha.1',
-        commit: 'cd5ef8148158c3a752a658978873241fdf8e2bbc',
-        tree: 'a712eec535b48badc4fefb4df5176a7002e4280b',
+        tag: 'dsh-v0.1.2-alpha.2',
+        commit: '0a53fb55bea101816fa226bb964ae2bed71c343b',
+        tree: '64ccbfa8e0caa4711cd4a75717ef9e022657961b',
       },
       source: {
         repository: 'https://github.com/example/fixture-plugin.git',
@@ -249,9 +249,9 @@ test('hosted adaptation builds exact license, notice, SBOM, and script-free byte
       },
       output: {
         packageName: 'fixture-plugin',
-        packageVersion: '1.0.0-dsh.alpha1.1',
-        description: 'Fixed alpha.1 fixture adaptation',
-        assetName: 'fixture-plugin-1.0.0-dsh.alpha1.1.tgz',
+        packageVersion: '1.0.0-dsh.alpha2.1',
+        description: 'Fixed alpha.2 fixture adaptation',
+        assetName: 'fixture-plugin-1.0.0-dsh.alpha2.1.tgz',
         hostEntry: 'index.mjs',
         clientEntry: 'client.js',
         bundlePatch: 'cordis.patch.yml',
@@ -260,8 +260,8 @@ test('hosted adaptation builds exact license, notice, SBOM, and script-free byte
           '@deepseek-ai/dsh-client-ui-renderer',
         ],
         peerDependencies: {
-          '@deepseek-ai/dsh-api-session-controller': '0.1.2-alpha.1',
-          '@deepseek-ai/dsh-client-ui-renderer': '0.1.2-alpha.1',
+          '@deepseek-ai/dsh-api-session-controller': '0.1.2-alpha.2',
+          '@deepseek-ai/dsh-client-ui-renderer': '0.1.2-alpha.2',
           react: '18.2.0',
         },
         files: ['index.mjs', 'client.js', 'cordis.patch.yml', 'LICENSE'].map((path) => ({
@@ -311,7 +311,7 @@ test('hosted adaptation builds exact license, notice, SBOM, and script-free byte
     const entries = inspectTarEntries(first.artifact);
     const byName = new Map(entries.map((entry) => [entry.name, entry]));
     const packedManifest = JSON.parse(byName.get('package/package.json').body);
-    assert.equal(packedManifest.version, '1.0.0-dsh.alpha1.1');
+    assert.equal(packedManifest.version, '1.0.0-dsh.alpha2.1');
     assert.equal(packedManifest.main, './index.mjs');
     assert.deepEqual(packedManifest.exports, {
       '.': './index.mjs',
@@ -325,8 +325,8 @@ test('hosted adaptation builds exact license, notice, SBOM, and script-free byte
     assert.equal(packedManifest.dshThemes.installable, undefined);
     assert.equal(packedManifest.dshThemes.runtimeCertified, undefined);
     assert.deepEqual(packedManifest.peerDependencies, {
-      '@deepseek-ai/dsh-api-session-controller': '0.1.2-alpha.1',
-      '@deepseek-ai/dsh-client-ui-renderer': '0.1.2-alpha.1',
+      '@deepseek-ai/dsh-api-session-controller': '0.1.2-alpha.2',
+      '@deepseek-ai/dsh-client-ui-renderer': '0.1.2-alpha.2',
       react: '18.2.0',
     });
     assert.deepEqual(packedManifest.dsh.client.inject, recipe.output.clientInject);
@@ -334,7 +334,7 @@ test('hosted adaptation builds exact license, notice, SBOM, and script-free byte
     assert.match(byName.get('package/NOTICE.md').body.toString(), new RegExp(commit, 'u'));
     const sbom = JSON.parse(byName.get('package/SBOM.cdx.json').body);
     assert.equal(sbom.bomFormat, 'CycloneDX');
-    assert.equal(sbom.metadata.component.version, '1.0.0-dsh.alpha1.1');
+    assert.equal(sbom.metadata.component.version, '1.0.0-dsh.alpha2.1');
     assert.equal(sbom.metadata.component.hashes, undefined);
     assert.deepEqual(sbom.metadata.component.properties, [{
       name: 'dsh-themes:package-manifest-sha256',
@@ -350,8 +350,8 @@ test('hosted adaptation builds exact license, notice, SBOM, and script-free byte
     assert.deepEqual(
       sbom.dependencies.find((entry) => entry.ref === sbom.metadata.component['bom-ref']).dependsOn,
       [
-        'pkg:npm/%40deepseek-ai/dsh-api-session-controller@0.1.2-alpha.1',
-        'pkg:npm/%40deepseek-ai/dsh-client-ui-renderer@0.1.2-alpha.1',
+        'pkg:npm/%40deepseek-ai/dsh-api-session-controller@0.1.2-alpha.2',
+        'pkg:npm/%40deepseek-ai/dsh-client-ui-renderer@0.1.2-alpha.2',
         'pkg:npm/react@18.2.0',
       ]
     );
@@ -370,10 +370,17 @@ test('hosted adaptation builds exact license, notice, SBOM, and script-free byte
           path: recipe.rights.licensePath,
           sha256: first.receipt.artifact.licenseSha256,
         },
+        noticeFile: {
+          path: 'NOTICE.md',
+          sha256: first.receipt.artifact.noticeSha256,
+        },
         sbom: {
           path: 'SBOM.cdx.json',
           sha256: first.receipt.artifact.sbomSha256,
         },
+      },
+      rights: {
+        licenseExpression: recipe.rights.licenseExpression,
       },
     };
     assert.deepEqual(validateHostedArtifact(first.artifact, hostedItem), {
@@ -448,7 +455,7 @@ test('hosted adaptation builds exact license, notice, SBOM, and script-free byte
     );
 
     const drifting = structuredClone(recipe);
-    drifting.output.peerDependencies['@deepseek-ai/dsh-api-session-controller'] = '^0.1.2-alpha.1';
+    drifting.output.peerDependencies['@deepseek-ai/dsh-api-session-controller'] = '^0.1.2-alpha.2';
     assert.throws(
       () => validateHostedAdaptationRecipe(drifting),
       /peer dependency closure/u
@@ -461,7 +468,7 @@ test('hosted adaptation builds exact license, notice, SBOM, and script-free byte
   }
 });
 
-test('hosted adaptation schema is closed and bound to alpha.1', async () => {
+test('hosted adaptation schema is closed and bound to alpha.2', async () => {
   const [schema, probeSchema] = await Promise.all([
     readFile(new URL(
       '../skills/dsh-plugin-installer/references/plugin-hosted-adaptation.schema.json',
@@ -483,10 +490,10 @@ test('hosted adaptation schema is closed and bound to alpha.1', async () => {
   assert.equal(schema.properties.staticPolicy.properties.computedMembers.maxItems, 0);
   assert.equal(schema.properties.staticPolicy.properties.computedMembers.items.$ref, '#/$defs/computedMember');
   assert.equal(schema.$defs.scriptEntryPath.allOf[1].pattern, '\\.(?:js|mjs|cjs)$');
-  assert.equal(schema.properties.baseline.properties.tag.const, 'dsh-v0.1.2-alpha.1');
+  assert.equal(schema.properties.baseline.properties.tag.const, 'dsh-v0.1.2-alpha.2');
   assert.equal(
     schema.properties.baseline.properties.commit.const,
-    'cd5ef8148158c3a752a658978873241fdf8e2bbc'
+    '0a53fb55bea101816fa226bb964ae2bed71c343b'
   );
   assert.equal(probeSchema.additionalProperties, false);
   assert.equal(probeSchema.properties.authorityEffect.const, 'contract-only-not-runtime-authority');
@@ -987,39 +994,63 @@ test('hosted script gate requires strict UTF-8, parsed syntax, exact imports, an
 
 test('checked-in hosted adaptation assets and probes remain exactly recipe-bound', async () => {
   const expected = new Map([
+    [3004, {
+      packageName: '@dsh-themes/dsh-spotlight',
+      packageVersion: '0.0.2-dsh.alpha2.1',
+      commit: 'dd7ef5ed160aa1a624559de16eafd4ea9406d7ed',
+      tree: '7a5fb2e5e2275cd194d47f6340aa73a0edf42991',
+    }],
     [3006, {
       packageName: '@dsh-themes/dsh-better-model-selector',
-      packageVersion: '1.0.0-dsh.alpha1.1',
+      packageVersion: '1.0.0-dsh.alpha2.1',
       commit: '4781f4c215f1ad4d55a44e1409bafe58f05b721f',
       tree: '8840140ed08a525005e3468348e8d5370416e371',
     }],
+    [3008, {
+      packageName: '@dsh-themes/dsh-view-modes',
+      packageVersion: '1.0.0-dsh.alpha2.1',
+      commit: 'a57d237e03b6488875cb7cc2a90bf6a37512632d',
+      tree: '5f84cf31a180a1aced2496e8e391f0751d836e41',
+    }],
+    [3010, {
+      packageName: '@dsh-themes/dsh-openpencil',
+      packageVersion: '0.1.0-dsh.alpha2.1',
+      commit: 'df71f28b8e29c76a7785e50461bc1065cdb5a899',
+      tree: '902f49e8877d4364cffd36d6a20af6defa68fde8',
+    }],
+    [3011, {
+      packageName: '@dsh-themes/arcana',
+      packageVersion: '0.1.0-dsh.alpha2.1',
+      commit: '82f910c0b5e645c65c2a34be0b0e47035d0489a7',
+      tree: '36cb0b3210b87a8c57d9d13845d8b1564842b126',
+    }],
     [3017, {
       packageName: '@dsh-themes/plugin-list-plus',
-      packageVersion: '0.1.0-dsh.alpha1.1',
+      packageVersion: '0.1.0-dsh.alpha2.1',
       commit: 'f62e6ba7be47f42accae372bb84dc879972d071a',
       tree: '8fa40ba5c5f3ba78a54db05a39487b4a79a81f34',
     }],
     [3040, {
       packageName: '@dsh-themes/dsh-kanban',
-      packageVersion: '0.1.1-dsh.alpha1.1',
+      packageVersion: '0.1.1-dsh.alpha2.1',
       commit: 'f7fa24c14db47ee4827cad5c827ad7aa3fd13434',
       tree: '322fe7f98155d8cee98918f235ce4602ffe3cbc3',
     }],
     [3041, {
       packageName: '@dsh-themes/context-vista',
-      packageVersion: '0.1.0-dsh.alpha1.1',
+      packageVersion: '0.1.0-dsh.alpha2.1',
       commit: 'fdde2e6da8524cd5ea27598c19eae744d4a1078a',
       tree: '1dcfc8e5952365ec142eafcc6ddd007e0b6fb6b5',
     }],
     [3042, {
       packageName: '@dsh-themes/dsh-wikilink',
-      packageVersion: '0.2.0-dsh.alpha1.1',
+      packageVersion: '0.2.0-dsh.alpha2.1',
       commit: '7f0203b6690588f30b7a9a35af37c1978a7caacc',
       tree: 'aefb3d89dd6dffb9b3a0b5b43adfbbe6a1c5b4e3',
     }],
     [3050, {
       packageName: '@dsh-themes/dsh-automation',
-      packageVersion: '0.1.7-dsh.alpha1.1',
+      packageVersion: '0.1.7-dsh.alpha2.1',
       commit: '5ae28f209c0253461131613fc1b2ea27920bec67',
       tree: 'ac7485a58d484abf6149681403c307958e8214ac',
     }],
@@ -1100,6 +1131,169 @@ test('#3006 reviewed bundle statically owns one reversible model seat and offici
   );
 });
 
+test('#3008 reviewed bundle is one real alpha.2 read-only Chat projection View', async () => {
+  const [{ recipe }, bundle] = await Promise.all([
+    loadHostedAdaptation(3008),
+    readFile(new URL(
+      '../skills/dsh-plugin-installer/assets/hosted-adaptations/3008/lib/client.js',
+      import.meta.url
+    ), 'utf8'),
+  ]);
+  assert.deepEqual(recipe.output.clientInject, [
+    '@deepseek-ai/dsh-api-session-controller',
+    '@deepseek-ai/dsh-client-locale',
+    '@deepseek-ai/dsh-client-ui-chat',
+    '@deepseek-ai/dsh-client-ui-conversation',
+    '@deepseek-ai/dsh-client-ui-renderer',
+    '@deepseek-ai/dsh-client-ui-session',
+  ]);
+  assert.deepEqual(Object.keys(recipe.output.peerDependencies), [
+    '@deepseek-ai/cordis',
+    '@deepseek-ai/dsh-api-session-controller',
+    '@deepseek-ai/dsh-client-locale',
+    '@deepseek-ai/dsh-client-ui-chat',
+    '@deepseek-ai/dsh-client-ui-conversation',
+    '@deepseek-ai/dsh-client-ui-renderer',
+    '@deepseek-ai/dsh-client-ui-session',
+    'react',
+  ]);
+  assert.match(bundle, /id: '@dsh-themes\/dsh-view-modes'/u);
+  assert.match(bundle, /const inject = \['slots', 'uiConversation', 'locale'\]/u);
+  assert.match(bundle, /ctx\.slots\.inject\('conversation\.view'/u);
+  assert.match(
+    bundle,
+    /name: 'conversation\.view',[\s\S]+id: VIEW_ID,[\s\S]+order: 20,[\s\S]+label: function \(\) \{ return t\('tab'\) \},[\s\S]+locale: NS/u
+  );
+  assert.match(
+    bundle,
+    /inject: function \(sessionId\) \{[\s\S]+hooks: \{[\s\S]+viewChat: ctx\.uiConversation\.binding\(sessionId\)\.target\('chat'\)/u
+  );
+  assert.match(
+    bundle,
+    /props\.useViewChat\(function \(snapshot\) \{[\s\S]+snapshot\.navigation\.items\(\)/u
+  );
+  assert.match(bundle, /const \[mode, setMode\] = React\.useState\('normal'\)/u);
+  assert.match(bundle, /if \(mode === 'summary'\) return items\.slice\(-1\)/u);
+  assert.match(bundle, /if \(mode === 'normal'\) return items\.slice\(-NORMAL_TURN_LIMIT\)/u);
+  assert.match(bundle, /React\.createElement\('article'/u);
+  assert.match(bundle, /React\.createElement\('header'/u);
+  assert.match(bundle, /React\.createElement\('ul'/u);
+  assert.match(bundle, /React\.createElement\('li'/u);
+  assert.match(bundle, /'aria-pressed': mode === entry/u);
+  assert.match(bundle, /ctx\.locale\.register\(NS, \{ zh, en \}\)/u);
+  assert.doesNotMatch(
+    bundle,
+    /uiConversation\.views\.register|conversation\.phase|props\.useConversation|props\.useSessions|document\.|style:|fetch\(|XMLHttpRequest|WebSocket|EventSource|localStorage|sessionStorage|document\.cookie|ctx\.remote|ctx\.connection|node:fs|node:child_process/u
+  );
+});
+
+test('#3010 reviewed bundle exposes only explicit .op path-to-draft review actions', async () => {
+  const [{ recipe }, bundle] = await Promise.all([
+    loadHostedAdaptation(3010),
+    readFile(new URL(
+      '../skills/dsh-plugin-installer/assets/hosted-adaptations/3010/lib/client.js',
+      import.meta.url
+    ), 'utf8'),
+  ]);
+  assert.equal(
+    recipe.source.manifestSha256,
+    'd942a0a9d0a7a3ef81ca86687f0fbd7e08970445cea658e3768dfecd85c6edac'
+  );
+  assert.equal(
+    recipe.rights.licenseSha256,
+    '07810262dcd2df061e16ae24c3a9a7a3cd265ddfc2bfb073544cd11af22d7812'
+  );
+  assert.deepEqual(
+    recipe.output.files.map((file) => [
+      file.outputPath,
+      file.input.sourcePath,
+      file.input.sourceSha256 ?? file.input.sha256,
+    ]),
+    [
+      ['lib/index.js', 'src/index.ts', '8f649bfd2aacaa714e7a8c57728ee2fa043fb30d3f0157e3b2effff838f25015'],
+      ['lib/client.js', 'src/client/index.tsx', '6a258a7f036a36a17696cc0505eecb9620855c0f76e29d6251cb0eae0b0cd262'],
+      ['cordis.patch.yml', 'cordis.patch.yml', '224785e0a3f0b7f06774f0c10fffcb8c3e6c5ab5e57187941418e4bedf50341d'],
+      ['LICENSE', 'LICENSE', '07810262dcd2df061e16ae24c3a9a7a3cd265ddfc2bfb073544cd11af22d7812'],
+    ]
+  );
+  assert.match(bundle, /id: '@dsh-themes\/dsh-openpencil'/u);
+  assert.match(bundle, /const inject = \['slots', 'locale', 'remote', 'remote\.fileReferences'\]/u);
+  assert.match(bundle, /ctx\.remote\.fileReferences\.list\(sessionId, query, signal\)/u);
+  assert.match(bundle, /ctx\.slots\.inject\('conversation\.input\.overlay'/u);
+  assert.match(bundle, /id: 'dsh-openpencil-review-picker'/u);
+  assert.match(bundle, /candidate\.kind !== 'file'/u);
+  assert.match(bundle, /\.endsWith\('\.op'\)/u);
+  assert.match(bundle, /props\.inputActions\.setDraft/u);
+  assert.match(bundle, /mode === 'review' \? 'reviewPrompt' : 'planPrompt'/u);
+  assert.match(bundle, /new AbortController\(\)/u);
+  assert.match(bundle, /ctx\.locale\.register\(NS, \{ zh, en \}\)/u);
+  assert.doesNotMatch(
+    bundle,
+    /@deepseek-ai\/dsh-client-runtime|ctx\.fs|ctx\.tools|ctx\.sessions|ctx\.connection|fetch\(|WebSocket|localStorage|sessionStorage|document\.|window\.location|innerHTML|node:fs|node:path|node:child_process|process\.env/u
+  );
+});
+
+test('#3011 reviewed bundle is an explicit memory-only deck over the Commands Remote', async () => {
+  const [{ recipe }, bundle] = await Promise.all([
+    loadHostedAdaptation(3011),
+    readFile(new URL(
+      '../skills/dsh-plugin-installer/assets/hosted-adaptations/3011/lib/client.js',
+      import.meta.url
+    ), 'utf8'),
+  ]);
+  assert.equal(
+    recipe.source.manifestSha256,
+    'cc8aaa5902d470caa148e8f632c736ca596e7d76f4352740cc84c113cf2297b2'
+  );
+  assert.equal(
+    recipe.rights.licenseSha256,
+    '29ca4f9a12bad476f6d9f0187e501a9095315ba1dc6bfb40ba9d9f7cefaa4ecb'
+  );
+  assert.deepEqual(
+    recipe.output.files.map((file) => [
+      file.outputPath,
+      file.input.sourcePath,
+      file.input.sourceSha256 ?? file.input.sha256,
+    ]),
+    [
+      ['lib/index.js', 'lib/index.js', '013e1bc291f4c03bb703c3ec3e13795bcc0dca62d33215a9a6e89cf0a43516f8'],
+      ['lib/client.js', 'lib/client.js', '0a95bcde5551c0d84577add03a1c3b9732633363e81961d6a36f54b648e390c2'],
+      ['cordis.patch.yml', 'cordis.patch.yml', '1ea4d61f445815f60619ef896b7d8e57c7b0b50ac97b46ffd520a58eef4cdc3d'],
+      ['LICENSE', 'LICENSE', '29ca4f9a12bad476f6d9f0187e501a9095315ba1dc6bfb40ba9d9f7cefaa4ecb'],
+    ]
+  );
+  assert.match(bundle, /id: '@dsh-themes\/arcana'/u);
+  assert.match(bundle, /const inject = \['slots', 'sessions', 'locale', 'remote', 'remote\.commands'\]/u);
+  assert.match(bundle, /ctx\.remote\.commands\.list\(sessionId\)/u);
+  assert.match(bundle, /ctx\.remote\.commands\.execute\(sessionId, line, \[\], signal\)/u);
+  assert.match(bundle, /ctx\.slots\.inject\('sidebar\.footer\.action'/u);
+  assert.match(bundle, /id: 'arcana-command-deck-trigger'/u);
+  assert.match(bundle, /ctx\.slots\.inject\('shell\.overlay'/u);
+  assert.match(bundle, /id: 'arcana-command-deck'/u);
+  assert.match(bundle, /const \[usage, setUsage\] = React\.useState\(function \(\) \{ return \[\] \}\)/u);
+  assert.match(bundle, /usageCount\(usage, right\.name\) - usageCount\(usage, left\.name\)/u);
+  assert.match(bundle, /command\.input === undefined/u);
+  assert.match(bundle, /new AbortController\(\)/u);
+  assert.match(bundle, /sessions\.current !== selectedSessionId/u);
+  assert.match(bundle, /currentSession\.current = sessions\.current/u);
+  assert.match(bundle, /currentSession\.current !== requestedSessionId/u);
+  assert.match(bundle, /view\.sessionId === sessions\.current/u);
+  assert.match(bundle, /view\.sessionId !== sessionId/u);
+  assert.match(bundle, /choose\(command, currentView\.sessionId\)/u);
+  assert.match(bundle, /setSelected\(Object\.freeze\(\{ command, sessionId \}\)\)/u);
+  assert.match(bundle, /result\.value\.result\.kind === 'success'/u);
+  assert.match(
+    bundle,
+    /React\.useEffect\(function \(\) \{[\s\S]{0,300}setSelected\(null\)[\s\S]{0,160}setArgument\(''\)[\s\S]{0,160}setMessage\(''\)[\s\S]{0,100}\}, \[sessions\.current\]\)/u
+  );
+  assert.match(bundle, /ctx\.effect\(function \(\) \{ return controller\.dispose \}/u);
+  assert.match(bundle, /ctx\.locale\.register\(NS, \{ zh, en \}\)/u);
+  assert.doesNotMatch(
+    bundle,
+    /@deepseek-ai\/dsh-client-runtime|session\.command\(|remote\.\$on|ctx\.fs|ctx\.tools|ctx\.connection|fetch\(|WebSocket|localStorage|sessionStorage|document\.|window\.location|innerHTML|node:fs|node:path|node:child_process|process\.env|console\./u
+  );
+});
+
 test('#3017 reviewed browser bundle statically binds React and reversible additive ownership', async () => {
   const bundle = await readFile(new URL(
     '../skills/dsh-plugin-installer/assets/hosted-adaptations/3017/client.js',
@@ -1119,7 +1313,7 @@ test('#3017 reviewed browser bundle statically binds React and reversible additi
   );
 });
 
-test('#3040 reviewed bundle preserves a reversible five-column board on official alpha.1 slots', async () => {
+test('#3040 reviewed bundle preserves a reversible five-column board on official alpha.2 slots', async () => {
   const [{ recipe }, bundle] = await Promise.all([
     loadHostedAdaptation(3040),
     readFile(new URL(
@@ -1307,6 +1501,15 @@ test('reviewed browser adaptations carry complete, reversible eight-locale dicti
   const expectedExtraLocales = ['zh-Hant', 'ja', 'ko', 'fr', 'de', 'es'];
   const cases = [
     {
+      id: 3004,
+      url: '../skills/dsh-plugin-installer/assets/hosted-adaptations/3004/lib/client.js',
+      style: 'freeze',
+      expectedKeys: 17,
+      expectedModelPlaceholders: 0,
+      expectedMessagePlaceholders: 0,
+      register: /disposers\.push\(ctx\.locale\.register\(NS, \{ zh, en \}\)\)[\s\S]+for \(const \[locale, dictionary\] of EXTRA_DICTIONARIES\) disposers\.push\(ctx\.locale\.register\(NS, locale, dictionary\)\)[\s\S]+for \(let index = disposers\.length - 1; index >= 0; index -= 1\) disposers\.at\(index\)\(\)/u,
+    },
+    {
       id: 3006,
       url: '../skills/dsh-plugin-installer/assets/hosted-adaptations/3006/lib/client.js',
       style: 'freeze',
@@ -1314,6 +1517,33 @@ test('reviewed browser adaptations carry complete, reversible eight-locale dicti
       expectedModelPlaceholders: 2,
       expectedMessagePlaceholders: 3,
       register: /disposers\.push\(ctx\.locale\.register\(LOCALE_NAMESPACE, \{ zh, en \}\)\)[\s\S]+for \(const \[locale, dictionary\] of EXTRA_DICTIONARIES\)[\s\S]+disposers\.push\(ctx\.locale\.register\(LOCALE_NAMESPACE, locale, dictionary\)\)[\s\S]+for \(let index = disposers\.length - 1; index >= 0; index -= 1\) disposers\.at\(index\)\(\)/u,
+    },
+    {
+      id: 3008,
+      url: '../skills/dsh-plugin-installer/assets/hosted-adaptations/3008/lib/client.js',
+      style: 'freeze',
+      expectedKeys: 17,
+      expectedModelPlaceholders: 0,
+      expectedMessagePlaceholders: 0,
+      register: /disposers\.push\(ctx\.locale\.register\(NS, \{ zh, en \}\)\)[\s\S]+for \(const \[locale, dictionary\] of EXTRA_DICTIONARIES\)[\s\S]+if \(disposed\) return[\s\S]+for \(let index = disposers\.length - 1; index >= 0; index -= 1\) disposers\.at\(index\)\(\)/u,
+    },
+    {
+      id: 3010,
+      url: '../skills/dsh-plugin-installer/assets/hosted-adaptations/3010/lib/client.js',
+      style: 'freeze',
+      expectedKeys: 11,
+      expectedModelPlaceholders: 0,
+      expectedMessagePlaceholders: 0,
+      register: /disposers\.push\(ctx\.locale\.register\(NS, \{ zh, en \}\)\)[\s\S]+for \(const \[locale, dictionary\] of EXTRA_DICTIONARIES\) disposers\.push\(ctx\.locale\.register\(NS, locale, dictionary\)\)[\s\S]+for \(let index = disposers\.length - 1; index >= 0; index -= 1\) disposers\.at\(index\)\(\)/u,
+    },
+    {
+      id: 3011,
+      url: '../skills/dsh-plugin-installer/assets/hosted-adaptations/3011/lib/client.js',
+      style: 'freeze',
+      expectedKeys: 15,
+      expectedModelPlaceholders: 0,
+      expectedMessagePlaceholders: 0,
+      register: /disposers\.push\(ctx\.locale\.register\(NS, \{ zh, en \}\)\)[\s\S]+for \(const \[locale, dictionary\] of EXTRA_DICTIONARIES\) disposers\.push\(ctx\.locale\.register\(NS, locale, dictionary\)\)[\s\S]+for \(let index = disposers\.length - 1; index >= 0; index -= 1\) disposers\.at\(index\)\(\)/u,
     },
     {
       id: 3017,
@@ -1403,55 +1633,110 @@ test('reviewed browser adaptations carry complete, reversible eight-locale dicti
   }
 });
 
+test('#3004 refreshes official directories only when stable inputs change', async () => {
+  const source = await readFile(new URL(
+    '../skills/dsh-plugin-installer/assets/hosted-adaptations/3004/lib/client.js',
+    import.meta.url
+  ), 'utf8');
+  assert.match(
+    source,
+    /\[visible, sessions\.current, props\.listCommands, props\.listPlugins\]/u
+  );
+  assert.match(source, /result\.value\.result\.kind === 'success'/u);
+  assert.match(source, /currentSession\.current = sessions\.current/u);
+  assert.match(source, /currentSession\.current !== requestedSessionId/u);
+  assert.match(source, /view\.sessionId === currentViewSessionId/u);
+  assert.match(source, /sessionId: currentView\.sessionId/u);
+  assert.match(source, /view\.sessionId !== item\.sessionId/u);
+  assert.match(source, /props\.executeCommand\(item\.sessionId, '\/' \+ item\.id\)/u);
+  assert.match(source, /const t = ctx\.locale\.bind\(NS\)/u);
+  assert.match(source, /description: t\('subtitle'\)/u);
+  assert.match(source, /label: t\('trigger'\), detail: t\('subtitle'\)/u);
+  assert.match(source, /document\.querySelector\(selector\)/u);
+  assert.doesNotMatch(
+    source,
+    /description: 'Open the Spotlight|label: 'Open Spotlight'|detail: 'Search official directories'/u
+  );
+  assert.doesNotMatch(source, /\[visible, sessions\.current, props\]/u);
+});
+
 test('hosted adaptation CI matrix contains only immutable build-only identities', async () => {
   const plan = await loadHostedAdaptationPlan();
   assert.deepEqual(plan, [
+    {
+      catalogId: 3004,
+      repository: '0xsline/dsh-spotlight',
+      commit: 'dd7ef5ed160aa1a624559de16eafd4ea9406d7ed',
+      tree: '7a5fb2e5e2275cd194d47f6340aa73a0edf42991',
+      assetName: 'dsh-spotlight-0.0.2-dsh.alpha2.1.tgz',
+    },
     {
       catalogId: 3006,
       repository: 'Khellendros97/dsh-better-model-selector',
       commit: '4781f4c215f1ad4d55a44e1409bafe58f05b721f',
       tree: '8840140ed08a525005e3468348e8d5370416e371',
-      assetName: 'dsh-better-model-selector-1.0.0-dsh.alpha1.1.tgz',
+      assetName: 'dsh-better-model-selector-1.0.0-dsh.alpha2.1.tgz',
+    },
+    {
+      catalogId: 3008,
+      repository: 'NigelYao/dsh-view-modes',
+      commit: 'a57d237e03b6488875cb7cc2a90bf6a37512632d',
+      tree: '5f84cf31a180a1aced2496e8e391f0751d836e41',
+      assetName: 'dsh-view-modes-1.0.0-dsh.alpha2.1.tgz',
+    },
+    {
+      catalogId: 3010,
+      repository: 'ZSeven-W/dsh-openpencil',
+      commit: 'df71f28b8e29c76a7785e50461bc1065cdb5a899',
+      tree: '902f49e8877d4364cffd36d6a20af6defa68fde8',
+      assetName: 'dsh-openpencil-0.1.0-dsh.alpha2.1.tgz',
+    },
+    {
+      catalogId: 3011,
+      repository: 'GooodWei/arcana',
+      commit: '82f910c0b5e645c65c2a34be0b0e47035d0489a7',
+      tree: '36cb0b3210b87a8c57d9d13845d8b1564842b126',
+      assetName: 'arcana-0.1.0-dsh.alpha2.1.tgz',
     },
     {
       catalogId: 3017,
       repository: 'yibiner/dsh-plugin-list-plus',
       commit: 'f62e6ba7be47f42accae372bb84dc879972d071a',
       tree: '8fa40ba5c5f3ba78a54db05a39487b4a79a81f34',
-      assetName: 'dsh-plugin-list-plus-0.1.0-dsh.alpha1.1.tgz',
+      assetName: 'dsh-plugin-list-plus-0.1.0-dsh.alpha2.1.tgz',
     },
     {
       catalogId: 3040,
       repository: 'Ericwong5021/dsh-kanban',
       commit: 'f7fa24c14db47ee4827cad5c827ad7aa3fd13434',
       tree: '322fe7f98155d8cee98918f235ce4602ffe3cbc3',
-      assetName: 'dsh-kanban-0.1.1-dsh.alpha1.1.tgz',
+      assetName: 'dsh-kanban-0.1.1-dsh.alpha2.1.tgz',
     },
     {
       catalogId: 3041,
       repository: 'GooodWei/context-vista',
       commit: 'fdde2e6da8524cd5ea27598c19eae744d4a1078a',
       tree: '1dcfc8e5952365ec142eafcc6ddd007e0b6fb6b5',
-      assetName: 'context-vista-0.1.0-dsh.alpha1.1.tgz',
+      assetName: 'context-vista-0.1.0-dsh.alpha2.1.tgz',
     },
     {
       catalogId: 3042,
       repository: 'zhaoscsc/dsh-wikilink',
       commit: '7f0203b6690588f30b7a9a35af37c1978a7caacc',
       tree: 'aefb3d89dd6dffb9b3a0b5b43adfbbe6a1c5b4e3',
-      assetName: 'dsh-wikilink-0.2.0-dsh.alpha1.1.tgz',
+      assetName: 'dsh-wikilink-0.2.0-dsh.alpha2.1.tgz',
     },
     {
       catalogId: 3050,
       repository: 'titanwings/dsh-automation',
       commit: '5ae28f209c0253461131613fc1b2ea27920bec67',
       tree: 'ac7485a58d484abf6149681403c307958e8214ac',
-      assetName: 'dsh-automation-0.1.7-dsh.alpha1.1.tgz',
+      assetName: 'dsh-automation-0.1.7-dsh.alpha2.1.tgz',
     },
   ]);
   const [workflow, ordinaryCi] = await Promise.all([
     readFile(new URL(
-      '../.github/workflows/alpha1-plugin-hosted-adaptations.yml',
+      '../.github/workflows/alpha2-plugin-hosted-adaptations.yml',
       import.meta.url
     ), 'utf8'),
     readFile(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8'),

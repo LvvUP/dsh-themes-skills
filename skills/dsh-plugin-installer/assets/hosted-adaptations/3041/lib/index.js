@@ -1,5 +1,5 @@
 /**
- * Public plugin #3041 alpha.1 reviewed replacement — Host discovery anchor.
+ * Public plugin #3041 alpha.2 reviewed replacement — Host discovery anchor.
  *
  * The feature is entirely browser-side and reads only standard session
  * projections. This no-op Host half gives Loader an ordinary row from which

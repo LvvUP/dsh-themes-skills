@@ -20,7 +20,7 @@ import {
 import { verifyRuntimeProvenance } from './verify-runtime-provenance.mjs';
 
 const canonicalAuthorityPath = fileURLToPath(
-  new URL('../references/alpha1-source-authority.json', import.meta.url)
+  new URL('../references/alpha2-release-authority.json', import.meta.url)
 );
 const canonicalWorkflowPath = fileURLToPath(
   new URL(`../../../${RUNTIME_WORKFLOW}`, import.meta.url)
@@ -42,7 +42,7 @@ function git(repository, args) {
 
 export function buildPromotedRuntimeAuthority(authorityInput, verifiedCandidate) {
   const authority = validateAuthority(structuredClone(authorityInput));
-  if (authority.publication.status !== 'source-build-evidence-pending' ||
+  if (authority.publication.status !== 'official-npm-runtime-evidence-pending' ||
       authority.publication.publishedInstallable !== false ||
       authority.publication.completedReceipts.length !== 0 ||
       authority.publication.receiptSetSha256 !== null) {
@@ -126,7 +126,7 @@ export async function atomicReplaceRuntimeAuthorityFile(
 
 async function acquirePromotionLock(repository) {
   const repositoryKey = createHash('sha256').update(repository).digest('hex');
-  const lockPath = path.join(os.tmpdir(), `dsh-alpha1-runtime-promotion-${repositoryKey}.lock`);
+  const lockPath = path.join(os.tmpdir(), `dsh-alpha2-runtime-promotion-${repositoryKey}.lock`);
   let handle;
   try {
     handle = await open(lockPath, 'wx', 0o600);
@@ -135,7 +135,7 @@ async function acquirePromotionLock(repository) {
     return { handle, lockPath };
   } catch (error) {
     if (handle) await handle.close();
-    if (error.code === 'EEXIST') fail('another alpha.1 runtime promotion holds the checkout lock');
+    if (error.code === 'EEXIST') fail('another alpha.2 runtime promotion holds the checkout lock');
     throw error;
   }
 }
@@ -150,7 +150,7 @@ export async function promoteRuntimeAuthority({ candidate, provenance, authority
     fail('--candidate, --provenance, --authority, and --gh must be absolute paths');
   }
   if (path.resolve(authorityPath) !== path.resolve(canonicalAuthorityPath)) {
-    fail('--authority must name the bundled alpha.1 authority exactly');
+    fail('--authority must name the bundled alpha.2 authority exactly');
   }
   const repository = path.resolve(path.dirname(canonicalWorkflowPath), '../..');
   const lock = await acquirePromotionLock(repository);

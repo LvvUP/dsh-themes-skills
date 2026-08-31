@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "purpose": "dsh-alpha1-hosted-plugin-adaptation",
+  "purpose": "dsh-alpha2-hosted-plugin-adaptation",
   "catalogId": 3041,
   "slug": "context-vista",
   "baseline": {
-    "tag": "dsh-v0.1.2-alpha.1",
-    "commit": "cd5ef8148158c3a752a658978873241fdf8e2bbc",
-    "tree": "a712eec535b48badc4fefb4df5176a7002e4280b"
+    "tag": "dsh-v0.1.2-alpha.2",
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
   },
   "source": {
     "repository": "https://github.com/GooodWei/context-vista.git",
@@ -20,9 +20,9 @@
   },
   "output": {
     "packageName": "@dsh-themes/context-vista",
-    "packageVersion": "0.1.0-dsh.alpha1.1",
-    "description": "Read-only context pressure, composition, and durable token usage view for DeepSeek Harness 0.1.2-alpha.1",
-    "assetName": "context-vista-0.1.0-dsh.alpha1.1.tgz",
+    "packageVersion": "0.1.0-dsh.alpha2.1",
+    "description": "Read-only context pressure, composition, and durable token usage view for DeepSeek Harness 0.1.2-alpha.2",
+    "assetName": "context-vista-0.1.0-dsh.alpha2.1.tgz",
     "hostEntry": "lib/index.js",
     "clientEntry": "lib/client.js",
     "bundlePatch": "cordis.patch.yml",
@@ -35,11 +35,11 @@
     ],
     "peerDependencies": {
       "@deepseek-ai/cordis": "4.0.1",
-      "@deepseek-ai/dsh-api-session-controller": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-conversation": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-session": "0.1.2-alpha.1",
+      "@deepseek-ai/dsh-api-session-controller": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-conversation": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-session": "0.1.2-alpha.2",
       "react": "18.3.1"
     },
     "files": [
@@ -50,7 +50,7 @@
           "sourcePath": "lib/index.js",
           "sourceSha256": "c5332fd18b19d6ccad2a4a9daa27b6ef07dc0e754dc081799ad1e95a276f8c86",
           "replacementPath": "assets/hosted-adaptations/3041/lib/index.js",
-          "replacementSha256": "e206d7d299542c12e731b7a7d5f1139404574a36746713c6375388a3b645e9f2"
+          "replacementSha256": "f5a1cedd291b55d699565e65aaf0354e5d49f1e3a553c11b12e3f7c73655de95"
         }
       },
       {
@@ -60,7 +60,7 @@
           "sourcePath": "lib/client.js",
           "sourceSha256": "8664d769f4e8830075ea1e454fb43120f674c80e421245d41404b54c54f2780e",
           "replacementPath": "assets/hosted-adaptations/3041/lib/client.js",
-          "replacementSha256": "06861f100e7fd96a18b24cdce79a3a0216fdef3739db8bee295f571f5efd24c7"
+          "replacementSha256": "75561ad2bd3d47ce016a1f96994d07e69eeeda7b8fca2d6a513e0dd0543f468b"
         }
       },
       {
@@ -70,7 +70,7 @@
           "sourcePath": "cordis.patch.yml",
           "sourceSha256": "9f9406662c11d1d5e1f4a769cd5359a3f82fe2d96c87a1a8012e353aa6dbdaaf",
           "replacementPath": "assets/hosted-adaptations/3041/cordis.patch.yml",
-          "replacementSha256": "15a1c80c992f2d2f485aca04e75d23ac3c56b84d32e4af56113ca00cced8ead2"
+          "replacementSha256": "8bb19c47acdc2fb53889a499622054cecd3bc874dc1aea91b43f918dac8f499f"
         }
       },
       {
@@ -128,7 +128,7 @@
   },
   "runtimeProbe": {
     "contractPath": "references/plugin-runtime-probes/3041.json",
-    "contractSha256": "a206f754875c7f0e33b050a5daa3e3faf404dd85a3c3ab26521ee24794119d16",
+    "contractSha256": "afba0c2d6467e3adb73b03b7dad73e6462b55e4fe609ec2b41c12d713a73c316",
     "requiredAssertions": [
       "package.exact-entry",
       "boot.ready-context-once",

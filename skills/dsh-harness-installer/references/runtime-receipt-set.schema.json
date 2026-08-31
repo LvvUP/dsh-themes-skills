@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dsh-themes.com/schemas/dsh-alpha1-runtime-receipt-set-v1.json",
-  "title": "DSH alpha.1 six-task runtime receipt set",
+  "$id": "https://dsh-themes.com/schemas/dsh-alpha2-runtime-receipt-set-v1.json",
+  "title": "DSH alpha.2 six-task runtime receipt set",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "status", "source", "workflow", "requiredReceiptCount", "receipts", "provenanceSetSha256", "receiptSetPayloadSha256"],
   "properties": {
     "schemaVersion": { "const": 1 },
-    "status": { "const": "alpha1-runtime-matrix-verified" },
+    "status": { "const": "alpha2-runtime-matrix-verified" },
     "source": { "$ref": "runtime-receipt.schema.json#/$defs/source" },
     "workflow": {
       "type": "object",
@@ -15,7 +15,7 @@
       "required": ["repository", "workflowPath", "workflowSha256", "runId", "runAttempt", "headSha"],
       "properties": {
         "repository": { "const": "LvvUP/dsh-themes-skills" },
-        "workflowPath": { "const": ".github/workflows/alpha1-runtime-certification.yml" },
+        "workflowPath": { "const": ".github/workflows/alpha2-runtime-certification.yml" },
         "workflowSha256": { "$ref": "#/$defs/sha256" },
         "runId": { "type": "string", "pattern": "^[1-9][0-9]{0,19}$" },
         "runAttempt": { "type": "integer", "minimum": 1, "maximum": 1000 },

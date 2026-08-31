@@ -18,7 +18,7 @@ import { fetchBoundedExact } from './fetch-plugin-source.mjs';
 
 const SHA40 = /^[a-f0-9]{40}$/u;
 const SHA64 = /^[a-f0-9]{64}$/u;
-const PACKAGE = /^(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+$/u;
+const PACKAGE = /^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/u;
 const SEMVER = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/u;
 const SAFE_PATH = /^(?:[A-Za-z0-9._-]+\/)*[A-Za-z0-9._-]+(?:\.ya?ml)$/u;
 const MAX_MANIFEST_BYTES = 1024 * 1024;
@@ -28,7 +28,7 @@ const MAX_LOCKFILE_BYTES = 32 * 1024 * 1024;
 const MAX_NPM_METADATA_BYTES = 4 * 1024 * 1024;
 const MAX_NPM_TARBALL_BYTES = 256 * 1024 * 1024;
 const LOCKFILES = ['pnpm-lock.yaml', 'package-lock.json', 'yarn.lock', 'npm-shrinkwrap.json'];
-const ALPHA1_REMOVED_PACKAGES = new Set([
+const BASELINE_ABSENT_PACKAGES = new Set([
   '@deepseek-ai/dsh-client-runtime',
   '@deepseek-ai/dsh-host-apiproxy',
 ]);
@@ -140,12 +140,12 @@ function normalizeRepository(value) {
   }
 }
 
-function alpha1RemovedPackageReferences(manifest) {
+function baselineAbsentPackageReferences(manifest) {
   const references = new Set();
   const inject = manifest?.dsh?.client?.inject;
   if (Array.isArray(inject)) {
     for (const name of inject) {
-      if (ALPHA1_REMOVED_PACKAGES.has(name)) references.add(name);
+      if (BASELINE_ABSENT_PACKAGES.has(name)) references.add(name);
     }
   }
   for (const field of ['dependencies', 'optionalDependencies', 'peerDependencies']) {
@@ -154,7 +154,7 @@ function alpha1RemovedPackageReferences(manifest) {
       continue;
     }
     for (const name of Object.keys(dependencies)) {
-      if (ALPHA1_REMOVED_PACKAGES.has(name)) references.add(name);
+      if (BASELINE_ABSENT_PACKAGES.has(name)) references.add(name);
     }
   }
   return [...references].sort();
@@ -228,9 +228,9 @@ async function inspectExactNpm(manifest, candidate, fetchImpl) {
   ) {
     fail('exact npm tarball package identity or dsh.bundle.patch differs from the pinned source');
   }
-  const removedPackageReferences = alpha1RemovedPackageReferences(packed.manifest);
+  const removedPackageReferences = baselineAbsentPackageReferences(packed.manifest);
   if (removedPackageReferences.length > 0) {
-    fail(`exact npm tarball references packages absent from alpha.1: ${removedPackageReferences.join(', ')}`);
+    fail(`exact npm tarball references packages absent from alpha.2: ${removedPackageReferences.join(', ')}`);
   }
   const patchName = `package/${normalizeBundlePatch(manifest.dsh.bundle.patch)}`;
   if (!entries.some((entry) => entry.name === patchName && entry.type === '0')) {
@@ -538,10 +538,10 @@ export async function auditCandidateCheckout({
       'package.json at the fixed source subdirectory is not one versioned DSH bundle package with a safe dsh.bundle.patch',
     ]);
   }
-  const removedPackageReferences = alpha1RemovedPackageReferences(manifest);
+  const removedPackageReferences = baselineAbsentPackageReferences(manifest);
   if (removedPackageReferences.length > 0) {
     return rejectedReceipt(candidate, sourceEvidence, [
-      `package.json references packages absent from the exact alpha.1 source baseline: ${removedPackageReferences.join(', ')}`,
+      `package.json references packages absent from the exact alpha.2 source baseline: ${removedPackageReferences.join(', ')}`,
     ]);
   }
   let licenseBytes;

@@ -1,10 +1,10 @@
 /**
- * Public plugin #3042 alpha.1 reviewed replacement — browser half.
+ * Public plugin #3042 alpha.2 reviewed replacement — browser half.
  *
  * The original [[ picker directly walked and read Host files, mounted a
  * custom Typert namespace, and injected hidden note contents before a model
  * step. This adaptation preserves the explicit [[ note-picking use case while
- * delegating path discovery to alpha.1's official fileReferences Remote and
+ * delegating path discovery to alpha.2's official fileReferences Remote and
  * writing the selected Markdown note as the standard @path prompt reference.
  * The model can then use the ordinary read tool under Harness policy.
  */

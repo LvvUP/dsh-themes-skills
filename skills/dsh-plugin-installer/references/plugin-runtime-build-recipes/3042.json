@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "purpose": "dsh-alpha1-hosted-plugin-adaptation",
+  "purpose": "dsh-alpha2-hosted-plugin-adaptation",
   "catalogId": 3042,
   "slug": "dsh-wikilink",
   "baseline": {
-    "tag": "dsh-v0.1.2-alpha.1",
-    "commit": "cd5ef8148158c3a752a658978873241fdf8e2bbc",
-    "tree": "a712eec535b48badc4fefb4df5176a7002e4280b"
+    "tag": "dsh-v0.1.2-alpha.2",
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
   },
   "source": {
     "repository": "https://github.com/zhaoscsc/dsh-wikilink.git",
@@ -20,9 +20,9 @@
   },
   "output": {
     "packageName": "@dsh-themes/dsh-wikilink",
-    "packageVersion": "0.2.0-dsh.alpha1.1",
-    "description": "Obsidian-style [[ Markdown note picker backed by the standard path-only fileReferences service for DeepSeek Harness 0.1.2-alpha.1",
-    "assetName": "dsh-wikilink-0.2.0-dsh.alpha1.1.tgz",
+    "packageVersion": "0.2.0-dsh.alpha2.1",
+    "description": "Obsidian-style [[ Markdown note picker backed by the standard path-only fileReferences service for DeepSeek Harness 0.1.2-alpha.2",
+    "assetName": "dsh-wikilink-0.2.0-dsh.alpha2.1.tgz",
     "hostEntry": "lib/index.js",
     "clientEntry": "lib/client.js",
     "bundlePatch": "cordis.patch.yml",
@@ -34,10 +34,10 @@
     ],
     "peerDependencies": {
       "@deepseek-ai/cordis": "4.0.1",
-      "@deepseek-ai/dsh-api-remotes": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-conversation": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.1",
+      "@deepseek-ai/dsh-api-remotes": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-conversation": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.2",
       "react": "18.3.1"
     },
     "files": [
@@ -48,7 +48,7 @@
           "sourcePath": "lib/index.js",
           "sourceSha256": "ee6884faa37f61f4c9c43a3c88c7f2a4433082c8cf869cbcf731de8f39acf974",
           "replacementPath": "assets/hosted-adaptations/3042/lib/index.js",
-          "replacementSha256": "c5944e23f88cabe4969a2d0cbcec5ef95ce4986c66dda4c3d5b1f28992559f24"
+          "replacementSha256": "c204e9054a75531f6b7a28de04fb63da73344beb5e012758478bfe29ef6e5c67"
         }
       },
       {
@@ -58,7 +58,7 @@
           "sourcePath": "lib/client.js",
           "sourceSha256": "c140cafe01d99c31a287d1d5d0eaf976f7f415d68b0ff926e5765f84426514c5",
           "replacementPath": "assets/hosted-adaptations/3042/lib/client.js",
-          "replacementSha256": "4b66159e2acba55a30052f173d348728f562eecd319dd34051b38dab3a0bb441"
+          "replacementSha256": "cfaa35fb16ab3192d5f8e956c55595dd3127f2d017a9052f118f18056cde15de"
         }
       },
       {
@@ -68,7 +68,7 @@
           "sourcePath": "cordis.patch.yml",
           "sourceSha256": "9664ac1fd8670defe1063fd1a9be4927066ec1bdab276c591b6b88f600478d01",
           "replacementPath": "assets/hosted-adaptations/3042/cordis.patch.yml",
-          "replacementSha256": "74d7866d47362133d12c0f2ad7c9c5096f0d1f6dd8eb89b11bfed4e0ff7a6f12"
+          "replacementSha256": "b9472d26253e0c6fdaa2413afa6a4a12b190fa1591cb746ce4fea9c439d10230"
         }
       },
       {
@@ -144,7 +144,7 @@
   },
   "runtimeProbe": {
     "contractPath": "references/plugin-runtime-probes/3042.json",
-    "contractSha256": "698e927d7f0a77de3f435ca21e492cd6a1895e35590ec6a34c3680b4ff32958d",
+    "contractSha256": "89dad953eecb92d1736a1a3390a9605ae00c8b64d53f8b8d4260f5c86a9a129e",
     "requiredAssertions": [
       "package.exact-entry",
       "boot.ready-picker-once",

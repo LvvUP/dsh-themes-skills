@@ -33,7 +33,7 @@ import {
   validatePluginRuntimeCandidatePlan,
 } from '../skills/dsh-plugin-installer/scripts/plugin-runtime-plan.mjs';
 
-const workflowPath = resolve('.github/workflows/alpha1-plugin-runtime-certification.yml');
+const workflowPath = resolve('.github/workflows/alpha2-plugin-runtime-certification.yml');
 const executorPath = resolve(
   'skills/dsh-plugin-installer/scripts/plugin-runtime-fixed-executor.mjs'
 );
@@ -153,7 +153,7 @@ function syntheticReceipt(context, candidate, runtimeCandidate, tuple, batchId, 
   const task = { ...tuple, batchId, catalogId: candidate.catalogId };
   const ci = {
     repository: 'LvvUP/dsh-themes-skills',
-    workflowPath: '.github/workflows/alpha1-plugin-runtime-certification.yml',
+    workflowPath: '.github/workflows/alpha2-plugin-runtime-certification.yml',
     workflowSha256,
     event: 'workflow_dispatch',
     ref: 'refs/heads/main',
@@ -342,9 +342,9 @@ test('GitHub identity fixes workflow path, main ref, dispatch event, job, and ex
   const environment = {
     GITHUB_ACTIONS: 'true',
     GITHUB_REPOSITORY: 'LvvUP/dsh-themes-skills',
-    GITHUB_WORKFLOW: 'alpha1 Plugin runtime certification',
+    GITHUB_WORKFLOW: 'alpha2 Plugin runtime certification',
     GITHUB_WORKFLOW_REF:
-      'LvvUP/dsh-themes-skills/.github/workflows/alpha1-plugin-runtime-certification.yml@refs/heads/main',
+      'LvvUP/dsh-themes-skills/.github/workflows/alpha2-plugin-runtime-certification.yml@refs/heads/main',
     GITHUB_EVENT_NAME: 'workflow_dispatch',
     GITHUB_REF: 'refs/heads/main',
     GITHUB_JOB: 'runtime-batch-3',
@@ -369,7 +369,7 @@ test('GitHub identity fixes workflow path, main ref, dispatch event, job, and ex
   }
   const aggregateIdentity = {
     repository: environment.GITHUB_REPOSITORY,
-    workflowPath: '.github/workflows/alpha1-plugin-runtime-certification.yml',
+    workflowPath: '.github/workflows/alpha2-plugin-runtime-certification.yml',
     workflowSha256: deterministicSha('workflow'),
     event: environment.GITHUB_EVENT_NAME,
     ref: environment.GITHUB_REF,
@@ -398,9 +398,9 @@ test('aggregation requires all 480 canonical receipts from one run and re-verifi
     const githubEnvironment = {
       GITHUB_ACTIONS: 'true',
       GITHUB_REPOSITORY: 'LvvUP/dsh-themes-skills',
-      GITHUB_WORKFLOW: 'alpha1 Plugin runtime certification',
+      GITHUB_WORKFLOW: 'alpha2 Plugin runtime certification',
       GITHUB_WORKFLOW_REF:
-        'LvvUP/dsh-themes-skills/.github/workflows/alpha1-plugin-runtime-certification.yml@refs/heads/main',
+        'LvvUP/dsh-themes-skills/.github/workflows/alpha2-plugin-runtime-certification.yml@refs/heads/main',
       GITHUB_EVENT_NAME: 'workflow_dispatch',
       GITHUB_REF: 'refs/heads/main',
       GITHUB_JOB: 'aggregate',
@@ -460,7 +460,7 @@ test('custom Sigstore handoff binds its signed predicate to the exact local evid
   try {
     const predicate = {
       schemaVersion: 1,
-      predicateType: 'https://dsh-themes.com/attestations/plugin-alpha1-runtime-evidence/v1',
+      predicateType: 'https://dsh-themes.com/attestations/plugin-alpha2-runtime-evidence/v1',
       receiptSet: { status: 'plugin-runtime-80-of-80-passed' },
       taskReceipts: [],
     };
@@ -473,7 +473,7 @@ test('custom Sigstore handoff binds its signed predicate to the exact local evid
         payload: Buffer.from(JSON.stringify({
           _type: 'https://in-toto.io/Statement/v1',
           subject: [{ name: 'plugin-runtime-receipt-set.json', digest: { sha256: 'a'.repeat(64) } }],
-          predicateType: 'https://dsh-themes.com/attestations/plugin-alpha1-runtime-evidence/v1',
+          predicateType: 'https://dsh-themes.com/attestations/plugin-alpha2-runtime-evidence/v1',
           predicate,
         })).toString('base64'),
         signatures: [{ sig: 'test-only' }],
@@ -529,9 +529,9 @@ test('workflow isolates candidates, pins actions, minimizes permissions, and can
     assert.match(action, /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+@[a-f0-9]{40}$/u);
   }
   assert.doesNotMatch(`${source}\n${actionSource}`, /secrets\.|GH_TOKEN|persist-credentials:\s*true/u);
-  assert.match(actionSource, /dsh-v0\.1\.2-alpha\.1/u);
-  assert.match(actionSource, /cd5ef8148158c3a752a658978873241fdf8e2bbc/u);
-  assert.match(actionSource, /a712eec535b48badc4fefb4df5176a7002e4280b/u);
+  assert.match(actionSource, /dsh-v0\.1\.2-alpha\.2/u);
+  assert.match(actionSource, /0a53fb55bea101816fa226bb964ae2bed71c343b/u);
+  assert.match(actionSource, /64ccbfa8e0caa4711cd4a75717ef9e022657961b/u);
   assert.match(actionSource, /plugin-runtime-fixed-executor\.mjs/u);
   assert.match(actionSource, /--candidate-source "\$\{\{ github\.workspace \}\}\/\.ci\/candidate"/u);
   assert.doesNotMatch(actionSource, /\.ci\/candidate\/\$\{\{ inputs\.source-subdir \}\}/u);

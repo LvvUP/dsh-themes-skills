@@ -1,10 +1,10 @@
-name: alpha1 Plugin source intake
+name: alpha2 Plugin source intake
 
 on:
   workflow_dispatch:
   pull_request:
     paths:
-      - .github/workflows/alpha1-plugin-source-intake.yml
+      - .github/workflows/alpha2-plugin-source-intake.yml
       - skills/dsh-plugin-installer/**
       - test/plugin-candidate-intake.test.mjs
       - test/plugin-static-risk.test.mjs
@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: alpha1-plugin-source-intake-${{ github.workflow }}-${{ github.ref }}
+  group: alpha2-plugin-source-intake-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -93,7 +93,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: alpha1-plugin-source-intake-${{ matrix.catalogId }}
+          name: alpha2-plugin-source-intake-${{ matrix.catalogId }}
           path: ci-evidence/receipt
           if-no-files-found: error
           retention-days: 14
@@ -118,7 +118,7 @@ jobs:
       - name: Download every candidate receipt
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
-          pattern: alpha1-plugin-source-intake-*
+          pattern: alpha2-plugin-source-intake-*
           path: ci-evidence/input
       - name: Reject missing, duplicate, secret-bearing, or malformed source intake
         shell: bash
@@ -140,7 +140,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: alpha1-plugin-source-intake-summary
+          name: alpha2-plugin-source-intake-summary
           path: |
             ci-evidence/summary/source-intake-summary.json
             ci-evidence/risk-summary/static-risk-summary.json

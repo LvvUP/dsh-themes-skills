@@ -11,9 +11,9 @@ const BASELINE_POLICY = JSON.parse(
   await readFile(new URL('../references/baseline-policy.json', import.meta.url))
 );
 const CERTIFIED_RUNTIME = BASELINE_POLICY.certifiedRuntimeBaseline;
-const COMMUNITY_CURRENT = BASELINE_POLICY.communityCurrentAlpha1;
+const COMMUNITY_CURRENT = BASELINE_POLICY.communityCurrentAlpha2;
 if (
-  BASELINE_POLICY.schemaVersion !== 3 ||
+  BASELINE_POLICY.schemaVersion !== 4 ||
   BASELINE_POLICY.defaultOperationalLane !== 'certified' ||
   BASELINE_POLICY.certified?.status !== 'certified-discovery' ||
   BASELINE_POLICY.certified?.enabled !== true ||
@@ -27,18 +27,20 @@ if (
   !/^[0-9a-f]{64}$/.test(
     BASELINE_POLICY.certified?.hostedAuthoritySha256
   ) ||
-  COMMUNITY_CURRENT?.status !== 'alpha1-item-runtime-evidence-pending' ||
+  COMMUNITY_CURRENT?.status !== 'alpha2-item-runtime-evidence-pending' ||
   COMMUNITY_CURRENT?.enabled !== true ||
   COMMUNITY_CURRENT?.inspectionEnabled !== true ||
   COMMUNITY_CURRENT?.installableResultsAllowed !== false ||
-  COMMUNITY_CURRENT?.dshPackageVersion !== '0.1.2-alpha.1' ||
-  COMMUNITY_CURRENT?.sourceTag !== 'dsh-v0.1.2-alpha.1' ||
+  COMMUNITY_CURRENT?.dshPackageVersion !== '0.1.2-alpha.2' ||
+  COMMUNITY_CURRENT?.sourceTag !== 'dsh-v0.1.2-alpha.2' ||
   COMMUNITY_CURRENT?.sourceCommit !==
-    'cd5ef8148158c3a752a658978873241fdf8e2bbc' ||
+    '0a53fb55bea101816fa226bb964ae2bed71c343b' ||
   COMMUNITY_CURRENT?.sourceTree !==
-    'a712eec535b48badc4fefb4df5176a7002e4280b' ||
+    '64ccbfa8e0caa4711cd4a75717ef9e022657961b' ||
   COMMUNITY_CURRENT?.communityItemsRequired !== 11 ||
   COMMUNITY_CURRENT?.communityItemsCompleted !== 0 ||
+  COMMUNITY_CURRENT?.communityTasksRequired !== 66 ||
+  COMMUNITY_CURRENT?.communityTasksCompleted !== 0 ||
   COMMUNITY_CURRENT?.communityInstallableRecords !== 0 ||
   COMMUNITY_CURRENT?.websiteDistribution !== 'external-showcase' ||
   COMMUNITY_CURRENT?.websiteInstallability !== 'showcase-only' ||
@@ -51,6 +53,11 @@ if (
     BASELINE_POLICY.certified.evidencePath ||
   COMMUNITY_CURRENT?.historicalIdentitySha256 !==
     BASELINE_POLICY.certified.evidenceSha256 ||
+  COMMUNITY_CURRENT?.historicalAlpha1Path !==
+    'community-alpha1-recertification.json' ||
+  COMMUNITY_CURRENT?.historicalAlpha1Sha256 !==
+    '9ecc86474cba557c445ae21b8e479aa3f1b55cb8b2768faa6ed73952cc7b1552' ||
+  COMMUNITY_CURRENT?.historicalAlpha1MayAuthorizeCurrent !== false ||
   CERTIFIED_RUNTIME?.status !== 'baseline-certified' ||
   CERTIFIED_RUNTIME?.certificationStatus !== 'verified-runtime-baseline' ||
   CERTIFIED_RUNTIME?.productionReady !== true ||
@@ -89,47 +96,55 @@ if (
   createHash('sha256').update(communityCurrentBytes).digest('hex') !==
   COMMUNITY_CURRENT.evidenceSha256
 ) {
-  throw new Error('current alpha1 community authority digest differs');
+  throw new Error('current alpha2 community authority digest differs');
 }
-const COMMUNITY_ALPHA1 = JSON.parse(communityCurrentBytes.toString('utf8'));
+const COMMUNITY_ALPHA2 = JSON.parse(communityCurrentBytes.toString('utf8'));
 if (
-  COMMUNITY_ALPHA1.schemaVersion !== 1 ||
-  COMMUNITY_ALPHA1.baseline?.baselineId !==
-    `deepseek-harness/dsh-v0.1.2-alpha.1@${COMMUNITY_CURRENT.sourceCommit}` ||
-  COMMUNITY_ALPHA1.baseline?.dshPackageVersion !==
+  COMMUNITY_ALPHA2.schemaVersion !== 1 ||
+  COMMUNITY_ALPHA2.purpose !== 'alpha2-community-skin-item-recertification' ||
+  COMMUNITY_ALPHA2.baseline?.baselineId !==
+    `deepseek-harness/dsh-v0.1.2-alpha.2@${COMMUNITY_CURRENT.sourceCommit}` ||
+  COMMUNITY_ALPHA2.baseline?.dshPackageVersion !==
     COMMUNITY_CURRENT.dshPackageVersion ||
-  COMMUNITY_ALPHA1.baseline?.officialTag !== COMMUNITY_CURRENT.sourceTag ||
-  COMMUNITY_ALPHA1.baseline?.sourceCommit !== COMMUNITY_CURRENT.sourceCommit ||
-  COMMUNITY_ALPHA1.baseline?.sourceTree !== COMMUNITY_CURRENT.sourceTree ||
-  COMMUNITY_ALPHA1.baseline?.officialBinaryArtifact !== false ||
-  COMMUNITY_ALPHA1.gate?.status !== COMMUNITY_CURRENT.status ||
-  COMMUNITY_ALPHA1.gate?.requiredItems !== 11 ||
-  COMMUNITY_ALPHA1.gate?.completedItems !== 0 ||
-  COMMUNITY_ALPHA1.gate?.requiredTasksPerItem !== 6 ||
-  COMMUNITY_ALPHA1.gate?.completedTasksPerItem !== 0 ||
-  COMMUNITY_ALPHA1.gate?.installable !== false ||
-  COMMUNITY_ALPHA1.gate?.runtimeReceiptSetSha256 !== null ||
-  COMMUNITY_ALPHA1.gate?.rollbackReceiptSetSha256 !== null ||
-  COMMUNITY_ALPHA1.items?.length !== 11 ||
-  COMMUNITY_ALPHA1.items.some(
-    (item) => item.status !== 'verification-pending'
+  COMMUNITY_ALPHA2.baseline?.officialTag !== COMMUNITY_CURRENT.sourceTag ||
+  COMMUNITY_ALPHA2.baseline?.sourceCommit !== COMMUNITY_CURRENT.sourceCommit ||
+  COMMUNITY_ALPHA2.baseline?.sourceTree !== COMMUNITY_CURRENT.sourceTree ||
+  COMMUNITY_ALPHA2.baseline?.dshPackageName !== '@deepseek-ai/dsh' ||
+  COMMUNITY_ALPHA2.matrix?.requiredTasksPerItem !== 6 ||
+  COMMUNITY_ALPHA2.matrix?.requiredTotalTasks !== 66 ||
+  COMMUNITY_ALPHA2.gate?.status !== COMMUNITY_CURRENT.status ||
+  COMMUNITY_ALPHA2.gate?.requiredItems !== 11 ||
+  COMMUNITY_ALPHA2.gate?.completedItems !== 0 ||
+  COMMUNITY_ALPHA2.gate?.completedTasks !== 0 ||
+  COMMUNITY_ALPHA2.gate?.installable !== false ||
+  COMMUNITY_ALPHA2.gate?.publicationAllowed !== false ||
+  COMMUNITY_ALPHA2.gate?.runtimeReceiptSetSha256 !== null ||
+  COMMUNITY_ALPHA2.gate?.rollbackReceiptSetSha256 !== null ||
+  COMMUNITY_ALPHA2.items?.length !== 11 ||
+  COMMUNITY_ALPHA2.items.some(
+    (item) =>
+      item.status !== 'verification-pending' ||
+      item.completedTasks !== 0 ||
+      item.runtimeReceiptSetSha256 !== null ||
+      item.rollbackReceiptSetSha256 !== null
   ) ||
-  COMMUNITY_ALPHA1.historicalAuthority?.mayAuthorizeAlpha1 !== false
+  COMMUNITY_ALPHA2.historicalAuthority?.alpha1MayAuthorizeAlpha2 !== false ||
+  COMMUNITY_ALPHA2.historicalAuthority?.rc8MayAuthorizeAlpha2 !== false
 ) {
-  throw new Error('current alpha1 community authority attempts promotion');
+  throw new Error('current alpha2 community authority attempts promotion');
 }
-const communityAlpha1Keys = new Set();
-for (const currentItem of COMMUNITY_ALPHA1.items) {
+const communityAlpha2Keys = new Set();
+for (const currentItem of COMMUNITY_ALPHA2.items) {
   const key = `${currentItem.catalogId}:${currentItem.slug}`;
   const historicalItem = COMMUNITY_AUTHORITY.skins?.find(
     (item) =>
       item.catalogId === currentItem.catalogId &&
       item.slug === currentItem.slug
   );
-  if (communityAlpha1Keys.has(key) || !historicalItem) {
-    throw new Error('current alpha1 community authority changes the historical set');
+  if (communityAlpha2Keys.has(key) || !historicalItem) {
+    throw new Error('current alpha2 community authority changes the historical set');
   }
-  communityAlpha1Keys.add(key);
+  communityAlpha2Keys.add(key);
 }
 const hostedAuthorityUrl = new URL(
   `../references/${BASELINE_POLICY.certified.hostedAuthorityPath}`,
@@ -344,8 +359,8 @@ const COMMUNITY_MAIN_RECEIPT_SHA256 =
 const COMMUNITY_ATTESTATION_BRIDGE_SHA256 =
   COMMUNITY_AUTHORITY.managerGate.attestationEquivalenceBridgeSha256;
 const CERTIFIED_DSH_VERSION = CERTIFIED_COMPATIBILITY.dshPackageVersion;
-const COMMUNITY_ALPHA1_DSH_VERSION =
-  COMMUNITY_ALPHA1.baseline.dshPackageVersion;
+const COMMUNITY_ALPHA2_DSH_VERSION =
+  COMMUNITY_ALPHA2.baseline.dshPackageVersion;
 const HISTORICAL_V2_VERSION =
   BASELINE_POLICY.historicalDiscoveryVersions[0];
 const CERTIFIED_TARGET_VERSION = CERTIFIED_DSH_VERSION;
@@ -559,7 +574,7 @@ function parseArgs(argv) {
     HISTORICAL_V2_VERSION,
     CERTIFIED_DSH_VERSION,
     RUNTIME_BASELINE_DSH_VERSION,
-    COMMUNITY_ALPHA1_DSH_VERSION,
+    COMMUNITY_ALPHA2_DSH_VERSION,
   ]).has(values['dsh-version'])) {
     throw new Error('DSH version must be one exact version listed by baseline-policy.json');
   }
@@ -1242,7 +1257,7 @@ function directoryExternalRightsMatch(source, rights) {
 
 function communityAuthorityFor(item, source, rights) {
   const local = COMMUNITY_AUTHORITY.skins.find((skin) => skin.slug === item.slug);
-  const current = COMMUNITY_ALPHA1.items.find(
+  const current = COMMUNITY_ALPHA2.items.find(
     (candidate) =>
       candidate.catalogId === item.catalogId &&
       candidate.slug === item.slug
@@ -1348,7 +1363,7 @@ function acceptedDirectory(item, args, catalogOrigin) {
   const runtime = item.runtime;
   const compatibility = item.compatibility;
   const distribution = item.distribution;
-  const currentCommunityItem = COMMUNITY_ALPHA1.items.find(
+  const currentCommunityItem = COMMUNITY_ALPHA2.items.find(
     (candidate) =>
       candidate.catalogId === item.catalogId &&
       candidate.slug === item.slug
@@ -1358,7 +1373,7 @@ function acceptedDirectory(item, args, catalogOrigin) {
       currentCommunityItem.status === 'verification-pending' &&
       runtime?.status === 'verification-pending' &&
       compatibility?.status === 'verification-pending' &&
-      compatibility?.baseline === COMMUNITY_ALPHA1_DSH_VERSION &&
+      compatibility?.baseline === COMMUNITY_ALPHA2_DSH_VERSION &&
       distribution?.kind === SHOWCASE.kind &&
       distribution?.installability === SHOWCASE.installability
   );
@@ -1470,7 +1485,7 @@ function acceptedDirectory(item, args, catalogOrigin) {
       },
       compatibility: {
         status: 'verification-pending',
-        dshPackageVersion: COMMUNITY_ALPHA1_DSH_VERSION,
+        dshPackageVersion: COMMUNITY_ALPHA2_DSH_VERSION,
         evidence: [],
       },
       distribution: {
@@ -1479,12 +1494,14 @@ function acceptedDirectory(item, args, catalogOrigin) {
       },
       communityRecertification: {
         status: COMMUNITY_CURRENT.status,
-        baseline: COMMUNITY_ALPHA1_DSH_VERSION,
-        requiredItems: COMMUNITY_ALPHA1.gate.requiredItems,
-        completedItems: COMMUNITY_ALPHA1.gate.completedItems,
+        baseline: COMMUNITY_ALPHA2_DSH_VERSION,
+        requiredItems: COMMUNITY_ALPHA2.gate.requiredItems,
+        completedItems: COMMUNITY_ALPHA2.gate.completedItems,
+        requiredTasks: COMMUNITY_ALPHA2.matrix.requiredTotalTasks,
+        completedTasks: COMMUNITY_ALPHA2.gate.completedTasks,
         historicalRuntimeStatus: authority.historical.runtimeStatus,
       },
-      handoff: 'alpha1-community-recertification-pending',
+      handoff: 'alpha2-community-recertification-pending',
     };
   }
 
@@ -1528,13 +1545,15 @@ function acceptedDirectory(item, args, catalogOrigin) {
         ? {
             communityRecertification: {
               status: COMMUNITY_CURRENT.status,
-              baseline: COMMUNITY_ALPHA1_DSH_VERSION,
-              requiredItems: COMMUNITY_ALPHA1.gate.requiredItems,
-              completedItems: COMMUNITY_ALPHA1.gate.completedItems,
+              baseline: COMMUNITY_ALPHA2_DSH_VERSION,
+              requiredItems: COMMUNITY_ALPHA2.gate.requiredItems,
+              completedItems: COMMUNITY_ALPHA2.gate.completedItems,
+              requiredTasks: COMMUNITY_ALPHA2.matrix.requiredTotalTasks,
+              completedTasks: COMMUNITY_ALPHA2.gate.completedTasks,
               historicalRuntimeStatus:
                 communityAuthority.historical.runtimeStatus,
             },
-            handoff: 'alpha1-community-recertification-pending',
+            handoff: 'alpha2-community-recertification-pending',
           }
         : {}),
     };
@@ -1949,14 +1968,14 @@ export async function runFinder(argv, { fetchImpl = fetch } = {}) {
     results.length > 0 &&
     results.every((item) => Boolean(item.communityRecertification));
   const effectiveDshVersion = allResultsUseCurrentCommunityBaseline
-    ? COMMUNITY_ALPHA1_DSH_VERSION
+    ? COMMUNITY_ALPHA2_DSH_VERSION
     : args['dsh-version'];
   return {
     locale: args.locale,
     copy,
     dshVersion: effectiveDshVersion,
     baselineStatus:
-      effectiveDshVersion === COMMUNITY_ALPHA1_DSH_VERSION
+      effectiveDshVersion === COMMUNITY_ALPHA2_DSH_VERSION
         ? COMMUNITY_CURRENT.status
         : effectiveDshVersion === CERTIFIED_DSH_VERSION
         ? BASELINE_POLICY.certified.status

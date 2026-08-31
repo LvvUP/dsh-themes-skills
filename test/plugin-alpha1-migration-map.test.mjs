@@ -12,7 +12,7 @@ const contractUrl = new URL(
   import.meta.url
 );
 
-test('plugin review instructions bind the official alpha.1 migration boundary', async () => {
+test('historical alpha.1 migration evidence remains frozen without governing the current Skill', async () => {
   const [migrationMap, skill, contract] = await Promise.all([
     readFile(mapUrl, 'utf8'),
     readFile(skillUrl, 'utf8'),
@@ -37,8 +37,8 @@ test('plugin review instructions bind the official alpha.1 migration boundary', 
   assert.match(migrationMap, /macOS arm64, Linux x64, and Windows x64/u);
   assert.match(migrationMap, /Node 22\.19\.0 and 24\.15\.0/u);
 
-  for (const instructions of [skill, contract]) {
-    assert.match(instructions, /alpha1-plugin-migration-map\.md/u);
-    assert.match(instructions, /#3089/u);
-  }
+  assert.match(skill, /alpha2-plugin-migration-map\.md/u);
+  assert.match(contract, /alpha2-plugin-migration-map\.md/u);
+  for (const instructions of [skill, contract]) assert.match(instructions, /#3089/u);
+  assert.doesNotMatch(skill, /alpha1-plugin-migration-map\.md/u);
 });

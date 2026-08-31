@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Real alpha.1 runtime probes and candidate-only receipt aggregation.
+ * Real alpha.2 runtime probes and candidate-only receipt aggregation.
  *
  * BrowserAuth material is held only in bounded process memory. It is never
  * printed, persisted, hashed, or included in an exception message.
@@ -32,6 +32,7 @@ import { parseDocument } from 'yaml';
 import {
   loadAuthority,
   validateBuildReceipt,
+  validateInstallReceipt,
 } from './authority.mjs';
 import {
   RUNTIME_REPOSITORY,
@@ -203,12 +204,12 @@ async function readCanonicalJson(file, label) {
 
 async function readBundledWorkflow(input) {
   if (!path.isAbsolute(input) || path.resolve(input) !== path.resolve(bundledWorkflowPath)) {
-    fail('--workflow must name the bundled alpha.1 runtime workflow exactly');
+    fail('--workflow must name the bundled alpha.2 runtime workflow exactly');
   }
   const info = await lstat(input);
   if (!info.isFile() || info.isSymbolicLink() ||
       await realpath(input) !== path.resolve(bundledWorkflowPath)) {
-    fail('bundled alpha.1 runtime workflow must be a real regular file');
+    fail('bundled alpha.2 runtime workflow must be a real regular file');
   }
   return readFile(input);
 }
@@ -534,7 +535,7 @@ export function staleRuntimeComboUrl(batch) {
 function apiBody() {
   return Buffer.from(JSON.stringify({
     type: 'client-request',
-    rpcId: 'alpha1-runtime-certification',
+    rpcId: 'alpha2-runtime-certification',
     method: 'settings/describe',
     payload: { args: {} },
   }), 'utf8');
@@ -549,7 +550,7 @@ function validateSettingsDescribeResponse(response) {
     fail('authenticated settings API response is not JSON');
   }
   if (value?.type !== 'server-response' ||
-      value?.rpcId !== 'alpha1-runtime-certification' ||
+      value?.rpcId !== 'alpha2-runtime-certification' ||
       value?.result?.ok !== true ||
       !Array.isArray(value?.result?.value?.namespaces)) {
     fail('authenticated settings API response shape mismatch');
@@ -805,7 +806,7 @@ export function validateRuntimeGithubIdentity(environment, task) {
     fail('runtime receipts may be created only by the bound GitHub Actions workflow');
   }
   if (environment.GITHUB_ACTIONS !== 'true' || environment.GITHUB_REPOSITORY !== RUNTIME_REPOSITORY ||
-      environment.GITHUB_WORKFLOW !== 'DSH alpha.1 runtime certification' ||
+      environment.GITHUB_WORKFLOW !== 'DSH alpha.2 runtime certification' ||
       environment.GITHUB_JOB !== 'runtime' || !/^[1-9]\d{0,19}$/u.test(environment.GITHUB_RUN_ID) ||
       !/^[1-9]\d{0,2}$/u.test(environment.GITHUB_RUN_ATTEMPT) || !SHA40.test(environment.GITHUB_SHA)) {
     fail('GitHub Actions runtime identity mismatch');
@@ -824,10 +825,19 @@ export function validateRuntimeGithubIdentity(environment, task) {
   };
 }
 
-export function buildRuntimeReceipt({ authority, task, buildReceipt, buildReceiptBytes, ci, probes }) {
+export function buildRuntimeReceipt({
+  authority,
+  task,
+  buildReceipt,
+  buildReceiptBytes,
+  installReceipt,
+  installReceiptBytes,
+  ci,
+  probes,
+}) {
   const receipt = {
     schemaVersion: 1,
-    status: 'alpha1-runtime-task-passed',
+    status: 'alpha2-runtime-task-passed',
     scope: 'one-platform-node-task',
     source: {
       tag: authority.release.tag,
@@ -836,9 +846,26 @@ export function buildRuntimeReceipt({ authority, task, buildReceipt, buildReceip
       lockfileSha256: authority.source.lockfileSha256,
     },
     task,
-    build: {
-      buildReceiptSha256: digest(buildReceiptBytes),
-      builtCliSha256: buildReceipt.result.builtCliSha256,
+    artifacts: {
+      officialNpm: {
+        installReceiptSha256: digest(installReceiptBytes),
+        installedCliSha256: installReceipt.result.installedCliSha256,
+        tarballSha256: installReceipt.package.tarballSha256,
+        resolutionLockfileSha256: installReceipt.resolution.lockfileSha256,
+      },
+      sourceCrossBuild: {
+        buildReceiptSha256: digest(buildReceiptBytes),
+        builtCliSha256: buildReceipt.result.builtCliSha256,
+        reportedVersion: buildReceipt.result.reportedVersion,
+      },
+    },
+    provenanceBoundary: {
+      officialNpmOperationalRuntime: true,
+      exactSourceCrossBuild: true,
+      npmGitHeadPresent: authority.officialNpm.gitHeadPresent,
+      npmProvenanceAttestationPresent: authority.officialNpm.provenanceAttestationPresent,
+      binarySourceEquivalenceClaimed: false,
+      artifactRelationship: 'independent-artifacts-no-source-package-binding',
     },
     probes: {
       cli: { reportedVersion: authority.release.version },
@@ -876,8 +903,53 @@ export function buildRuntimeReceipt({ authority, task, buildReceipt, buildReceip
   return validateRuntimeReceipt(receipt, authority);
 }
 
-export async function runRuntimeTask({ source, buildReceiptPath, output, tuple, workflowPath }) {
-  if (![source, buildReceiptPath, output, workflowPath].every(path.isAbsolute)) {
+async function verifiedOfficialInstall(installRootInput, installReceiptPath, authority, task) {
+  const installRoot = path.resolve(installRootInput);
+  const home = await realpath(os.homedir());
+  const rootInfo = await lstat(installRoot);
+  if (!rootInfo.isDirectory() || rootInfo.isSymbolicLink() ||
+      await realpath(installRoot) !== installRoot ||
+      path.basename(installRoot) !== 'dsh-v0.1.2-alpha.2-npm') {
+    fail('official runtime install root is not the exact versioned real directory');
+  }
+  const relationToHome = path.relative(home, installRoot);
+  if (relationToHome === '' || relationToHome.startsWith('..') || path.isAbsolute(relationToHome)) {
+    fail('official runtime install root must remain below the current user home');
+  }
+  const loaded = await readCanonicalJson(path.resolve(installReceiptPath), 'private install receipt');
+  const installReceipt = validateInstallReceipt(loaded.value, authority);
+  if (installReceipt.toolchain.platform !== task.platform ||
+      installReceipt.toolchain.arch !== task.arch ||
+      installReceipt.toolchain.nodeVersion !== task.nodeVersion) {
+    fail('install receipt tuple mismatch');
+  }
+  const lockfile = await readFile(path.join(installRoot, 'pnpm-lock.yaml'));
+  if (digest(lockfile) !== authority.runtimeInstall.lockfileSha256) {
+    fail('official runtime lockfile changed after installation');
+  }
+  const linkedCli = path.join(installRoot, authority.runtimeInstall.installedCliPath);
+  const cli = await realpath(linkedCli);
+  const relationToInstall = path.relative(installRoot, cli);
+  const cliInfo = await lstat(cli);
+  if (relationToInstall.startsWith('..') || path.isAbsolute(relationToInstall) ||
+      !cliInfo.isFile() || cliInfo.isSymbolicLink() ||
+      digest(await readFile(cli)) !== authority.officialNpm.cliSha256) {
+    fail('official runtime CLI differs from the installed receipt authority');
+  }
+  return { cli, installReceipt, installReceiptBytes: loaded.bytes };
+}
+
+export async function runRuntimeTask({
+  source,
+  buildReceiptPath,
+  installRoot,
+  installReceiptPath,
+  output,
+  tuple,
+  workflowPath,
+}) {
+  if (![source, buildReceiptPath, installRoot, installReceiptPath, output, workflowPath]
+    .every(path.isAbsolute)) {
     fail('runtime task paths must be absolute');
   }
   const authority = await loadAuthority();
@@ -899,44 +971,65 @@ export async function runRuntimeTask({ source, buildReceiptPath, output, tuple, 
       digest(await readFile(cli)) !== buildReceipt.result.builtCliSha256) {
     fail('source-built CLI bytes do not match the private build receipt');
   }
+  const official = await verifiedOfficialInstall(
+    installRoot,
+    installReceiptPath,
+    authority,
+    task
+  );
   const workflowBytes = await readBundledWorkflow(workflowPath);
   const workflowSha256 = digest(workflowBytes);
   const ci = { ...validateRuntimeGithubIdentity(process.env, task), workflowSha256 };
-  const tempRoot = await mkdtemp(path.join(os.tmpdir(), 'dsh-alpha1-runtime-'));
+  const tempRoot = await mkdtemp(path.join(os.tmpdir(), 'dsh-alpha2-runtime-'));
   let first;
   try {
     const env = await prepareRuntimeRoot(tempRoot);
     await assertCliBytes(cli, buildReceipt.result.builtCliSha256);
-    const versionResult = await captureCli(cli, ['--version'], { cwd: tempRoot, env });
+    const sourceVersionResult = await captureCli(cli, ['--version'], { cwd: tempRoot, env });
     await assertCliBytes(cli, buildReceipt.result.builtCliSha256);
-    if (versionResult.stderr.trim() !== '') fail('source-built CLI version probe wrote to stderr');
+    if (sourceVersionResult.stderr.trim() !== '') fail('source-built CLI version probe wrote to stderr');
     const escaped = authority.release.version.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
-    if (!new RegExp(`(?:^|[^0-9])${escaped}(?:$|[^0-9])`, 'u').test(versionResult.stdout)) {
+    if (!new RegExp(`(?:^|[^0-9])${escaped}(?:$|[^0-9])`, 'u').test(sourceVersionResult.stdout)) {
       fail('source-built CLI version probe mismatch');
     }
-    await assertCliBytes(cli, buildReceipt.result.builtCliSha256);
-    const dumpResult = await captureCli(cli, ['--profile', 'web', '--dump-config'], {
+    await assertCliBytes(official.cli, authority.officialNpm.cliSha256);
+    const versionResult = await captureCli(official.cli, ['--version'], { cwd: tempRoot, env });
+    await assertCliBytes(official.cli, authority.officialNpm.cliSha256);
+    if (versionResult.stderr.trim() !== '') fail('official npm CLI version probe wrote to stderr');
+    if (!new RegExp(`(?:^|[^0-9])${escaped}(?:$|[^0-9])`, 'u').test(versionResult.stdout)) {
+      fail('official npm CLI version probe mismatch');
+    }
+    await assertCliBytes(official.cli, authority.officialNpm.cliSha256);
+    const dumpResult = await captureCli(official.cli, ['--profile', 'web', '--dump-config'], {
       cwd: tempRoot,
       env,
     });
-    await assertCliBytes(cli, buildReceipt.result.builtCliSha256);
+    await assertCliBytes(official.cli, authority.officialNpm.cliSha256);
     if (dumpResult.stderr.trim() !== '') fail('Profile dump-config probe wrote to stderr');
     const dumpConfigPassed = validateDumpConfig(dumpResult.stdout);
     const port = await freePort();
-    first = await probeFirstWeb(cli, tempRoot, env, port, buildReceipt.result.builtCliSha256);
+    first = await probeFirstWeb(
+      official.cli,
+      tempRoot,
+      env,
+      port,
+      authority.officialNpm.cliSha256
+    );
     const restartStatus = await probeRestart(
-      cli,
+      official.cli,
       tempRoot,
       env,
       port,
       first,
-      buildReceipt.result.builtCliSha256
+      authority.officialNpm.cliSha256
     );
     const receipt = buildRuntimeReceipt({
       authority,
       task,
       buildReceipt,
       buildReceiptBytes,
+      installReceipt: official.installReceipt,
+      installReceiptBytes: official.installReceiptBytes,
       ci,
       probes: { ...first.evidence, dumpConfigPassed, restartStatus },
     });
@@ -959,7 +1052,7 @@ function expectedReceiptFiles() {
 function runtimeEvidencePredicate(receiptSet, receipts) {
   return {
     schemaVersion: 1,
-    predicateType: 'https://dsh-themes.com/attestations/alpha1-runtime-evidence/v1',
+    predicateType: 'https://dsh-themes.com/attestations/alpha2-runtime-evidence/v1',
     authorityEffect: 'none',
     receiptSet,
     receipts,
@@ -974,7 +1067,7 @@ function candidateManifest(
 ) {
   return {
     schemaVersion: 1,
-    status: 'alpha1-runtime-candidate-awaiting-explicit-promotion',
+    status: 'alpha2-runtime-candidate-awaiting-explicit-promotion',
     authorityEffect: 'none',
     sourceCommit: receiptSet.source.commit,
     workflow: receiptSet.workflow,
@@ -1028,7 +1121,7 @@ export async function aggregateRuntimeCandidate({ input, output, workflowPath })
     receipt.ci.headSha !== first.ci.headSha)) fail('receipt CI run or workflow binding mismatch');
   const receiptSet = {
     schemaVersion: 1,
-    status: 'alpha1-runtime-matrix-verified',
+    status: 'alpha2-runtime-matrix-verified',
     source: first.source,
     workflow: {
       repository: first.ci.repository,
@@ -1202,10 +1295,14 @@ async function main(argv) {
   const [command, ...args] = argv;
   const flags = parseFlags(args);
   if (command === 'run-task') {
-    requireExactFlags(flags, ['source', 'build-receipt', 'output', 'tuple', 'workflow']);
+    requireExactFlags(flags, [
+      'source', 'build-receipt', 'install', 'install-receipt', 'output', 'tuple', 'workflow',
+    ]);
     await runRuntimeTask({
       source: flag(flags, 'source'),
       buildReceiptPath: flag(flags, 'build-receipt'),
+      installRoot: flag(flags, 'install'),
+      installReceiptPath: flag(flags, 'install-receipt'),
       output: flag(flags, 'output'),
       tuple: flag(flags, 'tuple'),
       workflowPath: flag(flags, 'workflow'),

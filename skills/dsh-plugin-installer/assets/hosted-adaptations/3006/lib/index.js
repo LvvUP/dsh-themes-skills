@@ -1,9 +1,9 @@
 /**
- * Public plugin #3006 alpha.1 reviewed replacement — Host half.
+ * Public plugin #3006 alpha.2 reviewed replacement — Host half.
  *
  * The only Host behavior is registration of one non-secret preference
  * namespace. Registration belongs to the settings-injection child fiber:
- * alpha.1 removes it automatically when this plugin or the settings provider
+ * alpha.2 removes it automatically when this plugin or the settings provider
  * unloads. User values remain in settings.yaml as inert preferences.
  */
 import z from '@deepseek-ai/schemastery'
@@ -55,7 +55,7 @@ function validatePreferences(value) {
 
 /**
  * Register the durable namespace only while the official settings service is
- * present. Duplicate ownership fails loudly in alpha.1 settings.register().
+ * present. Duplicate ownership fails loudly in alpha.2 settings.register().
  */
 export function apply(ctx) {
   ctx.inject(['settings'], (settingsCtx) => {

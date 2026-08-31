@@ -31,7 +31,7 @@ const ARCHIVE_OR_BINARY_EXTENSIONS = new Set([
 const LIFECYCLE_HOOKS = [
   'preinstall', 'install', 'postinstall', 'prepublish', 'preprepare', 'prepare', 'postprepare',
 ];
-const ALPHA1_REMOVED_PACKAGES = new Set([
+const BASELINE_ABSENT_PACKAGES = new Set([
   '@deepseek-ai/dsh-client-runtime',
   '@deepseek-ai/dsh-host-apiproxy',
 ]);
@@ -110,7 +110,7 @@ function policySha256() {
     maxTrackedFiles: MAX_TRACKED_FILES,
     maxLocations: MAX_LOCATIONS,
     lifecycleHooks: LIFECYCLE_HOOKS,
-    alpha1RemovedPackages: [...ALPHA1_REMOVED_PACKAGES].sort(),
+    baselineAbsentPackages: [...BASELINE_ABSENT_PACKAGES].sort(),
     safePackageRef: SAFE_PACKAGE_REF.source,
     scannedExtensions: [...SCANNED_EXTENSIONS].sort(),
     scannedFilenames: [...SCANNED_FILENAMES].sort(),
@@ -300,13 +300,13 @@ function validateReceipt(receipt, candidate) {
       !isSortedUniqueStrings(receipt.declared.dependencies, { maximumLength: 214 }) ||
       !isSortedUniqueStrings(receipt.declared.dshClientInject, { maximumLength: 214 }) ||
       !hasExactKeys(receipt.classification, [
-        'requiresElevatedStaticReview', 'rawWebRouteAuthState', 'alpha1RemovedPackages',
+        'requiresElevatedStaticReview', 'rawWebRouteAuthState', 'baselineAbsentPackages',
       ]) || typeof receipt.classification.requiresElevatedStaticReview !== 'boolean' ||
-      !isSortedUniqueStrings(receipt.classification.alpha1RemovedPackages, {
+      !isSortedUniqueStrings(receipt.classification.baselineAbsentPackages, {
         maximumLength: 214,
         maximumItems: 2,
       }) ||
-      !receipt.classification.alpha1RemovedPackages.every((name) => ALPHA1_REMOVED_PACKAGES.has(name)) ||
+      !receipt.classification.baselineAbsentPackages.every((name) => BASELINE_ABSENT_PACKAGES.has(name)) ||
       !hasExactKeys(receipt.privacy, [
         'capturesSourceSnippets', 'capturesCredentials', 'capturesEnvironmentValues',
         'capturesLifecycleCommands',
@@ -373,10 +373,10 @@ function validateReceipt(receipt, candidate) {
   const expectedRemovedPackages = [...new Set([
     ...receipt.declared.dependencies,
     ...receipt.declared.dshClientInject,
-  ].filter((name) => ALPHA1_REMOVED_PACKAGES.has(name)))].sort();
+  ].filter((name) => BASELINE_ABSENT_PACKAGES.has(name)))].sort();
   if (receipt.classification.rawWebRouteAuthState !== expectedAuthState ||
       receipt.classification.requiresElevatedStaticReview !== expectedElevatedStaticReview ||
-      JSON.stringify(receipt.classification.alpha1RemovedPackages) !==
+      JSON.stringify(receipt.classification.baselineAbsentPackages) !==
         JSON.stringify(expectedRemovedPackages)) {
     fail('static-risk receipt classification is not derived from its bounded evidence');
   }
@@ -410,10 +410,10 @@ export async function auditCandidateStaticRisk({ candidate, source: sourceInput 
   const dshClientInject = Array.isArray(manifest?.dsh?.client?.inject)
     ? [...manifest.dsh.client.inject].filter((value) => typeof value === 'string').sort()
     : [];
-  const alpha1RemovedPackages = [...new Set([
+  const baselineAbsentPackages = [...new Set([
     ...dependencies,
     ...dshClientInject,
-  ].filter((name) => ALPHA1_REMOVED_PACKAGES.has(name)))].sort();
+  ].filter((name) => BASELINE_ABSENT_PACKAGES.has(name)))].sort();
   const findingMap = new Map([
     ...SIGNALS.map(([id, severity]) => [id, { id, severity, occurrences: 0, locations: [] }]),
     ...STRUCTURAL_SIGNALS.map(([id, severity]) => [
@@ -535,7 +535,7 @@ export async function auditCandidateStaticRisk({ candidate, source: sourceInput 
         : authReferenceCount === 0
           ? 'raw-route-without-official-auth-reference'
           : 'raw-route-with-auth-reference-manual-review-required',
-      alpha1RemovedPackages,
+      baselineAbsentPackages,
     },
     privacy: {
       capturesSourceSnippets: false,

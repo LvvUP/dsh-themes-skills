@@ -7,9 +7,10 @@ function fail(message) {
   throw new Error(`community baseline refused: ${message}`);
 }
 
-const laneName = process.argv[2] ?? 'currentAlpha1';
+const laneName = process.argv[2] ?? 'currentAlpha2';
 if (
   ![
+    'currentAlpha2',
     'currentAlpha1',
     'certified',
     'certifiedRuntimeBaseline',
@@ -18,7 +19,7 @@ if (
   process.argv.length > 3
 ) {
   fail(
-    'usage: inspect-baseline.mjs [currentAlpha1|certified|certifiedRuntimeBaseline|candidate]'
+    'usage: inspect-baseline.mjs [currentAlpha2|currentAlpha1|certified|certifiedRuntimeBaseline|candidate]'
   );
 }
 const policy = JSON.parse(
@@ -57,19 +58,24 @@ const dshVersion =
   evidence.baseline?.dshPackageVersion;
 if (typeof dshVersion !== 'string') fail('exact DSH version is missing');
 if (
-  laneName === 'currentAlpha1' &&
-  (policy.schemaVersion !== 3 ||
-    policy.defaultOperationalLane !== 'currentAlpha1' ||
-    lane.status !== 'alpha1-item-runtime-evidence-pending' ||
+  laneName === 'currentAlpha2' &&
+  (policy.schemaVersion !== 4 ||
+    policy.defaultOperationalLane !== 'currentAlpha2' ||
+    lane.status !== 'alpha2-item-runtime-evidence-pending' ||
     lane.enabled !== true ||
     lane.inspectionEnabled !== true ||
     lane.installable !== false ||
-    lane.dshPackageVersion !== '0.1.2-alpha.1' ||
-    lane.sourceTag !== 'dsh-v0.1.2-alpha.1' ||
-    lane.sourceCommit !== 'cd5ef8148158c3a752a658978873241fdf8e2bbc' ||
-    lane.sourceTree !== 'a712eec535b48badc4fefb4df5176a7002e4280b' ||
+    lane.dshPackageVersion !== '0.1.2-alpha.2' ||
+    lane.sourceTag !== 'dsh-v0.1.2-alpha.2' ||
+    lane.sourceCommit !== '0a53fb55bea101816fa226bb964ae2bed71c343b' ||
+    lane.sourceTree !== '64ccbfa8e0caa4711cd4a75717ef9e022657961b' ||
+    lane.officialNpmPackage !== '@deepseek-ai/dsh' ||
+    lane.officialNpmTarballSha256 !==
+      '5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47' ||
     lane.communityItemsRequired !== 11 ||
     lane.communityItemsCompleted !== 0 ||
+    lane.communityTasksRequired !== 66 ||
+    lane.communityTasksCompleted !== 0 ||
     lane.communityInstallableRecords !== 0 ||
     lane.websiteDistribution !== 'external-showcase' ||
     lane.websiteInstallability !== 'showcase-only' ||
@@ -78,18 +84,43 @@ if (
     evidence.gate?.status !== lane.status ||
     evidence.gate?.requiredItems !== 11 ||
     evidence.gate?.completedItems !== 0 ||
-    evidence.gate?.requiredTasksPerItem !== 6 ||
-    evidence.gate?.completedTasksPerItem !== 0 ||
+    evidence.gate?.completedTasks !== 0 ||
     evidence.gate?.installable !== false ||
+    evidence.gate?.publicationAllowed !== false ||
+    evidence.matrix?.requiredTasksPerItem !== 6 ||
+    evidence.matrix?.requiredTotalTasks !== 66 ||
     evidence.gate?.runtimeReceiptSetSha256 !== null ||
     evidence.gate?.rollbackReceiptSetSha256 !== null ||
     evidence.items?.length !== 11 ||
     evidence.items.some(
-      (item) => item.status !== 'verification-pending'
+      (item) =>
+        item.status !== 'verification-pending' ||
+        item.completedTasks !== 0 ||
+        item.runtimeReceiptSetSha256 !== null ||
+        item.rollbackReceiptSetSha256 !== null
     ) ||
+    evidence.historicalAuthority?.alpha1MayAuthorizeAlpha2 !== false ||
+    evidence.historicalAuthority?.rc8MayAuthorizeAlpha2 !== false)
+) {
+  fail('current alpha2 lane is malformed or attempts promotion');
+}
+if (
+  laneName === 'currentAlpha1' &&
+  (policy.schemaVersion !== 4 ||
+    policy.defaultOperationalLane !== 'currentAlpha2' ||
+    lane.status !== 'historical-alpha1-item-runtime-evidence-pending' ||
+    lane.historicalAtCapture !== true ||
+    lane.enabled !== false ||
+    lane.inspectionEnabled !== false ||
+    lane.installable !== false ||
+    lane.mayAuthorizeCurrent !== false ||
+    lane.dshPackageVersion !== '0.1.2-alpha.1' ||
+    evidence.gate?.status !== 'alpha1-item-runtime-evidence-pending' ||
+    evidence.gate?.completedItems !== 0 ||
+    evidence.gate?.installable !== false ||
     evidence.historicalAuthority?.mayAuthorizeAlpha1 !== false)
 ) {
-  fail('current alpha1 lane is malformed or attempts promotion');
+  fail('historical alpha1 lane is malformed or attempts current promotion');
 }
 if (
   laneName === 'certified' &&

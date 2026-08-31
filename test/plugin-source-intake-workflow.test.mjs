@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-const workflowPath = '.github/workflows/alpha1-plugin-source-intake.yml';
+const workflowPath = '.github/workflows/alpha2-plugin-source-intake.yml';
 
 test('source-intake workflow audits source and static risk without executing candidates', async () => {
   const workflow = await readFile(workflowPath, 'utf8');

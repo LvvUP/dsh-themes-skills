@@ -14,7 +14,7 @@ export const RUNTIME_PLATFORMS = [
   ['win32', 'x64'],
 ];
 export const RUNTIME_NODE_VERSIONS = ['22.19.0', '24.15.0'];
-export const RUNTIME_WORKFLOW = '.github/workflows/alpha1-runtime-certification.yml';
+export const RUNTIME_WORKFLOW = '.github/workflows/alpha2-runtime-certification.yml';
 export const RUNTIME_REPOSITORY = 'LvvUP/dsh-themes-skills';
 const FORBIDDEN_VALUE = /(?:[?&]token=|\bcookie\s*:|\bauthorization\s*:|bearer\s+[a-z0-9._~-]+)/iu;
 const BASE64URL_SECRET = /(?:^|[^A-Za-z0-9_-])[A-Za-z0-9_-]{43}(?:$|[^A-Za-z0-9_-])/;
@@ -58,7 +58,7 @@ export function runtimeReceiptSetPayloadSha256(receiptSet) {
 export function runtimeProvenanceSet(receiptSet) {
   return stable({
     authorityEffect: 'none',
-    kind: 'dsh-alpha1-runtime-provenance-set',
+    kind: 'dsh-alpha2-runtime-provenance-set',
     receipts: receiptSet.receipts,
     schemaVersion: receiptSet.schemaVersion,
     source: receiptSet.source,
@@ -97,7 +97,7 @@ function validateSource(source, authority, label) {
   exactKeys(source, ['tag', 'commit', 'tree', 'lockfileSha256'], label);
   if (source.tag !== authority.release.tag || source.commit !== authority.release.commit ||
       source.tree !== authority.release.tree || source.lockfileSha256 !== authority.source.lockfileSha256) {
-    fail(`${label} does not match the pinned alpha.1 source`);
+    fail(`${label} does not match the pinned alpha.2 release`);
   }
 }
 
@@ -117,9 +117,10 @@ export function validateRuntimeReceipt(receipt, authorityInput) {
   const authority = validateAuthority(authorityInput);
   inspectPrivacy(receipt);
   exactKeys(receipt, [
-    'schemaVersion', 'status', 'scope', 'source', 'task', 'build', 'probes', 'ci', 'privacy',
+    'schemaVersion', 'status', 'scope', 'source', 'task', 'artifacts',
+    'provenanceBoundary', 'probes', 'ci', 'privacy',
   ], 'runtime receipt');
-  if (receipt.schemaVersion !== 1 || receipt.status !== 'alpha1-runtime-task-passed' ||
+  if (receipt.schemaVersion !== 1 || receipt.status !== 'alpha2-runtime-task-passed' ||
       receipt.scope !== 'one-platform-node-task') fail('runtime receipt header mismatch');
   validateSource(receipt.source, authority, 'runtime receipt source');
   exactKeys(receipt.task, ['platform', 'arch', 'nodeVersion'], 'runtime receipt task');
@@ -127,9 +128,41 @@ export function validateRuntimeReceipt(receipt, authorityInput) {
   if (receipt.task.arch !== expectedArch || !RUNTIME_NODE_VERSIONS.includes(receipt.task.nodeVersion)) {
     fail('runtime receipt task is outside the exact platform/Node matrix');
   }
-  exactKeys(receipt.build, ['buildReceiptSha256', 'builtCliSha256'], 'runtime receipt build');
-  if (!SHA64.test(receipt.build.buildReceiptSha256) || !SHA64.test(receipt.build.builtCliSha256)) {
-    fail('runtime receipt build digests are malformed');
+  exactKeys(receipt.artifacts, ['officialNpm', 'sourceCrossBuild'], 'runtime receipt artifacts');
+  exactKeys(receipt.artifacts.officialNpm, [
+    'installReceiptSha256', 'installedCliSha256', 'tarballSha256',
+    'resolutionLockfileSha256',
+  ], 'runtime receipt official npm artifact');
+  const official = receipt.artifacts.officialNpm;
+  if (!SHA64.test(official.installReceiptSha256) ||
+      official.installedCliSha256 !== authority.officialNpm.cliSha256 ||
+      official.tarballSha256 !== authority.officialNpm.tarballSha256 ||
+      official.resolutionLockfileSha256 !== authority.runtimeInstall.lockfileSha256) {
+    fail('runtime receipt official npm artifact mismatch');
+  }
+  exactKeys(receipt.artifacts.sourceCrossBuild, [
+    'buildReceiptSha256', 'builtCliSha256', 'reportedVersion',
+  ], 'runtime receipt source cross-build artifact');
+  const sourceCrossBuild = receipt.artifacts.sourceCrossBuild;
+  if (!SHA64.test(sourceCrossBuild.buildReceiptSha256) ||
+      !SHA64.test(sourceCrossBuild.builtCliSha256) ||
+      sourceCrossBuild.reportedVersion !== authority.release.version) {
+    fail('runtime receipt source cross-build artifact mismatch');
+  }
+  exactKeys(receipt.provenanceBoundary, [
+    'officialNpmOperationalRuntime', 'exactSourceCrossBuild', 'npmGitHeadPresent',
+    'npmProvenanceAttestationPresent', 'binarySourceEquivalenceClaimed',
+    'artifactRelationship',
+  ], 'runtime receipt provenance boundary');
+  if (receipt.provenanceBoundary.officialNpmOperationalRuntime !== true ||
+      receipt.provenanceBoundary.exactSourceCrossBuild !== true ||
+      receipt.provenanceBoundary.npmGitHeadPresent !== authority.officialNpm.gitHeadPresent ||
+      receipt.provenanceBoundary.npmProvenanceAttestationPresent !==
+        authority.officialNpm.provenanceAttestationPresent ||
+      receipt.provenanceBoundary.binarySourceEquivalenceClaimed !== false ||
+      receipt.provenanceBoundary.artifactRelationship !==
+        'independent-artifacts-no-source-package-binding') {
+    fail('runtime receipt provenance boundary mismatch');
   }
   exactKeys(receipt.probes, ['cli', 'profile', 'browserAuth', 'webProtocol'], 'runtime receipt probes');
   exactKeys(receipt.probes.cli, ['reportedVersion'], 'runtime receipt CLI probe');
@@ -183,7 +216,7 @@ export function validateRuntimeReceiptSet(receiptSet, {
     'schemaVersion', 'status', 'source', 'workflow', 'requiredReceiptCount', 'receipts',
     'provenanceSetSha256', 'receiptSetPayloadSha256',
   ], 'runtime receipt set');
-  if (receiptSet.schemaVersion !== 1 || receiptSet.status !== 'alpha1-runtime-matrix-verified' ||
+  if (receiptSet.schemaVersion !== 1 || receiptSet.status !== 'alpha2-runtime-matrix-verified' ||
       receiptSet.requiredReceiptCount !== 6 || !SHA64.test(receiptSet.provenanceSetSha256) ||
       !SHA64.test(receiptSet.receiptSetPayloadSha256) ||
       runtimeProvenanceSetSha256(receiptSet) !== receiptSet.provenanceSetSha256 ||

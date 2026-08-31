@@ -1,4 +1,4 @@
 interface:
   display_name: "DSH Plugin Installer"
   short_description: "Install, remove, or recover verified DSH plugins"
-  default_prompt: "Use $dsh-plugin-installer to inspect, install, remove, or recover an exact public #3NNN Plugin only when its bundled alpha.1 authority permits the requested mutation."
+  default_prompt: "Use $dsh-plugin-installer to inspect, install, remove, or recover an exact public #3NNN Plugin only when its bundled alpha.2 authority permits the requested mutation."

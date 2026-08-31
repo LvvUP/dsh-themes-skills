@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import {
   lifecycleHooksFromManifest,
   loadAuthority,
+  manifestHasRuntimeDependencyGraph,
   normalizeCatalogId,
   normalizeBundlePatch,
   resolveItems,
@@ -25,8 +26,35 @@ function sha256(bytes) {
 }
 
 function git(checkout, args) {
-  const result = spawnSync('git', ['-C', checkout, ...args], { encoding: 'utf8', shell: false });
-  if (result.status !== 0) fail(`git ${args.join(' ')} failed: ${(result.stderr || result.stdout).trim()}`);
+  const executablePath = process.env.PATH ?? process.env.Path;
+  if (typeof executablePath !== 'string' || executablePath.length === 0 ||
+      executablePath.includes('\0')) {
+    fail('upstream preparation requires one explicit executable PATH');
+  }
+  const environment = {
+    PATH: executablePath,
+    GIT_CONFIG_NOSYSTEM: '1',
+    GIT_CONFIG_GLOBAL: process.platform === 'win32' ? 'NUL' : '/dev/null',
+    GIT_TERMINAL_PROMPT: '0',
+    GIT_OPTIONAL_LOCKS: '0',
+    GIT_NO_REPLACE_OBJECTS: '1',
+    GCM_INTERACTIVE: 'Never',
+  };
+  for (const name of ['SystemRoot', 'WINDIR']) {
+    if (typeof process.env[name] === 'string') environment[name] = process.env[name];
+  }
+  const result = spawnSync('git', [
+    '-c', 'core.fsmonitor=false', '-c', 'core.hooksPath=', '-C', checkout, ...args,
+  ], {
+    encoding: 'utf8',
+    env: environment,
+    shell: false,
+    timeout: 30_000,
+    windowsHide: true,
+  });
+  if (result.error || result.status !== 0 || String(result.stderr ?? '').trim() !== '') {
+    fail('upstream checkout Git identity probe failed');
+  }
   return result.stdout.trim();
 }
 
@@ -106,6 +134,7 @@ export async function prepareHosted({ item, artifact, output: outputInput }) {
         artifactSha256: item.distribution.artifactSha256,
         metadataSha256: null,
         licenseSha256: item.distribution.licenseFile.sha256,
+        noticeSha256: item.distribution.noticeFile.sha256,
         sbomSha256: item.distribution.sbom.sha256,
         sourceCommit: null,
         sourceTree: null,
@@ -165,15 +194,22 @@ export async function prepareUpstream({
       fail('upstream package must be the real repository root');
     }
     const manifestPath = await canonicalFile(join(packageRoot, 'package.json'), 'upstream package manifest');
-    const lockfilePath = await canonicalFile(join(packageRoot, source.lockfilePath), 'upstream lockfile');
-    for (const [path, label] of [[manifestPath, 'manifest'], [lockfilePath, 'lockfile']]) {
+    const lockfilePath = source.lockfilePath === null
+      ? null
+      : await canonicalFile(join(packageRoot, source.lockfilePath), 'upstream lockfile');
+    for (const [path, label] of [
+      [manifestPath, 'manifest'],
+      ...(lockfilePath === null ? [] : [[lockfilePath, 'lockfile']]),
+    ]) {
       const relativePath = relative(checkout, path);
       if (relativePath.startsWith('..') || isAbsolute(relativePath)) fail(`upstream ${label} escapes checkout`);
     }
     const manifestBytes = await readFile(manifestPath);
-    const lockfileBytes = await readFile(lockfilePath);
+    const lockfileBytes = lockfilePath === null ? null : await readFile(lockfilePath);
     if (sha256(manifestBytes) !== source.manifestSha256 ||
-        sha256(lockfileBytes) !== source.lockfileSha256) fail('upstream manifest or lockfile digest mismatch');
+        (lockfileBytes !== null && sha256(lockfileBytes) !== source.lockfileSha256)) {
+      fail('upstream manifest or lockfile digest mismatch');
+    }
     const manifest = JSON.parse(manifestBytes.toString('utf8'));
     if (manifest.name !== item.package.name || manifest.version !== item.package.version ||
         normalizeBundlePatch(manifest.dsh?.bundle?.patch) !== item.package.bundlePatch) {
@@ -182,6 +218,11 @@ export async function prepareUpstream({
     const lifecycle = lifecycleHooksFromManifest(manifest);
     if (JSON.stringify(lifecycle) !== JSON.stringify(item.package.lifecycle.hooks)) {
       fail('upstream lifecycle hook map does not match its complete reviewed authority');
+    }
+    if (lockfilePath === null &&
+        (Object.values(lifecycle).some((value) => value !== null) ||
+         manifestHasRuntimeDependencyGraph(manifest))) {
+      fail('lockless Git source must be prebuilt with no lifecycle hooks or runtime/peer dependencies');
     }
     const output = await newOutput(outputInput);
     try {
@@ -286,6 +327,7 @@ export async function validatePrepared(preparedDirectoryInput, item) {
       artifactSha256: item.distribution.artifactSha256,
       metadataSha256: null,
       licenseSha256: item.distribution.licenseFile.sha256,
+      noticeSha256: item.distribution.noticeFile.sha256,
       sbomSha256: item.distribution.sbom.sha256,
       sourceCommit: null,
       sourceTree: null,
@@ -360,6 +402,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       validationOptions: {
         harnessAuthorityBytes: loaded.harnessAuthorityBytes,
         top10ReleaseSetBytes: loaded.top10ReleaseSetBytes,
+        migrationMapBytes: loaded.migrationMapBytes,
+        migrationMapSchemaBytes: loaded.migrationMapSchemaBytes,
+        candidateIntakeBytes: loaded.candidateIntakeBytes,
       },
     });
     if (item.distribution.kind === 'hosted-plugin-verified' &&

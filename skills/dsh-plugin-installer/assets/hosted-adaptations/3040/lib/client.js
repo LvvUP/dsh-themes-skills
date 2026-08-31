@@ -1,7 +1,7 @@
 /**
- * Public plugin #3040 alpha.1 reviewed replacement — browser half.
+ * Public plugin #3040 alpha.2 reviewed replacement — browser half.
  *
- * DSH Kanban is a bounded view over alpha.1's standard Session list and
+ * DSH Kanban is a bounded view over alpha.2's standard Session list and
  * pending-interaction hook. It owns two additive slots and in-memory column
  * overrides only. It does not replace a route, hide official UI, persist
  * browser data, call a Remote, or create a task on the user's behalf.

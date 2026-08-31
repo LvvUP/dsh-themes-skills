@@ -36,9 +36,9 @@ import {
   validateRuntimeGithubProvenanceResult,
 } from '../skills/dsh-harness-installer/scripts/verify-runtime-provenance.mjs';
 
-const workflowPath = resolve('.github/workflows/alpha1-runtime-certification.yml');
+const workflowPath = resolve('.github/workflows/alpha2-runtime-certification.yml');
 const authorityPath = resolve(
-  'skills/dsh-harness-installer/references/alpha1-source-authority.json'
+  'skills/dsh-harness-installer/references/alpha2-release-authority.json'
 );
 
 function sha256(bytes) {
@@ -52,7 +52,7 @@ function tuple(task) {
 function syntheticReceipt(authority, task, index, workflowSha256) {
   return {
     schemaVersion: 1,
-    status: 'alpha1-runtime-task-passed',
+    status: 'alpha2-runtime-task-passed',
     scope: 'one-platform-node-task',
     source: {
       tag: authority.release.tag,
@@ -61,9 +61,26 @@ function syntheticReceipt(authority, task, index, workflowSha256) {
       lockfileSha256: authority.source.lockfileSha256,
     },
     task,
-    build: {
-      buildReceiptSha256: sha256(Buffer.from(`build-${index}`)),
-      builtCliSha256: sha256(Buffer.from(`cli-${index}`)),
+    artifacts: {
+      officialNpm: {
+        installReceiptSha256: sha256(Buffer.from(`install-${index}`)),
+        installedCliSha256: authority.officialNpm.cliSha256,
+        tarballSha256: authority.officialNpm.tarballSha256,
+        resolutionLockfileSha256: authority.runtimeInstall.lockfileSha256,
+      },
+      sourceCrossBuild: {
+        buildReceiptSha256: sha256(Buffer.from(`build-${index}`)),
+        builtCliSha256: sha256(Buffer.from(`cli-${index}`)),
+        reportedVersion: authority.release.version,
+      },
+    },
+    provenanceBoundary: {
+      officialNpmOperationalRuntime: true,
+      exactSourceCrossBuild: true,
+      npmGitHeadPresent: false,
+      npmProvenanceAttestationPresent: false,
+      binarySourceEquivalenceClaimed: false,
+      artifactRelationship: 'independent-artifacts-no-source-package-binding',
     },
     probes: {
       cli: { reportedVersion: authority.release.version },
@@ -91,7 +108,7 @@ function syntheticReceipt(authority, task, index, workflowSha256) {
     },
     ci: {
       repository: 'LvvUP/dsh-themes-skills',
-      workflowPath: '.github/workflows/alpha1-runtime-certification.yml',
+      workflowPath: '.github/workflows/alpha2-runtime-certification.yml',
       workflowSha256,
       runId: '123456789',
       runAttempt: 1,
@@ -121,7 +138,7 @@ async function syntheticInput(root) {
   return { authority, input };
 }
 
-test('alpha.1 workflow is manual, exact-six, candidate-only, and pins every action by full SHA', async () => {
+test('alpha.2 workflow is manual, exact-six, dual-artifact, candidate-only, and pins every action', async () => {
   const source = await readFile(workflowPath, 'utf8');
   const runtimeSource = await readFile(resolve(
     'skills/dsh-harness-installer/scripts/runtime-certification.mjs'
@@ -151,6 +168,8 @@ test('alpha.1 workflow is manual, exact-six, candidate-only, and pins every acti
   assert.ok(actions.length >= 6);
   for (const action of actions) assert.match(action, /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+@[a-f0-9]{40}$/u);
   assert.match(source, /build-source\.mjs/u);
+  assert.match(source, /install-official\.mjs/u);
+  assert.match(source, /--install-receipt/u);
   assert.match(source, /runtime-certification\.mjs run-task/u);
   assert.match(source, /runtime-certification\.mjs aggregate/u);
   assert.match(source, /actions\/attest@1e69f48acb82d1966a394da916b4c1698aa569d6/u);
@@ -180,7 +199,7 @@ test('alpha.1 workflow is manual, exact-six, candidate-only, and pins every acti
 });
 
 test('six canonical receipts aggregate to a verified candidate without changing 0/6 authority', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'alpha1-runtime-candidate-test-'));
+  const root = await mkdtemp(join(tmpdir(), 'alpha2-runtime-candidate-test-'));
   try {
     const { authority, input } = await syntheticInput(root);
     const before = await readFile(authorityPath);
@@ -215,7 +234,7 @@ test('six canonical receipts aggregate to a verified candidate without changing 
 });
 
 test('candidate verification rejects missing, tampered, cross-run, and provenance-drift evidence', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'alpha1-runtime-reject-test-'));
+  const root = await mkdtemp(join(tmpdir(), 'alpha2-runtime-reject-test-'));
   try {
     const { input } = await syntheticInput(root);
     const missing = join(root, 'missing');
@@ -290,7 +309,7 @@ test('privacy scanner rejects query credentials and standalone 43-character Brow
     () => assertNoRuntimeSecrets(`{"value":"${'A'.repeat(43)}"}`),
     /forbidden secret/u
   );
-  const root = await mkdtemp(join(tmpdir(), 'alpha1-runtime-secret-test-'));
+  const root = await mkdtemp(join(tmpdir(), 'alpha2-runtime-secret-test-'));
   try {
     await writeFile(join(root, 'receipt.json'), `{"value":"${'B'.repeat(43)}"}\n`);
     await assert.rejects(scanRuntimeEvidence([root]), /forbidden secret/u);
@@ -304,9 +323,9 @@ test('tuple receipt identity admits only the exact main GitHub workflow context'
   const environment = {
     GITHUB_ACTIONS: 'true',
     GITHUB_REPOSITORY: 'LvvUP/dsh-themes-skills',
-    GITHUB_WORKFLOW: 'DSH alpha.1 runtime certification',
+    GITHUB_WORKFLOW: 'DSH alpha.2 runtime certification',
     GITHUB_WORKFLOW_REF:
-      'LvvUP/dsh-themes-skills/.github/workflows/alpha1-runtime-certification.yml@refs/heads/main',
+      'LvvUP/dsh-themes-skills/.github/workflows/alpha2-runtime-certification.yml@refs/heads/main',
     GITHUB_RUN_ID: '123456789',
     GITHUB_RUN_ATTEMPT: '1',
     GITHUB_SHA: '6'.repeat(40),
@@ -410,7 +429,7 @@ test('signed provenance policy binds subject, main workflow, hosted runner, sour
   const runId = '123456789';
   const runAttempt = 2;
   const identity =
-    'https://github.com/LvvUP/dsh-themes-skills/.github/workflows/alpha1-runtime-certification.yml@refs/heads/main';
+    'https://github.com/LvvUP/dsh-themes-skills/.github/workflows/alpha2-runtime-certification.yml@refs/heads/main';
   const result = [{
     verificationResult: {
       statement: {
@@ -423,7 +442,7 @@ test('signed provenance policy binds subject, main workflow, hosted runner, sour
               workflow: {
                 ref: 'refs/heads/main',
                 repository: 'https://github.com/LvvUP/dsh-themes-skills',
-                path: '.github/workflows/alpha1-runtime-certification.yml',
+                path: '.github/workflows/alpha2-runtime-certification.yml',
               },
             },
             internalParameters: {
@@ -455,7 +474,7 @@ test('signed provenance policy binds subject, main workflow, hosted runner, sour
           subjectAlternativeName: identity,
           githubWorkflowTrigger: 'workflow_dispatch',
           githubWorkflowSHA: sourceSha,
-          githubWorkflowName: 'DSH alpha.1 runtime certification',
+          githubWorkflowName: 'DSH alpha.2 runtime certification',
           githubWorkflowRepository: 'LvvUP/dsh-themes-skills',
           githubWorkflowRef: 'refs/heads/main',
           buildSignerURI: identity,
@@ -513,7 +532,7 @@ test('signed provenance policy binds subject, main workflow, hosted runner, sour
 test('POSIX authority replacement is durable and stale-input failure leaves the target unchanged', {
   skip: process.platform === 'win32',
 }, async () => {
-  const root = await mkdtemp(join(tmpdir(), 'alpha1-runtime-atomic-test-'));
+  const root = await mkdtemp(join(tmpdir(), 'alpha2-runtime-atomic-test-'));
   try {
     const target = join(root, 'authority.json');
     const original = Buffer.from('{"state":"pending"}\n');

@@ -6,12 +6,19 @@ import { chmod, lstat, mkdir, open, readFile, realpath, rename, rm } from 'node:
 import { basename, dirname, isAbsolute, join, parse, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { secureWindowsPrivatePath } from './windows-private-acl.mjs';
+import {
+  captureWindowsPrivatePathIdentity,
+  secureWindowsPrivatePath as enforceWindowsPrivatePath,
+  secureWindowsPrivatePaths as enforceWindowsPrivatePaths,
+  windowsPrivateIdentityFromStat,
+} from './windows-private-acl.mjs';
 import { moveWindowsPathDurably } from './windows-durable-move.mjs';
 
 export const PROFILE_FILES = ['package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', 'cordis.patch.yml'];
 export const HOME_FILES = ['settings.yaml', 'cordis.patch.yml', '.credentials.yaml', '.anonymous-user-id'];
 export const BASE_BUNDLES = ['@deepseek-ai/dsh-base', '@deepseek-ai/dsh-web-app'];
+
+const PACKAGE_NAME = /^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/u;
 
 const SNAPSHOT_LAYOUT = [
   ...PROFILE_FILES.map((path) => ({ root: 'profile', path, required: true })),
@@ -24,6 +31,31 @@ function fail(message) {
 
 function sha256(bytes) {
   return createHash('sha256').update(bytes).digest('hex');
+}
+
+function sameWindowsIdentity(first, second) {
+  return first.volumeSerial === second.volumeSerial && first.fileIndex === second.fileIndex;
+}
+
+async function secureWindowsPrivatePath(path, kind, action, expectedIdentity) {
+  const identity = expectedIdentity ?? await captureWindowsPrivatePathIdentity(path, kind);
+  return enforceWindowsPrivatePath(path, kind, action, { expectedIdentity: identity });
+}
+
+async function secureWindowsPrivatePaths(requests) {
+  const bound = await Promise.all(requests.map(async (request) => ({
+    ...request,
+    expectedIdentity: request.expectedIdentity ??
+      await captureWindowsPrivatePathIdentity(request.path, request.kind),
+  })));
+  return enforceWindowsPrivatePaths(bound);
+}
+
+async function assertWindowsPathIdentity(path, kind, expectedIdentity, label) {
+  const observed = await captureWindowsPrivatePathIdentity(path, kind);
+  if (!sameWindowsIdentity(expectedIdentity, observed)) {
+    fail(`${label} changed from its caller-bound Windows file identity`);
+  }
 }
 
 async function canonicalDirectory(input, label) {
@@ -50,10 +82,20 @@ export async function validateWebProfile(profileInput) {
   const stat = await lstat(manifestPath);
   if (!stat.isFile() || stat.isSymbolicLink()) fail('profile package.json must be a regular file');
   const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+  const bundles = manifest.dsh?.profile?.bundles;
+  const dependencies = manifest.dependencies;
   if (manifest.name !== 'dsh-profile-web' || manifest.private !== true ||
-      JSON.stringify(manifest.dsh?.profile?.bundles) !== JSON.stringify(BASE_BUNDLES) ||
-      manifest.dsh.profile.patchReload !== 'live') {
-    fail('target is not an alpha.1 web profile');
+      manifest.dsh?.profile?.patchReload !== 'live' || !Array.isArray(bundles) ||
+      bundles.length < BASE_BUNDLES.length ||
+      !BASE_BUNDLES.every((name, index) => bundles[index] === name) ||
+      new Set(bundles).size !== bundles.length ||
+      bundles.some((name) => typeof name !== 'string' || !PACKAGE_NAME.test(name)) ||
+      dependencies === null || typeof dependencies !== 'object' || Array.isArray(dependencies) ||
+      Object.entries(dependencies).some(([name, spec]) =>
+        !PACKAGE_NAME.test(name) || typeof spec !== 'string' || spec.length < 1 ||
+        spec.length > 4096 || /[\0\r\n\t]/u.test(spec)) ||
+      bundles.slice(BASE_BUNDLES.length).some((name) => !Object.hasOwn(dependencies, name))) {
+    fail('target is not an alpha.2 web profile');
   }
   for (const name of PROFILE_FILES) {
     const fileStat = await lstat(join(profile, name));
@@ -96,14 +138,53 @@ async function makePrivateDirectory(path) {
   let moved = false;
   try {
     await mkdir(temporary, { recursive: false, mode: 0o700 });
-    await secureWindowsPrivatePath(temporary, 'directory', 'configure');
-    await secureWindowsPrivatePath(temporary, 'directory', 'verify');
+    const identity = await captureWindowsPrivatePathIdentity(temporary, 'directory');
+    await secureWindowsPrivatePath(temporary, 'directory', 'configure', identity);
     await moveWindowsPathDurably(temporary, path);
     moved = true;
-    await secureWindowsPrivatePath(path, 'directory', 'verify');
+    await secureWindowsPrivatePath(path, 'directory', 'verify', identity);
   } catch (error) {
-    if (!moved) await rm(temporary, { recursive: true, force: true }).catch(() => {});
+    await rm(moved ? path : temporary, { recursive: true, force: true }).catch(() => {});
     throw error;
+  }
+}
+
+async function makePrivateDirectories(paths) {
+  if (process.platform !== 'win32') {
+    for (const path of paths) await makePrivateDirectory(path);
+    return;
+  }
+  const prepared = [];
+  const installed = [];
+  try {
+    for (const path of paths) {
+      const temporary = `${path}.dsh-plugin-installer-${randomUUID()}.tmp`;
+      await mkdir(temporary, { recursive: false, mode: 0o700 });
+      const identity = await captureWindowsPrivatePathIdentity(temporary, 'directory');
+      prepared.push({ path, temporary, identity });
+    }
+    await secureWindowsPrivatePaths(prepared.map(({ temporary, identity }) => ({
+      path: temporary,
+      kind: 'directory',
+      action: 'configure',
+      expectedIdentity: identity,
+    })));
+    for (const entry of prepared) {
+      await moveWindowsPathDurably(entry.temporary, entry.path);
+      installed.push(entry.path);
+    }
+    await secureWindowsPrivatePaths(prepared.map(({ path, identity }) => ({
+      path,
+      kind: 'directory',
+      action: 'verify',
+      expectedIdentity: identity,
+    })));
+  } catch (error) {
+    await Promise.all(installed.map((path) => rm(path, { recursive: true, force: true }).catch(() => {})));
+    throw error;
+  } finally {
+    await Promise.all(prepared.map(({ temporary }) =>
+      rm(temporary, { recursive: true, force: true }).catch(() => {})));
   }
 }
 
@@ -123,8 +204,10 @@ async function newSnapshotDirectory(input, dshHome) {
   }
   await makePrivateDirectory(snapshot);
   try {
-    await makePrivateDirectory(join(snapshot, 'profile'));
-    await makePrivateDirectory(join(snapshot, 'home'));
+    await makePrivateDirectories([
+      join(snapshot, 'profile'),
+      join(snapshot, 'home'),
+    ]);
     return realpath(snapshot);
   } catch (error) {
     await rm(snapshot, { recursive: true, force: true });
@@ -133,54 +216,73 @@ async function newSnapshotDirectory(input, dshHome) {
   }
 }
 
-async function readOptionalRegular(path, { requireSingleLink = false } = {}) {
+async function readOptionalRegular(
+  path,
+  { holdWindowsHandle = false, requireSingleLink = false } = {}
+) {
+  const windows = process.platform === 'win32';
+  const oneLink = windows ? 1n : 1;
   let before;
   try {
-    before = await lstat(path);
+    before = await lstat(path, { bigint: windows });
     if (!before.isFile() || before.isSymbolicLink() ||
-        (requireSingleLink && before.nlink !== 1)) {
+        (requireSingleLink && before.nlink !== oneLink)) {
       fail(`${path} must be a regular${requireSingleLink ? ' single-link' : ''} file`);
     }
     const flags = fsConstants.O_RDONLY | (fsConstants.O_NOFOLLOW ?? 0);
     const handle = await open(path, flags);
+    let retained = false;
     try {
-      const stat = await handle.stat();
+      const stat = await handle.stat({ bigint: windows });
       if (!stat.isFile() || before.dev !== stat.dev || before.ino !== stat.ino ||
-          (requireSingleLink && stat.nlink !== 1)) {
+          (requireSingleLink && stat.nlink !== oneLink)) {
         fail(`${path} must remain one regular single-link file while it is read`);
       }
       const bytes = await handle.readFile();
-      const after = await handle.stat();
+      const after = await handle.stat({ bigint: windows });
       let afterPath;
       try {
-        afterPath = await lstat(path);
+        afterPath = await lstat(path, { bigint: windows });
       } catch {
         bytes.fill(0);
         fail(`${path} changed while it was read`);
       }
-      const final = await handle.stat();
+      const final = await handle.stat({ bigint: windows });
       if (!afterPath.isFile() || afterPath.isSymbolicLink() ||
           afterPath.dev !== stat.dev || afterPath.ino !== stat.ino ||
           afterPath.nlink !== stat.nlink || afterPath.size !== stat.size ||
           afterPath.mtimeMs !== stat.mtimeMs || afterPath.ctimeMs !== stat.ctimeMs ||
           after.dev !== stat.dev || after.ino !== stat.ino ||
-          after.nlink !== stat.nlink || (requireSingleLink && after.nlink !== 1) ||
+          after.nlink !== stat.nlink || (requireSingleLink && after.nlink !== oneLink) ||
           after.size !== stat.size || after.mtimeMs !== stat.mtimeMs ||
           after.ctimeMs !== stat.ctimeMs ||
           final.dev !== stat.dev || final.ino !== stat.ino ||
-          final.nlink !== stat.nlink || (requireSingleLink && final.nlink !== 1) ||
+          final.nlink !== stat.nlink || (requireSingleLink && final.nlink !== oneLink) ||
           final.size !== stat.size || final.mtimeMs !== stat.mtimeMs ||
-          final.ctimeMs !== stat.ctimeMs || bytes.length !== stat.size) {
+          final.ctimeMs !== stat.ctimeMs || bytes.length !== Number(stat.size)) {
         bytes.fill(0);
         fail(`${path} changed while it was read`);
       }
+      retained = windows && holdWindowsHandle;
       return {
         present: true,
         bytes,
-        posixMode: process.platform === 'win32' ? null : stat.mode & 0o7777,
+        posixMode: windows ? null : stat.mode & 0o7777,
+        windowsBinding: windows
+          ? {
+              identity: windowsPrivateIdentityFromStat(stat, 'file'),
+              dev: stat.dev,
+              ino: stat.ino,
+              nlink: stat.nlink,
+              size: stat.size,
+              mtimeMs: stat.mtimeMs,
+              ctimeMs: stat.ctimeMs,
+            }
+          : null,
+        windowsHandle: retained ? handle : null,
       };
     } finally {
-      await handle.close();
+      if (!retained) await handle.close();
     }
   } catch (error) {
     if (error.code === 'ENOENT') {
@@ -189,7 +291,13 @@ async function readOptionalRegular(path, { requireSingleLink = false } = {}) {
         fail(`${path} appeared while its absence was checked`);
       } catch (absenceError) {
         if (absenceError.code === 'ENOENT') {
-          return { present: false, bytes: null, posixMode: null };
+          return {
+            present: false,
+            bytes: null,
+            posixMode: null,
+            windowsBinding: null,
+            windowsHandle: null,
+          };
         }
         throw absenceError;
       }
@@ -216,32 +324,122 @@ async function privateWrite(path, bytes) {
   const handle = await open(writePath, 'wx', 0o600);
   let closed = false;
   let installed = false;
+  let identity = null;
   try {
     if (process.platform === 'win32') {
-      await secureWindowsPrivatePath(writePath, 'file', 'configure');
-      await secureWindowsPrivatePath(writePath, 'file', 'verify');
+      identity = windowsPrivateIdentityFromStat(await handle.stat({ bigint: true }), 'file');
+      await secureWindowsPrivatePath(
+        writePath,
+        'file',
+        'configure-open-writer',
+        identity
+      );
     }
     await handle.writeFile(bytes);
     await handle.sync();
+    if (process.platform === 'win32') {
+      const handleIdentity = windowsPrivateIdentityFromStat(
+        await handle.stat({ bigint: true }),
+        'file'
+      );
+      if (!sameWindowsIdentity(identity, handleIdentity)) {
+        fail('snapshot temporary file handle identity changed while it was written');
+      }
+      await assertWindowsPathIdentity(
+        writePath,
+        'file',
+        identity,
+        'snapshot temporary file'
+      );
+    }
     await handle.close();
     closed = true;
     if (process.platform === 'win32') {
+      await secureWindowsPrivatePath(writePath, 'file', 'verify', identity);
       await moveWindowsPathDurably(writePath, path);
       installed = true;
-      await secureWindowsPrivatePath(path, 'file', 'verify');
+      await secureWindowsPrivatePath(path, 'file', 'verify', identity);
     } else {
       await syncParentDirectory(path);
       installed = true;
     }
   } catch (error) {
     if (!closed) await handle.close().catch(() => {});
-    if (!installed) {
+    if (process.platform === 'win32' && installed) {
+      await rm(path, { force: true }).catch(() => {});
+    } else if (!installed) {
       await rm(writePath, { force: true }).catch(() => {});
       if (process.platform !== 'win32') {
         await syncParentDirectory(writePath).catch(() => {});
       }
     }
     throw error;
+  }
+}
+
+async function privateWriteBatch(entries) {
+  if (process.platform !== 'win32') {
+    for (const entry of entries) await privateWrite(entry.path, entry.bytes);
+    return;
+  }
+  const prepared = [];
+  const installed = [];
+  try {
+    for (const entry of entries) {
+      const temporary = `${entry.path}.dsh-plugin-installer-${randomUUID()}.tmp`;
+      const handle = await open(temporary, 'wx', 0o600);
+      const identity = windowsPrivateIdentityFromStat(await handle.stat({ bigint: true }), 'file');
+      prepared.push({ ...entry, temporary, handle, identity, closed: false });
+    }
+    await secureWindowsPrivatePaths(prepared.map(({ temporary, identity }) => ({
+      path: temporary,
+      kind: 'file',
+      action: 'configure-open-writer',
+      expectedIdentity: identity,
+    })));
+    for (const entry of prepared) {
+      await entry.handle.writeFile(entry.bytes);
+      await entry.handle.sync();
+      const handleIdentity = windowsPrivateIdentityFromStat(
+        await entry.handle.stat({ bigint: true }),
+        'file'
+      );
+      if (!sameWindowsIdentity(entry.identity, handleIdentity)) {
+        fail('snapshot batch temporary handle identity changed while it was written');
+      }
+      await assertWindowsPathIdentity(
+        entry.temporary,
+        'file',
+        entry.identity,
+        'snapshot batch temporary file'
+      );
+      await entry.handle.close();
+      entry.closed = true;
+    }
+    await secureWindowsPrivatePaths(prepared.map(({ temporary, identity }) => ({
+      path: temporary,
+      kind: 'file',
+      action: 'verify',
+      expectedIdentity: identity,
+    })));
+    for (const entry of prepared) {
+      await moveWindowsPathDurably(entry.temporary, entry.path);
+      installed.push(entry.path);
+    }
+    await secureWindowsPrivatePaths(prepared.map(({ path, identity }) => ({
+      path,
+      kind: 'file',
+      action: 'verify',
+      expectedIdentity: identity,
+    })));
+  } catch (error) {
+    await Promise.all(installed.map((path) => rm(path, { force: true }).catch(() => {})));
+    throw error;
+  } finally {
+    await Promise.all(prepared.map(async (entry) => {
+      if (!entry.closed) await entry.handle.close().catch(() => {});
+      await rm(entry.temporary, { force: true }).catch(() => {});
+    }));
   }
 }
 
@@ -343,11 +541,14 @@ export async function createProfileSnapshot(dshHomeInput, profileInput, snapshot
   const snapshot = await newSnapshotDirectory(snapshotInput, roots.dshHome);
   try {
     const files = [];
+    const writes = [];
     for (const expected of SNAPSHOT_LAYOUT) {
       const state = await readOptionalRegular(entrySource(expected, roots), {
         requireSingleLink: true,
       });
-      if (state.present) await privateWrite(entrySnapshot(expected, snapshot), state.bytes);
+      if (state.present) {
+        writes.push({ path: entrySnapshot(expected, snapshot), bytes: state.bytes });
+      }
       files.push({
         root: expected.root,
         path: expected.path,
@@ -357,10 +558,11 @@ export async function createProfileSnapshot(dshHomeInput, profileInput, snapshot
       });
     }
     const manifest = validateSnapshotManifest({ schemaVersion: 3, profile: 'web', files });
-    await privateWrite(
-      join(snapshot, 'snapshot.json'),
-      Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`, 'utf8')
-    );
+    writes.push({
+      path: join(snapshot, 'snapshot.json'),
+      bytes: Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`, 'utf8'),
+    });
+    await privateWriteBatch(writes);
     return publicResult(snapshot);
   } catch (error) {
     await rm(snapshot, { recursive: true, force: true });
@@ -369,48 +571,151 @@ export async function createProfileSnapshot(dshHomeInput, profileInput, snapshot
 }
 
 async function validatePrivateSnapshotDirectory(path, label) {
-  const stat = await lstat(path);
+  const stat = await lstat(path, { bigint: process.platform === 'win32' });
   if (!stat.isDirectory() || stat.isSymbolicLink()) fail(`${label} must be a private real directory`);
-  if (process.platform === 'win32') {
-    await secureWindowsPrivatePath(path, 'directory', 'verify');
-  } else if ((stat.mode & 0o077) !== 0) {
+  if (process.platform !== 'win32' && (stat.mode & 0o077) !== 0) {
     fail(`${label} must not be accessible by group or others`);
+  }
+  return stat;
+}
+
+function sameWindowsSnapshotFile(binding, stat) {
+  return stat.isFile() && !stat.isSymbolicLink() &&
+    stat.dev === binding.dev && stat.ino === binding.ino &&
+    stat.nlink === binding.nlink && stat.size === binding.size &&
+    stat.mtimeMs === binding.mtimeMs && stat.ctimeMs === binding.ctimeMs;
+}
+
+function sameWindowsSnapshotDirectory(binding, stat) {
+  return stat.isDirectory() && !stat.isSymbolicLink() &&
+    stat.dev === binding.dev && stat.ino === binding.ino &&
+    stat.mtimeMs === binding.mtimeMs && stat.ctimeMs === binding.ctimeMs;
+}
+
+async function assertSnapshotEntryStillAbsent(path) {
+  try {
+    await lstat(path);
+    fail(`${path} appeared while its absence was checked`);
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
   }
 }
 
 export async function loadVerifiedProfileSnapshot(input) {
   const snapshot = await canonicalDirectory(input, 'snapshot directory');
-  await validatePrivateSnapshotDirectory(snapshot, 'snapshot directory');
-  await validatePrivateSnapshotDirectory(join(snapshot, 'profile'), 'snapshot profile directory');
-  await validatePrivateSnapshotDirectory(join(snapshot, 'home'), 'snapshot home directory');
+  const directories = [
+    {
+      path: snapshot,
+      label: 'snapshot directory',
+      stat: await validatePrivateSnapshotDirectory(snapshot, 'snapshot directory'),
+    },
+    {
+      path: join(snapshot, 'profile'),
+      label: 'snapshot profile directory',
+      stat: await validatePrivateSnapshotDirectory(
+        join(snapshot, 'profile'),
+        'snapshot profile directory'
+      ),
+    },
+    {
+      path: join(snapshot, 'home'),
+      label: 'snapshot home directory',
+      stat: await validatePrivateSnapshotDirectory(
+        join(snapshot, 'home'),
+        'snapshot home directory'
+      ),
+    },
+  ];
   const manifestPath = join(snapshot, 'snapshot.json');
-  const manifestState = await readOptionalRegular(manifestPath, { requireSingleLink: true });
-  if (!manifestState.present ||
-      (process.platform !== 'win32' && (manifestState.posixMode & 0o077) !== 0)) {
-    fail('snapshot manifest must be a private regular file');
-  }
-  if (process.platform === 'win32') {
-    await secureWindowsPrivatePath(manifestPath, 'file', 'verify');
-  }
-  const manifest = validateSnapshotManifest(JSON.parse(manifestState.bytes.toString('utf8')));
-  const verifiedFiles = new Map();
-  for (const entry of manifest.files) {
-    const path = entrySnapshot(entry, snapshot);
-    const state = await readOptionalRegular(path, { requireSingleLink: true });
-    if (state.present && process.platform !== 'win32') {
-      const stat = await lstat(path);
-      if ((stat.mode & 0o077) !== 0) fail(`snapshot file ${entry.root}/${entry.path} is not private`);
+  const heldWindowsHandles = [];
+  const readSnapshotFile = async (path) => {
+    const state = await readOptionalRegular(path, {
+      holdWindowsHandle: process.platform === 'win32',
+      requireSingleLink: true,
+    });
+    if (state.windowsHandle !== null) heldWindowsHandles.push(state.windowsHandle);
+    return state;
+  };
+  try {
+    const manifestState = await readSnapshotFile(manifestPath);
+    if (!manifestState.present ||
+        (process.platform !== 'win32' && (manifestState.posixMode & 0o077) !== 0)) {
+      fail('snapshot manifest must be a private regular file');
     }
-    if (state.present && process.platform === 'win32') {
-      await secureWindowsPrivatePath(path, 'file', 'verify');
+    const manifest = validateSnapshotManifest(JSON.parse(manifestState.bytes.toString('utf8')));
+    const entryStates = [];
+    for (const entry of manifest.files) {
+      const path = entrySnapshot(entry, snapshot);
+      const state = await readSnapshotFile(path);
+      entryStates.push({ entry, path, state });
     }
-    if (state.present !== entry.present ||
-        (state.present && sha256(state.bytes) !== entry.sha256)) {
-      fail(`snapshot file ${entry.root}/${entry.path} digest mismatch`);
+    if (process.platform === 'win32') {
+      await secureWindowsPrivatePaths([
+        ...directories.map(({ path, stat }) => ({
+          path,
+          kind: 'directory',
+          action: 'verify',
+          expectedIdentity: windowsPrivateIdentityFromStat(stat, 'directory'),
+        })),
+        {
+          path: manifestPath,
+          kind: 'file',
+          action: 'verify',
+          expectedIdentity: manifestState.windowsBinding.identity,
+        },
+        ...entryStates
+          .filter(({ state }) => state.present)
+          .map(({ path, state }) => ({
+            path,
+            kind: 'file',
+            action: 'verify',
+            expectedIdentity: state.windowsBinding.identity,
+          })),
+      ]);
+      for (const directory of directories) {
+        if (!sameWindowsSnapshotDirectory(
+          directory.stat,
+          await lstat(directory.path, { bigint: true })
+        )) {
+          fail(`${directory.label} changed while its private ACL was verified`);
+        }
+      }
+      if (!sameWindowsSnapshotFile(
+        manifestState.windowsBinding,
+        await lstat(manifestPath, { bigint: true })
+      )) {
+        fail('snapshot manifest changed while its private ACL was verified');
+      }
+      for (const { path, state } of entryStates) {
+        if (state.present) {
+          if (!sameWindowsSnapshotFile(
+            state.windowsBinding,
+            await lstat(path, { bigint: true })
+          )) {
+            fail(`${path} changed while its private ACL was verified`);
+          }
+        } else {
+          await assertSnapshotEntryStillAbsent(path);
+        }
+      }
     }
-    if (state.present) verifiedFiles.set(`${entry.root}/${entry.path}`, state.bytes);
+    const verifiedFiles = new Map();
+    for (const { entry, path, state } of entryStates) {
+      if (state.present && process.platform !== 'win32') {
+        if ((state.posixMode & 0o077) !== 0) {
+          fail(`snapshot file ${entry.root}/${entry.path} is not private`);
+        }
+      }
+      if (state.present !== entry.present ||
+          (state.present && sha256(state.bytes) !== entry.sha256)) {
+        fail(`snapshot file ${entry.root}/${entry.path} digest mismatch`);
+      }
+      if (state.present) verifiedFiles.set(`${entry.root}/${entry.path}`, state.bytes);
+    }
+    return { snapshot, manifest, verifiedFiles };
+  } finally {
+    await Promise.allSettled(heldWindowsHandles.map((handle) => handle.close()));
   }
-  return { snapshot, manifest, verifiedFiles };
 }
 
 async function optionalRegularExists(path, lstatPath) {
@@ -442,16 +747,40 @@ export async function atomicRestoreWrite(path, bytes, posixMode, {
   let handleClosed = false;
   let replacementInstalled = false;
   let originalMoved = false;
+  let replacementIdentity = null;
   try {
     // On Windows the temporary file must be empty until its inherited ACL has
     // been replaced and independently verified as current-user SID-only.
     handle = await openFile(temporary, 'wx', 0o600);
     if (platform === 'win32') {
-      await securePath(temporary, 'file', 'configure');
-      await securePath(temporary, 'file', 'verify');
+      replacementIdentity = windowsPrivateIdentityFromStat(
+        await handle.stat({ bigint: true }),
+        'file'
+      );
+      await securePath(
+        temporary,
+        'file',
+        'configure-open-writer',
+        replacementIdentity
+      );
     }
     await handle.writeFile(bytes);
     await handle.sync();
+    if (platform === 'win32') {
+      const handleIdentity = windowsPrivateIdentityFromStat(
+        await handle.stat({ bigint: true }),
+        'file'
+      );
+      if (!sameWindowsIdentity(replacementIdentity, handleIdentity)) {
+        fail('restore temporary handle identity changed while it was written');
+      }
+      const pathIdentity = await captureWindowsPrivatePathIdentity(temporary, 'file', {
+        lstatPath,
+      });
+      if (!sameWindowsIdentity(replacementIdentity, pathIdentity)) {
+        fail('restore temporary path changed while it was written');
+      }
+    }
     await handle.close();
     handleClosed = true;
 
@@ -461,6 +790,7 @@ export async function atomicRestoreWrite(path, bytes, posixMode, {
       replacementInstalled = true;
       await syncParentDirectory(path);
     } else {
+      await securePath(temporary, 'file', 'verify', replacementIdentity);
       if (await optionalRegularExists(path, lstatPath)) {
         backup = `${path}.dsh-plugin-installer-${randomId()}.bak`;
         await movePath(path, backup);
@@ -470,7 +800,7 @@ export async function atomicRestoreWrite(path, bytes, posixMode, {
       replacementInstalled = true;
       // Renaming must preserve the already-verified ACL. Keep the original
       // backup until this second verification succeeds on the final target.
-      await securePath(path, 'file', 'verify');
+      await securePath(path, 'file', 'verify', replacementIdentity);
       if (backup !== null) {
         await removePath(backup, { force: true });
         originalMoved = false;

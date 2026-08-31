@@ -397,10 +397,20 @@ test('release documentation exposes runtime, item, and historical lanes', async 
   }
   const combined = [...contentsByPath.values()].join('\n');
   assert.ok(combined.includes(state.candidate.dshPackageVersion));
-  assert.ok(combined.includes(state.certifiedRuntimeBaseline.status));
-  assert.ok(combined.includes(state.certifiedRuntimeBaseline.certificationStatus));
-  assert.ok(combined.includes('separate-authority-required'));
-  assert.ok(combined.includes(state.certifiedRuntimeBaseline.certificationSourceSha));
+  assert.match(
+    contentsByPath.get('README.md'),
+    /Verified six-job runtime baseline/
+  );
+  assert.match(
+    contentsByPath.get('README.zh-CN.md'),
+    /六任务已验证运行基线/
+  );
+  assert.match(combined, /no item authority|grants zero item authority|不授予任何条目权威/i);
+  assert.match(combined, /alpha\.2/);
+  assert.match(combined, /0\/66 tasks|66 required tasks/);
+  assert.match(combined, /showcase-only/);
+  assert.match(contentsByPath.get('README.md'), /fail-closed/i);
+  assert.match(contentsByPath.get('README.zh-CN.md'), /失败关闭/);
   assert.ok(combined.includes(state.historicalV2.dshPackageVersion));
   assert.ok(combined.includes(state.historicalV1.dshPackageVersion));
   const security = await readFile(new URL('SECURITY.md', root), 'utf8');
@@ -429,7 +439,7 @@ test('informational release state cannot change executable baseline gates', asyn
   }
 });
 
-test('Manager keeps RC.8 history while the separate community lane is closed on alpha.1', async () => {
+test('Manager keeps alpha.1 and RC.8 history while the separate community lane is closed on alpha.2', async () => {
   const finder = await readFile(
     new URL('skills/dsh-theme-finder/scripts/find-themes.mjs', root),
     'utf8'
@@ -463,43 +473,65 @@ test('Manager keeps RC.8 history while the separate community lane is closed on 
       'utf8'
     )
   );
-  const alpha1Recertification = JSON.parse(
+  const alpha2Recertification = JSON.parse(
     await readFile(
       new URL(
-        'skills/dsh-community-skin-installer/references/alpha1-recertification.json',
+        'skills/dsh-community-skin-installer/references/alpha2-recertification.json',
         root
       ),
       'utf8'
+    )
+  );
+  const alpha1Bytes = await readFile(
+    new URL(
+      'skills/dsh-community-skin-installer/references/alpha1-recertification.json',
+      root
     )
   );
 
   assert.match(finder, /runtimeAttestationSha256/);
   assert.match(manager, /validateV3/);
   assert.doesNotMatch(manager, /rejectPendingV3/);
-  assert.match(communityGate, /alpha1GateCertified/);
-  assert.match(communityGate, /ALPHA1_RECERTIFICATION_SHA256/);
-  assert.equal(communityPolicy.defaultOperationalLane, 'currentAlpha1');
-  assert.equal(communityPolicy.currentAlpha1.installable, false);
+  assert.match(communityGate, /alpha2GateCertified/);
+  assert.match(communityGate, /ALPHA2_RECERTIFICATION_SHA256/);
+  assert.equal(communityPolicy.defaultOperationalLane, 'currentAlpha2');
+  assert.equal(communityPolicy.currentAlpha2.installable, false);
   assert.equal(
-    communityPolicy.currentAlpha1.websiteDistribution,
+    communityPolicy.currentAlpha2.websiteDistribution,
     'external-showcase'
   );
   assert.equal(
-    communityPolicy.currentAlpha1.websiteInstallability,
+    communityPolicy.currentAlpha2.websiteInstallability,
     'showcase-only'
   );
   assert.equal(
-    communityPolicy.currentAlpha1.websiteCompatibility,
+    communityPolicy.currentAlpha2.websiteCompatibility,
     'verification-pending'
   );
   assert.equal(
-    alpha1Recertification.baseline.sourceCommit,
-    'cd5ef8148158c3a752a658978873241fdf8e2bbc'
+    alpha2Recertification.baseline.sourceCommit,
+    '0a53fb55bea101816fa226bb964ae2bed71c343b'
   );
-  assert.equal(alpha1Recertification.gate.requiredItems, 11);
-  assert.equal(alpha1Recertification.gate.completedItems, 0);
-  assert.equal(alpha1Recertification.gate.installable, false);
-  assert.equal(alpha1Recertification.historicalAuthority.mayAuthorizeAlpha1, false);
+  assert.equal(
+    alpha2Recertification.baseline.sourceTree,
+    '64ccbfa8e0caa4711cd4a75717ef9e022657961b'
+  );
+  assert.equal(alpha2Recertification.gate.requiredItems, 11);
+  assert.equal(alpha2Recertification.matrix.requiredTotalTasks, 66);
+  assert.equal(alpha2Recertification.gate.completedItems, 0);
+  assert.equal(alpha2Recertification.gate.completedTasks, 0);
+  assert.equal(alpha2Recertification.gate.installable, false);
+  assert.equal(alpha2Recertification.gate.publicationAllowed, false);
+  assert.equal(
+    alpha2Recertification.historicalAuthority.alpha1MayAuthorizeAlpha2,
+    false
+  );
+  assert.equal(
+    createHash('sha256').update(alpha1Bytes).digest('hex'),
+    '9ecc86474cba557c445ae21b8e479aa3f1b55cb8b2768faa6ed73952cc7b1552'
+  );
+  assert.equal(communityPolicy.currentAlpha1.historicalAtCapture, true);
+  assert.equal(communityPolicy.currentAlpha1.mayAuthorizeCurrent, false);
   assert.equal(catalog.managerGate.installable, true);
   assert.equal(catalog.managerGate.certificationStatus, 'certified-installable');
   assert.equal(

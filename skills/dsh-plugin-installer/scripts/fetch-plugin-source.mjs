@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import {
   lifecycleHooksFromManifest,
   loadAuthority,
+  manifestHasRuntimeDependencyGraph,
   normalizeCatalogId,
   normalizeBundlePatch,
   resolveItems,
@@ -315,7 +316,7 @@ export async function fetchAuthorityBoundSource({
       expectedSha256: source.manifestSha256,
       fetchImpl,
     });
-    const lockfile = await fetchBoundedExact({
+    const lockfile = source.lockfilePath === null ? null : await fetchBoundedExact({
       url: `${rawBase}/${source.lockfilePath}`,
       expectedOrigin: 'https://raw.githubusercontent.com',
       maxBytes: MAX_LOCKFILE_BYTES,
@@ -328,15 +329,22 @@ export async function fetchAuthorityBoundSource({
     } catch {
       fail('Git commit package manifest is not valid JSON');
     }
+    const lifecycle = lifecycleHooksFromManifest(manifestDocument);
     if (manifestDocument.name !== item.package.name || manifestDocument.version !== item.package.version ||
         normalizeBundlePatch(manifestDocument.dsh?.bundle?.patch) !== item.package.bundlePatch ||
-        JSON.stringify(lifecycleHooksFromManifest(manifestDocument)) !==
+        JSON.stringify(lifecycle) !==
           JSON.stringify(item.package.lifecycle.hooks)) {
       fail('Git commit manifest identity, patch, or lifecycle map mismatch');
     }
-    files.push(['package.json', manifest.bytes], [source.lockfilePath, lockfile.bytes]);
+    if (lockfile === null &&
+        (Object.values(lifecycle).some((value) => value !== null) ||
+         manifestHasRuntimeDependencyGraph(manifestDocument))) {
+      fail('lockless Git source must be prebuilt with no lifecycle hooks or runtime/peer dependencies');
+    }
+    files.push(['package.json', manifest.bytes]);
+    if (lockfile !== null) files.push([source.lockfilePath, lockfile.bytes]);
     receipt.evidence.manifestSha256 = manifest.sha256;
-    receipt.evidence.lockfileSha256 = lockfile.sha256;
+    receipt.evidence.lockfileSha256 = lockfile?.sha256 ?? null;
     receipt.evidence.sourceCommit = source.commit;
     receipt.evidence.sourceTree = source.tree;
   } else {
@@ -378,6 +386,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       validationOptions: {
         harnessAuthorityBytes: loaded.harnessAuthorityBytes,
         top10ReleaseSetBytes: loaded.top10ReleaseSetBytes,
+        migrationMapBytes: loaded.migrationMapBytes,
+        migrationMapSchemaBytes: loaded.migrationMapSchemaBytes,
+        candidateIntakeBytes: loaded.candidateIntakeBytes,
       },
     });
     const result = await fetchAuthorityBoundSource({ item, output: options.output });

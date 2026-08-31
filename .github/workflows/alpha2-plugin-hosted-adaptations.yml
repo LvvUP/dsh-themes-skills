@@ -1,4 +1,4 @@
-name: alpha1 Plugin hosted adaptations
+name: alpha2 Plugin hosted adaptations
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
     paths:
       - package.json
       - package-lock.json
-      - .github/workflows/alpha1-plugin-hosted-adaptations.yml
+      - .github/workflows/alpha2-plugin-hosted-adaptations.yml
       - skills/dsh-plugin-installer/assets/hosted-adaptations/**
       - skills/dsh-plugin-installer/references/plugin-hosted-adaptation.schema.json
       - skills/dsh-plugin-installer/references/plugin-runtime-build-recipes/**
@@ -21,7 +21,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: alpha1-plugin-hosted-adaptations-${{ github.workflow }}-${{ github.ref }}
+  group: alpha2-plugin-hosted-adaptations-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -105,7 +105,7 @@ jobs:
       - name: Upload non-installable deterministic staging bytes
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: alpha1-hosted-adaptation-${{ matrix.catalogId }}
+          name: alpha2-hosted-adaptation-${{ matrix.catalogId }}
           path: ${{ runner.temp }}/hosted-a
           if-no-files-found: error
           retention-days: 14

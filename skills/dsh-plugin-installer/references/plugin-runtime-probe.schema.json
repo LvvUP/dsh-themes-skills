@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://dsh-themes.com/schemas/plugin-runtime-probe-v1.json",
-  "title": "DSH alpha.1 Plugin fixed runtime probe contract",
+  "title": "DSH alpha.2 Plugin fixed runtime probe contract",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -18,7 +18,7 @@
   ],
   "properties": {
     "schemaVersion": { "const": 1 },
-    "purpose": { "const": "dsh-plugin-alpha1-fixed-runtime-probe" },
+    "purpose": { "const": "dsh-plugin-alpha2-fixed-runtime-probe" },
     "authorityEffect": { "const": "contract-only-not-runtime-authority" },
     "candidateExecuted": { "const": false },
     "catalogId": { "type": "integer", "minimum": 3000, "maximum": 9999 },
@@ -27,9 +27,9 @@
       "additionalProperties": false,
       "required": ["tag", "commit", "tree"],
       "properties": {
-        "tag": { "const": "dsh-v0.1.2-alpha.1" },
-        "commit": { "const": "cd5ef8148158c3a752a658978873241fdf8e2bbc" },
-        "tree": { "const": "a712eec535b48badc4fefb4df5176a7002e4280b" }
+        "tag": { "const": "dsh-v0.1.2-alpha.2" },
+        "commit": { "const": "0a53fb55bea101816fa226bb964ae2bed71c343b" },
+        "tree": { "const": "64ccbfa8e0caa4711cd4a75717ef9e022657961b" }
       }
     },
     "package": {
@@ -113,7 +113,7 @@
     },
     "packageName": {
       "type": "string",
-      "pattern": "^(?:@[a-z0-9._-]+/)?[a-z0-9._-]+$"
+      "pattern": "^(?:@[a-z0-9][a-z0-9._-]*/)?[a-z0-9][a-z0-9._-]*$"
     },
     "safeId": {
       "type": "string",

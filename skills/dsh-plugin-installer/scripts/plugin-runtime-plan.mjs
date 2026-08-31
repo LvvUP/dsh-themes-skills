@@ -47,15 +47,15 @@ export function buildPendingPluginRuntimeCandidatePlan(intake, intakeSha256) {
   validateCandidateIntake(intake);
   const plan = {
     schemaVersion: 1,
-    purpose: 'dsh-plugin-alpha1-runtime-candidate-plan',
+    purpose: 'dsh-plugin-alpha2-runtime-candidate-plan',
     status: 'runtime-artifact-and-probe-authority-pending',
     authorityEffect: 'none-not-installation-authority',
     candidateIntakeSha256: intakeSha256,
     baseline: {
-      tag: 'dsh-v0.1.2-alpha.1',
-      commit: 'cd5ef8148158c3a752a658978873241fdf8e2bbc',
-      tree: 'a712eec535b48badc4fefb4df5176a7002e4280b',
-      lockfileSha256: '506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1',
+      tag: 'dsh-v0.1.2-alpha.2',
+      commit: '0a53fb55bea101816fa226bb964ae2bed71c343b',
+      tree: '64ccbfa8e0caa4711cd4a75717ef9e022657961b',
+      lockfileSha256: '6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0',
     },
     matrix: {
       batchCount: 4,
@@ -148,17 +148,17 @@ export function validatePluginRuntimeCandidatePlan(plan, intake, intakeSha256) {
     'schemaVersion', 'purpose', 'status', 'authorityEffect', 'candidateIntakeSha256',
     'baseline', 'matrix', 'items',
   ], 'plugin runtime candidate plan');
-  if (plan.schemaVersion !== 1 || plan.purpose !== 'dsh-plugin-alpha1-runtime-candidate-plan' ||
+  if (plan.schemaVersion !== 1 || plan.purpose !== 'dsh-plugin-alpha2-runtime-candidate-plan' ||
       !['runtime-artifact-and-probe-authority-pending', 'runtime-candidates-ready'].includes(plan.status) ||
       plan.authorityEffect !== 'none-not-installation-authority' ||
       plan.candidateIntakeSha256 !== intakeSha256 || !SHA256.test(plan.candidateIntakeSha256 ?? '')) {
     fail('plugin runtime candidate plan header or intake binding mismatch');
   }
   exactKeys(plan.baseline, ['tag', 'commit', 'tree', 'lockfileSha256'], 'runtime plan baseline');
-  if (plan.baseline.tag !== 'dsh-v0.1.2-alpha.1' ||
-      plan.baseline.commit !== 'cd5ef8148158c3a752a658978873241fdf8e2bbc' ||
-      plan.baseline.tree !== 'a712eec535b48badc4fefb4df5176a7002e4280b' ||
-      plan.baseline.lockfileSha256 !== '506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1') {
+  if (plan.baseline.tag !== 'dsh-v0.1.2-alpha.2' ||
+      plan.baseline.commit !== '0a53fb55bea101816fa226bb964ae2bed71c343b' ||
+      plan.baseline.tree !== '64ccbfa8e0caa4711cd4a75717ef9e022657961b' ||
+      plan.baseline.lockfileSha256 !== '6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0') {
     fail('plugin runtime candidate plan baseline mismatch');
   }
   exactKeys(plan.matrix, [

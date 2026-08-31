@@ -3,6 +3,9 @@ import { lstat as fsLstat } from 'node:fs/promises';
 import { win32 } from 'node:path';
 import { promisify } from 'node:util';
 
+import { trustedWindowsSystemRoot } from './windows-private-acl.mjs';
+import { acquireWindowsPowerShellTemp } from './windows-powershell-temp.mjs';
+
 const execFileAsync = promisify(execFile);
 
 export const WINDOWS_DURABLE_MOVE_TIMEOUT_MS = 60_000;
@@ -18,6 +21,21 @@ $source = [Environment]::GetEnvironmentVariable('DSH_PLUGIN_DURABLE_MOVE_SOURCE'
 $target = [Environment]::GetEnvironmentVariable('DSH_PLUGIN_DURABLE_MOVE_TARGET', 'Process')
 if ([String]::IsNullOrEmpty($source)) { throw 'missing durable move source' }
 if ([String]::IsNullOrEmpty($target)) { throw 'missing durable move target' }
+
+function ConvertTo-DshExtendedPath([string]$path) {
+  $normalized = $path.Replace('/', '\')
+  if ($normalized.StartsWith('\\?\')) { return $normalized }
+  if ($normalized.StartsWith('\\')) {
+    return '\\?\UNC\' + $normalized.Substring(2)
+  }
+  if ($normalized -notmatch '^[A-Za-z]:\\') {
+    throw 'durable move path is not drive-absolute or UNC'
+  }
+  return '\\?\' + $normalized
+}
+
+$sourceNative = ConvertTo-DshExtendedPath $source
+$targetNative = ConvertTo-DshExtendedPath $target
 
 Add-Type -TypeDefinition @'
 using System.Runtime.InteropServices;
@@ -35,10 +53,10 @@ public static class DshPluginDurableMove
 '@
 
 $MOVEFILE_WRITE_THROUGH = [uint32]0x8
-$moved = [DshPluginDurableMove]::MoveFileExW($source, $target, $MOVEFILE_WRITE_THROUGH)
+$moved = [DshPluginDurableMove]::MoveFileExW($sourceNative, $targetNative, $MOVEFILE_WRITE_THROUGH)
 $win32Error = if ($moved) { 0 } else { [Runtime.InteropServices.Marshal]::GetLastWin32Error() }
-$sourceExists = [IO.File]::Exists($source) -or [IO.Directory]::Exists($source)
-$targetExists = [IO.File]::Exists($target) -or [IO.Directory]::Exists($target)
+$sourceExists = [IO.File]::Exists($sourceNative) -or [IO.Directory]::Exists($sourceNative)
+$targetExists = [IO.File]::Exists($targetNative) -or [IO.Directory]::Exists($targetNative)
 
 [PSCustomObject]@{
   schemaVersion = 1
@@ -155,6 +173,9 @@ export async function moveWindowsPathDurably(
     execute = execFileAsync,
     lstat = fsLstat,
     platform = process.platform,
+    powerShellTempExecute,
+    powerShellTempForTesting,
+    systemRootForTesting,
   } = {}
 ) {
   if (platform !== 'win32') {
@@ -172,15 +193,7 @@ export async function moveWindowsPathDurably(
     throw new Error('Windows durable move dependencies are malformed');
   }
 
-  const systemRoot = environment.SystemRoot ?? environment.windir ?? environment.WINDIR;
-  if (
-    typeof systemRoot !== 'string' ||
-    systemRoot.length === 0 ||
-    systemRoot.includes('\0') ||
-    !win32.isAbsolute(systemRoot)
-  ) {
-    throw new Error('cannot perform durable move without an absolute Windows system root');
-  }
+  const systemRoot = trustedWindowsSystemRoot({ platform, systemRootForTesting });
   const powershell = win32.join(
     systemRoot,
     'System32',
@@ -192,53 +205,61 @@ export async function moveWindowsPathDurably(
   await requireSource(source, lstat);
   await requireAbsentTarget(target, lstat);
 
+  const bootstrap = await acquireWindowsPowerShellTemp({
+    environment,
+    execute: powerShellTempExecute,
+    platform,
+    powershell,
+    powerShellTempForTesting,
+    systemRoot,
+  });
   const childEnvironment = {
     SystemRoot: systemRoot,
+    WINDIR: systemRoot,
+    TEMP: bootstrap.path,
+    TMP: bootstrap.path,
     [SOURCE_ENV]: source,
     [TARGET_ENV]: target,
   };
-  for (const key of ['TEMP', 'TMP']) {
-    const value = environment[key];
-    if (typeof value === 'string' && value.length > 0 && !value.includes('\0')) {
-      childEnvironment[key] = value;
-    }
-  }
-  let result;
   try {
-    result = await execute(
-      powershell,
-      [
-        '-NoLogo',
-        '-NoProfile',
-        '-NonInteractive',
-        '-ExecutionPolicy',
-        'Bypass',
-        '-Command',
-        WINDOWS_DURABLE_MOVE_SCRIPT,
-      ],
-      {
-        encoding: 'utf8',
-        env: childEnvironment,
-        maxBuffer: 64 * 1024,
-        timeout: WINDOWS_DURABLE_MOVE_TIMEOUT_MS,
-        windowsHide: true,
-      }
-    );
-  } catch (error) {
+    let result;
     try {
-      const proof = parseProof(error?.stdout);
-      if (!proof.moved) throw win32MoveError(proof, error);
-    } catch (proofError) {
-      if (proofError?.win32Error !== undefined) throw proofError;
+      result = await execute(
+        powershell,
+        [
+          '-NoLogo',
+          '-NoProfile',
+          '-NonInteractive',
+          '-ExecutionPolicy',
+          'Bypass',
+          '-Command',
+          WINDOWS_DURABLE_MOVE_SCRIPT,
+        ],
+        {
+          encoding: 'utf8',
+          env: childEnvironment,
+          maxBuffer: 64 * 1024,
+          timeout: WINDOWS_DURABLE_MOVE_TIMEOUT_MS,
+          windowsHide: true,
+        }
+      );
+    } catch (error) {
+      try {
+        const proof = parseProof(error?.stdout);
+        if (!proof.moved) throw win32MoveError(proof, error);
+      } catch (proofError) {
+        if (proofError?.win32Error !== undefined) throw proofError;
+      }
+      const detail = error?.stderr?.trim() || error?.message || 'unknown error';
+      throw new Error(`failed to execute Windows durable move: ${detail}`, { cause: error });
     }
-    const detail = error?.stderr?.trim() || error?.message || 'unknown error';
-    throw new Error(`failed to execute Windows durable move: ${detail}`, { cause: error });
+    const proof = parseProof(result?.stdout);
+    if (!proof.moved) throw win32MoveError(proof);
+    if (proof.sourceExists || !proof.targetExists) {
+      throw new Error('Windows durable move proof is weaker than source-gone and target-present');
+    }
+    return proof;
+  } finally {
+    await bootstrap.release();
   }
-
-  const proof = parseProof(result?.stdout);
-  if (!proof.moved) throw win32MoveError(proof);
-  if (proof.sourceExists || !proof.targetExists) {
-    throw new Error('Windows durable move proof is weaker than source-gone and target-present');
-  }
-  return proof;
 }

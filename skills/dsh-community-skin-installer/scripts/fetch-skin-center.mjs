@@ -43,13 +43,14 @@ function request(url, signal) {
 }
 
 const output = outputArg(process.argv.slice(2));
-const { catalog, alpha1Recertification } = await loadCommunityAuthority();
+const { catalog, alpha2Recertification } = await loadCommunityAuthority();
 if (
-  alpha1Recertification.gate?.status !== 'certified-installable' ||
-  alpha1Recertification.gate?.installable !== true
+  alpha2Recertification.gate?.status !== 'certified-installable' ||
+  alpha2Recertification.gate?.installable !== true ||
+  alpha2Recertification.gate?.publicationAllowed !== true
 ) {
   fail(
-    'Download is blocked: alpha1-recertification-gate-not-certified; no directory or network request was created'
+    'Download is blocked: alpha2-recertification-gate-not-certified; no directory or network request was created'
   );
 }
 const authority = catalog.skinCenter;

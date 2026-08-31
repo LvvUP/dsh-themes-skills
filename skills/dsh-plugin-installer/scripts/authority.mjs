@@ -5,15 +5,19 @@ import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 import { validateTop10ReleaseSet } from './top10-authority.mjs';
+import { validateAlpha2PluginMigrationMap } from './validate-alpha2-plugin-migration-map.mjs';
 
 const authorityUrl = new URL('../references/plugin-authority.json', import.meta.url);
 const schemaUrl = new URL('../references/plugin-authority.schema.json', import.meta.url);
-const harnessAuthorityUrl = new URL('../../dsh-harness-installer/references/alpha1-source-authority.json', import.meta.url);
+const harnessAuthorityUrl = new URL('../../dsh-harness-installer/references/alpha2-release-authority.json', import.meta.url);
 const top10ReleaseSetUrl = new URL('../references/top10-release-set.json', import.meta.url);
+const migrationMapUrl = new URL('../references/alpha2-plugin-migration-map.json', import.meta.url);
+const migrationMapSchemaUrl = new URL('../references/alpha2-plugin-migration-map.schema.json', import.meta.url);
+const candidateIntakeUrl = new URL('../references/plugin-candidate-intake.json', import.meta.url);
 
 const SHA40 = /^[a-f0-9]{40}$/;
 const SHA64 = /^[a-f0-9]{64}$/;
-const PACKAGE = /^(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+$/;
+const PACKAGE = /^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const SAFE_ENTRY_ID = /^[A-Za-z0-9][A-Za-z0-9._\/-]{0,127}$/;
 const SEMVER = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
@@ -94,6 +98,22 @@ export function lifecycleHooksSha256(hooks) {
   return sha256(Buffer.from(`${JSON.stringify(hooks)}\n`, 'utf8'));
 }
 
+export function manifestHasRuntimeDependencyGraph(manifest) {
+  for (const key of ['dependencies', 'optionalDependencies', 'peerDependencies']) {
+    const value = manifest?.[key];
+    if (value !== undefined && (value === null || typeof value !== 'object' ||
+        Array.isArray(value) || Object.keys(value).length > 0)) return true;
+  }
+  const peerMetadata = manifest?.peerDependenciesMeta;
+  if (peerMetadata !== undefined && (peerMetadata === null || typeof peerMetadata !== 'object' ||
+      Array.isArray(peerMetadata) || Object.keys(peerMetadata).length > 0)) return true;
+  for (const key of ['bundledDependencies', 'bundleDependencies']) {
+    const value = manifest?.[key];
+    if (value !== undefined && (!Array.isArray(value) || value.length > 0)) return true;
+  }
+  return false;
+}
+
 function validateHostedEvidence(evidence, label) {
   exactKeys(evidence, ['path', 'sha256'], label);
   safeRelativePath(evidence.path, `${label}.path`, { file: true });
@@ -157,7 +177,7 @@ export function validateItem(item, index = 0) {
   if (item.distribution?.kind === 'hosted-plugin-verified') {
     exactKeys(item.distribution, [
       'kind', 'assetName', 'artifactUrl', 'artifactBytes', 'artifactSha256',
-      'artifactIntegrity', 'manifestSha256', 'licenseFile', 'sbom',
+      'artifactIntegrity', 'manifestSha256', 'licenseFile', 'noticeFile', 'sbom',
     ], `${label}.distribution`);
     if (!/^[A-Za-z0-9][A-Za-z0-9._-]{0,159}\.tgz$/.test(item.distribution.assetName)) {
       fail(`${label} hosted release asset name is malformed`);
@@ -174,6 +194,10 @@ export function validateItem(item, index = 0) {
       fail(`${label} artifact digest or integrity mismatch`);
     }
     validateHostedEvidence(item.distribution.licenseFile, `${label}.distribution.licenseFile`);
+    validateHostedEvidence(item.distribution.noticeFile, `${label}.distribution.noticeFile`);
+    if (item.distribution.noticeFile.path !== 'NOTICE.md') {
+      fail(`${label} hosted modification notice must use NOTICE.md`);
+    }
     exactKeys(item.distribution.sbom, ['format', 'path', 'sha256'], `${label}.distribution.sbom`);
     if (item.distribution.sbom.format !== 'cyclonedx-json') fail(`${label} hosted SBOM format mismatch`);
     safeRelativePath(item.distribution.sbom.path, `${label}.distribution.sbom.path`, { file: true });
@@ -181,8 +205,9 @@ export function validateItem(item, index = 0) {
     if (new Set([
       item.package?.bundlePatch,
       item.distribution.licenseFile.path,
+      item.distribution.noticeFile.path,
       item.distribution.sbom.path,
-    ]).size !== 3) fail(`${label} hosted patch, license, and SBOM paths must be distinct`);
+    ]).size !== 4) fail(`${label} hosted patch, license, notice, and SBOM paths must be distinct`);
   } else if (item.distribution?.kind === 'upstream-plugin-verified') {
     exactKeys(item.distribution, ['kind', 'source'], `${label}.distribution`);
     const source = object(item.distribution.source, `${label}.distribution.source`);
@@ -219,10 +244,13 @@ export function validateItem(item, index = 0) {
         'manifestSha256', 'lockfilePath', 'lockfileSha256',
       ], `${label}.distribution.source`);
       safeHttpsUrl(source.repository, `${label} Git repository`, 'https://github.com');
+      const lockfileBound =
+        ['pnpm-lock.yaml', 'package-lock.json', 'yarn.lock', 'npm-shrinkwrap.json']
+          .includes(source.lockfilePath) && SHA64.test(source.lockfileSha256 ?? '');
+      const lockfileAbsent = source.lockfilePath === null && source.lockfileSha256 === null;
       if (!/^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\.git$/.test(source.repository) ||
           !SHA40.test(source.commit) || !SHA40.test(source.tree) || !SHA64.test(source.manifestSha256) ||
-          !['pnpm-lock.yaml', 'package-lock.json', 'yarn.lock', 'npm-shrinkwrap.json'].includes(source.lockfilePath) ||
-          !SHA64.test(source.lockfileSha256) || source.subdir !== '.') {
+          (!lockfileBound && !lockfileAbsent) || source.subdir !== '.') {
         fail(`${label} exact Git commit source is malformed`);
       }
     } else {
@@ -254,6 +282,11 @@ export function validateItem(item, index = 0) {
     fail(`${label} must disclose transitive dependency lifecycle risk`);
   }
   const executableHooks = LIFECYCLE_HOOKS.filter((hook) => lifecycle[hook] !== null);
+  if (item.distribution.kind === 'upstream-plugin-verified' &&
+      item.distribution.source.type === 'git-commit' &&
+      item.distribution.source.lockfilePath === null && executableHooks.length > 0) {
+    fail(`${label} lockless Git source cannot declare lifecycle hooks`);
+  }
   const authorization = item.package.lifecycleAuthorization;
   exactKeys(authorization, [
     'required', 'packageKey', 'authorizedHooks', 'hooksSha256',
@@ -336,27 +369,70 @@ export function validateItem(item, index = 0) {
 export function validateAuthority(authority, options = {}) {
   exactKeys(authority, [
     'schemaVersion', 'capturedAt', 'purpose', 'harness', 'supportedDistributionKinds',
-    'publication', 'top10ReleaseSet', 'items',
+    'migrationReview', 'publication', 'top10ReleaseSet', 'items',
   ], 'authority');
-  if (authority.schemaVersion !== 2 || authority.purpose !== 'dsh-plugin-install-authority' ||
+  if (authority.schemaVersion !== 3 || authority.purpose !== 'dsh-plugin-install-authority' ||
       !/^\d{4}-\d{2}-\d{2}$/.test(authority.capturedAt)) fail('authority header mismatch');
   if (JSON.stringify(authority.supportedDistributionKinds) !== JSON.stringify(DISTRIBUTIONS)) {
     fail('supported distribution kinds mismatch');
   }
   exactKeys(authority.harness, [
-    'tag', 'commit', 'tree', 'lockfileSha256', 'sourceBuildAuthoritySha256',
+    'tag', 'commit', 'tree', 'lockfileSha256', 'officialNpmPackage',
+    'officialNpmVersion', 'officialNpmTarballSha256', 'harnessReleaseAuthoritySha256',
     'runtimeStatus', 'runtimeReceiptSetSha256', 'installable',
   ], 'harness');
-  if (authority.harness.tag !== 'dsh-v0.1.2-alpha.1' ||
-      authority.harness.commit !== 'cd5ef8148158c3a752a658978873241fdf8e2bbc' ||
-      authority.harness.tree !== 'a712eec535b48badc4fefb4df5176a7002e4280b' ||
-      authority.harness.lockfileSha256 !== '506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1' ||
-      !SHA64.test(authority.harness.sourceBuildAuthoritySha256)) fail('Harness source authority mismatch');
+  if (authority.harness.tag !== 'dsh-v0.1.2-alpha.2' ||
+      authority.harness.commit !== '0a53fb55bea101816fa226bb964ae2bed71c343b' ||
+      authority.harness.tree !== '64ccbfa8e0caa4711cd4a75717ef9e022657961b' ||
+      authority.harness.lockfileSha256 !== '6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0' ||
+      authority.harness.officialNpmPackage !== '@deepseek-ai/dsh' ||
+      authority.harness.officialNpmVersion !== '0.1.2-alpha.2' ||
+      authority.harness.officialNpmTarballSha256 !==
+        '5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47' ||
+      !SHA64.test(authority.harness.harnessReleaseAuthoritySha256)) {
+    fail('Harness alpha.2 release authority mismatch');
+  }
   const runtimeVerified = authority.harness.runtimeStatus === 'runtime-receipt-verified';
   if (runtimeVerified !== authority.harness.installable ||
       (runtimeVerified ? !SHA64.test(authority.harness.runtimeReceiptSetSha256) : authority.harness.runtimeReceiptSetSha256 !== null)) {
     fail('Harness runtime receipt gate is inconsistent');
   }
+
+  exactKeys(authority.migrationReview, [
+    'path', 'schemaPath', 'schemaSha256', 'sha256', 'candidateIntakePath',
+    'candidateIntakeSha256', 'status', 'retainedCurrentCatalogCount',
+    'retiredCatalogCount', 'replacementCandidateCount', 'replacementIdsAllocated',
+  ], 'migrationReview');
+  if (authority.migrationReview.path !== 'alpha2-plugin-migration-map.json' ||
+      authority.migrationReview.schemaPath !== 'alpha2-plugin-migration-map.schema.json' ||
+      authority.migrationReview.candidateIntakePath !== 'plugin-candidate-intake.json' ||
+      authority.migrationReview.status !== 'static-reviewed-pending-runtime' ||
+      authority.migrationReview.retainedCurrentCatalogCount !== 52 ||
+      authority.migrationReview.retiredCatalogCount !== 28 ||
+      authority.migrationReview.replacementCandidateCount !== 44 ||
+      authority.migrationReview.replacementIdsAllocated !== false ||
+      !Buffer.isBuffer(options.migrationMapBytes) ||
+      !Buffer.isBuffer(options.migrationMapSchemaBytes) ||
+      !Buffer.isBuffer(options.candidateIntakeBytes) ||
+      sha256(options.migrationMapBytes) !== authority.migrationReview.sha256 ||
+      sha256(options.migrationMapSchemaBytes) !== authority.migrationReview.schemaSha256 ||
+      sha256(options.candidateIntakeBytes) !== authority.migrationReview.candidateIntakeSha256) {
+    fail('Plugin authority is not bound to the exact alpha.2 migration review bytes');
+  }
+  let migrationMap;
+  let candidateIntake;
+  try {
+    migrationMap = JSON.parse(options.migrationMapBytes);
+    candidateIntake = JSON.parse(options.candidateIntakeBytes);
+  } catch {
+    fail('alpha.2 migration review bytes are not valid JSON');
+  }
+  if (!Array.isArray(candidateIntake?.items)) {
+    fail('alpha.2 migration review candidate intake is malformed');
+  }
+  validateAlpha2PluginMigrationMap(migrationMap, {
+    existingRepositories: candidateIntake.items.map((item) => item.repository),
+  });
 
   exactKeys(authority.publication, [
     'status', 'publishedInstallable', 'publishedCatalogPluginCount',
@@ -408,8 +484,8 @@ export function validateAuthority(authority, options = {}) {
   }
   validateTop10ReleaseSet(top10ReleaseSet, { authority });
   if (!Buffer.isBuffer(options.harnessAuthorityBytes) ||
-      sha256(options.harnessAuthorityBytes) !== authority.harness.sourceBuildAuthoritySha256) {
-    fail('plugin authority is not bound to the bundled Harness source authority bytes');
+      sha256(options.harnessAuthorityBytes) !== authority.harness.harnessReleaseAuthoritySha256) {
+    fail('plugin authority is not bound to the bundled Harness alpha.2 release authority bytes');
   }
   return authority;
 }
@@ -437,20 +513,36 @@ export function resolveItems(authority, selections, { top10 = false, top10Releas
 }
 
 export async function loadAuthority() {
-  const [authorityBytes, harnessBytes, top10ReleaseSetBytes] = await Promise.all([
+  const [
+    authorityBytes,
+    harnessBytes,
+    top10ReleaseSetBytes,
+    migrationMapBytes,
+    migrationMapSchemaBytes,
+    candidateIntakeBytes,
+  ] = await Promise.all([
     readFile(authorityUrl),
     readFile(harnessAuthorityUrl),
     readFile(top10ReleaseSetUrl),
+    readFile(migrationMapUrl),
+    readFile(migrationMapSchemaUrl),
+    readFile(candidateIntakeUrl),
   ]);
   const authority = JSON.parse(authorityBytes);
   return {
     authority: validateAuthority(authority, {
       harnessAuthorityBytes: harnessBytes,
       top10ReleaseSetBytes,
+      migrationMapBytes,
+      migrationMapSchemaBytes,
+      candidateIntakeBytes,
     }),
     authorityBytes,
     authoritySha256: sha256(authorityBytes),
     harnessAuthorityBytes: harnessBytes,
+    migrationMapBytes,
+    migrationMapSchemaBytes,
+    candidateIntakeBytes,
     top10ReleaseSetBytes,
     top10ReleaseSet: validateTop10ReleaseSet(JSON.parse(top10ReleaseSetBytes), { authority }),
     top10ReleaseSetSha256: sha256(top10ReleaseSetBytes),

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dsh-themes.com/schemas/dsh-alpha1-source-build-receipt-v1.json",
-  "title": "DSH alpha.1 local source-build receipt",
+  "$id": "https://dsh-themes.com/schemas/dsh-alpha2-source-build-receipt-v1.json",
+  "title": "DSH alpha.2 local source-build receipt",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -22,10 +22,10 @@
       "additionalProperties": false,
       "required": ["tag", "commit", "tree", "lockfileSha256"],
       "properties": {
-        "tag": { "const": "dsh-v0.1.2-alpha.1" },
-        "commit": { "const": "cd5ef8148158c3a752a658978873241fdf8e2bbc" },
-        "tree": { "const": "a712eec535b48badc4fefb4df5176a7002e4280b" },
-        "lockfileSha256": { "const": "506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1" }
+        "tag": { "const": "dsh-v0.1.2-alpha.2" },
+        "commit": { "const": "0a53fb55bea101816fa226bb964ae2bed71c343b" },
+        "tree": { "const": "64ccbfa8e0caa4711cd4a75717ef9e022657961b" },
+        "lockfileSha256": { "const": "6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0" }
       }
     },
     "toolchain": {
@@ -53,7 +53,7 @@
         "buildScript": { "const": "build:official" },
         "builtCliPath": { "const": "apps/cli/lib/bin.js" },
         "builtCliSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
-        "reportedVersion": { "const": "0.1.2-alpha.1" },
+        "reportedVersion": { "const": "0.1.2-alpha.2" },
         "pathInstalled": { "const": false }
       }
     },

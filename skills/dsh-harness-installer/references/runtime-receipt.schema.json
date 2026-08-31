@@ -1,17 +1,18 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dsh-themes.com/schemas/dsh-alpha1-runtime-receipt-v1.json",
-  "title": "DSH alpha.1 one-platform runtime receipt",
+  "$id": "https://dsh-themes.com/schemas/dsh-alpha2-runtime-receipt-v1.json",
+  "title": "DSH alpha.2 one-platform runtime receipt",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "status", "scope", "source", "task", "build", "probes", "ci", "privacy"],
+  "required": ["schemaVersion", "status", "scope", "source", "task", "artifacts", "provenanceBoundary", "probes", "ci", "privacy"],
   "properties": {
     "schemaVersion": { "const": 1 },
-    "status": { "const": "alpha1-runtime-task-passed" },
+    "status": { "const": "alpha2-runtime-task-passed" },
     "scope": { "const": "one-platform-node-task" },
     "source": { "$ref": "#/$defs/source" },
     "task": { "$ref": "#/$defs/task" },
-    "build": { "$ref": "#/$defs/build" },
+    "artifacts": { "$ref": "#/$defs/artifacts" },
+    "provenanceBoundary": { "$ref": "#/$defs/provenanceBoundary" },
     "probes": { "$ref": "#/$defs/probes" },
     "ci": { "$ref": "#/$defs/ci" },
     "privacy": { "$ref": "#/$defs/privacy" }
@@ -24,10 +25,10 @@
       "additionalProperties": false,
       "required": ["tag", "commit", "tree", "lockfileSha256"],
       "properties": {
-        "tag": { "const": "dsh-v0.1.2-alpha.1" },
-        "commit": { "const": "cd5ef8148158c3a752a658978873241fdf8e2bbc" },
-        "tree": { "const": "a712eec535b48badc4fefb4df5176a7002e4280b" },
-        "lockfileSha256": { "const": "506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1" }
+        "tag": { "const": "dsh-v0.1.2-alpha.2" },
+        "commit": { "const": "0a53fb55bea101816fa226bb964ae2bed71c343b" },
+        "tree": { "const": "64ccbfa8e0caa4711cd4a75717ef9e022657961b" },
+        "lockfileSha256": { "const": "6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0" }
       }
     },
     "task": {
@@ -45,13 +46,45 @@
         "nodeVersion": { "enum": ["22.19.0", "24.15.0"] }
       }
     },
-    "build": {
+    "artifacts": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["buildReceiptSha256", "builtCliSha256"],
+      "required": ["officialNpm", "sourceCrossBuild"],
       "properties": {
-        "buildReceiptSha256": { "$ref": "#/$defs/sha256" },
-        "builtCliSha256": { "$ref": "#/$defs/sha256" }
+        "officialNpm": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["installReceiptSha256", "installedCliSha256", "tarballSha256", "resolutionLockfileSha256"],
+          "properties": {
+            "installReceiptSha256": { "$ref": "#/$defs/sha256" },
+            "installedCliSha256": { "const": "dc23f6c5dd7df8834e3e38bdb9609d77b459834681ae9b7133b417b0c35f3166" },
+            "tarballSha256": { "const": "5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47" },
+            "resolutionLockfileSha256": { "const": "083152c5eaf99bd2ecad3db1b5a04aca2141b5347e7db97caca82e0ce5a09b1c" }
+          }
+        },
+        "sourceCrossBuild": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["buildReceiptSha256", "builtCliSha256", "reportedVersion"],
+          "properties": {
+            "buildReceiptSha256": { "$ref": "#/$defs/sha256" },
+            "builtCliSha256": { "$ref": "#/$defs/sha256" },
+            "reportedVersion": { "const": "0.1.2-alpha.2" }
+          }
+        }
+      }
+    },
+    "provenanceBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["officialNpmOperationalRuntime", "exactSourceCrossBuild", "npmGitHeadPresent", "npmProvenanceAttestationPresent", "binarySourceEquivalenceClaimed", "artifactRelationship"],
+      "properties": {
+        "officialNpmOperationalRuntime": { "const": true },
+        "exactSourceCrossBuild": { "const": true },
+        "npmGitHeadPresent": { "const": false },
+        "npmProvenanceAttestationPresent": { "const": false },
+        "binarySourceEquivalenceClaimed": { "const": false },
+        "artifactRelationship": { "const": "independent-artifacts-no-source-package-binding" }
       }
     },
     "probes": {
@@ -63,7 +96,7 @@
           "type": "object",
           "additionalProperties": false,
           "required": ["reportedVersion"],
-          "properties": { "reportedVersion": { "const": "0.1.2-alpha.1" } }
+          "properties": { "reportedVersion": { "const": "0.1.2-alpha.2" } }
         },
         "profile": {
           "type": "object",
@@ -111,7 +144,7 @@
       "required": ["repository", "workflowPath", "workflowSha256", "runId", "runAttempt", "jobId", "headSha"],
       "properties": {
         "repository": { "const": "LvvUP/dsh-themes-skills" },
-        "workflowPath": { "const": ".github/workflows/alpha1-runtime-certification.yml" },
+        "workflowPath": { "const": ".github/workflows/alpha2-runtime-certification.yml" },
         "workflowSha256": { "$ref": "#/$defs/sha256" },
         "runId": { "type": "string", "pattern": "^[1-9][0-9]{0,19}$" },
         "runAttempt": { "type": "integer", "minimum": 1, "maximum": 1000 },

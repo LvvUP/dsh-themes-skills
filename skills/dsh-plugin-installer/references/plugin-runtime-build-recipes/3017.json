@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "purpose": "dsh-alpha1-hosted-plugin-adaptation",
+  "purpose": "dsh-alpha2-hosted-plugin-adaptation",
   "catalogId": 3017,
   "slug": "dsh-plugin-list-plus",
   "baseline": {
-    "tag": "dsh-v0.1.2-alpha.1",
-    "commit": "cd5ef8148158c3a752a658978873241fdf8e2bbc",
-    "tree": "a712eec535b48badc4fefb4df5176a7002e4280b"
+    "tag": "dsh-v0.1.2-alpha.2",
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
   },
   "source": {
     "repository": "https://github.com/yibiner/dsh-plugin-list-plus.git",
@@ -20,9 +20,9 @@
   },
   "output": {
     "packageName": "@dsh-themes/plugin-list-plus",
-    "packageVersion": "0.1.0-dsh.alpha1.1",
-    "description": "Read-only enhanced plugin inventory for DeepSeek Harness 0.1.2-alpha.1",
-    "assetName": "dsh-plugin-list-plus-0.1.0-dsh.alpha1.1.tgz",
+    "packageVersion": "0.1.0-dsh.alpha2.1",
+    "description": "Read-only enhanced plugin inventory for DeepSeek Harness 0.1.2-alpha.2",
+    "assetName": "dsh-plugin-list-plus-0.1.0-dsh.alpha2.1.tgz",
     "hostEntry": "index.mjs",
     "clientEntry": "client.js",
     "bundlePatch": "cordis.patch.yml",
@@ -33,10 +33,10 @@
     ],
     "peerDependencies": {
       "@deepseek-ai/cordis": "4.0.1",
-      "@deepseek-ai/dsh-api-remotes": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-settings": "0.1.2-alpha.1",
+      "@deepseek-ai/dsh-api-remotes": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-settings": "0.1.2-alpha.2",
       "react": "18.3.1"
     },
     "files": [
@@ -67,7 +67,7 @@
           "sourcePath": "src/client/index.ts",
           "sourceSha256": "6b9cc4f08ab96f03e500de6480457b34b0fa257d04f0ea9c8bfd4410a291a3d3",
           "replacementPath": "assets/hosted-adaptations/3017/client/index.tsx",
-          "replacementSha256": "62e2d1a2a5e9b75ce93eb5ac1a070009d20d0ce8f0cd7edddda60f5c6bccf56a"
+          "replacementSha256": "89709ab5d6aac8f00d40f08193c527b6b7a6af779a8154d4fdfff4ff1f1e6ed3"
         }
       },
       {
@@ -134,7 +134,7 @@
   },
   "runtimeProbe": {
     "contractPath": "references/plugin-runtime-probes/3017.json",
-    "contractSha256": "5e3fe6a42ba540d2e7b5bcb6b6c102a80f13ac864cab96efa215c7534c669fe1",
+    "contractSha256": "f8aab6173b763dca362b60685caaee644600fe6362d54e192e77a0b5978e30f2",
     "requiredAssertions": [
       "package.exact-entry",
       "boot.ready-inventory-once",

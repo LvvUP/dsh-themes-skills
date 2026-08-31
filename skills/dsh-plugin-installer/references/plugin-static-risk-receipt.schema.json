@@ -102,7 +102,7 @@
     "classification": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["requiresElevatedStaticReview", "rawWebRouteAuthState", "alpha1RemovedPackages"],
+      "required": ["requiresElevatedStaticReview", "rawWebRouteAuthState", "baselineAbsentPackages"],
       "properties": {
         "requiresElevatedStaticReview": { "type": "boolean" },
         "rawWebRouteAuthState": {
@@ -112,7 +112,7 @@
             "raw-route-with-auth-reference-manual-review-required"
           ]
         },
-        "alpha1RemovedPackages": {
+        "baselineAbsentPackages": {
           "type": "array",
           "uniqueItems": true,
           "maxItems": 2,

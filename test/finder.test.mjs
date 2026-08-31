@@ -1625,14 +1625,14 @@ function runtimeVerifiedDirectorySkin() {
   });
 }
 
-function alpha1PendingDirectorySkin() {
+function alpha2PendingDirectorySkin() {
   const pending = directorySkin();
   return directorySkin({
-    summary: 'A community adaptation pending alpha.1 re-certification.',
+    summary: 'A community adaptation pending alpha.2 re-certification.',
     runtime: {
       ...pending.runtime,
       status: 'verification-pending',
-      riskDisclosure: 'Alpha.1 acceptance remains pending.',
+      riskDisclosure: 'Alpha.2 acceptance remains pending.',
     },
     distribution: {
       kind: 'external-showcase',
@@ -1641,13 +1641,13 @@ function alpha1PendingDirectorySkin() {
     },
     compatibility: {
       status: 'verification-pending',
-      baseline: '0.1.2-alpha.1',
+      baseline: '0.1.2-alpha.2',
       evidence: [],
     },
   });
 }
 
-test('canonical #ID downgrades historical RC.8 community authority to alpha.1 showcase', async () => {
+test('canonical #ID downgrades historical RC.8 community authority to alpha.2 showcase', async () => {
   const item = runtimeVerifiedDirectorySkin();
   const requests = [];
   const fetchImpl = async (input, init) => {
@@ -1673,10 +1673,10 @@ test('canonical #ID downgrades historical RC.8 community authority to alpha.1 sh
 
   assert.equal(output.selection.status, 'resolved');
   assert.equal(output.count, 1);
-  assert.equal(output.dshVersion, '0.1.2-alpha.1');
+  assert.equal(output.dshVersion, '0.1.2-alpha.2');
   assert.equal(
     output.baselineStatus,
-    'alpha1-item-runtime-evidence-pending'
+    'alpha2-item-runtime-evidence-pending'
   );
   assert.equal(output.installableResultsAllowed, false);
   assert.equal(output.items[0].installable, false);
@@ -1687,22 +1687,24 @@ test('canonical #ID downgrades historical RC.8 community authority to alpha.1 sh
   assert.equal(output.items[0].compatibility.status, 'verification-pending');
   assert.equal(
     output.items[0].compatibility.dshPackageVersion,
-    '0.1.2-alpha.1'
+    '0.1.2-alpha.2'
   );
   assert.equal(
     output.items[0].handoff,
-    'alpha1-community-recertification-pending'
+    'alpha2-community-recertification-pending'
   );
   assert.equal(output.items[0].communityRecertification.requiredItems, 11);
   assert.equal(output.items[0].communityRecertification.completedItems, 0);
+  assert.equal(output.items[0].communityRecertification.requiredTasks, 66);
+  assert.equal(output.items[0].communityRecertification.completedTasks, 0);
   assert.deepEqual(
     requests.map((request) => new URL(request.url).pathname),
     ['/api/dsh-directory']
   );
 });
 
-test('canonical current alpha.1 community record remains inspect-only with no handoff', async () => {
-  const item = alpha1PendingDirectorySkin();
+test('canonical current alpha.2 community record remains inspect-only with no handoff', async () => {
+  const item = alpha2PendingDirectorySkin();
   const output = await runFinder(
     ['--selection', item.publicId],
     {
@@ -1721,7 +1723,7 @@ test('canonical current alpha.1 community record remains inspect-only with no ha
   );
 
   assert.equal(output.selection.status, 'resolved');
-  assert.equal(output.dshVersion, '0.1.2-alpha.1');
+  assert.equal(output.dshVersion, '0.1.2-alpha.2');
   assert.equal(output.count, 1);
   assert.equal(output.items[0].installable, false);
   assert.equal(output.items[0].installer, null);
@@ -1731,10 +1733,12 @@ test('canonical current alpha.1 community record remains inspect-only with no ha
   });
   assert.equal(
     output.items[0].handoff,
-    'alpha1-community-recertification-pending'
+    'alpha2-community-recertification-pending'
   );
   assert.equal(output.items[0].communityRecertification.requiredItems, 11);
   assert.equal(output.items[0].communityRecertification.completedItems, 0);
+  assert.equal(output.items[0].communityRecertification.requiredTasks, 66);
+  assert.equal(output.items[0].communityRecertification.completedTasks, 0);
 });
 
 test('finder keeps local community matches discovery-only without a canonical #ID', async () => {
@@ -1778,11 +1782,11 @@ test('finder keeps local community matches discovery-only without a canonical #I
   assert.equal(output.items[1].compatibility.status, 'verification-pending');
   assert.equal(
     output.items[1].compatibility.dshPackageVersion,
-    '0.1.2-alpha.1'
+    '0.1.2-alpha.2'
   );
   assert.equal(
     output.items[1].handoff,
-    'alpha1-community-recertification-pending'
+    'alpha2-community-recertification-pending'
   );
 
   const installable = await run(finder, [

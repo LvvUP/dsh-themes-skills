@@ -10,7 +10,8 @@ import { lifecycleHooksFromManifest, normalizeBundlePatch } from './authority.mj
 const MAX_COMPRESSED_BYTES = 256 * 1024 * 1024;
 const MAX_UNCOMPRESSED_BYTES = 512 * 1024 * 1024;
 const MAX_ENTRIES = 5000;
-const PACKAGE = /^(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+$/u;
+const UTF8 = new TextDecoder('utf-8', { fatal: true });
+const PACKAGE = /^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/u;
 const SEMVER = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/u;
 
 function fail(message) {
@@ -36,6 +37,13 @@ function componentManifestSha256(component) {
     /^[a-f0-9]{64}$/.test(entry.value));
   if (matches.length !== 1) return null;
   return matches[0].value;
+}
+
+function componentLicenseExpression(component) {
+  if (!Array.isArray(component?.licenses) || component.licenses.length !== 1 ||
+      !exactObjectKeys(component.licenses[0], ['expression']) ||
+      typeof component.licenses[0].expression !== 'string') return null;
+  return component.licenses[0].expression;
 }
 
 function exactObjectKeys(value, expected) {
@@ -78,8 +86,9 @@ export function validateCycloneDxSbom(document, item, manifest) {
       root.type !== 'library' || root.name !== item.package.name ||
       root.version !== item.package.version || root.purl !== expectedPurl ||
       root['bom-ref'] !== expectedPurl ||
-      componentManifestSha256(root) !== item.distribution.manifestSha256) {
-    fail('hosted artifact SBOM metadata component does not bind the exact package identity, purl, and manifest SHA-256');
+      componentManifestSha256(root) !== item.distribution.manifestSha256 ||
+      componentLicenseExpression(root) !== item.rights?.licenseExpression) {
+    fail('hosted artifact SBOM metadata component does not bind the exact package identity, purl, manifest SHA-256, and license expression');
   }
   const references = new Map([[root['bom-ref'], root]]);
   if (document.components.length !== expectedDependencies.length) {
@@ -130,12 +139,23 @@ export function validateCycloneDxSbom(document, item, manifest) {
   return document;
 }
 
-function field(bytes, start, length) {
-  return bytes.subarray(start, start + length).toString('utf8').replace(/\0.*$/s, '');
+function field(bytes, start, length, label, allowSpacePadding = false) {
+  const value = bytes.subarray(start, start + length);
+  const nul = value.indexOf(0);
+  const body = nul < 0 ? value : value.subarray(0, nul);
+  const padding = nul < 0 ? Buffer.alloc(0) : value.subarray(nul + 1);
+  if (!padding.every((byte) => byte === 0 || (allowSpacePadding && byte === 0x20))) {
+    fail(`archive ${label} contains hidden bytes after NUL padding`);
+  }
+  try {
+    return UTF8.decode(body);
+  } catch {
+    fail(`archive ${label} is not valid UTF-8`);
+  }
 }
 
 function octal(bytes, start, length, label) {
-  const value = field(bytes, start, length).trim().replace(/^0+/, '') || '0';
+  const value = field(bytes, start, length, label, true).trim().replace(/^0+/, '') || '0';
   if (!/^[0-7]+$/.test(value)) fail(`archive ${label} is not octal`);
   const parsed = Number.parseInt(value, 8);
   if (!Number.isSafeInteger(parsed) || parsed < 0) fail(`archive ${label} is invalid`);
@@ -215,12 +235,19 @@ export function inspectTarEntries(compressed) {
       if (zeroBlocks >= 2) break;
       continue;
     }
+    if (zeroBlocks !== 0) {
+      fail('archive has a zero-block gap before its terminator');
+    }
     zeroBlocks = 0;
     verifyHeaderChecksum(header);
-    const namePart = field(header, 0, 100);
-    const prefix = field(header, 345, 155);
-    const name = prefix ? `${prefix}/${namePart}` : namePart;
-    safeEntryPath(name.replace(/\/$/, ''));
+    if (!header.subarray(257, 265).equals(Buffer.from('ustar\0' + '00', 'binary'))) {
+      fail('archive header is not canonical POSIX ustar');
+    }
+    const namePart = field(header, 0, 100, 'entry name');
+    const prefix = field(header, 345, 155, 'entry prefix');
+    const rawName = prefix ? `${prefix}/${namePart}` : namePart;
+    const name = rawName.replace(/\/$/, '');
+    safeEntryPath(name);
     const size = octal(header, 124, 12, 'entry size');
     if (size > MAX_COMPRESSED_BYTES) fail('archive entry is too large');
     const type = String.fromCharCode(header[156] || 0x30);
@@ -238,14 +265,14 @@ export function inspectTarEntries(compressed) {
       fail(`archive entry ${name} has non-zero padding`);
     }
     entries.push({
-      name: name.replace(/\/$/, ''),
+      name,
       type: type === '\0' ? '0' : type,
       mode,
       size,
       body: Buffer.from(tar.subarray(bodyStart, bodyEnd)),
     });
     if (entries.length > MAX_ENTRIES) fail('archive contains too many entries');
-    offset = bodyStart + Math.ceil(size / 512) * 512;
+    offset = paddedEnd;
   }
   if (zeroBlocks < 2) fail('archive lacks two terminating zero blocks');
   if (!tar.subarray(offset).every((byte) => byte === 0)) {
@@ -279,8 +306,9 @@ export function validateHostedArtifact(bytes, item) {
     fail('hosted package manifest digest mismatch');
   }
   if (manifest.name !== item.package.name || manifest.version !== item.package.version ||
+      manifest.license !== item.rights?.licenseExpression ||
       normalizeBundlePatch(manifest.dsh?.bundle?.patch) !== item.package.bundlePatch) {
-    fail('hosted package manifest identity or dsh.bundle patch mismatch');
+    fail('hosted package manifest identity, license, or dsh.bundle patch mismatch');
   }
   for (const [hook, script] of Object.entries(lifecycleHooksFromManifest(manifest))) {
     if (script !== null) fail(`hosted artifact contains forbidden ${hook} lifecycle script`);
@@ -293,6 +321,22 @@ export function validateHostedArtifact(bytes, item) {
   const license = entries.find((entry) => entry.name === licenseName && entry.type === '0');
   if (!license || license.body.length === 0 || sha256(license.body) !== item.distribution.licenseFile.sha256) {
     fail('hosted artifact license file is missing, empty, or has the wrong digest');
+  }
+  const noticeName = `package/${item.distribution.noticeFile.path}`;
+  const notice = entries.find((entry) => entry.name === noticeName && entry.type === '0');
+  if (!notice || notice.body.length === 0 ||
+      sha256(notice.body) !== item.distribution.noticeFile.sha256) {
+    fail('hosted artifact modification notice is missing, empty, or has the wrong digest');
+  }
+  let noticeText;
+  try {
+    noticeText = UTF8.decode(notice.body);
+  } catch {
+    fail('hosted artifact modification notice is not valid UTF-8');
+  }
+  if (!noticeText.includes('# Modification notice') ||
+      !noticeText.includes(`- License: ${item.rights.licenseExpression}`)) {
+    fail('hosted artifact modification notice does not identify its license');
   }
   const sbomName = `package/${item.distribution.sbom.path}`;
   const sbom = entries.find((entry) => entry.name === sbomName && entry.type === '0');

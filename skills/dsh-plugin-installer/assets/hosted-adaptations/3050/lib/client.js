@@ -1,9 +1,9 @@
 /**
- * Public plugin #3050 alpha.1 reviewed replacement — browser half.
+ * Public plugin #3050 alpha.2 reviewed replacement — browser half.
  *
  * This is a consent-first planning surface. Plans are page-memory values and
  * never run automatically. Only the user's Run now or Schedule click submits
- * a prompt through alpha.1's official Session Controller. Schedule asks the
+ * a prompt through alpha.2's official Session Controller. Schedule asks the
  * root Agent to use schedule_create; the plugin cannot constrain that choice.
  */
 window.__ModuleLoader__.load({
@@ -172,7 +172,7 @@ window.__ModuleLoader__.load({
       return [
         'This is my explicit request to create one reminder in this current session.',
         'This plugin can only submit this request; it cannot call or constrain tools itself.',
-        'If the official alpha.1 schedule_create tool is available in this root session, call it exactly once with the following JSON arguments.',
+        'If the official alpha.2 schedule_create tool is available in this root session, call it exactly once with the following JSON arguments.',
         'If that tool is unavailable, do not substitute another mechanism and report that no reminder was created.',
         'Do not substitute a plugin-owned timer, file, process, network call, or background task.',
         JSON.stringify(scheduleArguments(plan)),

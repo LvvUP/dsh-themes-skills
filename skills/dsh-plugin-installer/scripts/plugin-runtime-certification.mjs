@@ -23,14 +23,14 @@ const SHA256 = /^[a-f0-9]{64}$/u;
 const SHA40 = /^[a-f0-9]{40}$/u;
 const SAFE_ID = /^[a-z0-9]+(?:[._:-][a-z0-9]+)*$/u;
 const SAFE_SUBDIR = /^(?:\.|[A-Za-z0-9_-]+(?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?(?:\/[A-Za-z0-9_-]+(?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?)*)$/u;
-const WORKFLOW_PATH = '.github/workflows/alpha1-plugin-runtime-certification.yml';
+const WORKFLOW_PATH = '.github/workflows/alpha2-plugin-runtime-certification.yml';
 const REPOSITORY = 'LvvUP/dsh-themes-skills';
 const REPOSITORY_ROOT = fileURLToPath(new URL('../../../', import.meta.url));
 const BASELINE = Object.freeze({
-  tag: 'dsh-v0.1.2-alpha.1',
-  commit: 'cd5ef8148158c3a752a658978873241fdf8e2bbc',
-  tree: 'a712eec535b48badc4fefb4df5176a7002e4280b',
-  lockfileSha256: '506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1',
+  tag: 'dsh-v0.1.2-alpha.2',
+  commit: '0a53fb55bea101816fa226bb964ae2bed71c343b',
+  tree: '64ccbfa8e0caa4711cd4a75717ef9e022657961b',
+  lockfileSha256: '6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0',
 });
 
 function fail(message) {
@@ -234,7 +234,7 @@ export function validatePluginRuntimeReceipt(
   }
   exactKeys(receipt.baseline, ['tag', 'commit', 'tree', 'lockfileSha256'], 'receipt baseline');
   if (canonicalPluginRuntimeJson(receipt.baseline) !== canonicalPluginRuntimeJson(BASELINE)) {
-    fail('receipt does not bind the exact official alpha.1 source');
+    fail('receipt does not bind the exact official alpha.2 source');
   }
   exactKeys(receipt.task, ['batchId', 'platform', 'arch', 'nodeVersion'], 'receipt task');
   const admittedTuple = PLUGIN_RUNTIME_TUPLES.find((entry) =>
@@ -538,7 +538,7 @@ export function validatePluginRuntimeAggregateGithubIdentity(
   const expectedJobs = Array.isArray(expectedJob) ? expectedJob : [expectedJob];
   if (environment.GITHUB_ACTIONS !== 'true' ||
       environment.GITHUB_REPOSITORY !== REPOSITORY ||
-      environment.GITHUB_WORKFLOW !== 'alpha1 Plugin runtime certification' ||
+      environment.GITHUB_WORKFLOW !== 'alpha2 Plugin runtime certification' ||
       environment.GITHUB_WORKFLOW_REF !== `${REPOSITORY}/${WORKFLOW_PATH}@refs/heads/main` ||
       environment.GITHUB_EVENT_NAME !== 'workflow_dispatch' ||
       environment.GITHUB_REF !== 'refs/heads/main' || !expectedJobs.includes(environment.GITHUB_JOB) ||
@@ -641,7 +641,7 @@ async function writeNew(path, bytes) {
 function evidencePredicate(receiptSet, loaded) {
   return {
     schemaVersion: 1,
-    predicateType: 'https://dsh-themes.com/attestations/plugin-alpha1-runtime-evidence/v1',
+    predicateType: 'https://dsh-themes.com/attestations/plugin-alpha2-runtime-evidence/v1',
     authorityEffect: 'none-awaiting-reviewed-promotion',
     receiptSet,
     taskReceipts: loaded.expected.map(({ candidate, tuple }) => {
@@ -748,7 +748,7 @@ export async function bindPluginRuntimeCustomAttestationPredicate({ bundle, pred
   }
   if (statement?._type !== 'https://in-toto.io/Statement/v1' ||
       statement.predicateType !==
-        'https://dsh-themes.com/attestations/plugin-alpha1-runtime-evidence/v1' ||
+        'https://dsh-themes.com/attestations/plugin-alpha2-runtime-evidence/v1' ||
       statement.predicate === null || typeof statement.predicate !== 'object' ||
       Array.isArray(statement.predicate) ||
       canonicalPluginRuntimeJson(statement.predicate) !== predicateRecord.bytes.toString('utf8')) {
@@ -763,7 +763,7 @@ export async function bindPluginRuntimeCustomAttestationPredicate({ bundle, pred
 export function validatePluginRuntimeGithubIdentity(environment, task, workflowSha256) {
   const expectedRef = `${REPOSITORY}/${WORKFLOW_PATH}@refs/heads/main`;
   if (environment.GITHUB_ACTIONS !== 'true' || environment.GITHUB_REPOSITORY !== REPOSITORY ||
-      environment.GITHUB_WORKFLOW !== 'alpha1 Plugin runtime certification' ||
+      environment.GITHUB_WORKFLOW !== 'alpha2 Plugin runtime certification' ||
       environment.GITHUB_WORKFLOW_REF !== expectedRef ||
       environment.GITHUB_EVENT_NAME !== 'workflow_dispatch' ||
       environment.GITHUB_REF !== 'refs/heads/main' || environment.GITHUB_JOB !== `runtime-batch-${task.batchId}` ||

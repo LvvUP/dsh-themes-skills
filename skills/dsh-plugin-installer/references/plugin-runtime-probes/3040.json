@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "purpose": "dsh-plugin-alpha1-fixed-runtime-probe",
+  "purpose": "dsh-plugin-alpha2-fixed-runtime-probe",
   "authorityEffect": "contract-only-not-runtime-authority",
   "candidateExecuted": false,
   "catalogId": 3040,
   "baseline": {
-    "tag": "dsh-v0.1.2-alpha.1",
-    "commit": "cd5ef8148158c3a752a658978873241fdf8e2bbc",
-    "tree": "a712eec535b48badc4fefb4df5176a7002e4280b"
+    "tag": "dsh-v0.1.2-alpha.2",
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
   },
   "package": {
     "name": "@dsh-themes/dsh-kanban",
-    "version": "0.1.1-dsh.alpha1.1",
+    "version": "0.1.1-dsh.alpha2.1",
     "profile": "web",
     "cordisEntryId": "dsh-plugin-3040-kanban"
   },
@@ -43,7 +43,7 @@
     {
       "id": "package.exact-entry",
       "class": "package-graph",
-      "expected": "The exact package and Cordis entry occur once; every declared DeepSeek peer resolves to 0.1.2-alpha.1 and no removed aggregate runtime resolves."
+      "expected": "The exact package and Cordis entry occur once; every declared DeepSeek peer resolves to 0.1.2-alpha.2 and no removed aggregate runtime resolves."
     },
     {
       "id": "boot.ready-context-once",

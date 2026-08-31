@@ -1,4 +1,4 @@
-const PACKAGE = /^(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+$/u;
+const PACKAGE = /^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/u;
 const SEMVER = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/u;
 const SAFE_ID = /^[a-z0-9]+(?:[._:-][a-z0-9]+)*$/u;
 const CONTROL = /[\u0000-\u001f\u007f]/u;
@@ -38,17 +38,17 @@ export function validatePluginRuntimeProbe(contract) {
     'catalogId', 'baseline', 'package', 'capabilities', 'combination', 'assertions',
   ], 'plugin runtime probe');
   if (contract.schemaVersion !== 1 ||
-      contract.purpose !== 'dsh-plugin-alpha1-fixed-runtime-probe' ||
+      contract.purpose !== 'dsh-plugin-alpha2-fixed-runtime-probe' ||
       contract.authorityEffect !== 'contract-only-not-runtime-authority' ||
       contract.candidateExecuted !== false || !Number.isSafeInteger(contract.catalogId) ||
       contract.catalogId < 3000 || contract.catalogId > 9999) {
     fail('plugin runtime probe header is malformed');
   }
   exactKeys(contract.baseline, ['tag', 'commit', 'tree'], 'plugin runtime probe baseline');
-  if (contract.baseline.tag !== 'dsh-v0.1.2-alpha.1' ||
-      contract.baseline.commit !== 'cd5ef8148158c3a752a658978873241fdf8e2bbc' ||
-      contract.baseline.tree !== 'a712eec535b48badc4fefb4df5176a7002e4280b') {
-    fail('plugin runtime probe baseline is not the exact official alpha.1 source');
+  if (contract.baseline.tag !== 'dsh-v0.1.2-alpha.2' ||
+      contract.baseline.commit !== '0a53fb55bea101816fa226bb964ae2bed71c343b' ||
+      contract.baseline.tree !== '64ccbfa8e0caa4711cd4a75717ef9e022657961b') {
+    fail('plugin runtime probe baseline is not the exact official alpha.2 source');
   }
   exactKeys(
     contract.package,

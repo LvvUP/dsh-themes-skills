@@ -20,7 +20,9 @@ import {
 } from './authority.mjs';
 import {
   authorizePrepare,
+  cleanupInstallerOwnedAllowBuilds,
   revokePrepare,
+  validateProfileResolutionSurface,
   verifyEffectivePnpmBuildPolicy,
 } from './prepare-authorization.mjs';
 import {
@@ -36,7 +38,12 @@ import {
 } from './profile-snapshot.mjs';
 import { captureProfileClosure, verifyProfileClosure } from './profile-closure.mjs';
 import { validatePrepared } from './prepare-plugin.mjs';
-import { secureWindowsPrivatePath } from './windows-private-acl.mjs';
+import {
+  captureWindowsPrivatePathIdentity,
+  secureWindowsPrivatePath as enforceWindowsPrivatePath,
+  secureWindowsPrivatePaths as enforceWindowsPrivatePaths,
+  windowsPrivateIdentityFromStat,
+} from './windows-private-acl.mjs';
 import { moveWindowsPathDurably } from './windows-durable-move.mjs';
 import {
   loadAuthority as loadHarnessAuthority,
@@ -66,6 +73,31 @@ function jsonBytes(value) {
   return Buffer.from(`${JSON.stringify(value, null, 2)}\n`, 'utf8');
 }
 
+function sameWindowsIdentity(first, second) {
+  return first.volumeSerial === second.volumeSerial && first.fileIndex === second.fileIndex;
+}
+
+async function secureWindowsPrivatePath(path, kind, action, expectedIdentity) {
+  const identity = expectedIdentity ?? await captureWindowsPrivatePathIdentity(path, kind);
+  return enforceWindowsPrivatePath(path, kind, action, { expectedIdentity: identity });
+}
+
+async function secureWindowsPrivatePaths(requests) {
+  const bound = await Promise.all(requests.map(async (request) => ({
+    ...request,
+    expectedIdentity: request.expectedIdentity ??
+      await captureWindowsPrivatePathIdentity(request.path, request.kind),
+  })));
+  return enforceWindowsPrivatePaths(bound);
+}
+
+async function assertWindowsPathIdentity(path, kind, expectedIdentity, label) {
+  const observed = await captureWindowsPrivatePathIdentity(path, kind);
+  if (!sameWindowsIdentity(expectedIdentity, observed)) {
+    fail(`${label} changed from its caller-bound Windows file identity`);
+  }
+}
+
 async function syncDirectory(path) {
   if (process.platform === 'win32') return false;
   const handle = await open(path, fsConstants.O_RDONLY);
@@ -87,13 +119,13 @@ async function createPrivateDirectoryDurably(path) {
   let moved = false;
   try {
     await mkdir(temporary, { mode: 0o700 });
-    await secureWindowsPrivatePath(temporary, 'directory', 'configure');
-    await secureWindowsPrivatePath(temporary, 'directory', 'verify');
+    const identity = await captureWindowsPrivatePathIdentity(temporary, 'directory');
+    await secureWindowsPrivatePath(temporary, 'directory', 'configure', identity);
     await moveWindowsPathDurably(temporary, path);
     moved = true;
-    await secureWindowsPrivatePath(path, 'directory', 'verify');
+    await secureWindowsPrivatePath(path, 'directory', 'verify', identity);
   } catch (error) {
-    if (!moved) await rm(temporary, { recursive: true, force: true }).catch(() => {});
+    await rm(moved ? path : temporary, { recursive: true, force: true }).catch(() => {});
     throw error;
   }
 }
@@ -118,6 +150,13 @@ export function buildPlan(authority, selections, {
     top10ReleaseSet,
     validationOptions,
   });
+  const liveLifecycleItem = items.find((item) => item.package.lifecycleAuthorization.required);
+  if (liveLifecycleItem) {
+    fail(
+      `plugin #${liveLifecycleItem.catalogId} requires a live lifecycle build; ` +
+      'this transaction accepts only prebuilt or script-free artifacts'
+    );
+  }
   const plan = {
     schemaVersion: 1,
     action: 'install',
@@ -144,6 +183,7 @@ export function buildPlan(authority, selections, {
             artifactIntegrity: item.distribution.artifactIntegrity,
             manifestSha256: item.distribution.manifestSha256,
             licenseFile: stable(item.distribution.licenseFile),
+            noticeFile: stable(item.distribution.noticeFile),
             sbom: stable(item.distribution.sbom),
           }
         : { kind: item.distribution.kind, source: stable(item.distribution.source) },
@@ -209,7 +249,7 @@ export function buildRemovalPlan(authority, selections, {
   return { items, plan, planSha256: sha256(bytes) };
 }
 
-export function buildDshInvocation(builtCli, dshArgs) {
+export function buildDshInvocation(builtCli, dshArgs, constraints = {}) {
   if (!isAbsolute(builtCli) && !/^[A-Za-z]:\\/.test(builtCli)) {
     fail('built DSH CLI must be absolute');
   }
@@ -217,35 +257,84 @@ export function buildDshInvocation(builtCli, dshArgs) {
       dshArgs.some((value) => typeof value !== 'string' || value.includes('\0') || value.includes('\n') || value.includes('\r'))) {
     fail('DSH arguments must be bounded literal argument-array values');
   }
-  const add = dshArgs.length === 6 &&
-    JSON.stringify(dshArgs.slice(0, 4)) === JSON.stringify(['plugin', '--profile', 'web', 'add']) &&
-    dshArgs[5] === '--save-exact';
-  const remove = dshArgs.length === 5 &&
+  if (constraints === null || typeof constraints !== 'object' || Array.isArray(constraints)) {
+    fail('DSH invocation constraints are malformed');
+  }
+  const remove = dshArgs.length === 7 &&
     JSON.stringify(dshArgs.slice(0, 4)) === JSON.stringify(['plugin', '--profile', 'web', 'remove']) &&
-    /^(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+$/u.test(dshArgs[4]);
-  const restore = JSON.stringify(dshArgs) ===
-    JSON.stringify(['plugin', '--profile', 'web', 'install', '--frozen-lockfile']);
+    JSON.stringify(dshArgs.slice(4, 6)) === JSON.stringify(['--lockfile-only', '--']) &&
+    /^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/u.test(dshArgs[6]);
+  const materialize = JSON.stringify(dshArgs) === JSON.stringify([
+    'plugin', '--profile', 'web', 'install', '--frozen-lockfile',
+    '--ignore-scripts', '--ignore-pnpmfile',
+  ]);
   const list = JSON.stringify(dshArgs) ===
     JSON.stringify(['plugin', '--profile', 'web', 'list', '--json']);
   const dump = JSON.stringify(dshArgs) ===
     JSON.stringify(['--profile', 'web', '--dump-config']);
-  if (add) {
-    const spec = dshArgs[4];
-    const safeLocalArtifact =
-      (/^\/[A-Za-z0-9_./:+ -]+\.tgz$/u.test(spec) || /^[A-Za-z]:\\[A-Za-z0-9_.\\:+ -]+\.tgz$/u.test(spec)) &&
-      !spec.split(/[\\/]/u).some((part) => part === '..');
-    const safeUpstream = /^git\+https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\.git#[a-f0-9]{40}$/u.test(spec);
-    if (!safeLocalArtifact && !safeUpstream) {
-      fail('plugin install spec is outside the fixed command-injection-safe grammar');
-    }
-  } else if (!remove && !restore && !list && !dump) {
-    fail('DSH plugin invocation is outside the fixed add, remove, list, dump-config, or frozen-restore grammar');
+  if (Object.keys(constraints).length !== 0) {
+    fail('DSH invocation constraints are forbidden');
+  }
+  if (!remove && !materialize && !list && !dump) {
+    fail('DSH plugin invocation is outside the fixed materialize, remove, list, or dump-config grammar');
   }
   return {
     command: process.execPath,
     args: [builtCli, ...dshArgs],
     shell: false,
   };
+}
+
+export function buildBoundPnpmResolutionInvocation(childEnv, pnpmArgs, constraints) {
+  if (childEnv === null || typeof childEnv !== 'object' || Array.isArray(childEnv) ||
+      typeof childEnv.DSH_PLUGIN_PNPM_NODE !== 'string' ||
+      (!isAbsolute(childEnv.DSH_PLUGIN_PNPM_NODE) &&
+        !/^[A-Za-z]:\\/u.test(childEnv.DSH_PLUGIN_PNPM_NODE)) ||
+      typeof childEnv.DSH_PLUGIN_PNPM_CLI !== 'string' ||
+      (!isAbsolute(childEnv.DSH_PLUGIN_PNPM_CLI) &&
+        !/^[A-Za-z]:\\/u.test(childEnv.DSH_PLUGIN_PNPM_CLI)) ||
+      !Array.isArray(pnpmArgs) || pnpmArgs.length !== 7 ||
+      JSON.stringify(pnpmArgs.slice(0, 6)) !== JSON.stringify([
+        'add', '--save-exact', '--ignore-scripts', '--lockfile-only',
+        '--ignore-pnpmfile', '--',
+      ]) ||
+      constraints === null || typeof constraints !== 'object' || Array.isArray(constraints) ||
+      JSON.stringify(Object.keys(constraints)) !== JSON.stringify(['expectedInstallSpec']) ||
+      constraints.expectedInstallSpec !== pnpmArgs[6]) {
+    fail('bound pnpm resolution invocation is malformed or not tied to its exact install spec');
+  }
+  const spec = pnpmArgs[6];
+  if (typeof spec !== 'string' || spec.length < 1 || spec.length > 4096 ||
+      /[\0\r\n\t]/u.test(spec)) {
+    fail('plugin install spec is outside the fixed command-injection-safe grammar');
+  }
+  const windowsLocal = /^[A-Za-z]:\\/u.test(spec);
+  const posixLocal = spec.startsWith('/');
+  const safeLocalArtifact =
+    (windowsLocal || posixLocal) && spec.toLowerCase().endsWith('.tgz') &&
+    !spec.split(/[\\/]/u).some((part) => part === '..') &&
+    (!windowsLocal || !/["%!^&|<>]/u.test(spec));
+  const safeUpstream =
+    /^git\+https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\.git#[a-f0-9]{40}$/u.test(spec);
+  if (!safeLocalArtifact && !safeUpstream) {
+    fail('plugin install spec is outside the fixed command-injection-safe grammar');
+  }
+  return {
+    command: childEnv.DSH_PLUGIN_PNPM_NODE,
+    args: [childEnv.DSH_PLUGIN_PNPM_CLI, ...pnpmArgs],
+    shell: false,
+  };
+}
+
+export function verifyFrozenLockfileBytes(before, after) {
+  if (!Buffer.isBuffer(before) || !Buffer.isBuffer(after) || before.length < 1 ||
+      before.length > 16 * 1024 * 1024 || after.length < 1 || after.length > 16 * 1024 * 1024) {
+    fail('frozen lockfile byte verification input is malformed');
+  }
+  if (sha256(after) !== sha256(before) || !after.equals(before)) {
+    fail('frozen script-free materialization changed the resolved lockfile bytes');
+  }
+  return sha256(before);
 }
 
 const CHILD_ENV_ALLOWLIST = [
@@ -442,14 +531,14 @@ async function verifyHarnessGate(sourceInput, receiptInput, pluginAuthority) {
 
 function verifyPnpm(childEnv) {
   if (
-    !/^[a-f0-9]{64}$/u.test(childEnv.DSH_PLUGIN_PNPM_TARGET_SHA256 ?? '') ||
-    !/^[a-f0-9]{64}$/u.test(childEnv.DSH_PLUGIN_PNPM_LAUNCHER_SHA256 ?? '') ||
-    typeof childEnv.DSH_PLUGIN_PNPM_LAUNCHER !== 'string' ||
-    !isAbsolute(childEnv.DSH_PLUGIN_PNPM_LAUNCHER) ||
+    !/^[a-f0-9]{64}$/u.test(childEnv.DSH_PLUGIN_PNPM_ARTIFACT_SHA256 ?? '') ||
+    !/^[a-f0-9]{128}$/u.test(childEnv.DSH_PLUGIN_PNPM_CLOSURE_SHA512 ?? '') ||
+    typeof childEnv.DSH_PLUGIN_PNPM_CLI !== 'string' ||
+    !isAbsolute(childEnv.DSH_PLUGIN_PNPM_CLI) ||
     typeof childEnv.DSH_PLUGIN_PNPM_NODE !== 'string' ||
     !isAbsolute(childEnv.DSH_PLUGIN_PNPM_NODE)
   ) {
-    fail('the source-built DSH plugin command requires one private absolute pnpm PATH binding');
+    fail('the DSH plugin command requires one private verified pnpm runtime binding');
   }
   const result = spawnSync('pnpm', ['--version'], {
     encoding: 'utf8',
@@ -464,7 +553,7 @@ function verifyPnpm(childEnv) {
     (result.stderr ?? '').trim() !== '' ||
     (result.stdout ?? '').trim() !== '11.7.0'
   ) {
-    fail('the source-built DSH plugin command requires the private PATH binding to resolve pnpm 11.7.0');
+    fail('the DSH plugin command requires its private wrapper to launch pnpm 11.7.0');
   }
 }
 
@@ -515,7 +604,7 @@ export function parsePluginInventory(output) {
   const dependencies = value[0].dependencies ?? {};
   if (dependencies === null || typeof dependencies !== 'object' || Array.isArray(dependencies) ||
       Object.keys(dependencies).some((name) =>
-        !/^(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+$/u.test(name))) {
+        !/^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/u.test(name))) {
     fail('plugin inventory dependencies are malformed');
   }
   const normalized = {};
@@ -605,7 +694,7 @@ function normalizeInventory(value, label) {
   }
   const normalized = {};
   for (const [name, version] of Object.entries(value)) {
-    if (!/^(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+$/u.test(name) ||
+    if (!/^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/u.test(name) ||
         typeof version !== 'string' || version.length === 0 || version.length > 160) {
       fail(`${label} is malformed`);
     }
@@ -774,26 +863,50 @@ async function writePrivateBytes(path, bytes) {
   const handle = await open(writePath, 'wx', 0o600);
   let closed = false;
   let installed = false;
+  let identity = null;
   try {
     if (process.platform === 'win32') {
-      await secureWindowsPrivatePath(writePath, 'file', 'configure');
-      await secureWindowsPrivatePath(writePath, 'file', 'verify');
+      identity = windowsPrivateIdentityFromStat(await handle.stat({ bigint: true }), 'file');
+      await secureWindowsPrivatePath(
+        writePath,
+        'file',
+        'configure-open-writer',
+        identity
+      );
     }
     await handle.writeFile(bytes);
     await handle.sync();
+    if (process.platform === 'win32') {
+      const handleIdentity = windowsPrivateIdentityFromStat(
+        await handle.stat({ bigint: true }),
+        'file'
+      );
+      if (!sameWindowsIdentity(identity, handleIdentity)) {
+        fail('private temporary file handle identity changed while it was written');
+      }
+      await assertWindowsPathIdentity(
+        writePath,
+        'file',
+        identity,
+        'private temporary file'
+      );
+    }
     await handle.close();
     closed = true;
     if (process.platform === 'win32') {
+      await secureWindowsPrivatePath(writePath, 'file', 'verify', identity);
       await moveWindowsPathDurably(writePath, path);
       installed = true;
-      await secureWindowsPrivatePath(path, 'file', 'verify');
+      await secureWindowsPrivatePath(path, 'file', 'verify', identity);
     } else {
       await syncDirectory(dirname(path));
       installed = true;
     }
   } catch (error) {
     if (!closed) await handle.close().catch(() => {});
-    if (!installed) {
+    if (process.platform === 'win32' && installed) {
+      await rm(path, { force: true }).catch(() => {});
+    } else if (!installed) {
       await rm(writePath, { force: true }).catch(() => {});
       if (process.platform !== 'win32') {
         await syncDirectory(dirname(writePath)).catch(() => {});
@@ -803,72 +916,154 @@ async function writePrivateBytes(path, bytes) {
   }
 }
 
-async function readPrivateBytes(path, label, { allowMissing = false } = {}) {
-  const flags = fsConstants.O_RDONLY | (fsConstants.O_NOFOLLOW ?? 0);
-  let before;
-  let handle;
+function samePrivateFileState(state, candidate) {
+  return candidate.isFile() && !candidate.isSymbolicLink() &&
+    candidate.dev === state.dev && candidate.ino === state.ino &&
+    candidate.nlink === state.nlink && candidate.size === state.size &&
+    candidate.mtimeMs === state.mtimeMs && candidate.ctimeMs === state.ctimeMs;
+}
+
+function samePrivateDirectoryState(state, candidate) {
+  return candidate.isDirectory() && !candidate.isSymbolicLink() &&
+    candidate.dev === state.dev && candidate.ino === state.ino &&
+    candidate.mtimeMs === state.mtimeMs && candidate.ctimeMs === state.ctimeMs;
+}
+
+async function assertStillMissing(path, label) {
   try {
-    handle = await open(path, flags);
+    await lstat(path);
+    fail(`${label} appeared while its absence was checked`);
   } catch (error) {
-    if (allowMissing && error.code === 'ENOENT') {
-      try {
-        await lstat(path);
-        fail(`${label} appeared while its absence was checked`);
-      } catch (absenceError) {
-        if (absenceError.code === 'ENOENT') return null;
-        throw absenceError;
-      }
-    }
-    throw error;
+    if (error.code !== 'ENOENT') throw error;
   }
+}
+
+async function readPrivateBytesBatch(specifications, { windowsDirectories = [] } = {}) {
+  if (!Array.isArray(specifications) || specifications.length < 1 ||
+      specifications.some((entry) => entry === null || typeof entry !== 'object' ||
+        typeof entry.path !== 'string' || typeof entry.label !== 'string' ||
+        typeof entry.allowMissing !== 'boolean') ||
+      !Array.isArray(windowsDirectories) ||
+      windowsDirectories.some((entry) => entry === null || typeof entry !== 'object' ||
+        typeof entry.path !== 'string' || typeof entry.label !== 'string')) {
+    fail('private read batch is malformed');
+  }
+  const flags = fsConstants.O_RDONLY | (fsConstants.O_NOFOLLOW ?? 0);
+  const prepared = [];
+  const resultBytes = [];
   try {
-    before = await lstat(path);
-    const stat = await handle.stat();
-    if (!before.isFile() || before.isSymbolicLink() || !stat.isFile() ||
-        before.dev !== stat.dev || before.ino !== stat.ino || stat.nlink !== 1 ||
-        stat.size < 2 || stat.size > 2 * 1024 * 1024) {
-      fail(`${label} must be one bounded regular single-link file`);
-    }
-    if (process.platform !== 'win32' && (stat.mode & 0o077) !== 0) {
-      fail(`${label} must not be readable or writable by group or others`);
-    }
-    if (process.platform === 'win32') {
-      await secureWindowsPrivatePath(path, 'file', 'verify');
-      const afterAcl = await lstat(path);
-      if (!afterAcl.isFile() || afterAcl.isSymbolicLink() ||
-          afterAcl.dev !== stat.dev || afterAcl.ino !== stat.ino ||
-          afterAcl.nlink !== stat.nlink || afterAcl.size !== stat.size ||
-          afterAcl.mtimeMs !== stat.mtimeMs || afterAcl.ctimeMs !== stat.ctimeMs) {
-        fail(`${label} changed while its private ACL was verified`);
+    for (const specification of specifications) {
+      let handle;
+      try {
+        handle = await open(specification.path, flags);
+      } catch (error) {
+        if (specification.allowMissing && error.code === 'ENOENT') {
+          await assertStillMissing(specification.path, specification.label);
+          prepared.push({ ...specification, handle: null, stat: null });
+          continue;
+        }
+        throw error;
+      }
+      try {
+        const windows = process.platform === 'win32';
+        const before = await lstat(specification.path, { bigint: windows });
+        const stat = await handle.stat({ bigint: windows });
+        if (!before.isFile() || before.isSymbolicLink() || !stat.isFile() ||
+            before.dev !== stat.dev || before.ino !== stat.ino ||
+            stat.nlink !== (windows ? 1n : 1) ||
+            stat.size < (windows ? 2n : 2) ||
+            stat.size > (windows ? 2n * 1024n * 1024n : 2 * 1024 * 1024)) {
+          fail(`${specification.label} must be one bounded regular single-link file`);
+        }
+        if (process.platform !== 'win32' && (stat.mode & 0o077) !== 0) {
+          fail(`${specification.label} must not be readable or writable by group or others`);
+        }
+        prepared.push({ ...specification, handle, stat });
+      } catch (error) {
+        await handle.close().catch(() => {});
+        throw error;
       }
     }
-    const bytes = await handle.readFile();
-    const after = await handle.stat();
-    let afterPath;
-    try {
-      afterPath = await lstat(path);
-    } catch {
-      bytes.fill(0);
-      fail(`${label} changed while it was read`);
+
+    if (process.platform === 'win32') {
+      const directoryStates = [];
+      for (const directory of windowsDirectories) {
+        const stat = await lstat(directory.path, { bigint: true });
+        if (!stat.isDirectory() || stat.isSymbolicLink()) {
+          fail(`${directory.label} must be a private real directory`);
+        }
+        directoryStates.push({ ...directory, stat });
+      }
+      const aclRequests = [
+        ...directoryStates.map(({ path, stat }) => ({
+          path,
+          kind: 'directory',
+          action: 'verify',
+          expectedIdentity: windowsPrivateIdentityFromStat(stat, 'directory'),
+        })),
+        ...prepared
+          .filter(({ handle }) => handle !== null)
+          .map(({ path, stat }) => ({
+            path,
+            kind: 'file',
+            action: 'verify',
+            expectedIdentity: windowsPrivateIdentityFromStat(stat, 'file'),
+          })),
+      ];
+      if (aclRequests.length > 0) await secureWindowsPrivatePaths(aclRequests);
+      for (const directory of directoryStates) {
+        const afterAcl = await lstat(directory.path, { bigint: true });
+        if (!samePrivateDirectoryState(directory.stat, afterAcl)) {
+          fail(`${directory.label} changed while its private ACL was verified`);
+        }
+      }
+      for (const entry of prepared) {
+        if (entry.handle === null) {
+          await assertStillMissing(entry.path, entry.label);
+          continue;
+        }
+        const afterAcl = await lstat(entry.path, { bigint: true });
+        if (!samePrivateFileState(entry.stat, afterAcl)) {
+          fail(`${entry.label} changed while its private ACL was verified`);
+        }
+      }
     }
-    const final = await handle.stat();
-    if (!afterPath.isFile() || afterPath.isSymbolicLink() ||
-        afterPath.dev !== stat.dev || afterPath.ino !== stat.ino ||
-        afterPath.nlink !== stat.nlink || afterPath.size !== stat.size ||
-        afterPath.mtimeMs !== stat.mtimeMs || afterPath.ctimeMs !== stat.ctimeMs ||
-        after.dev !== stat.dev || after.ino !== stat.ino || after.nlink !== 1 ||
-        after.size !== stat.size || after.mtimeMs !== stat.mtimeMs ||
-        after.ctimeMs !== stat.ctimeMs ||
-        final.dev !== stat.dev || final.ino !== stat.ino || final.nlink !== 1 ||
-        final.size !== stat.size || final.mtimeMs !== stat.mtimeMs ||
-        final.ctimeMs !== stat.ctimeMs || bytes.length !== stat.size) {
-      bytes.fill(0);
-      fail(`${label} changed while it was read`);
+
+    for (const entry of prepared) {
+      if (entry.handle === null) {
+        await assertStillMissing(entry.path, entry.label);
+        resultBytes.push(null);
+        continue;
+      }
+      const bytes = await entry.handle.readFile();
+      resultBytes.push(bytes);
+      const after = await entry.handle.stat({ bigint: process.platform === 'win32' });
+      let afterPath;
+      try {
+        afterPath = await lstat(entry.path, { bigint: process.platform === 'win32' });
+      } catch {
+        fail(`${entry.label} changed while it was read`);
+      }
+      const final = await entry.handle.stat({ bigint: process.platform === 'win32' });
+      if (!samePrivateFileState(entry.stat, afterPath) ||
+          !samePrivateFileState(entry.stat, after) ||
+          !samePrivateFileState(entry.stat, final) ||
+          bytes.length !== Number(entry.stat.size)) {
+        fail(`${entry.label} changed while it was read`);
+      }
     }
-    return bytes;
+    return resultBytes;
+  } catch (error) {
+    for (const bytes of resultBytes) bytes?.fill(0);
+    throw error;
   } finally {
-    await handle.close();
+    await Promise.all(prepared.map(({ handle }) => handle?.close().catch(() => {})));
   }
+}
+
+async function readPrivateBytes(path, label, { allowMissing = false } = {}) {
+  const [bytes] = await readPrivateBytesBatch([{ path, label, allowMissing }]);
+  return bytes;
 }
 
 async function privateWrite(path, value) {
@@ -883,12 +1078,17 @@ export function assertPrivateRecoveryPlatform(platform = process.platform) {
   }
 }
 
-async function ensureRecoveryTrustRoot(dshHome, { create = false } = {}) {
+async function ensureRecoveryTrustRoot(dshHome, {
+  create = false,
+  verifyWindows = true,
+} = {}) {
   assertPrivateRecoveryPlatform();
   const trustRoot = join(dshHome, '.dsh-plugin-installer');
+  let created = false;
   if (create) {
     try {
       await createPrivateDirectoryDurably(trustRoot);
+      created = true;
     } catch (error) {
       if (error.code !== 'EEXIST') throw error;
     }
@@ -906,14 +1106,17 @@ async function ensureRecoveryTrustRoot(dshHome, { create = false } = {}) {
   }
   const canonicalRoot = await realpath(trustRoot);
   if (canonicalRoot !== trustRoot) fail('local recovery trust root must not traverse symlinks');
-  if (process.platform === 'win32') {
+  if (process.platform === 'win32' && (verifyWindows || (create && !created))) {
     await secureWindowsPrivatePath(canonicalRoot, 'directory', 'verify');
   }
   return canonicalRoot;
 }
 
 export async function loadRecoveryKey(dshHome, { create = false } = {}) {
-  const canonicalRoot = await ensureRecoveryTrustRoot(dshHome, { create });
+  const canonicalRoot = await ensureRecoveryTrustRoot(dshHome, {
+    create,
+    verifyWindows: false,
+  });
   const keyPath = join(canonicalRoot, 'hmac-sha256.key');
   if (create) {
     const keyBytes = randomBytes(32);
@@ -936,10 +1139,13 @@ export async function loadRecoveryKey(dshHome, { create = false } = {}) {
       (process.platform !== 'win32' && (stat.mode & 0o077) !== 0)) {
     fail('local recovery trust key must be one private 32-byte regular file');
   }
-  if (process.platform === 'win32') {
-    await secureWindowsPrivatePath(keyPath, 'file', 'verify');
-  }
-  const key = await readPrivateBytes(keyPath, 'local recovery trust key');
+  const [key] = await readPrivateBytesBatch([
+    { path: keyPath, label: 'local recovery trust key', allowMissing: false },
+  ], {
+    windowsDirectories: [
+      { path: canonicalRoot, label: 'local recovery trust root' },
+    ],
+  });
   if (key.length !== 32) fail('local recovery trust key must be one private 32-byte regular file');
   return key;
 }
@@ -1057,7 +1263,6 @@ async function acquireTakeoverGuard(trustRoot, pid) {
   try {
     if (process.platform === 'win32') {
       await secureWindowsPrivatePath(guardRoot, 'directory', 'configure');
-      await secureWindowsPrivatePath(guardRoot, 'directory', 'verify');
     }
     await privateWrite(join(guardRoot, 'owner.json'), {
       schemaVersion: 1,
@@ -1177,7 +1382,6 @@ export async function acquireTransactionLock(dshHomeInput, transactionRootInput,
     const holderIdentity = await processIdentity(pid);
     if (process.platform === 'win32') {
       await secureWindowsPrivatePath(lockRoot, 'directory', 'configure');
-      await secureWindowsPrivatePath(lockRoot, 'directory', 'verify');
     }
     await privateWrite(join(lockRoot, 'owner.json'), {
       schemaVersion: 2,
@@ -1568,6 +1772,7 @@ async function restoreAndVerifyBaseline({
   verifyEffectivePnpmBuildPolicy(profile, [], false, { environment: childEnv });
   const invocation = buildDshInvocation(harness.builtCli, [
     'plugin', '--profile', 'web', 'install', '--frozen-lockfile',
+    '--ignore-scripts', '--ignore-pnpmfile',
   ]);
   const result = runInvocation(invocation, { cwd: harness.source, childEnv });
   if (result.error || result.code !== 0) fail('frozen dependency closure restoration failed');
@@ -1587,6 +1792,9 @@ function validateTransactionAuthorityContext(authorityContext) {
   if (!Buffer.isBuffer(authorityContext?.authorityBytes) ||
       !Buffer.isBuffer(authorityContext?.harnessAuthorityBytes) ||
       !Buffer.isBuffer(authorityContext?.top10ReleaseSetBytes) ||
+      !Buffer.isBuffer(authorityContext?.migrationMapBytes) ||
+      !Buffer.isBuffer(authorityContext?.migrationMapSchemaBytes) ||
+      !Buffer.isBuffer(authorityContext?.candidateIntakeBytes) ||
       sha256(authorityContext.authorityBytes) !== authorityContext.authoritySha256 ||
       sha256(authorityContext.top10ReleaseSetBytes) !== authorityContext.top10ReleaseSetSha256 ||
       JSON.stringify(JSON.parse(authorityContext.authorityBytes)) !== JSON.stringify(authorityContext.authority)) {
@@ -1595,6 +1803,9 @@ function validateTransactionAuthorityContext(authorityContext) {
   const validationOptions = {
     harnessAuthorityBytes: authorityContext.harnessAuthorityBytes,
     top10ReleaseSetBytes: authorityContext.top10ReleaseSetBytes,
+    migrationMapBytes: authorityContext.migrationMapBytes,
+    migrationMapSchemaBytes: authorityContext.migrationMapSchemaBytes,
+    candidateIntakeBytes: authorityContext.candidateIntakeBytes,
   };
   const authority = validateAuthority(authorityContext.authority, validationOptions);
   if (JSON.stringify(JSON.parse(authorityContext.top10ReleaseSetBytes)) !==
@@ -1635,6 +1846,7 @@ export async function executeTransaction(options) {
   assertPrivateRecoveryPlatform();
   const dshHome = await canonicalDirectory(dshHomeInput, 'DSH_HOME');
   const profile = await canonicalDirectory(join(dshHome, 'profiles/web'), 'web profile');
+  await validateProfileResolutionSurface(profile);
   const preparedRoot = await canonicalDirectory(preparedRootInput, 'prepared root');
   const harness = await verifyHarnessGate(harnessSource, harnessReceipt, authority);
   if (!isAbsolute(harness.builtCli)) fail('built CLI must be absolute');
@@ -1658,8 +1870,10 @@ export async function executeTransaction(options) {
     let completeBaseline = false;
     return runAtomicAcceptanceBoundary(async () => {
       const snapshotManifestBytes = await readFile(join(snapshot, 'snapshot.json'));
+      await validateProfileResolutionSurface(profile);
       baselineClosure = await captureProfileClosure(profile);
       baselineInventory = probePluginInventory(harness, childEnv);
+      const baselinePnpmLockSource = await readFile(join(profile, 'pnpm-lock.yaml'), 'utf8');
       completeBaseline = true;
       await privateWrite(join(transactionRoot, 'plan.json'), {
         schemaVersion: 1,
@@ -1705,15 +1919,43 @@ export async function executeTransaction(options) {
         recoveryKey,
         transactionNonce
       );
-      await authorizePrepare(profile, items, { environment: childEnv });
+      // Resolve the exact pnpm depPaths without materializing packages or
+      // executing any lifecycle script. Source-like tarball and Git keys are
+      // path/commit-qualified and cannot safely be guessed from name/version.
+      // Invoke the certified Node plus private pnpm.cjs closure directly. The
+      // Harness Windows `dsh plugin` forwarding uses cmd.exe and cannot
+      // preserve an absolute artifact path containing spaces as one literal.
+      const installSpecs = stagedPrepared.map((entry) => entry.installSpec);
       for (let index = 0; index < items.length; index += 1) {
-        const invocation = buildDshInvocation(harness.builtCli, [
-          'plugin', '--profile', 'web', 'add', stagedPrepared[index].installSpec, '--save-exact',
-        ]);
-        const result = runInvocation(invocation, { cwd: harness.source, childEnv });
-        if (result.error || result.code !== 0) fail(`plugin #${items[index].catalogId} installation failed`);
-        await verifyInstalled(profile, items[index]);
+        const invocation = buildBoundPnpmResolutionInvocation(childEnv, [
+          'add', '--save-exact', '--ignore-scripts', '--lockfile-only',
+          '--ignore-pnpmfile', '--', installSpecs[index],
+        ], { expectedInstallSpec: installSpecs[index] });
+        const result = runInvocation(invocation, { cwd: profile, childEnv });
+        if (result.error || result.code !== 0) {
+          fail(`plugin #${items[index].catalogId} dependency resolution failed`);
+        }
       }
+      await authorizePrepare(profile, items, {
+        baselineLockSource: baselinePnpmLockSource,
+        environment: childEnv,
+        installSpecs,
+      });
+      const resolvedLockBytes = await readFile(join(profile, 'pnpm-lock.yaml'));
+      const materializeInvocation = buildDshInvocation(harness.builtCli, [
+        'plugin', '--profile', 'web', 'install', '--frozen-lockfile',
+        '--ignore-scripts', '--ignore-pnpmfile',
+      ]);
+      const materializeResult = runInvocation(materializeInvocation, {
+        cwd: harness.source,
+        childEnv,
+      });
+      if (materializeResult.error || materializeResult.code !== 0) {
+        fail('frozen script-free plugin materialization failed');
+      }
+      const materializedLockBytes = await readFile(join(profile, 'pnpm-lock.yaml'));
+      verifyFrozenLockfileBytes(resolvedLockBytes, materializedLockBytes);
+      for (const item of items) await verifyInstalled(profile, item);
       const installedInventory = probePluginInventory(harness, childEnv);
       const dumpConfigOutput = probeDumpConfig(harness, childEnv);
       await probeColdWebStart(harness, childEnv);
@@ -1805,6 +2047,7 @@ export async function executeRemovalTransaction(options) {
   assertPrivateRecoveryPlatform();
   const dshHome = await canonicalDirectory(dshHomeInput, 'DSH_HOME');
   const profile = await canonicalDirectory(join(dshHome, 'profiles/web'), 'web profile');
+  await validateProfileResolutionSurface(profile);
   const harness = await verifyHarnessGate(harnessSource, harnessReceipt, authority);
   for (const item of items) await verifyInstalled(profile, item);
   await requireColdWebPort();
@@ -1822,6 +2065,7 @@ export async function executeRemovalTransaction(options) {
     let completeBaseline = false;
     return runAtomicAcceptanceBoundary(async () => {
       const snapshotManifestBytes = await readFile(join(snapshot, 'snapshot.json'));
+      await validateProfileResolutionSurface(profile);
       baselineClosure = await captureProfileClosure(profile);
       baselineInventory = probePluginInventory(harness, childEnv);
       completeBaseline = true;
@@ -1880,12 +2124,28 @@ export async function executeRemovalTransaction(options) {
       await revokePrepare(profile, items, { environment: childEnv });
       for (const item of [...items].reverse()) {
         const invocation = buildDshInvocation(harness.builtCli, [
-          'plugin', '--profile', 'web', 'remove', item.rollback.removePackageName,
+          'plugin', '--profile', 'web', 'remove', '--lockfile-only', '--',
+          item.rollback.removePackageName,
         ]);
         const result = runInvocation(invocation, { cwd: harness.source, childEnv });
         if (result.error || result.code !== 0) fail(`plugin #${item.catalogId} removal failed`);
-        await verifyRemoved(profile, item);
       }
+      const resolvedRemovalLockBytes = await readFile(join(profile, 'pnpm-lock.yaml'));
+      const materializeInvocation = buildDshInvocation(harness.builtCli, [
+        'plugin', '--profile', 'web', 'install', '--frozen-lockfile',
+        '--ignore-scripts', '--ignore-pnpmfile',
+      ]);
+      const materializeResult = runInvocation(materializeInvocation, {
+        cwd: harness.source,
+        childEnv,
+      });
+      if (materializeResult.error || materializeResult.code !== 0) {
+        fail('frozen script-free removal materialization failed');
+      }
+      const materializedLockBytes = await readFile(join(profile, 'pnpm-lock.yaml'));
+      verifyFrozenLockfileBytes(resolvedRemovalLockBytes, materializedLockBytes);
+      await cleanupInstallerOwnedAllowBuilds(profile);
+      for (const item of items) await verifyRemoved(profile, item);
       const removedInventory = probePluginInventory(harness, childEnv);
       if (JSON.stringify(removedInventory) !== JSON.stringify(normalizedExpectedInventory)) {
         fail('post-remove plugin inventory does not match the authority-bound removal plan');
@@ -1950,6 +2210,10 @@ async function readPrivateJson(root, name, label, { allowMissing = false } = {})
   const path = join(root, name);
   const bytes = await readPrivateBytes(path, label, { allowMissing });
   if (bytes === null) return null;
+  return privateJsonRecord(path, bytes, label);
+}
+
+function privateJsonRecord(path, bytes, label) {
   try {
     return { path, bytes, value: JSON.parse(bytes) };
   } catch {
@@ -1967,7 +2231,7 @@ function validateClosureRecord(closure) {
   if (closure.dependencies === null || typeof closure.dependencies !== 'object' ||
       Array.isArray(closure.dependencies) ||
       Object.entries(closure.dependencies).some(([name, version]) =>
-        !/^(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+$/u.test(name) ||
+        !/^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/u.test(name) ||
         typeof version !== 'string' || version.length === 0 || version.length > 512) ||
       !Array.isArray(closure.bundles) || closure.bundles.some((name) => typeof name !== 'string') ||
       !Array.isArray(closure.installedPackages) ||
@@ -1993,11 +2257,53 @@ export async function loadRecoverySource(input, recoveryKey) {
   if (process.platform !== 'win32' && (rootStat.mode & 0o077) !== 0) {
     fail('source transaction root must not be accessible by group or others');
   }
-  if (process.platform === 'win32') {
-    await secureWindowsPrivatePath(root, 'directory', 'verify');
+  const snapshot = await canonicalDirectory(join(root, 'snapshot'), 'source transaction snapshot');
+  const snapshotStat = await lstat(snapshot);
+  if (process.platform !== 'win32' && (snapshotStat.mode & 0o077) !== 0) {
+    fail('source transaction snapshot must not be accessible by group or others');
   }
-  const planRecord = await readPrivateJson(root, 'plan.json', 'source transaction plan');
-  const baselineRecord = await readPrivateJson(root, 'rollback-baseline.json', 'source rollback baseline');
+
+  const statePath = join(root, 'state.json');
+  let terminalMarkerPresent;
+  try {
+    await lstat(statePath);
+    terminalMarkerPresent = true;
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+    terminalMarkerPresent = false;
+  }
+  const specifications = [
+    { path: join(root, 'plan.json'), label: 'source transaction plan', allowMissing: false },
+    { path: join(root, 'rollback-baseline.json'), label: 'source rollback baseline', allowMissing: false },
+    { path: join(snapshot, 'snapshot.json'), label: 'source snapshot manifest', allowMissing: false },
+    terminalMarkerPresent
+      ? { path: statePath, label: 'source transaction state', allowMissing: false }
+      : { path: statePath, label: 'source transaction state', allowMissing: true },
+    terminalMarkerPresent
+      ? {
+          path: join(root, 'recovery-auth.json'),
+          label: 'source recovery authentication',
+          allowMissing: false,
+        }
+      : {
+          path: join(root, 'in-progress.json'),
+          label: 'source authenticated interrupted journal',
+          allowMissing: false,
+        },
+  ];
+  const records = await readPrivateBytesBatch(specifications, {
+    windowsDirectories: [
+      { path: root, label: 'source transaction root' },
+      { path: snapshot, label: 'source transaction snapshot' },
+    ],
+  });
+  const planRecord = privateJsonRecord(specifications[0].path, records[0], specifications[0].label);
+  const baselineRecord = privateJsonRecord(specifications[1].path, records[1], specifications[1].label);
+  const snapshotManifest = privateJsonRecord(
+    specifications[2].path,
+    records[2],
+    specifications[2].label
+  );
   exactObjectKeys(planRecord.value, ['schemaVersion', 'planSha256', 'catalogIds', 'plan'], 'source transaction plan');
   exactObjectKeys(baselineRecord.value, ['schemaVersion', 'closure', 'inventory'], 'source rollback baseline');
   const { planSha256, catalogIds, plan } = planRecord.value;
@@ -2011,18 +2317,13 @@ export async function loadRecoverySource(input, recoveryKey) {
   }
   const canonicalPlanSha256 = sha256(Buffer.from(`${JSON.stringify(stable(plan))}\n`, 'utf8'));
   if (canonicalPlanSha256 !== planSha256) fail('source transaction plan digest or action mismatch');
-  const snapshot = await canonicalDirectory(join(root, 'snapshot'), 'source transaction snapshot');
-  const snapshotManifest = await readPrivateJson(snapshot, 'snapshot.json', 'source snapshot manifest');
 
   // state.json is the durable terminal marker. If it exists, recovery never
   // opens in-progress.json, so a completed install/removal cannot replay its
   // earlier rollback journal even if a stale copy was left behind.
-  const stateRecord = await readPrivateJson(
-    root,
-    'state.json',
-    'source transaction state',
-    { allowMissing: true }
-  );
+  const stateRecord = records[3] === null
+    ? null
+    : privateJsonRecord(specifications[3].path, records[3], specifications[3].label);
   let kind;
   let state;
   let authenticationRecord;
@@ -2030,10 +2331,10 @@ export async function loadRecoverySource(input, recoveryKey) {
   if (stateRecord !== null) {
     kind = 'terminal';
     state = stateRecord.value;
-    authenticationRecord = await readPrivateJson(
-      root,
-      'recovery-auth.json',
-      'source recovery authentication'
+    authenticationRecord = privateJsonRecord(
+      specifications[4].path,
+      records[4],
+      specifications[4].label
     );
     const status = state?.status;
     const stateKeys = status === 'committed'
@@ -2062,10 +2363,10 @@ export async function loadRecoverySource(input, recoveryKey) {
     }
   } else {
     kind = 'interrupted';
-    const journalRecord = await readPrivateJson(
-      root,
-      'in-progress.json',
-      'source authenticated interrupted journal'
+    const journalRecord = privateJsonRecord(
+      specifications[4].path,
+      records[4],
+      specifications[4].label
     );
     exactObjectKeys(
       journalRecord.value,
@@ -2463,6 +2764,9 @@ async function resolveItemContext(options) {
     validationOptions: {
       harnessAuthorityBytes: authorityContext.harnessAuthorityBytes,
       top10ReleaseSetBytes: authorityContext.top10ReleaseSetBytes,
+      migrationMapBytes: authorityContext.migrationMapBytes,
+      migrationMapSchemaBytes: authorityContext.migrationMapSchemaBytes,
+      candidateIntakeBytes: authorityContext.candidateIntakeBytes,
     },
   });
   if (options.command === 'remove-plan' || options.command === 'remove') {

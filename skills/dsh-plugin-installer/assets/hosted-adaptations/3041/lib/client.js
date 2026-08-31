@@ -1,7 +1,7 @@
 /**
- * Public plugin #3041 alpha.1 reviewed replacement — browser half.
+ * Public plugin #3041 alpha.2 reviewed replacement — browser half.
  *
- * Context Vista is a read-only view over alpha.1's standard tokenUsage,
+ * Context Vista is a read-only view over alpha.2's standard tokenUsage,
  * contextPressure, and contextBreakdown projections. It owns no Host route,
  * Remote, persistence, credential, process, or file capability.
  */

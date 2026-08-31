@@ -3,6 +3,7 @@ node_modules/
 coverage/
 *.tgz
 !test/fixtures/deep-ocean-1.2.0.tgz
+!skills/dsh-plugin-installer/assets/pnpm-runtime/pnpm-11.7.0.tgz
 .dsh-themes/
 .env
 .env.*

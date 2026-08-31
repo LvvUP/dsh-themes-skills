@@ -1,14 +1,17 @@
 {
-  "schemaVersion": 2,
-  "capturedAt": "2026-08-30",
+  "schemaVersion": 3,
+  "capturedAt": "2026-09-01",
   "purpose": "dsh-plugin-install-authority",
   "harness": {
-    "tag": "dsh-v0.1.2-alpha.1",
-    "commit": "cd5ef8148158c3a752a658978873241fdf8e2bbc",
-    "tree": "a712eec535b48badc4fefb4df5176a7002e4280b",
-    "lockfileSha256": "506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1",
-    "sourceBuildAuthoritySha256": "2ee9343fea9a2f1e15dd8e3d4870e3040f730bb85e19bb13c4ba90c6212c2da3",
-    "runtimeStatus": "source-build-evidence-pending",
+    "tag": "dsh-v0.1.2-alpha.2",
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b",
+    "lockfileSha256": "6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0",
+    "officialNpmPackage": "@deepseek-ai/dsh",
+    "officialNpmVersion": "0.1.2-alpha.2",
+    "officialNpmTarballSha256": "5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47",
+    "harnessReleaseAuthoritySha256": "f8be99bda583c2b8b1458746eaf07fe64c5a846348cbe0fffc1d4ff699211e11",
+    "runtimeStatus": "official-npm-runtime-evidence-pending",
     "runtimeReceiptSetSha256": null,
     "installable": false
   },
@@ -16,6 +19,19 @@
     "hosted-plugin-verified",
     "upstream-plugin-verified"
   ],
+  "migrationReview": {
+    "path": "alpha2-plugin-migration-map.json",
+    "schemaPath": "alpha2-plugin-migration-map.schema.json",
+    "schemaSha256": "48ceef982d6a86856c925c1cec3d319c00d2ec3809383b7c7d200afcc88a87a3",
+    "sha256": "d113a04a1d64ceeea6068624433ef60fe5e192c0ccecd1a39b76d31f5c802005",
+    "candidateIntakePath": "plugin-candidate-intake.json",
+    "candidateIntakeSha256": "7babb98c801aee0a87653195c8e9fad7f7b38b8b1c39c81e62dab072b5e1830b",
+    "status": "static-reviewed-pending-runtime",
+    "retainedCurrentCatalogCount": 52,
+    "retiredCatalogCount": 28,
+    "replacementCandidateCount": 44,
+    "replacementIdsAllocated": false
+  },
   "publication": {
     "status": "plugin-evidence-pending",
     "publishedInstallable": false,
@@ -26,7 +42,7 @@
   },
   "top10ReleaseSet": {
     "path": "top10-release-set.json",
-    "sha256": "125b8787f0cfa983fd1e6aab0888811ce202e626b30bc8fa04b49bfc68075234"
+    "sha256": "8eaaa395f417576791406058cf100c63933ab2f0a92fb72444aad1d5413b8d21"
   },
   "items": []
 }

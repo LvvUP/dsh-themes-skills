@@ -44,7 +44,7 @@ export function normalizeRuntimeBatchId(input) {
 
 export function validatePluginRuntimeBatchPlan(plan, intake) {
   validateCandidateIntake(intake);
-  if (plan?.schemaVersion !== 1 || plan.purpose !== 'dsh-plugin-alpha1-runtime-batches' ||
+  if (plan?.schemaVersion !== 1 || plan.purpose !== 'dsh-plugin-alpha2-runtime-batches' ||
       plan.runtimeCandidatePlanSha256 === undefined ||
       !/^[a-f0-9]{64}$/u.test(plan.runtimeCandidatePlanSha256) ||
       !Array.isArray(plan.batches) || plan.batches.length !== PLUGIN_RUNTIME_BATCH_COUNT) {
@@ -82,7 +82,7 @@ export function buildPluginRuntimeBatchPlan(intake, runtimeCandidatePlanSha256) 
   }
   const plan = {
     schemaVersion: 1,
-    purpose: 'dsh-plugin-alpha1-runtime-batches',
+    purpose: 'dsh-plugin-alpha2-runtime-batches',
     runtimeCandidatePlanSha256,
     batches: Array.from({ length: PLUGIN_RUNTIME_BATCH_COUNT }, (_, index) => ({
       batchId: index + 1,

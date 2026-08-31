@@ -1,6 +1,6 @@
 ---
 name: dsh-plugin-installer
-description: Inspect, prepare, install, remove, recover, and atomically roll back only item-level verified DSH Plugins under the pinned alpha.1 source-build authority. Use for exact public #3NNN Plugin requests, including the fixed Top10 batch, not Themes, Skins, or showcase-only repositories.
+description: Inspect, prepare, install, remove, recover, and atomically roll back only item-level verified DSH Plugins under the pinned alpha.2 source-build authority. Use for exact public #3NNN Plugin requests, including the fixed Top10 batch, not Themes, Skins, or showcase-only repositories.
 ---
 
 # DSH Plugin Installer
@@ -27,43 +27,31 @@ and every replacement receives a new ID.
 
 When the exact source references an RC-era aggregate client runtime, APIProxy,
 legacy client service property, raw Web route, or shell slot, read
-[references/alpha1-plugin-migration-map.md](references/alpha1-plugin-migration-map.md)
+[references/alpha2-plugin-migration-map.md](references/alpha2-plugin-migration-map.md)
 before proposing a hosted adaptation or accepting a newer upstream artifact.
 The map is an implementation boundary only: it never grants install authority
 or replaces the six-task runtime receipts.
+The 44 ID-less replacements use the closed [`plugin-replacement-runtime-plan.json`](references/plugin-replacement-runtime-plan.json) lane; `candidateKey` is CI-only, pending inputs block matrix expansion, only 6/6 macOS arm64/Linux x64/Windows x64 tasks across Node 22.19/24.15 qualify for the 28-item proposal from `#3089`, and that proposal is non-installing, never writes `plugin-authority.json`, and never rebinds a retired legacy ID.
 
-For a license-permitted hosted derivative, require one closed
+For a license-permitted hosted derivative, require the closed
 [`plugin-hosted-adaptation.schema.json`](references/plugin-hosted-adaptation.schema.json)
-recipe and one closed
-[`plugin-runtime-probe.schema.json`](references/plugin-runtime-probe.schema.json)
-contract. `scripts/build-hosted-adaptation.mjs` accepts only the exact clean
-source commit/tree, digest-bound reviewed replacement files, exact alpha.1
-peer versions, the preserved upstream license, an Acorn-parsed JavaScript AST,
-and a zero-computed-syntax policy: runtime JavaScript may contain no AST node
-whose `computed` flag is true, including members, properties, methods, or class
-fields. It also rejects Node built-ins, indirect dependency loading, and
-React/DOM shapes outside the checked-in reviewed
-allowlist, while flagging direct or statically foldable external CSS reference
-syntax.
-It strips every lifecycle script and uncontrolled dependency field, emits a
-normalized tarball, CycloneDX SBOM, and modification notice, and never executes
-candidate code.
-This AST gate is defense in depth for digest-bound, manually reviewed
-replacements; it is not a JavaScript sandbox and is not runtime certification.
-Its receipt is always non-installable and runtime-uncertified; only the six
-real runtime tasks can promote the resulting bytes.
+recipe and [`plugin-runtime-probe.schema.json`](references/plugin-runtime-probe.schema.json)
+contract. The fixed builder admits only the exact clean commit/tree,
+digest-bound reviewed replacements, exact alpha.2 peers, preserved license and
+its closed Acorn AST allowlist; it rejects computed syntax, Node built-ins,
+indirect loading, unreviewed React/DOM shapes and unsafe CSS references. It
+strips lifecycle scripts and uncontrolled dependencies, then emits a normalized
+tarball, CycloneDX SBOM and modification notice without executing candidate
+code. This is defense in depth, not a sandbox or runtime certification; only
+all six real runtime tasks can promote the bytes.
 
-The same isolated checkout is also inventoried by
-`scripts/audit-candidate-risk.mjs`. Its closed
-[receipt schema](references/plugin-static-risk-receipt.schema.json) records
-only bounded signal IDs, counts, and safe file/line locations. It does not
-record source snippets, lifecycle commands, credentials, environment values,
-or candidate output. `scripts/aggregate-candidate-risk.mjs` requires one valid
-receipt for every intake ID and emits a non-installable review queue under the
-[summary schema](references/plugin-static-risk-summary.schema.json). A clean
-or low-signal inventory is not compatibility, legal, distribution, runtime,
-installation, or Top10 authority; every candidate still requires manual review
-and the six-task runtime gate.
+The isolated checkout risk inventory records only bounded signal IDs/counts
+and safe locations under its closed [receipt schema](references/plugin-static-risk-receipt.schema.json).
+It excludes snippets, commands, credentials, environment values and candidate
+output. The aggregator requires all 80 receipts and emits only the
+non-installable [review queue](references/plugin-static-risk-summary.schema.json).
+Low static risk never grants legal, distribution, compatibility, runtime,
+installation or Top10 authority.
 
 ## Current result: inspect only
 
@@ -71,7 +59,7 @@ The website currently publishes 80 curated Plugin records, but
 `references/plugin-authority.json` contains **zero verified installation
 items**. Its independently hashed `references/top10-release-set.json` is
 `candidate-pending` with `frozen: false`, no ranked entries or item-authority
-digests, and zero completed matrix tasks. The alpha.1 Harness runtime receipt
+digests, and zero completed matrix tasks. The alpha.2 Harness runtime receipt
 set is also pending. Therefore:
 
 - `verifiedInstallableCount` is 0;
@@ -80,7 +68,7 @@ set is also pending. Therefore:
   installation set;
 - Top10 is not frozen and cannot start a transaction;
 - RC.8 Theme/Skin receipts and the RC.2 runtime baseline do not authorize any
-  alpha.1 Plugin.
+  alpha.2 Plugin.
 
 Do not create a temporary authority, infer a package from a repository, copy a
 website command, or mark an item verified to satisfy a request. Explain the
@@ -107,34 +95,28 @@ full-batch preflight and failure rollback, and only then set
 ## Prerequisites for a future verified item
 
 1. `dsh-harness-installer` must have built the exact official
-   `dsh-v0.1.2-alpha.1` source and issued a valid private local build receipt.
+   `dsh-v0.1.2-alpha.2` source and issued a valid private local build receipt.
    The source build remains local and is not an official binary.
 2. The bundled plugin authority must bind the promoted six-job Harness receipt
    set and exactly one item-level record for every selected public ID.
 3. The user must provide an explicit absolute `DSH_HOME`; only
    `profiles/web` is in scope. Never infer or broaden it.
-4. Exact pnpm `11.7.0` must already be the executable that alpha.1 resolves on
-   its input PATH. The installer resolves that first command to one canonical
-   absolute regular file, verifies its bytes and version directly, then creates
-   a transaction-private first-PATH launcher. That launcher rechecks the target
-   size and SHA-256 before every invocation. It does not install pnpm or modify
-   the caller's persistent PATH. On Windows the child environment also sets
-   `NoDefaultCurrentDirectoryInExePath`, so alpha.1's Profile working directory
-   cannot shadow the protected first-PATH launcher. This matches the inspected
-   alpha.1 `apps/cli/src/plugin.ts` behavior, including its Windows
-   `shell: true` `.cmd` boundary. That boundary uses the verified absolute
-   system `cmd.exe`, not an inherited `COMSPEC`, and does not use an unrelated
-   Corepack probe. Promotion receipts must bind both target and
-   private-launcher digests.
-   Every pnpm/DSH/Web child receives one frozen minimal environment containing
-   `DSH_HOME`, the private pnpm binding plus reviewed PATH, required OS
-   user/home/temp fields, locale fields, and non-secret binding digests/paths.
-   `NODE_OPTIONS`, npm/pnpm/Corepack configuration, CI flags, cloud credentials,
-   tokens, and unrelated caller variables are never inherited. The preflight
-   effective-policy check and the install/remove/recovery process must use that
-   same environment object.
+4. Exact pnpm `11.7.0` comes only from the checked-in official registry tarball
+   and closed `pnpm-runtime-authority.json`. The installer verifies byte count,
+   SHA-256, registry SHA-512, manifest, MIT license and the complete safe archive
+   closure before private extraction; drift, links, special entries, unsafe
+   paths or case/Unicode collisions fail closed. The certified absolute Node
+   runs private `package/bin/pnpm.cjs`; no caller-PATH pnpm, Corepack implementation,
+   branch, tag, download or fallback is trusted. The transaction wrapper is
+   only for Harness name-based invocation and proves its fixed identity. Windows
+   fixes `PATHEXT`, private `pnpm.cmd`, `NoDefaultCurrentDirectoryInExePath` and
+   verified system `cmd.exe`. Every pnpm/DSH/Web child shares one frozen minimal
+   environment; Node/package-manager injection, CI/cloud credentials, tokens and
+   unrelated caller variables never cross the boundary. The full executable,
+   wrapper, closure and environment contract is mandatory in
+   [plugin-install-contract.md](references/plugin-install-contract.md).
 5. Finish or stop any running Harness process before package mutation. A
-   package add/remove still requires a cold restart even though alpha.1 can
+   package add/remove still requires a cold restart even though alpha.2 can
    live-reload the user patch layer.
 6. Every promoted item must carry one closed `runtimeAcceptance` record. It
    binds an exact Cordis entry ID to the same authority package name and binds
@@ -148,6 +130,14 @@ full-batch preflight and failure rollback, and only then set
    ContainerInherit + ObjectInherit; the key rule carries no inheritance.
    Existing paths are verified rather than silently repaired. A mismatch
    fails before Profile mutation; Windows `mode` bits are never ACL evidence.
+   Directory configuration and every closed-file verification admit only
+   `FileShare.Read`, never Write or Delete. Only the initial ACL configuration
+   of a file whose installer-owned Node write handle is still open may
+   temporarily admit `FileShare.Write`; after that handle closes, strict
+   verification is mandatory before the durable move. Every PowerShell
+   `Add-Type` child receives a fresh local NTFS compiler temp whose protected
+   ACL contains exactly one current-user SID FullControl rule; caller TEMP/TMP
+   values never cross that child boundary.
 8. Install, removal, and recovery share one cross-platform exclusive lock
    below the explicit `DSH_HOME` trust root. The fixed executor acquires it
    before snapshotting and holds it until commit or a verified rollback. A
@@ -201,9 +191,12 @@ node <skill-dir>/scripts/prepare-plugin.mjs \
 2. `github-release-asset`: fixed GitHub repository, non-`latest` tag, exact
    `.tgz` asset name/URL/bytes/SHA-256/SRI, and package-manifest digest.
 3. `git-commit`: credential-free GitHub repository, full 40-hex commit, tree,
-   repository-root manifest digest, exact lockfile path/digest, and canonical
-   `git+https` spec ending in that commit. Short commits, branch names, and
-   subfolders fail closed.
+   repository-root manifest digest, and canonical `git+https` spec ending in
+   that commit. A source with runtime dependencies or any standard lifecycle
+   hook also binds an exact lockfile path/digest. A lockless source is admitted
+   only when the exact manifest has no runtime or peer dependency graph and no
+   standard lifecycle hook, so the already-built package needs no source build.
+   Short commits, branch names, and subfolders fail closed.
 
 Before local preparation, the fixed fetcher validates the source coordinate,
 uses `redirect: manual`, admits only its hard-coded HTTPS origin set, streams
@@ -216,13 +209,26 @@ node <skill-dir>/scripts/fetch-plugin-source.mjs \
   --output <new-absolute-private-fetch-directory>
 ```
 
-All three verify package identity, bundle patch, the complete standard npm
-lifecycle-hook map and digest, and every declared hook included in the single
-summarized lifecycle authorization. An undeclared `prepare`, `install`,
-`postinstall`, or any other standard lifecycle hook fails. The plan shows the
-exact hook names and script text before one aggregate consent. pnpm may still
-run disclosed transitive-dependency lifecycle scripts; that residual risk is
-also part of consent.
+During installation, the installer first resolves with `--ignore-scripts
+--lockfile-only`, then binds policy to the exact depPath emitted by pnpm 11.7.
+A selected package receives an explicit `allowBuilds: false` rule for that
+exact peer-normalized depPath. An existing positive rule for the same exact
+depPath fails closed instead of silently widening that item.
+Every newly created negative rule carries the stable
+`dsh-plugin-installer-owned-v1` YAML value comment. This marker is cleanup
+provenance, never build permission: removal prunes only marked `false` keys
+that no longer correspond to any current lockfile package or peer-normalized
+snapshot key. Pre-existing unmarked denials and every `true` value remain
+untouched; forging the comment cannot grant execution because
+`strictDepBuilds: true` remains mandatory.
+
+All three verify package identity, bundle patch, and the complete standard npm
+lifecycle-hook map and digest. An undeclared `prepare`, `install`, `postinstall`,
+or any other standard lifecycle hook fails preparation. Any package that still
+requires a live lifecycle build is rejected before consent; it must instead be
+prebuilt in an isolated review workflow, repackaged as a digest-bound
+script-free artifact when rights allow, or replaced. Every newly resolved
+transitive depPath is explicitly denied build permission.
 
 ```bash
 node <skill-dir>/scripts/prepare-plugin.mjs \
@@ -281,7 +287,7 @@ private transaction directory outside `DSH_HOME`, source, and prepared trees:
 node <skill-dir>/scripts/install-transaction.mjs execute \
   --id <#3NNN> \
   --dsh-home <absolute-DSH_HOME> \
-  --harness-source <absolute-alpha1-source> \
+  --harness-source <absolute-alpha2-source> \
   --harness-receipt <absolute-private-build-receipt.json> \
   --prepared-root <absolute-private-prepared-root> \
   --transaction-root <new-absolute-private-transaction-directory> \
@@ -300,16 +306,22 @@ Replace `--id` with `--top10` only for the fixed Top10 set. The script:
    dependency closure and Plugin inventory, to a private directory; snapshot
    schema v3 preserves and verifies POSIX permission bits, while Windows
    restores the current-user SID-only ACL boundary;
-3. rejects `dangerouslyAllowAllBuilds: true`, fixes the project policy at
-   `dangerouslyAllowAllBuilds: false` and `strictDepBuilds: true`, adds only
-   package keys whose complete reviewed lifecycle-hook set requires execution
-   to `allowBuilds`, and verifies those effective values through the same
-   privately bound pnpm under the same frozen minimal child environment before
-   package mutation;
-4. invokes the absolute source-built CLI with a fixed argument array and
-   `shell: false` under the frozen minimal child environment;
-5. installs sequentially and verifies exact package identity and bundle
-   activation after each item;
+3. invokes the private `pnpm.cjs` through the already-certified absolute Node
+   with a fixed argument array, `shell: false`, `--` option termination, and
+   only `--ignore-scripts --lockfile-only` resolution, then strictly parses the
+   bounded lockfile and derives each
+   direct package's exact source-like depPath plus the complete newly added
+   package-key closure; this direct phase avoids alpha.2's Windows
+   `dsh plugin` cmd forwarding, which cannot preserve an artifact path with
+   spaces as one literal argument;
+4. rejects `dangerouslyAllowAllBuilds: true`, fixes the project policy at
+   `dangerouslyAllowAllBuilds: false` and `strictDepBuilds: true`, writes
+   `false` for every newly resolved peer-normalized depPath, never writes a new
+   positive lifecycle permission, and verifies those effective values through
+   the same privately bound pnpm and frozen minimal child environment;
+5. materializes the already-resolved batch once with `--frozen-lockfile
+   --ignore-scripts --ignore-pnpmfile`, requires the lockfile bytes to remain
+   identical, then verifies every exact package identity and bundle activation;
 6. runs the fixed `--profile web --dump-config` command, parses its output as a
    bounded strict YAML entry list in memory, and requires exactly one
    authority-bound `{ id, name }` entry for every selected item;
@@ -354,7 +366,7 @@ After immediate explicit consent to that exact plan digest, run:
 node <skill-dir>/scripts/install-transaction.mjs remove \
   --id <#3NNN> \
   --dsh-home <absolute-DSH_HOME> \
-  --harness-source <absolute-alpha1-source> \
+  --harness-source <absolute-alpha2-source> \
   --harness-receipt <absolute-private-build-receipt.json> \
   --transaction-root <new-absolute-private-removal-directory> \
   --consent-sha256 <exact-removal-plan-sha256>
@@ -362,9 +374,12 @@ node <skill-dir>/scripts/install-transaction.mjs remove \
 
 Use `--top10` instead of `--id` only for the frozen Top10 set. The executor
 snapshots the complete pre-remove Profile and closure, removes packages in
-reverse plan order through the fixed source-built CLI argument array, verifies
-their absence plus the exact remaining inventory before and after a real cold
-Web start, and writes `status: "removed"` only after all checks pass. Any
+reverse plan order through fixed `remove <package> --lockfile-only` source-built
+CLI argument arrays, then performs one
+`install --frozen-lockfile --ignore-scripts --ignore-pnpmfile` materialization
+and requires the lockfile bytes to remain identical. It verifies package
+absence plus the exact remaining inventory before and after a real cold Web
+start, and writes `status: "removed"` only after all checks pass. Any
 failure restores the whole pre-remove snapshot; partial removal is never a
 successful state.
 
@@ -385,7 +400,7 @@ a new recovery transaction:
 node <skill-dir>/scripts/install-transaction.mjs recover \
   --source-transaction-root <absolute-private-install-or-removal-directory> \
   --dsh-home <absolute-DSH_HOME> \
-  --harness-source <absolute-alpha1-source> \
+  --harness-source <absolute-alpha2-source> \
   --harness-receipt <absolute-private-build-receipt.json> \
   --transaction-root <new-absolute-private-recovery-directory> \
   --consent-sha256 <exact-recovery-plan-sha256>
@@ -443,20 +458,28 @@ fails closed.
 
 A fixed upstream lifecycle script is executable code. Every standard hook,
 including `prepare`, `install`, and `postinstall`, must be enumerated with its
-exact text in authority and in the consented plan. The installer only writes
-its exact package key under the Profile's `allowBuilds`; a strict YAML
+exact text in authority, but the v0.8.0 transaction does not execute or
+authorize any live lifecycle build. Such a candidate is rejected before
+consent until an isolated review produces an authority-bound script-free
+artifact, or the candidate is replaced. The installer first resolves with
+scripts disabled and lockfile-only, then writes every newly added
+peer-normalized pnpm depPath—not a bare package name—as `false`; a strict YAML
 AST rejects aliases, merge keys, duplicates, custom tags, non-boolean values,
 an existing explicit denial, and any unsafe global build-policy switch. Missing
 safe booleans are written explicitly; existing unsafe values are never silently
 overridden. The installer then queries the effective project policy through a
 fixed `pnpm config get --location project --json` argument array and fails if
-environment or user configuration changes the safe values. Removal deletes
-only the removed items' exact `allowBuilds: true` keys while preserving
-explicit denials and unrelated entries. The authorization helper has no
+environment or user configuration changes the safe values. Removal can delete
+an exact historical depPath authorization and, after frozen materialization,
+atomically prune stale installer-marked `false` entries absent from the
+current lockfile graph. A legacy broad package-name `true` without installer
+provenance fails closed and requires explicit migration; user-authored
+denials, reachable marked denials, and all `true` entries remain untouched. The
+authorization helper has no
 standalone mutating CLI and accepts no implicit process environment; only the
-consent-bound transaction may provide its frozen environment. The authority and plan also disclose that
-pnpm may run lifecycle scripts from transitive dependencies. The installer
-never executes authority script text itself.
+consent-bound transaction may provide its frozen environment. The installer
+never executes authority script text itself and never grants a transitive
+depPath build permission implicitly.
 
 Profile snapshots, prepared artifacts, build receipts, and transaction state
 are private local recovery material. Do not publish them. A private snapshot

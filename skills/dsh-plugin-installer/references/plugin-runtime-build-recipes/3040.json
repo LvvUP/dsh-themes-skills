@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "purpose": "dsh-alpha1-hosted-plugin-adaptation",
+  "purpose": "dsh-alpha2-hosted-plugin-adaptation",
   "catalogId": 3040,
   "slug": "dsh-kanban",
   "baseline": {
-    "tag": "dsh-v0.1.2-alpha.1",
-    "commit": "cd5ef8148158c3a752a658978873241fdf8e2bbc",
-    "tree": "a712eec535b48badc4fefb4df5176a7002e4280b"
+    "tag": "dsh-v0.1.2-alpha.2",
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
   },
   "source": {
     "repository": "https://github.com/Ericwong5021/dsh-kanban.git",
@@ -20,9 +20,9 @@
   },
   "output": {
     "packageName": "@dsh-themes/dsh-kanban",
-    "packageVersion": "0.1.1-dsh.alpha1.1",
-    "description": "Five-column live session planning board using only standard DeepSeek Harness 0.1.2-alpha.1 Web surfaces",
-    "assetName": "dsh-kanban-0.1.1-dsh.alpha1.1.tgz",
+    "packageVersion": "0.1.1-dsh.alpha2.1",
+    "description": "Five-column live session planning board using only standard DeepSeek Harness 0.1.2-alpha.2 Web surfaces",
+    "assetName": "dsh-kanban-0.1.1-dsh.alpha2.1.tgz",
     "hostEntry": "lib/index.js",
     "clientEntry": "lib/client.js",
     "bundlePatch": "cordis.patch.yml",
@@ -36,12 +36,12 @@
     ],
     "peerDependencies": {
       "@deepseek-ai/cordis": "4.0.1",
-      "@deepseek-ai/dsh-api-session-controller": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-layout": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-session": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-sidebar": "0.1.2-alpha.1",
+      "@deepseek-ai/dsh-api-session-controller": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-layout": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-session": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-sidebar": "0.1.2-alpha.2",
       "react": "18.3.1"
     },
     "files": [
@@ -52,7 +52,7 @@
           "sourcePath": "src/index.ts",
           "sourceSha256": "88e6c394e8980a82a76acb0a22c26b8b846336ab83fce23d7fdf03eac9ee727b",
           "replacementPath": "assets/hosted-adaptations/3040/lib/index.js",
-          "replacementSha256": "43d3f98dee355324a3886db9df7d801911f31858e92c105eec336897c4bc6115"
+          "replacementSha256": "8cf8786d31a65c0f96e323ed650023288738588a92fd5f22e502096c37c20b76"
         }
       },
       {
@@ -62,7 +62,7 @@
           "sourcePath": "src/client/Kanban.tsx",
           "sourceSha256": "871a37d663af144372339c5290f1a55322eeb26a0171d4b096de6f77a4577b3e",
           "replacementPath": "assets/hosted-adaptations/3040/lib/client.js",
-          "replacementSha256": "dc634deb6e887dcef99c598196b5ffdf32fd28122a08b3b349ff22f350995c94"
+          "replacementSha256": "390b165521c42e53a29d06763e4064c03c03d823ea3b7c294df632dd89bd37ad"
         }
       },
       {
@@ -72,7 +72,7 @@
           "sourcePath": "cordis.patch.yml",
           "sourceSha256": "929ab1a18725d614ecc83c2a54d2f7303c900ba582413eba2e70efc822c338e8",
           "replacementPath": "assets/hosted-adaptations/3040/cordis.patch.yml",
-          "replacementSha256": "7a94f76274b185b24a2f637049fb9d2c5d49414bd89840d313c600cbac1772a1"
+          "replacementSha256": "773adb574cb0f63af8579b4c2631843a6ab1c75e2b185d78076b24e8aaef82b3"
         }
       },
       {
@@ -140,7 +140,7 @@
   },
   "runtimeProbe": {
     "contractPath": "references/plugin-runtime-probes/3040.json",
-    "contractSha256": "afa31e967227e0643722f44e0471d4c20495927dd3914378e3d793cc0aa0f16c",
+    "contractSha256": "1228b73c7406960a04d1e684beb1850ca57aea2505f7767e95070caddf42ed29",
     "requiredAssertions": [
       "package.exact-entry",
       "boot.ready-context-once",

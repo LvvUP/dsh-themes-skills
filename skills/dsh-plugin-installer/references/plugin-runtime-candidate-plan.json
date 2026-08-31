@@ -1,12 +1,12 @@
 {
   "authorityEffect": "none-not-installation-authority",
   "baseline": {
-    "commit": "cd5ef8148158c3a752a658978873241fdf8e2bbc",
-    "lockfileSha256": "506ad1fc7c40f71ce8c6afe08724fdd55020c1a527d7a7a185c559d39ecfcaf1",
-    "tag": "dsh-v0.1.2-alpha.1",
-    "tree": "a712eec535b48badc4fefb4df5176a7002e4280b"
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "lockfileSha256": "6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0",
+    "tag": "dsh-v0.1.2-alpha.2",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
   },
-  "candidateIntakeSha256": "8778c8ac3d374cd2019712637ecef1fd95044b3d0ef3c6f10b8a70418bba1169",
+  "candidateIntakeSha256": "7babb98c801aee0a87653195c8e9fad7f7b38b8b1c39c81e62dab072b5e1830b",
   "items": [
     {
       "artifact": null,
@@ -815,7 +815,7 @@
     "requiredCandidates": 80,
     "tasksPerCandidate": 6
   },
-  "purpose": "dsh-plugin-alpha1-runtime-candidate-plan",
+  "purpose": "dsh-plugin-alpha2-runtime-candidate-plan",
   "schemaVersion": 1,
   "status": "runtime-artifact-and-probe-authority-pending"
 }

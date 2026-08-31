@@ -1,5 +1,5 @@
 /**
- * Browser-only Plugin List Plus for DeepSeek Harness 0.1.2-alpha.1.
+ * Browser-only Plugin List Plus for DeepSeek Harness 0.1.2-alpha.2.
  *
  * The official pluginInventory Remote is the sole data authority. This client
  * adds search, neutral namespace grouping, and collapsible groups/cards while

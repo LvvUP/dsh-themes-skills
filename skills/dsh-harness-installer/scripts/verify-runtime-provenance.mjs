@@ -31,7 +31,7 @@ const PINNED_GH_SHA256 = Object.freeze({
 });
 
 function fail(message) {
-  throw new Error(`alpha.1 runtime provenance refused: ${message}`);
+  throw new Error(`alpha.2 runtime provenance refused: ${message}`);
 }
 
 async function readBoundedRegularFile(file, maximum, label) {
@@ -44,7 +44,7 @@ async function readBoundedRegularFile(file, maximum, label) {
     }
     return await handle.readFile();
   } catch (error) {
-    if (error.message?.startsWith('alpha.1 runtime provenance refused:')) throw error;
+    if (error.message?.startsWith('alpha.2 runtime provenance refused:')) throw error;
     fail(`${label} must be a bounded regular non-symlink file`);
   } finally {
     if (handle) await handle.close();
@@ -126,7 +126,7 @@ function exactGithubWorkflowProvenance(entry, policy) {
     certificate?.subjectAlternativeName === CERTIFICATE_IDENTITY &&
     certificate?.githubWorkflowTrigger === 'workflow_dispatch' &&
     certificate?.githubWorkflowSHA === policy.sourceSha &&
-    certificate?.githubWorkflowName === 'DSH alpha.1 runtime certification' &&
+    certificate?.githubWorkflowName === 'DSH alpha.2 runtime certification' &&
     certificate?.githubWorkflowRepository === RUNTIME_REPOSITORY &&
     certificate?.githubWorkflowRef === SOURCE_REF &&
     certificate?.buildSignerURI === CERTIFICATE_IDENTITY &&
@@ -170,7 +170,7 @@ async function validatePinnedGh(ghPath) {
     }
     return bytes;
   } catch (error) {
-    if (error.message?.startsWith('alpha.1 runtime provenance refused:')) throw error;
+    if (error.message?.startsWith('alpha.2 runtime provenance refused:')) throw error;
     fail('GitHub CLI must be a readable regular non-symlink file');
   } finally {
     if (handle) await handle.close();
@@ -178,7 +178,7 @@ async function validatePinnedGh(ghPath) {
 }
 
 async function runGhVerify(args) {
-  const privateRoot = await mkdtemp(path.join(os.tmpdir(), 'alpha1-runtime-gh-'));
+  const privateRoot = await mkdtemp(path.join(os.tmpdir(), 'alpha2-runtime-gh-'));
   try {
     const config = path.join(privateRoot, 'gh');
     await mkdir(config, { mode: 0o700 });

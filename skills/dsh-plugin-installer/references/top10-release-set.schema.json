@@ -32,17 +32,17 @@
       "additionalProperties": false,
       "required": ["tag", "commit"],
       "properties": {
-        "tag": { "const": "dsh-v0.1.2-alpha.1" },
-        "commit": { "const": "cd5ef8148158c3a752a658978873241fdf8e2bbc" }
+        "tag": { "const": "dsh-v0.1.2-alpha.2" },
+        "commit": { "const": "0a53fb55bea101816fa226bb964ae2bed71c343b" }
       }
     },
     "weights": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["userValueAndUseCaseClarity", "stabilityMaintenanceAndAlpha1Fit", "securityAndPermissionRestraint", "crossPlatformInstallRemoveRollback", "nonTechnicalUsabilityAndDocs", "combinationComplementarity"],
+      "required": ["userValueAndUseCaseClarity", "stabilityMaintenanceAndAlpha2Fit", "securityAndPermissionRestraint", "crossPlatformInstallRemoveRollback", "nonTechnicalUsabilityAndDocs", "combinationComplementarity"],
       "properties": {
         "userValueAndUseCaseClarity": { "const": 25 },
-        "stabilityMaintenanceAndAlpha1Fit": { "const": 25 },
+        "stabilityMaintenanceAndAlpha2Fit": { "const": 25 },
         "securityAndPermissionRestraint": { "const": 15 },
         "crossPlatformInstallRemoveRollback": { "const": 15 },
         "nonTechnicalUsabilityAndDocs": { "const": 10 },
@@ -80,10 +80,10 @@
     "scores": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["userValueAndUseCaseClarity", "stabilityMaintenanceAndAlpha1Fit", "securityAndPermissionRestraint", "crossPlatformInstallRemoveRollback", "nonTechnicalUsabilityAndDocs", "combinationComplementarity"],
+      "required": ["userValueAndUseCaseClarity", "stabilityMaintenanceAndAlpha2Fit", "securityAndPermissionRestraint", "crossPlatformInstallRemoveRollback", "nonTechnicalUsabilityAndDocs", "combinationComplementarity"],
       "properties": {
         "userValueAndUseCaseClarity": { "type": "integer", "minimum": 0, "maximum": 25 },
-        "stabilityMaintenanceAndAlpha1Fit": { "type": "integer", "minimum": 0, "maximum": 25 },
+        "stabilityMaintenanceAndAlpha2Fit": { "type": "integer", "minimum": 0, "maximum": 25 },
         "securityAndPermissionRestraint": { "type": "integer", "minimum": 0, "maximum": 15 },
         "crossPlatformInstallRemoveRollback": { "type": "integer", "minimum": 0, "maximum": 15 },
         "nonTechnicalUsabilityAndDocs": { "type": "integer", "minimum": 0, "maximum": 10 },

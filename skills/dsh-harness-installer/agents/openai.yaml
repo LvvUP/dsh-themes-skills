@@ -1,4 +1,4 @@
 interface:
   display_name: "DSH Harness Installer"
   short_description: "Build pinned DSH source without changing PATH"
-  default_prompt: "Use $dsh-harness-installer to inspect prerequisites and, only after my consent, build the exact alpha.1 source locally without claiming an official binary or changing PATH."
+  default_prompt: "Use $dsh-harness-installer to inspect the alpha.2 authority and, only after my consent, install the exact official npm runtime without changing PATH; keep the exact source cross-build as separate evidence and do not claim binary equivalence."

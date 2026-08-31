@@ -20,6 +20,14 @@ const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const skillRoot = join(repoRoot, 'skills/dsh-community-skin-installer');
 const scripts = {
   authority: join(skillRoot, 'scripts/catalog-authority.mjs'),
+  alpha2Authority: join(
+    skillRoot,
+    'scripts/alpha2-recertification-authority.mjs'
+  ),
+  alpha2Validate: join(
+    skillRoot,
+    'scripts/validate-alpha2-recertification.mjs'
+  ),
   fetch: join(skillRoot, 'scripts/fetch-skin-center.mjs'),
   inspectBaseline: join(skillRoot, 'scripts/inspect-baseline.mjs'),
   state: join(skillRoot, 'scripts/skin-center-state.mjs'),
@@ -27,7 +35,15 @@ const scripts = {
   validate: join(skillRoot, 'scripts/validate-record.mjs'),
 };
 const catalogPath = join(skillRoot, 'references/community-catalog.json');
-const alpha1RecertificationPath = join(
+const alpha2RecertificationPath = join(
+  skillRoot,
+  'references/alpha2-recertification.json'
+);
+const alpha2RecertificationSchemaPath = join(
+  skillRoot,
+  'references/alpha2-recertification.schema.json'
+);
+const alpha1HistoricalPath = join(
   skillRoot,
   'references/alpha1-recertification.json'
 );
@@ -137,35 +153,116 @@ test('community installer scripts are syntactically valid', () => {
   }
 });
 
-test('community authority preserves RC.8 history but closes the alpha.1 gate', async () => {
+test('alpha.2 authority, schema, shared Harness binding, and six planned guards are exact', async () => {
+  const authorityBytes = await readFile(alpha2RecertificationPath);
+  const schemaBytes = await readFile(alpha2RecertificationSchemaPath);
+  assert.equal(
+    createHash('sha256').update(authorityBytes).digest('hex'),
+    '02dbedab9dc248019bfe2654bd9c9e35002ada1c744256d172fe3abe664c2b80'
+  );
+  assert.equal(
+    createHash('sha256').update(schemaBytes).digest('hex'),
+    'ff4ba6954be7213d6ea14804ca67408b14af367ea54834684a6a4d93429d1103'
+  );
+  const validated = JSON.parse(run(scripts.alpha2Validate, []).stdout);
+  assert.equal(
+    validated.baselineId,
+    'deepseek-harness/dsh-v0.1.2-alpha.2@0a53fb55bea101816fa226bb964ae2bed71c343b'
+  );
+  assert.equal(validated.requiredItems, 11);
+  assert.equal(validated.requiredTasks, 66);
+  assert.equal(validated.completedTasks, 0);
+  assert.equal(validated.installable, false);
+  assert.equal(validated.publicationAllowed, false);
+  assert.equal(validated.runtimeExecuted, false);
+  assert.equal(validated.receiptProduced, false);
+  for (const target of ['darwin-arm64', 'linux-x64', 'win32-x64']) {
+    for (const nodeVersion of ['22.19.0', '24.15.0']) {
+      const guarded = JSON.parse(
+        run(scripts.alpha2Validate, [
+          '--planned-target',
+          target,
+          '--node-version',
+          nodeVersion,
+        ]).stdout
+      );
+      assert.equal(guarded.validationMode, 'planned-matrix-static-guard');
+      assert.equal(guarded.plannedTarget, target);
+      assert.equal(guarded.nodeVersion, nodeVersion);
+      assert.equal(guarded.runtimeExecuted, false);
+      assert.equal(guarded.receiptProduced, false);
+    }
+  }
+  assert.match(
+    run(
+      scripts.alpha2Validate,
+      ['--planned-target', 'darwin-x64', '--node-version', '22.19.0'],
+      { ok: false }
+    ).stderr,
+    /target must be darwin-arm64, linux-x64, or win32-x64/
+  );
+  const workflow = await readFile(
+    resolve('.github/workflows/alpha2-community-skin-recertification.yml'),
+    'utf8'
+  );
+  assert.match(workflow, /pending-authority guard/);
+  assert.match(workflow, /runtimeExecuted!==false/);
+  assert.match(workflow, /receiptProduced!==false/);
+  assert.doesNotMatch(workflow, /actions\/upload-artifact/);
+  assert.doesNotMatch(workflow, /runtime-certification\.mjs run-task/);
+});
+
+test('community authority preserves alpha.1 and RC.8 history but closes the alpha.2 gate', async () => {
   const catalogBytes = await readFile(catalogPath);
   const rc8ReceiptBytes = await readFile(rc8RuntimeReceiptPath);
   const catalog = JSON.parse(catalogBytes.toString('utf8'));
   const current = JSON.parse(
-    await readFile(alpha1RecertificationPath, 'utf8')
+    await readFile(alpha2RecertificationPath, 'utf8')
   );
+  const alpha1Bytes = await readFile(alpha1HistoricalPath);
   const policy = JSON.parse(await readFile(baselinePolicyPath, 'utf8'));
   const authoritySource = await readFile(scripts.authority, 'utf8');
   assert.doesNotMatch(authoritySource, /release-state\.json/);
-  assert.equal(policy.defaultOperationalLane, 'currentAlpha1');
-  assert.equal(policy.currentAlpha1.installable, false);
-  assert.equal(policy.currentAlpha1.websiteDistribution, 'external-showcase');
-  assert.equal(policy.currentAlpha1.websiteInstallability, 'showcase-only');
-  assert.equal(policy.currentAlpha1.websiteCompatibility, 'verification-pending');
-  assert.equal(current.baseline.dshPackageVersion, '0.1.2-alpha.1');
-  assert.equal(current.baseline.officialTag, 'dsh-v0.1.2-alpha.1');
+  assert.equal(policy.defaultOperationalLane, 'currentAlpha2');
+  assert.equal(policy.currentAlpha2.installable, false);
+  assert.equal(policy.currentAlpha2.websiteDistribution, 'external-showcase');
+  assert.equal(policy.currentAlpha2.websiteInstallability, 'showcase-only');
+  assert.equal(policy.currentAlpha2.websiteCompatibility, 'verification-pending');
+  assert.equal(policy.currentAlpha2.communityTasksRequired, 66);
+  assert.equal(policy.currentAlpha2.communityTasksCompleted, 0);
+  assert.equal(current.baseline.dshPackageVersion, '0.1.2-alpha.2');
+  assert.equal(current.baseline.officialTag, 'dsh-v0.1.2-alpha.2');
   assert.equal(
     current.baseline.sourceCommit,
-    'cd5ef8148158c3a752a658978873241fdf8e2bbc'
+    '0a53fb55bea101816fa226bb964ae2bed71c343b'
+  );
+  assert.equal(
+    current.baseline.sourceTree,
+    '64ccbfa8e0caa4711cd4a75717ef9e022657961b'
   );
   assert.equal(current.gate.requiredItems, 11);
   assert.equal(current.gate.completedItems, 0);
+  assert.equal(current.gate.completedTasks, 0);
   assert.equal(current.gate.installable, false);
+  assert.equal(current.gate.publicationAllowed, false);
   assert.equal(current.gate.runtimeReceiptSetSha256, null);
   assert.equal(current.gate.rollbackReceiptSetSha256, null);
   assert.ok(
-    current.items.every((item) => item.status === 'verification-pending')
+    current.items.every(
+      (item) =>
+        item.status === 'verification-pending' &&
+        item.completedTasks === 0 &&
+        item.runtimeReceiptSetSha256 === null &&
+        item.rollbackReceiptSetSha256 === null
+    )
   );
+  assert.equal(
+    createHash('sha256').update(alpha1Bytes).digest('hex'),
+    '9ecc86474cba557c445ae21b8e479aa3f1b55cb8b2768faa6ed73952cc7b1552'
+  );
+  assert.equal(policy.currentAlpha1.historicalAtCapture, true);
+  assert.equal(policy.currentAlpha1.enabled, false);
+  assert.equal(policy.currentAlpha1.mayAuthorizeCurrent, false);
   assert.equal(policy.certified.historicalAtCapture, true);
   assert.equal(policy.certified.installableAtCapture, true);
   assert.equal(policy.certified.installable, false);
@@ -201,13 +298,13 @@ test('community authority preserves RC.8 history but closes the alpha.1 gate', a
   assert.match(trading.riskDisclosure, /404/);
 });
 
-test('baseline inspector defaults to the alpha.1 0/11 current lane', () => {
+test('baseline inspector defaults to the alpha.2 0/66 current lane', () => {
   const inspected = JSON.parse(
     run(scripts.inspectBaseline, []).stdout
   );
-  assert.equal(inspected.lane, 'currentAlpha1');
-  assert.equal(inspected.status, 'alpha1-item-runtime-evidence-pending');
-  assert.equal(inspected.dshVersion, '0.1.2-alpha.1');
+  assert.equal(inspected.lane, 'currentAlpha2');
+  assert.equal(inspected.status, 'alpha2-item-runtime-evidence-pending');
+  assert.equal(inspected.dshVersion, '0.1.2-alpha.2');
   assert.equal(inspected.inspectionEnabled, true);
   assert.equal(inspected.installable, false);
   assert.equal(inspected.itemsPlanned, 11);
@@ -218,11 +315,11 @@ test('baseline inspector defaults to the alpha.1 0/11 current lane', () => {
   assert.equal(inspected.websiteCompatibility, 'verification-pending');
 });
 
-test('nested directory records inspect but cannot install before alpha.1 recertification', async (t) => {
+test('nested directory records inspect but cannot install before alpha.2 recertification', async (t) => {
   const root = await workspace(t);
   const catalog = JSON.parse(await readFile(catalogPath, 'utf8'));
   const current = JSON.parse(
-    await readFile(alpha1RecertificationPath, 'utf8')
+    await readFile(alpha2RecertificationPath, 'utf8')
   );
   const skin = catalog.skins.find((candidate) => candidate.skinId === 'qq98');
   assert.ok(skin);
@@ -240,9 +337,9 @@ test('nested directory records inspect but cannot install before alpha.1 recerti
   assert.equal(inspected.installable, false);
   assert.deepEqual(inspected.blockingReasons, [
     'item-runtime-verification-pending',
-    'alpha1-recertification-gate-not-certified',
+    'alpha2-recertification-gate-not-certified',
   ]);
-  assert.equal(inspected.baseline.dshPackageVersion, '0.1.2-alpha.1');
+  assert.equal(inspected.baseline.dshPackageVersion, '0.1.2-alpha.2');
 
   const blockedInstall = run(
     scripts.validate,
@@ -251,7 +348,7 @@ test('nested directory records inspect but cannot install before alpha.1 recerti
   );
   assert.match(
     blockedInstall.stderr,
-    /alpha1-recertification-gate-not-certified/
+    /alpha2-recertification-gate-not-certified/
   );
 
   const tampered = directoryRecord(catalog, current, skin);
@@ -299,7 +396,7 @@ test('all 11 current website records are showcase-only and reject install mode',
   const input = join(root, 'record.json');
   const catalog = JSON.parse(await readFile(catalogPath, 'utf8'));
   const current = JSON.parse(
-    await readFile(alpha1RecertificationPath, 'utf8')
+    await readFile(alpha2RecertificationPath, 'utf8')
   );
 
   assert.equal(catalog.skins.length, 11);
@@ -309,7 +406,7 @@ test('all 11 current website records are showcase-only and reject install mode',
     assert.equal(selected.distribution.installability, 'showcase-only');
     assert.equal(selected.runtime.status, 'verification-pending');
     assert.equal(selected.compatibility.status, 'verification-pending');
-    assert.equal(selected.compatibility.baseline, '0.1.2-alpha.1');
+    assert.equal(selected.compatibility.baseline, '0.1.2-alpha.2');
     assert.equal(Object.hasOwn(selected.distribution, 'artifactUrl'), false);
     assert.equal(Object.hasOwn(selected.distribution, 'installCommand'), false);
 
@@ -323,7 +420,7 @@ test('all 11 current website records are showcase-only and reject install mode',
     assert.equal(inspected.installable, false);
     assert.deepEqual(inspected.blockingReasons, [
       'item-runtime-verification-pending',
-      'alpha1-recertification-gate-not-certified',
+      'alpha2-recertification-gate-not-certified',
     ]);
 
     const rejected = run(
@@ -333,7 +430,7 @@ test('all 11 current website records are showcase-only and reject install mode',
     );
     assert.match(
       rejected.stderr,
-      /alpha1-recertification-gate-not-certified/
+      /alpha2-recertification-gate-not-certified/
     );
   }
 });
@@ -344,7 +441,7 @@ test('direct CSS adaptation installation is blocked before touching the profile'
   await mkdir(dshHome);
   const catalog = JSON.parse(await readFile(catalogPath, 'utf8'));
   const current = JSON.parse(
-    await readFile(alpha1RecertificationPath, 'utf8')
+    await readFile(alpha2RecertificationPath, 'utf8')
   );
   const skin = catalog.skins.find((candidate) => candidate.skinId === 'qq98');
   const input = join(root, 'record.json');
@@ -374,7 +471,7 @@ test('direct CSS adaptation installation is blocked before touching the profile'
     ],
     { ok: false }
   );
-  assert.match(blocked.stderr, /alpha1-recertification-gate-not-certified/);
+  assert.match(blocked.stderr, /alpha2-recertification-gate-not-certified/);
   assert.deepEqual(await readdir(dshHome), []);
 
   const blockedRemove = run(
@@ -382,7 +479,7 @@ test('direct CSS adaptation installation is blocked before touching the profile'
     ['remove', '--id', 'qq98', '--dsh-home', dshHome],
     { ok: false }
   );
-  assert.match(blockedRemove.stderr, /alpha1-recertification-gate-not-certified/);
+  assert.match(blockedRemove.stderr, /alpha2-recertification-gate-not-certified/);
   assert.deepEqual(await readdir(dshHome), []);
 });
 
@@ -458,11 +555,11 @@ test('artifact fetcher rejects relative output before network access', () => {
   assert.match(result.stderr, /--output must be absolute/);
 });
 
-test('artifact fetcher rejects the pending alpha.1 gate before creating output', async (t) => {
+test('artifact fetcher rejects the pending alpha.2 gate before creating output', async (t) => {
   const root = await workspace(t);
   const output = join(root, 'nested', 'skin-center.tgz');
   const result = run(scripts.fetch, ['--output', output], { ok: false });
-  assert.match(result.stderr, /alpha1-recertification-gate-not-certified/);
+  assert.match(result.stderr, /alpha2-recertification-gate-not-certified/);
   assert.equal(
     await readFile(output).then(
       () => true,
@@ -484,32 +581,34 @@ test('Finder and Installer retain byte-identical historical RC.8 identity author
   assert.equal(finderAuthority, await readFile(catalogPath, 'utf8'));
 });
 
-test('Finder and Installer carry byte-identical current alpha.1 0/11 authority', async () => {
+test('Finder and Installer carry byte-identical current alpha.2 0/66 authority', async () => {
   const finderAuthority = await readFile(
     resolve(
-      'skills/dsh-theme-finder/references/community-alpha1-recertification.json'
+      'skills/dsh-theme-finder/references/community-alpha2-recertification.json'
     ),
     'utf8'
   );
   assert.equal(
     finderAuthority,
-    await readFile(alpha1RecertificationPath, 'utf8')
+    await readFile(alpha2RecertificationPath, 'utf8')
   );
   assert.equal(
     createHash('sha256').update(finderAuthority).digest('hex'),
-    '9ecc86474cba557c445ae21b8e479aa3f1b55cb8b2768faa6ed73952cc7b1552'
+    '02dbedab9dc248019bfe2654bd9c9e35002ada1c744256d172fe3abe664c2b80'
   );
 });
 
-test('local Installer exposes no promoted alpha.1 item receipt set', async () => {
+test('local Installer exposes no promoted alpha.2 item receipt set', async () => {
   const catalog = JSON.parse(await readFile(catalogPath, 'utf8'));
   const current = JSON.parse(
-    await readFile(alpha1RecertificationPath, 'utf8')
+    await readFile(alpha2RecertificationPath, 'utf8')
   );
   assert.equal(catalog.skins.length, 11);
   assert.equal(current.items.length, 11);
   assert.equal(current.gate.completedItems, 0);
   assert.equal(current.gate.runtimeReceiptSetSha256, null);
   assert.equal(current.gate.rollbackReceiptSetSha256, null);
-  assert.equal(current.historicalAuthority.mayAuthorizeAlpha1, false);
+  assert.equal(current.gate.completedTasks, 0);
+  assert.equal(current.historicalAuthority.alpha1MayAuthorizeAlpha2, false);
+  assert.equal(current.historicalAuthority.rc8MayAuthorizeAlpha2, false);
 });

@@ -1,34 +1,37 @@
 import { spawnSync } from 'node:child_process';
-import { createHash } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
 import {
   chmod,
   lstat,
   mkdir,
   readFile,
   realpath,
-  symlink,
   writeFile,
 } from 'node:fs/promises';
-import {
-  delimiter,
-  extname,
-  isAbsolute,
-  join,
-  resolve,
-  win32,
-} from 'node:path';
+import { extname, isAbsolute, join, win32 } from 'node:path';
 
-import { secureWindowsPrivatePath } from './windows-private-acl.mjs';
+import { materializeVerifiedPnpmRuntime } from './pnpm-runtime.mjs';
+import {
+  captureWindowsPrivatePathIdentity,
+  secureWindowsPrivatePath,
+  trustedWindowsSystemRoot,
+} from './windows-private-acl.mjs';
 
 const EXPECTED_PNPM_VERSION = '11.7.0';
-const MAX_EXECUTABLE_BYTES = 32 * 1024 * 1024;
+const CERTIFIED_NODES = new Set(['v22.19.0', 'v24.15.0']);
+const WINDOWS_PATHEXT = '.CMD;.EXE;.COM;.BAT';
+const PROOF_FLAG = '--dsh-plugin-installer-runtime-proof';
 
 function fail(message) {
   throw new Error(message);
 }
 
-function sha256(bytes) {
-  return createHash('sha256').update(bytes).digest('hex');
+const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
+
+function requireWindowsCommandSafePath(path, label) {
+  if (!/^[A-Za-z]:[\\/]/u.test(path) || /["%!^&|<>\r\n]/u.test(path)) {
+    fail(`${label} is unsafe for the fixed Windows command-wrapper boundary`);
+  }
 }
 
 export function requiresPnpmCommandShimShell(platform = process.platform) {
@@ -41,257 +44,214 @@ export function requiresPnpmCommandShimShell(platform = process.platform) {
 export function pnpmCommandShimShell(environment, platform = process.platform) {
   if (!requiresPnpmCommandShimShell(platform)) return false;
   const commandProcessor = environment?.COMSPEC;
-  if (
-    typeof commandProcessor !== 'string' ||
-    !win32.isAbsolute(commandProcessor) ||
-    !/^[A-Za-z]:[\\/]/u.test(commandProcessor) ||
-    win32.basename(commandProcessor).toLowerCase() !== 'cmd.exe'
-  ) {
+  if (typeof commandProcessor !== 'string' || !win32.isAbsolute(commandProcessor) ||
+      !/^[A-Za-z]:[\\/]/u.test(commandProcessor) ||
+      win32.basename(commandProcessor).toLowerCase() !== 'cmd.exe') {
     fail('Windows pnpm command shim requires one absolute command processor');
   }
   return commandProcessor;
 }
 
-function commandNames(platform, environment) {
-  if (platform !== 'win32') return ['pnpm'];
-  const raw = environment.PATHEXT;
-  if (typeof raw !== 'string' || raw.length === 0 || raw.includes('\0')) {
-    fail('pnpm binding requires one explicit Windows PATHEXT');
+export function validatePrivatePnpmPathext(value) {
+  if (typeof value !== 'string' || value.includes('\0')) {
+    fail('private pnpm PATHEXT is malformed');
   }
-  const extensions = raw
-    .split(';')
-    .map((value) => value.trim())
-    .filter(Boolean);
-  if (
-    extensions.length === 0 ||
-    extensions.some((value) => !/^\.[A-Za-z0-9]+$/u.test(value))
-  ) {
-    fail('pnpm binding requires a strict Windows PATHEXT');
+  const extensions = value.split(';').map((entry) => entry.toUpperCase());
+  if (JSON.stringify(extensions) !== JSON.stringify(WINDOWS_PATHEXT.split(';')) ||
+      extensions.indexOf('.CMD') === -1 ||
+      ['.EXE', '.COM', '.BAT'].some((entry) =>
+        extensions.indexOf('.CMD') > extensions.indexOf(entry))) {
+    fail('private pnpm PATHEXT must put .CMD before every executable fallback');
   }
-  return extensions.map((value) => `pnpm${value.toLowerCase()}`);
+  return value;
 }
 
-async function executableIdentity(path, platform) {
-  const canonical = await realpath(path);
-  if (!isAbsolute(canonical)) fail('resolved pnpm executable is not absolute');
-  const stat = await lstat(canonical);
-  if (
-    !stat.isFile() ||
-    stat.isSymbolicLink() ||
-    stat.size < 1 ||
-    stat.size > MAX_EXECUTABLE_BYTES ||
-    (platform !== 'win32' && (stat.mode & 0o111) === 0)
-  ) {
-    fail('resolved pnpm executable is not one bounded executable regular file');
-  }
-  if (
-    platform === 'win32' &&
-    !['.cmd', '.bat', '.exe', '.com'].includes(extname(canonical).toLowerCase())
-  ) {
-    fail('resolved Windows pnpm executable has an unsupported command type');
-  }
-  return {
-    path: canonical,
-    sha256: sha256(await readFile(canonical)),
-    size: stat.size,
-  };
-}
-
-export async function resolvePnpmExecutable(
-  environment,
-  {
-    commandCwd = process.cwd(),
-    platform = process.platform,
-  } = {}
-) {
-  requiresPnpmCommandShimShell(platform);
-  if (
-    environment === null ||
-    typeof environment !== 'object' ||
-    Array.isArray(environment) ||
-    typeof environment.PATH !== 'string' ||
-    environment.PATH.length === 0 ||
-    environment.PATH.includes('\0')
-  ) {
-    fail('pnpm binding requires one explicit PATH');
-  }
-  const directories = environment.PATH.split(delimiter);
-  if (directories.length === 0) fail('pnpm binding requires a non-empty PATH');
-  const names = commandNames(platform, environment);
-  if (!isAbsolute(commandCwd)) fail('pnpm binding command cwd must be absolute');
-  const reviewedDirectories = [];
-  let identity;
-  let unsafeTrailingPathEntriesRemoved = 0;
-  for (const directory of directories) {
-    if (directory.length === 0 || !isAbsolute(directory)) {
-      if (!identity) {
-        const relativeDirectory = resolve(commandCwd, directory || '.');
-        for (const name of names) {
-          try {
-            const stat = await lstat(join(relativeDirectory, name));
-            if (stat.isFile() || stat.isSymbolicLink()) {
-              fail('pnpm binding refuses a command resolved from an empty or relative PATH entry');
-            }
-          } catch (error) {
-            if (error?.code !== 'ENOENT') throw error;
-          }
-        }
-      }
-      unsafeTrailingPathEntriesRemoved += 1;
-      continue;
-    }
-    const canonicalDirectory = resolve(directory);
-    reviewedDirectories.push(canonicalDirectory);
-    if (!identity) {
-      for (const name of names) {
-        const candidate = join(canonicalDirectory, name);
-        try {
-          const stat = await lstat(candidate);
-          if (!stat.isFile() && !stat.isSymbolicLink()) continue;
-          identity = await executableIdentity(candidate, platform);
-          break;
-        } catch (error) {
-          if (error?.code !== 'ENOENT') throw error;
-        }
-      }
-    }
-  }
-  if (!identity) fail('pnpm executable is missing from the reviewed PATH');
-  return {
-    ...identity,
-    reviewedPath: reviewedDirectories.join(delimiter),
-    unsafeTrailingPathEntriesRemoved,
-  };
-}
-
-async function resolveWindowsCommandProcessor(environment, platform) {
-  if (!requiresPnpmCommandShimShell(platform)) return null;
-  const systemRoot = environment.SystemRoot ?? environment.WINDIR;
-  if (
-    typeof systemRoot !== 'string' ||
-    systemRoot.length === 0 ||
-    systemRoot.includes('\0') ||
-    !isAbsolute(systemRoot)
-  ) {
-    fail('pnpm binding requires one absolute Windows system root');
-  }
-  const commandProcessor = join(await realpath(systemRoot), 'System32', 'cmd.exe');
+async function resolveWindowsHost(platform, systemRootForTesting) {
+  if (platform !== 'win32') return null;
+  const systemRoot = await realpath(trustedWindowsSystemRoot({
+    platform,
+    systemRootForTesting,
+  }));
+  const commandProcessor = await realpath(win32.join(systemRoot, 'System32', 'cmd.exe'));
   const stat = await lstat(commandProcessor);
   if (!stat.isFile() || stat.isSymbolicLink()) {
-    fail('Windows command processor must be one real system file');
+    fail('Windows command processor is not one trusted regular file');
   }
-  return realpath(commandProcessor);
+  return Object.freeze({ commandProcessor, systemRoot });
 }
 
-function runExactTarget(identity, args, environment, platform, commandCwd) {
-  const result = spawnSync(identity.path, args, {
-    cwd: commandCwd,
-    encoding: 'utf8',
-    env: environment,
-    shell: pnpmCommandShimShell(environment, platform),
-    timeout: 30_000,
-    windowsHide: true,
+function discardCallerPath(pathValue, platform) {
+  if (typeof pathValue !== 'string' || pathValue.length === 0 ||
+      pathValue.length > 32_768 || pathValue.includes('\0')) {
+    fail('pnpm binding requires one explicit PATH');
+  }
+  const entries = pathValue.split(platform === 'win32' ? ';' : ':');
+  return Object.freeze({
+    discardedEntries: entries.length,
+    policy: 'discarded-without-filesystem-resolution',
   });
-  if (
-    result.error ||
-    result.status !== 0 ||
-    (result.stderr ?? '').trim() !== '' ||
-    (result.stdout ?? '').trim() !== EXPECTED_PNPM_VERSION
-  ) {
-    fail('the absolute PATH-resolved pnpm executable is not exactly 11.7.0');
+}
+
+async function protectCreatedPath(
+  path,
+  kind,
+  platform,
+  systemRootForTesting,
+  powerShellTempForTesting
+) {
+  if (platform === 'win32') {
+    const expectedIdentity = await captureWindowsPrivatePathIdentity(path, kind);
+    await secureWindowsPrivatePath(path, kind, 'configure', {
+      expectedIdentity,
+      powerShellTempForTesting,
+      systemRootForTesting,
+    });
+  } else {
+    await chmod(path, kind === 'directory' ? 0o700 : 0o600);
   }
 }
 
-function launcherSource(identity, commandProcessor) {
+function wrapperRunnerSource(runtime, nodePath, cliSha256) {
   return `import { spawnSync } from 'node:child_process';\n`
     + `import { createHash } from 'node:crypto';\n`
     + `import { lstatSync, readFileSync, realpathSync } from 'node:fs';\n`
-    + `const expected = Object.freeze(${JSON.stringify(identity)});\n`
+    + `const expected = Object.freeze(${JSON.stringify({
+      cli: runtime.cli,
+      cliSha256,
+      closureSha512: runtime.closureSha512,
+      nodePath,
+      version: runtime.version,
+    })});\n`
     + `function stop(message) { process.stderr.write(message + '\\n'); process.exit(126); }\n`
-    + `let stat;\n`
     + `try {\n`
-    + `  if (realpathSync(expected.path) !== expected.path) stop('dsh-plugin-installer: bound pnpm path changed');\n`
-    + `  stat = lstatSync(expected.path);\n`
-    + `  if (!stat.isFile() || stat.isSymbolicLink() || stat.size !== expected.size) stop('dsh-plugin-installer: bound pnpm identity changed');\n`
-    + `  const digest = createHash('sha256').update(readFileSync(expected.path)).digest('hex');\n`
-    + `  if (digest !== expected.sha256) stop('dsh-plugin-installer: bound pnpm digest changed');\n`
-    + `} catch { stop('dsh-plugin-installer: bound pnpm verification failed'); }\n`
-    + `const result = spawnSync(expected.path, process.argv.slice(2), { env: process.env, shell: ${JSON.stringify(commandProcessor ?? false)}, stdio: 'inherit', windowsHide: true });\n`
-    + `if (result.error) stop('dsh-plugin-installer: bound pnpm launch failed');\n`
-    + `process.exit(result.status ?? 1);\n`;
+    + `  if (realpathSync(process.execPath) !== expected.nodePath || realpathSync(expected.cli) !== expected.cli) stop('dsh-plugin-installer: private runtime identity changed');\n`
+    + `  const stat = lstatSync(expected.cli);\n`
+    + `  if (!stat.isFile() || stat.isSymbolicLink() || createHash('sha256').update(readFileSync(expected.cli)).digest('hex') !== expected.cliSha256) stop('dsh-plugin-installer: private pnpm CLI changed');\n`
+    + `} catch { stop('dsh-plugin-installer: private pnpm verification failed'); }\n`
+    + `const args = process.argv.slice(2);\n`
+    + `const proof = args.length === 2 && args[0] === ${JSON.stringify(PROOF_FLAG)} && /^[a-f0-9]{64}$/u.test(args[1]);\n`
+    + `const child = spawnSync(expected.nodePath, [expected.cli, ...(proof ? ['--version'] : args)], { env: process.env, shell: false, encoding: proof ? 'utf8' : undefined, stdio: proof ? 'pipe' : 'inherit', windowsHide: true });\n`
+    + `if (child.error || child.status !== 0) stop('dsh-plugin-installer: private pnpm launch failed');\n`
+    + `if (proof) {\n`
+    + `  if ((child.stderr ?? '').trim() !== '' || (child.stdout ?? '').trim() !== expected.version) stop('dsh-plugin-installer: private pnpm version proof failed');\n`
+    + `  process.stdout.write(JSON.stringify({ schemaVersion: 1, challenge: args[1], version: expected.version, closureSha512: expected.closureSha512 }) + '\\n');\n`
+    + `  process.exit(0);\n`
+    + `}\n`
+    + `process.exit(child.status ?? 1);\n`;
 }
 
-async function protectCreatedPath(path, kind, platform) {
-  if (platform === 'win32') {
-    await secureWindowsPrivatePath(path, kind, 'configure');
-  } else if (kind === 'directory') {
-    await chmod(path, 0o700);
-  } else {
-    await chmod(path, 0o600);
+function parseProof(result, challenge, runtime) {
+  if (result.error || result.status !== 0 || (result.stderr ?? '').trim() !== '') {
+    fail('private pnpm wrapper proof did not execute cleanly');
   }
+  let proof;
+  try {
+    proof = JSON.parse((result.stdout ?? '').trim());
+  } catch (error) {
+    throw new Error('private pnpm wrapper proof is not valid JSON', { cause: error });
+  }
+  if (proof === null || typeof proof !== 'object' || Array.isArray(proof) ||
+      JSON.stringify(Object.keys(proof).sort()) !==
+        JSON.stringify(['challenge', 'closureSha512', 'schemaVersion', 'version']) ||
+      proof.schemaVersion !== 1 || proof.challenge !== challenge ||
+      proof.version !== EXPECTED_PNPM_VERSION ||
+      proof.closureSha512 !== runtime.closureSha512) {
+    fail('private pnpm wrapper returned the wrong launch proof');
+  }
+  return Object.freeze(proof);
 }
 
-export async function createPrivatePnpmBinding(
-  environment,
-  runtimeRoot,
-  {
-    commandCwd = process.cwd(),
-    platform = process.platform,
-  } = {}
-) {
-  if (!isAbsolute(runtimeRoot)) fail('pnpm binding runtime root must be absolute');
-  const resolved = await resolvePnpmExecutable(environment, { commandCwd, platform });
-  const identity = {
-    path: resolved.path,
-    sha256: resolved.sha256,
-    size: resolved.size,
-  };
-  const commandProcessor = await resolveWindowsCommandProcessor(environment, platform);
-  const reviewedEnvironment = Object.fromEntries(
-    Object.entries(environment).filter(([key]) =>
-      platform !== 'win32' ||
-      !['comspec', 'nodefaultcurrentdirectoryinexepath', 'path', 'pathext']
-        .includes(key.toLowerCase()))
-  );
-  reviewedEnvironment.PATH = resolved.reviewedPath;
+export async function createPrivatePnpmBinding(environment, runtimeRoot, {
+  commandCwd = process.cwd(),
+  platform = process.platform,
+  powerShellTempForTesting,
+  systemRootForTesting,
+} = {}) {
+  requiresPnpmCommandShimShell(platform);
+  if (process.platform === 'win32' && platform !== 'win32') {
+    fail('pnpm binding platform cannot be overridden on a Windows host');
+  }
+  if (!CERTIFIED_NODES.has(process.version) || !isAbsolute(runtimeRoot) ||
+      !isAbsolute(commandCwd) || environment === null ||
+      typeof environment !== 'object' || Array.isArray(environment)) {
+    fail('pnpm binding requires the certified Node and explicit absolute roots');
+  }
+  const nodePath = await realpath(process.execPath);
+  const nodeStat = await lstat(nodePath);
+  if (!nodeStat.isFile() || nodeStat.isSymbolicLink() ||
+      !['', '.exe'].includes(extname(nodePath).toLowerCase())) {
+    fail('certified Node executable is not one real regular file');
+  }
+  const windowsHost = await resolveWindowsHost(platform, systemRootForTesting);
   if (platform === 'win32') {
-    reviewedEnvironment.PATHEXT = environment.PATHEXT;
-    reviewedEnvironment.COMSPEC = commandProcessor;
+    requireWindowsCommandSafePath(nodePath, 'certified Node path');
+    requireWindowsCommandSafePath(runtimeRoot, 'private pnpm runtime root');
+    requireWindowsCommandSafePath(commandCwd, 'private pnpm command cwd');
+  }
+  const discardedPath = discardCallerPath(environment.PATH, platform);
+  const reviewedEnvironment = Object.fromEntries(Object.entries(environment).filter(([key]) =>
+    platform !== 'win32' || ![
+      'comspec', 'nodefaultcurrentdirectoryinexepath', 'path', 'pathext',
+      'systemroot', 'windir',
+    ].includes(key.toLowerCase())));
+  if (platform === 'win32') {
+    reviewedEnvironment.COMSPEC = windowsHost.commandProcessor;
+    reviewedEnvironment.SystemRoot = windowsHost.systemRoot;
+    reviewedEnvironment.WINDIR = windowsHost.systemRoot;
+    reviewedEnvironment.PATHEXT = validatePrivatePnpmPathext(WINDOWS_PATHEXT);
     reviewedEnvironment.NoDefaultCurrentDirectoryInExePath = '1';
   }
-  runExactTarget(identity, ['--version'], reviewedEnvironment, platform, commandCwd);
 
   const bindingRoot = join(runtimeRoot, 'pnpm-binding');
   await mkdir(bindingRoot, { mode: 0o700 });
-  await protectCreatedPath(bindingRoot, 'directory', platform);
-
-  const launcher = join(bindingRoot, 'pnpm-launcher.mjs');
-  const launcherBytes = Buffer.from(launcherSource(identity, commandProcessor), 'utf8');
-  await writeFile(launcher, launcherBytes, { flag: 'wx', mode: 0o600 });
-  await protectCreatedPath(launcher, 'file', platform);
-
+  await protectCreatedPath(
+    bindingRoot,
+    'directory',
+    platform,
+    systemRootForTesting,
+    powerShellTempForTesting
+  );
+  const runtime = await materializeVerifiedPnpmRuntime(join(bindingRoot, 'runtime'), {
+    platform,
+    powerShellTempForTesting,
+    systemRootForTesting,
+  });
+  const cliSha256 = sha256(await readFile(runtime.cli));
+  const runner = join(bindingRoot, 'pnpm-wrapper.mjs');
+  const runnerBytes = Buffer.from(wrapperRunnerSource(runtime, nodePath, cliSha256), 'utf8');
+  await writeFile(runner, runnerBytes, { flag: 'wx', mode: 0o600 });
+  await protectCreatedPath(
+    runner,
+    'file',
+    platform,
+    systemRootForTesting,
+    powerShellTempForTesting
+  );
   const wrapper = join(bindingRoot, platform === 'win32' ? 'pnpm.cmd' : 'pnpm');
-  const wrapperText = platform === 'win32'
-    ? '@echo off\r\n"%DSH_PLUGIN_PNPM_NODE%" "%DSH_PLUGIN_PNPM_LAUNCHER%" %*\r\n'
-    : '#!/bin/sh\nexec "$DSH_PLUGIN_PNPM_NODE" "$DSH_PLUGIN_PNPM_LAUNCHER" "$@"\n';
-  await writeFile(wrapper, wrapperText, { flag: 'wx', mode: 0o700 });
-  await protectCreatedPath(wrapper, 'file', platform);
+  const wrapperBytes = Buffer.from(platform === 'win32'
+    ? '@echo off\r\n"%DSH_PLUGIN_PNPM_NODE%" "%DSH_PLUGIN_PNPM_WRAPPER%" %*\r\n'
+    : '#!/bin/sh\nexec "$DSH_PLUGIN_PNPM_NODE" "$DSH_PLUGIN_PNPM_WRAPPER" "$@"\n');
+  await writeFile(wrapper, wrapperBytes, { flag: 'wx', mode: 0o700 });
+  await protectCreatedPath(
+    wrapper,
+    'file',
+    platform,
+    systemRootForTesting,
+    powerShellTempForTesting
+  );
   if (platform !== 'win32') await chmod(wrapper, 0o700);
-
-  if (platform !== 'win32') {
-    const nodeLink = join(bindingRoot, 'node');
-    await symlink(await realpath(process.execPath), nodeLink, 'file');
-  }
 
   const boundEnvironment = Object.freeze({
     ...reviewedEnvironment,
-    PATH: `${bindingRoot}${delimiter}${resolved.reviewedPath}`,
-    DSH_PLUGIN_PNPM_LAUNCHER: launcher,
-    DSH_PLUGIN_PNPM_NODE: process.execPath,
-    DSH_PLUGIN_PNPM_TARGET_SHA256: identity.sha256,
-    DSH_PLUGIN_PNPM_LAUNCHER_SHA256: sha256(launcherBytes),
+    PATH: bindingRoot,
+    DSH_PLUGIN_PNPM_CLI: runtime.cli,
+    DSH_PLUGIN_PNPM_NODE: nodePath,
+    DSH_PLUGIN_PNPM_WRAPPER: runner,
+    DSH_PLUGIN_PNPM_ARTIFACT_SHA256: runtime.artifactSha256,
+    DSH_PLUGIN_PNPM_CLOSURE_SHA512: runtime.closureSha512,
   });
-  const result = spawnSync('pnpm', ['--version'], {
+  const challenge = randomBytes(32).toString('hex');
+  const proofResult = spawnSync('pnpm', [PROOF_FLAG, challenge], {
     cwd: commandCwd,
     encoding: 'utf8',
     env: boundEnvironment,
@@ -299,28 +259,39 @@ export async function createPrivatePnpmBinding(
     timeout: 30_000,
     windowsHide: true,
   });
-  if (
-    result.error ||
-    result.status !== 0 ||
-    (result.stderr ?? '').trim() !== '' ||
-    (result.stdout ?? '').trim() !== EXPECTED_PNPM_VERSION
-  ) {
-    fail('private pnpm PATH binding did not resolve exactly pnpm 11.7.0');
+  parseProof(proofResult, challenge, runtime);
+  const direct = spawnSync(nodePath, [runtime.cli, '--version'], {
+    cwd: commandCwd,
+    encoding: 'utf8',
+    env: boundEnvironment,
+    shell: false,
+    timeout: 30_000,
+    windowsHide: true,
+  });
+  if (direct.error || direct.status !== 0 || (direct.stderr ?? '').trim() !== '' ||
+      (direct.stdout ?? '').trim() !== EXPECTED_PNPM_VERSION) {
+    fail('fixed Node could not execute the private pnpm.cjs runtime');
   }
-  return {
+  return Object.freeze({
     environment: boundEnvironment,
     receipt: Object.freeze({
-      schemaVersion: 1,
+      schemaVersion: 3,
       packageManager: 'pnpm',
       version: EXPECTED_PNPM_VERSION,
-      targetSha256: identity.sha256,
-      targetBytes: identity.size,
-      launcherSha256: sha256(launcherBytes),
+      artifactSha256: runtime.artifactSha256,
+      artifactSha512: runtime.artifactSha512,
+      authoritySha256: runtime.authoritySha256,
+      closureSha512: runtime.closureSha512,
+      closureEntries: runtime.entryCount,
+      nodeVersion: process.version.slice(1),
       privatePathPrecedence: true,
-      unsafeTrailingPathEntriesRemoved: resolved.unsafeTrailingPathEntriesRemoved,
-      targetPathOutput: 'forbidden',
+      callerPathPolicy: discardedPath.policy,
+      discardedCallerPathEntries: discardedPath.discardedEntries,
+      wrapperSha256: sha256(wrapperBytes),
+      wrapperRunnerSha256: sha256(runnerBytes),
+      runtimePathOutput: 'forbidden',
       upstreamSpawnContract:
-        'alpha.1-apps-cli-plugin-spawnSync-pnpm-path-resolution',
+        'alpha1-alpha2-apps-cli-plugin-spawnSync-pnpm-private-wrapper',
     }),
-  };
+  });
 }

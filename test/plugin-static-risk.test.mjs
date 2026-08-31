@@ -90,7 +90,7 @@ test('static-risk inventory reads exact Git objects without executing or quoting
   assert.equal(receipt.candidateExecuted, false);
   await assert.rejects(() => access(join(fixture.source, 'candidate-executed-marker')));
   assert.equal(receipt.declared.lifecycle.prepare, true);
-  assert.deepEqual(receipt.classification.alpha1RemovedPackages, [
+  assert.deepEqual(receipt.classification.baselineAbsentPackages, [
     '@deepseek-ai/dsh-client-runtime',
   ]);
   assert.equal(
@@ -143,7 +143,7 @@ test('static-risk validator rejects policy, execution, and derived-classificatio
     (value) => { value.scan.policySha256 = 'f'.repeat(64); },
     (value) => { value.classification.requiresElevatedStaticReview = false; },
     (value) => { value.scan.skippedBinaryCount = 0; },
-    (value) => { value.classification.alpha1RemovedPackages = []; },
+    (value) => { value.classification.baselineAbsentPackages = []; },
     (value) => { value.privacy.capturesLifecycleCommands = true; },
   ]) {
     const changed = structuredClone(receipt);

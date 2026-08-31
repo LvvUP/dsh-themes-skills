@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "purpose": "dsh-alpha1-hosted-plugin-adaptation",
+  "purpose": "dsh-alpha2-hosted-plugin-adaptation",
   "catalogId": 3006,
   "slug": "dsh-better-model-selector",
   "baseline": {
-    "tag": "dsh-v0.1.2-alpha.1",
-    "commit": "cd5ef8148158c3a752a658978873241fdf8e2bbc",
-    "tree": "a712eec535b48badc4fefb4df5176a7002e4280b"
+    "tag": "dsh-v0.1.2-alpha.2",
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
   },
   "source": {
     "repository": "https://github.com/Khellendros97/dsh-better-model-selector.git",
@@ -20,9 +20,9 @@
   },
   "output": {
     "packageName": "@dsh-themes/dsh-better-model-selector",
-    "packageVersion": "1.0.0-dsh.alpha1.1",
-    "description": "Authoritative model and reasoning selector for DeepSeek Harness 0.1.2-alpha.1",
-    "assetName": "dsh-better-model-selector-1.0.0-dsh.alpha1.1.tgz",
+    "packageVersion": "1.0.0-dsh.alpha2.1",
+    "description": "Authoritative model and reasoning selector for DeepSeek Harness 0.1.2-alpha.2",
+    "assetName": "dsh-better-model-selector-1.0.0-dsh.alpha2.1.tgz",
     "hostEntry": "lib/index.js",
     "clientEntry": "lib/client.js",
     "bundlePatch": "cordis.patch.yml",
@@ -36,13 +36,13 @@
     ],
     "peerDependencies": {
       "@deepseek-ai/cordis": "4.0.1",
-      "@deepseek-ai/dsh-api-session-controller": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-conversation": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-model-selection": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-client-ui-settings": "0.1.2-alpha.1",
-      "@deepseek-ai/dsh-settings": "0.1.2-alpha.1",
+      "@deepseek-ai/dsh-api-session-controller": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-conversation": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-model-selection": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-settings": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-settings": "0.1.2-alpha.2",
       "@deepseek-ai/schemastery": "3.18.1",
       "react": "18.3.1"
     },
@@ -54,7 +54,7 @@
           "sourcePath": "lib/index.js",
           "sourceSha256": "ec39003a0f4e4407fe814594c146c97b17887648b47f92415cb757a1b84838a4",
           "replacementPath": "assets/hosted-adaptations/3006/lib/index.js",
-          "replacementSha256": "798256a70af436ad25f042116f7b8f3ae436ecff3c85b38443cc916749a1faac"
+          "replacementSha256": "e8c9905f0faf31b17f858463d34fa2652a1f8e177577657b478441a63cca095f"
         }
       },
       {
@@ -64,7 +64,7 @@
           "sourcePath": "lib/client.js",
           "sourceSha256": "e5ccc663e6f7c2b6049db7adb0d6e8e371988b9e334407d3e3b3bfed4d13a3b4",
           "replacementPath": "assets/hosted-adaptations/3006/lib/client.js",
-          "replacementSha256": "69fb4e3aee974ac0a27b87df19a888143d9662d303495508478aefeea3084af8"
+          "replacementSha256": "79030139f9e373d489dc2b7703b89783609d4fe84a6575099d1c8b445c79e98f"
         }
       },
       {
@@ -138,7 +138,7 @@
   },
   "runtimeProbe": {
     "contractPath": "references/plugin-runtime-probes/3006.json",
-    "contractSha256": "541eb1ad3ada994fc1d4e4bcd398836320f7355ebfc9fbef22866260b44a2c9d",
+    "contractSha256": "e7c5054b6d39462e6515e3fae7947dbe89e114c4070af56fe74048e6db761621",
     "requiredAssertions": [
       "package.exact-entry",
       "boot.ready-selector-once",
