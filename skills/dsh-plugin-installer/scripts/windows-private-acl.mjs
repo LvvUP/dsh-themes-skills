@@ -152,6 +152,7 @@ public static class DshPrivatePathNative
     }
 
     private const uint ReadControl = 0x00020000;
+    private const uint FileReadDataOrListDirectory = 0x00000001;
     private const uint FileReadAttributes = 0x00000080;
     private const uint WriteDac = 0x00040000;
     private const uint WriteOwner = 0x00080000;
@@ -345,7 +346,10 @@ public static class DshPrivatePathNative
         bool openWriter = action == "configure-open-writer";
         if (directory && openWriter)
             throw new InvalidOperationException("directory ACL configuration cannot admit a writer");
-        uint access = ReadControl | FileReadAttributes;
+        // Attribute-only access does not participate in Windows share checks.
+        // Reading file data (or listing a directory) makes FILE_SHARE_WRITE
+        // exclusion prove no writer (or, for files, writable mapping) was open.
+        uint access = ReadControl | FileReadDataOrListDirectory | FileReadAttributes;
         if (configure) access |= WriteDac | WriteOwner;
         uint shareMode = FileShareRead | (openWriter ? FileShareWrite : 0);
         using (SafeFileHandle handle = CreateFileW(

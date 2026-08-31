@@ -2677,6 +2677,14 @@ test('Windows recovery ACL runner binds a native handle identity and validates S
   assert.equal(options.env.TMP, WINDOWS_POWERSHELL_TEMP_FOR_TESTING);
   assert.equal(options.env.SECRET_TOKEN, undefined);
   assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /CreateFileW/u);
+  assert.match(
+    WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+    /private const uint FileReadDataOrListDirectory = 0x00000001;/u
+  );
+  assert.match(
+    WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+    /uint access = ReadControl \| FileReadDataOrListDirectory \| FileReadAttributes;/u
+  );
   assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /GetFileInformationByHandle/u);
   assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /GetVolumeInformationByHandleW/u);
   assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /"NTFS"/u);
@@ -3091,8 +3099,9 @@ $stream = [IO.File]::Open(
   [IO.FileMode]::Open,
   [IO.FileAccess]::ReadWrite,
   [IO.FileShare]::Read)
+$mapName = 'Local\DshPluginAclTest-' + [Guid]::NewGuid().ToString('N')
 $mapping = [IO.MemoryMappedFiles.MemoryMappedFile]::CreateFromFile(
-  $stream, $null, 0,
+  $stream, $mapName, 0,
   [IO.MemoryMappedFiles.MemoryMappedFileAccess]::ReadWrite,
   [IO.HandleInheritability]::None, $false)
 $view = $mapping.CreateViewAccessor()
@@ -4180,6 +4189,19 @@ test('snapshot v3 restores bytes, existence, and POSIX modes without leaking pri
   const retainedSnapshotCredentialPath = join(snapshot, 'home', '.credentials.retained.yaml');
   await rename(snapshotCredentialPath, retainedSnapshotCredentialPath);
   await writeFile(snapshotCredentialPath, 'provider:\n  token: replaced-snapshot\n', { mode: 0o600 });
+  if (process.platform === 'win32') {
+    await assert.rejects(
+      () => loadVerifiedProfileSnapshot(snapshot),
+      /failed to enforce current-user SID-only Windows ACL batch: Windows private-path ACL proof is malformed or weaker than current-user SID-only/u
+    );
+    const replacementIdentity = await captureWindowsPrivatePathIdentity(
+      snapshotCredentialPath,
+      'file'
+    );
+    await secureWindowsPrivatePath(snapshotCredentialPath, 'file', 'configure', {
+      expectedIdentity: replacementIdentity,
+    });
+  }
   assert.equal(cachedCredentials.toString('utf8'), baselineCredentials);
   await assert.rejects(
     () => loadVerifiedProfileSnapshot(snapshot),
