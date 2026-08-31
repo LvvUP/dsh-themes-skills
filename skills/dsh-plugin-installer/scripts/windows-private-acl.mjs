@@ -18,9 +18,45 @@ const FILE_INDEX_ENV = 'DSH_PLUGIN_PRIVATE_FILE_INDEX';
 const MAX_BATCH_REQUESTS = 32;
 const MAX_BATCH_ENV_BYTES = 24 * 1024;
 const MAX_WINDOWS_LOCAL_PATH_CHARS = 32_760;
+const BATCH_REQUEST_KEYS = Object.freeze([
+  'path',
+  'kind',
+  'action',
+  'expectedIdentity',
+]);
+const EXPECTED_IDENTITY_KEYS = Object.freeze(['volumeSerial', 'fileIndex']);
+const ACL_PROOF_KEYS = Object.freeze([
+  'schemaVersion',
+  'kind',
+  'volumeSerial',
+  'fileIndex',
+  'fileSystem',
+  'currentSid',
+  'ownerSid',
+  'protected',
+  'ruleCount',
+  'ruleSid',
+  'inherited',
+  'allow',
+  'fullControl',
+  'inheritanceFlags',
+  'propagationFlags',
+  'shareMode',
+]);
 const HOST_WINDOWS_ROOTS = process.platform === 'win32'
   ? captureHostWindowsRoots()
   : Object.freeze([]);
+
+function hasExactOwnKeys(value, expectedKeys) {
+  if (value === null || typeof value !== 'object' || Array.isArray(value)) {
+    return false;
+  }
+  const actualKeys = Reflect.ownKeys(value);
+  return (
+    actualKeys.length === expectedKeys.length &&
+    expectedKeys.every((key) => Object.hasOwn(value, key))
+  );
+}
 
 function captureHostWindowsRoots() {
   try {
@@ -386,7 +422,45 @@ $isBatch = -not [String]::IsNullOrWhiteSpace($batch)
 if ($isBatch) {
   try {
     $requestJson = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($batch))
-    $requests = @($requestJson | ConvertFrom-Json)
+    # -InputObject avoids Windows PowerShell 5.1 preserving the JSON array as one
+    # pipeline object; the envelope keeps one-request and many-request shapes equal.
+    $batchEnvelope = ConvertFrom-Json -InputObject $requestJson
+    if ($null -eq $batchEnvelope -or
+        $batchEnvelope -isnot [System.Management.Automation.PSCustomObject]) {
+      throw 'invalid private path batch envelope'
+    }
+    $batchProperties = @($batchEnvelope.PSObject.Properties.Name)
+    $schemaVersion = $batchEnvelope.PSObject.Properties['schemaVersion'].Value
+    if ($schemaVersion -isnot [System.Int32] -or
+        $schemaVersion -ne 1 -or
+        $batchProperties.Count -ne 2 -or
+        $batchProperties -cnotcontains 'schemaVersion' -or
+        $batchProperties -cnotcontains 'requests' -or
+        $batchEnvelope.requests -isnot [System.Array]) {
+      throw 'invalid private path batch envelope'
+    }
+    $requests = [System.Collections.Generic.List[object]]::new()
+    foreach ($candidateRequest in $batchEnvelope.requests) {
+      if ($null -eq $candidateRequest -or
+          $candidateRequest -isnot [System.Management.Automation.PSCustomObject]) {
+        throw 'invalid private path batch request'
+      }
+      $requestProperties = @($candidateRequest.PSObject.Properties.Name)
+      if ($requestProperties.Count -ne 5 -or
+          $requestProperties -cnotcontains 'path' -or
+          $requestProperties -cnotcontains 'kind' -or
+          $requestProperties -cnotcontains 'action' -or
+          $requestProperties -cnotcontains 'volumeSerial' -or
+          $requestProperties -cnotcontains 'fileIndex' -or
+          $candidateRequest.path -isnot [System.String] -or
+          $candidateRequest.kind -isnot [System.String] -or
+          $candidateRequest.action -isnot [System.String] -or
+          $candidateRequest.volumeSerial -isnot [System.String] -or
+          $candidateRequest.fileIndex -isnot [System.String]) {
+        throw 'invalid private path batch request'
+      }
+      [void]$requests.Add($candidateRequest)
+    }
   } catch {
     throw 'invalid private path batch'
   }
@@ -442,7 +516,10 @@ foreach ($request in $requests) {
 }
 
 if ($isBatch) {
-  [Console]::WriteLine((ConvertTo-Json -InputObject ($proofs.ToArray()) -Compress))
+  [Console]::WriteLine((ConvertTo-Json -InputObject ([PSCustomObject]@{
+    schemaVersion = 1
+    proofs = $proofs.ToArray()
+  }) -Depth 4 -Compress))
 } else {
   [Console]::WriteLine((ConvertTo-Json -InputObject ($proofs[0]) -Compress))
 }
@@ -452,8 +529,7 @@ function validateProof(proof, kind, action, identity) {
   const inheritanceFlags = kind === 'directory' ? 3 : 0;
   const shareMode = action === 'configure-open-writer' ? 3 : 1;
   if (
-    proof === null ||
-    typeof proof !== 'object' ||
+    !hasExactOwnKeys(proof, ACL_PROOF_KEYS) ||
     proof.schemaVersion !== 3 ||
     proof.kind !== kind ||
     proof.volumeSerial !== identity.volumeSerial ||
@@ -473,7 +549,24 @@ function validateProof(proof, kind, action, identity) {
   ) {
     throw new Error('Windows private-path ACL proof is malformed or weaker than current-user SID-only');
   }
-  return Object.freeze({ ...proof });
+  return Object.freeze({
+    schemaVersion: proof.schemaVersion,
+    kind: proof.kind,
+    volumeSerial: proof.volumeSerial,
+    fileIndex: proof.fileIndex,
+    fileSystem: proof.fileSystem,
+    currentSid: proof.currentSid,
+    ownerSid: proof.ownerSid,
+    protected: proof.protected,
+    ruleCount: proof.ruleCount,
+    ruleSid: proof.ruleSid,
+    inherited: proof.inherited,
+    allow: proof.allow,
+    fullControl: proof.fullControl,
+    inheritanceFlags: proof.inheritanceFlags,
+    propagationFlags: proof.propagationFlags,
+    shareMode: proof.shareMode,
+  });
 }
 
 function normalizeLocalWindowsPath(path, label) {
@@ -557,10 +650,11 @@ export function windowsPrivateIdentityFromStat(stat, kind) {
 }
 
 function normalizeExpectedIdentity(identity) {
-  if (identity === null || typeof identity !== 'object' || Array.isArray(identity) ||
+  if (!hasExactOwnKeys(identity, EXPECTED_IDENTITY_KEYS) ||
+      typeof identity.volumeSerial !== 'string' ||
+      typeof identity.fileIndex !== 'string' ||
       !/^(?:0|[1-9][0-9]*)$/u.test(identity.volumeSerial ?? '') ||
-      !/^(?:0|[1-9][0-9]*)$/u.test(identity.fileIndex ?? '') ||
-      Object.keys(identity).some((key) => !['fileIndex', 'volumeSerial'].includes(key))) {
+      !/^(?:0|[1-9][0-9]*)$/u.test(identity.fileIndex ?? '')) {
     throw new Error('Windows private-path ACL expected identity is malformed');
   }
   return Object.freeze({
@@ -702,7 +796,7 @@ export async function secureWindowsPrivatePaths(
     throw new Error('Windows private-path ACL batch is malformed');
   }
   const normalized = requests.map((request) => {
-    if (request === null || typeof request !== 'object' || Array.isArray(request) ||
+    if (!hasExactOwnKeys(request, BATCH_REQUEST_KEYS) ||
         !['directory', 'file'].includes(request.kind) ||
         !['configure', 'configure-open-writer', 'verify'].includes(request.action) ||
         (request.kind === 'directory' && request.action === 'configure-open-writer') ||
@@ -736,7 +830,10 @@ export async function secureWindowsPrivatePaths(
     volumeSerial: identities[index].volumeSerial,
     fileIndex: identities[index].fileIndex,
   }));
-  const encoded = Buffer.from(JSON.stringify(bound), 'utf8').toString('base64');
+  const encoded = Buffer.from(
+    JSON.stringify({ schemaVersion: 1, requests: bound }),
+    'utf8'
+  ).toString('base64');
   if (Buffer.byteLength(encoded, 'ascii') > MAX_BATCH_ENV_BYTES) {
     throw new Error('Windows private-path ACL batch is too large');
   }
@@ -779,10 +876,15 @@ export async function secureWindowsPrivatePaths(
       }
     );
     const parsed = JSON.parse(result.stdout.trim());
-    if (!Array.isArray(parsed) || parsed.length !== normalized.length) {
+    if (
+      !hasExactOwnKeys(parsed, ['schemaVersion', 'proofs']) ||
+      parsed.schemaVersion !== 1 ||
+      !Array.isArray(parsed.proofs) ||
+      parsed.proofs.length !== normalized.length
+    ) {
       throw new Error('Windows private-path ACL batch proof count is invalid');
     }
-    const proofs = Object.freeze(parsed.map((proof, index) =>
+    const proofs = Object.freeze(parsed.proofs.map((proof, index) =>
       validateProof(
         proof,
         normalized[index].kind,

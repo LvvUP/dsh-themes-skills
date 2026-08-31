@@ -3153,6 +3153,141 @@ $stream.Dispose()
   assert.equal(proof.shareMode, 1);
 });
 
+test('Windows PowerShell 5.1 receives closed batch envelopes and CI serializes real ACL proofs', async () => {
+  assert.match(
+    WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+    /ConvertFrom-Json -InputObject \$requestJson/u
+  );
+  assert.doesNotMatch(
+    WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+    /\$requestJson\s*\|\s*ConvertFrom-Json/u
+  );
+  assert.match(
+    WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+    /foreach \(\$candidateRequest in \$batchEnvelope\.requests\)/u
+  );
+  assert.match(
+    WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+    /\$schemaVersion -isnot \[System\.Int32\]/u
+  );
+  assert.match(
+    WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+    /\$batchEnvelope\.requests -isnot \[System\.Array\]/u
+  );
+  assert.match(
+    WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+    /\$requestProperties -cnotcontains 'path'/u
+  );
+  assert.match(
+    WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+    /schemaVersion = 1[\s\S]*proofs = \$proofs\.ToArray\(\)/u
+  );
+
+  const [packageBytes, workflow] = await Promise.all([
+    readFile(new URL('../package.json', import.meta.url), 'utf8'),
+    readFile(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8'),
+  ]);
+  const packageJson = JSON.parse(packageBytes);
+  assert.equal(packageJson.scripts.test, 'node --test');
+  assert.match(
+    workflow,
+    /if: runner\.os == 'Windows'[\s\S]{0,160}run: npm test -- --test-concurrency=1/u
+  );
+  assert.match(
+    workflow,
+    /if: runner\.os != 'Windows'[\s\S]{0,160}run: npm test/u
+  );
+  assert.doesNotMatch(workflow, /--test-name-pattern|--test-only/u);
+});
+
+test('Windows PowerShell 5.1 rejects malformed batch envelopes before any path operation', {
+  skip: process.platform !== 'win32',
+}, () => {
+  const systemRoot = trustedWindowsSystemRoot();
+  const powerShellTemp = process.env.RUNNER_TEMP ?? process.env.TEMP;
+  assert.equal(typeof powerShellTemp, 'string');
+  const powershell = join(
+    systemRoot,
+    'System32',
+    'WindowsPowerShell',
+    'v1.0',
+    'powershell.exe'
+  );
+  const request = {
+    path: 'C:\\this-path-must-never-be-opened',
+    kind: 'directory',
+    action: 'verify',
+    volumeSerial: '1',
+    fileIndex: '1',
+  };
+  const malformed = [
+    null,
+    { schemaVersion: '1', requests: [] },
+    { schemaVersion: 1, requests: request },
+    { schemaVersion: 1, requests: 'not-an-array' },
+    { schemaVersion: 1, requests: [null] },
+    { schemaVersion: 1, requests: [{ ...request, extra: true }] },
+    { schemaVersion: 1, requests: [{ ...request, kind: 7 }] },
+    { schemaVersion: 1, requests: [request], extra: true },
+    { SchemaVersion: 1, requests: [request] },
+  ];
+  for (const value of malformed) {
+    const result = spawnSync(
+      powershell,
+      [
+        '-NoLogo',
+        '-NoProfile',
+        '-NonInteractive',
+        '-ExecutionPolicy',
+        'Bypass',
+        '-Command',
+        WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+      ],
+      {
+        encoding: 'utf8',
+        env: {
+          SystemRoot: systemRoot,
+          WINDIR: systemRoot,
+          TEMP: powerShellTemp,
+          TMP: powerShellTemp,
+          DSH_PLUGIN_PRIVATE_BATCH: Buffer.from(
+            JSON.stringify(value),
+            'utf8'
+          ).toString('base64'),
+        },
+        timeout: 30_000,
+        windowsHide: true,
+      }
+    );
+    assert.equal(result.error, undefined);
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /invalid private path batch/u);
+    assert.doesNotMatch(result.stderr, /CreateFileW failed/u);
+  }
+});
+
+test('Windows PowerShell 5.1 preserves one request as an exact batch array', {
+  skip: process.platform !== 'win32',
+}, async (t) => {
+  const root = await realpath(await workspace(t));
+  const path = join(root, 'one-request-batch.key');
+  await writeFile(path, randomBytes(32), { mode: 0o600 });
+  const expectedIdentity = await captureWindowsPrivatePathIdentity(path, 'file');
+  const proofs = await secureWindowsPrivatePaths([
+    {
+      path,
+      kind: 'file',
+      action: 'configure',
+      expectedIdentity,
+    },
+  ]);
+  assert.equal(proofs.length, 1);
+  assert.equal(proofs[0].volumeSerial, expectedIdentity.volumeSerial);
+  assert.equal(proofs[0].fileIndex, expectedIdentity.fileIndex);
+  assert.equal(proofs[0].protected, true);
+  assert.equal(proofs[0].ruleCount, 1);
+});
+
 test('Windows private ACL batches amortize one bounded PowerShell process without weakening proofs', {
   skip: process.platform === 'win32',
 }, async () => {
@@ -3193,11 +3328,14 @@ test('Windows private ACL batches amortize one bounded PowerShell process withou
         'base64'
       ).toString('utf8'));
       return {
-        stdout: `${JSON.stringify(bound.map((request) => windowsAclProof(
-          request.kind,
-          request.volumeSerial,
-          request.fileIndex
-        )))}\n`,
+        stdout: `${JSON.stringify({
+          schemaVersion: 1,
+          proofs: bound.requests.map((request) => windowsAclProof(
+            request.kind,
+            request.volumeSerial,
+            request.fileIndex
+          )),
+        })}\n`,
         stderr: '',
       };
     },
@@ -3220,11 +3358,14 @@ test('Windows private ACL batches amortize one bounded PowerShell process withou
   assert.equal(options.env.TMP, WINDOWS_POWERSHELL_TEMP_FOR_TESTING);
   assert.deepEqual(
     JSON.parse(Buffer.from(options.env.DSH_PLUGIN_PRIVATE_BATCH, 'base64').toString('utf8')),
-    requests.map(({ expectedIdentity, ...request }) => ({
-      ...request,
-      volumeSerial: expectedIdentity.volumeSerial,
-      fileIndex: expectedIdentity.fileIndex,
-    }))
+    {
+      schemaVersion: 1,
+      requests: requests.map(({ expectedIdentity, ...request }) => ({
+        ...request,
+        volumeSerial: expectedIdentity.volumeSerial,
+        fileIndex: expectedIdentity.fileIndex,
+      })),
+    }
   );
   assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /FromBase64String\(\$batch\)/);
   assert.match(WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT, /foreach \(\$request in \$requests\)/);
@@ -3244,7 +3385,10 @@ test('Windows private ACL batches amortize one bounded PowerShell process withou
     () => secureWindowsPrivatePaths(requests, {
       environment: { SystemRoot: 'C:\\Windows' },
       execute: async () => ({
-        stdout: `${JSON.stringify([windowsAclProof('directory', 52, 7001)])}\n`,
+        stdout: `${JSON.stringify({
+          schemaVersion: 1,
+          proofs: [windowsAclProof('directory', 52, 7001)],
+        })}\n`,
         stderr: '',
       }),
       lstatPath,
@@ -3257,10 +3401,13 @@ test('Windows private ACL batches amortize one bounded PowerShell process withou
     () => secureWindowsPrivatePaths(requests, {
       environment: { SystemRoot: 'C:\\Windows' },
       execute: async () => ({
-        stdout: `${JSON.stringify([
-          windowsAclProof('directory', 52, 7001),
-          windowsAclProof('file', 52, 7002, { ownerSid: 'S-1-5-18' }),
-        ])}\n`,
+        stdout: `${JSON.stringify({
+          schemaVersion: 1,
+          proofs: [
+            windowsAclProof('directory', 52, 7001),
+            windowsAclProof('file', 52, 7002, { ownerSid: 'S-1-5-18' }),
+          ],
+        })}\n`,
         stderr: '',
       }),
       lstatPath,
@@ -3268,6 +3415,45 @@ test('Windows private ACL batches amortize one bounded PowerShell process withou
       ...systemRootOptions,
     }),
     /malformed or weaker/
+  );
+  await assert.rejects(
+    () => secureWindowsPrivatePaths(requests, {
+      environment: { SystemRoot: 'C:\\Windows' },
+      execute: async () => ({
+        stdout: `${JSON.stringify({
+          schemaVersion: 1,
+          proofs: [
+            { ...windowsAclProof('directory', 52, 7001), extra: true },
+            windowsAclProof('file', 52, 7002),
+          ],
+        })}\n`,
+        stderr: '',
+      }),
+      lstatPath,
+      platform: 'win32',
+      ...systemRootOptions,
+    }),
+    /malformed or weaker/
+  );
+  await assert.rejects(
+    () => secureWindowsPrivatePaths(requests, {
+      environment: { SystemRoot: 'C:\\Windows' },
+      execute: async () => ({
+        stdout: `${JSON.stringify({
+          schemaVersion: 1,
+          proofs: [
+            windowsAclProof('directory', 52, 7001),
+            windowsAclProof('file', 52, 7002),
+          ],
+          extra: true,
+        })}\n`,
+        stderr: '',
+      }),
+      lstatPath,
+      platform: 'win32',
+      ...systemRootOptions,
+    }),
+    /proof count is invalid/
   );
   await assert.rejects(
     () => secureWindowsPrivatePaths([
@@ -3297,6 +3483,37 @@ test('Windows private ACL batches amortize one bounded PowerShell process withou
       platform: 'win32',
     }),
     /batch is malformed/
+  );
+  await assert.rejects(
+    () => secureWindowsPrivatePaths([
+      { ...requests[0], extra: true },
+    ], {
+      environment: { SystemRoot: 'C:\\Windows' },
+      execute: async () => {
+        throw new Error('executor must not run for a request with extra keys');
+      },
+      lstatPath,
+      platform: 'win32',
+      ...systemRootOptions,
+    }),
+    /batch is malformed/
+  );
+  await assert.rejects(
+    () => secureWindowsPrivatePaths([
+      {
+        ...requests[0],
+        expectedIdentity: { volumeSerial: 52, fileIndex: '7001' },
+      },
+    ], {
+      environment: { SystemRoot: 'C:\\Windows' },
+      execute: async () => {
+        throw new Error('executor must not run for a non-string identity');
+      },
+      lstatPath,
+      platform: 'win32',
+      ...systemRootOptions,
+    }),
+    /expected identity is malformed/
   );
   await assert.rejects(
     () => secureWindowsPrivatePaths(Array.from({ length: 33 }, () => requests[0]), {
