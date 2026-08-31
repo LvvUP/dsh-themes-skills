@@ -137,6 +137,14 @@ function fail(message) {
   throw new Error(message);
 }
 
+function safeProofFailureSuffix(error) {
+  if (!(error instanceof Error)) return '';
+  const match = error.message.match(
+    /^PowerShell bootstrap temp ACL proof is weaker than SID-only NTFS \(([A-Za-z,]+)\)$/u
+  );
+  return match ? ` (${match[1]})` : '';
+}
+
 function normalizeLocal(path, label) {
   if (typeof path !== 'string' || path.length < 3 || path.includes('\0') ||
       !/^[A-Za-z]:[\\/]/u.test(path) || path.slice(2).includes(':')) {
@@ -359,7 +367,8 @@ export async function acquireWindowsPowerShellTemp({
       }
     }
   }
-  throw new Error('failed to create SID-only NTFS PowerShell bootstrap temp', {
-    cause: lastError,
-  });
+  throw new Error(
+    `failed to create SID-only NTFS PowerShell bootstrap temp${safeProofFailureSuffix(lastError)}`,
+    { cause: lastError }
+  );
 }
