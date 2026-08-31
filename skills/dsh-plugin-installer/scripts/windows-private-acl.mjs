@@ -12,6 +12,12 @@ import {
 const execFileAsync = promisify(execFile);
 
 export const WINDOWS_PRIVATE_ACL_TIMEOUT_MS = 60_000;
+// A durable MoveFileEx step is independently bounded at 60 seconds. Retain the
+// compiled worker across one such step plus a small scheduling/filesystem margin
+// so the next ACL proof does not pay another Add-Type cold start. The worker is
+// still reclaimed on a fixed, short upper bound.
+export const WINDOWS_PRIVATE_ACL_WORKER_IDLE_MS =
+  WINDOWS_PRIVATE_ACL_TIMEOUT_MS + 15_000;
 
 const PATH_ENV = 'DSH_PLUGIN_PRIVATE_PATH';
 const KIND_ENV = 'DSH_PLUGIN_PRIVATE_KIND';
@@ -23,7 +29,6 @@ const WORKER_ENV = 'DSH_PLUGIN_PRIVATE_WORKER';
 const MAX_BATCH_REQUESTS = 32;
 const MAX_BATCH_ENV_BYTES = 24 * 1024;
 const MAX_WORKER_LINE_BYTES = 64 * 1024;
-const WORKER_IDLE_MS = 5_000;
 const WORKER_STOP_TIMEOUT_MS = 5_000;
 const MAX_WINDOWS_LOCAL_PATH_CHARS = 32_760;
 const BATCH_REQUEST_KEYS = Object.freeze([
@@ -786,7 +791,7 @@ function scheduleAclWorkerStop(state) {
         new Error('Windows private-path ACL worker did not stop after stdin closed')
       );
     }, WORKER_STOP_TIMEOUT_MS);
-  }, WORKER_IDLE_MS);
+  }, WINDOWS_PRIVATE_ACL_WORKER_IDLE_MS);
 }
 
 async function executeAclWorkerBatch(encoded, context) {

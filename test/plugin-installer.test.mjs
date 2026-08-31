@@ -119,6 +119,7 @@ import {
   trustedWindowsSystemRootFromCandidates,
   WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
   WINDOWS_PRIVATE_ACL_TIMEOUT_MS,
+  WINDOWS_PRIVATE_ACL_WORKER_IDLE_MS,
 } from '../skills/dsh-plugin-installer/scripts/windows-private-acl.mjs';
 import {
   WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT,
@@ -3154,6 +3155,9 @@ $stream.Dispose()
 });
 
 test('Windows PowerShell 5.1 receives closed batch envelopes and CI serializes real ACL proofs', async () => {
+  assert.equal(WINDOWS_PRIVATE_ACL_WORKER_IDLE_MS, 75_000);
+  assert.ok(WINDOWS_PRIVATE_ACL_WORKER_IDLE_MS > WINDOWS_PRIVATE_ACL_TIMEOUT_MS);
+  assert.ok(WINDOWS_PRIVATE_ACL_WORKER_IDLE_MS <= 90_000);
   assert.match(
     WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
     /ConvertFrom-Json -InputObject \$requestJson/u
