@@ -3182,10 +3182,37 @@ test('Windows PowerShell 5.1 receives closed batch envelopes and CI serializes r
     WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
     /schemaVersion = 1[\s\S]*proofs = \$proofs\.ToArray\(\)/u
   );
+  assert.match(
+    WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+    /\$workerProperties\.Count -ne 3/u
+  );
+  assert.match(
+    WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+    /\$workerEnvelope\.requestId -cnotmatch '\^\[a-f0-9\]\{32\}\$'/u
+  );
+  assert.match(
+    WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+    /\$workerEnvelope\.batch\.Length -gt 24576/u
+  );
+  assert.ok(
+    WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT.indexOf('Add-Type -TypeDefinition') <
+      WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT.indexOf('while ($true)')
+  );
 
-  const [packageBytes, workflow] = await Promise.all([
+  const [packageBytes, workflow, aclSource, tempSource] = await Promise.all([
     readFile(new URL('../package.json', import.meta.url), 'utf8'),
     readFile(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8'),
+    readFile(
+      new URL('../skills/dsh-plugin-installer/scripts/windows-private-acl.mjs', import.meta.url),
+      'utf8'
+    ),
+    readFile(
+      new URL(
+        '../skills/dsh-plugin-installer/scripts/windows-powershell-temp.mjs',
+        import.meta.url
+      ),
+      'utf8'
+    ),
   ]);
   const packageJson = JSON.parse(packageBytes);
   assert.equal(packageJson.scripts.test, 'node --test');
@@ -3198,6 +3225,16 @@ test('Windows PowerShell 5.1 receives closed batch envelopes and CI serializes r
     /if: runner\.os != 'Windows'[\s\S]{0,160}run: npm test/u
   );
   assert.doesNotMatch(workflow, /--test-name-pattern|--test-only/u);
+  assert.match(aclSource, /let aclWorker = null;[\s\S]*spawn\([\s\S]*state\.pending/u);
+  assert.match(
+    tempSource,
+    /acquireSharedWindowsPowerShellTemp[\s\S]*entry\.references \+= 1/u
+  );
+  assert.match(tempSource, /const sharedTempCreations = new Map\(\)/u);
+  assert.match(
+    tempSource,
+    /process\.exitCode[\s\S]*process\.emitWarning\([\s\S]*cleanup failed; refusing a successful process exit/u
+  );
 });
 
 test('Windows PowerShell 5.1 rejects malformed batch envelopes before any path operation', {

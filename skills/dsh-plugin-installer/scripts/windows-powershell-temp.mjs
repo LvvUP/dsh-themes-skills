@@ -7,7 +7,12 @@ import { promisify } from 'node:util';
 const execFileAsync = promisify(execFile);
 const BOOTSTRAP_ENV = 'DSH_PLUGIN_POWERSHELL_TEMP';
 const BOOTSTRAP_TIMEOUT_MS = 30_000;
+const SHARED_TEMP_IDLE_MS = 1_000;
 const MAX_LOCAL_PATH = 32_760;
+
+let sharedTempEntry = null;
+const sharedTempCreations = new Map();
+let sharedTempCleanupError = null;
 
 export const WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT = String.raw`
 $ErrorActionPreference = 'Stop'
@@ -442,4 +447,113 @@ export async function acquireWindowsPowerShellTemp({
     `failed to create SID-only NTFS PowerShell bootstrap temp${safeProofFailureSuffix(lastError)}`,
     { cause: lastError }
   );
+}
+
+function sharedTempKey({ powershell, systemRoot }) {
+  return `${win32.normalize(systemRoot).toLowerCase()}\0${
+    win32.normalize(powershell).toLowerCase()}`;
+}
+
+async function destroySharedTemp(entry) {
+  if (entry.references !== 0 || entry.destroying) return;
+  entry.destroying = true;
+  if (sharedTempEntry === entry) sharedTempEntry = null;
+  if (entry.timer !== null) {
+    clearTimeout(entry.timer);
+    entry.timer = null;
+  }
+  try {
+    await entry.lease.release();
+  } finally {
+    entry.destroying = false;
+  }
+}
+
+function recordSharedTempCleanupFailure(error) {
+  if (sharedTempCleanupError !== null) return;
+  sharedTempCleanupError = error;
+  if (process.exitCode === undefined || process.exitCode === 0) process.exitCode = 1;
+  process.emitWarning(
+    'SID-only PowerShell bootstrap temp cleanup failed; refusing a successful process exit',
+    { code: 'DSH_POWERSHELL_TEMP_CLEANUP' }
+  );
+}
+
+function scheduleSharedTempCleanup(entry) {
+  if (entry.references !== 0 || entry.destroying || entry.timer !== null) return;
+  entry.timer = setTimeout(() => {
+    entry.timer = null;
+    void destroySharedTemp(entry).catch(recordSharedTempCleanupFailure);
+  }, SHARED_TEMP_IDLE_MS);
+}
+
+/**
+ * Reuses one already-proven SID-only NTFS temp for adjacent trusted PowerShell
+ * operations in this Node process. Custom executors and simulated Windows keep
+ * the one-shot path so tests and callers cannot accidentally enter the cache.
+ */
+export async function acquireSharedWindowsPowerShellTemp(options = {}) {
+  const {
+    environment = process.env,
+    execute,
+    platform = process.platform,
+    powershell,
+    powerShellTempForTesting,
+    systemRoot,
+  } = options;
+  const cacheable = process.platform === 'win32' &&
+    platform === 'win32' &&
+    environment === process.env &&
+    (execute === undefined || execute === execFileAsync) &&
+    powerShellTempForTesting === undefined;
+  if (!cacheable) return acquireWindowsPowerShellTemp(options);
+  if (sharedTempCleanupError !== null) {
+    throw new Error('previous shared PowerShell bootstrap temp cleanup failed', {
+      cause: sharedTempCleanupError,
+    });
+  }
+
+  const key = sharedTempKey({ powershell, systemRoot });
+  let entry = sharedTempEntry;
+  if (entry !== null && (entry.key !== key || entry.destroying)) entry = null;
+  if (entry === null) {
+    let creation = sharedTempCreations.get(key);
+    if (creation === undefined) {
+      creation = acquireWindowsPowerShellTemp(options).then((lease) => ({
+        key,
+        lease,
+        references: 0,
+        timer: null,
+        destroying: false,
+      }));
+      sharedTempCreations.set(key, creation);
+    }
+    try {
+      entry = await creation;
+    } finally {
+      if (sharedTempCreations.get(key) === creation) {
+        sharedTempCreations.delete(key);
+      }
+    }
+    sharedTempEntry = entry;
+  }
+  if (entry.timer !== null) {
+    clearTimeout(entry.timer);
+    entry.timer = null;
+  }
+  entry.references += 1;
+  let released = false;
+  return Object.freeze({
+    path: entry.lease.path,
+    proof: entry.lease.proof,
+    release: async () => {
+      if (released) return;
+      released = true;
+      entry.references -= 1;
+      if (entry.references < 0) {
+        throw new Error('shared PowerShell bootstrap temp reference count underflow');
+      }
+      scheduleSharedTempCleanup(entry);
+    },
+  });
 }

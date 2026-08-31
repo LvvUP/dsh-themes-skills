@@ -4,7 +4,7 @@ import { win32 } from 'node:path';
 import { promisify } from 'node:util';
 
 import { trustedWindowsSystemRoot } from './windows-private-acl.mjs';
-import { acquireWindowsPowerShellTemp } from './windows-powershell-temp.mjs';
+import { acquireSharedWindowsPowerShellTemp } from './windows-powershell-temp.mjs';
 
 const execFileAsync = promisify(execFile);
 
@@ -205,7 +205,7 @@ export async function moveWindowsPathDurably(
   await requireSource(source, lstat);
   await requireAbsentTarget(target, lstat);
 
-  const bootstrap = await acquireWindowsPowerShellTemp({
+  const bootstrap = await acquireSharedWindowsPowerShellTemp({
     environment,
     execute: powerShellTempExecute,
     platform,

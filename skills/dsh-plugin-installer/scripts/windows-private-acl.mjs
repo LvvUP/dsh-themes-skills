@@ -1,9 +1,13 @@
-import { execFile } from 'node:child_process';
+import { execFile, spawn } from 'node:child_process';
+import { randomBytes } from 'node:crypto';
 import { lstat as fsLstat } from 'node:fs/promises';
 import { win32 } from 'node:path';
 import { promisify } from 'node:util';
 
-import { acquireWindowsPowerShellTemp } from './windows-powershell-temp.mjs';
+import {
+  acquireSharedWindowsPowerShellTemp,
+  acquireWindowsPowerShellTemp,
+} from './windows-powershell-temp.mjs';
 
 const execFileAsync = promisify(execFile);
 
@@ -15,8 +19,12 @@ const ACTION_ENV = 'DSH_PLUGIN_PRIVATE_ACTION';
 const BATCH_ENV = 'DSH_PLUGIN_PRIVATE_BATCH';
 const VOLUME_ENV = 'DSH_PLUGIN_PRIVATE_VOLUME_SERIAL';
 const FILE_INDEX_ENV = 'DSH_PLUGIN_PRIVATE_FILE_INDEX';
+const WORKER_ENV = 'DSH_PLUGIN_PRIVATE_WORKER';
 const MAX_BATCH_REQUESTS = 32;
 const MAX_BATCH_ENV_BYTES = 24 * 1024;
+const MAX_WORKER_LINE_BYTES = 64 * 1024;
+const WORKER_IDLE_MS = 5_000;
+const WORKER_STOP_TIMEOUT_MS = 5_000;
 const MAX_WINDOWS_LOCAL_PATH_CHARS = 32_760;
 const BATCH_REQUEST_KEYS = Object.freeze([
   'path',
@@ -414,116 +422,460 @@ public static class DshPrivatePathNative
 }
 '@
 }
-$target = [Environment]::GetEnvironmentVariable('DSH_PLUGIN_PRIVATE_PATH', 'Process')
-$kind = [Environment]::GetEnvironmentVariable('DSH_PLUGIN_PRIVATE_KIND', 'Process')
-$action = [Environment]::GetEnvironmentVariable('DSH_PLUGIN_PRIVATE_ACTION', 'Process')
-$batch = [Environment]::GetEnvironmentVariable('DSH_PLUGIN_PRIVATE_BATCH', 'Process')
-$isBatch = -not [String]::IsNullOrWhiteSpace($batch)
-if ($isBatch) {
-  try {
-    $requestJson = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($batch))
-    # -InputObject avoids Windows PowerShell 5.1 preserving the JSON array as one
-    # pipeline object; the envelope keeps one-request and many-request shapes equal.
-    $batchEnvelope = ConvertFrom-Json -InputObject $requestJson
-    if ($null -eq $batchEnvelope -or
-        $batchEnvelope -isnot [System.Management.Automation.PSCustomObject]) {
-      throw 'invalid private path batch envelope'
-    }
-    $batchProperties = @($batchEnvelope.PSObject.Properties.Name)
-    $schemaVersion = $batchEnvelope.PSObject.Properties['schemaVersion'].Value
-    if ($schemaVersion -isnot [System.Int32] -or
-        $schemaVersion -ne 1 -or
-        $batchProperties.Count -ne 2 -or
-        $batchProperties -cnotcontains 'schemaVersion' -or
-        $batchProperties -cnotcontains 'requests' -or
-        $batchEnvelope.requests -isnot [System.Array]) {
-      throw 'invalid private path batch envelope'
-    }
-    $requests = [System.Collections.Generic.List[object]]::new()
-    foreach ($candidateRequest in $batchEnvelope.requests) {
-      if ($null -eq $candidateRequest -or
-          $candidateRequest -isnot [System.Management.Automation.PSCustomObject]) {
-        throw 'invalid private path batch request'
+function Invoke-DshPrivateAclRequest(
+    [AllowNull()][string]$batch,
+    [AllowNull()][string]$singleTarget,
+    [AllowNull()][string]$singleKind,
+    [AllowNull()][string]$singleAction,
+    [AllowNull()][string]$singleVolumeSerial,
+    [AllowNull()][string]$singleFileIndex) {
+  $isBatch = -not [String]::IsNullOrWhiteSpace($batch)
+  if ($isBatch) {
+    try {
+      $requestJson = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($batch))
+      # -InputObject avoids Windows PowerShell 5.1 preserving the JSON array as one
+      # pipeline object; the envelope keeps one-request and many-request shapes equal.
+      $batchEnvelope = ConvertFrom-Json -InputObject $requestJson
+      if ($null -eq $batchEnvelope -or
+          $batchEnvelope -isnot [System.Management.Automation.PSCustomObject]) {
+        throw 'invalid private path batch envelope'
       }
-      $requestProperties = @($candidateRequest.PSObject.Properties.Name)
-      if ($requestProperties.Count -ne 5 -or
-          $requestProperties -cnotcontains 'path' -or
-          $requestProperties -cnotcontains 'kind' -or
-          $requestProperties -cnotcontains 'action' -or
-          $requestProperties -cnotcontains 'volumeSerial' -or
-          $requestProperties -cnotcontains 'fileIndex' -or
-          $candidateRequest.path -isnot [System.String] -or
-          $candidateRequest.kind -isnot [System.String] -or
-          $candidateRequest.action -isnot [System.String] -or
-          $candidateRequest.volumeSerial -isnot [System.String] -or
-          $candidateRequest.fileIndex -isnot [System.String]) {
-        throw 'invalid private path batch request'
+      $batchProperties = @($batchEnvelope.PSObject.Properties.Name)
+      $schemaVersion = $batchEnvelope.PSObject.Properties['schemaVersion'].Value
+      if ($schemaVersion -isnot [System.Int32] -or
+          $schemaVersion -ne 1 -or
+          $batchProperties.Count -ne 2 -or
+          $batchProperties -cnotcontains 'schemaVersion' -or
+          $batchProperties -cnotcontains 'requests' -or
+          $batchEnvelope.requests -isnot [System.Array]) {
+        throw 'invalid private path batch envelope'
       }
-      [void]$requests.Add($candidateRequest)
+      $requests = [System.Collections.Generic.List[object]]::new()
+      foreach ($candidateRequest in $batchEnvelope.requests) {
+        if ($null -eq $candidateRequest -or
+            $candidateRequest -isnot [System.Management.Automation.PSCustomObject]) {
+          throw 'invalid private path batch request'
+        }
+        $requestProperties = @($candidateRequest.PSObject.Properties.Name)
+        if ($requestProperties.Count -ne 5 -or
+            $requestProperties -cnotcontains 'path' -or
+            $requestProperties -cnotcontains 'kind' -or
+            $requestProperties -cnotcontains 'action' -or
+            $requestProperties -cnotcontains 'volumeSerial' -or
+            $requestProperties -cnotcontains 'fileIndex' -or
+            $candidateRequest.path -isnot [System.String] -or
+            $candidateRequest.kind -isnot [System.String] -or
+            $candidateRequest.action -isnot [System.String] -or
+            $candidateRequest.volumeSerial -isnot [System.String] -or
+            $candidateRequest.fileIndex -isnot [System.String]) {
+          throw 'invalid private path batch request'
+        }
+        [void]$requests.Add($candidateRequest)
+      }
+    } catch {
+      throw 'invalid private path batch'
     }
-  } catch {
-    throw 'invalid private path batch'
+    if ($requests.Count -lt 1 -or $requests.Count -gt 32) {
+      throw 'invalid private path batch size'
+    }
+  } else {
+    $requests = @([PSCustomObject]@{
+      path = $singleTarget
+      kind = $singleKind
+      action = $singleAction
+      volumeSerial = $singleVolumeSerial
+      fileIndex = $singleFileIndex
+    })
   }
-  if ($requests.Count -lt 1 -or $requests.Count -gt 32) { throw 'invalid private path batch size' }
+
+  $proofs = [System.Collections.Generic.List[object]]::new()
+  foreach ($request in $requests) {
+    $target = $request.path
+    $kind = $request.kind
+    $action = $request.action
+    if ([String]::IsNullOrWhiteSpace($target)) { throw 'missing private path' }
+    if ($kind -ne 'directory' -and $kind -ne 'file') { throw 'invalid private path kind' }
+    if ($action -ne 'configure' -and $action -ne 'configure-open-writer' -and
+        $action -ne 'verify') { throw 'invalid private path action' }
+    if ($kind -eq 'directory' -and $action -eq 'configure-open-writer') {
+      throw 'directory private path cannot admit an open writer'
+    }
+    if ([String]::IsNullOrWhiteSpace($request.volumeSerial) -or
+        [String]::IsNullOrWhiteSpace($request.fileIndex)) {
+      throw 'missing private path identity'
+    }
+    $verified = [DshPrivatePathNative]::SecureAndInspect(
+      $target, $kind, $action, $request.volumeSerial, $request.fileIndex)
+    [void]$proofs.Add([PSCustomObject]@{
+      schemaVersion = 3
+      kind = $kind
+      volumeSerial = $verified.VolumeSerial
+      fileIndex = $verified.FileIndex
+      fileSystem = $verified.FileSystem
+      currentSid = $verified.CurrentSid
+      ownerSid = $verified.OwnerSid
+      protected = $verified.Protected
+      ruleCount = $verified.RuleCount
+      ruleSid = $verified.RuleSid
+      inherited = $verified.Inherited
+      allow = $verified.Allow
+      fullControl = $verified.FullControl
+      inheritanceFlags = $verified.InheritanceFlags
+      propagationFlags = $verified.PropagationFlags
+      shareMode = $verified.ShareMode
+    })
+  }
+
+  if ($isBatch) {
+    return (ConvertTo-Json -InputObject ([PSCustomObject]@{
+      schemaVersion = 1
+      proofs = $proofs.ToArray()
+    }) -Depth 4 -Compress)
+  }
+  return (ConvertTo-Json -InputObject ($proofs[0]) -Compress)
+}
+
+$workerMode = [Environment]::GetEnvironmentVariable('DSH_PLUGIN_PRIVATE_WORKER', 'Process')
+if ($workerMode -eq '1') {
+  while ($true) {
+    $line = [Console]::In.ReadLine()
+    if ($null -eq $line) { break }
+    $requestId = '00000000000000000000000000000000'
+    try {
+      $workerEnvelope = ConvertFrom-Json -InputObject $line
+      if ($null -eq $workerEnvelope -or
+          $workerEnvelope -isnot [System.Management.Automation.PSCustomObject]) {
+        throw 'invalid private ACL worker envelope'
+      }
+      $workerProperties = @($workerEnvelope.PSObject.Properties.Name)
+      $workerSchemaVersion = $workerEnvelope.PSObject.Properties['schemaVersion'].Value
+      if ($workerSchemaVersion -isnot [System.Int32] -or
+          $workerSchemaVersion -ne 1 -or
+          $workerProperties.Count -ne 3 -or
+          $workerProperties -cnotcontains 'schemaVersion' -or
+          $workerProperties -cnotcontains 'requestId' -or
+          $workerProperties -cnotcontains 'batch' -or
+          $workerEnvelope.requestId -isnot [System.String] -or
+          $workerEnvelope.requestId -cnotmatch '^[a-f0-9]{32}$' -or
+          $workerEnvelope.batch -isnot [System.String] -or
+          $workerEnvelope.batch.Length -lt 1 -or
+          $workerEnvelope.batch.Length -gt 24576) {
+        throw 'invalid private ACL worker envelope'
+      }
+      $requestId = $workerEnvelope.requestId
+      $result = Invoke-DshPrivateAclRequest $workerEnvelope.batch $null $null $null $null $null
+      $payload = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($result))
+      [Console]::WriteLine((ConvertTo-Json -InputObject ([PSCustomObject]@{
+        schemaVersion = 1
+        requestId = $requestId
+        ok = $true
+        payload = $payload
+      }) -Compress))
+      [Console]::Out.Flush()
+    } catch {
+      $message = [string]$_.Exception.Message
+      if ([String]::IsNullOrEmpty($message)) { $message = 'private ACL worker request failed' }
+      if ($message.Length -gt 4096) { $message = $message.Substring(0, 4096) }
+      $payload = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($message))
+      [Console]::WriteLine((ConvertTo-Json -InputObject ([PSCustomObject]@{
+        schemaVersion = 1
+        requestId = $requestId
+        ok = $false
+        payload = $payload
+      }) -Compress))
+      [Console]::Out.Flush()
+    }
+  }
 } else {
-  $volumeSerial = [Environment]::GetEnvironmentVariable('DSH_PLUGIN_PRIVATE_VOLUME_SERIAL', 'Process')
+  $target = [Environment]::GetEnvironmentVariable('DSH_PLUGIN_PRIVATE_PATH', 'Process')
+  $kind = [Environment]::GetEnvironmentVariable('DSH_PLUGIN_PRIVATE_KIND', 'Process')
+  $action = [Environment]::GetEnvironmentVariable('DSH_PLUGIN_PRIVATE_ACTION', 'Process')
+  $batch = [Environment]::GetEnvironmentVariable('DSH_PLUGIN_PRIVATE_BATCH', 'Process')
+  $volumeSerial = [Environment]::GetEnvironmentVariable(
+    'DSH_PLUGIN_PRIVATE_VOLUME_SERIAL', 'Process')
   $fileIndex = [Environment]::GetEnvironmentVariable('DSH_PLUGIN_PRIVATE_FILE_INDEX', 'Process')
-  $requests = @([PSCustomObject]@{
-    path = $target
-    kind = $kind
-    action = $action
-    volumeSerial = $volumeSerial
-    fileIndex = $fileIndex
-  })
-}
-
-$proofs = [System.Collections.Generic.List[object]]::new()
-foreach ($request in $requests) {
-  $target = $request.path
-  $kind = $request.kind
-  $action = $request.action
-  if ([String]::IsNullOrWhiteSpace($target)) { throw 'missing private path' }
-  if ($kind -ne 'directory' -and $kind -ne 'file') { throw 'invalid private path kind' }
-  if ($action -ne 'configure' -and $action -ne 'configure-open-writer' -and
-      $action -ne 'verify') { throw 'invalid private path action' }
-  if ($kind -eq 'directory' -and $action -eq 'configure-open-writer') {
-    throw 'directory private path cannot admit an open writer'
-  }
-  if ([String]::IsNullOrWhiteSpace($request.volumeSerial) -or
-      [String]::IsNullOrWhiteSpace($request.fileIndex)) {
-    throw 'missing private path identity'
-  }
-  $verified = [DshPrivatePathNative]::SecureAndInspect(
-    $target, $kind, $action, $request.volumeSerial, $request.fileIndex)
-  [void]$proofs.Add([PSCustomObject]@{
-    schemaVersion = 3
-    kind = $kind
-    volumeSerial = $verified.VolumeSerial
-    fileIndex = $verified.FileIndex
-    fileSystem = $verified.FileSystem
-    currentSid = $verified.CurrentSid
-    ownerSid = $verified.OwnerSid
-    protected = $verified.Protected
-    ruleCount = $verified.RuleCount
-    ruleSid = $verified.RuleSid
-    inherited = $verified.Inherited
-    allow = $verified.Allow
-    fullControl = $verified.FullControl
-    inheritanceFlags = $verified.InheritanceFlags
-    propagationFlags = $verified.PropagationFlags
-    shareMode = $verified.ShareMode
-  })
-}
-
-if ($isBatch) {
-  [Console]::WriteLine((ConvertTo-Json -InputObject ([PSCustomObject]@{
-    schemaVersion = 1
-    proofs = $proofs.ToArray()
-  }) -Depth 4 -Compress))
-} else {
-  [Console]::WriteLine((ConvertTo-Json -InputObject ($proofs[0]) -Compress))
+  $result = Invoke-DshPrivateAclRequest $batch $target $kind $action $volumeSerial $fileIndex
+  [Console]::WriteLine($result)
 }
 `;
+
+const WORKER_RESPONSE_KEYS = Object.freeze([
+  'schemaVersion',
+  'requestId',
+  'ok',
+  'payload',
+]);
+
+let aclWorker = null;
+let aclWorkerQueue = Promise.resolve();
+
+function canonicalBase64Bytes(value, label) {
+  if (typeof value !== 'string' || value.length === 0 ||
+      !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/u.test(value)) {
+    throw new Error(`${label} is not canonical base64`);
+  }
+  const bytes = Buffer.from(value, 'base64');
+  if (bytes.toString('base64') !== value) {
+    throw new Error(`${label} is not canonical base64`);
+  }
+  return bytes;
+}
+
+function parseWorkerResponse(line, expectedRequestId) {
+  if (Buffer.byteLength(line, 'utf8') > MAX_WORKER_LINE_BYTES) {
+    throw new Error('Windows private-path ACL worker response is too large');
+  }
+  const response = JSON.parse(line);
+  if (!hasExactOwnKeys(response, WORKER_RESPONSE_KEYS) ||
+      response.schemaVersion !== 1 ||
+      response.requestId !== expectedRequestId ||
+      typeof response.ok !== 'boolean') {
+    throw new Error('Windows private-path ACL worker response envelope is malformed');
+  }
+  const payload = canonicalBase64Bytes(
+    response.payload,
+    'Windows private-path ACL worker payload'
+  ).toString('utf8');
+  if (!response.ok) {
+    const error = new Error(payload || 'Windows private-path ACL worker request failed');
+    error.workerRequestRejected = true;
+    throw error;
+  }
+  return payload;
+}
+
+function rejectWorkerPending(state, error) {
+  if (state.pending === null) return;
+  const pending = state.pending;
+  state.pending = null;
+  clearTimeout(pending.timer);
+  pending.reject(error);
+}
+
+function finishAclWorker(state, error) {
+  if (state.finished) return;
+  state.finished = true;
+  if (state.idleTimer !== null) clearTimeout(state.idleTimer);
+  if (state.stopTimer !== null) clearTimeout(state.stopTimer);
+  if (aclWorker === state) aclWorker = null;
+  rejectWorkerPending(state, error);
+  void state.bootstrap.release().catch(() => {});
+}
+
+function terminateAclWorker(state, error) {
+  if (state.finished) return;
+  rejectWorkerPending(state, error);
+  if (aclWorker === state) aclWorker = null;
+  if (!state.child.killed) state.child.kill();
+}
+
+function handleWorkerStdout(state, chunk) {
+  state.stdoutBuffer += chunk;
+  if (Buffer.byteLength(state.stdoutBuffer, 'utf8') > MAX_WORKER_LINE_BYTES) {
+    terminateAclWorker(
+      state,
+      new Error('Windows private-path ACL worker exceeded its stdout bound')
+    );
+    return;
+  }
+  let newline = state.stdoutBuffer.indexOf('\n');
+  while (newline !== -1) {
+    const line = state.stdoutBuffer.slice(0, newline).replace(/\r$/u, '');
+    state.stdoutBuffer = state.stdoutBuffer.slice(newline + 1);
+    const pending = state.pending;
+    if (pending === null || line.length === 0) {
+      terminateAclWorker(
+        state,
+        new Error('Windows private-path ACL worker emitted an unexpected stdout frame')
+      );
+      return;
+    }
+    state.pending = null;
+    clearTimeout(pending.timer);
+    try {
+      pending.resolve(parseWorkerResponse(line, pending.requestId));
+    } catch (error) {
+      pending.reject(error);
+      if (error?.workerRequestRejected !== true) {
+        terminateAclWorker(state, error);
+        return;
+      }
+    }
+    newline = state.stdoutBuffer.indexOf('\n');
+  }
+}
+
+async function startAclWorker({ environment, powershell, systemRoot }) {
+  const bootstrap = await acquireSharedWindowsPowerShellTemp({
+    environment,
+    platform: 'win32',
+    powershell,
+    systemRoot,
+  });
+  let child;
+  try {
+    child = spawn(
+      powershell,
+      [
+        '-NoLogo',
+        '-NoProfile',
+        '-NonInteractive',
+        '-ExecutionPolicy',
+        'Bypass',
+        '-Command',
+        WINDOWS_CURRENT_USER_PRIVATE_ACL_SCRIPT,
+      ],
+      {
+        env: childEnvironment(environment, systemRoot, bootstrap.path, {
+          [WORKER_ENV]: '1',
+        }),
+        shell: false,
+        stdio: ['pipe', 'pipe', 'pipe'],
+        windowsHide: true,
+      }
+    );
+  } catch (error) {
+    await bootstrap.release();
+    throw error;
+  }
+  const state = {
+    bootstrap,
+    child,
+    finished: false,
+    idleTimer: null,
+    pending: null,
+    stderrBuffer: '',
+    stdoutBuffer: '',
+    stopTimer: null,
+  };
+  child.stdout.setEncoding('utf8');
+  child.stderr.setEncoding('utf8');
+  child.stdout.on('data', (chunk) => handleWorkerStdout(state, chunk));
+  child.stdin.on('error', (error) => terminateAclWorker(state, error));
+  child.stderr.on('data', (chunk) => {
+    state.stderrBuffer += chunk;
+    if (Buffer.byteLength(state.stderrBuffer, 'utf8') > MAX_WORKER_LINE_BYTES) {
+      state.stderrBuffer = state.stderrBuffer.slice(-MAX_WORKER_LINE_BYTES);
+    }
+  });
+  child.once('error', (error) => finishAclWorker(state, error));
+  child.once('close', (code, signal) => {
+    const diagnostic = state.stderrBuffer.trim();
+    const suffix = diagnostic.length > 0
+      ? `: ${diagnostic}`
+      : ` (${signal ?? code ?? 'unknown'})`;
+    finishAclWorker(
+      state,
+      new Error(`Windows private-path ACL worker exited unexpectedly${suffix}`)
+    );
+  });
+  aclWorker = state;
+  return state;
+}
+
+function scheduleAclWorkerStop(state) {
+  if (state.finished || state.pending !== null || state.idleTimer !== null) return;
+  state.idleTimer = setTimeout(() => {
+    state.idleTimer = null;
+    if (state.finished || state.pending !== null) return;
+    if (aclWorker === state) aclWorker = null;
+    state.child.stdin.end();
+    state.stopTimer = setTimeout(() => {
+      terminateAclWorker(
+        state,
+        new Error('Windows private-path ACL worker did not stop after stdin closed')
+      );
+    }, WORKER_STOP_TIMEOUT_MS);
+  }, WORKER_IDLE_MS);
+}
+
+async function executeAclWorkerBatch(encoded, context) {
+  const operation = aclWorkerQueue.then(async () => {
+    let state = aclWorker;
+    if (state === null || state.finished) state = await startAclWorker(context);
+    if (state.idleTimer !== null) {
+      clearTimeout(state.idleTimer);
+      state.idleTimer = null;
+    }
+    const requestId = randomBytes(16).toString('hex');
+    const frame = `${JSON.stringify({
+      schemaVersion: 1,
+      requestId,
+      batch: encoded,
+    })}\n`;
+    if (Buffer.byteLength(frame, 'utf8') > MAX_WORKER_LINE_BYTES) {
+      throw new Error('Windows private-path ACL worker request is too large');
+    }
+    try {
+      return await new Promise((resolve, reject) => {
+        const timer = setTimeout(() => {
+          const error = new Error('Windows private-path ACL worker request timed out');
+          terminateAclWorker(state, error);
+        }, WINDOWS_PRIVATE_ACL_TIMEOUT_MS);
+        state.pending = { reject, requestId, resolve, timer };
+        state.child.stdin.write(frame, 'utf8', (error) => {
+          if (error !== null && error !== undefined &&
+              state.pending?.requestId === requestId) {
+            terminateAclWorker(state, error);
+          }
+        });
+      });
+    } finally {
+      scheduleAclWorkerStop(state);
+    }
+  });
+  aclWorkerQueue = operation.catch(() => {});
+  return operation;
+}
+
+function canUseAclWorker({
+  environment,
+  execute,
+  lstatPath,
+  platform,
+  powerShellTempExecute,
+  powerShellTempForTesting,
+  systemRootForTesting,
+}) {
+  return process.platform === 'win32' &&
+    platform === 'win32' &&
+    environment === process.env &&
+    execute === execFileAsync &&
+    lstatPath === fsLstat &&
+    powerShellTempExecute === undefined &&
+    powerShellTempForTesting === undefined &&
+    systemRootForTesting === undefined;
+}
+
+function encodeAclBatch(requests) {
+  const encoded = Buffer.from(
+    JSON.stringify({ schemaVersion: 1, requests }),
+    'utf8'
+  ).toString('base64');
+  if (Buffer.byteLength(encoded, 'ascii') > MAX_BATCH_ENV_BYTES) {
+    throw new Error('Windows private-path ACL batch is too large');
+  }
+  return encoded;
+}
+
+function validateBatchProofs(stdout, normalized, identities) {
+  const parsed = JSON.parse(stdout.trim());
+  if (
+    !hasExactOwnKeys(parsed, ['schemaVersion', 'proofs']) ||
+    parsed.schemaVersion !== 1 ||
+    !Array.isArray(parsed.proofs) ||
+    parsed.proofs.length !== normalized.length
+  ) {
+    throw new Error('Windows private-path ACL batch proof count is invalid');
+  }
+  return Object.freeze(parsed.proofs.map((proof, index) =>
+    validateProof(
+      proof,
+      normalized[index].kind,
+      normalized[index].action,
+      identities[index]
+    )));
+}
 
 function validateProof(proof, kind, action, identity) {
   const inheritanceFlags = kind === 'directory' ? 3 : 0;
@@ -729,6 +1081,40 @@ export async function secureWindowsPrivatePath(
     'v1.0',
     'powershell.exe'
   );
+  if (canUseAclWorker({
+    environment,
+    execute,
+    lstatPath,
+    platform,
+    powerShellTempExecute,
+    powerShellTempForTesting,
+    systemRootForTesting,
+  })) {
+    const normalized = [{ path: normalizedPath, kind, action }];
+    const encoded = encodeAclBatch([{
+      path: normalizedPath,
+      kind,
+      action,
+      volumeSerial: identity.volumeSerial,
+      fileIndex: identity.fileIndex,
+    }]);
+    try {
+      const stdout = await executeAclWorkerBatch(encoded, {
+        environment,
+        powershell,
+        systemRoot,
+      });
+      const [proof] = validateBatchProofs(stdout, normalized, [identity]);
+      await verifyPrivatePathIdentity(normalizedPath, kind, identity, lstatPath);
+      return proof;
+    } catch (error) {
+      throw new Error(
+        `failed to enforce current-user SID-only Windows ACL: ${
+          error?.message || 'unknown error'}`,
+        { cause: error }
+      );
+    }
+  }
   const bootstrap = await acquireWindowsPowerShellTemp({
     environment,
     execute: powerShellTempExecute,
@@ -830,13 +1216,7 @@ export async function secureWindowsPrivatePaths(
     volumeSerial: identities[index].volumeSerial,
     fileIndex: identities[index].fileIndex,
   }));
-  const encoded = Buffer.from(
-    JSON.stringify({ schemaVersion: 1, requests: bound }),
-    'utf8'
-  ).toString('base64');
-  if (Buffer.byteLength(encoded, 'ascii') > MAX_BATCH_ENV_BYTES) {
-    throw new Error('Windows private-path ACL batch is too large');
-  }
+  const encoded = encodeAclBatch(bound);
   const powershell = win32.join(
     systemRoot,
     'System32',
@@ -844,6 +1224,33 @@ export async function secureWindowsPrivatePaths(
     'v1.0',
     'powershell.exe'
   );
+  if (canUseAclWorker({
+    environment,
+    execute,
+    lstatPath,
+    platform,
+    powerShellTempExecute,
+    powerShellTempForTesting,
+    systemRootForTesting,
+  })) {
+    try {
+      const stdout = await executeAclWorkerBatch(encoded, {
+        environment,
+        powershell,
+        systemRoot,
+      });
+      const proofs = validateBatchProofs(stdout, normalized, identities);
+      await Promise.all(normalized.map(({ path, kind }, index) =>
+        verifyPrivatePathIdentity(path, kind, identities[index], lstatPath)));
+      return proofs;
+    } catch (error) {
+      throw new Error(
+        `failed to enforce current-user SID-only Windows ACL batch: ${
+          error?.message || 'unknown error'}`,
+        { cause: error }
+      );
+    }
+  }
   const bootstrap = await acquireWindowsPowerShellTemp({
     environment,
     execute: powerShellTempExecute,
@@ -875,22 +1282,7 @@ export async function secureWindowsPrivatePaths(
         windowsHide: true,
       }
     );
-    const parsed = JSON.parse(result.stdout.trim());
-    if (
-      !hasExactOwnKeys(parsed, ['schemaVersion', 'proofs']) ||
-      parsed.schemaVersion !== 1 ||
-      !Array.isArray(parsed.proofs) ||
-      parsed.proofs.length !== normalized.length
-    ) {
-      throw new Error('Windows private-path ACL batch proof count is invalid');
-    }
-    const proofs = Object.freeze(parsed.proofs.map((proof, index) =>
-      validateProof(
-        proof,
-        normalized[index].kind,
-        normalized[index].action,
-        identities[index]
-      )));
+    const proofs = validateBatchProofs(result.stdout, normalized, identities);
     await Promise.all(normalized.map(({ path, kind }, index) =>
       verifyPrivatePathIdentity(path, kind, identities[index], lstatPath)));
     return proofs;
