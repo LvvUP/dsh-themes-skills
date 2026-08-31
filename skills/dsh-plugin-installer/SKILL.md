@@ -136,8 +136,10 @@ full-batch preflight and failure rollback, and only then set
    temporarily admit `FileShare.Write`; after that handle closes, strict
    verification is mandatory before the durable move. Every PowerShell
    `Add-Type` child receives a fresh local NTFS compiler temp whose protected
-   ACL contains exactly one current-user SID FullControl rule; caller TEMP/TMP
-   values never cross that child boundary.
+   ACL contains exactly one current-user SID FullControl rule. It tries process
+   `LOCALAPPDATA\\Temp`, then agreed `TEMP`/`TMP`; neither is a trust root, both
+   need identical owner, ancestor, NTFS, atomic-create, and identity proof;
+   only the fresh verified child becomes the `Add-Type` `TEMP`/`TMP`.
 8. Install, removal, and recovery share one cross-platform exclusive lock
    below the explicit `DSH_HOME` trust root. The fixed executor acquires it
    before snapshotting and holds it until commit or a verified rollback. A
@@ -494,6 +496,4 @@ The local recovery HMAC key and per-transaction nonce are also private recovery
 material: do not copy, publish, print, hash into a public receipt, or place the
 key inside a transaction. The nonce lives only in the protected authentication
 record and is never included in plans, terminal state, or CLI output.
-Losing or replacing that key intentionally makes retained transactions
-unrecoverable; preserve it only as part of a protected private `DSH_HOME`
-backup.
+Losing that key makes retained transactions unrecoverable; preserve it in protected backup.

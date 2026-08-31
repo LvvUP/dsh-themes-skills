@@ -168,21 +168,32 @@ function windowsPathIdentity(value) {
     : withoutTrailingSeparators).toLowerCase();
 }
 
-export function windowsPowerShellTempParentFromEnvironment(environment) {
+function windowsPowerShellTempParentsFromEnvironment(environment) {
   if (environment === null || typeof environment !== 'object' || Array.isArray(environment)) {
     fail('PowerShell bootstrap environment is malformed');
   }
+  const localAppDataValue = environmentValue(environment, 'LOCALAPPDATA');
+  const localAppDataTemp = localAppDataValue === undefined
+    ? undefined
+    : win32.join(localAppDataValue, 'Temp');
   const tempValue = environmentValue(environment, 'TEMP');
   const tmpValue = environmentValue(environment, 'TMP');
   if (tempValue !== undefined && tmpValue !== undefined &&
       windowsPathIdentity(tempValue) !== windowsPathIdentity(tmpValue)) {
     fail('PowerShell bootstrap TEMP and TMP disagree');
   }
-  const parent = tempValue ?? tmpValue;
-  if (parent === undefined) {
-    fail('PowerShell bootstrap requires one local TEMP or TMP parent');
+  const parents = [localAppDataTemp, tempValue ?? tmpValue]
+    .filter((value) => value !== undefined)
+    .filter((value, index, values) => values.findIndex((candidate) =>
+      windowsPathIdentity(candidate) === windowsPathIdentity(value)) === index);
+  if (parents.length === 0) {
+    fail('PowerShell bootstrap requires one local LOCALAPPDATA or TEMP/TMP parent');
   }
-  return parent;
+  return parents;
+}
+
+export function windowsPowerShellTempParentFromEnvironment(environment) {
+  return windowsPowerShellTempParentsFromEnvironment(environment)[0];
 }
 
 function validateProof(proof, expectedParent) {
@@ -242,86 +253,90 @@ export async function acquireWindowsPowerShellTemp({
   if (powerShellTempForTesting !== undefined) {
     fail('PowerShell bootstrap temp cannot be overridden on a Windows host');
   }
-  const parent = windowsPowerShellTempParentFromEnvironment(environment);
-  const canonicalParent = normalizeLocal(
-    await realpath(parent),
-    'canonical PowerShell bootstrap temp parent'
-  );
-  const parentBefore = await lstat(canonicalParent, { bigint: true });
-  if (!parentBefore.isDirectory() || parentBefore.isSymbolicLink()) {
-    fail('PowerShell bootstrap temp parent must be one real directory');
-  }
-  const path = win32.join(
-    canonicalParent,
-    `.dsh-plugin-powershell-${randomBytes(16).toString('hex')}`
-  );
-  let before = null;
-  let retained = true;
-  try {
-    const result = await execute(
-      powershell,
-      [
-        '-NoLogo', '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
-        '-Command', WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT,
-      ],
-      {
-        encoding: 'utf8',
-        env: {
-          SystemRoot: trustedSystemRoot,
-          WINDIR: trustedSystemRoot,
-          TEMP: path,
-          TMP: path,
-          [BOOTSTRAP_ENV]: path,
-        },
-        maxBuffer: 32 * 1024,
-        timeout: BOOTSTRAP_TIMEOUT_MS,
-        windowsHide: true,
-        shell: false,
+  let lastError = null;
+  for (const parent of windowsPowerShellTempParentsFromEnvironment(environment)) {
+    let before = null;
+    let path = null;
+    let retained = true;
+    try {
+      const canonicalParent = normalizeLocal(
+        await realpath(parent),
+        'canonical PowerShell bootstrap temp parent'
+      );
+      const parentBefore = await lstat(canonicalParent, { bigint: true });
+      if (!parentBefore.isDirectory() || parentBefore.isSymbolicLink()) {
+        fail('PowerShell bootstrap temp parent must be one real directory');
       }
-    );
-    if (String(result.stderr ?? '').trim() !== '') {
-      fail('PowerShell bootstrap temp emitted unexpected diagnostic output');
-    }
-    const proof = validateProof(JSON.parse(result.stdout.trim()), canonicalParent);
-    const parentAfter = await lstat(canonicalParent, { bigint: true });
-    if (!parentAfter.isDirectory() || parentAfter.isSymbolicLink() ||
-        parentBefore.dev !== parentAfter.dev || parentBefore.ino !== parentAfter.ino) {
-      fail('PowerShell bootstrap temp parent identity changed during ACL configuration');
-    }
-    before = await lstat(path, { bigint: true });
-    const after = await lstat(path, { bigint: true });
-    if (!after.isDirectory() || after.isSymbolicLink() || before.dev !== after.dev ||
-        before.ino !== after.ino) {
-      fail('PowerShell bootstrap temp identity changed during ACL configuration');
-    }
-    if ((await readdir(path)).length !== 0) {
-      fail('PowerShell bootstrap temp was not empty after ACL configuration');
-    }
-    return Object.freeze({
-      path,
-      proof,
-      release: async () => {
-        if (!retained) return;
-        const current = await lstat(path, { bigint: true });
-        if (!current.isDirectory() || current.isSymbolicLink() ||
-            before.dev !== current.dev || before.ino !== current.ino) {
-          fail('PowerShell bootstrap temp identity changed before cleanup');
+      path = win32.join(
+        canonicalParent,
+        `.dsh-plugin-powershell-${randomBytes(16).toString('hex')}`
+      );
+      const result = await execute(
+        powershell,
+        [
+          '-NoLogo', '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
+          '-Command', WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT,
+        ],
+        {
+          encoding: 'utf8',
+          env: {
+            SystemRoot: trustedSystemRoot,
+            WINDIR: trustedSystemRoot,
+            TEMP: path,
+            TMP: path,
+            [BOOTSTRAP_ENV]: path,
+          },
+          maxBuffer: 32 * 1024,
+          timeout: BOOTSTRAP_TIMEOUT_MS,
+          windowsHide: true,
+          shell: false,
         }
-        await rm(path, { recursive: true, force: true });
-        retained = false;
-      },
-    });
-  } catch (error) {
-    retained = false;
-    if (before !== null) {
-      const current = await lstat(path, { bigint: true }).catch(() => null);
-      if (current?.isDirectory() && !current.isSymbolicLink() &&
-          before.dev === current.dev && before.ino === current.ino) {
-        await rm(path, { recursive: true, force: true }).catch(() => {});
+      );
+      if (String(result.stderr ?? '').trim() !== '') {
+        fail('PowerShell bootstrap temp emitted unexpected diagnostic output');
+      }
+      const proof = validateProof(JSON.parse(result.stdout.trim()), canonicalParent);
+      const parentAfter = await lstat(canonicalParent, { bigint: true });
+      if (!parentAfter.isDirectory() || parentAfter.isSymbolicLink() ||
+          parentBefore.dev !== parentAfter.dev || parentBefore.ino !== parentAfter.ino) {
+        fail('PowerShell bootstrap temp parent identity changed during ACL configuration');
+      }
+      before = await lstat(path, { bigint: true });
+      const after = await lstat(path, { bigint: true });
+      if (!after.isDirectory() || after.isSymbolicLink() || before.dev !== after.dev ||
+          before.ino !== after.ino) {
+        fail('PowerShell bootstrap temp identity changed during ACL configuration');
+      }
+      if ((await readdir(path)).length !== 0) {
+        fail('PowerShell bootstrap temp was not empty after ACL configuration');
+      }
+      return Object.freeze({
+        path,
+        proof,
+        release: async () => {
+          if (!retained) return;
+          const current = await lstat(path, { bigint: true });
+          if (!current.isDirectory() || current.isSymbolicLink() ||
+              before.dev !== current.dev || before.ino !== current.ino) {
+            fail('PowerShell bootstrap temp identity changed before cleanup');
+          }
+          await rm(path, { recursive: true, force: true });
+          retained = false;
+        },
+      });
+    } catch (error) {
+      retained = false;
+      lastError = error;
+      if (before !== null && path !== null) {
+        const current = await lstat(path, { bigint: true }).catch(() => null);
+        if (current?.isDirectory() && !current.isSymbolicLink() &&
+            before.dev === current.dev && before.ino === current.ino) {
+          await rm(path, { recursive: true, force: true }).catch(() => {});
+        }
       }
     }
-    throw new Error('failed to create SID-only NTFS PowerShell bootstrap temp', {
-      cause: error,
-    });
   }
+  throw new Error('failed to create SID-only NTFS PowerShell bootstrap temp', {
+    cause: lastError,
+  });
 }

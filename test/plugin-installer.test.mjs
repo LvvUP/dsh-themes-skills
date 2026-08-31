@@ -1330,7 +1330,7 @@ test('pnpm lifecycle policy binds local tarballs to profile-relative locator and
   const item = hostedFixture().item;
   const profile = '/private/dsh/profiles/web';
   const artifact = '/private/transaction/prepared-staging/3006/plugin.tgz';
-  const locator = `file:${relative(profile, artifact)}`;
+  const locator = `file:${relative(profile, artifact).replaceAll('\\', '/')}`;
   const artifactIntegrity = `sha512-${Buffer.alloc(64, 9).toString('base64')}`;
   const packageKey = `${item.package.name}@${locator}`;
   const baseline = "lockfileVersion: '9.0'\nimporters:\n  .: {}\n";
@@ -2609,7 +2609,9 @@ function windowsAclProof(kind, volumeSerial, fileIndex, overrides = {}) {
   };
 }
 
-test('Windows recovery ACL runner binds a native handle identity and validates SID-only proof', async () => {
+test('Windows recovery ACL runner binds a native handle identity and validates SID-only proof', {
+  skip: process.platform === 'win32',
+}, async () => {
   const calls = [];
   const expectedIdentity = { volumeSerial: '41', fileIndex: '9001' };
   const systemRootOptions = windowsSystemRootTestOptions();
@@ -2855,6 +2857,38 @@ test('Windows recovery ACL runner binds a native handle identity and validates S
       }),
       'C:\\Temp'
     );
+    assert.equal(
+      windowsPowerShellTempParentFromEnvironment({
+        LOCALAPPDATA: 'C:\\Users\\Fixture\\AppData\\Local',
+        TEMP: 'D:\\Shared\\Temp',
+        TMP: 'D:\\Shared\\Temp',
+      }),
+      'C:\\Users\\Fixture\\AppData\\Local\\Temp'
+    );
+    assert.equal(
+      windowsPowerShellTempParentFromEnvironment({
+        LOCALAPPDATA: 'C:\\Users\\Fixture\\AppData\\Local',
+        localappdata: 'c:\\USERS\\FIXTURE\\APPDATA\\LOCAL\\',
+        TEMP: 'C:\\Users\\Fixture\\AppData\\Local\\Temp',
+        TMP: 'c:\\USERS\\FIXTURE\\APPDATA\\LOCAL\\TEMP\\',
+      }),
+      'C:\\Users\\Fixture\\AppData\\Local\\Temp'
+    );
+    assert.throws(
+      () => windowsPowerShellTempParentFromEnvironment({
+        LOCALAPPDATA: 'C:\\Users\\Fixture\\AppData\\Local',
+        localappdata: 'D:\\Other\\Local',
+        TEMP: 'C:\\Temp',
+      }),
+      /ambiguous Windows LOCALAPPDATA entries/u
+    );
+    assert.throws(
+      () => windowsPowerShellTempParentFromEnvironment({
+        LOCALAPPDATA: '\\\\server\\share\\Local',
+        TEMP: 'C:\\Temp',
+      }),
+      /local drive-absolute/u
+    );
     assert.throws(
       () => windowsPowerShellTempParentFromEnvironment({
         TEMP: 'C:\\Temp',
@@ -2999,7 +3033,9 @@ $stream.Dispose()
   assert.equal(proof.shareMode, 1);
 });
 
-test('Windows private ACL batches amortize one bounded PowerShell process without weakening proofs', async () => {
+test('Windows private ACL batches amortize one bounded PowerShell process without weakening proofs', {
+  skip: process.platform === 'win32',
+}, async () => {
   const calls = [];
   const systemRootOptions = windowsSystemRootTestOptions();
   const trustedSystemRoot = trustedWindowsSystemRoot({
@@ -3291,6 +3327,9 @@ test('private pnpm binding uses only the vendored 11.7.0 closure and defeats PAT
     COMSPEC: process.platform === 'win32'
       ? join(profileCwd, 'untrusted-command-processor.exe')
       : process.env.COMSPEC,
+    ...(process.platform === 'win32' && process.env.LOCALAPPDATA
+      ? { LOCALAPPDATA: process.env.LOCALAPPDATA }
+      : {}),
     TEMP: process.env.TEMP ?? tmpdir(),
     TMP: process.env.TMP ?? tmpdir(),
   };

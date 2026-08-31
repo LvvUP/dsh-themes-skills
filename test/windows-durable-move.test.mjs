@@ -48,7 +48,9 @@ function windowsSystemRootTestOptions() {
       };
 }
 
-test('uses trusted PowerShell and a SID-only bootstrap temp instead of caller compiler paths', async () => {
+test('uses trusted PowerShell and a SID-only bootstrap temp instead of caller compiler paths', {
+  skip: process.platform === 'win32',
+}, async () => {
   let invocation;
   const execute = async (...args) => {
     invocation = args;
@@ -106,7 +108,9 @@ test('uses trusted PowerShell and a SID-only bootstrap temp instead of caller co
   assert.doesNotMatch(WINDOWS_DURABLE_MOVE_SCRIPT, /C:\\private/u);
 });
 
-test('rejects a successful but weak proof', async () => {
+test('rejects a successful but weak proof', {
+  skip: process.platform === 'win32',
+}, async () => {
   await assert.rejects(
     moveWindowsPathDurably(source, target, {
       environment: { SystemRoot: String.raw`Z:\forged-windows` },
@@ -123,7 +127,9 @@ test('rejects a successful but weak proof', async () => {
 });
 
 for (const win32Error of [80, 183]) {
-  test(`maps Win32 target-exists error ${win32Error} to EEXIST`, async () => {
+  test(`maps Win32 target-exists error ${win32Error} to EEXIST`, {
+    skip: process.platform === 'win32',
+  }, async () => {
     await assert.rejects(
       moveWindowsPathDurably(source, target, {
         environment: { SystemRoot: String.raw`Z:\forged-windows` },
@@ -149,7 +155,9 @@ for (const win32Error of [80, 183]) {
   });
 }
 
-test('recovers a JSON Win32 failure proof from a rejected executor', async () => {
+test('recovers a JSON Win32 failure proof from a rejected executor', {
+  skip: process.platform === 'win32',
+}, async () => {
   const executionError = new Error('PowerShell exited unsuccessfully');
   executionError.stdout = proof({
     moved: false,

@@ -188,6 +188,11 @@ initial ACL configuration while the installer's own Node file-writer handle is
 still open; it admits Write but never Delete, and closing that handle must be
 followed by strict verification before movement. PowerShell `Add-Type` runs
 only with a fresh local NTFS TEMP/TMP protected to one current-user SID rule.
+Its parent is selected from process `LOCALAPPDATA\\Temp` and then the one
+agreed caller `TEMP`/`TMP`; neither is a trust root, and both candidates must
+pass the identical owner, full ancestor-chain, NTFS, atomic-create, and
+file-identity proof. Only the fresh verified child is forwarded to `Add-Type`,
+so a shared or redirectable runner temp fails closed rather than being trusted.
 The implementation is covered by a real Windows ACL test, while
 promotion still requires the complete six-task runtime receipt matrix.
 
