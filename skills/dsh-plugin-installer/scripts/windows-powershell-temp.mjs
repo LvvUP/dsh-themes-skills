@@ -95,7 +95,7 @@ $rule = [Security.AccessControl.FileSystemAccessRule]::new(
   [Security.AccessControl.PropagationFlags]::None,
   [Security.AccessControl.AccessControlType]::Allow)
 $security.AddAccessRule($rule)
-$directory = [IO.Directory]::CreateDirectory($path, $security)
+$directory.Create($security)
 $directory.Refresh()
 $drive = [IO.DriveInfo]::new($directory.Root.FullName)
 if (-not $directory.Exists -or
@@ -110,7 +110,7 @@ $rules = @($verified.GetAccessRules($true, $true, [Security.Principal.SecurityId
 $only = if ($rules.Count -eq 1) { $rules[0] } else { $null }
 [PSCustomObject]@{
   schemaVersion = 2
-  creationMode = 'atomic-directory-security-overload'
+  creationMode = 'atomic-directoryinfo-security-overload'
   fileSystem = $drive.DriveFormat.ToUpperInvariant()
   parentPath = $parent.FullName
   parentOwnerSid = $parentOwnerSid
@@ -221,7 +221,7 @@ function validateProof(proof, expectedParent) {
   }
   const invalidFields = [
     ['schemaVersion', proof.schemaVersion === 2],
-    ['creationMode', proof.creationMode === 'atomic-directory-security-overload'],
+    ['creationMode', proof.creationMode === 'atomic-directoryinfo-security-overload'],
     ['fileSystem', proof.fileSystem === 'NTFS'],
     ['parentPath', proofParentMatches],
     ['parentOwnerSid', /^S-1-[0-9-]+$/u.test(proof.parentOwnerSid ?? '')],

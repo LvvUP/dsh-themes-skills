@@ -2698,7 +2698,11 @@ test('Windows recovery ACL runner binds a native handle identity and validates S
   assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /DriveFormat/u);
   assert.match(
     WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT,
-    /\[IO\.Directory\]::CreateDirectory\(\$path, \$security\)/u
+    /\$directory\.Create\(\$security\)/u
+  );
+  assert.doesNotMatch(
+    WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT,
+    /\[IO\.Directory\]::CreateDirectory/u
   );
   assert.match(
     WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT,
