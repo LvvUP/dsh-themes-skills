@@ -197,24 +197,47 @@ export function windowsPowerShellTempParentFromEnvironment(environment) {
 }
 
 function validateProof(proof, expectedParent) {
-  if (proof === null || typeof proof !== 'object' || Array.isArray(proof) ||
-      proof.schemaVersion !== 2 ||
-      proof.creationMode !== 'atomic-directory-security-overload' ||
-      proof.fileSystem !== 'NTFS' ||
-      typeof proof.parentPath !== 'string' ||
-      windowsPathIdentity(normalizeLocal(proof.parentPath, 'PowerShell bootstrap proof parent')) !==
-        windowsPathIdentity(expectedParent) ||
-      !/^S-1-[0-9-]+$/u.test(proof.parentOwnerSid ?? '') ||
-      !Number.isSafeInteger(proof.checkedAncestorCount) ||
-      proof.checkedAncestorCount < 1 || proof.checkedAncestorCount > 256 ||
-      proof.untrustedMutationRuleCount !== 0 ||
-      !/^S-1-[0-9-]+$/u.test(proof.currentSid ?? '') ||
-      proof.ownerSid !== proof.currentSid || proof.protected !== true ||
-      proof.ruleCount !== 1 || proof.ruleSid !== proof.currentSid ||
-      proof.inherited !== false || proof.allow !== true ||
-      proof.fullControl !== true || proof.inheritanceFlags !== 3 ||
-      proof.propagationFlags !== 0) {
-    fail('PowerShell bootstrap temp ACL proof is weaker than SID-only NTFS');
+  if (proof === null || typeof proof !== 'object' || Array.isArray(proof)) {
+    fail('PowerShell bootstrap temp ACL proof is weaker than SID-only NTFS (object)');
+  }
+  let proofParentMatches = false;
+  if (typeof proof.parentPath === 'string') {
+    try {
+      proofParentMatches = windowsPathIdentity(normalizeLocal(
+        proof.parentPath,
+        'PowerShell bootstrap proof parent'
+      )) === windowsPathIdentity(expectedParent);
+    } catch {
+      proofParentMatches = false;
+    }
+  }
+  const invalidFields = [
+    ['schemaVersion', proof.schemaVersion === 2],
+    ['creationMode', proof.creationMode === 'atomic-directory-security-overload'],
+    ['fileSystem', proof.fileSystem === 'NTFS'],
+    ['parentPath', proofParentMatches],
+    ['parentOwnerSid', /^S-1-[0-9-]+$/u.test(proof.parentOwnerSid ?? '')],
+    [
+      'checkedAncestorCount',
+      Number.isSafeInteger(proof.checkedAncestorCount) &&
+        proof.checkedAncestorCount >= 1 && proof.checkedAncestorCount <= 256,
+    ],
+    ['untrustedMutationRuleCount', proof.untrustedMutationRuleCount === 0],
+    ['currentSid', /^S-1-[0-9-]+$/u.test(proof.currentSid ?? '')],
+    ['ownerSid', proof.ownerSid === proof.currentSid],
+    ['protected', proof.protected === true],
+    ['ruleCount', proof.ruleCount === 1],
+    ['ruleSid', proof.ruleSid === proof.currentSid],
+    ['inherited', proof.inherited === false],
+    ['allow', proof.allow === true],
+    ['fullControl', proof.fullControl === true],
+    ['inheritanceFlags', proof.inheritanceFlags === 3],
+    ['propagationFlags', proof.propagationFlags === 0],
+  ].filter(([, valid]) => !valid).map(([field]) => field);
+  if (invalidFields.length > 0) {
+    fail(
+      `PowerShell bootstrap temp ACL proof is weaker than SID-only NTFS (${invalidFields.join(',')})`
+    );
   }
   return Object.freeze({ ...proof });
 }
