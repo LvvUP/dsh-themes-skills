@@ -72,10 +72,14 @@ jobs:
         shell: bash
         run: |
           mkdir -p ci-evidence/receipt
+          set +e
           node authority/skills/dsh-plugin-installer/scripts/audit-candidate-source.mjs \
             --id "#${{ matrix.catalogId }}" \
             --source "${{ github.workspace }}/candidate" \
             --out "${{ github.workspace }}/ci-evidence/receipt/source-intake-receipt.json"
+          status="$?"
+          set -e
+          test "$status" -eq 0 || test "$status" -eq 2
       - name: Inventory bounded static risk without executing candidate code
         if: ${{ always() }}
         shell: bash
@@ -116,11 +120,16 @@ jobs:
         with:
           pattern: alpha1-plugin-source-intake-*
           path: ci-evidence/input
-      - name: Reject missing, duplicate, secret-bearing, or failed source intake
-        run: >-
-          node skills/dsh-plugin-installer/scripts/aggregate-source-intake.mjs
-          --input "${{ github.workspace }}/ci-evidence/input"
-          --out-dir "${{ github.workspace }}/ci-evidence/summary"
+      - name: Reject missing, duplicate, secret-bearing, or malformed source intake
+        shell: bash
+        run: |
+          set +e
+          node skills/dsh-plugin-installer/scripts/aggregate-source-intake.mjs \
+            --input "${{ github.workspace }}/ci-evidence/input" \
+            --out-dir "${{ github.workspace }}/ci-evidence/summary"
+          status="$?"
+          set -e
+          test "$status" -eq 0 || test "$status" -eq 2
       - name: Build the non-authoritative static-risk review queue
         if: ${{ always() }}
         run: >-

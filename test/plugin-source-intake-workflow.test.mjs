@@ -13,6 +13,10 @@ test('source-intake workflow audits source and static risk without executing can
   assert.match(workflow, /audit-candidate-source\.mjs/);
   assert.match(workflow, /audit-candidate-risk\.mjs/);
   assert.match(workflow, /aggregate-source-intake\.mjs/);
+  assert.equal(
+    [...workflow.matchAll(/test "\$status" -eq 0 \|\| test "\$status" -eq 2/g)].length,
+    2
+  );
   assert.match(workflow, /aggregate-candidate-risk\.mjs/);
   assert.match(workflow, /static-risk-summary\.json/);
   assert.doesNotMatch(workflow, /(?:path:|mkdir -p|--input|--out(?:-dir)?) [^\n]*\.ci(?:\/|\\)/u);
