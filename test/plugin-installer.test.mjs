@@ -122,6 +122,7 @@ import {
 } from '../skills/dsh-plugin-installer/scripts/windows-private-acl.mjs';
 import {
   WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT,
+  validateWindowsPowerShellTempProof,
   windowsPowerShellTempParentFromEnvironment,
 } from '../skills/dsh-plugin-installer/scripts/windows-powershell-temp.mjs';
 
@@ -2696,10 +2697,15 @@ test('Windows recovery ACL runner binds a native handle identity and validates S
   assert.doesNotMatch(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /Add-Type/u);
   assert.doesNotMatch(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /\.SetAccessControl\(/u);
   assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /DriveFormat/u);
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /SetSecurityDescriptorSddlForm/u);
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /D:P\(A;OICI;FA;;;/u);
   assert.match(
     WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT,
-    /\$directory\.Create\(\$security\)/u
+    /SetAccessRuleProtection\(\$true, \$false\)/u
   );
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /\$directory\.Create\(\$security\)/u);
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /GetSecurityDescriptorBinaryForm/u);
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /DiscretionaryAclProtected/u);
   assert.doesNotMatch(
     WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT,
     /\[IO\.Directory\]::CreateDirectory/u
@@ -2713,8 +2719,41 @@ test('Windows recovery ACL runner binds a native handle identity and validates S
   assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /TakeOwnership/u);
   assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /S-1-5-32-544/u);
   assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /checkedAncestorCount/u);
-  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /SetAccessRuleProtection\(\$true, \$false\)/u);
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /AreAccessRulesProtected/u);
   assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /GetCurrent\(\)\.User/u);
+
+  const bootstrapParent = String.raw`C:\Users\runneradmin\AppData\Local\Temp`;
+  const bootstrapProof = {
+    schemaVersion: 3,
+    creationMode: 'atomic-directoryinfo-explicit-sddl',
+    fileSystem: 'NTFS',
+    parentPath: bootstrapParent,
+    parentOwnerSid: 'S-1-5-21-1000',
+    checkedAncestorCount: 5,
+    untrustedMutationRuleCount: 0,
+    currentSid: 'S-1-5-21-1000',
+    ownerSid: 'S-1-5-21-1000',
+    protected: true,
+    ruleCount: 1,
+    ruleSid: 'S-1-5-21-1000',
+    inherited: false,
+    allow: true,
+    fullControl: true,
+    inheritanceFlags: 3,
+    propagationFlags: 0,
+  };
+  assert.equal(
+    validateWindowsPowerShellTempProof(bootstrapProof, bootstrapParent).creationMode,
+    'atomic-directoryinfo-explicit-sddl'
+  );
+  assert.throws(
+    () => validateWindowsPowerShellTempProof({
+      ...bootstrapProof,
+      schemaVersion: 2,
+      creationMode: 'atomic-directoryinfo-security-overload',
+    }, bootstrapParent),
+    /\(schemaVersion,creationMode\)/
+  );
 
   await assert.rejects(
     () => secureWindowsPrivatePath('C:\\private\\trust-root', 'directory', 'verify', {

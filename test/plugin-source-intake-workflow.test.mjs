@@ -7,6 +7,8 @@ const workflowPath = '.github/workflows/alpha2-plugin-source-intake.yml';
 test('source-intake workflow audits source and static risk without executing candidates', async () => {
   const workflow = await readFile(workflowPath, 'utf8');
   assert.match(workflow, /candidate-intake\.mjs --github-matrix/);
+  assert.match(workflow, /candidate_matrix="\$\(node [^\n]+ --github-matrix\)"/u);
+  assert.doesNotMatch(workflow, /echo "candidates=\$\(node/u);
   assert.match(workflow, /repository: \$\{\{ matrix\.repository \}\}/);
   assert.match(workflow, /ref: \$\{\{ matrix\.commit \}\}/);
   assert.match(workflow, /persist-credentials: false/g);

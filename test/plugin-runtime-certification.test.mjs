@@ -514,6 +514,8 @@ test('workflow isolates candidates, pins actions, minimizes permissions, and can
     'artifact-metadata': 'write',
   });
   assert.deepEqual(workflow.jobs['verify-signed'].permissions, { contents: 'read' });
+  assert.match(source, /matrix_batch_1="\$\(node [^\n]+ --batch 1\)"/u);
+  assert.doesNotMatch(source, /echo "batch-[1-4]=\$\(node/u);
   for (let batchId = 1; batchId <= 4; batchId += 1) {
     const job = workflow.jobs[`runtime-batch-${batchId}`];
     assert.equal(job.strategy['max-parallel'], 20);

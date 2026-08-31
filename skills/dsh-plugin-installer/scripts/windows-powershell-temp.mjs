@@ -85,16 +85,35 @@ while ($null -ne $cursor) {
 }
 
 $security = [Security.AccessControl.DirectorySecurity]::new()
+$security.SetSecurityDescriptorSddlForm(
+  'O:' + $sid.Value + 'D:P(A;OICI;FA;;;' + $sid.Value + ')')
 $security.SetAccessRuleProtection($true, $false)
-$security.SetOwner($sid)
-$rule = [Security.AccessControl.FileSystemAccessRule]::new(
-  $sid,
-  [Security.AccessControl.FileSystemRights]::FullControl,
-  [Security.AccessControl.InheritanceFlags]::ContainerInherit -bor
-    [Security.AccessControl.InheritanceFlags]::ObjectInherit,
-  [Security.AccessControl.PropagationFlags]::None,
-  [Security.AccessControl.AccessControlType]::Allow)
-$security.AddAccessRule($rule)
+$preparedRules = @($security.GetAccessRules(
+  $true,
+  $true,
+  [Security.Principal.SecurityIdentifier]))
+$preparedOnly = if ($preparedRules.Count -eq 1) { $preparedRules[0] } else { $null }
+if ($security.GetOwner([Security.Principal.SecurityIdentifier]).Value -ne $sid.Value -or
+    -not $security.AreAccessRulesProtected -or
+    $null -eq $preparedOnly -or
+    $preparedOnly.IdentityReference.Value -ne $sid.Value -or
+    $preparedOnly.IsInherited -or
+    $preparedOnly.AccessControlType -ne [Security.AccessControl.AccessControlType]::Allow -or
+    $preparedOnly.FileSystemRights -ne [Security.AccessControl.FileSystemRights]::FullControl -or
+    [int]$preparedOnly.InheritanceFlags -ne 3 -or
+    [int]$preparedOnly.PropagationFlags -ne 0) {
+  throw 'PowerShell bootstrap security descriptor is malformed before native creation'
+}
+$descriptor = $security.GetSecurityDescriptorBinaryForm()
+if ($descriptor.Length -lt 20 -or $descriptor.Length -gt 65536) {
+  throw 'PowerShell bootstrap security descriptor is outside bounded handling'
+}
+$rawDescriptor = [Security.AccessControl.RawSecurityDescriptor]::new($descriptor, 0)
+if (($rawDescriptor.ControlFlags -band
+      [Security.AccessControl.ControlFlags]::DiscretionaryAclProtected) -eq 0) {
+  throw 'PowerShell bootstrap security descriptor lost DACL protection'
+}
+
 $directory.Create($security)
 $directory.Refresh()
 $drive = [IO.DriveInfo]::new($directory.Root.FullName)
@@ -109,8 +128,8 @@ $verified = $directory.GetAccessControl(
 $rules = @($verified.GetAccessRules($true, $true, [Security.Principal.SecurityIdentifier]))
 $only = if ($rules.Count -eq 1) { $rules[0] } else { $null }
 [PSCustomObject]@{
-  schemaVersion = 2
-  creationMode = 'atomic-directoryinfo-security-overload'
+  schemaVersion = 3
+  creationMode = 'atomic-directoryinfo-explicit-sddl'
   fileSystem = $drive.DriveFormat.ToUpperInvariant()
   parentPath = $parent.FullName
   parentOwnerSid = $parentOwnerSid
@@ -204,7 +223,7 @@ export function windowsPowerShellTempParentFromEnvironment(environment) {
   return windowsPowerShellTempParentsFromEnvironment(environment)[0];
 }
 
-function validateProof(proof, expectedParent) {
+export function validateWindowsPowerShellTempProof(proof, expectedParent) {
   if (proof === null || typeof proof !== 'object' || Array.isArray(proof)) {
     fail('PowerShell bootstrap temp ACL proof is weaker than SID-only NTFS (object)');
   }
@@ -220,8 +239,8 @@ function validateProof(proof, expectedParent) {
     }
   }
   const invalidFields = [
-    ['schemaVersion', proof.schemaVersion === 2],
-    ['creationMode', proof.creationMode === 'atomic-directoryinfo-security-overload'],
+    ['schemaVersion', proof.schemaVersion === 3],
+    ['creationMode', proof.creationMode === 'atomic-directoryinfo-explicit-sddl'],
     ['fileSystem', proof.fileSystem === 'NTFS'],
     ['parentPath', proofParentMatches],
     ['parentOwnerSid', /^S-1-[0-9-]+$/u.test(proof.parentOwnerSid ?? '')],
@@ -326,7 +345,10 @@ export async function acquireWindowsPowerShellTemp({
       if (String(result.stderr ?? '').trim() !== '') {
         fail('PowerShell bootstrap temp emitted unexpected diagnostic output');
       }
-      const proof = validateProof(JSON.parse(result.stdout.trim()), canonicalParent);
+      const proof = validateWindowsPowerShellTempProof(
+        JSON.parse(result.stdout.trim()),
+        canonicalParent
+      );
       const parentAfter = await lstat(canonicalParent, { bigint: true });
       if (!parentAfter.isDirectory() || parentAfter.isSymbolicLink() ||
           parentBefore.dev !== parentAfter.dev || parentBefore.ino !== parentAfter.ino) {

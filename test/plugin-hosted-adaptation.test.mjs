@@ -1741,6 +1741,8 @@ test('hosted adaptation CI matrix contains only immutable build-only identities'
     ), 'utf8'),
     readFile(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8'),
   ]);
+  assert.match(workflow, /adaptation_matrix="\$\(node [^\n]+ matrix\)"/u);
+  assert.doesNotMatch(workflow, /echo "adaptations=\$\(node/u);
   assert.match(workflow, /Build twice without running candidate code/u);
   assert.match(workflow, /cmp .*hosted-a/u);
   assert.match(workflow, /candidateExecuted/u);

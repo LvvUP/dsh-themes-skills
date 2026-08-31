@@ -38,7 +38,9 @@ jobs:
       - name: Emit immutable candidate matrix
         id: matrix
         shell: bash
-        run: echo "candidates=$(node skills/dsh-plugin-installer/scripts/candidate-intake.mjs --github-matrix)" >> "$GITHUB_OUTPUT"
+        run: |
+          candidate_matrix="$(node skills/dsh-plugin-installer/scripts/candidate-intake.mjs --github-matrix)"
+          printf 'candidates=%s\n' "$candidate_matrix" >> "$GITHUB_OUTPUT"
 
   source-intake:
     name: "Source-only intake #${{ matrix.catalogId }}"

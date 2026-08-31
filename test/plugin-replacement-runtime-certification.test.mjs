@@ -459,6 +459,8 @@ test('GitHub context, schemas, workflow, and action preserve the non-installing 
   assert.match(workflow.jobs.aggregate.if, /always\(\)/u);
   assert.equal(workflow.jobs.sign.permissions['id-token'], 'write');
   assert.equal(workflow.jobs['verify-signed'].permissions.contents, 'read');
+  assert.match(workflowSource, /matrix_batch_1="\$\(node [^\n]+ --batch 1\)"/u);
+  assert.doesNotMatch(workflowSource, /echo "batch-[1-4]=\$\(node/u);
   assert.equal(action.inputs['candidate-key'].required, true);
   assert.equal(action.inputs.tree.required, true);
   assert.match(actionSource, /persist-credentials: false/u);

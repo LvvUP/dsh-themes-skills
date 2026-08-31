@@ -47,7 +47,9 @@ jobs:
       - name: Emit digest-bound recipe matrix
         id: matrix
         shell: bash
-        run: echo "adaptations=$(node skills/dsh-plugin-installer/scripts/hosted-adaptation-plan.mjs matrix)" >> "$GITHUB_OUTPUT"
+        run: |
+          adaptation_matrix="$(node skills/dsh-plugin-installer/scripts/hosted-adaptation-plan.mjs matrix)"
+          printf 'adaptations=%s\n' "$adaptation_matrix" >> "$GITHUB_OUTPUT"
 
   build:
     name: "Build-only hosted adaptation #${{ matrix.catalogId }}"
