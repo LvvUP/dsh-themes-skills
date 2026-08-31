@@ -71,8 +71,30 @@ function Assert-TrustedAncestor([IO.DirectoryInfo]$candidate, [bool]$immediatePa
   return $candidateOwner
 }
 
+function Assert-BootstrapTargetAbsent([IO.DirectoryInfo]$candidate) {
+  $candidate.Refresh()
+  if ($candidate.Exists -or [IO.File]::Exists($candidate.FullName)) {
+    throw 'PowerShell bootstrap temp must not exist before atomic creation'
+  }
+  $existing = @($candidate.Parent.GetFileSystemInfos(
+    $candidate.Name,
+    [IO.SearchOption]::TopDirectoryOnly))
+  foreach ($entry in $existing) {
+    if ([String]::Equals(
+        $entry.Name,
+        $candidate.Name,
+        [StringComparison]::OrdinalIgnoreCase)) {
+      if (($entry.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+        throw 'PowerShell bootstrap temp must not preexist as a reparse point'
+      }
+      throw 'PowerShell bootstrap temp must not preexist'
+    }
+  }
+}
+
 $parent = $directory.Parent
 if ($null -eq $parent) { throw 'PowerShell bootstrap temp has no parent' }
+Assert-BootstrapTargetAbsent $directory
 $checkedAncestors = 0
 $parentOwnerSid = $null
 $cursor = $parent
@@ -114,6 +136,7 @@ if (($rawDescriptor.ControlFlags -band
   throw 'PowerShell bootstrap security descriptor lost DACL protection'
 }
 
+Assert-BootstrapTargetAbsent $directory
 $directory.Create($security)
 $directory.Refresh()
 $drive = [IO.DriveInfo]::new($directory.Root.FullName)
@@ -223,6 +246,28 @@ export function windowsPowerShellTempParentFromEnvironment(environment) {
   return windowsPowerShellTempParentsFromEnvironment(environment)[0];
 }
 
+export function windowsPowerShellBootstrapEnvironment({
+  canonicalParent,
+  path,
+  trustedSystemRoot,
+}) {
+  const parent = normalizeLocal(canonicalParent, 'canonical PowerShell bootstrap temp parent');
+  const child = normalizeLocal(path, 'PowerShell bootstrap temp child');
+  const systemRoot = normalizeLocal(trustedSystemRoot, 'trusted Windows system root');
+  if (windowsPathIdentity(win32.dirname(child)) !== windowsPathIdentity(parent) ||
+      windowsPathIdentity(child) === windowsPathIdentity(parent) ||
+      !/^\.dsh-plugin-powershell-[a-f0-9]{32}$/u.test(win32.basename(child))) {
+    fail('PowerShell bootstrap temp child must be one direct random child of its canonical parent');
+  }
+  return Object.freeze({
+    SystemRoot: systemRoot,
+    WINDIR: systemRoot,
+    TEMP: parent,
+    TMP: parent,
+    [BOOTSTRAP_ENV]: child,
+  });
+}
+
 export function validateWindowsPowerShellTempProof(proof, expectedParent) {
   if (proof === null || typeof proof !== 'object' || Array.isArray(proof)) {
     fail('PowerShell bootstrap temp ACL proof is weaker than SID-only NTFS (object)');
@@ -321,6 +366,12 @@ export async function acquireWindowsPowerShellTemp({
         canonicalParent,
         `.dsh-plugin-powershell-${randomBytes(16).toString('hex')}`
       );
+      try {
+        await lstat(path);
+        fail('PowerShell bootstrap temp child already exists before process launch');
+      } catch (error) {
+        if (error?.code !== 'ENOENT') throw error;
+      }
       const result = await execute(
         powershell,
         [
@@ -329,13 +380,11 @@ export async function acquireWindowsPowerShellTemp({
         ],
         {
           encoding: 'utf8',
-          env: {
-            SystemRoot: trustedSystemRoot,
-            WINDIR: trustedSystemRoot,
-            TEMP: path,
-            TMP: path,
-            [BOOTSTRAP_ENV]: path,
-          },
+          env: windowsPowerShellBootstrapEnvironment({
+            canonicalParent,
+            path,
+            trustedSystemRoot,
+          }),
           maxBuffer: 32 * 1024,
           timeout: BOOTSTRAP_TIMEOUT_MS,
           windowsHide: true,

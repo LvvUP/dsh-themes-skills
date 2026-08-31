@@ -123,6 +123,7 @@ import {
 import {
   WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT,
   validateWindowsPowerShellTempProof,
+  windowsPowerShellBootstrapEnvironment,
   windowsPowerShellTempParentFromEnvironment,
 } from '../skills/dsh-plugin-installer/scripts/windows-powershell-temp.mjs';
 
@@ -2721,8 +2722,46 @@ test('Windows recovery ACL runner binds a native handle identity and validates S
   assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /checkedAncestorCount/u);
   assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /AreAccessRulesProtected/u);
   assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /GetCurrent\(\)\.User/u);
+  assert.equal(
+    WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT.match(
+      /Assert-BootstrapTargetAbsent \$directory/gu
+    )?.length,
+    2
+  );
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /GetFileSystemInfos/u);
+  assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /ReparsePoint/u);
 
   const bootstrapParent = String.raw`C:\Users\runneradmin\AppData\Local\Temp`;
+  const bootstrapChild = `${bootstrapParent}\\.dsh-plugin-powershell-${'a'.repeat(32)}`;
+  const bootstrapEnvironment = windowsPowerShellBootstrapEnvironment({
+    canonicalParent: bootstrapParent,
+    path: bootstrapChild,
+    trustedSystemRoot: WINDOWS_SYSTEM_ROOT_FOR_TESTING,
+  });
+  assert.deepEqual(bootstrapEnvironment, {
+    SystemRoot: WINDOWS_SYSTEM_ROOT_FOR_TESTING,
+    WINDIR: WINDOWS_SYSTEM_ROOT_FOR_TESTING,
+    TEMP: bootstrapParent,
+    TMP: bootstrapParent,
+    DSH_PLUGIN_POWERSHELL_TEMP: bootstrapChild,
+  });
+  assert.notEqual(bootstrapEnvironment.TEMP, bootstrapEnvironment.DSH_PLUGIN_POWERSHELL_TEMP);
+  assert.throws(
+    () => windowsPowerShellBootstrapEnvironment({
+      canonicalParent: bootstrapParent,
+      path: `${bootstrapParent}\\nested\\child`,
+      trustedSystemRoot: WINDOWS_SYSTEM_ROOT_FOR_TESTING,
+    }),
+    /one direct random child/
+  );
+  assert.throws(
+    () => windowsPowerShellBootstrapEnvironment({
+      canonicalParent: bootstrapParent,
+      path: `${bootstrapParent}\\caller-chosen-child`,
+      trustedSystemRoot: WINDOWS_SYSTEM_ROOT_FOR_TESTING,
+    }),
+    /one direct random child/
+  );
   const bootstrapProof = {
     schemaVersion: 3,
     creationMode: 'atomic-directoryinfo-explicit-sddl',
@@ -2956,6 +2995,44 @@ test('Windows recovery ACL runner binds a native handle identity and validates S
         /local drive-absolute/
       );
     }
+  }
+});
+
+test('Windows PowerShell bootstrap rejects a pre-existing child before atomic creation', {
+  skip: process.platform !== 'win32',
+}, async () => {
+  const systemRoot = process.env.SystemRoot;
+  const localAppData = process.env.LOCALAPPDATA;
+  assert.equal(typeof systemRoot, 'string');
+  assert.equal(typeof localAppData, 'string');
+  const parent = await realpath(join(localAppData, 'Temp'));
+  const child = join(
+    parent,
+    `.dsh-plugin-powershell-${randomBytes(16).toString('hex')}`
+  );
+  await mkdir(child);
+  try {
+    const result = spawnSync(
+      join(systemRoot, 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe'),
+      [
+        '-NoLogo', '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
+        '-Command', WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT,
+      ],
+      {
+        encoding: 'utf8',
+        env: windowsPowerShellBootstrapEnvironment({
+          canonicalParent: parent,
+          path: child,
+          trustedSystemRoot: systemRoot,
+        }),
+        timeout: 30_000,
+        windowsHide: true,
+      }
+    );
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /must not exist before atomic creation/u);
+  } finally {
+    await rm(child, { recursive: true, force: true });
   }
 });
 
