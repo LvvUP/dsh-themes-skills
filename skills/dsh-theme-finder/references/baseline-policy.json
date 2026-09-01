@@ -36,7 +36,7 @@
     "evidencePath": "community-authority.json",
     "evidenceSha256": "343000de2be72848db4a7838be90e3c41191f164a5a62d8198d154bfe0aa5d99",
     "hostedAuthorityPath": "hosted-authority.json",
-    "hostedAuthoritySha256": "f3ec4dce1ede92f991e20ab673b251bf3655216547db95ef76bb9a993f789e8c",
+    "hostedAuthoritySha256": "46b2c69ca6215176d765d30979a6b20f9933dbcabe55d0cdffeb561ce6a72623",
     "compatibility": {
       "dshPackageVersion": "0.1.0-rc.8",
       "sourceCommit": "141eb6fef83422698aef7a981029e843e8161534",
