@@ -210,6 +210,10 @@ test('alpha.2 authority, schema, shared Harness binding, and six planned guards 
     'utf8'
   );
   assert.match(workflow, /pending-authority guard/);
+  assert.match(workflow, /reviewedItems!==0/);
+  assert.match(workflow, /installableItems!==0/);
+  assert.match(workflow, /showcasePublicationAllowed!==true/);
+  assert.match(workflow, /installPublicationAllowed!==false/);
   assert.match(workflow, /runtimeExecuted!==false/);
   assert.match(workflow, /receiptProduced!==false/);
   assert.doesNotMatch(workflow, /actions\/upload-artifact/);
