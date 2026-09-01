@@ -17,6 +17,7 @@ test('the 80-item Plugin intake is immutable source input, never installation au
   assert.equal(intake.replacementPolicy.nextReplacementCatalogId, 3089);
   assert.ok(!intake.items.some((item) => item.catalogId === 3003));
   assert.equal(intake.items.at(-1).catalogId, 3088);
+  assert.equal(intake.items.at(-1).editorialScore, 92);
   assert.equal(new Set(intake.items.map((item) => item.catalogId)).size, 80);
   assert.equal(
     new Set(intake.items.map((item) => `${item.repository}::${item.sourceSubdir ?? '.'}`)).size,

@@ -18,9 +18,9 @@ const harnessAuthorityUrl = new URL(
 );
 
 export const ALPHA2_RECERTIFICATION_SHA256 =
-  '9957b098139820f2b9acca089495e0b22c27c52323c5ecf881ce72087e5f92fd';
+  '1c83be51b9b611470771fae89d4e4c0550618a84efc055d993b38cfe9acb1a87';
 export const ALPHA2_RECERTIFICATION_SCHEMA_SHA256 =
-  '944f8e27cb78bc25f81db05af0c4b0e7d51c9773f635ef82e75111d490c3cbd0';
+  'f4b37c689ad1e9749127a711ce818d6a226842b94c9f455abf7775434c8c2f5e';
 export const ALPHA2_HARNESS_AUTHORITY_SHA256 =
   '100e24ea87e111a7abb13aab5d8c81e38585319c27ea09ce82e62dd4fcc80094';
 export const ALPHA1_RECERTIFICATION_SHA256 =
@@ -55,6 +55,25 @@ const EXPECTED_PLATFORMS = Object.freeze([
   { os: 'win32', arch: 'x64' },
 ]);
 const EXPECTED_NODE_VERSIONS = Object.freeze(['22.19.0', '24.15.0']);
+export const ALPHA2_SKIN_CENTER_COHORT_IDS = Object.freeze([
+  2101, 2201, 2202, 2203, 2204, 2205, 2208, 2209, 2210,
+]);
+export const ALPHA2_INDEPENDENT_ITEM_IDS = Object.freeze([2206, 2207]);
+export const ALPHA2_COHORT_POLICY = Object.freeze({
+  skinCenterBuiltin: Object.freeze({
+    cohortId: 'skin-center-builtin-0.2.5',
+    members: ALPHA2_SKIN_CENTER_COHORT_IDS,
+    requiredMembers: 9,
+    allMembersMustPass: true,
+    allMembersRollbackVerified: true,
+    installability: 'all-or-none',
+  }),
+  independentItems: Object.freeze({
+    members: ALPHA2_INDEPENDENT_ITEM_IDS,
+    requiredMembers: 2,
+    installability: 'item-level',
+  }),
+});
 
 function fail(message) {
   throw new Error(`alpha2 community recertification refused: ${message}`);
@@ -104,7 +123,7 @@ export function validateAlpha2Recertification(
     ['schemaVersion', 'purpose', 'baseline', 'matrix', 'gate', 'items', 'historicalAuthority'],
     'authority'
   );
-  exact(authority.schemaVersion, 2, 'schemaVersion');
+  exact(authority.schemaVersion, 3, 'schemaVersion');
   exact(
     authority.purpose,
     'alpha2-community-skin-item-recertification',
@@ -141,6 +160,7 @@ export function validateAlpha2Recertification(
       'installPublicationAllowed',
       'runtimeReceiptSetSha256',
       'rollbackReceiptSetSha256',
+      'cohortPolicy',
       'publicationRule',
     ],
     'gate'
@@ -163,10 +183,13 @@ export function validateAlpha2Recertification(
   );
   exact(gate.runtimeReceiptSetSha256, null, 'gate.runtimeReceiptSetSha256');
   exact(gate.rollbackReceiptSetSha256, null, 'gate.rollbackReceiptSetSha256');
+  exactObject(gate.cohortPolicy, ALPHA2_COHORT_POLICY, 'gate.cohortPolicy');
   if (
     typeof gate.publicationRule !== 'string' ||
     !gate.publicationRule.includes('All 11 exact items') ||
-    !gate.publicationRule.includes('independently') ||
+    !gate.publicationRule.includes('all nine') ||
+    !gate.publicationRule.includes('QQ98 #2206') ||
+    !gate.publicationRule.includes('THS #2207') ||
     !gate.publicationRule.includes('showcase-only') ||
     !gate.publicationRule.includes('complete rollback')
   ) {
@@ -294,6 +317,8 @@ export function validateAlpha2Recertification(
     installable: gate.installable,
     showcasePublicationAllowed: gate.showcasePublicationAllowed,
     installPublicationAllowed: gate.installPublicationAllowed,
+    skinCenterCohortItems: gate.cohortPolicy.skinCenterBuiltin.requiredMembers,
+    independentItems: gate.cohortPolicy.independentItems.requiredMembers,
     historicalAlpha1MayAuthorize: historical.alpha1MayAuthorizeAlpha2,
     historicalRc8MayAuthorize: historical.rc8MayAuthorizeAlpha2,
   };

@@ -386,6 +386,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       validationOptions: {
         harnessAuthorityBytes: loaded.harnessAuthorityBytes,
         top10ReleaseSetBytes: loaded.top10ReleaseSetBytes,
+        top10ReleaseSetSchemaBytes: loaded.top10ReleaseSetSchemaBytes,
+        top10ScoreAuthorityBytes: loaded.top10ScoreAuthorityBytes,
+        top10ScoreAuthoritySchemaBytes: loaded.top10ScoreAuthoritySchemaBytes,
         migrationMapBytes: loaded.migrationMapBytes,
         migrationMapSchemaBytes: loaded.migrationMapSchemaBytes,
         candidateIntakeBytes: loaded.candidateIntakeBytes,

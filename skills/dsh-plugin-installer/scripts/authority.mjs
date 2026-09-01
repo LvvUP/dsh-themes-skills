@@ -11,6 +11,12 @@ const authorityUrl = new URL('../references/plugin-authority.json', import.meta.
 const schemaUrl = new URL('../references/plugin-authority.schema.json', import.meta.url);
 const harnessAuthorityUrl = new URL('../../dsh-harness-installer/references/alpha2-release-authority.json', import.meta.url);
 const top10ReleaseSetUrl = new URL('../references/top10-release-set.json', import.meta.url);
+const top10ReleaseSetSchemaUrl = new URL('../references/top10-release-set.schema.json', import.meta.url);
+const top10ScoreAuthorityUrl = new URL('../references/top10-score-authority.json', import.meta.url);
+const top10ScoreAuthoritySchemaUrl = new URL(
+  '../references/top10-score-authority.schema.json',
+  import.meta.url
+);
 const migrationMapUrl = new URL('../references/alpha2-plugin-migration-map.json', import.meta.url);
 const migrationMapSchemaUrl = new URL('../references/alpha2-plugin-migration-map.schema.json', import.meta.url);
 const candidateIntakeUrl = new URL('../references/plugin-candidate-intake.json', import.meta.url);
@@ -369,9 +375,9 @@ export function validateItem(item, index = 0) {
 export function validateAuthority(authority, options = {}) {
   exactKeys(authority, [
     'schemaVersion', 'capturedAt', 'purpose', 'harness', 'supportedDistributionKinds',
-    'migrationReview', 'publication', 'top10ReleaseSet', 'items',
+    'migrationReview', 'publication', 'top10ScoreAuthority', 'top10ReleaseSet', 'items',
   ], 'authority');
-  if (authority.schemaVersion !== 3 || authority.purpose !== 'dsh-plugin-install-authority' ||
+  if (authority.schemaVersion !== 4 || authority.purpose !== 'dsh-plugin-install-authority' ||
       !/^\d{4}-\d{2}-\d{2}$/.test(authority.capturedAt)) fail('authority header mismatch');
   if (JSON.stringify(authority.supportedDistributionKinds) !== JSON.stringify(DISTRIBUTIONS)) {
     fail('supported distribution kinds mismatch');
@@ -469,12 +475,38 @@ export function validateAuthority(authority, options = {}) {
     fail('plugin publication gate is inconsistent');
   }
 
-  exactKeys(authority.top10ReleaseSet, ['path', 'sha256'], 'top10ReleaseSet');
+  exactKeys(
+    authority.top10ScoreAuthority,
+    ['path', 'schemaPath', 'schemaSha256', 'sha256'],
+    'top10ScoreAuthority'
+  );
+  if (
+    authority.top10ScoreAuthority.path !== 'top10-score-authority.json' ||
+    authority.top10ScoreAuthority.schemaPath !== 'top10-score-authority.schema.json' ||
+    !SHA64.test(authority.top10ScoreAuthority.schemaSha256) ||
+    !SHA64.test(authority.top10ScoreAuthority.sha256) ||
+    !Buffer.isBuffer(options.top10ScoreAuthorityBytes) ||
+    !Buffer.isBuffer(options.top10ScoreAuthoritySchemaBytes) ||
+    sha256(options.top10ScoreAuthorityBytes) !== authority.top10ScoreAuthority.sha256 ||
+    sha256(options.top10ScoreAuthoritySchemaBytes) !== authority.top10ScoreAuthority.schemaSha256
+  ) {
+    fail('Plugin authority is not bound to the exact complete Top10 score authority and schema bytes');
+  }
+
+  exactKeys(
+    authority.top10ReleaseSet,
+    ['path', 'schemaPath', 'schemaSha256', 'sha256'],
+    'top10ReleaseSet'
+  );
   if (authority.top10ReleaseSet.path !== 'top10-release-set.json' ||
+      authority.top10ReleaseSet.schemaPath !== 'top10-release-set.schema.json' ||
+      !SHA64.test(authority.top10ReleaseSet.schemaSha256) ||
       !SHA64.test(authority.top10ReleaseSet.sha256) ||
       !Buffer.isBuffer(options.top10ReleaseSetBytes) ||
-      sha256(options.top10ReleaseSetBytes) !== authority.top10ReleaseSet.sha256) {
-    fail('Plugin authority is not bound to the exact Top10 release-set bytes');
+      !Buffer.isBuffer(options.top10ReleaseSetSchemaBytes) ||
+      sha256(options.top10ReleaseSetBytes) !== authority.top10ReleaseSet.sha256 ||
+      sha256(options.top10ReleaseSetSchemaBytes) !== authority.top10ReleaseSet.schemaSha256) {
+    fail('Plugin authority is not bound to the exact Top10 release-set and schema bytes');
   }
   let top10ReleaseSet;
   try {
@@ -482,7 +514,11 @@ export function validateAuthority(authority, options = {}) {
   } catch {
     fail('Top10 release-set bytes are not valid JSON');
   }
-  validateTop10ReleaseSet(top10ReleaseSet, { authority });
+  validateTop10ReleaseSet(top10ReleaseSet, {
+    authority,
+    scoreAuthorityBytes: options.top10ScoreAuthorityBytes,
+    candidateIntakeBytes: options.candidateIntakeBytes,
+  });
   if (!Buffer.isBuffer(options.harnessAuthorityBytes) ||
       sha256(options.harnessAuthorityBytes) !== authority.harness.harnessReleaseAuthoritySha256) {
     fail('plugin authority is not bound to the bundled Harness alpha.2 release authority bytes');
@@ -539,6 +575,9 @@ export async function loadAuthority() {
     authorityBytes,
     harnessBytes,
     top10ReleaseSetBytes,
+    top10ReleaseSetSchemaBytes,
+    top10ScoreAuthorityBytes,
+    top10ScoreAuthoritySchemaBytes,
     migrationMapBytes,
     migrationMapSchemaBytes,
     candidateIntakeBytes,
@@ -546,6 +585,9 @@ export async function loadAuthority() {
     readFile(authorityUrl),
     readFile(harnessAuthorityUrl),
     readFile(top10ReleaseSetUrl),
+    readFile(top10ReleaseSetSchemaUrl),
+    readFile(top10ScoreAuthorityUrl),
+    readFile(top10ScoreAuthoritySchemaUrl),
     readFile(migrationMapUrl),
     readFile(migrationMapSchemaUrl),
     readFile(candidateIntakeUrl),
@@ -555,6 +597,9 @@ export async function loadAuthority() {
     authority: validateAuthority(authority, {
       harnessAuthorityBytes: harnessBytes,
       top10ReleaseSetBytes,
+      top10ReleaseSetSchemaBytes,
+      top10ScoreAuthorityBytes,
+      top10ScoreAuthoritySchemaBytes,
       migrationMapBytes,
       migrationMapSchemaBytes,
       candidateIntakeBytes,
@@ -566,8 +611,17 @@ export async function loadAuthority() {
     migrationMapSchemaBytes,
     candidateIntakeBytes,
     top10ReleaseSetBytes,
-    top10ReleaseSet: validateTop10ReleaseSet(JSON.parse(top10ReleaseSetBytes), { authority }),
+    top10ReleaseSetSchemaBytes,
+    top10ScoreAuthorityBytes,
+    top10ScoreAuthoritySchemaBytes,
+    top10ReleaseSet: validateTop10ReleaseSet(JSON.parse(top10ReleaseSetBytes), {
+      authority,
+      scoreAuthorityBytes: top10ScoreAuthorityBytes,
+      candidateIntakeBytes,
+    }),
     top10ReleaseSetSha256: sha256(top10ReleaseSetBytes),
+    top10ScoreAuthority: JSON.parse(top10ScoreAuthorityBytes),
+    top10ScoreAuthoritySha256: sha256(top10ScoreAuthorityBytes),
   };
 }
 
@@ -585,8 +639,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       publishedCatalogPluginCount: loaded.authority.publication.publishedCatalogPluginCount,
       verifiedInstallableCount: loaded.authority.publication.verifiedInstallableCount,
       authorityItemCount: loaded.authority.items.length,
+      top10ScoreStatus: loaded.top10ScoreAuthority.status,
+      top10ScoredPluginCount: loaded.top10ScoreAuthority.items.length,
       top10Status: loaded.top10ReleaseSet.status,
       top10Frozen: loaded.top10ReleaseSet.frozen,
+      top10EntryCount: loaded.top10ReleaseSet.entries.length,
     }, null, 2)}\n`);
   } catch (error) {
     process.stderr.write(`${error.message}\n`);

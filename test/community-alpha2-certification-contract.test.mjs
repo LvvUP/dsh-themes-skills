@@ -454,7 +454,7 @@ test('one shared cohort failure blocks all nine while independent items stay ite
   );
 });
 
-test('Skin Center download gate requires all nine current receipt-backed items', async () => {
+test('Skin Center download gate cannot self-certify with shaped future authority', async () => {
   const context = await loadCommunityCertificationContext();
   const onlyIndependent = completeFutureAuthority(
     context,
@@ -479,23 +479,79 @@ test('Skin Center download gate requires all nine current receipt-backed items',
       }),
     /alpha2-skin-center-cohort-not-certified/
   );
-  assert.deepEqual(
-    assertSkinCenterDownloadCohort({
-      catalog: context.catalog,
-      alpha2Recertification: completeFutureAuthority(
-        context,
-        SKIN_CENTER_COHORT_IDS
-      ),
-    }),
-    {
-      cohortId: 'skin-center-builtin-0.2.5',
-      members: SKIN_CENTER_COHORT_IDS,
-      eligible: true,
-    }
+  const allShared = completeFutureAuthority(context, SKIN_CENTER_COHORT_IDS);
+  assert.throws(
+    () =>
+      assertSkinCenterDownloadCohort({
+        catalog: context.catalog,
+        alpha2Recertification: allShared,
+      }),
+    /alpha2-certification-aggregate-review-authority-required/
   );
+
+  const fakeAggregateAndReview = {
+    certificationAggregate: { receiptSetPayloadSha256: 'e'.repeat(64) },
+    reviewAuthority: { approved: true, sha256: 'f'.repeat(64) },
+  };
+  assert.throws(
+    () =>
+      assertSkinCenterDownloadCohort({
+        catalog: context.catalog,
+        alpha2Recertification: allShared,
+        ...fakeAggregateAndReview,
+      }),
+    /alpha2-runtime-receipt-verifier-not-implemented/
+  );
+
+  const faults = [
+    (authority) => {
+      authority.gate.cohortPolicy.skinCenterBuiltin.members[0] = 2206;
+    },
+    (authority) => {
+      authority.items[1] = structuredClone(authority.items[0]);
+    },
+    (authority) => {
+      authority.items[0].slug = 'wrong-slug';
+    },
+    (authority) => {
+      authority.items[0].showcaseVisible = false;
+    },
+    (authority) => {
+      authority.items[0].ineligibilityReasons = ['still-failed'];
+    },
+    (authority) => {
+      authority.gate.installableItems += 1;
+    },
+  ];
+  for (const mutate of faults) {
+    const faulty = structuredClone(allShared);
+    mutate(faulty);
+    assert.throws(
+      () =>
+        assertSkinCenterDownloadCohort({
+          catalog: context.catalog,
+          alpha2Recertification: faulty,
+          ...fakeAggregateAndReview,
+        }),
+      /alpha2-skin-center-cohort-not-certified/
+    );
+  }
   const fetchSource = await readFile(fetchScript, 'utf8');
   assert.match(fetchSource, /assertSkinCenterDownloadCohort/);
   assert.doesNotMatch(fetchSource, /installableItems < 1/);
+});
+
+test('community compatibility prose preserves the nine-plus-two cohort policy', async () => {
+  const compatibility = await readFile(
+    join(skillRoot, 'references/compatibility.md'),
+    'utf8'
+  );
+  assert.match(
+    compatibility,
+    /nine shared Skin Center records reopen only as one all-passing cohort/
+  );
+  assert.match(compatibility, /QQ98 plus THS remain item-level decisions/);
+  assert.doesNotMatch(compatibility, /final review is item-level, not all-or-nothing/i);
 });
 
 test('current fetch still fails before creating output or opening the network', async (t) => {
@@ -523,6 +579,6 @@ test('contract files never modify the current authority or Finder authority', as
   assert.equal(installer.equals(finder), true);
   assert.equal(
     createHash('sha256').update(installer).digest('hex'),
-    '9957b098139820f2b9acca089495e0b22c27c52323c5ecf881ce72087e5f92fd'
+    '1c83be51b9b611470771fae89d4e4c0550618a84efc055d993b38cfe9acb1a87'
   );
 });

@@ -112,6 +112,17 @@ import {
   validateTop10ReleaseSet,
 } from '../skills/dsh-plugin-installer/scripts/top10-authority.mjs';
 import {
+  candidateInputSha256,
+  loadTop10ScoreAuthoritySchema,
+  maintenanceEvidenceSha256,
+  rankTop10ScoreItems,
+  scoreAuthorityItemSha256,
+  scoreAuthorityPayloadSha256,
+  scoreReceiptSha256,
+  scoringPolicySha256,
+  validateTop10ScoreAuthority,
+} from '../skills/dsh-plugin-installer/scripts/top10-score-authority.mjs';
+import {
   captureWindowsPrivatePathIdentity,
   secureWindowsPrivatePath,
   secureWindowsPrivatePaths,
@@ -501,6 +512,9 @@ function validationOptions(loaded) {
   return {
     harnessAuthorityBytes: loaded.harnessAuthorityBytes,
     top10ReleaseSetBytes: loaded.top10ReleaseSetBytes,
+    top10ReleaseSetSchemaBytes: loaded.top10ReleaseSetSchemaBytes,
+    top10ScoreAuthorityBytes: loaded.top10ScoreAuthorityBytes,
+    top10ScoreAuthoritySchemaBytes: loaded.top10ScoreAuthoritySchemaBytes,
     migrationMapBytes: loaded.migrationMapBytes,
     migrationMapSchemaBytes: loaded.migrationMapSchemaBytes,
     candidateIntakeBytes: loaded.candidateIntakeBytes,
@@ -508,51 +522,119 @@ function validationOptions(loaded) {
 }
 
 function promotedContext(loaded, items) {
+  const candidates = JSON.parse(loaded.candidateIntakeBytes).items;
   const authority = structuredClone(loaded.authority);
   authority.publication.status = 'verified-installable';
   authority.publication.publishedInstallable = true;
   authority.publication.verifiedInstallableCount = 80;
   authority.publication.authorityItemCount = 80;
   authority.items = items;
+  const scoreAuthority = structuredClone(loaded.top10ScoreAuthority);
+  scoreAuthority.status = 'verified-frozen';
+  scoreAuthority.frozen = true;
+  scoreAuthority.pluginSet.verifiedItemCount = 80;
+  const top10Ids = [3006, 3052, 3041, 3033, 3040, 3044, 3036, 3010, 3038, 3045];
+  const top10Rank = new Map(top10Ids.map((catalogId, index) => [catalogId, index]));
+  const coverage = [
+    'build-and-review',
+    'collaborate-and-notify',
+    'discover-and-start',
+    'govern-and-secure',
+    'measure-and-optimize',
+    'navigate-and-focus',
+    'plan-and-automate',
+    'remember-and-retrieve',
+  ];
+  scoreAuthority.items = candidates.map((candidate) => {
+    const item = items.find((entry) => entry.catalogId === candidate.catalogId);
+    const rankIndex = top10Rank.get(candidate.catalogId);
+    const scores = rankIndex === undefined
+      ? {
+          userValueAndUseCaseClarity: 10,
+          stabilityMaintenanceAndAlpha2Fit: 15,
+          securityAndPermissionRestraint: 10,
+          crossPlatformInstallRemoveRollback: 10,
+          nonTechnicalUsabilityAndDocs: 5,
+          combinationComplementarity: 5,
+        }
+      : {
+          userValueAndUseCaseClarity: 25,
+          stabilityMaintenanceAndAlpha2Fit: 25,
+          securityAndPermissionRestraint: 15,
+          crossPlatformInstallRemoveRollback: 15,
+          nonTechnicalUsabilityAndDocs: 10,
+          combinationComplementarity: 10 - rankIndex,
+        };
+    const useCaseCategories = [...new Set([
+      candidate.primaryUseCase,
+      ...(rankIndex === undefined ? [] : [coverage[rankIndex % coverage.length]]),
+    ])].sort();
+    const maintenanceEvidence = {
+      kind: 'github-commit-metadata',
+      repository: candidate.repository,
+      commit: candidate.commit,
+      committedAt: '2026-08-20T00:00:00.000Z',
+      observedAt: '2026-09-01T00:00:00.000Z',
+      evidenceUrl: `${candidate.repository.replace(/\.git$/u, '')}/commit/${candidate.commit}`,
+      sourceResponseSha256: sha256(Buffer.from(`source-response-${candidate.catalogId}`)),
+    };
+    const totalScore = Object.values(scores).reduce((sum, score) => sum + score, 0);
+    const scoreReceipt = {
+      schemaVersion: 1,
+      purpose: 'dsh-plugin-top10-score-review',
+      capturedAt: '2026-09-01',
+      baselineCommit: '0a53fb55bea101816fa226bb964ae2bed71c343b',
+      catalogId: candidate.catalogId,
+      candidateInputSha256: candidateInputSha256(candidate),
+      itemAuthoritySha256: itemAuthoritySha256(item),
+      platformNodeMatrixSha256: item.receipts.platformNodeMatrixSha256,
+      scoringPolicySha256: scoringPolicySha256(),
+      useCaseCategories,
+      scores,
+      totalScore,
+      maintenanceEvidenceSha256: maintenanceEvidenceSha256(maintenanceEvidence),
+    };
+    return {
+      catalogId: candidate.catalogId,
+      publicId: `#${candidate.catalogId}`,
+      candidateInputSha256: candidateInputSha256(candidate),
+      itemAuthoritySha256: itemAuthoritySha256(item),
+      useCaseCategories,
+      scores,
+      totalScore,
+      maintenanceEvidence,
+      scoreReceipt,
+      scoreReceiptSha256: scoreReceiptSha256(scoreReceipt),
+    };
+  });
+  scoreAuthority.pluginSet.itemAuthoritySetSha256 = sha256(Buffer.from(
+    `${JSON.stringify(stable(scoreAuthority.items.map((item) => ({
+      catalogId: item.catalogId,
+      itemAuthoritySha256: item.itemAuthoritySha256,
+    }))))}\n`
+  ));
+  scoreAuthority.scoreAuthorityPayloadSha256 = scoreAuthorityPayloadSha256(scoreAuthority);
+  const top10ScoreAuthorityBytes = Buffer.from(`${JSON.stringify(scoreAuthority, null, 2)}\n`);
+  authority.top10ScoreAuthority.sha256 = sha256(top10ScoreAuthorityBytes);
+
   const releaseSet = structuredClone(loaded.top10ReleaseSet);
   releaseSet.status = 'verified-frozen';
   releaseSet.frozen = true;
   releaseSet.scoring.coverageStatus = 'verified';
-  const top10Ids = [3006, 3052, 3041, 3033, 3040, 3044, 3036, 3010, 3038, 3045];
-  const useCases = [
-    'automation',
-    'communication',
-    'data-and-analysis',
-    'developer-workflow',
-    'files-and-content',
-    'knowledge-retrieval',
-    'observability',
-    'productivity',
-  ];
-  releaseSet.entries = top10Ids.map((catalogId, index) => {
-    const item = items.find((candidate) => candidate.catalogId === catalogId);
-    const scores = {
-      userValueAndUseCaseClarity: 25,
-      stabilityMaintenanceAndAlpha2Fit: 25,
-      securityAndPermissionRestraint: 15,
-      crossPlatformInstallRemoveRollback: 15,
-      nonTechnicalUsabilityAndDocs: 10,
-      combinationComplementarity: 10 - index,
-    };
+  releaseSet.scoreAuthority.sha256 = sha256(top10ScoreAuthorityBytes);
+  releaseSet.scoreAuthority.payloadSha256 = scoreAuthority.scoreAuthorityPayloadSha256;
+  const rankedScoreItems = rankTop10ScoreItems(scoreAuthority.items);
+  releaseSet.entries = rankedScoreItems.map((scoreItem, index) => {
     return {
       rank: index + 1,
-      publicId: `#${catalogId}`,
-      catalogId,
-      itemAuthoritySha256: itemAuthoritySha256(item),
-      useCaseCategories: [useCases[index % useCases.length]],
-      scores,
-      totalScore: Object.values(scores).reduce((sum, score) => sum + score, 0),
-      maintenanceActivityAt: '2026-08-30',
-      maintenanceActivityReceiptSha256: sha256(Buffer.from(`maintenance-${catalogId}`)),
+      publicId: scoreItem.publicId,
+      catalogId: scoreItem.catalogId,
+      itemAuthoritySha256: scoreItem.itemAuthoritySha256,
+      scoreAuthorityItemSha256: scoreAuthorityItemSha256(scoreItem),
     };
   });
   releaseSet.scoring.coveredUseCaseCategories = [...new Set(
-    releaseSet.entries.flatMap((entry) => entry.useCaseCategories)
+    rankedScoreItems.flatMap((item) => item.useCaseCategories)
   )].sort();
   releaseSet.gate = {
     requiredPublishedPluginCount: 80,
@@ -584,11 +666,17 @@ function promotedContext(loaded, items) {
   authority.top10ReleaseSet.sha256 = sha256(top10ReleaseSetBytes);
   return {
     authority,
+    top10ScoreAuthority: scoreAuthority,
+    top10ScoreAuthorityBytes,
+    top10ScoreAuthoritySha256: sha256(top10ScoreAuthorityBytes),
     top10ReleaseSet: releaseSet,
     top10ReleaseSetBytes,
     validationOptions: {
       harnessAuthorityBytes: loaded.harnessAuthorityBytes,
       top10ReleaseSetBytes,
+      top10ReleaseSetSchemaBytes: loaded.top10ReleaseSetSchemaBytes,
+      top10ScoreAuthorityBytes,
+      top10ScoreAuthoritySchemaBytes: loaded.top10ScoreAuthoritySchemaBytes,
       migrationMapBytes: loaded.migrationMapBytes,
       migrationMapSchemaBytes: loaded.migrationMapSchemaBytes,
       candidateIntakeBytes: loaded.candidateIntakeBytes,
@@ -596,10 +684,10 @@ function promotedContext(loaded, items) {
   };
 }
 
-function fullItemSet(overrides = []) {
+function fullItemSet(loaded, overrides = []) {
   const byId = new Map(overrides.map((item) => [item.catalogId, item]));
-  return Array.from({ length: 80 }, (_, offset) => {
-    const id = 3000 + offset;
+  const candidateIds = JSON.parse(loaded.candidateIntakeBytes).items.map((item) => item.catalogId);
+  return candidateIds.map((id) => {
     return byId.get(id) ?? hostedFixture({
       id,
       slug: `fixture-${id}`,
@@ -628,7 +716,7 @@ test('current Plugin authority exposes 80 curated records but zero installation 
   const loaded = await loadAuthority();
   assert.equal(
     loaded.authoritySha256,
-    'bb3444ede73411438e422762df4d2d6a865d51870a9a4f48ba8c4d58b0a38d4c'
+    '712ba92ec93f9d7788e25ad4d5c85b7549788dac4f669b5ba0c941100cb16e8f'
   );
   assert.equal(loaded.authority.migrationReview.retainedCurrentCatalogCount, 52);
   assert.equal(loaded.authority.migrationReview.retiredCatalogCount, 28);
@@ -659,6 +747,9 @@ test('current Plugin authority exposes 80 curated records but zero installation 
   assert.equal(loaded.top10ReleaseSet.gate.verifiedPluginCount, 0);
   assert.equal(loaded.top10ReleaseSet.gate.verifiedMatrixTasksPerItem, 0);
   assert.deepEqual(loaded.top10ReleaseSet.entries, []);
+  assert.equal(loaded.top10ScoreAuthority.status, 'candidate-pending');
+  assert.equal(loaded.top10ScoreAuthority.frozen, false);
+  assert.deepEqual(loaded.top10ScoreAuthority.items, []);
   assert.throws(
     () => resolveItems(loaded.authority, ['#3006'], {
       top10ReleaseSet: loaded.top10ReleaseSet,
@@ -676,7 +767,10 @@ test('current Plugin authority exposes 80 curated records but zero installation 
 
 test('independent Top10 authority freezes scoring but fails closed until 80/80 six-task evidence', async () => {
   const loaded = await loadAuthority();
-  assert.equal(validateTop10ReleaseSet(loaded.top10ReleaseSet).frozen, false);
+  assert.equal(validateTop10ReleaseSet(loaded.top10ReleaseSet, {
+    scoreAuthorityBytes: loaded.top10ScoreAuthorityBytes,
+    candidateIntakeBytes: loaded.candidateIntakeBytes,
+  }).frozen, false);
   assert.deepEqual(Object.values(loaded.top10ReleaseSet.scoring.weights), [25, 25, 15, 15, 10, 10]);
   assert.deepEqual(loaded.top10ReleaseSet.scoring.coveredUseCaseCategories, []);
   assert.deepEqual(
@@ -685,40 +779,83 @@ test('independent Top10 authority freezes scoring but fails closed until 80/80 s
   );
   assert.deepEqual(loaded.top10ReleaseSet.entries, []);
 
-  const promoted = promotedContext(loaded, fullItemSet());
+  const partialPendingClaim = structuredClone(loaded.top10ReleaseSet);
+  partialPendingClaim.gate.webCoexistenceVerified = true;
+  partialPendingClaim.releaseSetPayloadSha256 = releaseSetPayloadSha256(partialPendingClaim);
+  assert.throws(
+    () => validateTop10ReleaseSet(partialPendingClaim, {
+      scoreAuthorityBytes: loaded.top10ScoreAuthorityBytes,
+      candidateIntakeBytes: loaded.candidateIntakeBytes,
+    }),
+    /pending Top10 release set must not claim verified evidence/u
+  );
+
+  const promoted = promotedContext(loaded, fullItemSet(loaded));
   assert.doesNotThrow(() => validateTop10ReleaseSet(promoted.top10ReleaseSet, {
     authority: promoted.authority,
+    scoreAuthorityBytes: promoted.top10ScoreAuthorityBytes,
+    candidateIntakeBytes: loaded.candidateIntakeBytes,
   }));
   const tamperedOrder = structuredClone(promoted.top10ReleaseSet);
   [tamperedOrder.entries[0], tamperedOrder.entries[1]] = [tamperedOrder.entries[1], tamperedOrder.entries[0]];
-  assert.throws(() => validateTop10ReleaseSet(tamperedOrder), /identity|rank|payload digest/);
+  assert.throws(
+    () => validateTop10ReleaseSet(tamperedOrder, {
+      authority: promoted.authority,
+      scoreAuthorityBytes: promoted.top10ScoreAuthorityBytes,
+      candidateIntakeBytes: loaded.candidateIntakeBytes,
+    }),
+    /identity|rank|payload digest/
+  );
   const premature = structuredClone(loaded.top10ReleaseSet);
   premature.frozen = true;
   premature.status = 'verified-frozen';
   premature.releaseSetPayloadSha256 = releaseSetPayloadSha256(premature);
   assert.throws(
-    () => validateTop10ReleaseSet(premature, { authority: loaded.authority }),
-    /80\/80 six-task gate/
+    () => validateTop10ReleaseSet(premature, {
+      authority: loaded.authority,
+      scoreAuthorityBytes: loaded.top10ScoreAuthorityBytes,
+      candidateIntakeBytes: loaded.candidateIntakeBytes,
+    }),
+    /complete 80-item score authority|80\/80 six-task gate/
   );
   const changedBytes = Buffer.from(loaded.top10ReleaseSetBytes);
   changedBytes[changedBytes.length - 2] = changedBytes[changedBytes.length - 2] === 0x20 ? 0x09 : 0x20;
   assert.throws(
     () => validateAuthority(loaded.authority, {
-      harnessAuthorityBytes: loaded.harnessAuthorityBytes,
+      ...validationOptions(loaded),
       top10ReleaseSetBytes: changedBytes,
-      migrationMapBytes: loaded.migrationMapBytes,
-      migrationMapSchemaBytes: loaded.migrationMapSchemaBytes,
-      candidateIntakeBytes: loaded.candidateIntakeBytes,
     }),
-    /exact Top10 release-set bytes/
+    /exact Top10 release-set and schema bytes/
+  );
+  const changedScoreAuthorityBytes = Buffer.from(loaded.top10ScoreAuthorityBytes);
+  changedScoreAuthorityBytes[changedScoreAuthorityBytes.length - 2] =
+    changedScoreAuthorityBytes[changedScoreAuthorityBytes.length - 2] === 0x20 ? 0x09 : 0x20;
+  assert.throws(
+    () => validateAuthority(loaded.authority, {
+      ...validationOptions(loaded),
+      top10ScoreAuthorityBytes: changedScoreAuthorityBytes,
+    }),
+    /exact complete Top10 score authority and schema bytes/
+  );
+  const changedScoreSchemaBytes = Buffer.from(loaded.top10ScoreAuthoritySchemaBytes);
+  changedScoreSchemaBytes[changedScoreSchemaBytes.length - 2] =
+    changedScoreSchemaBytes[changedScoreSchemaBytes.length - 2] === 0x20 ? 0x09 : 0x20;
+  assert.throws(
+    () => validateAuthority(loaded.authority, {
+      ...validationOptions(loaded),
+      top10ScoreAuthoritySchemaBytes: changedScoreSchemaBytes,
+    }),
+    /exact complete Top10 score authority and schema bytes/
   );
 });
 
 test('machine schema is closed and models hosted plus fixed upstream distributions', async () => {
   const schema = await loadSchema();
   const top10Schema = await loadTop10Schema();
+  const scoreSchema = await loadTop10ScoreAuthoritySchema();
   assert.equal(schema.additionalProperties, false);
   assert.equal(top10Schema.additionalProperties, false);
+  assert.equal(scoreSchema.additionalProperties, false);
   assert.equal(schema.$defs.item.additionalProperties, false);
   assert.equal(schema.$defs.hostedDistribution.additionalProperties, false);
   assert.equal(schema.$defs.upstreamDistribution.additionalProperties, false);
@@ -740,6 +877,12 @@ test('machine schema is closed and models hosted plus fixed upstream distributio
   assert.equal(top10Schema.$defs.weights.properties.userValueAndUseCaseClarity.const, 25);
   assert.equal(top10Schema.$defs.weights.properties.stabilityMaintenanceAndAlpha2Fit.const, 25);
   assert.equal(top10Schema.$defs.scoring.properties.minimumUseCaseCategories.const, 8);
+  assert.equal(scoreSchema.properties.items.maxItems, 80);
+  assert.equal(scoreSchema.$defs.item.additionalProperties, false);
+  assert.deepEqual(
+    scoreSchema.$defs.scoring.properties.tieBreakOrder.const,
+    ['stability-plus-security', 'maintenance-activity', 'lower-public-id']
+  );
 });
 
 test('authority validator accepts exact hosted/upstream records and rejects command injection', async () => {
@@ -749,7 +892,10 @@ test('authority validator accepts exact hosted/upstream records and rejects comm
   const locklessGit = locklessGitFixture();
   const npm = upstreamArtifactFixture().item;
   const release = upstreamArtifactFixture({ type: 'github-release-asset' }).item;
-  const promoted = promotedContext(loaded, fullItemSet([hosted, git, locklessGit, npm, release]));
+  const promoted = promotedContext(
+    loaded,
+    fullItemSet(loaded, [hosted, git, locklessGit, npm, release])
+  );
   assert.doesNotThrow(() => validateAuthority(promoted.authority, promoted.validationOptions));
   const partial = structuredClone(promoted.authority);
   partial.items = [hosted, git];
@@ -1771,7 +1917,7 @@ test('transaction planning resolves exact authority members and production execu
   const loaded = await loadAuthority();
   const first = hostedFixture({ id: 3006, slug: 'fixture-one', name: 'dsh-fixture-one' });
   const second = hostedFixture({ id: 3052, slug: 'fixture-two', name: 'dsh-fixture-two' });
-  const promoted = promotedContext(loaded, fullItemSet([first.item, second.item]));
+  const promoted = promotedContext(loaded, fullItemSet(loaded, [first.item, second.item]));
   const planOptions = {
     top10ReleaseSet: promoted.top10ReleaseSet,
     validationOptions: promoted.validationOptions,
@@ -1787,7 +1933,7 @@ test('transaction planning resolves exact authority members and production execu
     /lacks one exact verified authority record/
   );
   const liveLifecycle = gitFixture();
-  const livePromoted = promotedContext(loaded, fullItemSet([liveLifecycle]));
+  const livePromoted = promotedContext(loaded, fullItemSet(loaded, [liveLifecycle]));
   assert.throws(
     () => buildPlan(livePromoted.authority, ['#3052'], {
       top10ReleaseSet: livePromoted.top10ReleaseSet,
@@ -1837,7 +1983,7 @@ test('removal planning is authority-bound and removal/recovery executors reject 
   const loaded = await loadAuthority();
   const first = hostedFixture({ id: 3006, slug: 'remove-one', name: 'dsh-remove-one' });
   const second = hostedFixture({ id: 3052, slug: 'remove-two', name: 'dsh-remove-two' });
-  const promoted = promotedContext(loaded, fullItemSet([first.item, second.item]));
+  const promoted = promotedContext(loaded, fullItemSet(loaded, [first.item, second.item]));
   const planned = buildRemovalPlan(promoted.authority, ['#3006', '#3052'], {
     top10ReleaseSet: promoted.top10ReleaseSet,
     validationOptions: promoted.validationOptions,
@@ -1968,7 +2114,7 @@ test('retained recovery uses nonce-scoped opaque bindings instead of secret-deri
 
   const loaded = await loadAuthority();
   const fixture = hostedFixture({ id: 3006, slug: 'recover-one', name: 'dsh-recover-one' });
-  const promoted = promotedContext(loaded, fullItemSet([fixture.item]));
+  const promoted = promotedContext(loaded, fullItemSet(loaded, [fixture.item]));
   const removal = buildRemovalPlan(promoted.authority, ['#3006'], {
     top10ReleaseSet: promoted.top10ReleaseSet,
     validationOptions: promoted.validationOptions,
@@ -2337,7 +2483,7 @@ test('authenticated interrupted journal requires exact stale holder, separate co
 
   const loaded = await loadAuthority();
   const fixture = hostedFixture({ id: 3006, slug: 'interrupted-one', name: 'dsh-interrupted-one' });
-  const promoted = promotedContext(loaded, fullItemSet([fixture.item]));
+  const promoted = promotedContext(loaded, fullItemSet(loaded, [fixture.item]));
   const removal = buildRemovalPlan(promoted.authority, ['#3006'], {
     top10ReleaseSet: promoted.top10ReleaseSet,
     validationOptions: promoted.validationOptions,
@@ -2450,6 +2596,8 @@ test('authenticated interrupted journal requires exact stale holder, separate co
     authorityBytes,
     authoritySha256: sha256(authorityBytes),
     harnessAuthorityBytes: loaded.harnessAuthorityBytes,
+    top10ReleaseSetSchemaBytes: loaded.top10ReleaseSetSchemaBytes,
+    top10ScoreAuthoritySchemaBytes: loaded.top10ScoreAuthoritySchemaBytes,
     migrationMapBytes: loaded.migrationMapBytes,
     migrationMapSchemaBytes: loaded.migrationMapSchemaBytes,
     candidateIntakeBytes: loaded.candidateIntakeBytes,

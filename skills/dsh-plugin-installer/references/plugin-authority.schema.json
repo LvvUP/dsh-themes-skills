@@ -1,24 +1,37 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dsh-themes.com/schemas/dsh-plugin-authority-v3.json",
+  "$id": "https://dsh-themes.com/schemas/dsh-plugin-authority-v4.json",
   "title": "DSH plugin installation authority",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "capturedAt", "purpose", "harness", "supportedDistributionKinds", "migrationReview", "publication", "top10ReleaseSet", "items"],
+  "required": ["schemaVersion", "capturedAt", "purpose", "harness", "supportedDistributionKinds", "migrationReview", "publication", "top10ScoreAuthority", "top10ReleaseSet", "items"],
   "properties": {
-    "schemaVersion": { "const": 3 },
+    "schemaVersion": { "const": 4 },
     "capturedAt": { "type": "string", "format": "date" },
     "purpose": { "const": "dsh-plugin-install-authority" },
     "harness": { "$ref": "#/$defs/harness" },
     "supportedDistributionKinds": { "const": ["hosted-plugin-verified", "upstream-plugin-verified"] },
     "migrationReview": { "$ref": "#/$defs/migrationReview" },
     "publication": { "$ref": "#/$defs/publication" },
+    "top10ScoreAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "schemaPath", "schemaSha256", "sha256"],
+      "properties": {
+        "path": { "const": "top10-score-authority.json" },
+        "schemaPath": { "const": "top10-score-authority.schema.json" },
+        "schemaSha256": { "$ref": "#/$defs/sha256" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
     "top10ReleaseSet": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["path", "sha256"],
+      "required": ["path", "schemaPath", "schemaSha256", "sha256"],
       "properties": {
         "path": { "const": "top10-release-set.json" },
+        "schemaPath": { "const": "top10-release-set.schema.json" },
+        "schemaSha256": { "$ref": "#/$defs/sha256" },
         "sha256": { "$ref": "#/$defs/sha256" }
       }
     },

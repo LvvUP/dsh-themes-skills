@@ -14,6 +14,7 @@ Read [references/plugin-install-contract.md](references/plugin-install-contract.
 before preparing or mutating a Profile. Read
 [references/plugin-authority.schema.json](references/plugin-authority.schema.json)
 only when reviewing or publishing authority changes.
+For Top10 changes, read its complete [score authority](references/top10-score-authority.json) and [closed schema](references/top10-score-authority.schema.json); the release set owns only derived ranks, never scores, dates, use cases, or receipts.
 
 When reviewing or replacing the 80 editorial inputs, read
 [references/plugin-candidate-intake.json](references/plugin-candidate-intake.json)
@@ -56,10 +57,9 @@ installation or Top10 authority.
 ## Current result: inspect only
 
 The website currently publishes 80 curated Plugin records, but
-`references/plugin-authority.json` contains **zero verified installation
-items**. Its independently hashed `references/top10-release-set.json` is
-`candidate-pending` with `frozen: false`, no ranked entries or item-authority
-digests, and zero completed matrix tasks. The exact alpha.2 Harness runtime
+`references/plugin-authority.json` contains **zero verified installation items**. Its independently hashed score and release-set authorities are both
+`candidate-pending` and unfrozen: scoring is 0/80, ranked entries are empty,
+and matrix counters are zero. The exact alpha.2 Harness runtime
 receipt set is promoted at 6/6 and is bound into Plugin authority, but that
 baseline gate creates no Plugin item authority. Therefore:
 
@@ -84,9 +84,9 @@ The remaining workflow below becomes executable only after a reviewed Plugin aut
 the relevant Plugin gates.
 Promotion requires exactly 80 unique item records and matching catalog,
 required, verified, authority, and item counts; a partial set cannot open the
-single-item lane. Top10 must be the exact ordered ten-ID subset of that set,
-bind every item authority digest, record every six-dimension score and exact
-total, pass all six platform/Node tasks, preserve
+single-item lane. Before Top10 can freeze, its score authority must bind all 80 candidate/item digests, six scores and totals, canonical use cases, upstream maintenance evidence, matrix digests, and score receipts. The release set must
+equal the first ten global deterministic ranks, never omit a higher rank, and
+pass all six platform/Node tasks while preserving
 the fixed score weights `25/25/15/15/10/10`, cover at least eight use-case
 categories, prove Web coexistence and the pairwise conflict matrix, pass
 full-batch preflight and failure rollback, and only then set

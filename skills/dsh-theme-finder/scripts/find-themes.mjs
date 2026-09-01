@@ -7,6 +7,24 @@ import { fileURLToPath } from 'node:url';
 
 import { isExactSemver } from './semver.mjs';
 
+const COMMUNITY_ALPHA2_COHORT_POLICY = Object.freeze({
+  skinCenterBuiltin: Object.freeze({
+    cohortId: 'skin-center-builtin-0.2.5',
+    members: Object.freeze([
+      2101, 2201, 2202, 2203, 2204, 2205, 2208, 2209, 2210,
+    ]),
+    requiredMembers: 9,
+    allMembersMustPass: true,
+    allMembersRollbackVerified: true,
+    installability: 'all-or-none',
+  }),
+  independentItems: Object.freeze({
+    members: Object.freeze([2206, 2207]),
+    requiredMembers: 2,
+    installability: 'item-level',
+  }),
+});
+
 const BASELINE_POLICY = JSON.parse(
   await readFile(new URL('../references/baseline-policy.json', import.meta.url))
 );
@@ -101,7 +119,7 @@ if (
 }
 const COMMUNITY_ALPHA2 = JSON.parse(communityCurrentBytes.toString('utf8'));
 if (
-  COMMUNITY_ALPHA2.schemaVersion !== 2 ||
+  COMMUNITY_ALPHA2.schemaVersion !== 3 ||
   COMMUNITY_ALPHA2.purpose !== 'alpha2-community-skin-item-recertification' ||
   COMMUNITY_ALPHA2.baseline?.baselineId !==
     `deepseek-harness/dsh-v0.1.2-alpha.2@${COMMUNITY_CURRENT.sourceCommit}` ||
@@ -123,6 +141,8 @@ if (
   COMMUNITY_ALPHA2.gate?.installPublicationAllowed !== false ||
   COMMUNITY_ALPHA2.gate?.runtimeReceiptSetSha256 !== null ||
   COMMUNITY_ALPHA2.gate?.rollbackReceiptSetSha256 !== null ||
+  JSON.stringify(COMMUNITY_ALPHA2.gate?.cohortPolicy) !==
+    JSON.stringify(COMMUNITY_ALPHA2_COHORT_POLICY) ||
   COMMUNITY_ALPHA2.items?.length !== 11 ||
   COMMUNITY_ALPHA2.items.some(
     (item) =>

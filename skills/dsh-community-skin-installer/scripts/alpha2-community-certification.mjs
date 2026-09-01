@@ -1104,6 +1104,8 @@ function cohortRefusal() {
 export function assertSkinCenterDownloadCohort({
   catalog,
   alpha2Recertification,
+  certificationAggregate,
+  reviewAuthority,
 }) {
   const cohort = catalog?.skins?.filter(
     (skin) => skin.installationMode === 'skin-center-builtin'
@@ -1117,20 +1119,71 @@ export function assertSkinCenterDownloadCohort({
   }
   const gate = alpha2Recertification?.gate;
   if (
+    canonicalCommunityCertificationJson(gate?.cohortPolicy) !==
+    canonicalCommunityCertificationJson({
+      skinCenterBuiltin: {
+        cohortId: SKIN_CENTER_COHORT_ID,
+        members: SKIN_CENTER_COHORT_IDS,
+        requiredMembers: 9,
+        allMembersMustPass: true,
+        allMembersRollbackVerified: true,
+        installability: 'all-or-none',
+      },
+      independentItems: {
+        members: INDEPENDENT_COMMUNITY_IDS,
+        requiredMembers: 2,
+        installability: 'item-level',
+      },
+    })
+  ) {
+    cohortRefusal();
+  }
+  const currentItems = alpha2Recertification?.items;
+  if (!Array.isArray(currentItems) || currentItems.length !== 11) cohortRefusal();
+  const expectedIdentity = catalog.skins.map(({ catalogId, slug }) => ({
+    catalogId,
+    slug,
+  }));
+  const actualIdentity = currentItems.map(({ catalogId, slug }) => ({
+    catalogId,
+    slug,
+  }));
+  if (
+    new Set(currentItems.map((item) => item.catalogId)).size !== 11 ||
+    new Set(currentItems.map((item) => `${item.catalogId}:${item.slug}`)).size !== 11 ||
+    canonicalCommunityCertificationJson(actualIdentity) !==
+      canonicalCommunityCertificationJson(expectedIdentity)
+  ) {
+    cohortRefusal();
+  }
+  const actualInstallableItems = currentItems.filter(
+    (item) => item.installable === true
+  ).length;
+  if (
     gate?.status !== 'alpha2-review-complete' ||
     gate?.requiredItems !== 11 ||
     gate?.reviewedItems !== 11 ||
     gate?.completedTasks !== 66 ||
-    gate?.installableItems < 9 ||
+    gate?.installableItems !== actualInstallableItems ||
+    gate.installableItems < 9 ||
     gate?.installable !== true ||
+    gate?.showcasePublicationAllowed !== true ||
     gate?.installPublicationAllowed !== true ||
     !SHA256.test(gate?.runtimeReceiptSetSha256 ?? '') ||
     !SHA256.test(gate?.rollbackReceiptSetSha256 ?? '')
   ) {
     cohortRefusal();
   }
-  const currentItems = alpha2Recertification?.items;
-  if (!Array.isArray(currentItems) || currentItems.length !== 11) cohortRefusal();
+  if (
+    currentItems.some(
+      (item) =>
+        item.reviewed !== true ||
+        item.completedTasks !== 6 ||
+        item.showcaseVisible !== true
+    )
+  ) {
+    cohortRefusal();
+  }
   for (const catalogId of SKIN_CENTER_COHORT_IDS) {
     const item = currentItems.find((candidate) => candidate.catalogId === catalogId);
     if (
@@ -1138,17 +1191,23 @@ export function assertSkinCenterDownloadCohort({
       item?.reviewed !== true ||
       item?.completedTasks !== 6 ||
       item?.installable !== true ||
+      item?.showcaseVisible !== true ||
+      !Array.isArray(item?.ineligibilityReasons) ||
+      item.ineligibilityReasons.length !== 0 ||
       !SHA256.test(item?.runtimeReceiptSetSha256 ?? '') ||
       !SHA256.test(item?.rollbackReceiptSetSha256 ?? '')
     ) {
       cohortRefusal();
     }
   }
-  return {
-    cohortId: SKIN_CENTER_COHORT_ID,
-    members: [...SKIN_CENTER_COHORT_IDS],
-    eligible: true,
-  };
+  if (!certificationAggregate || !reviewAuthority) {
+    fail(
+      'alpha2-recertification-gate-not-certified: alpha2-certification-aggregate-review-authority-required'
+    );
+  }
+  fail(
+    'alpha2-recertification-gate-not-certified: alpha2-runtime-receipt-verifier-not-implemented'
+  );
 }
 
 function exactSinglePathArg(argv, flag) {

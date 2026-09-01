@@ -1792,17 +1792,25 @@ function validateTransactionAuthorityContext(authorityContext) {
   if (!Buffer.isBuffer(authorityContext?.authorityBytes) ||
       !Buffer.isBuffer(authorityContext?.harnessAuthorityBytes) ||
       !Buffer.isBuffer(authorityContext?.top10ReleaseSetBytes) ||
+      !Buffer.isBuffer(authorityContext?.top10ReleaseSetSchemaBytes) ||
+      !Buffer.isBuffer(authorityContext?.top10ScoreAuthorityBytes) ||
+      !Buffer.isBuffer(authorityContext?.top10ScoreAuthoritySchemaBytes) ||
       !Buffer.isBuffer(authorityContext?.migrationMapBytes) ||
       !Buffer.isBuffer(authorityContext?.migrationMapSchemaBytes) ||
       !Buffer.isBuffer(authorityContext?.candidateIntakeBytes) ||
       sha256(authorityContext.authorityBytes) !== authorityContext.authoritySha256 ||
       sha256(authorityContext.top10ReleaseSetBytes) !== authorityContext.top10ReleaseSetSha256 ||
+      sha256(authorityContext.top10ScoreAuthorityBytes) !==
+        authorityContext.top10ScoreAuthoritySha256 ||
       JSON.stringify(JSON.parse(authorityContext.authorityBytes)) !== JSON.stringify(authorityContext.authority)) {
     fail('transaction authority context is not bound to its exact authority bytes');
   }
   const validationOptions = {
     harnessAuthorityBytes: authorityContext.harnessAuthorityBytes,
     top10ReleaseSetBytes: authorityContext.top10ReleaseSetBytes,
+    top10ReleaseSetSchemaBytes: authorityContext.top10ReleaseSetSchemaBytes,
+    top10ScoreAuthorityBytes: authorityContext.top10ScoreAuthorityBytes,
+    top10ScoreAuthoritySchemaBytes: authorityContext.top10ScoreAuthoritySchemaBytes,
     migrationMapBytes: authorityContext.migrationMapBytes,
     migrationMapSchemaBytes: authorityContext.migrationMapSchemaBytes,
     candidateIntakeBytes: authorityContext.candidateIntakeBytes,
@@ -1811,6 +1819,10 @@ function validateTransactionAuthorityContext(authorityContext) {
   if (JSON.stringify(JSON.parse(authorityContext.top10ReleaseSetBytes)) !==
       JSON.stringify(authorityContext.top10ReleaseSet)) {
     fail('transaction Top10 context is not bound to its exact release-set bytes');
+  }
+  if (JSON.stringify(JSON.parse(authorityContext.top10ScoreAuthorityBytes)) !==
+      JSON.stringify(authorityContext.top10ScoreAuthority)) {
+    fail('transaction Top10 context is not bound to its exact complete score-authority bytes');
   }
   return { authority, validationOptions };
 }
@@ -2764,6 +2776,9 @@ async function resolveItemContext(options) {
     validationOptions: {
       harnessAuthorityBytes: authorityContext.harnessAuthorityBytes,
       top10ReleaseSetBytes: authorityContext.top10ReleaseSetBytes,
+      top10ReleaseSetSchemaBytes: authorityContext.top10ReleaseSetSchemaBytes,
+      top10ScoreAuthorityBytes: authorityContext.top10ScoreAuthorityBytes,
+      top10ScoreAuthoritySchemaBytes: authorityContext.top10ScoreAuthoritySchemaBytes,
       migrationMapBytes: authorityContext.migrationMapBytes,
       migrationMapSchemaBytes: authorityContext.migrationMapSchemaBytes,
       candidateIntakeBytes: authorityContext.candidateIntakeBytes,
