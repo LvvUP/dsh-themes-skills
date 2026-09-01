@@ -33,7 +33,7 @@ const LOCAL_ASSET_ROOTS = [
   'theme-packages',
 ];
 const EXPECTED_AUTHORITY_SHA256 =
-  '5bda616b8ae9963fc64194b9e1ecf666eec3f93c82437b4db3677b7ad4776c92';
+  '1ce7c213460b8929c9adb0478684cf4608575d2e0a8832993609864cbe72727a';
 
 const TOKEN_NAMES = [
   '--dsw-alias-bg-base',
@@ -322,11 +322,13 @@ function validateHarnessProjection(authority, bytes) {
     fail('public Harness authority differs from the Manager candidate projection');
   }
   if (
-    harness.publication?.publishedInstallable !== false ||
-    harness.publication?.completedReceipts?.length !== 0 ||
-    harness.publication?.receiptSetSha256 !== null
+    harness.publication?.status !== 'runtime-receipt-verified' ||
+    harness.publication?.publishedInstallable !== true ||
+    harness.publication?.completedReceipts?.length !== 6 ||
+    harness.publication?.receiptSetSha256 !==
+      '3a1017961b0fbc2ac3e773913009c842332b030b5494a5af454594afdb679d0a'
   ) {
-    fail('public Harness baseline has changed and needs an independent review');
+    fail('public Harness baseline is not the promoted six-task authority');
   }
 }
 
@@ -418,7 +420,7 @@ export function validateAlpha2V4CandidateAuthority(authority) {
     authority.baseline.publicHarnessAuthorityPath !==
       '../dsh-harness-installer/references/alpha2-release-authority.json' ||
     authority.baseline.publicHarnessAuthoritySha256 !==
-      'f8be99bda583c2b8b1458746eaf07fe64c5a846348cbe0fffc1d4ff699211e11' ||
+      '100e24ea87e111a7abb13aab5d8c81e38585319c27ea09ce82e62dd4fcc80094' ||
     authority.baseline.publisherV4SourceAuthoritySha256 !==
       EXPECTED_COMPATIBILITY.source.authoritySha256 ||
     JSON.stringify(authority.baseline.provenanceBoundary) !==

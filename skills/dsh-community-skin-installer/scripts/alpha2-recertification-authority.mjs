@@ -18,11 +18,11 @@ const harnessAuthorityUrl = new URL(
 );
 
 export const ALPHA2_RECERTIFICATION_SHA256 =
-  '02dbedab9dc248019bfe2654bd9c9e35002ada1c744256d172fe3abe664c2b80';
+  'c1456b221050479e70ee74e7eab5422414a1fe9043f6c63e5d91a194d80e06b8';
 export const ALPHA2_RECERTIFICATION_SCHEMA_SHA256 =
   'ff4ba6954be7213d6ea14804ca67408b14af367ea54834684a6a4d93429d1103';
 export const ALPHA2_HARNESS_AUTHORITY_SHA256 =
-  'f8be99bda583c2b8b1458746eaf07fe64c5a846348cbe0fffc1d4ff699211e11';
+  '100e24ea87e111a7abb13aab5d8c81e38585319c27ea09ce82e62dd4fcc80094';
 export const ALPHA1_RECERTIFICATION_SHA256 =
   '9ecc86474cba557c445ae21b8e479aa3f1b55cb8b2768faa6ed73952cc7b1552';
 export const COMMUNITY_CATALOG_SHA256 =
@@ -235,6 +235,26 @@ export function validateAlpha2Recertification(
     harnessAuthority?.officialNpm?.distIntegrity,
     EXPECTED_BASELINE.officialNpmIntegrity,
     'Harness npm integrity'
+  );
+  exact(
+    harnessAuthority?.publication?.status,
+    'runtime-receipt-verified',
+    'Harness runtime status'
+  );
+  exact(
+    harnessAuthority?.publication?.publishedInstallable,
+    true,
+    'Harness runtime installability'
+  );
+  exact(
+    harnessAuthority?.publication?.completedReceipts?.length,
+    6,
+    'Harness completed runtime receipts'
+  );
+  exact(
+    harnessAuthority?.publication?.receiptSetSha256,
+    '3a1017961b0fbc2ac3e773913009c842332b030b5494a5af454594afdb679d0a',
+    'Harness runtime receipt set sha256'
   );
 
   return {

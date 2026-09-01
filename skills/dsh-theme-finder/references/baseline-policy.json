@@ -11,7 +11,7 @@
     "sourceCommit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
     "sourceTree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b",
     "evidencePath": "community-alpha2-recertification.json",
-    "evidenceSha256": "02dbedab9dc248019bfe2654bd9c9e35002ada1c744256d172fe3abe664c2b80",
+    "evidenceSha256": "c1456b221050479e70ee74e7eab5422414a1fe9043f6c63e5d91a194d80e06b8",
     "historicalIdentityPath": "community-authority.json",
     "historicalIdentitySha256": "343000de2be72848db4a7838be90e3c41191f164a5a62d8198d154bfe0aa5d99",
     "historicalAlpha1Path": "community-alpha1-recertification.json",

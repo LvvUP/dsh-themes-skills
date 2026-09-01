@@ -77,5 +77,5 @@
   </g>
 
   <circle cx="57" cy="613" r="6" fill="#F6C65B"/>
-  <text x="76" y="620" fill="#94A8AE" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif" font-size="18">Current alpha.2 gates: Harness 0/6 · Plugins 0/80 · no ordinary install claim</text>
+  <text x="76" y="620" fill="#94A8AE" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif" font-size="18">Current alpha.2 gates: Harness operational 6/6 · Plugins blocked 0/80 · item authority required</text>
 </svg>

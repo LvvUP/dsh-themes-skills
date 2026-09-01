@@ -119,7 +119,15 @@ runtime receipts.
 ## Publication state
 
 Upstream publication and project certification are different facts. The
-official prerelease and npm package exist, while the DSH Themes authority stays
-`official-npm-runtime-evidence-pending` until the complete signed six-task
-candidate is explicitly reviewed and promoted. Alpha.1, RC.8, and RC.2 evidence
-remains historical and is never overwritten.
+official prerelease and npm package exist, and the DSH Themes authority is now
+`runtime-receipt-verified`: all six exact platform/Node receipts were reviewed
+and explicitly promoted with receipt-set SHA-256
+`3a1017961b0fbc2ac3e773913009c842332b030b5494a5af454594afdb679d0a`.
+This makes the exact official npm runtime the published alpha.2 operational
+installation baseline while preserving the independent source-build boundary;
+it does not prove source-to-package binary equivalence.
+
+The manual candidate workflow, aggregation, signature, and verification have
+no authority effect by themselves. A failed later candidate cannot revoke or
+replace the promoted 6/6 authority and never causes fallback to alpha.1, RC.8,
+or RC.2. Those authorities remain historical and are never overwritten.

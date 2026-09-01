@@ -5,7 +5,9 @@
 `.github/workflows/alpha2-runtime-certification.yml` is manual-only and runs
 only from `main`. It cannot edit authority. Its first output is an unsigned
 candidate; signing and verification produce review evidence, not automatic
-promotion.
+promotion. The current bundled authority reached `runtime-receipt-verified`
+only through the separate explicit review and promotion of receipt set
+`3a1017961b0fbc2ac3e773913009c842332b030b5494a5af454594afdb679d0a`.
 
 The matrix contains exactly six independently executed tasks: Linux x64,
 macOS arm64, and Windows x64 on exact Node 22.19.0 and 24.15.0.
@@ -96,7 +98,9 @@ node <skill-dir>/scripts/runtime-certification.mjs verify \
   --workflow <absolute-repository>/.github/workflows/alpha2-runtime-certification.yml
 ```
 
-Only the explicit promotion command may change the bundled publication state,
-and only on a clean POSIX checkout whose HEAD and workflow match the signed run.
-Windows promotion is refused. Failure at any point keeps the authority at 0/6;
-there is no fallback to alpha.1 or RC.2.
+Only the explicit promotion command may change a pending bundled publication
+state, and only on a clean POSIX checkout whose HEAD and workflow match the
+signed run. It is one-way and refuses the current already-promoted authority.
+Windows promotion is refused. Before initial promotion, failure leaves the
+authority pending at 0/6. After promotion, a failed later candidate leaves the
+current authority at 6/6. Neither case falls back to alpha.1, RC.8, or RC.2.

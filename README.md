@@ -8,7 +8,7 @@
 
 [![Repository version 0.8.0](https://img.shields.io/badge/repository-0.8.0-246BCE)](package.json)
 [![DSH baseline 0.1.2-alpha.2](https://img.shields.io/badge/DSH-0.1.2--alpha.2-5B67D8)](skills/dsh-harness-installer/references/alpha2-release-authority.json)
-[![Harness promotion 0 of 6](https://img.shields.io/badge/Harness%20promotion-0%2F6-C58B20)](skills/dsh-harness-installer/references/alpha2-release-authority.json)
+[![Harness operational 6 of 6](https://img.shields.io/badge/Harness%20operational-6%2F6-2E8B57)](skills/dsh-harness-installer/references/alpha2-release-authority.json)
 [![Plugin authority 0 of 80](https://img.shields.io/badge/Plugin%20authority-0%2F80-C58B20)](skills/dsh-plugin-installer/references/plugin-authority.json)
 [![CI](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-246BCE)](LICENSE)
@@ -18,7 +18,7 @@
 </div>
 
 > [!IMPORTANT]
-> This repository's `0.8.0` line is still under certification. It is not presented here as a published, installable Skills release. The official upstream `@deepseek-ai/dsh@0.1.2-alpha.2` npm prerelease exists, but DSH Themes has promoted **0/6** required runtime tasks. Plugin authority remains **0/80**, and Top10 remains closed.
+> This repository's `0.8.0` line is still under certification. It is not presented here as a published, installable Skills release. The exact official upstream `@deepseek-ai/dsh@0.1.2-alpha.2` npm prerelease has passed and been promoted through all **6/6** required runtime tasks as the Harness operational installation baseline. That promotion does not release this Skills package or authorize a catalog item: Plugin authority remains **0/80**, V4 remains **0/54**, community alpha.2 re-certification remains **0/66**, and Top10 remains closed.
 
 ## What this gives you
 
@@ -35,7 +35,7 @@ DSH Themes separates choosing from installing. The website helps a person compar
 
 | Claim | Checked-in evidence | Current boundary |
 | --- | --- | --- |
-| Official alpha.2 npm runtime | Exact `@deepseek-ai/dsh@0.1.2-alpha.2`, registry signature, integrity, tarball SHA-256, and installed CLI SHA-256 are pinned in [`alpha2-release-authority.json`](skills/dsh-harness-installer/references/alpha2-release-authority.json) | The upstream package exists; DSH Themes promotion is **0/6** and `publishedInstallable: false` |
+| Official alpha.2 npm runtime | Exact `@deepseek-ai/dsh@0.1.2-alpha.2`, registry signature, integrity, tarball SHA-256, and installed CLI SHA-256 are pinned in [`alpha2-release-authority.json`](skills/dsh-harness-installer/references/alpha2-release-authority.json) | [Run `33463453889`, attempt 1](https://github.com/LvvUP/dsh-themes-skills/actions/runs/33463453889) passed **6/6** exact tasks; the reviewed signed receipt set is promoted with `publishedInstallable: true` |
 | Exact alpha.2 source cross-build | Official tag `dsh-v0.1.2-alpha.2`, commit, tree, lockfile, Node tuples, and `pnpm@11.7.0` are pinned separately | Source evidence is not proof that its built bytes equal the npm package |
 | Plugin catalog | The website exposes 80 curated records; [`plugin-authority.json`](skills/dsh-plugin-installer/references/plugin-authority.json) validates structurally | Verified installable items: **0/80**; authority item count: **0** |
 | Top10 | [`top10-release-set.json`](skills/dsh-plugin-installer/references/top10-release-set.json) contains the closed release-set gate | No entries, not frozen, not installable |
@@ -48,7 +48,7 @@ node skills/dsh-harness-installer/scripts/authority.mjs
 node skills/dsh-plugin-installer/scripts/authority.mjs
 ```
 
-The expected result today is a valid authority document with closed publication gates—not an installation success.
+The expected result today is a promoted **6/6 Harness** authority and a separately valid but closed **0/80 Plugin** authority. Harness success must not be interpreted as item installation authority.
 
 ### Real product surface
 
@@ -82,9 +82,9 @@ Please inspect DSH Themes #3006. Install only if its exact current authority is 
 
 Finder resolves kind and status. A matching installer may continue only after every exact gate passes and the user approves the displayed plan.
 
-### 4. Expect a fail-closed result on current alpha.2 lanes
+### 4. Keep the operational Harness lane separate from closed item lanes
 
-At the current **0/6 Harness** and **0/80 Plugin** state, alpha.2 setup and Plugin requests are inspection/certification workflows, not ordinary installation paths. A correct result is often: identify the item, show the missing evidence, and stop without mutation.
+Exact alpha.2 Harness setup may proceed through `dsh-harness-installer` only after its promoted authority is verified and the user approves the plan. Catalog items remain separate: Plugin is **0/80**, V4 is **0/54**, and community re-certification is **0/66**. For those item requests, the correct result is still to identify the item, show the missing item-level evidence, and stop without mutation.
 
 ### Skills package availability
 
@@ -99,7 +99,7 @@ There is intentionally no `v0.8.0` install command in this README yet. Do not in
 | `#1xxx` Theme or hosted `#2xxx` Full Skin | `dsh-theme-manager` | Accepts only its exact item authority; alpha.2 authority is not inferred from history |
 | Community `#2xxx` Skin | `dsh-community-skin-installer` | Inspect-only until the current baseline's item and rollback receipts are promoted |
 | `#3xxx` Plugin | `dsh-plugin-installer` | Inspect/certify only while authority is 0/80 |
-| Harness setup, no catalog ID | `dsh-harness-installer` | Separate official-npm and source-cross-build lanes; ordinary promotion remains 0/6 |
+| Harness setup, no catalog ID | `dsh-harness-installer` | Separate official-npm and source-cross-build lanes; the exact operational baseline is promoted 6/6 |
 
 `#NNNN` starts exact identity resolution; it never promises installation. Finder is read-only, and it does not combine Harness bootstrap with item mutation.
 
@@ -109,10 +109,10 @@ There is intentionally no `v0.8.0` install command in this README yet. Do not in
 
 | Lane | Exact identity | What it proves—and does not prove |
 | --- | --- | --- |
-| Official npm runtime | `@deepseek-ai/dsh@0.1.2-alpha.2`; tarball SHA-256 `5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47`; CLI SHA-256 `dc23f6c5dd7df8834e3e38bdb9609d77b459834681ae9b7133b417b0c35f3166` | This is the official upstream distributed prerelease runtime. It has a registry signature, but no npm provenance attestation and no `gitHead`. DSH Themes still requires six promoted tasks before ordinary use. |
+| Official npm runtime | `@deepseek-ai/dsh@0.1.2-alpha.2`; tarball SHA-256 `5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47`; CLI SHA-256 `dc23f6c5dd7df8834e3e38bdb9609d77b459834681ae9b7133b417b0c35f3166` | This is the official upstream distributed prerelease runtime. It has a registry signature, but no npm provenance attestation and no `gitHead`. DSH Themes promoted its complete signed six-task runtime matrix as the operational installation baseline. |
 | Exact source cross-build | Tag `dsh-v0.1.2-alpha.2`; commit `0a53fb55bea101816fa226bb964ae2bed71c343b`; tree `64ccbfa8e0caa4711cd4a75717ef9e022657961b`; lockfile SHA-256 `6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0` | This verifies a clean, frozen source build with `pnpm@11.7.0`. It is independent evidence, not an official binary and not a claim of byte-for-byte equivalence with npm. |
 
-The six-task gate is Linux x64, macOS arm64, and Windows x64 across Node `22.19.0` and `24.15.0`. The installer never modifies `PATH`, installs Node, or records browser tokens, cookies, authorization headers, or credential-derived digests.
+The promoted six-task gate covers Linux x64, macOS arm64, and Windows x64 across Node `22.19.0` and `24.15.0`. The installer never modifies `PATH`, installs Node, or records browser tokens, cookies, authorization headers, or credential-derived digests.
 The same authority preserves the exact upstream [SAFETY.md](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.1.2-alpha.2/SAFETY.md) bytes; that experimental-safety statement remains part of the user-visible boundary.
 
 ## Mixed Plugin distribution and Top10

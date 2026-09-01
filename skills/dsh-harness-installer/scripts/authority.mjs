@@ -17,6 +17,11 @@ const FORBIDDEN_RECEIPT_VALUE =
   /(?:[?&]token=|\bcookie\s*:|\bauthorization\s*:|bearer\s+[a-z0-9._~-]+)/i;
 const BASE64URL_SECRET = /(?:^|[^A-Za-z0-9_-])[A-Za-z0-9_-]{43}(?:$|[^A-Za-z0-9_-])/;
 
+export const PENDING_PUBLICATION_BOUNDARY =
+  'The upstream npm package is an official prerelease. DSH Themes has not promoted it as an operational installation baseline; the complete signed six-task runtime matrix and independent source cross-build must be reviewed and explicitly promoted first.';
+export const PROMOTED_PUBLICATION_BOUNDARY =
+  'The upstream npm package is an official prerelease. DSH Themes has promoted this exact npm runtime as the alpha.2 operational installation baseline after reviewing the complete signed six-task runtime matrix and independent source cross-build; no source-to-package binary equivalence is claimed.';
+
 function fail(message) {
   throw new Error(message);
 }
@@ -237,9 +242,11 @@ export function validateAuthority(authority) {
       seen.add(entry.receiptSha256);
     });
   }
-  if (!/official prerelease/i.test(authority.publication.boundary) ||
-      !/has not promoted/i.test(authority.publication.boundary)) {
-    fail('publication boundary must distinguish upstream publication from local promotion');
+  const expectedBoundary = pending
+    ? PENDING_PUBLICATION_BOUNDARY
+    : PROMOTED_PUBLICATION_BOUNDARY;
+  if (authority.publication.boundary !== expectedBoundary) {
+    fail(`publication boundary must exactly describe the ${pending ? 'pending' : 'promoted'} state`);
   }
   exactKeys(authority.historicalAuthority, [
     'alpha1SourceLaneUnchanged', 'rc8ItemLaneUnchanged', 'rc2RuntimeLaneUnchanged',

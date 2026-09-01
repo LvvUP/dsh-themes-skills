@@ -11,7 +11,7 @@
     "officialNpmTarballSha256": "5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47",
     "officialNpmIntegrity": "sha512-4TvTC5kRKlgtSU2UTBv+cID9a2Z+6+m6mpvjXWJfVzuTkflCff6s4MsQpFJTCmwFh/k7zNWe7qFXcLYMV/5VvA==",
     "harnessAuthorityPath": "../../dsh-harness-installer/references/alpha2-release-authority.json",
-    "harnessAuthoritySha256": "f8be99bda583c2b8b1458746eaf07fe64c5a846348cbe0fffc1d4ff699211e11",
+    "harnessAuthoritySha256": "100e24ea87e111a7abb13aab5d8c81e38585319c27ea09ce82e62dd4fcc80094",
     "artifactRelationship": "official-npm-runtime-and-exact-source-cross-build-are-independent"
   },
   "matrix": {
