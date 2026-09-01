@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "purpose": "dsh-alpha2-hosted-plugin-adaptation",
+  "catalogId": 3050,
+  "slug": "dsh-automation",
+  "baseline": {
+    "tag": "dsh-v0.1.2-alpha.2",
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
+  },
+  "source": {
+    "repository": "https://github.com/titanwings/dsh-automation.git",
+    "commit": "5ae28f209c0253461131613fc1b2ea27920bec67",
+    "tree": "ac7485a58d484abf6149681403c307958e8214ac",
+    "sourceSubdir": ".",
+    "manifestSha256": "f8918eeeb93aae79cd0722ad8571ea0bc7d906c87a8bd11b2cb5f2bc033ce0af",
+    "packageName": "@dsh-external/dsh-automation",
+    "packageVersion": "0.1.7",
+    "bundlePatch": "cordis.patch.yml"
+  },
+  "output": {
+    "packageName": "@dsh-themes/dsh-automation",
+    "packageVersion": "0.1.7-dsh.alpha2.1",
+    "description": "Consent-first planning and root-session Schedule requests for DeepSeek Harness 0.1.2-alpha.2",
+    "assetName": "dsh-automation-0.1.7-dsh.alpha2.1.tgz",
+    "hostEntry": "lib/index.js",
+    "clientEntry": "lib/client.js",
+    "bundlePatch": "cordis.patch.yml",
+    "clientInject": [
+      "@deepseek-ai/dsh-api-session-controller",
+      "@deepseek-ai/dsh-client-locale",
+      "@deepseek-ai/dsh-client-ui-layout",
+      "@deepseek-ai/dsh-client-ui-renderer",
+      "@deepseek-ai/dsh-client-ui-session",
+      "@deepseek-ai/dsh-client-ui-sidebar"
+    ],
+    "peerDependencies": {
+      "@deepseek-ai/cordis": "4.0.1",
+      "@deepseek-ai/dsh-api-session-controller": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-layout": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-session": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-sidebar": "0.1.2-alpha.2",
+      "react": "18.3.1"
+    },
+    "files": [
+      {
+        "outputPath": "lib/index.js",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "src/index.ts",
+          "sourceSha256": "2d523eb149cc7611fd519b170f0e38d7d14978122aff3e97130e67a34e0b6546",
+          "replacementPath": "assets/hosted-adaptations/3050/lib/index.js",
+          "replacementSha256": "d26f53506f1b992b7621f2113a69a4f67bc76f0102fe44a77f708f4015f416f8"
+        }
+      },
+      {
+        "outputPath": "lib/client.js",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "src/client/AutomationView.tsx",
+          "sourceSha256": "2720c53618db86be98c88ae125a9eab14662a71e8abc61fdb8ab14f12f2f306a",
+          "replacementPath": "assets/hosted-adaptations/3050/lib/client.js",
+          "replacementSha256": "f63d46956c1e501f649b888f1c749d8c421902e8c3d2bd68ba8e088609c3954f"
+        }
+      },
+      {
+        "outputPath": "cordis.patch.yml",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "cordis.patch.yml",
+          "sourceSha256": "290b6bb961b44fede56fcd0d5be13189d0c6102090fdce4b779f05eb39097044",
+          "replacementPath": "assets/hosted-adaptations/3050/cordis.patch.yml",
+          "replacementSha256": "0d704b8499859d521639ed634fe77fe96873d397d27543531ee66a8de2640edf"
+        }
+      },
+      {
+        "outputPath": "LICENSE",
+        "input": {
+          "kind": "copy-exact-upstream",
+          "sourcePath": "LICENSE",
+          "sha256": "06951b2bf3e23c4eec0820b937369bc91a0552ef2a85716388ffd040133faffb"
+        }
+      }
+    ]
+  },
+  "rights": {
+    "licenseExpression": "MIT",
+    "licensePath": "LICENSE",
+    "licenseSha256": "06951b2bf3e23c4eec0820b937369bc91a0552ef2a85716388ffd040133faffb",
+    "copyrightNotice": "Copyright (c) 2026 dsh-automation contributors",
+    "redistribution": "allowed-with-license-and-modification-notice"
+  },
+  "staticPolicy": {
+    "computedMembers": [],
+    "forbiddenUtf8": [
+      "@deepseek-ai/dsh-client-runtime",
+      "@deepseek-ai/dsh-host-apiproxy",
+      "ctx.webServer",
+      "ctx.connection",
+      "ctx.remote",
+      "ctx.agents",
+      "ctx.tools",
+      "ctx.storage",
+      "ctx.subprocess",
+      "automation_create",
+      "automation_run_now",
+      "fetch(",
+      "XMLHttpRequest",
+      "WebSocket",
+      "EventSource",
+      "localStorage",
+      "sessionStorage",
+      "document.cookie",
+      "innerHTML",
+      "outerHTML",
+      "insertAdjacentHTML",
+      "dangerouslySetInnerHTML",
+      "setInterval",
+      "setTimeout",
+      "node:child_process",
+      "node:fs",
+      "process.env",
+      "eval(",
+      "new Function"
+    ],
+    "requiredUtf8": [
+      "window.__ModuleLoader__.load",
+      "ctx.sessions.binding(sessionId)",
+      "session.beginSubmission",
+      "session.prompt([{ type: 'text', text }], 'queue'",
+      "schedule_create",
+      "ctx.slots.inject('sidebar.footer.action'",
+      "ctx.slots.inject('shell.overlay'",
+      "dsh-automation-planner-trigger",
+      "dsh-automation-planner",
+      "DSH3050_PROBE:MEMORY_ONLY_PLANS_V1",
+      "DSH3050_PROBE:EXPLICIT_RUN_CLICK_V1",
+      "DSH3050_PROBE:OFFICIAL_SCHEDULE_CREATE_V1",
+      "DSH3050_PROBE:ROOT_SESSION_ONLY_V1",
+      "DSH3050_PROBE:INHERITED_SESSION_PERMISSIONS_V1",
+      "function regularRootSessionId(sessions)",
+      "sessions.currentAddress === undefined",
+      "currentSummary.origin !== 'subagent'",
+      "const currentId = regularRootSessionId(sessions)",
+      "const session = currentId === undefined ? undefined : props.sessionFor(currentId)",
+      "if (session === undefined) { setMessage(props.t('noSession')); return }",
+      "DSH3050_PROBE:DISPOSE_CLEAN_V1"
+    ]
+  },
+  "runtimeProbe": {
+    "contractPath": "references/plugin-runtime-probes/3050.json",
+    "contractSha256": "88b7d36715c8826dcadd94598be7e73cc6ccf0d5e766ef8a2c0029c67cc42ede",
+    "requiredAssertions": [
+      "package.exact-entry",
+      "boot.ready-context-once",
+      "feature.memory-plan-builder",
+      "feature.explicit-run",
+      "feature.official-schedule",
+      "security.root-session-only",
+      "security.no-host-automation",
+      "ui.keyboard-zoom-themes",
+      "dispose.zero-residue",
+      "combine.additive-slots-rollback"
+    ]
+  }
+}

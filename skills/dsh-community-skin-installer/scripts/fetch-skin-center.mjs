@@ -2,12 +2,13 @@
 
 import { createHash, randomBytes } from 'node:crypto';
 import { createWriteStream } from 'node:fs';
-import { access, link, mkdir, readFile, stat, unlink } from 'node:fs/promises';
+import { access, link, mkdir, stat, unlink } from 'node:fs/promises';
 import https from 'node:https';
 import { dirname, isAbsolute } from 'node:path';
 import { pipeline } from 'node:stream/promises';
 
-const catalogUrl = new URL('../references/community-catalog.json', import.meta.url);
+import { loadCommunityAuthority } from './catalog-authority.mjs';
+
 const DOWNLOAD_TIMEOUT_MS = 5 * 60 * 1000;
 
 function fail(message) {
@@ -42,7 +43,16 @@ function request(url, signal) {
 }
 
 const output = outputArg(process.argv.slice(2));
-const catalog = JSON.parse(await readFile(catalogUrl, 'utf8'));
+const { catalog, alpha2Recertification } = await loadCommunityAuthority();
+if (
+  alpha2Recertification.gate?.status !== 'certified-installable' ||
+  alpha2Recertification.gate?.installable !== true ||
+  alpha2Recertification.gate?.publicationAllowed !== true
+) {
+  fail(
+    'Download is blocked: alpha2-recertification-gate-not-certified; no directory or network request was created'
+  );
+}
 const authority = catalog.skinCenter;
 const parsed = new URL(authority.tarballUrl);
 if (parsed.protocol !== 'https:' || parsed.username || parsed.password) {

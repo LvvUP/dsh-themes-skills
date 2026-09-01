@@ -1,0 +1,821 @@
+{
+  "authorityEffect": "none-not-installation-authority",
+  "baseline": {
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "lockfileSha256": "6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0",
+    "tag": "dsh-v0.1.2-alpha.2",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
+  },
+  "candidateIntakeSha256": "7babb98c801aee0a87653195c8e9fad7f7b38b8b1c39c81e62dab072b5e1830b",
+  "items": [
+    {
+      "artifact": null,
+      "catalogId": 3004,
+      "commit": "dd7ef5ed160aa1a624559de16eafd4ea9406d7ed",
+      "functionalProbe": null,
+      "repository": "https://github.com/0xsline/dsh-spotlight.git",
+      "slug": "dsh-spotlight",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3005,
+      "commit": "873bc91035e51dc598e5e60ad0c06df3a1a552d6",
+      "functionalProbe": null,
+      "repository": "https://github.com/Han-1413141/dsh-sticky-disclosure.git",
+      "slug": "dsh-sticky-disclosure",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3006,
+      "commit": "4781f4c215f1ad4d55a44e1409bafe58f05b721f",
+      "functionalProbe": null,
+      "repository": "https://github.com/Khellendros97/dsh-better-model-selector.git",
+      "slug": "dsh-better-model-selector",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3008,
+      "commit": "a57d237e03b6488875cb7cc2a90bf6a37512632d",
+      "functionalProbe": null,
+      "repository": "https://github.com/NigelYao/dsh-view-modes.git",
+      "slug": "dsh-view-modes",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3009,
+      "commit": "97866e7143b844995bc7490f3a5a40f968fe9441",
+      "functionalProbe": null,
+      "repository": "https://github.com/Laplace-bit/dsh-smooth-stream.git",
+      "slug": "dsh-smooth-stream",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3010,
+      "commit": "df71f28b8e29c76a7785e50461bc1065cdb5a899",
+      "functionalProbe": null,
+      "repository": "https://github.com/ZSeven-W/dsh-openpencil.git",
+      "slug": "dsh-openpencil",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3011,
+      "commit": "82f910c0b5e645c65c2a34be0b0e47035d0489a7",
+      "functionalProbe": null,
+      "repository": "https://github.com/GooodWei/arcana.git",
+      "slug": "arcana",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3012,
+      "commit": "f63cdf45b814eb56b7fb33c5744686baaea1550f",
+      "functionalProbe": null,
+      "repository": "https://github.com/GitHubJiKe/dsh-markdown-preview.git",
+      "slug": "dsh-markdown-preview",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3013,
+      "commit": "27a722e408cbb1c8ace6aa5cca0f77eca6fd4d72",
+      "functionalProbe": null,
+      "repository": "https://github.com/Semidia/dsh-i18n.git",
+      "slug": "dsh-i18n",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3014,
+      "commit": "60b0f9e61b40f917ad0aefee21da6c18d9f8970e",
+      "functionalProbe": null,
+      "repository": "https://github.com/Semidia/dsh-settings-tuner.git",
+      "slug": "dsh-settings-tuner",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3015,
+      "commit": "a412ea55f31ef9c170a137d90db6d3fa7bcb34e3",
+      "functionalProbe": null,
+      "repository": "https://github.com/0imzero/dsh-workspace-menu.git",
+      "slug": "dsh-workspace-menu",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3016,
+      "commit": "64047f40cd023dfa1b64a74778244abbe6452e23",
+      "functionalProbe": null,
+      "repository": "https://github.com/MysaDC/dsh-plugin-description.git",
+      "slug": "dsh-plugin-description",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3017,
+      "commit": "f62e6ba7be47f42accae372bb84dc879972d071a",
+      "functionalProbe": null,
+      "repository": "https://github.com/yibiner/dsh-plugin-list-plus.git",
+      "slug": "dsh-plugin-list-plus",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3018,
+      "commit": "bc86c777564a6f192c01582698696d9dd7ac7014",
+      "functionalProbe": null,
+      "repository": "https://github.com/Starfie1d1272/dsh-builtin-toggles.git",
+      "slug": "dsh-builtin-toggles",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3019,
+      "commit": "8714e4babb9f5969fe0545ef673d9124b73d9d8a",
+      "functionalProbe": null,
+      "repository": "https://github.com/a903067276-rgb/dsh-plan-switch.git",
+      "slug": "dsh-plan-switch",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3020,
+      "commit": "d732e684c41016f8530f8f303d4f8c7dfa4d7a01",
+      "functionalProbe": null,
+      "repository": "https://github.com/a903067276-rgb/dsh-file-mentions.git",
+      "slug": "dsh-file-mentions",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3021,
+      "commit": "ff092b723cb21d207f7dcf29ba9359be2b16002d",
+      "functionalProbe": null,
+      "repository": "https://github.com/PerryLink/dsh-mcp-panel.git",
+      "slug": "dsh-mcp-panel",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3022,
+      "commit": "17d46cf820469824c5f61203f46814d00feb29cb",
+      "functionalProbe": null,
+      "repository": "https://github.com/PerryLink/dsh-session-pin.git",
+      "slug": "dsh-session-pin",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3023,
+      "commit": "5bda86a8f102aae5c061b9ab45c0fe3385ac5484",
+      "functionalProbe": null,
+      "repository": "https://github.com/dhb861832993-star/pbr-render.git",
+      "slug": "pbr-render",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3026,
+      "commit": "c11c322986cfbad243bd9bbda7c30228bae70ca5",
+      "functionalProbe": null,
+      "repository": "https://github.com/lhh010/dsh-ui-whale.git",
+      "slug": "dsh-ui-whale",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3027,
+      "commit": "792064e6dbb022c5f9ce3529b9cf66efba2863c1",
+      "functionalProbe": null,
+      "repository": "https://github.com/dancingmemory/dskin.git",
+      "slug": "dskin-pixel-cats",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3030,
+      "commit": "1160f44899b9c82716b3e3f7c9564bc878be16ee",
+      "functionalProbe": null,
+      "repository": "https://github.com/QinXi-ai/dsh-codex-import.git",
+      "slug": "dsh-codex-import",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3031,
+      "commit": "00f3658c30655314b013edbb5687c4ec5f5dab27",
+      "functionalProbe": null,
+      "repository": "https://github.com/liustack/modlens.git",
+      "slug": "modlens",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3032,
+      "commit": "f6564d6958c820471697d370f63b8c9ab1914f50",
+      "functionalProbe": null,
+      "repository": "https://github.com/bowenliang123/dsh-context.git",
+      "slug": "dsh-context",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3033,
+      "commit": "1492d7b921dc526ccc21b65a3afbe91a7fbae12e",
+      "functionalProbe": null,
+      "repository": "https://github.com/liustack/modsearch.git",
+      "slug": "modsearch",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3034,
+      "commit": "46f53e4d6d9f95582948f90ec51f4f8a88b5ad9a",
+      "functionalProbe": null,
+      "repository": "https://github.com/xiaobright/dsh-anchored-standard.git",
+      "slug": "dsh-anchored-standard",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3035,
+      "commit": "c93f42f1cc1cdc8292f9803c378dc0fa520be4d2",
+      "functionalProbe": null,
+      "repository": "https://github.com/xmanrui/dsh-im.git",
+      "slug": "dsh-im",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3036,
+      "commit": "21f59e49768b1154869cb2cb9de2b6be3a7300dc",
+      "functionalProbe": null,
+      "repository": "https://github.com/lin-cheng-lab/dsh-plugin-doctor.git",
+      "slug": "dsh-plugin-doctor",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3037,
+      "commit": "eb4190498ef76daec21dfcf5c24c44f337a61ed3",
+      "functionalProbe": null,
+      "repository": "https://github.com/wuxiangru915/dsh-review-loop.git",
+      "slug": "dsh-review-loop",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3038,
+      "commit": "89bb8f6483331fd6feba089471daca4a45b8697b",
+      "functionalProbe": null,
+      "repository": "https://github.com/Han-1413141/dsh-cost-meter.git",
+      "slug": "dsh-cost-meter",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3039,
+      "commit": "f9153dfc1ce47cf43445c1b351ee3ae47b4ad9f1",
+      "functionalProbe": null,
+      "repository": "https://github.com/omdsh-dev/DSH-better-sidebar.git",
+      "slug": "dsh-better-sidebar",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3040,
+      "commit": "f7fa24c14db47ee4827cad5c827ad7aa3fd13434",
+      "functionalProbe": null,
+      "repository": "https://github.com/Ericwong5021/dsh-kanban.git",
+      "slug": "dsh-kanban",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3041,
+      "commit": "fdde2e6da8524cd5ea27598c19eae744d4a1078a",
+      "functionalProbe": null,
+      "repository": "https://github.com/GooodWei/context-vista.git",
+      "slug": "context-vista",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3042,
+      "commit": "7f0203b6690588f30b7a9a35af37c1978a7caacc",
+      "functionalProbe": null,
+      "repository": "https://github.com/zhaoscsc/dsh-wikilink.git",
+      "slug": "dsh-wikilink",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3043,
+      "commit": "8aed144abdc158a332aa73bce42fc217d962f751",
+      "functionalProbe": null,
+      "repository": "https://github.com/omdsh-dev/dsh-open-in-vscode.git",
+      "slug": "dsh-open-in-vscode",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3044,
+      "commit": "ddec603395a223deb46c75b74274c41849c6a131",
+      "functionalProbe": null,
+      "repository": "https://github.com/omdsh-dev/dsh-notification.git",
+      "slug": "dsh-notification",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3045,
+      "commit": "8bdc850732464e2c10278f47b4f2b82da38d801e",
+      "functionalProbe": null,
+      "repository": "https://github.com/dsh-tui/dsh-tui.git",
+      "slug": "dsh-tui",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3046,
+      "commit": "5f7d2fb9974d4575953795ced9e7feae2b241d0e",
+      "functionalProbe": null,
+      "repository": "https://github.com/ccch1mneyyy/dsh-TUI.git",
+      "slug": "dsh-cc-tui",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3047,
+      "commit": "d9888e161ac6e888651a639edd1fb5725d9c6e86",
+      "functionalProbe": null,
+      "repository": "https://github.com/gxpppp/dsh-search-mcp.git",
+      "slug": "dsh-search-mcp",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3048,
+      "commit": "ccf7975a024da789e5181fd6822a1ac4340c9f52",
+      "functionalProbe": null,
+      "repository": "https://github.com/Scorp1o117/dsh-tool-vision.git",
+      "slug": "dsh-tool-vision",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3049,
+      "commit": "506493224a21510c3f9cc7329a17e84af20879dc",
+      "functionalProbe": null,
+      "repository": "https://github.com/titanwings/dsh-better-browser.git",
+      "slug": "dsh-better-browser",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3050,
+      "commit": "5ae28f209c0253461131613fc1b2ea27920bec67",
+      "functionalProbe": null,
+      "repository": "https://github.com/titanwings/dsh-automation.git",
+      "slug": "dsh-automation",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3051,
+      "commit": "db8ae926ae0fc9fafdb47cac267e8c40c36b9c36",
+      "functionalProbe": null,
+      "repository": "https://github.com/Scorp1o117/dsh-tdai-memory.git",
+      "slug": "dsh-tdai-memory",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3052,
+      "commit": "0cb81a7c7e4153f9fec58f084ad2ba1e70dbc04c",
+      "functionalProbe": null,
+      "repository": "https://github.com/TecFancy/dsh-deeptutor.git",
+      "slug": "dsh-deeptutor",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3053,
+      "commit": "f1e544cce5108873e238313bf7c5ccf092827e2a",
+      "functionalProbe": null,
+      "repository": "https://github.com/imetn/dsh-lark-bridge.git",
+      "slug": "dsh-lark-bridge",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3054,
+      "commit": "9511c7b961faafb35f31e6b0e297524bf377aeaf",
+      "functionalProbe": null,
+      "repository": "https://github.com/codeAnqiang-ma/dsh-superpowers.git",
+      "slug": "dsh-superpowers",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3055,
+      "commit": "053c982f96b77fd750360ee66384bf90d5c1e603",
+      "functionalProbe": null,
+      "repository": "https://github.com/titanwings/dsh-plannotator.git",
+      "slug": "dsh-plannotator",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3056,
+      "commit": "c109330b755c793cbc701a4e6a972d620a6667da",
+      "functionalProbe": null,
+      "repository": "https://github.com/hellodigua/dsh-share.git",
+      "slug": "dsh-share",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3057,
+      "commit": "ebd44aa89c40d8de2519c932c2237ce474f8558e",
+      "functionalProbe": null,
+      "repository": "https://github.com/Proton1917/dsh-live-stats.git",
+      "slug": "dsh-live-stats",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3058,
+      "commit": "32d06f7db906914e278d1552728d1d63f191d6ad",
+      "functionalProbe": null,
+      "repository": "https://github.com/humblebanana/dsh-record-replay.git",
+      "slug": "dsh-record-replay",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3059,
+      "commit": "7ab238541380bb194478df088607d5dc5c351b77",
+      "functionalProbe": null,
+      "repository": "https://github.com/SiYue-ZO/dsh-translator.git",
+      "slug": "dsh-translator",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3060,
+      "commit": "ae295c22bf47d5346fb23450b70c7d97569be779",
+      "functionalProbe": null,
+      "repository": "https://github.com/Lum1104/dsh-browser.git",
+      "slug": "dsh-browser",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3061,
+      "commit": "387eae931b1852e3c3433e0e004fa460d3da2883",
+      "functionalProbe": null,
+      "repository": "https://github.com/Anionex/dsh-computer-use.git",
+      "slug": "dsh-computer-use",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3062,
+      "commit": "deeb194dc9bf03047acf77013d17bbd5257e965a",
+      "functionalProbe": null,
+      "repository": "https://github.com/omdsh-dev/dsh-security-audit.git",
+      "slug": "dsh-security-audit",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3063,
+      "commit": "d850f83503fc0966524a2477890faeff09148577",
+      "functionalProbe": null,
+      "repository": "https://github.com/omdsh-dev/dsh-session-health.git",
+      "slug": "dsh-session-health",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3064,
+      "commit": "aa8d88122adb2b9dc34259696ce3bd80a3e850d9",
+      "functionalProbe": null,
+      "repository": "https://github.com/omdsh-dev/dsh-toolkit.git",
+      "slug": "dsh-toolkit",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3065,
+      "commit": "d3734cb183a5d2483600e8caec3ece04c28c8f45",
+      "functionalProbe": null,
+      "repository": "https://github.com/Anionex/dsh-turn-rewind.git",
+      "slug": "dsh-turn-rewind",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3066,
+      "commit": "95d94419afb0869a255a4ac0fa232fe3c09cd3f3",
+      "functionalProbe": null,
+      "repository": "https://github.com/btspoony/dsh-llm-fallbacks.git",
+      "slug": "dsh-llm-fallbacks",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3067,
+      "commit": "fb854355b89e495ded090b9e2eb94c33430d2366",
+      "functionalProbe": null,
+      "repository": "https://github.com/Degurechaff57/dsh-openapi.git",
+      "slug": "dsh-openapi",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3068,
+      "commit": "4d876e44466cdc3a4d76b113b3f571b7e648f154",
+      "functionalProbe": null,
+      "repository": "https://github.com/dongsheng123132/task-passport.git",
+      "slug": "task-passport",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3069,
+      "commit": "e6f43c255345a6f6bbab66ee8c053a2e5457e3c7",
+      "functionalProbe": null,
+      "repository": "https://github.com/Drifter-yh/dsh-tool-policy.git",
+      "slug": "dsh-tool-policy",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3070,
+      "commit": "c01801a7e39c36515d8445747abff6a6388c1278",
+      "functionalProbe": null,
+      "repository": "https://github.com/ilharp/dsh-tool-approval.git",
+      "slug": "dsh-tool-approval",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3071,
+      "commit": "fd000f69da4ab79973a1ffe6e168da74fca6355e",
+      "functionalProbe": null,
+      "repository": "https://github.com/fakechris/dsh-track.git",
+      "slug": "dsh-track",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3072,
+      "commit": "31db81744225edc4296d1f12095460fc645dfe98",
+      "functionalProbe": null,
+      "repository": "https://github.com/havingautism/dsh-deepresearch.git",
+      "slug": "dsh-deepresearch",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3073,
+      "commit": "30f39804dfdbef434887169958019f186be5b8d2",
+      "functionalProbe": null,
+      "repository": "https://github.com/HuanLinOTO/dsh-plugin-yet-another-subagent.git",
+      "slug": "dsh-plugin-yet-another-subagent",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3074,
+      "commit": "f59b4f03e7b36648b804fd07e57a53e276da5d81",
+      "functionalProbe": null,
+      "repository": "https://github.com/Jesse-njx/dsh-routines.git",
+      "slug": "dsh-routines",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3075,
+      "commit": "c90e27c73e61a756de3bf5ebb2184b35b2a81711",
+      "functionalProbe": null,
+      "repository": "https://github.com/jiesou/dsh-stream-rules.git",
+      "slug": "dsh-stream-rules",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3076,
+      "commit": "b84d2beac7a56e88065e24ab76a32ec63dc53f4b",
+      "functionalProbe": null,
+      "repository": "https://github.com/NanmiCoder/dsh-agent-teams.git",
+      "slug": "dsh-agent-teams",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3077,
+      "commit": "652800ef31c7e352021c6d6683b6ba5204c8ac5a",
+      "functionalProbe": null,
+      "repository": "https://github.com/pandashere/dsh-self-control-guard.git",
+      "slug": "dsh-self-control-guard",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3078,
+      "commit": "65bf651e7b54bdca8c11b8a1684bf4f767f4d5e5",
+      "functionalProbe": null,
+      "repository": "https://github.com/Chinesezjc/dsh-interconnect.git",
+      "slug": "dsh-interconnect",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3079,
+      "commit": "d8b29a13ed029207b6da8277b05091ceefcbe754",
+      "functionalProbe": null,
+      "repository": "https://github.com/haytham818/dsh-notify.git",
+      "slug": "dsh-notify",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3080,
+      "commit": "e4c96c54923d0a54b4184e5a66a80b904f93ab18",
+      "functionalProbe": null,
+      "repository": "https://github.com/havingautism/dsh-notebooks.git",
+      "slug": "dsh-notebooks",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3081,
+      "commit": "01aba653f576658974b70514573c1f6b7b4ce4df",
+      "functionalProbe": null,
+      "repository": "https://github.com/omdsh-dev/dsh-kb-sieve.git",
+      "slug": "dsh-kb-sieve",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3082,
+      "commit": "b285e4cffcad6d089c12341354620edfb9278a95",
+      "functionalProbe": null,
+      "repository": "https://github.com/omdsh-dev/dsh-tool-csv.git",
+      "slug": "dsh-tool-csv",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3083,
+      "commit": "28f9b84ecd662df19291d7c0333ff0905e32b673",
+      "functionalProbe": null,
+      "repository": "https://github.com/YYTbit/dsh-plugin-rag.git",
+      "slug": "dsh-plugin-rag",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3084,
+      "commit": "bb7c76fbbb6ecfc665cccc0c1df7e9b698ea327a",
+      "functionalProbe": null,
+      "repository": "https://github.com/a179-sanae/dsh-code-check.git",
+      "slug": "dsh-code-check",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3085,
+      "commit": "45274b29b6782b06be96bd15fbce18a7ead85642",
+      "functionalProbe": null,
+      "repository": "https://github.com/ben7am1n/dsh-mcp-proxy.git",
+      "slug": "dsh-mcp-proxy",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3086,
+      "commit": "d61ce0f6c2498c94e996c63459c0dfb7c376c514",
+      "functionalProbe": null,
+      "repository": "https://github.com/FlashingChen/dsh-worktree.git",
+      "slug": "dsh-worktree",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3087,
+      "commit": "a4e1933a55b332c036c40382c342719b7658dabc",
+      "functionalProbe": null,
+      "repository": "https://github.com/mitao-su/dsh-playwright-cli.git",
+      "slug": "dsh-playwright-cli",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    },
+    {
+      "artifact": null,
+      "catalogId": 3088,
+      "commit": "d5799cc970828bafefbd6990ba2eab52c6dbc60a",
+      "functionalProbe": null,
+      "repository": "https://github.com/Scorp1o117/dsh-soul-md.git",
+      "slug": "dsh-soul-md",
+      "sourceSubdir": ".",
+      "status": "runtime-authority-pending"
+    }
+  ],
+  "matrix": {
+    "batchCount": 4,
+    "candidatesPerBatch": 20,
+    "requiredCandidates": 80,
+    "tasksPerCandidate": 6
+  },
+  "purpose": "dsh-plugin-alpha2-runtime-candidate-plan",
+  "schemaVersion": 1,
+  "status": "runtime-artifact-and-probe-authority-pending"
+}

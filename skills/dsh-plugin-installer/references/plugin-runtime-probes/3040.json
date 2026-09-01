@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "purpose": "dsh-plugin-alpha2-fixed-runtime-probe",
+  "authorityEffect": "contract-only-not-runtime-authority",
+  "candidateExecuted": false,
+  "catalogId": 3040,
+  "baseline": {
+    "tag": "dsh-v0.1.2-alpha.2",
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
+  },
+  "package": {
+    "name": "@dsh-themes/dsh-kanban",
+    "version": "0.1.1-dsh.alpha2.1",
+    "profile": "web",
+    "cordisEntryId": "dsh-plugin-3040-kanban"
+  },
+  "capabilities": {
+    "permissions": [
+      "read standard session-list summaries and pending-interaction state",
+      "navigate to an existing session or the official blank-session view after a direct user action"
+    ],
+    "network": [],
+    "processes": [],
+    "files": [],
+    "clientServices": [
+      "slots",
+      "sessions",
+      "locale"
+    ],
+    "remoteMethods": [],
+    "browserPersistence": "none"
+  },
+  "combination": {
+    "additiveSlots": [
+      "sidebar.footer.action:dsh-kanban-trigger",
+      "shell.overlay:dsh-kanban-board"
+    ],
+    "exclusiveResources": [],
+    "officialSurfacePreserved": true
+  },
+  "assertions": [
+    {
+      "id": "package.exact-entry",
+      "class": "package-graph",
+      "expected": "The exact package and Cordis entry occur once; every declared DeepSeek peer resolves to 0.1.2-alpha.2 and no removed aggregate runtime resolves."
+    },
+    {
+      "id": "boot.ready-context-once",
+      "class": "cold-web-boot",
+      "expected": "A cold Web start reaches __DSH_BOOT_READY__; one footer trigger, one dormant overlay occupant, and one owned style are present."
+    },
+    {
+      "id": "feature.five-column-kanban",
+      "class": "feature-contract",
+      "expected": "Fixed session-list and pending-interaction fixtures produce exactly Inbox, Ready, Running, Needs input, and Done columns; search and existing-session navigation use only official standard state and actions."
+    },
+    {
+      "id": "feature.ephemeral-idle-move",
+      "class": "feature-contract",
+      "expected": "An idle session can be manually reassigned with the keyboard-operable column selector; running, pending-input, and completed states remain host-derived and locked, and every override disappears on unload."
+    },
+    {
+      "id": "security.session-navigation-only",
+      "class": "security-boundary",
+      "expected": "The plugin reads only standard session and pending-interaction hooks, opens an existing session or clears into the official blank view only after a user gesture, and performs no Remote, route replacement, DOM concealment, outbound request, credential, process, file, or browser-persistence operation."
+    },
+    {
+      "id": "ui.keyboard-zoom-themes",
+      "class": "accessibility-responsive",
+      "expected": "The overlay, search, close, session links, and idle-column selectors remain keyboard operable and legible in narrow layouts, 200 percent zoom, 12/14/17 pixel font settings, and light and dark schemes."
+    },
+    {
+      "id": "dispose.zero-residue",
+      "class": "teardown-rollback",
+      "expected": "Removal leaves zero footer or overlay slots, styles, locale dictionaries, controller listeners, package rows, client graph entries, or dependency-closure changes, and governed Home and Profile bytes match the snapshot."
+    },
+    {
+      "id": "combine.additive-slots-rollback",
+      "class": "combination",
+      "expected": "Both uniquely identified additive slots coexist with official sidebar, overlay, settings, todo, goal, and conversation surfaces; full-batch rollback restores all prior entries after an injected later failure."
+    }
+  ]
+}

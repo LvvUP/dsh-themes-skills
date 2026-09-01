@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh-themes.com/schemas/dsh-plugin-alpha2-runtime-candidate-plan-v1.json",
+  "title": "Non-installing DSH Plugin runtime candidate plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "purpose", "status", "authorityEffect", "candidateIntakeSha256", "baseline", "matrix", "items"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "purpose": { "const": "dsh-plugin-alpha2-runtime-candidate-plan" },
+    "status": { "enum": ["runtime-artifact-and-probe-authority-pending", "runtime-candidates-ready"] },
+    "authorityEffect": { "const": "none-not-installation-authority" },
+    "candidateIntakeSha256": { "$ref": "#/$defs/sha256" },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tag", "commit", "tree", "lockfileSha256"],
+      "properties": {
+        "tag": { "const": "dsh-v0.1.2-alpha.2" },
+        "commit": { "const": "0a53fb55bea101816fa226bb964ae2bed71c343b" },
+        "tree": { "const": "64ccbfa8e0caa4711cd4a75717ef9e022657961b" },
+        "lockfileSha256": { "const": "6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0" }
+      }
+    },
+    "matrix": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["batchCount", "candidatesPerBatch", "tasksPerCandidate", "requiredCandidates"],
+      "properties": {
+        "batchCount": { "const": 4 },
+        "candidatesPerBatch": { "const": 20 },
+        "tasksPerCandidate": { "const": 6 },
+        "requiredCandidates": { "const": 80 }
+      }
+    },
+    "items": { "type": "array", "minItems": 80, "maxItems": 80, "items": { "$ref": "#/$defs/item" } }
+  },
+  "$defs": {
+    "sha40": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "commit", "tree", "sourceSubdir"],
+      "properties": {
+        "repository": { "type": "string" },
+        "commit": { "$ref": "#/$defs/sha40" },
+        "tree": { "$ref": "#/$defs/sha40" },
+        "sourceSubdir": { "type": "string" }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "locator", "bytes", "sha256", "source", "distribution"],
+      "properties": {
+        "kind": { "enum": ["npm-tarball", "github-release-asset", "hosted-staging-tarball"] },
+        "locator": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "bytes": { "type": "integer", "minimum": 1, "maximum": 1073741824 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "source": { "$ref": "#/$defs/source" },
+        "distribution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["sourceType", "immutableCoordinate", "metadataPath", "metadataSha256", "buildRecipePath", "buildRecipeSha256"],
+          "properties": {
+            "sourceType": { "enum": ["npm-registry-tarball", "github-release-asset", "reviewed-hosted-staging-build"] },
+            "immutableCoordinate": { "type": "string", "minLength": 1, "maxLength": 500 },
+            "metadataPath": { "type": "string" },
+            "metadataSha256": { "$ref": "#/$defs/sha256" },
+            "buildRecipePath": { "anyOf": [{ "type": "null" }, { "type": "string" }] },
+            "buildRecipeSha256": { "anyOf": [{ "type": "null" }, { "$ref": "#/$defs/sha256" }] }
+          }
+        }
+      }
+    },
+    "functionalProbe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contractPath", "contractSha256", "requiredAssertions"],
+      "properties": {
+        "contractPath": { "type": "string" },
+        "contractSha256": { "$ref": "#/$defs/sha256" },
+        "requiredAssertions": { "type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": { "type": "string" } }
+      }
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["catalogId", "slug", "repository", "commit", "sourceSubdir", "status", "artifact", "functionalProbe"],
+      "properties": {
+        "catalogId": { "type": "integer", "minimum": 3000, "maximum": 3999 },
+        "slug": { "type": "string" },
+        "repository": { "type": "string" },
+        "commit": { "$ref": "#/$defs/sha40" },
+        "sourceSubdir": { "type": "string" },
+        "status": { "enum": ["runtime-authority-pending", "runtime-candidate-ready"] },
+        "artifact": { "anyOf": [{ "type": "null" }, { "$ref": "#/$defs/artifact" }] },
+        "functionalProbe": { "anyOf": [{ "type": "null" }, { "$ref": "#/$defs/functionalProbe" }] }
+      }
+    }
+  }
+}

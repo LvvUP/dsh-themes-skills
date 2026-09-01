@@ -1,0 +1,5 @@
+# The immutable package remains non-installable until its six-task alpha.2
+# runtime receipt is promoted into plugin authority.
+- insert:
+    - id: dsh-plugin-3041-context-vista
+      name: '@dsh-themes/context-vista'

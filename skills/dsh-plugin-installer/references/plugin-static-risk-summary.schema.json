@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh-themes.com/schemas/dsh-plugin-static-risk-summary-v1.json",
+  "title": "DSH Plugin static-risk review queue summary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "authorityEffect",
+    "candidateExecuted",
+    "requiredCount",
+    "auditedCount",
+    "priorityReviewCount",
+    "rawRouteReviewCatalogIds",
+    "rawRouteWithoutOfficialAuthReferenceCatalogIds",
+    "baselineAbsentPackageCatalogIds",
+    "signalCounts",
+    "receipts",
+    "publication"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "status": { "const": "static-risk-review-queue-ready" },
+    "authorityEffect": { "const": "none-review-prioritization-only" },
+    "candidateExecuted": { "const": false },
+    "requiredCount": { "const": 80 },
+    "auditedCount": { "const": 80 },
+    "priorityReviewCount": { "type": "integer", "minimum": 0, "maximum": 80 },
+    "rawRouteReviewCatalogIds": { "$ref": "#/$defs/catalogIds" },
+    "rawRouteWithoutOfficialAuthReferenceCatalogIds": { "$ref": "#/$defs/catalogIds" },
+    "baselineAbsentPackageCatalogIds": { "$ref": "#/$defs/catalogIds" },
+    "signalCounts": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/signalId" },
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 2684354560
+      }
+    },
+    "receipts": {
+      "type": "array",
+      "minItems": 80,
+      "maxItems": 80,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "catalogId",
+          "receiptSha256",
+          "tree",
+          "requiresElevatedStaticReview",
+          "rawWebRouteAuthState",
+          "baselineAbsentPackages",
+          "highReviewSignalIds"
+        ],
+        "properties": {
+          "catalogId": { "type": "integer", "minimum": 3000, "maximum": 3999 },
+          "receiptSha256": { "$ref": "#/$defs/sha256" },
+          "tree": { "$ref": "#/$defs/sha1" },
+          "requiresElevatedStaticReview": { "type": "boolean" },
+          "rawWebRouteAuthState": {
+            "enum": [
+              "no-raw-webserver-route-found",
+              "raw-route-without-official-auth-reference",
+              "raw-route-with-auth-reference-manual-review-required"
+            ]
+          },
+          "baselineAbsentPackages": {
+            "type": "array",
+            "uniqueItems": true,
+            "maxItems": 2,
+            "items": {
+              "enum": [
+                "@deepseek-ai/dsh-client-runtime",
+                "@deepseek-ai/dsh-host-apiproxy"
+              ]
+            }
+          },
+          "highReviewSignalIds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "$ref": "#/$defs/highReviewSignalId" }
+          }
+        }
+      }
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["installable", "runtimeCertifiedCount", "boundary"],
+      "properties": {
+        "installable": { "const": false },
+        "runtimeCertifiedCount": { "const": 0 },
+        "boundary": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "catalogIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 80,
+      "items": { "type": "integer", "minimum": 3000, "maximum": 3999 }
+    },
+    "signalId": {
+      "enum": [
+        "authenticated-connection-route",
+        "binary-or-non-utf8-text-file",
+        "browser-persistence",
+        "browserauth-rejection-reference",
+        "child-process-module",
+        "credential-or-token-reference",
+        "dynamic-code-or-html-sink",
+        "environment-read",
+        "filesystem-write-api",
+        "git-lfs-reference",
+        "home-or-global-state-path",
+        "mutable-upstream-coordinate",
+        "network-client-api",
+        "oversize-text-file",
+        "process-or-tool-wrapper",
+        "raw-webserver-route",
+        "shell-execution-option",
+        "skipped-text-budget-file",
+        "tracked-archive-or-native-binary",
+        "tracked-executable-file",
+        "tracked-gitlink",
+        "tracked-symbolic-link"
+      ]
+    },
+    "highReviewSignalId": {
+      "enum": [
+        "binary-or-non-utf8-text-file",
+        "child-process-module",
+        "credential-or-token-reference",
+        "dynamic-code-or-html-sink",
+        "git-lfs-reference",
+        "mutable-upstream-coordinate",
+        "oversize-text-file",
+        "raw-webserver-route",
+        "shell-execution-option",
+        "skipped-text-budget-file",
+        "tracked-archive-or-native-binary",
+        "tracked-gitlink",
+        "tracked-symbolic-link"
+      ]
+    }
+  }
+}

@@ -22,7 +22,10 @@ import {
   PENDING_CANDIDATE_CATALOG_INDEX_SHA256,
   PENDING_CANDIDATE_HOSTED_ARTIFACTS,
 } from '../skills/dsh-theme-manager/scripts/hosted-artifact-authority.mjs';
-import { snapshotAllowedArtifact } from '../skills/dsh-theme-manager/scripts/artifact-snapshot.mjs';
+import {
+  snapshotAllowedArtifact,
+  WINDOWS_PRIVATE_ACL_TIMEOUT_MS,
+} from '../skills/dsh-theme-manager/scripts/artifact-snapshot.mjs';
 import { isExactSemver } from '../skills/dsh-theme-manager/scripts/semver.mjs';
 import {
   reverseRollbackRecord,
@@ -63,6 +66,10 @@ foreach ($rule in $rules) {
   [Console]::WriteLine([String]::Join($tab, $fields))
 }
 `;
+
+test('Windows ACL cold-start budget preserves fail-closed checks without the old 15 second flake', () => {
+  assert.equal(WINDOWS_PRIVATE_ACL_TIMEOUT_MS, 60_000);
+});
 const fixture = (name) => resolve('test/fixtures', name);
 const shaA = 'a'.repeat(64);
 const shaB = 'b'.repeat(64);
@@ -385,7 +392,7 @@ function inspectWindowsPrivateAcl(target) {
         ...process.env,
         DSH_THEMES_TEST_PRIVATE_PATH: target,
       },
-      timeout: 15_000,
+      timeout: WINDOWS_PRIVATE_ACL_TIMEOUT_MS,
       windowsHide: true,
     }
   );

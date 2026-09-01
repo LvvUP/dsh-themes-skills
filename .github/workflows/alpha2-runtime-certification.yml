@@ -1,0 +1,340 @@
+name: DSH alpha.2 runtime certification
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: alpha2-runtime-certification-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  runtime:
+    name: runtime-${{ matrix.tuple }}
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            platform: linux
+            arch: x64
+            node: 22.19.0
+            tuple: linux-x64-node-22.19.0
+          - runner: ubuntu-24.04
+            platform: linux
+            arch: x64
+            node: 24.15.0
+            tuple: linux-x64-node-24.15.0
+          - runner: macos-15
+            platform: darwin
+            arch: arm64
+            node: 22.19.0
+            tuple: darwin-arm64-node-22.19.0
+          - runner: macos-15
+            platform: darwin
+            arch: arm64
+            node: 24.15.0
+            tuple: darwin-arm64-node-24.15.0
+          - runner: windows-2022
+            platform: win32
+            arch: x64
+            node: 22.19.0
+            tuple: win32-x64-node-22.19.0
+          - runner: windows-2022
+            platform: win32
+            arch: x64
+            node: 24.15.0
+            tuple: win32-x64-node-24.15.0
+    steps:
+      - name: Check out the public verifier
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      - name: Check out the exact official alpha.2 source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: deepseek-ai/deepseek-harness
+          ref: dsh-v0.1.2-alpha.2
+          path: .ci/upstream
+          fetch-depth: 1
+          fetch-tags: true
+          persist-credentials: false
+
+      - name: Install exact Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install verifier dependencies without lifecycle scripts
+        shell: bash
+        run: npm ci --ignore-scripts
+
+      - name: Normalize and verify the official source origin
+        shell: bash
+        run: |
+          git -C .ci/upstream remote set-url origin https://github.com/deepseek-ai/deepseek-harness.git
+          test "$(git -C .ci/upstream rev-parse HEAD)" = "0a53fb55bea101816fa226bb964ae2bed71c343b"
+          test "$(git -C .ci/upstream rev-parse HEAD^{tree})" = "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
+          node skills/dsh-harness-installer/scripts/verify-source.mjs \
+            --source "${{ github.workspace }}/.ci/upstream"
+
+      - name: Install the exact official npm runtime into a versioned user directory
+        shell: bash
+        run: |
+          RUNTIME_INSTALL_ROOT="$(node -p 'require("node:path").join(require("node:os").homedir(), ".dsh-themes", "runtimes", "dsh-v0.1.2-alpha.2-npm")')"
+          node skills/dsh-harness-installer/scripts/install-official.mjs \
+            --output "${RUNTIME_INSTALL_ROOT}" \
+            --receipt "${{ runner.temp }}/alpha2-private-install-receipt.json" >/dev/null
+
+      - name: Build the pinned source and create a private build receipt
+        shell: bash
+        run: |
+          node skills/dsh-harness-installer/scripts/build-source.mjs \
+            --source "${{ github.workspace }}/.ci/upstream" \
+            --receipt "${{ runner.temp }}/alpha2-private-build-receipt.json" >/dev/null
+
+      - name: Run real CLI, Profile, BrowserAuth, and Web protocol probes
+        shell: bash
+        run: |
+          RUNTIME_INSTALL_ROOT="$(node -p 'require("node:path").join(require("node:os").homedir(), ".dsh-themes", "runtimes", "dsh-v0.1.2-alpha.2-npm")')"
+          mkdir -p "${{ runner.temp }}/alpha2-runtime-receipts"
+          node skills/dsh-harness-installer/scripts/runtime-certification.mjs run-task \
+            --source "${{ github.workspace }}/.ci/upstream" \
+            --build-receipt "${{ runner.temp }}/alpha2-private-build-receipt.json" \
+            --install "${RUNTIME_INSTALL_ROOT}" \
+            --install-receipt "${{ runner.temp }}/alpha2-private-install-receipt.json" \
+            --output "${{ runner.temp }}/alpha2-runtime-receipts/${{ matrix.tuple }}.json" \
+            --tuple "${{ matrix.tuple }}" \
+            --workflow "${{ github.workspace }}/.github/workflows/alpha2-runtime-certification.yml"
+
+      - name: Fail closed on BrowserAuth material in the tuple receipt
+        shell: bash
+        run: |
+          node skills/dsh-harness-installer/scripts/runtime-certification.mjs scan \
+            --path "${{ runner.temp }}/alpha2-runtime-receipts/${{ matrix.tuple }}.json"
+
+      - name: Upload one candidate tuple receipt
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: alpha2-runtime-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.tuple }}
+          path: ${{ runner.temp }}/alpha2-runtime-receipts/${{ matrix.tuple }}.json
+          if-no-files-found: error
+          retention-days: 7
+
+  aggregate:
+    name: aggregate-candidate-receipt-set
+    needs: runtime
+    if: ${{ needs.runtime.result == 'success' && github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out the public verifier
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      - name: Install exact Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24.15.0
+          cache: npm
+
+      - name: Install verifier dependencies without lifecycle scripts
+        shell: bash
+        run: npm ci --ignore-scripts
+
+      - name: Download linux x64 Node 22 receipt
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: alpha2-runtime-${{ github.run_id }}-${{ github.run_attempt }}-linux-x64-node-22.19.0
+          path: ${{ runner.temp }}/alpha2-runtime-input
+
+      - name: Download linux x64 Node 24 receipt
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: alpha2-runtime-${{ github.run_id }}-${{ github.run_attempt }}-linux-x64-node-24.15.0
+          path: ${{ runner.temp }}/alpha2-runtime-input
+
+      - name: Download macOS arm64 Node 22 receipt
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: alpha2-runtime-${{ github.run_id }}-${{ github.run_attempt }}-darwin-arm64-node-22.19.0
+          path: ${{ runner.temp }}/alpha2-runtime-input
+
+      - name: Download macOS arm64 Node 24 receipt
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: alpha2-runtime-${{ github.run_id }}-${{ github.run_attempt }}-darwin-arm64-node-24.15.0
+          path: ${{ runner.temp }}/alpha2-runtime-input
+
+      - name: Download Windows x64 Node 22 receipt
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: alpha2-runtime-${{ github.run_id }}-${{ github.run_attempt }}-win32-x64-node-22.19.0
+          path: ${{ runner.temp }}/alpha2-runtime-input
+
+      - name: Download Windows x64 Node 24 receipt
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: alpha2-runtime-${{ github.run_id }}-${{ github.run_attempt }}-win32-x64-node-24.15.0
+          path: ${{ runner.temp }}/alpha2-runtime-input
+
+      - name: Build and strictly verify the candidate receipt set
+        shell: bash
+        run: |
+          node skills/dsh-harness-installer/scripts/runtime-certification.mjs aggregate \
+            --input "${{ runner.temp }}/alpha2-runtime-input" \
+            --output "${{ runner.temp }}/alpha2-runtime-candidate" \
+            --workflow "${{ github.workspace }}/.github/workflows/alpha2-runtime-certification.yml"
+          node skills/dsh-harness-installer/scripts/runtime-certification.mjs verify \
+            --candidate "${{ runner.temp }}/alpha2-runtime-candidate" \
+            --workflow "${{ github.workspace }}/.github/workflows/alpha2-runtime-certification.yml"
+          node skills/dsh-harness-installer/scripts/runtime-certification.mjs scan \
+            --path "${{ runner.temp }}/alpha2-runtime-candidate"
+
+      - name: Upload verified unsigned candidate handoff
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: alpha2-runtime-unsigned-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/alpha2-runtime-candidate
+          if-no-files-found: error
+          retention-days: 1
+
+  sign:
+    name: sign-verified-candidate-bytes
+    needs: aggregate
+    if: ${{ needs.aggregate.result == 'success' && github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+      artifact-metadata: write
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Download only the verified unsigned candidate
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: alpha2-runtime-unsigned-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/alpha2-runtime-candidate
+
+      - name: Sign the exact receipt set with GitHub workflow provenance
+        id: runtime-provenance
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6
+        with:
+          subject-path: ${{ runner.temp }}/alpha2-runtime-candidate/runtime-receipt-set.json
+
+      - name: Publish permanent full six-receipt evidence attestation
+        id: durable-evidence
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6
+        with:
+          subject-path: ${{ runner.temp }}/alpha2-runtime-candidate/runtime-receipt-set.json
+          predicate-type: https://dsh-themes.com/attestations/alpha2-runtime-evidence/v1
+          predicate-path: ${{ runner.temp }}/alpha2-runtime-candidate/runtime-evidence-predicate.json
+
+      - name: Preserve detached bundles without running repository code
+        shell: bash
+        run: |
+          mkdir -p "${{ runner.temp }}/alpha2-runtime-signed"
+          cp "${{ steps.runtime-provenance.outputs.bundle-path }}" \
+            "${{ runner.temp }}/alpha2-runtime-signed/runtime-receipt-set.json.sigstore.json"
+          cp "${{ steps.durable-evidence.outputs.bundle-path }}" \
+            "${{ runner.temp }}/alpha2-runtime-signed/runtime-evidence-predicate.json.sigstore.json"
+
+      - name: Upload signed bytes for unprivileged verification
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: alpha2-runtime-signed-unverified-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/alpha2-runtime-candidate
+            ${{ runner.temp }}/alpha2-runtime-signed
+          if-no-files-found: error
+          retention-days: 1
+
+  verify-signed:
+    name: verify-signed-candidate-without-oidc
+    needs: sign
+    if: ${{ needs.sign.result == 'success' && github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out the public verifier
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      - name: Install exact Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24.15.0
+          cache: npm
+
+      - name: Install verifier dependencies without lifecycle scripts
+        shell: bash
+        run: npm ci --ignore-scripts
+
+      - name: Download only this run's signed handoff
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: alpha2-runtime-signed-unverified-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/alpha2-runtime-signed-handoff
+
+      - name: Install the byte-pinned GitHub CLI verifier
+        shell: bash
+        run: |
+          curl --fail --location --proto '=https' --tlsv1.2 \
+            --output "${{ runner.temp }}/gh.tar.gz" \
+            https://github.com/cli/cli/releases/download/v2.93.0/gh_2.93.0_linux_amd64.tar.gz
+          echo "02d1290eba130e0b896f3709ffff22e1c75a51475ddb70476a85abc6b5807af0  ${{ runner.temp }}/gh.tar.gz" | sha256sum --check --strict
+          tar -xzf "${{ runner.temp }}/gh.tar.gz" -C "${{ runner.temp }}"
+          echo "014fcd614de4de5b4a1441d298175684bad99f713d10296c5fcaaba47ac332d1  ${{ runner.temp }}/gh_2.93.0_linux_amd64/bin/gh" | sha256sum --check --strict
+
+      - name: Verify structure, privacy, and immutable GitHub provenance
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          node skills/dsh-harness-installer/scripts/runtime-certification.mjs verify \
+            --candidate "${{ runner.temp }}/alpha2-runtime-signed-handoff/alpha2-runtime-candidate" \
+            --workflow "${{ github.workspace }}/.github/workflows/alpha2-runtime-certification.yml"
+          node skills/dsh-harness-installer/scripts/runtime-certification.mjs scan \
+            --path "${{ runner.temp }}/alpha2-runtime-signed-handoff/alpha2-runtime-candidate"
+          node skills/dsh-harness-installer/scripts/verify-runtime-provenance.mjs \
+            --subject "${{ runner.temp }}/alpha2-runtime-signed-handoff/alpha2-runtime-candidate/runtime-receipt-set.json" \
+            --bundle "${{ runner.temp }}/alpha2-runtime-signed-handoff/alpha2-runtime-signed/runtime-receipt-set.json.sigstore.json" \
+            --run-id "${{ github.run_id }}" \
+            --run-attempt "${{ github.run_attempt }}" \
+            --source-sha "${{ github.sha }}" \
+            --gh "${{ runner.temp }}/gh_2.93.0_linux_amd64/bin/gh"
+          "${{ runner.temp }}/gh_2.93.0_linux_amd64/bin/gh" attestation verify \
+            "${{ runner.temp }}/alpha2-runtime-signed-handoff/alpha2-runtime-candidate/runtime-receipt-set.json" \
+            --bundle "${{ runner.temp }}/alpha2-runtime-signed-handoff/alpha2-runtime-signed/runtime-evidence-predicate.json.sigstore.json" \
+            --repo LvvUP/dsh-themes-skills \
+            --cert-identity "https://github.com/LvvUP/dsh-themes-skills/.github/workflows/alpha2-runtime-certification.yml@refs/heads/main" \
+            --cert-oidc-issuer https://token.actions.githubusercontent.com \
+            --predicate-type https://dsh-themes.com/attestations/alpha2-runtime-evidence/v1 \
+            --source-ref refs/heads/main \
+            --source-digest "${{ github.sha }}" \
+            --signer-digest "${{ github.sha }}" \
+            --deny-self-hosted-runners >/dev/null
+
+      - name: Upload signed candidate convenience copy without changing authority
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: alpha2-runtime-candidate-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/alpha2-runtime-signed-handoff/alpha2-runtime-candidate
+            ${{ runner.temp }}/alpha2-runtime-signed-handoff/alpha2-runtime-signed
+          if-no-files-found: error
+          retention-days: 90

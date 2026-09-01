@@ -1,0 +1,70 @@
+name: alpha2 community skin pending-authority guard
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/alpha2-community-skin-recertification.yml"
+      - "skills/dsh-community-skin-installer/**"
+      - "skills/dsh-harness-installer/references/alpha2-release-authority.json"
+      - "test/community-installer.test.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: alpha2-community-skin-pending-guard-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pending-authority:
+    name: pending-only-${{ matrix.target }}-node-${{ matrix.node }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            target: linux-x64
+            node: 22.19.0
+          - runner: ubuntu-24.04
+            target: linux-x64
+            node: 24.15.0
+          - runner: macos-15
+            target: darwin-arm64
+            node: 22.19.0
+          - runner: macos-15
+            target: darwin-arm64
+            node: 24.15.0
+          - runner: windows-2022
+            target: win32-x64
+            node: 22.19.0
+          - runner: windows-2022
+            target: win32-x64
+            node: 24.15.0
+    steps:
+      - name: Check out immutable authority inputs without credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      - name: Install exact guard Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Validate the pending authority for one planned matrix target
+        shell: bash
+        run: |
+          node skills/dsh-community-skin-installer/scripts/validate-alpha2-recertification.mjs \
+            --planned-target "${{ matrix.target }}" \
+            --node-version "${{ matrix.node }}" \
+            > "${{ runner.temp }}/pending-authority.json"
+          node -e 'const fs=require("node:fs");const r=JSON.parse(fs.readFileSync(process.argv[1],"utf8"));if(r.installable!==false||r.publicationAllowed!==false||r.completedTasks!==0||r.runtimeExecuted!==false||r.receiptProduced!==false)process.exit(1)' "${{ runner.temp }}/pending-authority.json"
+
+      - name: Do not upload or publish runtime receipts
+        shell: bash
+        run: |
+          test ! -e "${{ runner.temp }}/community-runtime-receipt.json"
+          test ! -e "${{ runner.temp }}/community-rollback-receipt.json"

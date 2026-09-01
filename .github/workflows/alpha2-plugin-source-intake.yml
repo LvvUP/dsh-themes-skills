@@ -1,0 +1,151 @@
+name: alpha2 Plugin source intake
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/alpha2-plugin-source-intake.yml
+      - skills/dsh-plugin-installer/**
+      - test/plugin-candidate-intake.test.mjs
+      - test/plugin-static-risk.test.mjs
+      - test/plugin-source-intake.test.mjs
+      - test/plugin-source-intake-workflow.test.mjs
+
+permissions:
+  contents: read
+
+concurrency:
+  group: alpha2-plugin-source-intake-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  matrix:
+    name: Freeze exact 80-item intake matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      candidates: ${{ steps.matrix.outputs.candidates }}
+    steps:
+      - name: Checkout public intake authority
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Install exact intake Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22.19.0
+      - name: Emit immutable candidate matrix
+        id: matrix
+        shell: bash
+        run: |
+          candidate_matrix="$(node skills/dsh-plugin-installer/scripts/candidate-intake.mjs --github-matrix)"
+          printf 'candidates=%s\n' "$candidate_matrix" >> "$GITHUB_OUTPUT"
+
+  source-intake:
+    name: "Source-only intake #${{ matrix.catalogId }}"
+    needs: matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix: ${{ fromJSON(needs.matrix.outputs.candidates) }}
+    steps:
+      - name: Checkout public verifier
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          path: authority
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Checkout exact untrusted candidate without credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: ${{ matrix.repository }}
+          ref: ${{ matrix.commit }}
+          path: candidate
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Install exact intake Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22.19.0
+      - name: Audit identity, package, license, patch, lockfiles, and exact npm bytes
+        shell: bash
+        run: |
+          mkdir -p ci-evidence/receipt
+          set +e
+          node authority/skills/dsh-plugin-installer/scripts/audit-candidate-source.mjs \
+            --id "#${{ matrix.catalogId }}" \
+            --source "${{ github.workspace }}/candidate" \
+            --out "${{ github.workspace }}/ci-evidence/receipt/source-intake-receipt.json"
+          status="$?"
+          set -e
+          test "$status" -eq 0 || test "$status" -eq 2
+      - name: Inventory bounded static risk without executing candidate code
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          mkdir -p ci-evidence/receipt
+          node authority/skills/dsh-plugin-installer/scripts/audit-candidate-risk.mjs \
+            --id "#${{ matrix.catalogId }}" \
+            --source "${{ github.workspace }}/candidate" \
+            --out "${{ github.workspace }}/ci-evidence/receipt/static-risk-receipt.json"
+      - name: Upload source and risk receipts even when the candidate is rejected
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: alpha2-plugin-source-intake-${{ matrix.catalogId }}
+          path: ci-evidence/receipt
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 9
+
+  aggregate:
+    name: Aggregate all 80 source-only receipts
+    if: ${{ always() }}
+    needs: source-intake
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout aggregate verifier
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Install exact aggregation Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22.19.0
+      - name: Download every candidate receipt
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          pattern: alpha2-plugin-source-intake-*
+          path: ci-evidence/input
+      - name: Reject missing, duplicate, secret-bearing, or malformed source intake
+        shell: bash
+        run: |
+          set +e
+          node skills/dsh-plugin-installer/scripts/aggregate-source-intake.mjs \
+            --input "${{ github.workspace }}/ci-evidence/input" \
+            --out-dir "${{ github.workspace }}/ci-evidence/summary"
+          status="$?"
+          set -e
+          test "$status" -eq 0 || test "$status" -eq 2
+      - name: Build the non-authoritative static-risk review queue
+        if: ${{ always() }}
+        run: >-
+          node skills/dsh-plugin-installer/scripts/aggregate-candidate-risk.mjs
+          --input "${{ github.workspace }}/ci-evidence/input"
+          --out-dir "${{ github.workspace }}/ci-evidence/risk-summary"
+      - name: Upload non-promotional intake and risk summaries
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: alpha2-plugin-source-intake-summary
+          path: |
+            ci-evidence/summary/source-intake-summary.json
+            ci-evidence/risk-summary/static-risk-summary.json
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 9

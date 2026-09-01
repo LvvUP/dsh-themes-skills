@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh-themes.com/schemas/dsh-plugin-alpha2-candidate-intake-v2.json",
+  "title": "DSH alpha.2 Plugin candidate intake",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "capturedAt",
+    "purpose",
+    "baseline",
+    "publication",
+    "replacementPolicy",
+    "items"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "capturedAt": { "type": "string", "format": "date" },
+    "purpose": { "const": "dsh-plugin-alpha2-candidate-intake" },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tag", "commit"],
+      "properties": {
+        "tag": { "const": "dsh-v0.1.2-alpha.2" },
+        "commit": { "const": "0a53fb55bea101816fa226bb964ae2bed71c343b" }
+      }
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "installable", "requiredFinalCount"],
+      "properties": {
+        "status": { "const": "not-installable-candidate-input" },
+        "installable": { "const": false },
+        "requiredFinalCount": { "const": 80 }
+      }
+    },
+    "replacementPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "retireFailedIds",
+        "retiredCatalogIds",
+        "nextReplacementCatalogId",
+        "neverRebindRetiredIds"
+      ],
+      "properties": {
+        "retireFailedIds": { "const": true },
+        "retiredCatalogIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "integer", "minimum": 3000, "maximum": 3999 }
+        },
+        "nextReplacementCatalogId": { "type": "integer", "minimum": 3088, "maximum": 3999 },
+        "neverRebindRetiredIds": { "const": true }
+      }
+    },
+    "items": {
+      "type": "array",
+      "minItems": 80,
+      "maxItems": 80,
+      "items": { "$ref": "#/$defs/item" }
+    }
+  },
+  "$defs": {
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "catalogId",
+        "slug",
+        "title",
+        "repository",
+        "commit",
+        "licenseExpression",
+        "licenseEvidencePath",
+        "primaryUseCase",
+        "editorialScore",
+        "status"
+      ],
+      "properties": {
+        "catalogId": { "type": "integer", "minimum": 3000, "maximum": 3999 },
+        "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "repository": {
+          "type": "string",
+          "pattern": "^https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\\.git$"
+        },
+        "sourceSubdir": {
+          "type": "string",
+          "pattern": "^(?:\\.|[A-Za-z0-9_-]+(?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?(?:/[A-Za-z0-9_-]+(?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?)*)$"
+        },
+        "commit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "licenseExpression": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "licenseEvidencePath": {
+          "type": "string",
+          "pattern": "^(?:[A-Za-z0-9._-]+/)*[A-Za-z0-9._-]+$"
+        },
+        "primaryUseCase": {
+          "enum": [
+            "build-and-review",
+            "collaborate-and-notify",
+            "discover-and-start",
+            "govern-and-secure",
+            "measure-and-optimize",
+            "navigate-and-focus",
+            "plan-and-automate",
+            "remember-and-retrieve",
+            "research-the-web",
+            "see-and-understand"
+          ]
+        },
+        "editorialScore": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "status": { "const": "source-intake-pending" }
+      }
+    }
+  }
+}

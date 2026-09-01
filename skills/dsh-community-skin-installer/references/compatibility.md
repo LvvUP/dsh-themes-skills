@@ -1,24 +1,27 @@
-# Community-skin certification target
+# alpha.2 community-skin certification target
 
-DeepSeek Harness `0.1.1-rc.2` has a verified runtime baseline, but the RC.2 community lane remains 0/11 verified and 0 installable. Runtime-baseline certification cannot replace the separate item receipt and never authorizes a community mutation.
+The current target is exact DeepSeek Harness `0.1.2-alpha.2`, official tag `dsh-v0.1.2-alpha.2`, source commit `0a53fb55bea101816fa226bb964ae2bed71c343b`, and tree `64ccbfa8e0caa4711cd4a75717ef9e022657961b`.
 
-The baseline is exact DeepSeek Harness `0.1.0-rc.8`, official tag `dsh-v0.1.0-rc.8`, source commit `141eb6fef83422698aef7a981029e843e8161534`. The adjacent Manager is certified with final attestation `1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae`; community authority remains a separate gate.
+The upstream prerelease publishes the official `@deepseek-ai/dsh@0.1.2-alpha.2` npm runtime. DSH Themes also keeps an exact-source cross-build lane. These are independent artifacts; the community gate does not claim source-to-npm byte equivalence. Both coordinates are bound through the shared Harness release authority.
 
-This Skill does not carry a second DSH runner. It requires the adjacent `dsh-theme-manager` runner and the exact final RC.8 V3 attestation so two skills cannot silently drift to different Harness closures. Community installation is authorized only for the exact 11 records whose self-contained catalog, final receipt, item status, and Manager gate all validate. A remote claim or Manager certification alone cannot add another item. The repository's [`release-state.json`](../../../release-state.json) is informational only.
+`baseline-policy.json` selects `currentAlpha2`; `alpha2-recertification.json` and its digest-bound schema are the current installation gate. They record 11 required items, 66 required platform/Node tasks, 0 completed tasks, and `installable: false`. Every website record must consequently remain `external-showcase`, `showcase-only`, and `verification-pending` on baseline `0.1.2-alpha.2`.
 
-## Skin Center authority
+## Historical evidence
 
-- Package: `@linxin666/dsh-client-ui-skin-center@0.2.5`
-- Source: dsh-web-ui tag `v0.2.5`, commit `dda2780bd6467de92ad7533f9f1c28a7a5a04118`
-- Tarball: `https://registry.npmjs.org/@linxin666/dsh-client-ui-skin-center/-/dsh-client-ui-skin-center-0.2.5.tgz`
-- SHA-256: `5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499`
-- npm integrity: `sha512-Dl82U+Gg7/KCkwjHkhMveW0e8R/oBSOFnB3d/AnYFpIL0IyC/SQ5IEkDLpNpp6dwz7FHIIMOGyChsIcd8Bxixg==`
-- Size: `58,988,084` bytes
+`alpha1-recertification.json` preserves the prior 0/11 alpha.1 pending state. `community-catalog.json`, `runtime-receipt.rc8.json`, and `runtime-evidence-prepared.json` preserve exact RC.8 identity, rights, asset, network, lifecycle, and rollback history. Their checked-in SHA-256 values remain fixed. They are review inputs only; none can authorize alpha.2 installation.
 
-The npm package metadata says Apache-2.0 while the published repository/package LICENSE file is BSD-3-Clause. Expose that conflict; do not normalize it away.
+The RC.2 runtime baseline and pending receipt remain historical evidence of a different baseline. Baseline certification cannot replace item authority.
 
-## Runtime acceptance
+## Promotion boundary
 
-Installation authority requires both (1) an item-level `runtimeStatus: runtime-verified` record produced from the exact package, exact user-skin asset hashes where applicable, and the RC.8 runner, and (2) an adjacent Manager whose certified current lane is exact RC.8. Verification covers package state, Skin Center catalog identity, try-on/apply/switch-back/restart/rollback, light/dark/system, narrow and 200% zoom surfaces, console/network behavior, and cleanup.
+Each item needs six current-baseline tasks: macOS arm64, Linux x64, and Windows x64 on Node 22.19.0 and 24.15.0. Every task must cover exact install, `web` Profile snapshot, `dump-config`, cold restart, functional probe, removal, complete rollback, and restored-state verification. A reviewed future authority must bind exact sanitized per-item runtime and rollback receipt sets plus aggregate receipt-set digests before the lane can reopen.
 
-All 11 bundled records are `runtime-verified` in the executable catalog. The sanitized [final receipt](runtime-receipt.rc8.json), SHA-256 `89bb10b995e7734b6c13ab7d0027d73440f5d8f40b1f618b3c9adbbe52e1b1a1`, binds the item matrix to final Manager attestation `1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae`. For the QQ98 and THS CSS-only adaptations, both the executable catalog and this receipt bind the upstream source digest, `PROVENANCE.json`, and every bundled file digest; the installer recomputes and matches all of them before writing a profile. Their reviewed bundles contain no runtime asset, so every CSS `url()` token is rejected. The [prepared evidence](runtime-evidence-prepared.json) remains byte-addressed history and preserves the different candidate attestation; the explicit bridge forbids silently replacing one hash with the other.
+The checked-in `alpha2-community-skin-recertification.yml` workflow is a static six-target guard only. It validates that every target sees the same pending authority and emits no runtime receipt. It must never be represented as runtime certification evidence.
+
+The historical Skin Center coordinate and rights conflict remain review inputs:
+
+- `@linxin666/dsh-client-ui-skin-center@0.2.5`
+- source commit `dda2780bd6467de92ad7533f9f1c28a7a5a04118`
+- package metadata says Apache-2.0 while its scoped LICENSE file says BSD-3-Clause
+
+This coordinate is not an alpha.2 installation recommendation while the gate is pending.

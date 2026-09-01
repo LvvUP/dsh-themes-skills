@@ -1,0 +1,5 @@
+# The immutable package remains non-installable until its six-task alpha.2
+# runtime receipt is promoted into plugin authority.
+- insert:
+    - id: dsh-plugin-3040-kanban
+      name: '@dsh-themes/dsh-kanban'

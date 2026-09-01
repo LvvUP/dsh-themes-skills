@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">DSH Themes public ID to installer flow</title>
+  <desc id="desc">A strict public number is resolved by the Finder, then routed to the Theme Manager, Community Skin Installer, or Plugin Installer. Missing authority stops without changing the profile.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#08131b"/>
+      <stop offset="1" stop-color="#10252b"/>
+    </linearGradient>
+    <linearGradient id="signal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#53d7b5"/>
+      <stop offset="1" stop-color="#b9f46a"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity=".24"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#78dbc0"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="420" rx="28" fill="url(#background)"/>
+  <path d="M40 62H1160" stroke="#274049" stroke-width="1" stroke-dasharray="3 8"/>
+  <text x="48" y="44" fill="#9db3b9" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" letter-spacing="2">DETERMINISTIC INSTALL ROUTE · 确定性安装路径</text>
+
+  <g filter="url(#shadow)">
+    <rect x="48" y="126" width="196" height="132" rx="18" fill="#122a32" stroke="#3f5961"/>
+    <rect x="272" y="126" width="224" height="132" rx="18" fill="#122a32" stroke="#3f5961"/>
+    <rect x="544" y="84" width="272" height="84" rx="16" fill="#132d34" stroke="#4e696e"/>
+    <rect x="544" y="178" width="272" height="84" rx="16" fill="#132d34" stroke="#4e696e"/>
+    <rect x="544" y="272" width="272" height="84" rx="16" fill="#132d34" stroke="#4e696e"/>
+    <rect x="864" y="126" width="288" height="132" rx="18" fill="#132a2d" stroke="#78dbc0"/>
+  </g>
+
+  <text x="72" y="164" fill="#8fa6ad" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13">PUBLIC INPUT</text>
+  <text x="72" y="207" fill="url(#signal)" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="34" font-weight="700">#NNNN</text>
+  <text x="72" y="236" fill="#d9e7e9" font-family="system-ui, sans-serif" font-size="14">页面只暴露公共编号</text>
+
+  <text x="296" y="164" fill="#8fa6ad" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13">EXACT RESOLUTION</text>
+  <text x="296" y="199" fill="#f3f7f5" font-family="system-ui, sans-serif" font-size="22" font-weight="650">DSH Theme Finder</text>
+  <text x="296" y="229" fill="#c5d4d7" font-family="system-ui, sans-serif" font-size="14">类型 · 状态 · authority 摘要</text>
+
+  <text x="568" y="118" fill="#8fa6ad" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12">#1NNN / HOSTED #2NNN</text>
+  <text x="568" y="146" fill="#f3f7f5" font-family="system-ui, sans-serif" font-size="19" font-weight="650">Theme Manager</text>
+
+  <text x="568" y="212" fill="#8fa6ad" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12">COMMUNITY #2NNN</text>
+  <text x="568" y="240" fill="#f3f7f5" font-family="system-ui, sans-serif" font-size="19" font-weight="650">Community Skin Installer</text>
+
+  <text x="568" y="306" fill="#8fa6ad" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12">VERIFIED #3NNN / TOP 10 SET</text>
+  <text x="568" y="334" fill="#f3f7f5" font-family="system-ui, sans-serif" font-size="19" font-weight="650">Plugin Installer</text>
+
+  <text x="888" y="164" fill="#8fa6ad" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13">ONE TRANSACTION</text>
+  <text x="888" y="199" fill="#f3f7f5" font-family="system-ui, sans-serif" font-size="22" font-weight="650">预检 → 授权 → 快照</text>
+  <text x="888" y="229" fill="#b9f46a" font-family="system-ui, sans-serif" font-size="15">安装失败即完整回滚</text>
+
+  <path d="M244 192H272" stroke="#78dbc0" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M496 192H518V126H544" stroke="#78dbc0" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M496 192H544" stroke="#78dbc0" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M496 192H518V314H544" stroke="#78dbc0" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M816 126H840V192H864" stroke="#78dbc0" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M816 220H864" stroke="#78dbc0" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M816 314H840V192H864" stroke="#78dbc0" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+
+  <rect x="48" y="382" width="1104" height="1" fill="#29424a"/>
+  <circle cx="60" cy="400" r="5" fill="#f2c15c"/>
+  <text x="76" y="405" fill="#afc0c4" font-family="system-ui, sans-serif" font-size="14">没有精确且已验证的安装权威：停止，不修改 Profile · Missing verified authority: stop without mutation</text>
+</svg>

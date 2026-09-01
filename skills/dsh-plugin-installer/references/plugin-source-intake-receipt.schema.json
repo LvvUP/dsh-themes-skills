@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh-themes.com/schemas/dsh-plugin-source-intake-receipt-v2.json",
+  "title": "DSH Plugin source-intake receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "candidateExecuted",
+    "catalogId",
+    "source",
+    "package",
+    "npm",
+    "review",
+    "privacy"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "status": { "enum": ["source-intake-audited", "source-intake-rejected"] },
+    "candidateExecuted": { "const": false },
+    "catalogId": { "type": "integer", "minimum": 3000, "maximum": 3999 },
+    "source": { "type": "object" },
+    "package": { "type": ["object", "null"] },
+    "npm": { "type": ["object", "null"] },
+    "review": { "type": "object" },
+    "privacy": { "type": "object" }
+  }
+}

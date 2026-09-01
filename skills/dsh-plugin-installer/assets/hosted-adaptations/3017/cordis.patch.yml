@@ -1,0 +1,5 @@
+# Browser-only Plugin List Plus. The Host entry is a zero-capability discovery
+# anchor; its dsh.client declaration contributes the actual browser plugin.
+- insert:
+    - id: dsh-themes-plugin-list-plus
+      name: '@dsh-themes/plugin-list-plus'

@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh-themes.com/schemas/dsh-alpha2-runtime-receipt-v1.json",
+  "title": "DSH alpha.2 one-platform runtime receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "scope", "source", "task", "artifacts", "provenanceBoundary", "probes", "ci", "privacy"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "status": { "const": "alpha2-runtime-task-passed" },
+    "scope": { "const": "one-platform-node-task" },
+    "source": { "$ref": "#/$defs/source" },
+    "task": { "$ref": "#/$defs/task" },
+    "artifacts": { "$ref": "#/$defs/artifacts" },
+    "provenanceBoundary": { "$ref": "#/$defs/provenanceBoundary" },
+    "probes": { "$ref": "#/$defs/probes" },
+    "ci": { "$ref": "#/$defs/ci" },
+    "privacy": { "$ref": "#/$defs/privacy" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tag", "commit", "tree", "lockfileSha256"],
+      "properties": {
+        "tag": { "const": "dsh-v0.1.2-alpha.2" },
+        "commit": { "const": "0a53fb55bea101816fa226bb964ae2bed71c343b" },
+        "tree": { "const": "64ccbfa8e0caa4711cd4a75717ef9e022657961b" },
+        "lockfileSha256": { "const": "6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0" }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["platform", "arch", "nodeVersion"],
+      "oneOf": [
+        { "properties": { "platform": { "const": "linux" }, "arch": { "const": "x64" } } },
+        { "properties": { "platform": { "const": "darwin" }, "arch": { "const": "arm64" } } },
+        { "properties": { "platform": { "const": "win32" }, "arch": { "const": "x64" } } }
+      ],
+      "properties": {
+        "platform": { "enum": ["linux", "darwin", "win32"] },
+        "arch": { "enum": ["x64", "arm64"] },
+        "nodeVersion": { "enum": ["22.19.0", "24.15.0"] }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["officialNpm", "sourceCrossBuild"],
+      "properties": {
+        "officialNpm": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["installReceiptSha256", "installedCliSha256", "tarballSha256", "resolutionLockfileSha256"],
+          "properties": {
+            "installReceiptSha256": { "$ref": "#/$defs/sha256" },
+            "installedCliSha256": { "const": "dc23f6c5dd7df8834e3e38bdb9609d77b459834681ae9b7133b417b0c35f3166" },
+            "tarballSha256": { "const": "5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47" },
+            "resolutionLockfileSha256": { "const": "083152c5eaf99bd2ecad3db1b5a04aca2141b5347e7db97caca82e0ce5a09b1c" }
+          }
+        },
+        "sourceCrossBuild": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["buildReceiptSha256", "builtCliSha256", "reportedVersion"],
+          "properties": {
+            "buildReceiptSha256": { "$ref": "#/$defs/sha256" },
+            "builtCliSha256": { "$ref": "#/$defs/sha256" },
+            "reportedVersion": { "const": "0.1.2-alpha.2" }
+          }
+        }
+      }
+    },
+    "provenanceBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["officialNpmOperationalRuntime", "exactSourceCrossBuild", "npmGitHeadPresent", "npmProvenanceAttestationPresent", "binarySourceEquivalenceClaimed", "artifactRelationship"],
+      "properties": {
+        "officialNpmOperationalRuntime": { "const": true },
+        "exactSourceCrossBuild": { "const": true },
+        "npmGitHeadPresent": { "const": false },
+        "npmProvenanceAttestationPresent": { "const": false },
+        "binarySourceEquivalenceClaimed": { "const": false },
+        "artifactRelationship": { "const": "independent-artifacts-no-source-package-binding" }
+      }
+    },
+    "probes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cli", "profile", "browserAuth", "webProtocol"],
+      "properties": {
+        "cli": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["reportedVersion"],
+          "properties": { "reportedVersion": { "const": "0.1.2-alpha.2" } }
+        },
+        "profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "dumpConfigPassed"],
+          "properties": { "name": { "const": "web" }, "dumpConfigPassed": { "const": true } }
+        },
+        "browserAuth": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["unauthenticatedRootStatus", "launchExchangeStatus", "authenticatedSessionStatus", "hostOnlyRejectionStatus", "originOnlyRejectionStatus", "crossSiteRejectionStatus", "restartStatus"],
+          "properties": {
+            "unauthenticatedRootStatus": { "const": 401 },
+            "launchExchangeStatus": { "const": 303 },
+            "authenticatedSessionStatus": { "const": 200 },
+            "hostOnlyRejectionStatus": { "const": 403 },
+            "originOnlyRejectionStatus": { "const": 403 },
+            "crossSiteRejectionStatus": { "const": 403 },
+            "restartStatus": {
+              "const": "prior-session-persisted-launch-credential-rotated"
+            }
+          }
+        },
+        "webProtocol": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["entriesAndBatches", "comboUrl", "revision404", "javascriptMime", "sourceMapMime", "gzip", "identity", "cache", "bootReady"],
+          "properties": {
+            "entriesAndBatches": { "const": true },
+            "comboUrl": { "const": true },
+            "revision404": { "const": true },
+            "javascriptMime": { "enum": ["text/javascript", "application/javascript"] },
+            "sourceMapMime": { "const": "application/json" },
+            "gzip": { "const": true },
+            "identity": { "const": true },
+            "cache": { "const": true },
+            "bootReady": { "const": true }
+          }
+        }
+      }
+    },
+    "ci": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "workflowPath", "workflowSha256", "runId", "runAttempt", "jobId", "headSha"],
+      "properties": {
+        "repository": { "const": "LvvUP/dsh-themes-skills" },
+        "workflowPath": { "const": ".github/workflows/alpha2-runtime-certification.yml" },
+        "workflowSha256": { "$ref": "#/$defs/sha256" },
+        "runId": { "type": "string", "pattern": "^[1-9][0-9]{0,19}$" },
+        "runAttempt": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "jobId": { "type": "string", "pattern": "^[A-Za-z0-9._-]{1,100}$" },
+        "headSha": { "$ref": "#/$defs/sha1" }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["capturesProcessOutput", "capturesEnvironment", "capturesBrowserSecrets", "capturesSecretDerivedDigest"],
+      "properties": {
+        "capturesProcessOutput": { "const": false },
+        "capturesEnvironment": { "const": false },
+        "capturesBrowserSecrets": { "const": false },
+        "capturesSecretDerivedDigest": { "const": false }
+      }
+    }
+  }
+}

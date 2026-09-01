@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "purpose": "dsh-alpha2-hosted-plugin-adaptation",
+  "catalogId": 3006,
+  "slug": "dsh-better-model-selector",
+  "baseline": {
+    "tag": "dsh-v0.1.2-alpha.2",
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
+  },
+  "source": {
+    "repository": "https://github.com/Khellendros97/dsh-better-model-selector.git",
+    "commit": "4781f4c215f1ad4d55a44e1409bafe58f05b721f",
+    "tree": "8840140ed08a525005e3468348e8d5370416e371",
+    "sourceSubdir": ".",
+    "manifestSha256": "86b38d86bb9f862eb08f44264631c46590726b315ffc65a2ce02e111e5ede38d",
+    "packageName": "dsh-better-model-selector",
+    "packageVersion": "1.0.0",
+    "bundlePatch": "cordis.patch.yml"
+  },
+  "output": {
+    "packageName": "@dsh-themes/dsh-better-model-selector",
+    "packageVersion": "1.0.0-dsh.alpha2.1",
+    "description": "Authoritative model and reasoning selector for DeepSeek Harness 0.1.2-alpha.2",
+    "assetName": "dsh-better-model-selector-1.0.0-dsh.alpha2.1.tgz",
+    "hostEntry": "lib/index.js",
+    "clientEntry": "lib/client.js",
+    "bundlePatch": "cordis.patch.yml",
+    "clientInject": [
+      "@deepseek-ai/dsh-api-session-controller",
+      "@deepseek-ai/dsh-client-locale",
+      "@deepseek-ai/dsh-client-ui-renderer",
+      "@deepseek-ai/dsh-client-ui-conversation",
+      "@deepseek-ai/dsh-client-ui-model-selection",
+      "@deepseek-ai/dsh-client-ui-settings"
+    ],
+    "peerDependencies": {
+      "@deepseek-ai/cordis": "4.0.1",
+      "@deepseek-ai/dsh-api-session-controller": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-conversation": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-model-selection": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-settings": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-settings": "0.1.2-alpha.2",
+      "@deepseek-ai/schemastery": "3.18.1",
+      "react": "18.3.1"
+    },
+    "files": [
+      {
+        "outputPath": "lib/index.js",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "lib/index.js",
+          "sourceSha256": "ec39003a0f4e4407fe814594c146c97b17887648b47f92415cb757a1b84838a4",
+          "replacementPath": "assets/hosted-adaptations/3006/lib/index.js",
+          "replacementSha256": "e8c9905f0faf31b17f858463d34fa2652a1f8e177577657b478441a63cca095f"
+        }
+      },
+      {
+        "outputPath": "lib/client.js",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "lib/client.js",
+          "sourceSha256": "e5ccc663e6f7c2b6049db7adb0d6e8e371988b9e334407d3e3b3bfed4d13a3b4",
+          "replacementPath": "assets/hosted-adaptations/3006/lib/client.js",
+          "replacementSha256": "79030139f9e373d489dc2b7703b89783609d4fe84a6575099d1c8b445c79e98f"
+        }
+      },
+      {
+        "outputPath": "cordis.patch.yml",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "cordis.patch.yml",
+          "sourceSha256": "dfa4864d584c94a2442f242cef8f5dfc67d2e84c012810ff53bdeeedf14c4d57",
+          "replacementPath": "assets/hosted-adaptations/3006/cordis.patch.yml",
+          "replacementSha256": "e5ee708b03472ce09e82250059cd552f263ff688cfa8d885ae48a2968aa3784a"
+        }
+      },
+      {
+        "outputPath": "LICENSE",
+        "input": {
+          "kind": "copy-exact-upstream",
+          "sourcePath": "LICENSE",
+          "sha256": "8111f523a2d63378ab29ed5b15de7b88a17b5b42481434293876673aaed32898"
+        }
+      }
+    ]
+  },
+  "rights": {
+    "licenseExpression": "MIT",
+    "licensePath": "LICENSE",
+    "licenseSha256": "8111f523a2d63378ab29ed5b15de7b88a17b5b42481434293876673aaed32898",
+    "copyrightNotice": "Copyright (c) 2026 Khellendros97",
+    "redistribution": "allowed-with-license-and-modification-notice"
+  },
+  "staticPolicy": {
+    "computedMembers": [],
+    "forbiddenUtf8": [
+      "@deepseek-ai/dsh-client-runtime",
+      "@deepseek-ai/dsh-host-apiproxy",
+      "ctx.webServer",
+      "ctx.remote",
+      "ctx.connection",
+      "fetch(",
+      "XMLHttpRequest",
+      "WebSocket",
+      "EventSource",
+      "localStorage",
+      "sessionStorage",
+      "document.cookie",
+      "innerHTML",
+      "outerHTML",
+      "insertAdjacentHTML",
+      "dangerouslySetInnerHTML",
+      "node:child_process",
+      "node:fs",
+      "process.env",
+      "error.message",
+      "addEventListener('keydown'",
+      "eval(",
+      "new Function"
+    ],
+    "requiredUtf8": [
+      "window.__ModuleLoader__.load",
+      "settingsCtx.settings.register",
+      "settingsNamespace(SETTINGS_NAMESPACE)",
+      "ctx.settingsScope.bind",
+      "ctx.modelDirectories.directoryFor",
+      "conversation.input.model",
+      "priority: -1",
+      "DSH3006_PROBE:HOST_SETTINGS_REGISTER_V1",
+      "DSH3006_PROBE:CLIENT_APPLY_V1",
+      "DSH3006_PROBE:SETTINGS_SCOPE_BOUND_V1",
+      "DSH3006_PROBE:SLOT_REGISTERED_V1",
+      "DSH3006_PROBE:STYLE_OWNED_V1"
+    ]
+  },
+  "runtimeProbe": {
+    "contractPath": "references/plugin-runtime-probes/3006.json",
+    "contractSha256": "e7c5054b6d39462e6515e3fae7947dbe89e114c4070af56fe74048e6db761621",
+    "requiredAssertions": [
+      "package.exact-entry",
+      "boot.ready-selector-once",
+      "feature.authoritative-selection",
+      "feature.confirmed-favorites",
+      "security.official-services-only",
+      "ui.keyboard-zoom-locales",
+      "dispose.zero-residue-fallback",
+      "combine.exclusive-seat-rollback"
+    ]
+  }
+}

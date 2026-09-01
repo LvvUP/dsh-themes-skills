@@ -42,6 +42,7 @@ export async function loadBaselinePolicy() {
   const { forbiddenVersionSelectors, ...operationalPolicy } = policy;
   rejectMutableSelectors(operationalPolicy);
   const runtime = policy.certifiedRuntimeBaseline;
+  const alpha2V4Candidate = policy.alpha2V4Candidate;
   if (
     policy.schemaVersion !== 2 ||
     policy.defaultOperationalLane !== 'certified' ||
@@ -60,6 +61,16 @@ export async function loadBaselinePolicy() {
     runtime?.communityItemsPlanned !== 11 ||
     runtime?.communityItemsVerified !== 0 ||
     runtime?.communityInstallableRecords !== 0 ||
+    alpha2V4Candidate?.status !== 'candidate-pending' ||
+    alpha2V4Candidate?.installable !== false ||
+    alpha2V4Candidate?.promotionAllowed !== false ||
+    alpha2V4Candidate?.candidateCount !== 54 ||
+    alpha2V4Candidate?.requiredRuntimeJobs !== 6 ||
+    alpha2V4Candidate?.completedRuntimeJobs !== 0 ||
+    alpha2V4Candidate?.authorityPath !==
+      'references/alpha2-v4-candidate-authority.json' ||
+    alpha2V4Candidate?.authoritySha256 !==
+      '5bda616b8ae9963fc64194b9e1ecf666eec3f93c82437b4db3677b7ad4776c92' ||
     policy.candidate?.status !== 'certification-pending' ||
     policy.candidate?.historicalAtCapture !== true ||
     policy.candidate?.installable !== false ||

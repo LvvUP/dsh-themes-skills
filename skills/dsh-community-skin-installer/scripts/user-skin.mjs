@@ -345,17 +345,35 @@ const { command, id, dshHome, from, authorityRecord } = parseArgs(
   process.argv.slice(2)
 );
 let installAuthority;
+let currentAuthority;
+if (command !== 'inspect') {
+  currentAuthority = await loadCommunityAuthority();
+}
 if (command === 'install') {
   const rawRecord = JSON.parse(await readFile(authorityRecord, 'utf8'));
   const gate = validateCommunityRecord(
     rawRecord,
-    await loadCommunityAuthority(),
+    currentAuthority,
     { mode: 'install' }
   );
   if (gate.skin.skinId !== id) {
     fail('--id does not match the validated catalog record');
   }
   installAuthority = gate.skin.bundledAssetAuthority;
+} else if (
+  command === 'remove' ||
+  command === 'recover'
+) {
+  const currentGate = currentAuthority.alpha2Recertification.gate;
+  if (
+    currentGate?.status !== 'certified-installable' ||
+    currentGate?.installable !== true ||
+    currentGate?.publicationAllowed !== true
+  ) {
+    fail(
+      `${command} is blocked: alpha2-recertification-gate-not-certified; the Profile was not inspected or changed`
+    );
+  }
 }
 const profile = await resolveProfile(dshHome, {
   createSkins: command === 'install' || command === 'recover',

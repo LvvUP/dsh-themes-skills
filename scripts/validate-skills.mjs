@@ -11,6 +11,8 @@ const required = [
   'dsh-theme-finder',
   'dsh-theme-submitter',
   'dsh-community-skin-installer',
+  'dsh-harness-installer',
+  'dsh-plugin-installer',
 ];
 
 function fail(message) {

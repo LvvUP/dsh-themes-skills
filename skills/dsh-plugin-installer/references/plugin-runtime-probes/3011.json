@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "purpose": "dsh-plugin-alpha2-fixed-runtime-probe",
+  "authorityEffect": "contract-only-not-runtime-authority",
+  "candidateExecuted": false,
+  "catalogId": 3011,
+  "baseline": {
+    "tag": "dsh-v0.1.2-alpha.2",
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
+  },
+  "package": {
+    "name": "@dsh-themes/arcana",
+    "version": "0.1.0-dsh.alpha2.1",
+    "profile": "web",
+    "cordisEntryId": "dsh-plugin-3011-arcana"
+  },
+  "capabilities": {
+    "permissions": [
+      "read the official command directory for the current regular Session while the user-opened deck is visible",
+      "execute one selected slash command after a direct command click or a separate Run click for argument-taking commands",
+      "rank commands by usage counts held only in the mounted deck's React memory"
+    ],
+    "network": [
+      "authenticated in-origin Commands Remote directory reads and explicit command execution only",
+      "indirect: an executed official command may use capabilities already granted by its owning Host command"
+    ],
+    "processes": [
+      "indirect: an executed official command may use process capability already granted by its owning Host command; Arcana starts no process"
+    ],
+    "files": [
+      "indirect: an executed official command may use file capability already granted by its owning Host command; Arcana reads and writes no file"
+    ],
+    "clientServices": [
+      "slots",
+      "sessions",
+      "locale",
+      "remote.commands"
+    ],
+    "remoteMethods": [
+      "commands.list",
+      "commands.execute"
+    ],
+    "browserPersistence": "none"
+  },
+  "combination": {
+    "additiveSlots": [
+      "sidebar.footer.action:arcana-command-deck-trigger",
+      "shell.overlay:arcana-command-deck"
+    ],
+    "exclusiveResources": [],
+    "officialSurfacePreserved": true
+  },
+  "assertions": [
+    {
+      "id": "package.exact-entry",
+      "class": "package-graph",
+      "expected": "The exact hosted package and Cordis entry occur once; every declared DeepSeek peer resolves to 0.1.2-alpha.2 and no removed aggregate runtime resolves."
+    },
+    {
+      "id": "boot.ready-deck-once",
+      "class": "cold-web-boot",
+      "expected": "A cold Web start reaches __DSH_BOOT_READY__; one footer trigger, one dormant overlay occupant, one empty memory ranking, and eight reversible locale dictionaries are present."
+    },
+    {
+      "id": "feature.official-command-directory",
+      "class": "feature-contract",
+      "expected": "Opening the deck reads at most eighty descriptors from commands.list for the current Session, binds every rendered descriptor to that Session, discards late prior-Session results, and presents names, descriptions, argument hints, and deterministic memory-ranked ordering."
+    },
+    {
+      "id": "feature.explicit-command-execution",
+      "class": "feature-contract",
+      "expected": "An argument-free command executes only after its item click; an argument-taking command requires a separate Run click; both refuse stale Session-bound descriptors, use commands.execute with an AbortSignal, accept only a success CommandResult, report the result, and never retry."
+    },
+    {
+      "id": "feature.ephemeral-usage-ranking",
+      "class": "feature-contract",
+      "expected": "Only accepted commands increment an in-memory name/count row; descending usage and then command name determine order, and every count resets when the mounted client unloads."
+    },
+    {
+      "id": "security.commands-remote-only",
+      "class": "security-boundary",
+      "expected": "Arcana uses only official Slots, Sessions, Locale, and Commands Remote services; it has no raw DOM, browser persistence, route, custom command, hidden submission, automatic execution, retry, credential, direct process, or direct file capability."
+    },
+    {
+      "id": "ui.keyboard-zoom-locales",
+      "class": "accessibility-responsive",
+      "expected": "The footer trigger, semantic dialog, native list and form controls, status announcements, narrow layout, 200 percent zoom, 12/14/17 pixel font settings, light and dark schemes, and all eight dictionaries remain usable."
+    },
+    {
+      "id": "dispose.zero-residue",
+      "class": "teardown-rollback",
+      "expected": "Closing or removal aborts an in-flight execution and removal leaves zero usage rows, selection state, slots, locale dictionaries, package rows, client graph entries, or dependency-closure changes; governed Home and Profile bytes match the snapshot."
+    },
+    {
+      "id": "combine.additive-slots-rollback",
+      "class": "combination",
+      "expected": "Both uniquely identified additive slots coexist with official sidebar, overlay, composer, command, settings, todo, goal, and conversation surfaces; full-batch rollback restores all prior entries after an injected later failure."
+    }
+  ]
+}

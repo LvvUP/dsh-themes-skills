@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "purpose": "dsh-alpha2-hosted-plugin-adaptation",
+  "catalogId": 3011,
+  "slug": "arcana",
+  "baseline": {
+    "tag": "dsh-v0.1.2-alpha.2",
+    "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b",
+    "tree": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
+  },
+  "source": {
+    "repository": "https://github.com/GooodWei/arcana.git",
+    "commit": "82f910c0b5e645c65c2a34be0b0e47035d0489a7",
+    "tree": "36cb0b3210b87a8c57d9d13845d8b1564842b126",
+    "sourceSubdir": ".",
+    "manifestSha256": "cc8aaa5902d470caa148e8f632c736ca596e7d76f4352740cc84c113cf2297b2",
+    "packageName": "arcana",
+    "packageVersion": "0.1.0",
+    "bundlePatch": "cordis.patch.yml"
+  },
+  "output": {
+    "packageName": "@dsh-themes/arcana",
+    "packageVersion": "0.1.0-dsh.alpha2.1",
+    "description": "Explicit, in-memory usage-ranked command deck over the official DeepSeek Harness alpha.2 Commands Remote",
+    "assetName": "arcana-0.1.0-dsh.alpha2.1.tgz",
+    "hostEntry": "lib/index.js",
+    "clientEntry": "lib/client.js",
+    "bundlePatch": "cordis.patch.yml",
+    "clientInject": [
+      "@deepseek-ai/dsh-api-remotes",
+      "@deepseek-ai/dsh-api-session-controller",
+      "@deepseek-ai/dsh-client-locale",
+      "@deepseek-ai/dsh-client-ui-layout",
+      "@deepseek-ai/dsh-client-ui-renderer",
+      "@deepseek-ai/dsh-client-ui-session",
+      "@deepseek-ai/dsh-client-ui-sidebar"
+    ],
+    "peerDependencies": {
+      "@deepseek-ai/cordis": "4.0.1",
+      "@deepseek-ai/dsh-api-remotes": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-api-session-controller": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-locale": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-layout": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-renderer": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-session": "0.1.2-alpha.2",
+      "@deepseek-ai/dsh-client-ui-sidebar": "0.1.2-alpha.2",
+      "react": "18.3.1"
+    },
+    "files": [
+      {
+        "outputPath": "lib/index.js",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "lib/index.js",
+          "sourceSha256": "013e1bc291f4c03bb703c3ec3e13795bcc0dca62d33215a9a6e89cf0a43516f8",
+          "replacementPath": "assets/hosted-adaptations/3011/lib/index.js",
+          "replacementSha256": "8e908d8072a2470bf517c612645df37e17dfeba0eb51b1019e765db32ff6412b"
+        }
+      },
+      {
+        "outputPath": "lib/client.js",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "lib/client.js",
+          "sourceSha256": "0a95bcde5551c0d84577add03a1c3b9732633363e81961d6a36f54b648e390c2",
+          "replacementPath": "assets/hosted-adaptations/3011/lib/client.js",
+          "replacementSha256": "4298af349fa449396209cd1f7ff78b914785f5e22802bfc539e8ed8ff822f80b"
+        }
+      },
+      {
+        "outputPath": "cordis.patch.yml",
+        "input": {
+          "kind": "reviewed-replacement",
+          "sourcePath": "cordis.patch.yml",
+          "sourceSha256": "1ea4d61f445815f60619ef896b7d8e57c7b0b50ac97b46ffd520a58eef4cdc3d",
+          "replacementPath": "assets/hosted-adaptations/3011/cordis.patch.yml",
+          "replacementSha256": "bcca7080750dfbd2f5840475c04b6d56efb56b9d8263f5ed5101bded7b007982"
+        }
+      },
+      {
+        "outputPath": "LICENSE",
+        "input": {
+          "kind": "copy-exact-upstream",
+          "sourcePath": "LICENSE",
+          "sha256": "29ca4f9a12bad476f6d9f0187e501a9095315ba1dc6bfb40ba9d9f7cefaa4ecb"
+        }
+      }
+    ]
+  },
+  "rights": {
+    "licenseExpression": "MIT",
+    "licensePath": "LICENSE",
+    "licenseSha256": "29ca4f9a12bad476f6d9f0187e501a9095315ba1dc6bfb40ba9d9f7cefaa4ecb",
+    "copyrightNotice": "Copyright (c) 2026 arcana contributors",
+    "redistribution": "allowed-with-license-and-modification-notice"
+  },
+  "staticPolicy": {
+    "computedMembers": [],
+    "forbiddenUtf8": [
+      "@deepseek-ai/dsh-client-runtime",
+      "@deepseek-ai/dsh-host-apiproxy",
+      "ctx.webServer",
+      "ctx.connection",
+      "ctx.fs",
+      "ctx.tools",
+      "ctx.storage",
+      "session.command(",
+      "remote.$on",
+      "fetch(",
+      "XMLHttpRequest",
+      "WebSocket",
+      "EventSource",
+      "localStorage",
+      "sessionStorage",
+      "document.",
+      "window.location",
+      "innerHTML",
+      "outerHTML",
+      "insertAdjacentHTML",
+      "dangerouslySetInnerHTML",
+      "node:child_process",
+      "node:fs",
+      "node:path",
+      "process.env",
+      "error.message",
+      "console.",
+      "eval(",
+      "new Function"
+    ],
+    "requiredUtf8": [
+      "window.__ModuleLoader__.load",
+      "const inject = ['slots', 'sessions', 'locale', 'remote', 'remote.commands']",
+      "ctx.remote.commands.list(sessionId)",
+      "ctx.remote.commands.execute(sessionId, line, [], signal)",
+      "sessions.current !== selectedSessionId",
+      "currentSession.current !== requestedSessionId",
+      "view.sessionId !== sessionId",
+      "setSelected(Object.freeze({ command, sessionId }))",
+      "result.value.result.kind === 'success'",
+      "ctx.slots.inject('sidebar.footer.action'",
+      "name: 'sidebar.footer.action'",
+      "id: 'arcana-command-deck-trigger'",
+      "ctx.slots.inject('shell.overlay'",
+      "name: 'shell.overlay'",
+      "id: 'arcana-command-deck'",
+      "ctx.locale.register(NS, { zh, en })",
+      "React.useSyncExternalStore",
+      "const [usage, setUsage] = React.useState(function () { return [] })",
+      "new AbortController()",
+      "DSH3011_PROBE:COMMANDS_REMOTE_DIRECTORY_V1",
+      "DSH3011_PROBE:EXPLICIT_COMMAND_EXECUTE_V1",
+      "DSH3011_PROBE:MEMORY_USAGE_RANKING_V1",
+      "DSH3011_PROBE:ADDITIVE_SLOTS_TWO_V1",
+      "DSH3011_PROBE:LOCALES_EIGHT_V1",
+      "DSH3011_PROBE:DISPOSE_CLEAN_V1"
+    ]
+  },
+  "runtimeProbe": {
+    "contractPath": "references/plugin-runtime-probes/3011.json",
+    "contractSha256": "13fb94f372698c6407cfe6b38d02c37ad5fc476bdd65a0dddbeea7af568c64a6",
+    "requiredAssertions": [
+      "package.exact-entry",
+      "boot.ready-deck-once",
+      "feature.official-command-directory",
+      "feature.explicit-command-execution",
+      "feature.ephemeral-usage-ranking",
+      "security.commands-remote-only",
+      "ui.keyboard-zoom-locales",
+      "dispose.zero-residue",
+      "combine.additive-slots-rollback"
+    ]
+  }
+}
