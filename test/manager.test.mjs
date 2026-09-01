@@ -837,7 +837,7 @@ test('manager exact-version checks implement the shared SemVer 2.0 vectors', asy
 test('hosted authority keeps 45 executable, zero pending, and 24 rollback-only tuples disjoint', () => {
   assert.equal(
     CURRENT_CATALOG_INDEX_SHA256,
-    'a894ed95febe69910281f4c603dd7ef392d5a004f8c5fc3f2b25cc67fa08de15'
+    '7c3044a1df66179f6592cafe42001d3ef4b3fa178950b704b36c4f71d844e732'
   );
   assert.equal(
     PENDING_CANDIDATE_CATALOG_INDEX_SHA256,

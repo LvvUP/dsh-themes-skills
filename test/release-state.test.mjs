@@ -252,7 +252,7 @@ test('release state separates the certified RC.2 runtime baseline from item and 
       themeCount: 6,
       fullSkinCount: 39,
       catalogIndexSha256:
-        'a894ed95febe69910281f4c603dd7ef392d5a004f8c5fc3f2b25cc67fa08de15',
+        '7c3044a1df66179f6592cafe42001d3ef4b3fa178950b704b36c4f71d844e732',
       tupleSetSha256:
         '6806fb4dfa5e59524fd3e29b9c4c7b20e5ece8108b7efec2f4a42ed8f5e4c954',
       rollbackOnlyCount: 24,
@@ -276,6 +276,8 @@ test('release state separates the certified RC.2 runtime baseline from item and 
       currentFullSkinCount: state.promotedHostedCohort.currentFullSkinCount,
       currentCatalogIndexSha256:
         state.promotedHostedCohort.currentCatalogIndexSha256,
+      historicalPromotedCatalogIndexSha256:
+        state.promotedHostedCohort.historicalPromotedCatalogIndexSha256,
       currentCatalogTupleSetSha256:
         state.promotedHostedCohort.currentCatalogTupleSetSha256,
       historicalFinalCandidateCatalogIndexSha256:
@@ -294,6 +296,8 @@ test('release state separates the certified RC.2 runtime baseline from item and 
       currentThemeCount: 6,
       currentFullSkinCount: 39,
       currentCatalogIndexSha256:
+        '7c3044a1df66179f6592cafe42001d3ef4b3fa178950b704b36c4f71d844e732',
+      historicalPromotedCatalogIndexSha256:
         'a894ed95febe69910281f4c603dd7ef392d5a004f8c5fc3f2b25cc67fa08de15',
       currentCatalogTupleSetSha256:
         '6806fb4dfa5e59524fd3e29b9c4c7b20e5ece8108b7efec2f4a42ed8f5e4c954',
