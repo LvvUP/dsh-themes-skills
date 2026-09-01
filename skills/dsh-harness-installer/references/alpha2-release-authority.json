@@ -35,7 +35,11 @@
     "lockfileSha256": "083152c5eaf99bd2ecad3db1b5a04aca2141b5347e7db97caca82e0ce5a09b1c",
     "packageManager": "pnpm",
     "packageManagerVersion": "11.7.0",
-    "installArgs": ["install", "--frozen-lockfile", "--ignore-scripts"],
+    "installArgs": [
+      "install",
+      "--frozen-lockfile",
+      "--ignore-scripts"
+    ],
     "installedCliPath": "node_modules/@deepseek-ai/dsh/lib/bin.js",
     "pathInstalled": false
   },
@@ -46,7 +50,11 @@
     "packageManager": "pnpm",
     "packageManagerVersion": "11.7.0",
     "nodeEngine": "^22.19.0 || >=24.0.0",
-    "installArgs": ["install", "--frozen-lockfile", "--ignore-scripts"],
+    "installArgs": [
+      "install",
+      "--frozen-lockfile",
+      "--ignore-scripts"
+    ],
     "buildScript": "build:official",
     "builtCliPath": "apps/cli/lib/bin.js"
   },
@@ -59,8 +67,15 @@
     "sha256": "62075bb51e0f7790441e7722ff12063107b4866019332e71ef01b63b6f880fee"
   },
   "runtimeMatrix": {
-    "platforms": ["linux", "darwin", "win32"],
-    "nodeVersions": ["22.19.0", "24.15.0"],
+    "platforms": [
+      "linux",
+      "darwin",
+      "win32"
+    ],
+    "nodeVersions": [
+      "22.19.0",
+      "24.15.0"
+    ],
     "requiredReceiptCount": 6
   },
   "packages": [
@@ -86,11 +101,54 @@
     }
   ],
   "publication": {
-    "status": "official-npm-runtime-evidence-pending",
-    "publishedInstallable": false,
-    "completedReceipts": [],
-    "receiptSetSha256": null,
-    "boundary": "The upstream npm package is an official prerelease. DSH Themes has not promoted it as an operational installation baseline until the exact six-task runtime matrix and source-to-package cross-check pass."
+    "status": "runtime-receipt-verified",
+    "publishedInstallable": true,
+    "completedReceipts": [
+      {
+        "platform": "linux",
+        "arch": "x64",
+        "nodeVersion": "22.19.0",
+        "receiptSha256": "4d73e34aa2f73d5ecb8ea9961fc18806d58f35f8bee6a27ce94dedfd5b4b882d",
+        "jobId": "runtime-linux-x64-node-22.19.0"
+      },
+      {
+        "platform": "linux",
+        "arch": "x64",
+        "nodeVersion": "24.15.0",
+        "receiptSha256": "7078ff4e97f96e9cf422bf9a4ae739eda39412ba42fad9aa21c8461434a7109f",
+        "jobId": "runtime-linux-x64-node-24.15.0"
+      },
+      {
+        "platform": "darwin",
+        "arch": "arm64",
+        "nodeVersion": "22.19.0",
+        "receiptSha256": "061f7a8c973d6e2b2dd898285b2bdfb25cd09f417eb9e4cdcf1ff91159e5894c",
+        "jobId": "runtime-darwin-arm64-node-22.19.0"
+      },
+      {
+        "platform": "darwin",
+        "arch": "arm64",
+        "nodeVersion": "24.15.0",
+        "receiptSha256": "5d8fbf0492013d6f6f22be1fd90e9278b6091d6a80a53a432cb02646f8e3d1cc",
+        "jobId": "runtime-darwin-arm64-node-24.15.0"
+      },
+      {
+        "platform": "win32",
+        "arch": "x64",
+        "nodeVersion": "22.19.0",
+        "receiptSha256": "e45583d86c7856b9c137165d8057e11ef856128e6c4af8f35cf709eeb5086634",
+        "jobId": "runtime-win32-x64-node-22.19.0"
+      },
+      {
+        "platform": "win32",
+        "arch": "x64",
+        "nodeVersion": "24.15.0",
+        "receiptSha256": "fd1d50e9231298d0663658e110fcb4a26a1fb7945fbe454ba1a3d872d3bf70f4",
+        "jobId": "runtime-win32-x64-node-24.15.0"
+      }
+    ],
+    "receiptSetSha256": "3a1017961b0fbc2ac3e773913009c842332b030b5494a5af454594afdb679d0a",
+    "boundary": "The upstream npm package is an official prerelease. DSH Themes has promoted this exact npm runtime as the alpha.2 operational installation baseline after reviewing the complete signed six-task runtime matrix and independent source cross-build; no source-to-package binary equivalence is claimed."
   },
   "historicalAuthority": {
     "alpha1SourceLaneUnchanged": true,

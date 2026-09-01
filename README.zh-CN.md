@@ -8,7 +8,7 @@
 
 [![仓库版本 0.8.0](https://img.shields.io/badge/repository-0.8.0-246BCE)](package.json)
 [![DSH 基线 0.1.2-alpha.2](https://img.shields.io/badge/DSH-0.1.2--alpha.2-5B67D8)](skills/dsh-harness-installer/references/alpha2-release-authority.json)
-[![Harness 晋级 0/6](https://img.shields.io/badge/Harness%20promotion-0%2F6-C58B20)](skills/dsh-harness-installer/references/alpha2-release-authority.json)
+[![Harness 已运行认证 6/6](https://img.shields.io/badge/Harness%20operational-6%2F6-2E8B57)](skills/dsh-harness-installer/references/alpha2-release-authority.json)
 [![Plugin 权威 0/80](https://img.shields.io/badge/Plugin%20authority-0%2F80-C58B20)](skills/dsh-plugin-installer/references/plugin-authority.json)
 [![CI](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml)
 [![许可证：Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-246BCE)](LICENSE)
@@ -18,7 +18,7 @@
 </div>
 
 > [!IMPORTANT]
-> 本仓库的 `0.8.0` 线仍在认证中，本文不会把它描述成已经发布、可以安装的 Skills Release。上游官方 npm 预发布包 `@deepseek-ai/dsh@0.1.2-alpha.2` 确实存在，但 DSH Themes 要求的运行任务目前只晋级了 **0/6**。Plugin 权威仍为 **0/80**，Top10 也保持关闭。
+> 本仓库的 `0.8.0` 线仍在认证中，本文不会把它描述成已经发布、可以安装的 Skills Release。精确的上游官方 npm 预发布包 `@deepseek-ai/dsh@0.1.2-alpha.2` 已通过并晋级全部 **6/6** 运行任务，成为 Harness 的 operational installation baseline。该晋级既不代表本 Skills 包已发布，也不授权任何目录条目：Plugin 权威仍为 **0/80**，V4 仍为 **0/54**，社区 alpha.2 复证仍为 **0/66**，Top10 也保持关闭。
 
 ## 你能获得什么
 
@@ -35,7 +35,7 @@ DSH Themes 把“选择”和“安装”拆开。网站帮助用户比较使用
 
 | 声明 | 仓库内证据 | 当前边界 |
 | --- | --- | --- |
-| 官方 alpha.2 npm 运行时 | [`alpha2-release-authority.json`](skills/dsh-harness-installer/references/alpha2-release-authority.json) 固定了精确的 `@deepseek-ai/dsh@0.1.2-alpha.2`、Registry 签名、integrity、tarball SHA-256 与安装后 CLI SHA-256 | 上游包确实存在；DSH Themes 晋级为 **0/6**，且 `publishedInstallable: false` |
+| 官方 alpha.2 npm 运行时 | [`alpha2-release-authority.json`](skills/dsh-harness-installer/references/alpha2-release-authority.json) 固定了精确的 `@deepseek-ai/dsh@0.1.2-alpha.2`、Registry 签名、integrity、tarball SHA-256 与安装后 CLI SHA-256 | [运行 `33463453889`，attempt 1](https://github.com/LvvUP/dsh-themes-skills/actions/runs/33463453889) 的 **6/6** 精确任务全部通过；经复核的签名回执集已晋级为 `publishedInstallable: true` |
 | 精确 alpha.2 源码交叉构建 | 官方 tag `dsh-v0.1.2-alpha.2`、commit、tree、lockfile、Node 任务组合与 `pnpm@11.7.0` 分开固定 | 源码证据不能证明构建结果与 npm 包字节相等 |
 | Plugin 目录 | 网站展示 80 条精选记录；[`plugin-authority.json`](skills/dsh-plugin-installer/references/plugin-authority.json) 的结构校验通过 | 已验证可安装条目：**0/80**；权威条目数：**0** |
 | Top10 | [`top10-release-set.json`](skills/dsh-plugin-installer/references/top10-release-set.json) 保存了关闭状态的 Release Set 门禁 | 没有条目、尚未冻结、不可安装 |
@@ -48,7 +48,7 @@ node skills/dsh-harness-installer/scripts/authority.mjs
 node skills/dsh-plugin-installer/scripts/authority.mjs
 ```
 
-今天的预期结果是“权威文档有效，但发布门禁关闭”，而不是安装成功。
+今天的预期结果是 Harness 权威已晋级为 **6/6**，而另一份 Plugin 权威仍有效但关闭在 **0/80**。Harness 成功绝不能被解释成条目安装权威。
 
 ### 真实产品表面
 
@@ -82,9 +82,9 @@ node skills/dsh-plugin-installer/scripts/authority.mjs
 
 Finder 解析类型与状态。只有所有精确门禁都通过、并且用户批准展示的计划后，对应安装器才可以继续。
 
-### 4. 当前 alpha.2 通道应当失败关闭
+### 4. 把可运行的 Harness 通道与关闭的条目通道分开
 
-在当前 **Harness 0/6**、**Plugin 0/80** 的状态下，alpha.2 配置与 Plugin 请求属于检查/认证流程，不是普通安装路径。正确结果通常是：识别条目、展示缺失证据，然后在不修改任何内容的情况下停止。
+精确的 alpha.2 Harness 配置只有在 `dsh-harness-installer` 验证已晋级权威、并且用户批准计划后才可以继续。目录条目仍是独立门禁：Plugin 为 **0/80**、V4 为 **0/54**、社区复证为 **0/66**。对于这些条目请求，正确结果仍是识别条目、展示缺失的逐项证据，然后在不修改任何内容的情况下停止。
 
 ### Skills 包可用性
 
@@ -99,7 +99,7 @@ Finder 解析类型与状态。只有所有精确门禁都通过、并且用户�
 | `#1xxx` Theme 或站内 `#2xxx` Full Skin | `dsh-theme-manager` | 只接受自身精确逐项权威；不会从历史记录推导 alpha.2 权威 |
 | 社区 `#2xxx` Skin | `dsh-community-skin-installer` | 在当前基线的逐项与回滚回执晋级前仅可检查 |
 | `#3xxx` Plugin | `dsh-plugin-installer` | 权威为 0/80 时只可检查/认证 |
-| Harness 配置，无目录编号 | `dsh-harness-installer` | 官方 npm 与源码交叉构建分属两条通道；普通使用晋级仍为 0/6 |
+| Harness 配置，无目录编号 | `dsh-harness-installer` | 官方 npm 与源码交叉构建分属两条通道；精确 operational baseline 已晋级 6/6 |
 
 `#NNNN` 只负责启动精确身份解析，从来不承诺安装。Finder 是只读的，也不会把 Harness 引导与条目修改合并成一个动作。
 
@@ -109,10 +109,10 @@ Finder 解析类型与状态。只有所有精确门禁都通过、并且用户�
 
 | 通道 | 精确身份 | 能证明什么，以及不能证明什么 |
 | --- | --- | --- |
-| 官方 npm 运行时 | `@deepseek-ai/dsh@0.1.2-alpha.2`；tarball SHA-256 `5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47`；CLI SHA-256 `dc23f6c5dd7df8834e3e38bdb9609d77b459834681ae9b7133b417b0c35f3166` | 这是上游官方分发的预发布运行时。它有 Registry 签名，但没有 npm provenance attestation，也没有 `gitHead`。DSH Themes 仍要求六个任务晋级后才能进入普通使用。 |
+| 官方 npm 运行时 | `@deepseek-ai/dsh@0.1.2-alpha.2`；tarball SHA-256 `5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47`；CLI SHA-256 `dc23f6c5dd7df8834e3e38bdb9609d77b459834681ae9b7133b417b0c35f3166` | 这是上游官方分发的预发布运行时。它有 Registry 签名，但没有 npm provenance attestation，也没有 `gitHead`。DSH Themes 已把完整签名六任务运行矩阵晋级为 operational installation baseline。 |
 | 精确源码交叉构建 | Tag `dsh-v0.1.2-alpha.2`；commit `0a53fb55bea101816fa226bb964ae2bed71c343b`；tree `64ccbfa8e0caa4711cd4a75717ef9e022657961b`；lockfile SHA-256 `6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0` | 它用 `pnpm@11.7.0` 验证干净、冻结的源码构建。它是独立证据，不是官方二进制，也不声明与 npm 包逐字节等价。 |
 
-六任务门禁覆盖 Linux x64、macOS arm64、Windows x64，以及 Node `22.19.0` 与 `24.15.0` 的组合。安装器不会修改 `PATH`、安装 Node，也不会记录浏览器 token、cookie、Authorization Header 或秘密派生摘要。
+已晋级的六任务门禁覆盖 Linux x64、macOS arm64、Windows x64，以及 Node `22.19.0` 与 `24.15.0` 的组合。安装器不会修改 `PATH`、安装 Node，也不会记录浏览器 token、cookie、Authorization Header 或秘密派生摘要。
 同一权威还保留上游 [SAFETY.md](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.1.2-alpha.2/SAFETY.md) 的精确字节；这份实验性安全说明始终属于面向用户的边界。
 
 ## 混合 Plugin 分发与 Top10

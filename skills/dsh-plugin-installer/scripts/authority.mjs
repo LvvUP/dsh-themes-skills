@@ -487,6 +487,28 @@ export function validateAuthority(authority, options = {}) {
       sha256(options.harnessAuthorityBytes) !== authority.harness.harnessReleaseAuthoritySha256) {
     fail('plugin authority is not bound to the bundled Harness alpha.2 release authority bytes');
   }
+  let harnessAuthority;
+  try {
+    harnessAuthority = JSON.parse(options.harnessAuthorityBytes.toString('utf8'));
+  } catch {
+    fail('bundled Harness alpha.2 release authority bytes are not valid JSON');
+  }
+  if (harnessAuthority.release?.tag !== authority.harness.tag ||
+      harnessAuthority.release?.commit !== authority.harness.commit ||
+      harnessAuthority.release?.tree !== authority.harness.tree ||
+      harnessAuthority.source?.lockfileSha256 !== authority.harness.lockfileSha256 ||
+      harnessAuthority.officialNpm?.packageName !== authority.harness.officialNpmPackage ||
+      harnessAuthority.officialNpm?.version !== authority.harness.officialNpmVersion ||
+      harnessAuthority.officialNpm?.tarballSha256 !==
+        authority.harness.officialNpmTarballSha256 ||
+      harnessAuthority.publication?.status !== authority.harness.runtimeStatus ||
+      harnessAuthority.publication?.receiptSetSha256 !==
+        authority.harness.runtimeReceiptSetSha256 ||
+      harnessAuthority.publication?.publishedInstallable !== authority.harness.installable ||
+      !Array.isArray(harnessAuthority.publication?.completedReceipts) ||
+      harnessAuthority.publication.completedReceipts.length !== 6) {
+    fail('plugin authority Harness projection differs from the promoted six-task authority');
+  }
   return authority;
 }
 

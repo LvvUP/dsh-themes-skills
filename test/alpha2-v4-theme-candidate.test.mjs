@@ -194,6 +194,10 @@ test('alpha.2 V4 authority freezes 54 pending candidates without changing RC.8',
       requiredJobs: 6,
     }
   );
+  assert.equal(
+    loaded.authority.baseline.publicHarnessAuthoritySha256,
+    '100e24ea87e111a7abb13aab5d8c81e38585319c27ea09ce82e62dd4fcc80094'
+  );
 
   const certified = await loadCertifiedAuthority();
   assert.equal(certified.version, '0.1.0-rc.8');

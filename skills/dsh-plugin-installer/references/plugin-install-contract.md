@@ -149,10 +149,11 @@ authority hashes, overall payload digest, six-task matrix, Web coexistence,
 pairwise conflict receipts, full preflight, and failure rollback gates all
 validate and `frozen` is true.
 
-Alpha.2 itself remains official-npm-runtime-evidence-pending at 0/6 tasks. Plugin installation
-requires both a promoted Harness runtime receipt set and item-level verified
-authority. RC.8 Theme/Skin authority and the RC.2 runtime baseline do not
-transfer to this lane.
+The exact alpha.2 official npm runtime has a promoted 6/6 Harness receipt set.
+Plugin installation still requires both that promoted baseline and item-level
+verified authority; the first gate is satisfied, while the bundled Plugin
+authority remains 0/80. RC.8 Theme/Skin authority and the RC.2 runtime baseline
+do not transfer to this lane.
 
 The installer carries the official pnpm `11.7.0` registry tarball under a
 closed authority that fixes its immutable URL, bytes, SHA-256, registry
@@ -173,8 +174,9 @@ contains only this private directory; there is no caller-command fallback.
 Windows fixes `PATHEXT` to `.CMD;.EXE;.COM;.BAT`, places the private
 `pnpm.cmd` first, sets `NoDefaultCurrentDirectoryInExePath`, and uses the
 verified absolute system `cmd.exe`; neither a Profile-local command nor a
-later-path `pnpm.exe` can win. Promotion remains blocked until the six-task
-receipts bind artifact, closure, Node, wrapper, and wrapper-runner digests.
+later-path `pnpm.exe` can win. Each Plugin's promotion remains blocked until its
+six runtime receipts bind artifact, closure, Node, wrapper, and wrapper-runner
+digests.
 
 The local recovery trust key uses private POSIX permissions on macOS and Linux.
 On Windows, both the trust-root directory and key must be owned by the current
@@ -193,8 +195,8 @@ agreed caller `TEMP`/`TMP`; neither is a trust root, and both candidates must
 pass the identical owner, full ancestor-chain, NTFS, atomic-create, and
 file-identity proof. Only the fresh verified child is forwarded to `Add-Type`,
 so a shared or redirectable runner temp fails closed rather than being trusted.
-The implementation is covered by a real Windows ACL test, while
-promotion still requires the complete six-task runtime receipt matrix.
+The implementation is covered by a real Windows ACL test, while each Plugin's
+promotion still requires its complete six-task runtime receipt matrix.
 
 ## Profile transaction
 

@@ -39,10 +39,13 @@ provenance attestation and no `gitHead`. Therefore:
 - never claim source-to-package binary equivalence;
 - never describe the local source build as an official distributed binary.
 
-The current authority remains `official-npm-runtime-evidence-pending` until all
-six real receipts from the exact CI tasks are reviewed and explicitly promoted. A local success does
-not open the publication gate. The alpha.1 source lane, RC.8 item authority,
-and RC.2 runtime authority remain immutable history.
+The current authority is `runtime-receipt-verified`. All six real receipts from
+the exact CI matrix were reviewed and explicitly promoted as receipt set
+`3a1017961b0fbc2ac3e773913009c842332b030b5494a5af454594afdb679d0a`.
+The exact official npm runtime is therefore the published alpha.2 operational
+installation baseline. This promotion does not claim source-to-package binary
+equivalence. The alpha.1 source lane, RC.8 item authority, and RC.2 runtime
+authority remain immutable history.
 
 ## Non-negotiable boundaries
 
@@ -70,10 +73,10 @@ and RC.2 runtime authority remain immutable history.
 node <skill-dir>/scripts/authority.mjs
 ```
 
-Proceed only on one exact platform/Node tuple. While the bundled publication
-authority is pending, ordinary users must not be told that this runtime is
-certified or generally installable; installation is limited to the controlled
-candidate/certification workflow.
+Proceed only on one exact platform/Node tuple. The bundled publication
+authority reports `6/6` and `publishedInstallable: true`; describe certification
+only for this exact npm package, frozen resolution, platform/Node matrix, and
+the independently cross-built source identity bound by that authority.
 
 ## Install the exact official npm runtime
 
@@ -170,9 +173,10 @@ node <skill-dir>/scripts/runtime-certification.mjs verify \
   --workflow <absolute-repository>/.github/workflows/alpha2-runtime-certification.yml
 ```
 
-This still has no authority effect. Promotion requires a clean POSIX checkout,
-the exact GitHub OIDC/Sigstore bundle, a byte-pinned `gh` executable, and an
-explicit reviewer action:
+This still has no authority effect. The bundled authority has already been
+promoted from the receipt set above. For a still-pending authority, promotion
+requires a clean POSIX checkout, the exact GitHub OIDC/Sigstore bundle, a
+byte-pinned `gh` executable, and an explicit reviewer action:
 
 ```bash
 node <skill-dir>/scripts/promote-runtime-authority.mjs \
@@ -182,6 +186,10 @@ node <skill-dir>/scripts/promote-runtime-authority.mjs \
   --gh <absolute-byte-pinned-gh-binary>
 ```
 
-Missing, partial, synthetic, copied, or post-redacted evidence keeps the lane
-closed. Promotion on Windows is intentionally refused because authority-file
-replacement is certified only with the reviewed POSIX durability path.
+The promotion command is one-way and refuses the current already-promoted
+authority. Missing, partial, synthetic, copied, or post-redacted evidence can
+never create or replace a promotion. Candidate generation and verification do
+not mutate authority; a failed later candidate also does not revoke the current
+6/6 baseline or fall back to alpha.1, RC.8, or RC.2. Promotion on Windows is
+intentionally refused because authority-file replacement is certified only
+with the reviewed POSIX durability path.

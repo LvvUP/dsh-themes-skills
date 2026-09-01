@@ -823,10 +823,15 @@ test('future frozen Top10 requires six scores, exact totals, ranking, eight-use-
   assert.throws(() => validateTop10ReleaseSet(noCoexistence, { authority }), /complete 80\/80/u);
 });
 
-test('Harness alpha.2 runtime set accepts only the canonical dual-artifact six-task matrix while publication remains 0/6', async () => {
+test('Harness alpha.2 promoted authority and runtime set bind the canonical dual-artifact six-task matrix', async () => {
   const authority = await loadHarnessAuthority();
-  assert.equal(authority.publication.completedReceipts.length, 0);
-  assert.equal(authority.publication.receiptSetSha256, null);
+  assert.equal(authority.publication.status, 'runtime-receipt-verified');
+  assert.equal(authority.publication.publishedInstallable, true);
+  assert.equal(authority.publication.completedReceipts.length, 6);
+  assert.equal(
+    authority.publication.receiptSetSha256,
+    '3a1017961b0fbc2ac3e773913009c842332b030b5494a5af454594afdb679d0a'
+  );
   const workflow = {
     repository: 'LvvUP/dsh-themes-skills',
     workflowPath: '.github/workflows/alpha2-runtime-certification.yml',

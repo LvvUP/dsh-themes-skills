@@ -1147,9 +1147,6 @@ export async function aggregateRuntimeCandidate({ input, output, workflowPath })
     fail('runtime aggregate paths must be absolute');
   }
   const authority = await loadAuthority();
-  if (authority.publication.publishedInstallable !== false) {
-    fail('candidate aggregation requires the bundled 0/6 pending authority');
-  }
   const loaded = await loadReceiptDirectory(path.resolve(input), authority);
   const orderedReceipts = runtimeTasks().map((task) => loaded.receipts.get(`${tupleName(task)}.json`));
   const first = orderedReceipts[0];

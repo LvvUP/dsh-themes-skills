@@ -202,9 +202,12 @@ test('alpha.2 authority binds the exact official npm runtime and source cross-bu
     bytes: 1673,
     sha256: '62075bb51e0f7790441e7722ff12063107b4866019332e71ef01b63b6f880fee',
   });
-  assert.equal(authority.publication.publishedInstallable, false);
-  assert.deepEqual(authority.publication.completedReceipts, []);
-  assert.equal(authority.publication.receiptSetSha256, null);
+  assert.equal(authority.publication.publishedInstallable, true);
+  assert.equal(authority.publication.completedReceipts.length, 6);
+  assert.equal(
+    authority.publication.receiptSetSha256,
+    '3a1017961b0fbc2ac3e773913009c842332b030b5494a5af454594afdb679d0a'
+  );
   assert.equal(authority.historicalAuthority.rc8ItemLaneUnchanged, true);
   assert.equal(authority.historicalAuthority.rc2RuntimeLaneUnchanged, true);
   assert.equal(authority.historicalAuthority.alpha1SourceLaneUnchanged, true);
@@ -221,7 +224,7 @@ test('source authority rejects tag, tree, lock, package-manager, and promotion d
     (value) => { value.source.installArgs.pop(); },
     (value) => { value.officialSafety.sha256 = '0'.repeat(64); },
     (value) => { value.officialSafety.commitUrl = value.officialSafety.tagUrl; },
-    (value) => { value.publication.publishedInstallable = true; },
+    (value) => { value.publication.publishedInstallable = false; },
   ]) {
     const changed = structuredClone(authority);
     mutate(changed);

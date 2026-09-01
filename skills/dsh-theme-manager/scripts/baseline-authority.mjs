@@ -70,7 +70,7 @@ export async function loadBaselinePolicy() {
     alpha2V4Candidate?.authorityPath !==
       'references/alpha2-v4-candidate-authority.json' ||
     alpha2V4Candidate?.authoritySha256 !==
-      '5bda616b8ae9963fc64194b9e1ecf666eec3f93c82437b4db3677b7ad4776c92' ||
+      '1ce7c213460b8929c9adb0478684cf4608575d2e0a8832993609864cbe72727a' ||
     policy.candidate?.status !== 'certification-pending' ||
     policy.candidate?.historicalAtCapture !== true ||
     policy.candidate?.installable !== false ||

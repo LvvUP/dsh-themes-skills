@@ -794,7 +794,7 @@
       "status": "runtime-input-pending"
     }
   ],
-  "harnessReleaseAuthoritySha256": "f8be99bda583c2b8b1458746eaf07fe64c5a846348cbe0fffc1d4ff699211e11",
+  "harnessReleaseAuthoritySha256": "100e24ea87e111a7abb13aab5d8c81e38585319c27ea09ce82e62dd4fcc80094",
   "matrix": {
     "batchCount": 4,
     "candidatesPerBatch": 11,

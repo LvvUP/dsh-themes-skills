@@ -46,7 +46,7 @@ test('installation skills keep technical coordinates inside the trusted workflow
   assert.match(manager, /CURRENT_INSTALLABLE_HOSTED_ARTIFACTS/);
   assert.match(manager, /Compute the file digest locally/);
   assert.match(manager, /This Skill never installs DSH, Node\.js/);
-  assert.match(manager, /Do not run that command from Manager/);
+  assert.match(manager, /Do not run Harness setup from Manager/);
   assert.match(manager, /never substitute retained RC\.8 behind the user's back/);
 
   assert.match(community, /Do not ask the user for a package name\/version/);
@@ -119,8 +119,10 @@ test('both README homepages explain the fail-closed v0.8 first-use and separate 
   assert.match(english, /Exact source cross-build/);
   assert.match(english, /without changing `PATH`/);
   assert.match(english, /`#NNNN` starts exact identity resolution/);
-  assert.match(english, /0\/6 Harness/);
-  assert.match(english, /0\/80 Plugin/);
+  assert.match(english, /promoted \*\*6\/6 Harness\*\* authority/);
+  assert.match(english, /closed \*\*0\/80 Plugin\*\* authority/);
+  assert.match(english, /V4 is \*\*0\/54\*\*/);
+  assert.match(english, /community re-certification is \*\*0\/66\*\*/);
   assert.match(english, /Top10 remains closed/);
   assert.match(english, /`hosted-plugin-verified`/);
   assert.match(english, /`upstream-plugin-verified`/);
@@ -140,8 +142,10 @@ test('both README homepages explain the fail-closed v0.8 first-use and separate 
   assert.match(chinese, /精确源码交叉构建/);
   assert.match(chinese, /不修改 `PATH`/);
   assert.match(chinese, /`#NNNN` 只负责启动精确身份解析/);
-  assert.match(chinese, /Harness 0\/6/);
-  assert.match(chinese, /Plugin 0\/80/);
+  assert.match(chinese, /Harness 权威已晋级为 \*\*6\/6\*\*/);
+  assert.match(chinese, /Plugin 权威仍有效但关闭在 \*\*0\/80\*\*/);
+  assert.match(chinese, /V4 为 \*\*0\/54\*\*/);
+  assert.match(chinese, /社区复证为 \*\*0\/66\*\*/);
   assert.match(chinese, /Top10 也保持关闭/);
   assert.match(chinese, /`hosted-plugin-verified`/);
   assert.match(chinese, /`upstream-plugin-verified`/);

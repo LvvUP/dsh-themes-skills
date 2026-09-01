@@ -509,9 +509,6 @@ function validationOptions(loaded) {
 
 function promotedContext(loaded, items) {
   const authority = structuredClone(loaded.authority);
-  authority.harness.runtimeStatus = 'runtime-receipt-verified';
-  authority.harness.runtimeReceiptSetSha256 = '9'.repeat(64);
-  authority.harness.installable = true;
   authority.publication.status = 'verified-installable';
   authority.publication.publishedInstallable = true;
   authority.publication.verifiedInstallableCount = 80;
@@ -631,7 +628,7 @@ test('current Plugin authority exposes 80 curated records but zero installation 
   const loaded = await loadAuthority();
   assert.equal(
     loaded.authoritySha256,
-    '413e4874d8ee8ac6915bbead4c82d37174b3170e3a90c38c0a507f6cb1382f26'
+    'bb3444ede73411438e422762df4d2d6a865d51870a9a4f48ba8c4d58b0a38d4c'
   );
   assert.equal(loaded.authority.migrationReview.retainedCurrentCatalogCount, 52);
   assert.equal(loaded.authority.migrationReview.retiredCatalogCount, 28);
@@ -651,7 +648,12 @@ test('current Plugin authority exposes 80 curated records but zero installation 
   assert.equal(loaded.authority.publication.requiredVerifiedInstallableCount, 80);
   assert.equal(loaded.authority.publication.verifiedInstallableCount, 0);
   assert.equal(loaded.authority.items.length, 0);
-  assert.equal(loaded.authority.harness.installable, false);
+  assert.equal(loaded.authority.harness.runtimeStatus, 'runtime-receipt-verified');
+  assert.equal(
+    loaded.authority.harness.runtimeReceiptSetSha256,
+    '3a1017961b0fbc2ac3e773913009c842332b030b5494a5af454594afdb679d0a'
+  );
+  assert.equal(loaded.authority.harness.installable, true);
   assert.equal(loaded.top10ReleaseSet.frozen, false);
   assert.equal(loaded.top10ReleaseSet.status, 'candidate-pending');
   assert.equal(loaded.top10ReleaseSet.gate.verifiedPluginCount, 0);
@@ -663,6 +665,12 @@ test('current Plugin authority exposes 80 curated records but zero installation 
       validationOptions: validationOptions(loaded),
     }),
     /evidence-pending/
+  );
+  const staleHarnessProjection = structuredClone(loaded.authority);
+  staleHarnessProjection.harness.runtimeReceiptSetSha256 = '9'.repeat(64);
+  assert.throws(
+    () => validateAuthority(staleHarnessProjection, validationOptions(loaded)),
+    /promoted six-task authority/
   );
 });
 

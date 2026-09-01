@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import test from 'node:test';
@@ -10,6 +10,8 @@ import { parse } from 'yaml';
 
 import {
   loadAuthority,
+  PENDING_PUBLICATION_BOUNDARY,
+  PROMOTED_PUBLICATION_BOUNDARY,
   validateAuthority,
 } from '../skills/dsh-harness-installer/scripts/authority.mjs';
 import {
@@ -25,6 +27,7 @@ import {
 import {
   atomicReplaceRuntimeAuthorityFile,
   buildPromotedRuntimeAuthority,
+  isDirectRuntimePromotionInvocation,
 } from '../skills/dsh-harness-installer/scripts/promote-runtime-authority.mjs';
 import {
   runtimeProvenanceSetSha256,
@@ -124,6 +127,18 @@ function syntheticReceipt(authority, task, index, workflowSha256) {
   };
 }
 
+function pendingAuthority(authority) {
+  const pending = structuredClone(authority);
+  pending.publication = {
+    status: 'official-npm-runtime-evidence-pending',
+    publishedInstallable: false,
+    completedReceipts: [],
+    receiptSetSha256: null,
+    boundary: PENDING_PUBLICATION_BOUNDARY,
+  };
+  return validateAuthority(pending);
+}
+
 async function syntheticInput(root) {
   const authority = await loadAuthority();
   const workflowSha256 = sha256(await readFile(workflowPath));
@@ -198,7 +213,7 @@ test('alpha.2 workflow is manual, exact-six, dual-artifact, candidate-only, and 
   assert.match(provenanceSource, /bundle: bundlePath/u);
 });
 
-test('six canonical receipts aggregate to a verified candidate without changing 0/6 authority', async () => {
+test('six canonical receipts aggregate without changing the promoted 6/6 authority', async () => {
   const root = await mkdtemp(join(tmpdir(), 'alpha2-runtime-candidate-test-'));
   try {
     const { authority, input } = await syntheticInput(root);
@@ -220,10 +235,21 @@ test('six canonical receipts aggregate to a verified candidate without changing 
       runtimeReceiptSetPayloadSha256(receiptSet)
     );
     assert.deepEqual(await readFile(authorityPath), before);
-    assert.equal(authority.publication.publishedInstallable, false);
-    const promoted = buildPromotedRuntimeAuthority(authority, verified);
+    assert.equal(authority.publication.status, 'runtime-receipt-verified');
+    assert.equal(authority.publication.publishedInstallable, true);
+    assert.equal(authority.publication.completedReceipts.length, 6);
+    assert.equal(
+      authority.publication.receiptSetSha256,
+      '3a1017961b0fbc2ac3e773913009c842332b030b5494a5af454594afdb679d0a'
+    );
+    assert.throws(
+      () => buildPromotedRuntimeAuthority(authority, verified),
+      /exact pending 0\/6/u
+    );
+    const promoted = buildPromotedRuntimeAuthority(pendingAuthority(authority), verified);
     assert.equal(promoted.publication.publishedInstallable, true);
     assert.equal(promoted.publication.completedReceipts.length, 6);
+    assert.equal(promoted.publication.boundary, PROMOTED_PUBLICATION_BOUNDARY);
     assert.doesNotThrow(() => validateAuthority(promoted));
     const leakedAuthority = structuredClone(promoted);
     leakedAuthority.publication.completedReceipts[0].jobId = 'A'.repeat(43);
@@ -231,6 +257,26 @@ test('six canonical receipts aggregate to a verified candidate without changing 
   } finally {
     await rm(root, { recursive: true, force: true });
   }
+});
+
+test('publication boundary exactly distinguishes pending and promoted authority', async () => {
+  const promoted = await loadAuthority();
+  assert.equal(promoted.publication.boundary, PROMOTED_PUBLICATION_BOUNDARY);
+  const pending = pendingAuthority(promoted);
+  assert.equal(pending.publication.boundary, PENDING_PUBLICATION_BOUNDARY);
+
+  const pendingWithPromotedBoundary = structuredClone(pending);
+  pendingWithPromotedBoundary.publication.boundary = PROMOTED_PUBLICATION_BOUNDARY;
+  assert.throws(
+    () => validateAuthority(pendingWithPromotedBoundary),
+    /exactly describe the pending state/u
+  );
+  const promotedWithPendingBoundary = structuredClone(promoted);
+  promotedWithPendingBoundary.publication.boundary = PENDING_PUBLICATION_BOUNDARY;
+  assert.throws(
+    () => validateAuthority(promotedWithPendingBoundary),
+    /exactly describe the promoted state/u
+  );
 });
 
 test('candidate verification rejects missing, tampered, cross-run, and provenance-drift evidence', async () => {
@@ -288,7 +334,7 @@ test('candidate verification rejects missing, tampered, cross-run, and provenanc
     receiptSet.provenanceSetSha256 = '7'.repeat(64);
     receiptSet.receiptSetPayloadSha256 = runtimeReceiptSetPayloadSha256(receiptSet);
     assert.throws(
-      () => buildPromotedRuntimeAuthority(authority, {
+      () => buildPromotedRuntimeAuthority(pendingAuthority(authority), {
         receiptSet,
         receiptSetBytes: Buffer.from(canonicalRuntimeJson(receiptSet)),
         receiptBytesBySha256: new Map(),
@@ -430,6 +476,36 @@ test('promotion CLI requires explicit absolute candidate and bundled authority p
   ], { encoding: 'utf8' });
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /absolute paths/u);
+});
+
+test('promotion CLI canonicalizes a symlinked entrypoint instead of silently doing nothing', {
+  skip: process.platform === 'win32',
+}, async () => {
+  const root = await mkdtemp(join(tmpdir(), 'alpha2-promotion-entrypoint-test-'));
+  try {
+    const script = resolve(
+      'skills/dsh-harness-installer/scripts/promote-runtime-authority.mjs'
+    );
+    const alias = join(root, 'promote-runtime-authority.mjs');
+    await symlink(script, alias);
+    assert.equal(await isDirectRuntimePromotionInvocation(alias), true);
+    const result = spawnSync(process.execPath, [
+      alias,
+      '--candidate',
+      'relative-candidate',
+      '--provenance',
+      'relative-provenance',
+      '--authority',
+      authorityPath,
+      '--gh',
+      'relative-gh',
+    ], { encoding: 'utf8' });
+    assert.notEqual(result.status, 0);
+    assert.equal(result.stdout, '');
+    assert.match(result.stderr, /absolute paths/u);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 });
 
 test('signed provenance policy binds subject, main workflow, hosted runner, source, and run attempt', () => {

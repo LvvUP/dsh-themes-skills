@@ -7,7 +7,10 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { validateAuthority } from './authority.mjs';
+import {
+  PROMOTED_PUBLICATION_BOUNDARY,
+  validateAuthority,
+} from './authority.mjs';
 import {
   canonicalRuntimeJson,
   verifyRuntimeCandidate,
@@ -60,7 +63,7 @@ export function buildPromotedRuntimeAuthority(authorityInput, verifiedCandidate)
     publishedInstallable: true,
     completedReceipts: receiptSet.receipts.map((entry) => ({ ...entry })),
     receiptSetSha256: runtimeSha256(receiptSetBytes),
-    boundary: authority.publication.boundary,
+    boundary: PROMOTED_PUBLICATION_BOUNDARY,
   };
   return validateAuthority(promoted);
 }
@@ -165,7 +168,10 @@ export async function promoteRuntimeAuthority({ candidate, provenance, authority
     try {
       authority = validateAuthority(JSON.parse(originalBytes));
     } catch {
-      fail('bundled authority is not a valid pending authority');
+      fail('bundled authority is not a valid alpha.2 authority');
+    }
+    if (authority.publication.status !== 'official-npm-runtime-evidence-pending') {
+      fail('bundled authority is already promoted; promotion accepts only the exact pending 0/6 authority');
     }
     if (git(repository, ['status', '--porcelain=v1', '--untracked-files=all']) !== '') {
       fail('promotion requires an entirely clean exact checkout');
@@ -211,6 +217,20 @@ export async function promoteRuntimeAuthority({ candidate, provenance, authority
   }
 }
 
+export async function isDirectRuntimePromotionInvocation(argvPath = process.argv[1]) {
+  if (typeof argvPath !== 'string' || argvPath.length === 0) return false;
+  const modulePath = fileURLToPath(import.meta.url);
+  const canonicalModulePath = await realpath(modulePath);
+  try {
+    return await realpath(path.resolve(argvPath)) === canonicalModulePath;
+  } catch {
+    if (path.resolve(argvPath) === path.resolve(modulePath)) {
+      fail('promotion CLI entrypoint identity could not be canonicalized');
+    }
+    return false;
+  }
+}
+
 function parseArgs(argv) {
   if (argv.length !== 8) {
     fail('usage: promote-runtime-authority.mjs --candidate <absolute-dir> --provenance <absolute-bundle> --authority <absolute-json> --gh <absolute-pinned-gh>');
@@ -235,7 +255,7 @@ function parseArgs(argv) {
   };
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (await isDirectRuntimePromotionInvocation()) {
   try {
     process.stdout.write(`${JSON.stringify(
       await promoteRuntimeAuthority(parseArgs(process.argv.slice(2)))

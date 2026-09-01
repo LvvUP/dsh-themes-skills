@@ -158,7 +158,7 @@ test('alpha.2 authority, schema, shared Harness binding, and six planned guards 
   const schemaBytes = await readFile(alpha2RecertificationSchemaPath);
   assert.equal(
     createHash('sha256').update(authorityBytes).digest('hex'),
-    '02dbedab9dc248019bfe2654bd9c9e35002ada1c744256d172fe3abe664c2b80'
+    'c1456b221050479e70ee74e7eab5422414a1fe9043f6c63e5d91a194d80e06b8'
   );
   assert.equal(
     createHash('sha256').update(schemaBytes).digest('hex'),
@@ -594,7 +594,7 @@ test('Finder and Installer carry byte-identical current alpha.2 0/66 authority',
   );
   assert.equal(
     createHash('sha256').update(finderAuthority).digest('hex'),
-    '02dbedab9dc248019bfe2654bd9c9e35002ada1c744256d172fe3abe664c2b80'
+    'c1456b221050479e70ee74e7eab5422414a1fe9043f6c63e5d91a194d80e06b8'
   );
 });
 

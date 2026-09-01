@@ -59,8 +59,9 @@ The website currently publishes 80 curated Plugin records, but
 `references/plugin-authority.json` contains **zero verified installation
 items**. Its independently hashed `references/top10-release-set.json` is
 `candidate-pending` with `frozen: false`, no ranked entries or item-authority
-digests, and zero completed matrix tasks. The alpha.2 Harness runtime receipt
-set is also pending. Therefore:
+digests, and zero completed matrix tasks. The exact alpha.2 Harness runtime
+receipt set is promoted at 6/6 and is bound into Plugin authority, but that
+baseline gate creates no Plugin item authority. Therefore:
 
 - `verifiedInstallableCount` is 0;
 - no single Plugin may be prepared or installed;
@@ -72,16 +73,15 @@ set is also pending. Therefore:
 
 Do not create a temporary authority, infer a package from a repository, copy a
 website command, or mark an item verified to satisfy a request. Explain the
-pending evidence and stop before network access or Profile mutation.
-
+missing item-level evidence and stop before network access or Profile mutation.
 Inspect the machine authority with:
 
 ```bash
 node <skill-dir>/scripts/authority.mjs
 ```
 
-The remaining workflow below becomes executable only after a reviewed
-authority update includes real runtime receipts and flips the relevant gates.
+The remaining workflow below becomes executable only after a reviewed Plugin authority update includes all real item runtime and rollback receipts and flips
+the relevant Plugin gates.
 Promotion requires exactly 80 unique item records and matching catalog,
 required, verified, authority, and item counts; a partial set cannot open the
 single-item lane. Top10 must be the exact ordered ten-ID subset of that set,
