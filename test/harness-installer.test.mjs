@@ -3,10 +3,12 @@ import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import test from 'node:test';
 import { gzipSync } from 'node:zlib';
 
+import { sourceBuildEnvironment } from '../skills/dsh-harness-installer/scripts/build-source.mjs';
+import { packageManagerEnvironment } from '../skills/dsh-harness-installer/scripts/install-official.mjs';
 import {
   loadAuthority,
   loadInstallReceiptSchema,
@@ -340,6 +342,59 @@ test('alpha.2 installers fetch into a private store, install offline, and block 
   assert.match(installer, /\.dsh-install-incomplete/u);
   assert.match(runner, /NODE_OPTIONS/u);
   assert.match(runner, /NODE_PATH/u);
+});
+
+test('source build metadata uses only the verified commit without reopening Git access', async () => {
+  const authority = await loadAuthority();
+  const privateRoot = resolve('/private/dsh-alpha2-source-toolchain');
+  const injectedNames = [
+    'DSH_CLIENT_COMMIT_HASH',
+    'DSH_CLIENT_VERSION',
+    'NODE_OPTIONS',
+    'NODE_PATH',
+  ];
+  const inherited = Object.fromEntries(
+    injectedNames.map((name) => [name, process.env[name]])
+  );
+  for (const name of injectedNames) process.env[name] = `attacker-${name}`;
+  try {
+    const officialRuntimeEnvironment = packageManagerEnvironment(privateRoot);
+    const environment = sourceBuildEnvironment(
+      privateRoot,
+      authority.release.commit,
+      authority.release.commit
+    );
+    assert.equal(
+      environment.DSH_CLIENT_COMMIT_HASH,
+      '0a53fb55bea101816fa226bb964ae2bed71c343b'
+    );
+    assert.equal(environment.PATH, dirname(process.execPath));
+    assert.doesNotMatch(environment.PATH, /(?:^|[\\/])git(?:[\\/]|$)/iu);
+    assert.equal(Object.hasOwn(environment, 'DSH_CLIENT_VERSION'), false);
+    assert.equal(Object.hasOwn(environment, 'NODE_OPTIONS'), false);
+    assert.equal(Object.hasOwn(environment, 'NODE_PATH'), false);
+    assert.equal(
+      Object.hasOwn(officialRuntimeEnvironment, 'DSH_CLIENT_COMMIT_HASH'),
+      false
+    );
+    assert.throws(
+      () =>
+        sourceBuildEnvironment(
+          privateRoot,
+          'f'.repeat(40),
+          authority.release.commit
+        ),
+      /verified source commit differs from the build authority/u
+    );
+  } finally {
+    for (const name of injectedNames) {
+      if (inherited[name] === undefined) {
+        delete process.env[name];
+      } else {
+        process.env[name] = inherited[name];
+      }
+    }
+  }
 });
 
 test('Harness Skill states official npm plus source cross-build, no-PATH, and token-safe boundaries', async () => {

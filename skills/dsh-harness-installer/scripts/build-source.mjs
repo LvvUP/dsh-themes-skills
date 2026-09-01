@@ -20,6 +20,23 @@ function sha256(bytes) {
   return createHash('sha256').update(bytes).digest('hex');
 }
 
+export function sourceBuildEnvironment(
+  privateRoot,
+  verifiedCommit,
+  authorityCommit
+) {
+  if (verifiedCommit !== authorityCommit) {
+    fail('verified source commit differs from the build authority');
+  }
+  return {
+    ...packageManagerEnvironment(privateRoot),
+    // Upstream otherwise shells out to Git while deriving client build
+    // metadata. Keep Git outside the restricted PATH and provide only the
+    // exact commit that verifySourceCheckout already proved.
+    DSH_CLIENT_COMMIT_HASH: authorityCommit,
+  };
+}
+
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
     cwd: options.cwd,
@@ -74,6 +91,11 @@ export async function buildSource({ source, receipt: receiptInput }, authority) 
   try {
     const toolchain = await materializePnpmToolchain(join(privateRoot, 'pnpm'));
     const environment = packageManagerEnvironment(privateRoot);
+    const buildEnvironment = sourceBuildEnvironment(
+      privateRoot,
+      verified.commit,
+      authority.release.commit
+    );
     pnpmVersion = run(process.execPath, [toolchain.cli, '--version'], {
       capture: true,
       environment,
@@ -101,7 +123,7 @@ export async function buildSource({ source, receipt: receiptInput }, authority) 
     });
     run(process.execPath, [toolchain.cli, 'run', authority.source.buildScript], {
       cwd: verified.source,
-      environment,
+      environment: buildEnvironment,
       label: 'pinned source build',
     });
   } finally {

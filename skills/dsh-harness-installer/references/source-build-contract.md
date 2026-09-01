@@ -66,6 +66,13 @@ lifecycle scripts stay disabled; the explicit project build is separately
 visible and reviewable. A source build receipt is private local evidence only
 and can never authorize publication on its own.
 
+The sanitized package-manager/build environment intentionally keeps Git outside
+`PATH`. After the checkout identity probe succeeds, the builder supplies
+`DSH_CLIENT_COMMIT_HASH` from that verified exact commit so the reviewed
+upstream build does not need to rediscover it by spawning Git. Ambient values
+are ignored, and any mismatch between the verified commit and authority aborts
+before dependency or build execution.
+
 ## Profile and BrowserAuth safety
 
 Before a launch can mutate an existing `web` Profile, the eight governed
