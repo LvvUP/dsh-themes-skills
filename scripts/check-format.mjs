@@ -67,17 +67,8 @@ let checked = 0;
 
 for (const file of repositoryFiles()) {
   if (!isTextFile(file)) continue;
-  let bytes;
-  try {
-    bytes = await readFile(file);
-  } catch (error) {
-    // `git ls-files --cached` still lists tracked files deleted by a rename
-    // until the index is staged. Formatting must remain runnable against the
-    // working tree while such a rename is in progress.
-    if (error?.code === 'ENOENT') continue;
-    throw error;
-  }
   checked += 1;
+  const bytes = await readFile(file);
   let source;
   try {
     source = decoder.decode(bytes);

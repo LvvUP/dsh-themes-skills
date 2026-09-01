@@ -13,7 +13,6 @@ import { join, parse, relative, resolve } from 'node:path';
 import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
-export const WINDOWS_PRIVATE_ACL_TIMEOUT_MS = 60_000;
 const WINDOWS_PRIVATE_PATH_ENV = 'DSH_THEMES_PRIVATE_PATH';
 const WINDOWS_PRIVATE_KIND_ENV = 'DSH_THEMES_PRIVATE_KIND';
 const WINDOWS_PRIVATE_ACTION_ENV = 'DSH_THEMES_PRIVATE_ACTION';
@@ -142,7 +141,7 @@ async function secureWindowsPath(path, kind, action) {
           [WINDOWS_PRIVATE_ACTION_ENV]: action,
         },
         maxBuffer: 64 * 1024,
-        timeout: WINDOWS_PRIVATE_ACL_TIMEOUT_MS,
+        timeout: 15_000,
         windowsHide: true,
       }
     );

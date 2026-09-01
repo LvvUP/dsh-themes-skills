@@ -252,7 +252,7 @@ test('release state separates the certified RC.2 runtime baseline from item and 
       themeCount: 6,
       fullSkinCount: 39,
       catalogIndexSha256:
-        '7c3044a1df66179f6592cafe42001d3ef4b3fa178950b704b36c4f71d844e732',
+        'a894ed95febe69910281f4c603dd7ef392d5a004f8c5fc3f2b25cc67fa08de15',
       tupleSetSha256:
         '6806fb4dfa5e59524fd3e29b9c4c7b20e5ece8108b7efec2f4a42ed8f5e4c954',
       rollbackOnlyCount: 24,
@@ -276,8 +276,6 @@ test('release state separates the certified RC.2 runtime baseline from item and 
       currentFullSkinCount: state.promotedHostedCohort.currentFullSkinCount,
       currentCatalogIndexSha256:
         state.promotedHostedCohort.currentCatalogIndexSha256,
-      historicalPromotedCatalogIndexSha256:
-        state.promotedHostedCohort.historicalPromotedCatalogIndexSha256,
       currentCatalogTupleSetSha256:
         state.promotedHostedCohort.currentCatalogTupleSetSha256,
       historicalFinalCandidateCatalogIndexSha256:
@@ -296,8 +294,6 @@ test('release state separates the certified RC.2 runtime baseline from item and 
       currentThemeCount: 6,
       currentFullSkinCount: 39,
       currentCatalogIndexSha256:
-        '7c3044a1df66179f6592cafe42001d3ef4b3fa178950b704b36c4f71d844e732',
-      historicalPromotedCatalogIndexSha256:
         'a894ed95febe69910281f4c603dd7ef392d5a004f8c5fc3f2b25cc67fa08de15',
       currentCatalogTupleSetSha256:
         '6806fb4dfa5e59524fd3e29b9c4c7b20e5ece8108b7efec2f4a42ed8f5e4c954',
@@ -401,20 +397,10 @@ test('release documentation exposes runtime, item, and historical lanes', async 
   }
   const combined = [...contentsByPath.values()].join('\n');
   assert.ok(combined.includes(state.candidate.dshPackageVersion));
-  assert.match(
-    contentsByPath.get('README.md'),
-    /Verified six-job runtime baseline/
-  );
-  assert.match(
-    contentsByPath.get('README.zh-CN.md'),
-    /六任务已验证运行基线/
-  );
-  assert.match(combined, /no item authority|grants zero item authority|不授予任何条目权威/i);
-  assert.match(combined, /alpha\.2/);
-  assert.match(combined, /0\/66 tasks|66 required tasks/);
-  assert.match(combined, /showcase-only/);
-  assert.match(contentsByPath.get('README.md'), /fail-closed/i);
-  assert.match(contentsByPath.get('README.zh-CN.md'), /失败关闭/);
+  assert.ok(combined.includes(state.certifiedRuntimeBaseline.status));
+  assert.ok(combined.includes(state.certifiedRuntimeBaseline.certificationStatus));
+  assert.ok(combined.includes('separate-authority-required'));
+  assert.ok(combined.includes(state.certifiedRuntimeBaseline.certificationSourceSha));
   assert.ok(combined.includes(state.historicalV2.dshPackageVersion));
   assert.ok(combined.includes(state.historicalV1.dshPackageVersion));
   const security = await readFile(new URL('SECURITY.md', root), 'utf8');
@@ -443,7 +429,7 @@ test('informational release state cannot change executable baseline gates', asyn
   }
 });
 
-test('Manager keeps alpha.1 and RC.8 history while the separate community lane is closed on alpha.2', async () => {
+test('Manager V3 and the separate 11-record community authority are open only on final RC.8 evidence', async () => {
   const finder = await readFile(
     new URL('skills/dsh-theme-finder/scripts/find-themes.mjs', root),
     'utf8'
@@ -468,76 +454,11 @@ test('Manager keeps alpha.1 and RC.8 history while the separate community lane i
       'utf8'
     )
   );
-  const communityPolicy = JSON.parse(
-    await readFile(
-      new URL(
-        'skills/dsh-community-skin-installer/references/baseline-policy.json',
-        root
-      ),
-      'utf8'
-    )
-  );
-  const alpha2Recertification = JSON.parse(
-    await readFile(
-      new URL(
-        'skills/dsh-community-skin-installer/references/alpha2-recertification.json',
-        root
-      ),
-      'utf8'
-    )
-  );
-  const alpha1Bytes = await readFile(
-    new URL(
-      'skills/dsh-community-skin-installer/references/alpha1-recertification.json',
-      root
-    )
-  );
 
   assert.match(finder, /runtimeAttestationSha256/);
   assert.match(manager, /validateV3/);
   assert.doesNotMatch(manager, /rejectPendingV3/);
-  assert.match(communityGate, /alpha2GateCertified/);
-  assert.match(communityGate, /ALPHA2_RECERTIFICATION_SHA256/);
-  assert.equal(communityPolicy.defaultOperationalLane, 'currentAlpha2');
-  assert.equal(communityPolicy.currentAlpha2.installable, false);
-  assert.equal(
-    communityPolicy.currentAlpha2.websiteDistribution,
-    'external-showcase'
-  );
-  assert.equal(
-    communityPolicy.currentAlpha2.websiteInstallability,
-    'showcase-only'
-  );
-  assert.equal(
-    communityPolicy.currentAlpha2.websiteCompatibility,
-    'verification-pending'
-  );
-  assert.equal(
-    alpha2Recertification.baseline.sourceCommit,
-    '0a53fb55bea101816fa226bb964ae2bed71c343b'
-  );
-  assert.equal(
-    alpha2Recertification.baseline.sourceTree,
-    '64ccbfa8e0caa4711cd4a75717ef9e022657961b'
-  );
-  assert.equal(alpha2Recertification.gate.requiredItems, 11);
-  assert.equal(alpha2Recertification.matrix.requiredTotalTasks, 66);
-  assert.equal(alpha2Recertification.gate.reviewedItems, 0);
-  assert.equal(alpha2Recertification.gate.completedTasks, 0);
-  assert.equal(alpha2Recertification.gate.installableItems, 0);
-  assert.equal(alpha2Recertification.gate.installable, false);
-  assert.equal(alpha2Recertification.gate.showcasePublicationAllowed, true);
-  assert.equal(alpha2Recertification.gate.installPublicationAllowed, false);
-  assert.equal(
-    alpha2Recertification.historicalAuthority.alpha1MayAuthorizeAlpha2,
-    false
-  );
-  assert.equal(
-    createHash('sha256').update(alpha1Bytes).digest('hex'),
-    '9ecc86474cba557c445ae21b8e479aa3f1b55cb8b2768faa6ed73952cc7b1552'
-  );
-  assert.equal(communityPolicy.currentAlpha1.historicalAtCapture, true);
-  assert.equal(communityPolicy.currentAlpha1.mayAuthorizeCurrent, false);
+  assert.match(communityGate, /managerBaselineCertified/);
   assert.equal(catalog.managerGate.installable, true);
   assert.equal(catalog.managerGate.certificationStatus, 'certified-installable');
   assert.equal(
@@ -552,8 +473,5 @@ test('Manager keeps alpha.1 and RC.8 history while the separate community lane i
   assert.ok(
     catalog.skins.every((skin) => skin.runtimeStatus === 'runtime-verified')
   );
-  assert.equal(communityPolicy.certified.historicalAtCapture, true);
-  assert.equal(communityPolicy.certified.installableAtCapture, true);
-  assert.equal(communityPolicy.certified.installable, false);
   assert.match(communityGate, /RUNTIME_RECEIPT_SHA256/);
 });

@@ -25,16 +25,6 @@
     "evidencePath": "runtime-baseline.dsh-0.1.1-rc.2.json",
     "evidenceSha256": "450fcefc76026a312def640c6cac5dedf8386469860f4be883050a6c5fa283dc"
   },
-  "alpha2V4Candidate": {
-    "status": "candidate-pending",
-    "installable": false,
-    "promotionAllowed": false,
-    "candidateCount": 54,
-    "requiredRuntimeJobs": 6,
-    "completedRuntimeJobs": 0,
-    "authorityPath": "references/alpha2-v4-candidate-authority.json",
-    "authoritySha256": "1ce7c213460b8929c9adb0478684cf4608575d2e0a8832993609864cbe72727a"
-  },
   "candidate": {
     "status": "certification-pending",
     "historicalAtCapture": true,

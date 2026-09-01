@@ -6,5 +6,5 @@ import test from 'node:test';
 test('all skill metadata and scripts validate', () => {
   const result = spawnSync(process.execPath, [resolve('scripts/validate-skills.mjs')], { encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /Validated 7 skills/);
+  assert.match(result.stdout, /Validated 5 skills/);
 });

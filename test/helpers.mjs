@@ -29,12 +29,7 @@ export async function run(script, args, options = {}) {
     let stderr = '';
     child.stdout.on('data', (chunk) => { stdout += chunk; });
     child.stderr.on('data', (chunk) => { stderr += chunk; });
-    child.on('close', (code, signal) => resolvePromise({
-      code,
-      signal,
-      stdout,
-      stderr,
-    }));
+    child.on('close', (code) => resolvePromise({ code, stdout, stderr }));
   });
 }
 

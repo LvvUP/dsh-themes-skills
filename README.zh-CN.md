@@ -2,184 +2,183 @@
 
 # DSH-Themes Skills
 
-**按用途选择 Theme、Full Skin 或 Plugin，复制一个公开 `#NNNN`，再由 Skills 解析精确权威、在修改前征求同意，并保留回滚路径。**
+**公开 `#NNNN` 首先用于识别条目，并不承诺可以安装。Finder 可以发现全部已发布条目；只有站内托管或社区授权匹配项才会解析制品并安装，其余条目只返回证据或官方来源后停止。**
 
 [English](README.md) · [简体中文](README.zh-CN.md)
 
-[![仓库版本 0.8.0](https://img.shields.io/badge/repository-0.8.0-246BCE)](package.json)
-[![DSH 基线 0.1.2-alpha.2](https://img.shields.io/badge/DSH-0.1.2--alpha.2-5B67D8)](skills/dsh-harness-installer/references/alpha2-release-authority.json)
-[![Harness 已运行认证 6/6](https://img.shields.io/badge/Harness%20operational-6%2F6-2E8B57)](skills/dsh-harness-installer/references/alpha2-release-authority.json)
-[![Plugin 权威 0/80](https://img.shields.io/badge/Plugin%20authority-0%2F80-C58B20)](skills/dsh-plugin-installer/references/plugin-authority.json)
+[![Version 0.7.2](https://img.shields.io/badge/version-0.7.2-246BCE)](package.json)
+[![RC.2 运行基线已认证](https://img.shields.io/badge/DSH%200.1.1--rc.2-%E8%BF%90%E8%A1%8C%E5%9F%BA%E7%BA%BF%E5%B7%B2%E8%AE%A4%E8%AF%81-16836B)](skills/dsh-theme-manager/references/runtime-baseline.dsh-0.1.1-rc.2.json)
 [![CI](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/LvvUP/dsh-themes-skills/actions/workflows/ci.yml)
-[![许可证：Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-246BCE)](LICENSE)
+[![Node.js 22/24](https://img.shields.io/badge/Node.js-22.19%20%7C%2024.15-16324F)](package.json)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-246BCE)](LICENSE)
 
-### [前往 dsh-themes.com 浏览目录 →](https://dsh-themes.com/zh/explore)
+### [前往 dsh-themes.com 探索 Theme、Full Skin 与精选 Plugin →](https://dsh-themes.com/zh/explore)
 
 </div>
 
-> [!IMPORTANT]
-> 本仓库的 `0.8.0` 线仍在认证中，本文不会把它描述成已经发布、可以安装的 Skills Release。精确的上游官方 npm 预发布包 `@deepseek-ai/dsh@0.1.2-alpha.2` 已通过并晋级全部 **6/6** 运行任务，成为 Harness 的 operational installation baseline。该晋级既不代表本 Skills 包已发布，也不授权任何目录条目：Plugin 权威仍为 **0/80**，V4 仍为 **0/54**，社区 alpha.2 复证仍为 **0/66**，Top10 也保持关闭。
+版本 **0.7.2** 正式发布默认分支已复核的精确 `#NNNN` 表述，以及“可发现不等于可安装”的说明。它仍是基于未改变的 v0.7.0 晋级批次发布的纯文档版本：制品字节、摘要、安装权限与历史证据均未改变。13 个精确 Full Skin 只有在两项必需运行阶段全部通过后，才进入 DeepSeek Harness **`0.1.0-rc.8` 可运行逐项通道**。当前可执行权威为 45 个站内元组（6 个 Theme + 39 个 Full Skin）；经过加密来源验证的 **`0.1.1-rc.2` 运行基线**仍是独立、非逐项权威：
 
-## 你能获得什么
+- **RC.2 运行基线：**六个操作系统/Node 任务全部通过，最终归档和独立 Sigstore 来源证明校验成功。这说明固定的 Harness 基线可以用于生产验证。
+- **主题、皮肤和插件安装：**RC.2 还没有逐项安装权威，因此 Finder 对 RC.2 返回 0 个条目，也不会交给安装器。基线认证不会自动让某个目录条目变成可安装项目。
+- **RC.8 逐项通道：**现在包含 45 个精确站内制品，以及保持不变的 11 条社区允许记录；每一项仍由独立的逐项证据约束。
+- **已晋级 Full Skin `#2030–#2041 + #2043`：**精确字节先后通过真实 capture-candidate 与重建字节 certify-final，之后才原子发布并获得 Finder-to-Manager 权威。`#2042` 已签发给另一条记录，从未属于本批次。
 
-DSH Themes 把“选择”和“安装”拆开。网站帮助用户比较使用效果；本仓库提供一组职责收敛的 Skills，让 Agent 解析一个公开编号、展示精确来源与能力、取得同意、快照指定 Web Profile，并在验收失败时恢复。
+这种分层可以防止“运行测试通过”被误用成“任何主题都能安装”。
 
-- **一个面向用户的标识符：**只复制目录卡片上的四位 `#NNNN`。名称、slug、包坐标、URL 和哈希都不是替代选择器。
-- **一个对应安装器：**Finder 先判定记录类型，再且只再交给负责该类型的安装器。
-- **有用的拒绝：**权威缺失、过期、不完整或尚未晋级时，在修改 Profile 前停止，并说明缺少哪一项证据。
-- **可恢复的事务：**所有修改通道先预检完整计划、一次询问、先做快照，再冷启动与探测，最后提交或恢复。
+当前目录权威共 **174 条：21 个 Theme、66 个 Skin、87 个 Curated Plugin**。其中 **166 条已发布：21 个 Theme、65 个 Skin、80 个 Curated Plugin**，另有 8 条未发布。Theme + Skin Gallery 共 86 项，站内权威包含 45 个制品（6 个 Theme + 39 个 Full Skin）。
 
-## 可验证的真实证明
+## 从这里开始
 
-### 当前已有证据
+### 通用安装
 
-| 声明 | 仓库内证据 | 当前边界 |
-| --- | --- | --- |
-| 官方 alpha.2 npm 运行时 | [`alpha2-release-authority.json`](skills/dsh-harness-installer/references/alpha2-release-authority.json) 固定了精确的 `@deepseek-ai/dsh@0.1.2-alpha.2`、Registry 签名、integrity、tarball SHA-256 与安装后 CLI SHA-256 | [运行 `33463453889`，attempt 1](https://github.com/LvvUP/dsh-themes-skills/actions/runs/33463453889) 的 **6/6** 精确任务全部通过；经复核的签名回执集已晋级为 `publishedInstallable: true` |
-| 精确 alpha.2 源码交叉构建 | 官方 tag `dsh-v0.1.2-alpha.2`、commit、tree、lockfile、Node 任务组合与 `pnpm@11.7.0` 分开固定 | 源码证据不能证明构建结果与 npm 包字节相等 |
-| Plugin 目录 | 网站展示 80 条精选记录；[`plugin-authority.json`](skills/dsh-plugin-installer/references/plugin-authority.json) 的结构校验通过 | 已验证可安装条目：**0/80**；权威条目数：**0** |
-| Top10 | [`top10-release-set.json`](skills/dsh-plugin-installer/references/top10-release-set.json) 保存了关闭状态的 Release Set 门禁 | 没有条目、尚未冻结、不可安装 |
-| 历史基线 | RC.8 逐项权威与 RC.2 六任务运行基线继续留在仓库中并保持不可变 | 它们只授权各自精确的历史范围，都不能晋级 alpha.2 |
+`#NNNN` 首先启动身份解析，而不是直接安装。Finder 可以发现全部已发布的 Theme、Skin 与 Curated Plugin；只有精确匹配站内托管或社区授权的结果才能继续解析制品并安装。其余结果只返回已复核证据或官方来源，然后停止。下面的示例首先要求 Skill 对条目分类。
 
-下面两条命令不会修改 Profile，可以复现当前计数：
-
-```bash
-node skills/dsh-harness-installer/scripts/authority.mjs
-node skills/dsh-plugin-installer/scripts/authority.mjs
-```
-
-今天的预期结果是 Harness 权威已晋级为 **6/6**，而另一份 Plugin 权威仍有效但关闭在 **0/80**。Harness 成功绝不能被解释成条目安装权威。
-
-### 真实产品表面
-
-下面是仓库内保存的 DSH Themes 真实渲染截图，不是生成的效果图。它们证明用户实际浏览的目录表面，但**不能**证明包身份、运行行为、转载权或可安装性。
-
-![DSH Themes 桌面端真实展廊](docs/readme-assets/gallery-1440-light.png)
-
-![DSH Themes 桌面端精选 Plugin 目录](docs/readme-assets/plugins-1440-light.png)
-
-<p align="center">
-  <img src="docs/readme-assets/gallery-390-light.png" width="320" alt="DSH Themes 移动端真实展廊">
-</p>
-
-这个边界是有意设计的：证明板展示产品；链接的 JSON 权威与回执才控制修改。
-
-## 首次使用
-
-### 1. 按结果浏览
-
-打开 [dsh-themes.com](https://dsh-themes.com/zh/explore)，比较页面上的用途，进入符合目标的卡片。
-
-### 2. 复制精确公开编号
-
-只使用卡片或详情页上的四位编号，例如 `#3006`。不要用展示名称、仓库、包名或旧的 `DSH-*` 标签替代。
-
-### 3. 发出一条理解权威边界的请求
+如果你已经安装了 DeepSeek Harness，请在 DSH Themes 卡片或详情页左上角找到格式固定为 `#NNNN` 的唯一公开编号，例如 `#2004`，然后告诉 Agent：
 
 ```text
-请检查 DSH Themes #3006。只有在当前精确权威已验证时才安装；否则说明关闭的门禁，不要修改我的 Profile。
+请帮我安装 DSH Themes 的 #2004。
 ```
 
-Finder 解析类型与状态。只有所有精确门禁都通过、并且用户批准展示的计划后，对应安装器才可以继续。
+这就是普通用户需要提供的全部内容。你不需要准备包名、版本、下载地址、`.tgz` 路径或校验值。Skill 会在后台解析这些信息，确认每个字段都指向同一个条目，说明即将进行的修改，并在真正更改 profile 前向你确认。
 
-### 4. 把可运行的 Harness 通道与关闭的条目通道分开
+`DSH-2206`、`DSH-FS-009`、名称、slug 和详情页地址属于旧标记、内部坐标或查找线索，**不是**第二套安装编号。
 
-精确的 alpha.2 Harness 配置只有在 `dsh-harness-installer` 验证已晋级权威、并且用户批准计划后才可以继续。目录条目仍是独立门禁：Plugin 为 **0/80**、V4 为 **0/54**、社区复证为 **0/66**。对于这些条目请求，正确结果仍是识别条目、展示缺失的逐项证据，然后在不修改任何内容的情况下停止。
+从已发布且不可变的 `v0.7.2` 标签安装一次配套 Skill：
 
-### Skills 包可用性
+```bash
+npx --yes skills@1.5.23 add \
+  https://github.com/LvvUP/dsh-themes-skills/tree/v0.7.2 \
+  --skill dsh-theme-finder \
+  --skill dsh-theme-manager \
+  --skill dsh-community-skin-installer
+```
 
-本文有意暂不提供 `v0.8.0` 安装命令。不要从 `main`、`latest`、分支名或其他可变引用安装这一版本线。只有不可变 Skills Release 及其声明的权威已经发布并验证后，面向用户的固定标签命令才应出现在这里。
+不要把固定版本替换成 `main`、`latest` 或 `next`。默认分支可能包含更新的文档或待审工作，不构成安装权威。
 
-## 从 `#ID` 到对应安装器
+### 专属安装
 
-![一个 DSH Themes 公开编号经过 Finder 确定性路由到对应类型安装器](docs/assets/readme/id-finder-installer-flow.svg)
+在 [dsh-themes.com](https://dsh-themes.com/zh) 打开 Theme、Full Skin 或精选 Plugin 详情页。Finder 统一输出规范类型 `plugin`；旧输入 `ui-extension` 仅作为兼容别名保留。页面的复制按钮会使用相同的简短提示词，并自动放入当前页面的公开 `#NNNN`：
 
-| Finder 结果 | 负责的 Skill | 当前行为 |
+`#NNNN` 是每个已发布条目的查找地址，并不承诺每个条目都能安装。只有精确匹配站内权威或社区逐项权威的记录，才能显示并完成安装器交接。大多数 Curated Plugin 仅供展示并提供官方项目链接，永远不会交给 Theme Manager。
+
+```text
+请帮我安装 DSH Themes 的 #2004。
+```
+
+通用安装与专属安装使用同一个解析器和同一套失败关闭检查。如果条目待验证、仅供展示、无法唯一匹配或证据冲突，Agent 会直接说明暂时不能安装，而不会让你收集一长串技术字段。
+
+### 我还没有安装 DeepSeek Harness
+
+请先使用 [DSH Themes 安装页面](https://dsh-themes.com/zh/install)中独立的**安装 DeepSeek Harness**任务。确认 DSH 能正常打开后，再选择一个 `#NNNN`。
+
+Harness 安装与目录内容安装会始终分开。主题 Skill 不会在安装条目时顺带安装 Node.js、Homebrew、`apt` 软件包或 DeepSeek Harness，也不会在背后降级已有 DSH。
+
+<details>
+<summary>高级说明：精确的 Harness 测试边界</summary>
+
+- 已测试 Node 22 中的 `22.19.0` 或更高版本，以及 Node 24 中的 `24.15.0` 或更高版本。运行系统级安装器需要单独请求，并在执行前取得即时明确同意。
+- 固定启动命令是 `npx @deepseek-ai/dsh@0.1.1-rc.2 web`，对应官方 commit `b150a551b8d465e31e418e1b2eaf5e79bbb7d28e`。
+- 只打开 DSH 输出的本机回环地址，然后在 DSH 设置中配置模型供应商和模型。不要把凭据放入主题提示词。
+- RC.2 能启动不等于 RC.2 条目获得安装权威，也不允许暗中降级为 RC.8。
+
+</details>
+
+## 哪些内容已经认证？
+
+| 通道 | 已验证证据 | 结果 |
 | --- | --- | --- |
-| `#1xxx` Theme 或站内 `#2xxx` Full Skin | `dsh-theme-manager` | 只接受自身精确逐项权威；不会从历史记录推导 alpha.2 权威 |
-| 社区 `#2xxx` Skin | `dsh-community-skin-installer` | 在当前基线的逐项与回滚回执晋级前仅可检查 |
-| `#3xxx` Plugin | `dsh-plugin-installer` | 权威为 0/80 时只可检查/认证 |
-| Harness 配置，无目录编号 | `dsh-harness-installer` | 官方 npm 与源码交叉构建分属两条通道；精确 operational baseline 已晋级 6/6 |
+| **RC.2 运行基线** | 官方发布映射、冻结的 505 个包闭包、188 个精确 DSH 包、Linux/macOS/Windows × Node 22.19/24.15 的六项生命周期任务、最终证明、最终回执、确定性归档与独立 Sigstore 来源证明 | **`baseline-certified`** / `verified-runtime-baseline`、`productionReady: true`；RC.2 可安装条目仍为 **0**，因为逐项权威是独立门槛 |
+| **RC.2 站内条目** | 已有基线证明；selector、重打包制品与逐项权威仍需单独复核 | Finder **不会读取 RC.2 目录**，返回 0 个条目，不产生安装交接 |
+| **RC.2 社区条目** | 已规划 11 个身份进行逐项重新认证 | **0/11 已验证，0 个可安装** |
+| **RC.8 逐项通道** | 最终 Manager 证明、45 个精确站内元组（6 个 Theme + 39 个 Full Skin），以及 11 个由独立规则约束的社区记录 | 只有每个条目的制品、权利、运行、同意和回滚门槛全部通过时才可运行 |
+| **v0.7.0 已晋级批次** | 13 个精确 Full Skin 元组（`#2030–#2041 + #2043`）；capture-candidate 与重建字节 certify-final 每阶段均包含 65 张真实模式截图和 1,010 个证据文件 | 两个阶段全部通过并原子进入 45 项权威后，才发布并允许执行 |
+| **历史捕获** | 最初的 RC.2 pending 与非晋级 smoke 字节 | 只用于不可变审计，不代表当前状态，也不授予权威 |
 
-`#NNNN` 只负责启动精确身份解析，从来不承诺安装。Finder 是只读的，也不会把 Harness 引导与条目修改合并成一个动作。
+正式 RC.2 基线运行：[GitHub Actions 32694257969](https://github.com/LvvUP/dsh-themes-skills/actions/runs/32694257969)，source `cc7546cb5ccd77002713171328972291ceaa12e6`，attempt `1`。
 
-## 两条 alpha.2 Harness 证据通道
+精确证据摘要：
 
-[`dsh-harness-installer`](skills/dsh-harness-installer/SKILL.md) 把上游运行时与源码交叉检查明确分开：
-
-| 通道 | 精确身份 | 能证明什么，以及不能证明什么 |
-| --- | --- | --- |
-| 官方 npm 运行时 | `@deepseek-ai/dsh@0.1.2-alpha.2`；tarball SHA-256 `5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47`；CLI SHA-256 `dc23f6c5dd7df8834e3e38bdb9609d77b459834681ae9b7133b417b0c35f3166` | 这是上游官方分发的预发布运行时。它有 Registry 签名，但没有 npm provenance attestation，也没有 `gitHead`。DSH Themes 已把完整签名六任务运行矩阵晋级为 operational installation baseline。 |
-| 精确源码交叉构建 | Tag `dsh-v0.1.2-alpha.2`；commit `0a53fb55bea101816fa226bb964ae2bed71c343b`；tree `64ccbfa8e0caa4711cd4a75717ef9e022657961b`；lockfile SHA-256 `6cc109a574218f51762474455c8d72e5f7c2625aedf25e85569dba1af7adcef0` | 它用 `pnpm@11.7.0` 验证干净、冻结的源码构建。它是独立证据，不是官方二进制，也不声明与 npm 包逐字节等价。 |
-
-已晋级的六任务门禁覆盖 Linux x64、macOS arm64、Windows x64，以及 Node `22.19.0` 与 `24.15.0` 的组合。安装器不会修改 `PATH`、安装 Node，也不会记录浏览器 token、cookie、Authorization Header 或秘密派生摘要。
-同一权威还保留上游 [SAFETY.md](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.1.2-alpha.2/SAFETY.md) 的精确字节；这份实验性安全说明始终属于面向用户的边界。
-
-## 混合 Plugin 分发与 Top10
-
-[`dsh-plugin-installer`](skills/dsh-plugin-installer/SKILL.md) 识别两种未来逐项权威：
-
-- **`hosted-plugin-verified`** —— 只用于许可证允许转载的情况。经过复核的不可变 tarball 必须绑定精确源码/替换文件字节、manifest 摘要、许可证与修改说明、CycloneDX SBOM，以及运行/回滚回执。静态准备阶段不执行候选代码，并移除生命周期脚本。
-- **`upstream-plugin-verified`** —— 在不允许或无需转载时，使用精确 npm 版本、带版本的 GitHub Release 资产或完整 Git commit。可变别名、版本范围、分支、短 commit、隐藏重定向与未复核的 `prepare` 脚本都会被拒绝。
-
-[alpha.2 迁移图](skills/dsh-plugin-installer/references/alpha2-plugin-migration-map.md) 只是静态复核证据。图中的直接固定、站内适配路径、退役编号与替补池都不会授予安装权威。
-
-Top10 采用失败关闭。只有全部 80 条目录记录都取得逐项权威、每个入选条目通过六任务矩阵、集合按确定性规则评分并冻结且覆盖至少八类用途，同时共存、冲突、完整预检与完整回滚回执全部有效后，它才可能成为一个精确有序的事务。任何一项失败都会恢复整个批次，不存在“部分成功”状态。
-
-## 七个职责明确的 Skill
-
-| Skill | 单一职责 |
+| 证据 | SHA-256 |
 | --- | --- |
-| [`dsh-theme-finder`](skills/dsh-theme-finder/SKILL.md) | 解析一个公开 `#NNNN`、报告证据与状态，并且只交给负责该类型的安装器。 |
-| [`dsh-theme-manager`](skills/dsh-theme-manager/SKILL.md) | 在自身逐项权威范围内验证并处理一个精确站内 Theme 或 Full Skin。 |
-| [`dsh-community-skin-installer`](skills/dsh-community-skin-installer/SKILL.md) | 检查受治理的社区 Skin 通道，并在当前回执通过前阻止修改。 |
-| [`dsh-harness-installer`](skills/dsh-harness-installer/SKILL.md) | 验证官方 alpha.2 npm 运行时，并独立交叉构建固定源码，不修改 `PATH`。 |
-| [`dsh-plugin-installer`](skills/dsh-plugin-installer/SKILL.md) | 检查、准备、认证并在未来处理精确站内/上游 Plugin，提供原子回滚。 |
-| [`dsh-theme-creator`](skills/dsh-theme-creator/SKILL.md) | 在受支持创作通道内生成确定性纯数据 manifest 与本地栅格素材。 |
-| [`dsh-theme-submitter`](skills/dsh-theme-submitter/SKILL.md) | 验证投稿，并打开不携带凭据的网站交接。 |
+| 最终证明 | `4c41e96827bb03eb7c4d6138f5723864e91f0324b1aec8bcf3b3a1bc47ba3fb7` |
+| 最终回执 | `4a649841766b4bf3421c78906f98f29a186d718ea34b03daca96ee52e9a3db98` |
+| 六份回执集合 | `b3d663b43b257a43d138538454cd40eb976802bdcabf0409295f7956dc07f1ae` |
+| 确定性归档 | `0b4f03e9c3f76d241890f46330fce84f32183774a5d9228077835e2258c76f3e` |
+| 独立 Sigstore bundle | `b520580f05101b4783079aa52f0e159b2aa1a9e239f7e6a68e469f4c5d084b2d` |
 
-这些 Skills 保持分离，确保 Harness 结果不能静默授权某个条目、Theme 安装器不能吸收 Plugin 权限、目录描述也不能变成可执行权威。
+已晋级的 v0.7.0 批次及其两阶段证据使用独立摘要固定：
 
-## 机制与安全
+| 晋级证据 | SHA-256 |
+| --- | --- |
+| 当前 45 项索引 | `a894ed95febe69910281f4c603dd7ef392d5a004f8c5fc3f2b25cc67fa08de15` |
+| 当前 45 项元组集 | `6806fb4dfa5e59524fd3e29b9c4c7b20e5ece8108b7efec2f4a42ed8f5e4c954` |
+| 历史最终候选索引 | `f2701f3af25d90fb72c8c2a68592b1adb4294e8f3c9652f34db8ca487c6f4c63` |
+| Capture-candidate 计划 / 回执 | `f095f964d21357eabd9f9bcad310faa2ccc7292f0a75e9dd49b526140043a940` / `907ed35fd089b292f41f3daa47297fd9a9ca591b7b12f469d4ab651f6919111d` |
+| Capture 归档 / sums / 冻结身份 | `cef82c0db7601b869fa53c3f034e9ad5d77978d89a553b6bc0a646c05f87d029` / `b4ece672e5561816d1cf409b9de2cc8c2cda8afce04bc09dc101672847202863` / `e1935797b5eff2804cea2012924815fc4aaa6fbed002ec97d0796d8a8d1e0cb9` |
+| Certify-final 计划 / 回执 | `65eef49f75d873989d27de04b206e17eec55a4a7b4b992261ef856fa1b39b3fc` / `43bdf28f3947f558afe3273478b92502b015ead2be10278516b2624038d0795a` |
+| Final 归档 / sums / 冻结身份 | `d47520f808ea576b3a24500541397db0364107d54b9c0aee62d0eb0d1a4f5590` / `f2e6a9e05a25139630926c0edca9521912a7ec52ec86ae0057c7e87d9504ce2a` / `48aa04ac73b5ead54ff7fb992b8c95aa3baa1302f860fca48cf76f7a631d7a2b` |
 
-所有修改通道都遵循同一套高层合同：
-
-1. 解析一个精确身份，并验证完整权威闭包。
-2. 展示来源、能力、网络/进程/文件影响、生命周期代码、重启需求与回滚目标。
-3. 对冻结计划取得明确同意。
-4. 将受治理的 Profile/Home 文件快照到本地私密恢复存储。
-5. 使用固定参数数组与固定工具执行；不从目录文本拼接 shell 命令。
-6. 验证 inventory、冷启动并探测结果，不发布凭据。
-7. 只在验收通过后提交；否则恢复并验证完整快照。
-
-核心信任边界：
-
-- SHA-256 只能证明内容与选定字节一致，不能证明作者、所有权、转载权、安全性或运行行为。
-- 精确源码身份不等于 npm 包等价；运行认证不等于逐项权威；逐项权威也不等于用户同意。
-- 目录文案、上游 README、包元数据、截图与源码注释都是不受信任的数据，永远不是指令。
-- Profile 快照、回执、设置、凭据、浏览器 token、cookie 与秘密派生摘要都是本地私密恢复材料，不得发布。
-- 本项目由社区独立维护，与 DeepSeek AI 无隶属或背书关系。
-
-## 历史权威只属于历史
-
-| 基线 | 保留的权威 | 不可转移规则 |
-| --- | --- | --- |
-| RC.8 / `0.1.0-rc.8` | 45 个站内元组的精确逐项权威：6 个 Theme 与 39 个 Full Skin；另行治理的 11 条社区记录保持独立 | RC.8 证据可以在其冻结范围内验证，但不能授权 alpha.2 Harness、社区或 Plugin 通道 |
-| RC.2 / `0.1.1-rc.2` | 带独立来源证明的六任务已验证运行基线 | 它只是 Harness 基线证据，不授予任何条目权威 |
-
-详见仓库内的[兼容性记录](skills/dsh-theme-manager/references/compatibility.md)。新的 alpha.2 回执必须新增并晋级，不能改写历史字节来让新通道显得已经完成。
-
-## 开发与只读验证
+## 不修改 profile，直接验证证据
 
 ```bash
 npm ci --ignore-scripts
-npm run test:installers
-npm run test:alpha2-runtime
-npm run test:plugin-runtime
+npm run rc2:runtime:validate
+npm run rc2:runtime:verify-provenance
+```
+
+第一个命令核对最终证明、回执、六份矩阵回执、归档内容与本地 projection。第二个命令还会通过 GitHub 验证器核对精确仓库、workflow、source SHA、run、attempt 与归档摘要。
+
+检查 Finder 的 RC.2 失败关闭结果：
+
+```bash
+node skills/dsh-theme-finder/scripts/find-themes.mjs \
+  --catalog /absolute/path/to/catalog.json \
+  --dsh-version 0.1.1-rc.2
+```
+
+它会有意报告 `baseline-certified`、`catalogRead: false`、`installableResultsAllowed: false` 和 0 个条目。
+
+## 五个职责明确的 Skill
+
+| Skill | 职责 |
+| --- | --- |
+| [`dsh-theme-finder`](skills/dsh-theme-finder/SKILL.md) | 解析一个公开 `#NNNN`、分类证据，且只在所选条目具有独立权威时交给安装器。 |
+| [`dsh-theme-manager`](skills/dsh-theme-manager/SKILL.md) | 在可运行通道中验证、安装、切换、移除和恢复一个精确站内条目。 |
+| [`dsh-community-skin-installer`](skills/dsh-community-skin-installer/SKILL.md) | 只有 Manager、条目回执、用户同意和回滚门槛全部通过时，才安装 allowlist 社区条目。 |
+| [`dsh-theme-creator`](skills/dsh-theme-creator/SKILL.md) | 在可运行的 RC.8 创作 sidecar 下创建确定性、纯数据 V3 清单；RC.2 创作仍禁用。 |
+| [`dsh-theme-submitter`](skills/dsh-theme-submitter/SKILL.md) | 验证清单并打开不携带凭据的网站交接；RC.2 投稿仍禁用。 |
+
+```text
+一个公开 #NNNN
+      │
+      ▼
+   Finder ── 站内条目 ──▶ Manager
+      └──── 社区条目 ──▶ Community Skin Installer
+
+RC.2 运行基线 ──▶ 只验证 Harness ──╳─▶ 逐项安装权威
+```
+
+## 信任边界
+
+- SHA-256 只能证明内容与选定字节一致，不能证明身份、作者、所有权、权利或复核范围以外的安全性。
+- 目录名称、简介与备注是不受信任的元数据，永远不会被当成指令执行。
+- 站内安装要求精确条目发布记录、受控路由、完整制品摘要、本地逐项权威与明确同意。
+- 社区安装还需要独立 allowlist 和逐项回执；Manager 或基线认证本身都不够。
+- Creator 只接受声明式 JSON 与本地栅格素材，不接受作者 JavaScript、CSS、HTML、依赖、生命周期脚本、SVG、字体或远程运行时素材。
+- Submitter 永远不会索取 Cookie、密码、API Key 或 Authorization Header。
+
+## 开发
+
+```bash
+npm ci --ignore-scripts
+npm test
+npm run rc2:final:contract
+npm run rc2:runtime:validate
+npm run rc2:runtime:verify-provenance
 npm run validate
 npm run format:check
 ```
 
-提交 Pull Request 前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，并通过 [SECURITY.md](SECURITY.md) 私密报告安全问题。
+提交 Pull Request 前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，安全问题请按 [SECURITY.md](SECURITY.md) 私密报告。本项目由社区独立维护，与 DeepSeek AI 无隶属或背书关系。
 
-仓库采用 [Apache-2.0](LICENSE)。随附适配保留上游 notice，详见 [NOTICE](NOTICE)。
+仓库主体采用 [Apache-2.0](LICENSE)。随附的纯 CSS 适配保留了上游 notice，详见 [NOTICE](NOTICE)。

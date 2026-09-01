@@ -19,10 +19,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node }}
           cache: npm
@@ -30,11 +28,7 @@ jobs:
       - name: Confirm historical, certified, and candidate runners start unbootstrapped
         run: node -e "const fs=require('node:fs'); for (const p of ['skills/dsh-theme-manager/runtime/node_modules','skills/dsh-theme-manager/runtime-rc8/node_modules','skills/dsh-theme-manager/runtime-dsh-0.1.1-rc.2/node_modules']) if (fs.existsSync(p)) process.exit(1)"
       - name: Test the advertised clean-clone workflow
-        if: runner.os != 'Windows'
         run: npm test
-      - name: Test the advertised clean-clone workflow with serialized Windows ACL proof
-        if: runner.os == 'Windows'
-        run: npm test -- --test-concurrency=1
       - name: Keep RC.2 runtime certification explicitly pending
         run: node skills/dsh-theme-manager/scripts/validate-baseline-candidate.mjs
       - run: npm run validate

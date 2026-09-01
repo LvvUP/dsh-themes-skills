@@ -2,14 +2,12 @@
 
 import { createHash, randomBytes } from 'node:crypto';
 import { createWriteStream } from 'node:fs';
-import { access, link, mkdir, stat, unlink } from 'node:fs/promises';
+import { access, link, mkdir, readFile, stat, unlink } from 'node:fs/promises';
 import https from 'node:https';
 import { dirname, isAbsolute } from 'node:path';
 import { pipeline } from 'node:stream/promises';
 
-import { assertSkinCenterDownloadCohort } from './alpha2-community-certification.mjs';
-import { loadCommunityAuthority } from './catalog-authority.mjs';
-
+const catalogUrl = new URL('../references/community-catalog.json', import.meta.url);
 const DOWNLOAD_TIMEOUT_MS = 5 * 60 * 1000;
 
 function fail(message) {
@@ -44,8 +42,7 @@ function request(url, signal) {
 }
 
 const output = outputArg(process.argv.slice(2));
-const { catalog, alpha2Recertification } = await loadCommunityAuthority();
-assertSkinCenterDownloadCohort({ catalog, alpha2Recertification });
+const catalog = JSON.parse(await readFile(catalogUrl, 'utf8'));
 const authority = catalog.skinCenter;
 const parsed = new URL(authority.tarballUrl);
 if (parsed.protocol !== 'https:' || parsed.username || parsed.password) {

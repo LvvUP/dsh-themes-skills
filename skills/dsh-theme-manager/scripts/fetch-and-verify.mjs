@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import { createHash } from 'node:crypto';
-import { writeSync } from 'node:fs';
 import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { dirname, isAbsolute, resolve } from 'node:path';
 
@@ -140,9 +139,6 @@ async function main() {
 }
 
 main().catch((error) => {
-  writeSync(
-    process.stderr.fd,
-    `${error instanceof Error ? error.message : String(error)}\n`
-  );
+  process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
   process.exitCode = 1;
 });

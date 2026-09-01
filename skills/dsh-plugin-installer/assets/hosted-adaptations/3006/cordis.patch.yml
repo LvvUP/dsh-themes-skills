@@ -1,5 +1,0 @@
-# The immutable package identity is still non-installable until six-task
-# runtime certification promotes its release receipt into plugin authority.
-- insert:
-    - id: dsh-plugin-3006-better-model-selector
-      name: '@dsh-themes/dsh-better-model-selector'

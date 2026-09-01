@@ -1,5 +1,0 @@
-packages: []
-
-autoInstallPeers: true
-dedupePeerDependents: true
-strictPeerDependencies: false

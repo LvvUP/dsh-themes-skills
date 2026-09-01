@@ -7,19 +7,13 @@ function fail(message) {
   throw new Error(`community baseline refused: ${message}`);
 }
 
-const laneName = process.argv[2] ?? 'currentAlpha2';
+const laneName = process.argv[2] ?? 'certified';
 if (
-  ![
-    'currentAlpha2',
-    'currentAlpha1',
-    'certified',
-    'certifiedRuntimeBaseline',
-    'candidate',
-  ].includes(laneName) ||
+  !['certified', 'certifiedRuntimeBaseline', 'candidate'].includes(laneName) ||
   process.argv.length > 3
 ) {
   fail(
-    'usage: inspect-baseline.mjs [currentAlpha2|currentAlpha1|certified|certifiedRuntimeBaseline|candidate]'
+    'usage: inspect-baseline.mjs [certified|certifiedRuntimeBaseline|candidate]'
   );
 }
 const policy = JSON.parse(
@@ -30,122 +24,21 @@ const evidencePath =
   laneName === 'certified' ? lane.catalogPath : lane.evidencePath;
 const evidenceSha256 =
   laneName === 'certified' ? lane.catalogSha256 : lane.evidenceSha256;
-const evidenceBytes = await readFile(
-  new URL(`../references/${evidencePath}`, import.meta.url)
-);
+const [evidenceBytes, receiptBytes] = await Promise.all([
+  readFile(new URL(`../references/${evidencePath}`, import.meta.url)),
+  readFile(new URL(`../references/${lane.receiptPath}`, import.meta.url)),
+]);
 if (createHash('sha256').update(evidenceBytes).digest('hex') !== evidenceSha256) {
   fail(`${laneName} evidence digest differs`);
 }
-let receiptBytes;
-if (lane.receiptPath) {
-  receiptBytes = await readFile(
-    new URL(`../references/${lane.receiptPath}`, import.meta.url)
-  );
-  if (
-    createHash('sha256').update(receiptBytes).digest('hex') !==
-    lane.receiptSha256
-  ) {
-    fail(`${laneName} receipt digest differs`);
-  }
+if (createHash('sha256').update(receiptBytes).digest('hex') !== lane.receiptSha256) {
+  fail(`${laneName} receipt digest differs`);
 }
 const evidence = JSON.parse(evidenceBytes.toString('utf8'));
-const receipt = receiptBytes
-  ? JSON.parse(receiptBytes.toString('utf8'))
-  : undefined;
+const receipt = JSON.parse(receiptBytes.toString('utf8'));
 const dshVersion =
-  lane.dshPackageVersion ??
-  evidence.dshPackageVersion ??
-  evidence.baseline?.dshPackageVersion;
+  evidence.dshPackageVersion ?? evidence.baseline?.dshPackageVersion;
 if (typeof dshVersion !== 'string') fail('exact DSH version is missing');
-if (
-  laneName === 'currentAlpha2' &&
-  (policy.schemaVersion !== 4 ||
-    policy.defaultOperationalLane !== 'currentAlpha2' ||
-    lane.status !== 'alpha2-item-runtime-evidence-pending' ||
-    lane.enabled !== true ||
-    lane.inspectionEnabled !== true ||
-    lane.installable !== false ||
-    lane.dshPackageVersion !== '0.1.2-alpha.2' ||
-    lane.sourceTag !== 'dsh-v0.1.2-alpha.2' ||
-    lane.sourceCommit !== '0a53fb55bea101816fa226bb964ae2bed71c343b' ||
-    lane.sourceTree !== '64ccbfa8e0caa4711cd4a75717ef9e022657961b' ||
-    lane.officialNpmPackage !== '@deepseek-ai/dsh' ||
-    lane.officialNpmTarballSha256 !==
-      '5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47' ||
-    lane.communityItemsRequired !== 11 ||
-    lane.communityItemsReviewed !== 0 ||
-    lane.communityTasksRequired !== 66 ||
-    lane.communityTasksCompleted !== 0 ||
-    lane.communityInstallableRecords !== 0 ||
-    lane.communityShowcaseRecords !== 11 ||
-    lane.websiteDistribution !== 'external-showcase' ||
-    lane.websiteInstallability !== 'showcase-only' ||
-    lane.websiteCompatibility !== 'verification-pending' ||
-    evidence.baseline?.baselineId !== lane.baselineId ||
-    evidence.gate?.status !== lane.status ||
-    evidence.gate?.requiredItems !== 11 ||
-    evidence.gate?.reviewedItems !== 0 ||
-    evidence.gate?.completedTasks !== 0 ||
-    evidence.gate?.installableItems !== 0 ||
-    evidence.gate?.installable !== false ||
-    evidence.gate?.showcasePublicationAllowed !== true ||
-    evidence.gate?.installPublicationAllowed !== false ||
-    evidence.matrix?.requiredTasksPerItem !== 6 ||
-    evidence.matrix?.requiredTotalTasks !== 66 ||
-    evidence.gate?.runtimeReceiptSetSha256 !== null ||
-    evidence.gate?.rollbackReceiptSetSha256 !== null ||
-    evidence.items?.length !== 11 ||
-    evidence.items.some(
-      (item) =>
-        item.status !== 'verification-pending' ||
-        item.reviewed !== false ||
-        item.completedTasks !== 0 ||
-        item.installable !== false ||
-        item.showcaseVisible !== true ||
-        JSON.stringify(item.ineligibilityReasons) !==
-          JSON.stringify(['alpha2-item-runtime-evidence-pending']) ||
-        item.runtimeReceiptSetSha256 !== null ||
-        item.rollbackReceiptSetSha256 !== null
-    ) ||
-    evidence.historicalAuthority?.alpha1MayAuthorizeAlpha2 !== false ||
-    evidence.historicalAuthority?.rc8MayAuthorizeAlpha2 !== false)
-) {
-  fail('current alpha2 lane is malformed or attempts promotion');
-}
-if (
-  laneName === 'currentAlpha1' &&
-  (policy.schemaVersion !== 4 ||
-    policy.defaultOperationalLane !== 'currentAlpha2' ||
-    lane.status !== 'historical-alpha1-item-runtime-evidence-pending' ||
-    lane.historicalAtCapture !== true ||
-    lane.enabled !== false ||
-    lane.inspectionEnabled !== false ||
-    lane.installable !== false ||
-    lane.mayAuthorizeCurrent !== false ||
-    lane.dshPackageVersion !== '0.1.2-alpha.1' ||
-    evidence.gate?.status !== 'alpha1-item-runtime-evidence-pending' ||
-    evidence.gate?.completedItems !== 0 ||
-    evidence.gate?.installable !== false ||
-    evidence.historicalAuthority?.mayAuthorizeAlpha1 !== false)
-) {
-  fail('historical alpha1 lane is malformed or attempts current promotion');
-}
-if (
-  laneName === 'certified' &&
-  (lane.status !== 'historical-certified-installable-at-capture' ||
-    lane.historicalAtCapture !== true ||
-    lane.enabled !== false ||
-    lane.installable !== false ||
-    lane.installableAtCapture !== true ||
-    lane.mayAuthorizeCurrent !== false ||
-    evidence.baseline?.dshPackageVersion !== '0.1.0-rc.8' ||
-    receipt?.status !== 'runtime-verified-install-authority' ||
-    receipt?.authority?.installable !== true ||
-    receipt?.summary?.itemsCovered !== 11 ||
-    receipt?.summary?.installableRecords !== 11)
-) {
-  fail('historical RC.8 lane is malformed or attempts current promotion');
-}
 if (
   laneName === 'candidate' &&
   (lane.status !== 'certification-pending' ||
@@ -199,30 +92,15 @@ process.stdout.write(`${JSON.stringify({
   lane: laneName,
   status: lane.status,
   enabled: lane.enabled,
-  inspectionEnabled: lane.inspectionEnabled,
   installable: lane.installable,
-  installableAtCapture: lane.installableAtCapture,
-  mayAuthorizeCurrent: lane.mayAuthorizeCurrent,
   productionReady: lane.productionReady,
   installableItems: lane.installableItems,
   itemInstallability: lane.itemInstallability,
   dshVersion,
   evidenceSha256,
   receiptSha256: lane.receiptSha256,
-  itemsPlanned:
-    evidence.gate?.requiredItems ??
-    receipt?.summary?.itemsPlanned ??
-    receipt?.summary?.runtimeMatrixRequired,
-  itemsReviewed: evidence.gate?.reviewedItems,
-  itemsVerified:
-    evidence.gate?.installableItems ??
-    receipt?.summary?.itemsVerified ??
-    receipt?.summary?.runtimeMatrixPassed,
-  installableRecords:
-    lane.communityInstallableRecords ?? receipt?.summary?.installableRecords,
-  showcaseRecords: lane.communityShowcaseRecords,
-  websiteDistribution: lane.websiteDistribution,
-  websiteInstallability: lane.websiteInstallability,
-  websiteCompatibility: lane.websiteCompatibility,
+  itemsPlanned: receipt.summary?.itemsPlanned ?? receipt.summary?.runtimeMatrixRequired,
+  itemsVerified: receipt.summary?.itemsVerified ?? receipt.summary?.runtimeMatrixPassed,
+  installableRecords: receipt.summary?.installableRecords,
   blockers: evidence.blockers ?? [],
 })}\n`);
