@@ -78,21 +78,26 @@ before dependency or build execution.
 The fixed upstream `build:web` script invokes `pnpm` by command name. The source
 lane therefore creates one ephemeral, builder-created command shim whose bytes,
 mode, file identity, Node path, pnpm CLI path, and pnpm CLI digest are verified
-again immediately before the build. Its base child `PATH` contains only that
-shim directory and the current Node directory; package-manager lifecycle code
-may prepend only `.bin` directories from the exact frozen installation. Caller
-PATH entries are discarded, and the lifecycle shell is an identity-checked
-absolute host shell rather than a caller `COMSPEC` or PATH command. The lane
-neither invokes Corepack nor admits an ambient pnpm command. This ephemeral
-child environment does not edit the user's shell or persistent `PATH`.
+again immediately before the build. On POSIX, that same private directory also
+contains fixed wrappers for `/usr/bin/dirname`, `/usr/bin/sed`, and
+`/usr/bin/uname`, the three host utilities used by pnpm's generated executable
+shims; their bytes and backing file identities are bound in the same check. Its
+base child `PATH` contains only that builder directory and the current Node
+directory; package-manager lifecycle code may prepend only `.bin` directories
+from the exact frozen installation. Caller PATH entries are discarded, and the
+lifecycle shell is an identity-checked absolute host shell rather than a caller
+`COMSPEC` or PATH command. The lane neither invokes Corepack nor admits an
+ambient pnpm or general system-command directory. This ephemeral child
+environment does not edit the user's shell or persistent `PATH`.
 
 The checkout path may not contain the platform PATH delimiter. Before
 installation the builder rejects every existing ignored `node_modules` tree.
 After the exact offline installation it rejects root lifecycle `.bin` entries
-that could shadow Node, npm, Git, or pnpm authority, writes the same fixed pnpm
-shim into the lifecycle-preferred root `.bin`, and verifies both shim locations.
-It removes that temporary lifecycle shim after the build and repeats the shim
-and shell identity checks immediately before the fixed build.
+that could shadow Node, npm, Git, pnpm, or the three POSIX utility authorities,
+writes the same fixed pnpm shim into the lifecycle-preferred root `.bin`, and
+verifies both shim locations. It removes that temporary lifecycle shim after
+the build and repeats the shim, utility, and shell identity checks immediately
+before the fixed build.
 
 These checks bind the deterministic builder inputs; they are not a concurrency
 isolation boundary for a local actor that can rewrite the checkout or temporary

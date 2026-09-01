@@ -184,12 +184,14 @@ async function writeNewJson(file, value) {
   return bytes;
 }
 
-async function readCanonicalJson(file, label) {
+async function readBoundedJsonBytes(file, label) {
   const info = await lstat(file);
   if (!info.isFile() || info.isSymbolicLink() || info.size < 2 ||
       info.size > MAX_EVIDENCE_FILE) fail(`${label} must be a bounded regular file`);
-  const bytes = await readFile(file);
-  assertNoRuntimeSecrets(bytes.toString('utf8'), label);
+  return readFile(file);
+}
+
+function parseCanonicalJson(bytes, label) {
   let value;
   try {
     value = JSON.parse(bytes);
@@ -200,6 +202,42 @@ async function readCanonicalJson(file, label) {
     fail(`${label} must use canonical JSON bytes`);
   }
   return { value, bytes };
+}
+
+async function readCanonicalJson(file, label) {
+  const bytes = await readBoundedJsonBytes(file, label);
+  assertNoRuntimeSecrets(bytes.toString('utf8'), label);
+  return parseCanonicalJson(bytes, label);
+}
+
+function assertNoValidatedPrivateReceiptSecrets(receipt, label) {
+  const projection = structuredClone(record(receipt, label));
+  const privacy = record(projection.privacy, `${label} privacy`);
+  if (privacy.capturesCredentialDerivedDigest !== false) {
+    fail(`${label} credential-derived digest assertion must be false`);
+  }
+  delete privacy.capturesCredentialDerivedDigest;
+  assertNoRuntimeSecrets(canonicalRuntimeJson(projection), label);
+}
+
+export async function readPrivateBuildReceipt(file, authority) {
+  const loaded = parseCanonicalJson(
+    await readBoundedJsonBytes(file, 'private build receipt'),
+    'private build receipt'
+  );
+  const value = validateBuildReceipt(loaded.value, authority);
+  assertNoValidatedPrivateReceiptSecrets(value, 'private build receipt');
+  return { value, bytes: loaded.bytes };
+}
+
+export async function readPrivateInstallReceipt(file, authority) {
+  const loaded = parseCanonicalJson(
+    await readBoundedJsonBytes(file, 'private install receipt'),
+    'private install receipt'
+  );
+  const value = validateInstallReceipt(loaded.value, authority);
+  assertNoValidatedPrivateReceiptSecrets(value, 'private install receipt');
+  return { value, bytes: loaded.bytes };
 }
 
 async function readBundledWorkflow(input) {
@@ -916,8 +954,11 @@ async function verifiedOfficialInstall(installRootInput, installReceiptPath, aut
   if (relationToHome === '' || relationToHome.startsWith('..') || path.isAbsolute(relationToHome)) {
     fail('official runtime install root must remain below the current user home');
   }
-  const loaded = await readCanonicalJson(path.resolve(installReceiptPath), 'private install receipt');
-  const installReceipt = validateInstallReceipt(loaded.value, authority);
+  const loaded = await readPrivateInstallReceipt(
+    path.resolve(installReceiptPath),
+    authority
+  );
+  const installReceipt = loaded.value;
   if (installReceipt.toolchain.platform !== task.platform ||
       installReceipt.toolchain.arch !== task.arch ||
       installReceipt.toolchain.nodeVersion !== task.nodeVersion) {
@@ -957,12 +998,12 @@ export async function runRuntimeTask({
   if (process.platform !== task.platform || process.arch !== task.arch ||
       process.versions.node !== task.nodeVersion) fail('runner does not match the requested authority tuple');
   const verified = await verifySourceCheckout(path.resolve(source), authority);
-  const buildInfo = await lstat(path.resolve(buildReceiptPath));
-  if (!buildInfo.isFile() || buildInfo.isSymbolicLink() || buildInfo.size > MAX_EVIDENCE_FILE) {
-    fail('private build receipt must be a bounded regular file');
-  }
-  const buildReceiptBytes = await readFile(path.resolve(buildReceiptPath));
-  const buildReceipt = validateBuildReceipt(JSON.parse(buildReceiptBytes), authority);
+  const loadedBuildReceipt = await readPrivateBuildReceipt(
+    path.resolve(buildReceiptPath),
+    authority
+  );
+  const buildReceiptBytes = loadedBuildReceipt.bytes;
+  const buildReceipt = loadedBuildReceipt.value;
   if (buildReceipt.toolchain.platform !== task.platform || buildReceipt.toolchain.arch !== task.arch ||
       buildReceipt.toolchain.nodeVersion !== task.nodeVersion) fail('build receipt tuple mismatch');
   const cli = path.join(verified.source, authority.source.builtCliPath);

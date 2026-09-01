@@ -1475,6 +1475,7 @@ test('remote verifier confines a 307 cookie bootstrap to the exact trusted path'
     let bootstrapRequests = 0;
     let otherPathRequests = 0;
     let foreignRequests = 0;
+    let secondRedirectRequests = 0;
     foreign = createServer(tls, (_request, response) => {
       foreignRequests += 1;
       response.end('cookie must not reach this server');
@@ -1538,6 +1539,7 @@ test('remote verifier confines a 307 cookie bootstrap to the exact trusted path'
         return;
       }
       if (request.url === '/api/themes/second-redirect/download/1.2.3') {
+        secondRedirectRequests += 1;
         response.writeHead(307, {
           location: '/api/themes/second-redirect/download/1.2.3',
           'set-cookie': 'dsh_download_identity=second-hop; Path=/; HttpOnly',
@@ -1604,13 +1606,18 @@ test('remote verifier confines a 307 cookie bootstrap to the exact trusted path'
         ['no-cookie', /requires both Location and Set-Cookie/],
         ['second-redirect', /second download redirect/],
       ]) {
+        const redirectsBefore = secondRedirectRequests;
         const result = await run(verifier, [
           '--source', `${origin}/api/themes/${slug}/download/1.2.3`,
           '--origin', origin,
           '--sha256', createHash('sha256').update(bytes).digest('hex'),
           '--output', join(directory, `${slug}.tgz`),
         ], { env });
-        assert.notEqual(result.code, 0);
+        if (slug === 'second-redirect') {
+          assert.equal(secondRedirectRequests - redirectsBefore, 2);
+        }
+        assert.equal(result.code, 1, result.stderr);
+        assert.equal(result.signal, null);
         assert.match(result.stderr, error);
       }
     });

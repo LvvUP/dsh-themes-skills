@@ -44,11 +44,24 @@ function sha256(bytes) {
 
 const sourcePnpmCommandBrand = Symbol('sourcePnpmCommand');
 const lifecyclePnpmCommandBrand = Symbol('lifecyclePnpmCommand');
+const posixBuildUtilities = Object.freeze({
+  dirname: '/usr/bin/dirname',
+  sed: '/usr/bin/sed',
+  uname: '/usr/bin/uname',
+});
 
 function sourcePnpmWrapperBytes(platform = process.platform) {
   return Buffer.from(platform === 'win32'
     ? '@ECHO OFF\r\nSETLOCAL DisableDelayedExpansion\r\n"%DSH_BUILD_PNPM_NODE%" "%DSH_BUILD_PNPM_CLI%" %*\r\nEXIT /B %ERRORLEVEL%\r\n'
     : '#!/bin/sh\nset -eu\nexec "$DSH_BUILD_PNPM_NODE" "$DSH_BUILD_PNPM_CLI" "$@"\n');
+}
+
+function sourceUtilityWrapperBytes(executable) {
+  if (process.platform === 'win32' ||
+      !Object.values(posixBuildUtilities).includes(executable)) {
+    fail('source-build utility wrapper is outside the fixed POSIX authority');
+  }
+  return Buffer.from(`#!/bin/sh\nset -eu\nexec "${executable}" "$@"\n`);
 }
 
 export function sourceBuildPath(bin, nodeDirectory) {
@@ -130,6 +143,26 @@ async function trustedScriptShell() {
   });
 }
 
+async function trustedPosixBuildUtilities() {
+  if (process.platform === 'win32') return Object.freeze([]);
+  const utilities = [];
+  for (const [name, requested] of Object.entries(posixBuildUtilities)) {
+    const executable = await realpath(requested);
+    if (executable !== requested) {
+      fail(`source-build ${name} utility is not the fixed /usr/bin file`);
+    }
+    utilities.push(Object.freeze({
+      executable,
+      identity: await stableRegularFileIdentity(
+        executable,
+        `source-build ${name} utility`
+      ),
+      name,
+    }));
+  }
+  return Object.freeze(utilities);
+}
+
 function inside(root, target) {
   const relation = relative(root, target);
   return relation !== '' && !relation.startsWith('..') && !isAbsolute(relation);
@@ -164,7 +197,9 @@ export async function verifyNoLifecycleToolShadow(source, allowedPnpmCommand) {
       throw error;
     }
     for (const entry of entries) {
-      if (!/^(?:git|node|npm|pnpm)(?:\..+)?$/iu.test(entry.name)) continue;
+      if (!/^(?:dirname|git|node|npm|pnpm|sed|uname)(?:\..+)?$/iu.test(
+        entry.name
+      )) continue;
       const candidate = join(bin, entry.name);
       if (allowedPnpmCommand?.[lifecyclePnpmCommandBrand] === true &&
           candidate === allowedPnpmCommand.wrapper && entry.isFile()) {
@@ -310,10 +345,16 @@ async function verifySourcePnpmCommand(command) {
   );
   const entries = await readdir(command.bin, { withFileTypes: true });
   const expectedWrapperName = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
+  const expectedEntries = [
+    expectedWrapperName,
+    ...command.utilities.map((utility) => utility.name),
+  ].sort();
+  const actualEntries = entries.map((entry) => entry.name).sort();
   if (bin !== command.bin || !binInfo.isDirectory() || binInfo.isSymbolicLink() ||
       (process.platform !== 'win32' && (binInfo.mode & 0o777) !== 0o700) ||
-      entries.length !== 1 || entries[0].name !== expectedWrapperName ||
-      !entries[0].isFile() || command.wrapper !== join(command.bin, expectedWrapperName) ||
+      JSON.stringify(actualEntries) !== JSON.stringify(expectedEntries) ||
+      entries.some((entry) => !entry.isFile()) ||
+      command.wrapper !== join(command.bin, expectedWrapperName) ||
       cli !== command.cli || !cliInfo.isFile() || cliInfo.isSymbolicLink() ||
       cliInfo.nlink !== 1 || node !== command.realNode ||
       scriptShell !== command.scriptShell ||
@@ -326,6 +367,22 @@ async function verifySourcePnpmCommand(command) {
     sourcePnpmWrapperBytes(),
     0o700
   );
+  for (const utility of command.utilities) {
+    const executable = await realpath(utility.executable);
+    const identity = await stableRegularFileIdentity(
+      utility.executable,
+      `source-build ${utility.name} utility`
+    );
+    if (executable !== posixBuildUtilities[utility.name] ||
+        !sameFileIdentity(identity, utility.identity)) {
+      fail(`source-build ${utility.name} utility binding changed`);
+    }
+    await verifyStablePrivateFile(
+      join(command.bin, utility.name),
+      sourceUtilityWrapperBytes(utility.executable),
+      0o700
+    );
+  }
 }
 
 export async function createSourcePnpmCommand(privateRootInput, toolchain) {
@@ -355,6 +412,7 @@ export async function createSourcePnpmCommand(privateRootInput, toolchain) {
   requireWindowsWrapperSafePath(process.execPath, 'certified Node path');
   requireWindowsWrapperSafePath(cli, 'private pnpm CLI path');
   const scriptShell = await trustedScriptShell();
+  const utilities = await trustedPosixBuildUtilities();
 
   const bin = join(privateRoot, 'source-build-bin');
   await mkdir(bin, { mode: 0o700 });
@@ -368,6 +426,15 @@ export async function createSourcePnpmCommand(privateRootInput, toolchain) {
   const wrapperBytes = sourcePnpmWrapperBytes();
   await writeFile(wrapper, wrapperBytes, { flag: 'wx', mode: 0o700 });
   if (process.platform !== 'win32') await chmod(wrapper, 0o700);
+  for (const utility of utilities) {
+    const utilityWrapper = join(bin, utility.name);
+    await writeFile(
+      utilityWrapper,
+      sourceUtilityWrapperBytes(utility.executable),
+      { flag: 'wx', mode: 0o700 }
+    );
+    await chmod(utilityWrapper, 0o700);
+  }
 
   const command = Object.freeze({
     bin: canonicalBin,
@@ -378,6 +445,7 @@ export async function createSourcePnpmCommand(privateRootInput, toolchain) {
     scriptShell: scriptShell.path,
     scriptShellIdentity: scriptShell.identity,
     systemRoot: scriptShell.systemRoot,
+    utilities,
     wrapper,
     [sourcePnpmCommandBrand]: true,
   });
