@@ -1694,9 +1694,16 @@ test('canonical #ID downgrades historical RC.8 community authority to alpha.2 sh
     'alpha2-community-recertification-pending'
   );
   assert.equal(output.items[0].communityRecertification.requiredItems, 11);
-  assert.equal(output.items[0].communityRecertification.completedItems, 0);
+  assert.equal(output.items[0].communityRecertification.reviewedItems, 0);
   assert.equal(output.items[0].communityRecertification.requiredTasks, 66);
   assert.equal(output.items[0].communityRecertification.completedTasks, 0);
+  assert.equal(output.items[0].communityRecertification.installableItems, 0);
+  assert.equal(output.items[0].communityRecertification.itemReviewed, false);
+  assert.equal(output.items[0].communityRecertification.itemInstallable, false);
+  assert.deepEqual(
+    output.items[0].communityRecertification.ineligibilityReasons,
+    ['alpha2-item-runtime-evidence-pending']
+  );
   assert.deepEqual(
     requests.map((request) => new URL(request.url).pathname),
     ['/api/dsh-directory']
@@ -1736,9 +1743,12 @@ test('canonical current alpha.2 community record remains inspect-only with no ha
     'alpha2-community-recertification-pending'
   );
   assert.equal(output.items[0].communityRecertification.requiredItems, 11);
-  assert.equal(output.items[0].communityRecertification.completedItems, 0);
+  assert.equal(output.items[0].communityRecertification.reviewedItems, 0);
   assert.equal(output.items[0].communityRecertification.requiredTasks, 66);
   assert.equal(output.items[0].communityRecertification.completedTasks, 0);
+  assert.equal(output.items[0].communityRecertification.installableItems, 0);
+  assert.equal(output.items[0].communityRecertification.itemReviewed, false);
+  assert.equal(output.items[0].communityRecertification.itemInstallable, false);
 });
 
 test('finder keeps local community matches discovery-only without a canonical #ID', async () => {

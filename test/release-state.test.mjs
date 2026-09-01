@@ -518,10 +518,12 @@ test('Manager keeps alpha.1 and RC.8 history while the separate community lane i
   );
   assert.equal(alpha2Recertification.gate.requiredItems, 11);
   assert.equal(alpha2Recertification.matrix.requiredTotalTasks, 66);
-  assert.equal(alpha2Recertification.gate.completedItems, 0);
+  assert.equal(alpha2Recertification.gate.reviewedItems, 0);
   assert.equal(alpha2Recertification.gate.completedTasks, 0);
+  assert.equal(alpha2Recertification.gate.installableItems, 0);
   assert.equal(alpha2Recertification.gate.installable, false);
-  assert.equal(alpha2Recertification.gate.publicationAllowed, false);
+  assert.equal(alpha2Recertification.gate.showcasePublicationAllowed, true);
+  assert.equal(alpha2Recertification.gate.installPublicationAllowed, false);
   assert.equal(
     alpha2Recertification.historicalAuthority.alpha1MayAuthorizeAlpha2,
     false

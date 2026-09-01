@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": ["schemaVersion", "purpose", "baseline", "matrix", "gate", "items", "historicalAuthority"],
   "properties": {
-    "schemaVersion": { "const": 1 },
+    "schemaVersion": { "const": 2 },
     "purpose": { "const": "alpha2-community-skin-item-recertification" },
     "baseline": {
       "type": "object",
@@ -53,14 +53,16 @@
     "gate": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["status", "requiredItems", "completedItems", "completedTasks", "installable", "publicationAllowed", "runtimeReceiptSetSha256", "rollbackReceiptSetSha256", "publicationRule"],
+      "required": ["status", "requiredItems", "reviewedItems", "completedTasks", "installableItems", "installable", "showcasePublicationAllowed", "installPublicationAllowed", "runtimeReceiptSetSha256", "rollbackReceiptSetSha256", "publicationRule"],
       "properties": {
         "status": { "const": "alpha2-item-runtime-evidence-pending" },
         "requiredItems": { "const": 11 },
-        "completedItems": { "const": 0 },
+        "reviewedItems": { "const": 0 },
         "completedTasks": { "const": 0 },
+        "installableItems": { "const": 0 },
         "installable": { "const": false },
-        "publicationAllowed": { "const": false },
+        "showcasePublicationAllowed": { "const": true },
+        "installPublicationAllowed": { "const": false },
         "runtimeReceiptSetSha256": { "type": "null" },
         "rollbackReceiptSetSha256": { "type": "null" },
         "publicationRule": { "type": "string", "minLength": 120 }
@@ -73,12 +75,16 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["catalogId", "slug", "status", "completedTasks", "runtimeReceiptSetSha256", "rollbackReceiptSetSha256"],
+        "required": ["catalogId", "slug", "status", "reviewed", "completedTasks", "installable", "showcaseVisible", "ineligibilityReasons", "runtimeReceiptSetSha256", "rollbackReceiptSetSha256"],
         "properties": {
           "catalogId": { "type": "integer", "minimum": 1000, "maximum": 9999 },
           "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
           "status": { "const": "verification-pending" },
+          "reviewed": { "const": false },
           "completedTasks": { "const": 0 },
+          "installable": { "const": false },
+          "showcaseVisible": { "const": true },
+          "ineligibilityReasons": { "const": ["alpha2-item-runtime-evidence-pending"] },
           "runtimeReceiptSetSha256": { "type": "null" },
           "rollbackReceiptSetSha256": { "type": "null" }
         }

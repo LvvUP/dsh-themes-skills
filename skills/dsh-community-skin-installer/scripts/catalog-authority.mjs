@@ -178,6 +178,16 @@ function expectedDistribution(skin) {
   };
 }
 
+function expectedCurrentDistribution(item) {
+  const verified =
+    item.status === 'runtime-verified-installable' && item.installable === true;
+  return {
+    kind: verified ? 'external-runtime-verified' : 'external-showcase',
+    installability: verified ? 'community-installer' : 'showcase-only',
+    compatibilityStatus: verified ? 'verified' : 'verification-pending',
+  };
+}
+
 function validateDirectoryRecord(
   selected,
   local,
@@ -235,7 +245,7 @@ function validateDirectoryRecord(
   const runtime = record(selected.runtime, 'runtime');
   exact(runtime.status, currentItem.status, 'runtime.status');
 
-  const expected = expectedDistribution({ runtimeStatus: currentItem.status });
+  const expected = expectedCurrentDistribution(currentItem);
   const distribution = record(selected.distribution, 'distribution');
   exact(distribution.kind, expected.kind, 'distribution.kind');
   exact(
@@ -425,13 +435,18 @@ export async function loadCommunityAuthority() {
     'current lane Harness authority sha256'
   );
   exact(currentLane.communityItemsRequired, 11, 'current required items');
-  exact(currentLane.communityItemsCompleted, 0, 'current completed items');
+  exact(currentLane.communityItemsReviewed, 0, 'current reviewed items');
   exact(currentLane.communityTasksRequired, 66, 'current required tasks');
   exact(currentLane.communityTasksCompleted, 0, 'current completed tasks');
   exact(
     currentLane.communityInstallableRecords,
     0,
     'current installable records'
+  );
+  exact(
+    currentLane.communityShowcaseRecords,
+    11,
+    'current showcase records'
   );
   exact(currentLane.websiteDistribution, 'external-showcase', 'website distribution');
   exact(currentLane.websiteInstallability, 'showcase-only', 'website installability');
@@ -508,10 +523,20 @@ export async function loadCommunityAuthority() {
   exact(alpha2Recertification.baseline?.baselineId, currentLane.baselineId, 'alpha2 baseline id');
   exact(alpha2Recertification.gate?.status, currentLane.status, 'alpha2 gate status');
   exact(alpha2Recertification.gate?.installable, false, 'alpha2 installability');
-  exact(alpha2Recertification.gate?.publicationAllowed, false, 'alpha2 publication status');
+  exact(
+    alpha2Recertification.gate?.showcasePublicationAllowed,
+    true,
+    'alpha2 showcase publication status'
+  );
+  exact(
+    alpha2Recertification.gate?.installPublicationAllowed,
+    false,
+    'alpha2 install publication status'
+  );
   exact(alpha2Recertification.gate?.requiredItems, 11, 'alpha2 required items');
-  exact(alpha2Recertification.gate?.completedItems, 0, 'alpha2 completed items');
+  exact(alpha2Recertification.gate?.reviewedItems, 0, 'alpha2 reviewed items');
   exact(alpha2Recertification.gate?.completedTasks, 0, 'alpha2 completed tasks');
+  exact(alpha2Recertification.gate?.installableItems, 0, 'alpha2 installable items');
   exact(alpha2Recertification.gate?.runtimeReceiptSetSha256, null, 'alpha2 runtime receipt set');
   exact(alpha2Recertification.gate?.rollbackReceiptSetSha256, null, 'alpha2 rollback receipt set');
 
@@ -603,13 +628,29 @@ export function validateCommunityRecord(
       )
     : validateLegacyRecord(selected, local, catalog);
 
-  const runtimeVerified = currentItem.status === 'runtime-verified';
+  const runtimeVerified =
+    currentItem.status === 'runtime-verified-installable' &&
+    currentItem.reviewed === true &&
+    currentItem.completedTasks === 6 &&
+    currentItem.installable === true &&
+    currentItem.showcaseVisible === true &&
+    Array.isArray(currentItem.ineligibilityReasons) &&
+    currentItem.ineligibilityReasons.length === 0 &&
+    /^[a-f0-9]{64}$/.test(currentItem.runtimeReceiptSetSha256 ?? '') &&
+    /^[a-f0-9]{64}$/.test(currentItem.rollbackReceiptSetSha256 ?? '');
   const alpha2GateCertified =
-    alpha2Recertification.gate?.status === 'certified-installable' &&
+    alpha2Recertification.gate?.status === 'alpha2-review-complete' &&
     alpha2Recertification.gate?.installable === true &&
-    alpha2Recertification.gate?.publicationAllowed === true &&
-    alpha2Recertification.gate?.completedItems ===
+    alpha2Recertification.gate?.installPublicationAllowed === true &&
+    alpha2Recertification.gate?.showcasePublicationAllowed === true &&
+    alpha2Recertification.gate?.reviewedItems ===
       alpha2Recertification.gate?.requiredItems &&
+    alpha2Recertification.gate?.completedTasks ===
+      alpha2Recertification.matrix?.requiredTotalTasks &&
+    alpha2Recertification.gate?.installableItems > 0 &&
+    alpha2Recertification.gate?.installableItems ===
+      alpha2Recertification.items.filter((item) => item.installable === true)
+        .length &&
     /^[a-f0-9]{64}$/.test(
       alpha2Recertification.gate?.runtimeReceiptSetSha256 ?? ''
     ) &&
@@ -620,11 +661,20 @@ export function validateCommunityRecord(
   if (normalized.shape !== 'directory-v1') {
     blockingReasons.push('legacy-record-not-install-authority');
   }
-  if (!runtimeVerified) blockingReasons.push('item-runtime-verification-pending');
+  if (!runtimeVerified) {
+    const itemReasons = Array.isArray(currentItem.ineligibilityReasons)
+      ? currentItem.ineligibilityReasons
+      : [];
+    blockingReasons.push(
+      ...(itemReasons.length > 0
+        ? itemReasons
+        : ['item-runtime-verification-not-installable'])
+    );
+  }
   if (!alpha2GateCertified) {
     blockingReasons.push('alpha2-recertification-gate-not-certified');
   }
-  if (runtimeVerified || alpha2GateCertified) {
+  if (runtimeVerified && alpha2GateCertified) {
     blockingReasons.push('alpha2-runtime-receipt-verifier-not-implemented');
   }
   const installable = blockingReasons.length === 0;

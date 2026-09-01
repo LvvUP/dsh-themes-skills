@@ -366,9 +366,11 @@ if (command === 'install') {
 ) {
   const currentGate = currentAuthority.alpha2Recertification.gate;
   if (
-    currentGate?.status !== 'certified-installable' ||
+    currentGate?.status !== 'alpha2-review-complete' ||
     currentGate?.installable !== true ||
-    currentGate?.publicationAllowed !== true
+    currentGate?.installPublicationAllowed !== true ||
+    currentGate?.reviewedItems !== currentGate?.requiredItems ||
+    currentGate?.installableItems < 1
   ) {
     fail(
       `${command} is blocked: alpha2-recertification-gate-not-certified; the Profile was not inspected or changed`

@@ -18,9 +18,9 @@ const harnessAuthorityUrl = new URL(
 );
 
 export const ALPHA2_RECERTIFICATION_SHA256 =
-  'c1456b221050479e70ee74e7eab5422414a1fe9043f6c63e5d91a194d80e06b8';
+  '9957b098139820f2b9acca089495e0b22c27c52323c5ecf881ce72087e5f92fd';
 export const ALPHA2_RECERTIFICATION_SCHEMA_SHA256 =
-  'ff4ba6954be7213d6ea14804ca67408b14af367ea54834684a6a4d93429d1103';
+  '944f8e27cb78bc25f81db05af0c4b0e7d51c9773f635ef82e75111d490c3cbd0';
 export const ALPHA2_HARNESS_AUTHORITY_SHA256 =
   '100e24ea87e111a7abb13aab5d8c81e38585319c27ea09ce82e62dd4fcc80094';
 export const ALPHA1_RECERTIFICATION_SHA256 =
@@ -104,7 +104,7 @@ export function validateAlpha2Recertification(
     ['schemaVersion', 'purpose', 'baseline', 'matrix', 'gate', 'items', 'historicalAuthority'],
     'authority'
   );
-  exact(authority.schemaVersion, 1, 'schemaVersion');
+  exact(authority.schemaVersion, 2, 'schemaVersion');
   exact(
     authority.purpose,
     'alpha2-community-skin-item-recertification',
@@ -133,10 +133,12 @@ export function validateAlpha2Recertification(
     [
       'status',
       'requiredItems',
-      'completedItems',
+      'reviewedItems',
       'completedTasks',
+      'installableItems',
       'installable',
-      'publicationAllowed',
+      'showcasePublicationAllowed',
+      'installPublicationAllowed',
       'runtimeReceiptSetSha256',
       'rollbackReceiptSetSha256',
       'publicationRule',
@@ -145,15 +147,27 @@ export function validateAlpha2Recertification(
   );
   exact(gate.status, 'alpha2-item-runtime-evidence-pending', 'gate.status');
   exact(gate.requiredItems, 11, 'gate.requiredItems');
-  exact(gate.completedItems, 0, 'gate.completedItems');
+  exact(gate.reviewedItems, 0, 'gate.reviewedItems');
   exact(gate.completedTasks, 0, 'gate.completedTasks');
+  exact(gate.installableItems, 0, 'gate.installableItems');
   exact(gate.installable, false, 'gate.installable');
-  exact(gate.publicationAllowed, false, 'gate.publicationAllowed');
+  exact(
+    gate.showcasePublicationAllowed,
+    true,
+    'gate.showcasePublicationAllowed'
+  );
+  exact(
+    gate.installPublicationAllowed,
+    false,
+    'gate.installPublicationAllowed'
+  );
   exact(gate.runtimeReceiptSetSha256, null, 'gate.runtimeReceiptSetSha256');
   exact(gate.rollbackReceiptSetSha256, null, 'gate.rollbackReceiptSetSha256');
   if (
     typeof gate.publicationRule !== 'string' ||
     !gate.publicationRule.includes('All 11 exact items') ||
+    !gate.publicationRule.includes('independently') ||
+    !gate.publicationRule.includes('showcase-only') ||
     !gate.publicationRule.includes('complete rollback')
   ) {
     fail('gate.publicationRule is incomplete');
@@ -173,7 +187,11 @@ export function validateAlpha2Recertification(
         'catalogId',
         'slug',
         'status',
+        'reviewed',
         'completedTasks',
+        'installable',
+        'showcaseVisible',
+        'ineligibilityReasons',
         'runtimeReceiptSetSha256',
         'rollbackReceiptSetSha256',
       ],
@@ -187,7 +205,15 @@ export function validateAlpha2Recertification(
     );
     if (!historical) fail(`item ${key} changes the historical allowlist`);
     exact(item.status, 'verification-pending', `${key}.status`);
+    exact(item.reviewed, false, `${key}.reviewed`);
     exact(item.completedTasks, 0, `${key}.completedTasks`);
+    exact(item.installable, false, `${key}.installable`);
+    exact(item.showcaseVisible, true, `${key}.showcaseVisible`);
+    exactObject(
+      item.ineligibilityReasons,
+      ['alpha2-item-runtime-evidence-pending'],
+      `${key}.ineligibilityReasons`
+    );
     exact(item.runtimeReceiptSetSha256, null, `${key}.runtimeReceiptSetSha256`);
     exact(item.rollbackReceiptSetSha256, null, `${key}.rollbackReceiptSetSha256`);
   }
@@ -261,11 +287,13 @@ export function validateAlpha2Recertification(
     status: gate.status,
     baselineId: authority.baseline.baselineId,
     requiredItems: gate.requiredItems,
-    completedItems: gate.completedItems,
+    reviewedItems: gate.reviewedItems,
     requiredTasks: authority.matrix.requiredTotalTasks,
     completedTasks: gate.completedTasks,
+    installableItems: gate.installableItems,
     installable: gate.installable,
-    publicationAllowed: gate.publicationAllowed,
+    showcasePublicationAllowed: gate.showcasePublicationAllowed,
+    installPublicationAllowed: gate.installPublicationAllowed,
     historicalAlpha1MayAuthorize: historical.alpha1MayAuthorizeAlpha2,
     historicalRc8MayAuthorize: historical.rc8MayAuthorizeAlpha2,
   };

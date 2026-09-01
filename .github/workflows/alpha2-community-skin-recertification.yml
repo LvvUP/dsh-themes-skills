@@ -61,7 +61,7 @@ jobs:
             --planned-target "${{ matrix.target }}" \
             --node-version "${{ matrix.node }}" \
             > "${{ runner.temp }}/pending-authority.json"
-          node -e 'const fs=require("node:fs");const r=JSON.parse(fs.readFileSync(process.argv[1],"utf8"));if(r.installable!==false||r.publicationAllowed!==false||r.completedTasks!==0||r.runtimeExecuted!==false||r.receiptProduced!==false)process.exit(1)' "${{ runner.temp }}/pending-authority.json"
+          node -e 'const fs=require("node:fs");const r=JSON.parse(fs.readFileSync(process.argv[1],"utf8"));if(r.reviewedItems!==0||r.completedTasks!==0||r.installableItems!==0||r.installable!==false||r.showcasePublicationAllowed!==true||r.installPublicationAllowed!==false||r.runtimeExecuted!==false||r.receiptProduced!==false)process.exit(1)' "${{ runner.temp }}/pending-authority.json"
 
       - name: Do not upload or publish runtime receipts
         shell: bash

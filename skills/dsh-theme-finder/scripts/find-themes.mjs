@@ -38,10 +38,11 @@ if (
   COMMUNITY_CURRENT?.sourceTree !==
     '64ccbfa8e0caa4711cd4a75717ef9e022657961b' ||
   COMMUNITY_CURRENT?.communityItemsRequired !== 11 ||
-  COMMUNITY_CURRENT?.communityItemsCompleted !== 0 ||
+  COMMUNITY_CURRENT?.communityItemsReviewed !== 0 ||
   COMMUNITY_CURRENT?.communityTasksRequired !== 66 ||
   COMMUNITY_CURRENT?.communityTasksCompleted !== 0 ||
   COMMUNITY_CURRENT?.communityInstallableRecords !== 0 ||
+  COMMUNITY_CURRENT?.communityShowcaseRecords !== 11 ||
   COMMUNITY_CURRENT?.websiteDistribution !== 'external-showcase' ||
   COMMUNITY_CURRENT?.websiteInstallability !== 'showcase-only' ||
   COMMUNITY_CURRENT?.websiteCompatibility !== 'verification-pending' ||
@@ -100,7 +101,7 @@ if (
 }
 const COMMUNITY_ALPHA2 = JSON.parse(communityCurrentBytes.toString('utf8'));
 if (
-  COMMUNITY_ALPHA2.schemaVersion !== 1 ||
+  COMMUNITY_ALPHA2.schemaVersion !== 2 ||
   COMMUNITY_ALPHA2.purpose !== 'alpha2-community-skin-item-recertification' ||
   COMMUNITY_ALPHA2.baseline?.baselineId !==
     `deepseek-harness/dsh-v0.1.2-alpha.2@${COMMUNITY_CURRENT.sourceCommit}` ||
@@ -114,17 +115,24 @@ if (
   COMMUNITY_ALPHA2.matrix?.requiredTotalTasks !== 66 ||
   COMMUNITY_ALPHA2.gate?.status !== COMMUNITY_CURRENT.status ||
   COMMUNITY_ALPHA2.gate?.requiredItems !== 11 ||
-  COMMUNITY_ALPHA2.gate?.completedItems !== 0 ||
+  COMMUNITY_ALPHA2.gate?.reviewedItems !== 0 ||
   COMMUNITY_ALPHA2.gate?.completedTasks !== 0 ||
+  COMMUNITY_ALPHA2.gate?.installableItems !== 0 ||
   COMMUNITY_ALPHA2.gate?.installable !== false ||
-  COMMUNITY_ALPHA2.gate?.publicationAllowed !== false ||
+  COMMUNITY_ALPHA2.gate?.showcasePublicationAllowed !== true ||
+  COMMUNITY_ALPHA2.gate?.installPublicationAllowed !== false ||
   COMMUNITY_ALPHA2.gate?.runtimeReceiptSetSha256 !== null ||
   COMMUNITY_ALPHA2.gate?.rollbackReceiptSetSha256 !== null ||
   COMMUNITY_ALPHA2.items?.length !== 11 ||
   COMMUNITY_ALPHA2.items.some(
     (item) =>
       item.status !== 'verification-pending' ||
+      item.reviewed !== false ||
       item.completedTasks !== 0 ||
+      item.installable !== false ||
+      item.showcaseVisible !== true ||
+      JSON.stringify(item.ineligibilityReasons) !==
+        JSON.stringify(['alpha2-item-runtime-evidence-pending']) ||
       item.runtimeReceiptSetSha256 !== null ||
       item.rollbackReceiptSetSha256 !== null
   ) ||
@@ -1266,7 +1274,13 @@ function communityAuthorityFor(item, source, rights) {
     !local ||
     !current ||
     local.runtimeStatus !== 'runtime-verified' ||
-    current.status !== 'verification-pending'
+    current.status !== 'verification-pending' ||
+    current.reviewed !== false ||
+    current.completedTasks !== 0 ||
+    current.installable !== false ||
+    current.showcaseVisible !== true ||
+    JSON.stringify(current.ineligibilityReasons) !==
+      JSON.stringify(['alpha2-item-runtime-evidence-pending'])
   ) return null;
   const expectedSource = new URL(local.sourceRepository);
   const expectedRepository = expectedSource.pathname.replace(/^\//, '');
@@ -1496,9 +1510,13 @@ function acceptedDirectory(item, args, catalogOrigin) {
         status: COMMUNITY_CURRENT.status,
         baseline: COMMUNITY_ALPHA2_DSH_VERSION,
         requiredItems: COMMUNITY_ALPHA2.gate.requiredItems,
-        completedItems: COMMUNITY_ALPHA2.gate.completedItems,
+        reviewedItems: COMMUNITY_ALPHA2.gate.reviewedItems,
         requiredTasks: COMMUNITY_ALPHA2.matrix.requiredTotalTasks,
         completedTasks: COMMUNITY_ALPHA2.gate.completedTasks,
+        installableItems: COMMUNITY_ALPHA2.gate.installableItems,
+        itemReviewed: authority.current.reviewed,
+        itemInstallable: authority.current.installable,
+        ineligibilityReasons: authority.current.ineligibilityReasons,
         historicalRuntimeStatus: authority.historical.runtimeStatus,
       },
       handoff: 'alpha2-community-recertification-pending',
@@ -1547,9 +1565,14 @@ function acceptedDirectory(item, args, catalogOrigin) {
               status: COMMUNITY_CURRENT.status,
               baseline: COMMUNITY_ALPHA2_DSH_VERSION,
               requiredItems: COMMUNITY_ALPHA2.gate.requiredItems,
-              completedItems: COMMUNITY_ALPHA2.gate.completedItems,
+              reviewedItems: COMMUNITY_ALPHA2.gate.reviewedItems,
               requiredTasks: COMMUNITY_ALPHA2.matrix.requiredTotalTasks,
               completedTasks: COMMUNITY_ALPHA2.gate.completedTasks,
+              installableItems: COMMUNITY_ALPHA2.gate.installableItems,
+              itemReviewed: communityAuthority.current.reviewed,
+              itemInstallable: communityAuthority.current.installable,
+              ineligibilityReasons:
+                communityAuthority.current.ineligibilityReasons,
               historicalRuntimeStatus:
                 communityAuthority.historical.runtimeStatus,
             },

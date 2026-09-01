@@ -4,7 +4,9 @@ The current target is exact DeepSeek Harness `0.1.2-alpha.2`, official tag `dsh-
 
 The upstream prerelease publishes the official `@deepseek-ai/dsh@0.1.2-alpha.2` npm runtime. DSH Themes also keeps an exact-source cross-build lane. These are independent artifacts; the community gate does not claim source-to-npm byte equivalence. Both coordinates are bound through the shared Harness release authority.
 
-`baseline-policy.json` selects `currentAlpha2`; `alpha2-recertification.json` and its digest-bound schema are the current installation gate. They record 11 required items, 66 required platform/Node tasks, 0 completed tasks, and `installable: false`. Every website record must consequently remain `external-showcase`, `showcase-only`, and `verification-pending` on baseline `0.1.2-alpha.2`.
+`baseline-policy.json` selects `currentAlpha2`; `alpha2-recertification.json` and its digest-bound schema are the current installation gate. They record 11 required items, 0 reviewed items, 66 required platform/Node tasks, 0 completed tasks, and 0 installable items. Every website record must consequently remain `external-showcase`, `showcase-only`, and `verification-pending` on baseline `0.1.2-alpha.2`.
+
+The final review is item-level, not all-or-nothing: all 11 items must be reviewed and all 66 tasks must finish, but only items with six passing runtime/removal/rollback receipts may become installable. Failed items remain visible as showcase-only with a reason and do not inherit authority from passing items.
 
 ## Historical evidence
 
