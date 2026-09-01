@@ -122,6 +122,7 @@ import {
   WINDOWS_PRIVATE_ACL_WORKER_IDLE_MS,
 } from '../skills/dsh-plugin-installer/scripts/windows-private-acl.mjs';
 import {
+  WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_ATTEMPT_TIMEOUT_MS,
   WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT,
   validateWindowsPowerShellTempProof,
   windowsPowerShellBootstrapEnvironment,
@@ -2739,6 +2740,11 @@ test('Windows recovery ACL runner binds a native handle identity and validates S
   );
   assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /GetFileSystemInfos/u);
   assert.match(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_SCRIPT, /ReparsePoint/u);
+  assert.equal(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_ATTEMPT_TIMEOUT_MS, 90_000);
+  assert.ok(
+    WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_ATTEMPT_TIMEOUT_MS > WINDOWS_PRIVATE_ACL_TIMEOUT_MS
+  );
+  assert.ok(WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_ATTEMPT_TIMEOUT_MS <= 90_000);
 
   const bootstrapParent = String.raw`C:\Users\runneradmin\AppData\Local\Temp`;
   const bootstrapChild = `${bootstrapParent}\\.dsh-plugin-powershell-${'a'.repeat(32)}`;
@@ -3242,6 +3248,14 @@ test('Windows PowerShell 5.1 receives closed batch envelopes and CI serializes r
   assert.match(
     tempSource,
     /acquireSharedWindowsPowerShellTemp[\s\S]*entry\.references \+= 1/u
+  );
+  assert.match(
+    tempSource,
+    /maxBuffer: 32 \* 1024,[\s\S]{0,160}timeout: WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_ATTEMPT_TIMEOUT_MS,[\s\S]{0,160}windowsHide: true,[\s\S]{0,80}shell: false/u
+  );
+  assert.match(
+    tempSource,
+    /encoding: 'utf8',[\s\S]{0,80}env: windowsPowerShellBootstrapEnvironment\(\{/u
   );
   assert.match(tempSource, /const sharedTempCreations = new Map\(\)/u);
   assert.match(

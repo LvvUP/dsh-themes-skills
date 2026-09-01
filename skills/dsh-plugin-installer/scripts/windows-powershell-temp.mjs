@@ -6,7 +6,8 @@ import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
 const BOOTSTRAP_ENV = 'DSH_PLUGIN_POWERSHELL_TEMP';
-const BOOTSTRAP_TIMEOUT_MS = 30_000;
+// Each of the at-most-two parent candidates gets one bounded cold-start attempt.
+export const WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_ATTEMPT_TIMEOUT_MS = 90_000;
 const SHARED_TEMP_IDLE_MS = 1_000;
 const MAX_LOCAL_PATH = 32_760;
 
@@ -391,7 +392,7 @@ export async function acquireWindowsPowerShellTemp({
             trustedSystemRoot,
           }),
           maxBuffer: 32 * 1024,
-          timeout: BOOTSTRAP_TIMEOUT_MS,
+          timeout: WINDOWS_POWERSHELL_TEMP_BOOTSTRAP_ATTEMPT_TIMEOUT_MS,
           windowsHide: true,
           shell: false,
         }
