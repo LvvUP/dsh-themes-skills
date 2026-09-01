@@ -1,13 +1,29 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import {
+  lstat,
+  mkdir,
+  mkdtemp,
+  readFile,
+  realpath,
+  rm,
+  writeFile,
+} from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { delimiter, dirname, join, resolve } from 'node:path';
 import test from 'node:test';
 import { gzipSync } from 'node:zlib';
 
-import { sourceBuildEnvironment } from '../skills/dsh-harness-installer/scripts/build-source.mjs';
+import {
+  createLifecyclePnpmCommand,
+  createSourcePnpmCommand,
+  requireFreshSourceDependencyTree,
+  sourceBuildEnvironment,
+  sourceBuildPath,
+  sourceBuildRootPath,
+  verifyNoLifecycleToolShadow,
+} from '../skills/dsh-harness-installer/scripts/build-source.mjs';
 import { packageManagerEnvironment } from '../skills/dsh-harness-installer/scripts/install-official.mjs';
 import {
   loadAuthority,
@@ -312,18 +328,206 @@ test('bundled pnpm toolchain materializes exactly and tar policy rejects ambiguo
   assert.throws(() => inspectTarEntries(ustarFixture({ zeroGap: true })), /zero-block gap/u);
   assert.throws(() => inspectTarEntries(ustarFixture({ badMagic: true })), /POSIX ustar/u);
 
-  const root = await mkdtemp(join(tmpdir(), 'dsh-alpha2-pnpm-test-'));
+  const root = await realpath(
+    await mkdtemp(join(tmpdir(), 'dsh-alpha2-pnpm-test-'))
+  );
+  const injectedNames = [
+    'COMSPEC',
+    'COREPACK_HOME',
+    'DSH_BUILD_PNPM_CLI',
+    'DSH_BUILD_PNPM_NODE',
+    'DSH_CLIENT_COMMIT_HASH',
+    'DSH_CLIENT_VERSION',
+    'NODE_OPTIONS',
+    'NODE_PATH',
+    'NPM_CONFIG_SCRIPT_SHELL',
+    'npm_config_script_shell',
+    'npm_config_store_dir',
+    'npm_execpath',
+    'PATHEXT',
+    'PATH',
+    'PNPM_CONFIG_STORE_DIR',
+    'PNPM_CONFIG_OFFLINE',
+    'PNPM_CONFIG_SCRIPT_SHELL',
+    'PNPM_CONFIG_UPDATE_NOTIFIER',
+    'PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN',
+    'PNPM_HOME',
+    'PNPM_STORE_DIR',
+    'SystemRoot',
+    'WINDIR',
+  ];
+  const inherited = Object.fromEntries(
+    injectedNames.map((name) => [name, process.env[name]])
+  );
+  for (const name of injectedNames) process.env[name] = `attacker-${name}`;
   try {
+    await requireFreshSourceDependencyTree(root);
+    await mkdir(join(root, 'node_modules', '.bin'), { recursive: true });
+    await assert.rejects(
+      () => requireFreshSourceDependencyTree(root),
+      /without any existing node_modules/u
+    );
+    await rm(join(root, 'node_modules'), { recursive: true });
+
     const toolchain = await materializePnpmToolchain(join(root, 'pnpm'));
     assert.equal(toolchain.version, '11.7.0');
     assert.equal(toolchain.entryCount, 449);
+
+    const command = await createSourcePnpmCommand(root, toolchain);
+    const authority = await loadAuthority();
+    const officialRuntimeEnvironment = packageManagerEnvironment(root);
+    const environment = sourceBuildEnvironment(
+      root,
+      authority.release.commit,
+      authority.release.commit,
+      command
+    );
+    assert.equal(
+      environment.DSH_CLIENT_COMMIT_HASH,
+      '0a53fb55bea101816fa226bb964ae2bed71c343b'
+    );
+    assert.equal(environment.DSH_BUILD_PNPM_CLI, toolchain.cli);
+    assert.equal(environment.DSH_BUILD_PNPM_NODE, process.execPath);
+    assert.equal(environment.npm_execpath, toolchain.cli);
+    const expectedScriptShell = process.platform === 'win32'
+      ? undefined
+      : await realpath('/bin/sh');
+    if (process.platform === 'win32') {
+      assert.match(
+        environment.COMSPEC,
+        /^[A-Za-z]:\\.*\\System32\\cmd\.exe$/iu
+      );
+    }
+    assert.equal(environment.NPM_CONFIG_SCRIPT_SHELL, expectedScriptShell);
+    assert.equal(environment.PNPM_CONFIG_SCRIPT_SHELL, expectedScriptShell);
+    assert.equal(environment.npm_config_script_shell, undefined);
+    assert.equal(environment.PNPM_CONFIG_OFFLINE, 'true');
+    assert.equal(environment.PNPM_CONFIG_UPDATE_NOTIFIER, 'false');
+    assert.equal(environment.PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN, 'false');
     const version = spawnSync(process.execPath, [toolchain.cli, '--version'], {
       encoding: 'utf8',
+      env: environment,
       shell: false,
     });
     assert.equal(version.status, 0);
     assert.equal(version.stdout.trim(), '11.7.0');
+    assert.equal(
+      environment.PATH,
+      [command.bin, dirname(process.execPath)].join(delimiter)
+    );
+    assert.equal(environment.PATH.includes('attacker-PATH'), false);
+    assert.doesNotMatch(environment.PATH, /(?:^|[\\/])git(?:[\\/]|$)/iu);
+    assert.equal(
+      environment.COMSPEC,
+      process.platform === 'win32' ? command.scriptShell : undefined
+    );
+    assert.equal(
+      environment.SystemRoot,
+      process.platform === 'win32'
+        ? dirname(dirname(command.scriptShell))
+        : undefined
+    );
+    assert.equal(environment.WINDIR, environment.SystemRoot);
+    assert.equal(environment.COREPACK_HOME, undefined);
+    assert.equal(Object.hasOwn(environment, 'DSH_CLIENT_VERSION'), false);
+    assert.equal(Object.hasOwn(environment, 'NODE_OPTIONS'), false);
+    assert.equal(Object.hasOwn(environment, 'NODE_PATH'), false);
+    assert.equal(environment.PNPM_HOME, join(root, 'pnpm-home'));
+    assert.equal(environment.PNPM_CONFIG_STORE_DIR, undefined);
+    assert.equal(environment.PNPM_STORE_DIR, undefined);
+    assert.equal(environment.npm_config_store_dir, undefined);
+    assert.equal(
+      Object.hasOwn(officialRuntimeEnvironment, 'DSH_BUILD_PNPM_CLI'),
+      false
+    );
+    assert.equal(
+      Object.hasOwn(officialRuntimeEnvironment, 'DSH_BUILD_PNPM_NODE'),
+      false
+    );
+    assert.equal(
+      Object.hasOwn(officialRuntimeEnvironment, 'DSH_CLIENT_COMMIT_HASH'),
+      false
+    );
+    assert.equal(Object.hasOwn(officialRuntimeEnvironment, 'npm_execpath'), false);
+
+    const wrapper = await lstat(command.wrapper);
+    assert.equal(wrapper.isFile(), true);
+    assert.equal(wrapper.isSymbolicLink(), false);
+    assert.equal(wrapper.nlink, 1);
+    if (process.platform !== 'win32') assert.equal(wrapper.mode & 0o777, 0o700);
+    const wrapperText = await readFile(command.wrapper, 'utf8');
+    assert.equal(
+      wrapperText,
+      process.platform === 'win32'
+        ? '@ECHO OFF\r\nSETLOCAL DisableDelayedExpansion\r\n"%DSH_BUILD_PNPM_NODE%" "%DSH_BUILD_PNPM_CLI%" %*\r\nEXIT /B %ERRORLEVEL%\r\n'
+        : '#!/bin/sh\nset -eu\nexec "$DSH_BUILD_PNPM_NODE" "$DSH_BUILD_PNPM_CLI" "$@"\n'
+    );
+    assert.doesNotMatch(wrapperText, /\b(?:CALL|START)\b/iu);
+
+    const lifecycleBin = join(root, 'node_modules', '.bin');
+    await mkdir(lifecycleBin, { recursive: true });
+    const lifecycleName = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
+    const hostilePnpm = join(lifecycleBin, lifecycleName);
+    await writeFile(
+      hostilePnpm,
+      process.platform === 'win32'
+        ? '@ECHO OFF\r\nECHO SHADOW\r\n'
+        : '#!/bin/sh\nprintf "SHADOW\\n"\n',
+      { mode: 0o700 }
+    );
+    await assert.rejects(
+      () => verifyNoLifecycleToolShadow(root),
+      /shadows build authority/u
+    );
+    await assert.rejects(
+      () => createLifecyclePnpmCommand(root),
+      /shadows build authority/u
+    );
+    await rm(hostilePnpm);
+    const lifecycleCommand = await createLifecyclePnpmCommand(root);
+    assert.equal(
+      await readFile(lifecycleCommand.wrapper, 'utf8'),
+      wrapperText
+    );
+
+    await writeFile(join(root, 'package.json'), `${JSON.stringify({
+      name: 'dsh-source-pnpm-command-proof',
+      private: true,
+      scripts: { probe: 'pnpm --version' },
+    }, null, 2)}\n`);
+    const shimVersion = spawnSync(process.execPath, [
+      toolchain.cli,
+      '--silent',
+      'run',
+      'probe',
+    ], {
+      cwd: root,
+      encoding: 'utf8',
+      env: environment,
+      shell: false,
+      windowsHide: true,
+    });
+    assert.equal(shimVersion.error, undefined);
+    assert.equal(
+      shimVersion.status,
+      0,
+      `${shimVersion.stdout ?? ''}\n${shimVersion.stderr ?? ''}`
+    );
+    assert.equal(shimVersion.stderr.trim(), '');
+    assert.match(shimVersion.stdout, /(?:^|\n)11\.7\.0(?:\n|$)/u);
+
+    if (process.platform === 'win32') {
+      assert.equal(environment.NoDefaultCurrentDirectoryInExePath, '1');
+      assert.equal(environment.PATHEXT, '.CMD;.EXE;.COM;.BAT');
+    }
   } finally {
+    for (const name of injectedNames) {
+      if (inherited[name] === undefined) {
+        delete process.env[name];
+      } else {
+        process.env[name] = inherited[name];
+      }
+    }
     await rm(root, { recursive: true, force: true });
   }
 });
@@ -347,54 +551,47 @@ test('alpha.2 installers fetch into a private store, install offline, and block 
 test('source build metadata uses only the verified commit without reopening Git access', async () => {
   const authority = await loadAuthority();
   const privateRoot = resolve('/private/dsh-alpha2-source-toolchain');
-  const injectedNames = [
-    'DSH_CLIENT_COMMIT_HASH',
-    'DSH_CLIENT_VERSION',
-    'NODE_OPTIONS',
-    'NODE_PATH',
-  ];
-  const inherited = Object.fromEntries(
-    injectedNames.map((name) => [name, process.env[name]])
+  assert.throws(
+    () =>
+      sourceBuildEnvironment(
+        privateRoot,
+        'f'.repeat(40),
+        authority.release.commit
+      ),
+    /verified source commit differs from the build authority/u
   );
-  for (const name of injectedNames) process.env[name] = `attacker-${name}`;
-  try {
-    const officialRuntimeEnvironment = packageManagerEnvironment(privateRoot);
-    const environment = sourceBuildEnvironment(
-      privateRoot,
-      authority.release.commit,
-      authority.release.commit
-    );
-    assert.equal(
-      environment.DSH_CLIENT_COMMIT_HASH,
-      '0a53fb55bea101816fa226bb964ae2bed71c343b'
-    );
-    assert.equal(environment.PATH, dirname(process.execPath));
-    assert.doesNotMatch(environment.PATH, /(?:^|[\\/])git(?:[\\/]|$)/iu);
-    assert.equal(Object.hasOwn(environment, 'DSH_CLIENT_VERSION'), false);
-    assert.equal(Object.hasOwn(environment, 'NODE_OPTIONS'), false);
-    assert.equal(Object.hasOwn(environment, 'NODE_PATH'), false);
-    assert.equal(
-      Object.hasOwn(officialRuntimeEnvironment, 'DSH_CLIENT_COMMIT_HASH'),
-      false
-    );
-    assert.throws(
-      () =>
-        sourceBuildEnvironment(
-          privateRoot,
-          'f'.repeat(40),
-          authority.release.commit
-        ),
-      /verified source commit differs from the build authority/u
-    );
-  } finally {
-    for (const name of injectedNames) {
-      if (inherited[name] === undefined) {
-        delete process.env[name];
-      } else {
-        process.env[name] = inherited[name];
-      }
-    }
-  }
+  assert.throws(
+    () =>
+      sourceBuildEnvironment(
+        privateRoot,
+        authority.release.commit,
+        authority.release.commit,
+        {}
+      ),
+    /private pnpm command binding/u
+  );
+  assert.throws(
+    () => sourceBuildPath(`/private/injected${delimiter}entry`, dirname(process.execPath)),
+    /PATH components are malformed/u
+  );
+  assert.throws(
+    () => sourceBuildPath('/private/bin', `${dirname(process.execPath)}${delimiter}`),
+    /PATH components are malformed/u
+  );
+  assert.throws(
+    () => sourceBuildRootPath(`/private/source${delimiter}injected`),
+    /unsafe for lifecycle PATH/u
+  );
+
+  const [builder, verifier] = await Promise.all([
+    readFile('skills/dsh-harness-installer/scripts/build-source.mjs', 'utf8'),
+    readFile('skills/dsh-harness-installer/scripts/verify-source.mjs', 'utf8'),
+  ]);
+  assert.match(builder, /npm_execpath: pnpmCommand\.cli/u);
+  assert.match(
+    verifier,
+    /pnpm --filter @deepseek-ai\/dsh-web-frontend run build/u
+  );
 });
 
 test('Harness Skill states official npm plus source cross-build, no-PATH, and token-safe boundaries', async () => {

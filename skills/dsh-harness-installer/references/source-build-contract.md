@@ -70,8 +70,35 @@ The sanitized package-manager/build environment intentionally keeps Git outside
 `PATH`. After the checkout identity probe succeeds, the builder supplies
 `DSH_CLIENT_COMMIT_HASH` from that verified exact commit so the reviewed
 upstream build does not need to rediscover it by spawning Git. Ambient values
-are ignored, and any mismatch between the verified commit and authority aborts
+for PATH, `npm_execpath`, PNPM/Corepack, Node injection, and DSH build metadata
+are discarded; only the explicit platform runtime/temporary-variable whitelist
+is retained. Any mismatch between the verified commit and authority aborts
 before dependency or build execution.
+
+The fixed upstream `build:web` script invokes `pnpm` by command name. The source
+lane therefore creates one ephemeral, builder-created command shim whose bytes,
+mode, file identity, Node path, pnpm CLI path, and pnpm CLI digest are verified
+again immediately before the build. Its base child `PATH` contains only that
+shim directory and the current Node directory; package-manager lifecycle code
+may prepend only `.bin` directories from the exact frozen installation. Caller
+PATH entries are discarded, and the lifecycle shell is an identity-checked
+absolute host shell rather than a caller `COMSPEC` or PATH command. The lane
+neither invokes Corepack nor admits an ambient pnpm command. This ephemeral
+child environment does not edit the user's shell or persistent `PATH`.
+
+The checkout path may not contain the platform PATH delimiter. Before
+installation the builder rejects every existing ignored `node_modules` tree.
+After the exact offline installation it rejects root lifecycle `.bin` entries
+that could shadow Node, npm, Git, or pnpm authority, writes the same fixed pnpm
+shim into the lifecycle-preferred root `.bin`, and verifies both shim locations.
+It removes that temporary lifecycle shim after the build and repeats the shim
+and shell identity checks immediately before the fixed build.
+
+These checks bind the deterministic builder inputs; they are not a concurrency
+isolation boundary for a local actor that can rewrite the checkout or temporary
+directory while the build is running. The authoritative Windows receipts use a
+fresh GitHub-hosted VM with no concurrent untrusted local principal. A shared or
+self-hosted runner is outside this evidence lane and must not reuse its receipts.
 
 ## Profile and BrowserAuth safety
 

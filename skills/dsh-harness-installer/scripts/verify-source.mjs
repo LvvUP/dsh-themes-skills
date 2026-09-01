@@ -84,13 +84,20 @@ export async function verifySourceCheckout(input, authorityInput) {
       rootManifest.version !== authority.release.version ||
       rootManifest.packageManager !== `pnpm@${authority.source.packageManagerVersion}` ||
       rootManifest.engines?.node !== authority.source.nodeEngine ||
-      rootManifest.scripts?.[authority.source.buildScript] !== 'tsx scripts/build.ts --profile official') {
+      rootManifest.scripts?.[authority.source.buildScript] !==
+        'tsx scripts/build.ts --profile official' ||
+      rootManifest.scripts?.['build:web'] !==
+        'pnpm --filter @deepseek-ai/dsh-web-frontend run build') {
     fail('root package manifest does not match the alpha.2 source-build contract');
   }
   for (const expected of authority.packages) {
     const manifest = JSON.parse(await readFile(join(source, expected.path), 'utf8'));
     if (manifest.name !== expected.name || manifest.version !== expected.version) {
       fail(`${expected.path} package identity mismatch`);
+    }
+    if (expected.path === 'apps/web/package.json' &&
+        manifest.scripts?.build !== 'vite build') {
+      fail('apps/web build script differs from the alpha.2 source-build contract');
     }
   }
 
