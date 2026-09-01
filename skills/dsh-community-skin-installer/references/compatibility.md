@@ -20,6 +20,12 @@ Each item needs six current-baseline tasks: macOS arm64, Linux x64, and Windows 
 
 The checked-in `alpha2-community-skin-recertification.yml` workflow is a static six-target guard only. It validates that every target sees the same pending authority and emits no runtime receipt. It must never be represented as runtime certification evidence.
 
+## Candidate receipt contract
+
+The three `alpha2-community-certification-*-receipt.schema.json` files and `scripts/alpha2-community-certification.mjs` define a candidate-only evidence lane. `plan` freezes the 11 × 6 Cartesian product; `verify-task`, `aggregate`, and `scan` reject tuple, source, gate, run, rollback, and privacy mismatches. `run-task` is intentionally fail-closed with `executor-not-reviewed`, so this revision cannot execute a Profile, filesystem, or network certification mutation.
+
+Every candidate aggregate remains pending review with `authorityMutation: false` and `installability: "none"`; it does not replace `alpha2-recertification.json` or Finder authority. The nine `skin-center-builtin` records, including Maid Atelier, form one shared-artifact cohort: all nine must pass their six tasks and rollback before any of the nine can be considered for publication. QQ98 and THS retain item-level candidacy. `fetch-skin-center.mjs` enforces the nine-member current-receipt cohort before creating output or opening the network.
+
 The historical Skin Center coordinate and rights conflict remain review inputs:
 
 - `@linxin666/dsh-client-ui-skin-center@0.2.5`

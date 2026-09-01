@@ -1,0 +1,312 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh-themes.com/schemas/community-alpha2-certification-task-receipt-v1.json",
+  "title": "One DSH community skin alpha.2 certification task",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "scope",
+    "certificationPlanSha256",
+    "authority",
+    "baseline",
+    "item",
+    "task",
+    "observedRuntime",
+    "lifecycle",
+    "run",
+    "privacy"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "status": {
+      "enum": [
+        "community-alpha2-task-passed",
+        "community-alpha2-task-failed"
+      ]
+    },
+    "scope": { "const": "one-community-skin-one-platform-node-task" },
+    "certificationPlanSha256": { "$ref": "#/$defs/sha256" },
+    "authority": { "$ref": "#/$defs/authority" },
+    "baseline": { "$ref": "#/$defs/baseline" },
+    "item": { "$ref": "#/$defs/item" },
+    "task": { "$ref": "#/$defs/task" },
+    "observedRuntime": { "$ref": "#/$defs/observedRuntime" },
+    "lifecycle": { "$ref": "#/$defs/lifecycle" },
+    "run": { "$ref": "#/$defs/run" },
+    "privacy": { "$ref": "#/$defs/privacy" }
+  },
+  "$defs": {
+    "sha40": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "currentGateSha256",
+        "catalogSha256",
+        "harnessAuthoritySha256"
+      ],
+      "properties": {
+        "currentGateSha256": { "$ref": "#/$defs/sha256" },
+        "catalogSha256": { "$ref": "#/$defs/sha256" },
+        "harnessAuthoritySha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baselineId",
+        "packageVersion",
+        "tag",
+        "commit",
+        "tree",
+        "officialNpmTarballSha256"
+      ],
+      "properties": {
+        "baselineId": {
+          "const": "deepseek-harness/dsh-v0.1.2-alpha.2@0a53fb55bea101816fa226bb964ae2bed71c343b"
+        },
+        "packageVersion": { "const": "0.1.2-alpha.2" },
+        "tag": { "const": "dsh-v0.1.2-alpha.2" },
+        "commit": {
+          "const": "0a53fb55bea101816fa226bb964ae2bed71c343b"
+        },
+        "tree": {
+          "const": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
+        },
+        "officialNpmTarballSha256": {
+          "const": "5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47"
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "locator", "bytes", "sha256"],
+      "properties": {
+        "kind": {
+          "enum": ["skin-center-shared-npm-tarball", "bundled-user-skin"]
+        },
+        "locator": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "catalogId",
+        "slug",
+        "skinId",
+        "installationMode",
+        "sourceRepository",
+        "sourceRevision",
+        "sourceSubdir",
+        "cohortId",
+        "artifact"
+      ],
+      "properties": {
+        "catalogId": { "type": "integer", "minimum": 1000, "maximum": 9999 },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "skinId": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "installationMode": {
+          "enum": ["skin-center-builtin", "bundled-user-skin"]
+        },
+        "sourceRepository": {
+          "type": "string",
+          "pattern": "^https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "sourceRevision": { "$ref": "#/$defs/sha40" },
+        "sourceSubdir": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "cohortId": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+        },
+        "artifact": { "$ref": "#/$defs/artifact" }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["taskId", "platform", "arch", "nodeVersion"],
+      "properties": {
+        "taskId": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "platform": { "enum": ["darwin", "linux", "win32"] },
+        "arch": { "enum": ["arm64", "x64"] },
+        "nodeVersion": { "enum": ["22.19.0", "24.15.0"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "platform": { "const": "darwin" } } },
+          "then": { "properties": { "arch": { "const": "arm64" } } }
+        },
+        {
+          "if": {
+            "properties": { "platform": { "enum": ["linux", "win32"] } }
+          },
+          "then": { "properties": { "arch": { "const": "x64" } } }
+        }
+      ]
+    },
+    "observedRuntime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["platform", "arch", "nodeVersion"],
+      "properties": {
+        "platform": { "enum": ["darwin", "linux", "win32"] },
+        "arch": { "enum": ["arm64", "x64"] },
+        "nodeVersion": { "enum": ["22.19.0", "24.15.0"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "platform": { "const": "darwin" } } },
+          "then": { "properties": { "arch": { "const": "arm64" } } }
+        },
+        {
+          "if": {
+            "properties": { "platform": { "enum": ["linux", "win32"] } }
+          },
+          "then": { "properties": { "arch": { "const": "x64" } } }
+        }
+      ]
+    },
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "sanitizedEvidenceSha256"],
+      "properties": {
+        "status": {
+          "enum": ["passed", "failed", "not-run-after-terminal-failure"]
+        },
+        "sanitizedEvidenceSha256": {
+          "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+        }
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "fullProfileRestored",
+        "dependencyClosureRestored",
+        "noWritesOutsideIsolatedRoots",
+        "sidecarsTerminated",
+        "sanitizedEvidenceSha256"
+      ],
+      "properties": {
+        "status": { "const": "passed" },
+        "fullProfileRestored": { "const": true },
+        "dependencyClosureRestored": { "const": true },
+        "noWritesOutsideIsolatedRoots": { "const": true },
+        "sidecarsTerminated": { "const": true },
+        "sanitizedEvidenceSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "terminalFailure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phase", "reasonCode", "sanitizedEvidenceSha256"],
+      "properties": {
+        "phase": {
+          "enum": [
+            "preflight",
+            "snapshot",
+            "install",
+            "dumpConfig",
+            "coldRestart",
+            "functionalProbe",
+            "removal"
+          ]
+        },
+        "reasonCode": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "sanitizedEvidenceSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preflight",
+        "snapshot",
+        "install",
+        "dumpConfig",
+        "coldRestart",
+        "functionalProbe",
+        "removal",
+        "rollback",
+        "terminalFailure"
+      ],
+      "properties": {
+        "preflight": { "$ref": "#/$defs/stage" },
+        "snapshot": { "$ref": "#/$defs/stage" },
+        "install": { "$ref": "#/$defs/stage" },
+        "dumpConfig": { "$ref": "#/$defs/stage" },
+        "coldRestart": { "$ref": "#/$defs/stage" },
+        "functionalProbe": { "$ref": "#/$defs/stage" },
+        "removal": { "$ref": "#/$defs/stage" },
+        "rollback": { "$ref": "#/$defs/rollback" },
+        "terminalFailure": {
+          "anyOf": [{ "$ref": "#/$defs/terminalFailure" }, { "type": "null" }]
+        }
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "workflow",
+        "workflowSha256",
+        "event",
+        "ref",
+        "runId",
+        "runAttempt",
+        "headSha",
+        "jobIdentity"
+      ],
+      "properties": {
+        "repository": { "const": "LvvUP/dsh-themes-skills" },
+        "workflow": { "const": "alpha2-community-skin-certification" },
+        "workflowSha256": { "$ref": "#/$defs/sha256" },
+        "event": { "const": "workflow_dispatch" },
+        "ref": { "const": "refs/heads/main" },
+        "runId": { "type": "string", "pattern": "^[1-9][0-9]{0,19}$" },
+        "runAttempt": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "headSha": { "$ref": "#/$defs/sha40" },
+        "jobIdentity": { "type": "string", "minLength": 1, "maxLength": 120 }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capturesMachinePaths",
+        "capturesTokens",
+        "capturesCookies",
+        "capturesCredentials",
+        "capturesCorrelatableSecretDigests"
+      ],
+      "properties": {
+        "capturesMachinePaths": { "const": false },
+        "capturesTokens": { "const": false },
+        "capturesCookies": { "const": false },
+        "capturesCredentials": { "const": false },
+        "capturesCorrelatableSecretDigests": { "const": false }
+      }
+    }
+  }
+}

@@ -7,6 +7,7 @@ import https from 'node:https';
 import { dirname, isAbsolute } from 'node:path';
 import { pipeline } from 'node:stream/promises';
 
+import { assertSkinCenterDownloadCohort } from './alpha2-community-certification.mjs';
 import { loadCommunityAuthority } from './catalog-authority.mjs';
 
 const DOWNLOAD_TIMEOUT_MS = 5 * 60 * 1000;
@@ -44,20 +45,7 @@ function request(url, signal) {
 
 const output = outputArg(process.argv.slice(2));
 const { catalog, alpha2Recertification } = await loadCommunityAuthority();
-if (
-  alpha2Recertification.gate?.status !== 'alpha2-review-complete' ||
-  alpha2Recertification.gate?.installable !== true ||
-  alpha2Recertification.gate?.installPublicationAllowed !== true ||
-  alpha2Recertification.gate?.reviewedItems !==
-    alpha2Recertification.gate?.requiredItems ||
-  alpha2Recertification.gate?.completedTasks !==
-    alpha2Recertification.matrix?.requiredTotalTasks ||
-  alpha2Recertification.gate?.installableItems < 1
-) {
-  fail(
-    'Download is blocked: alpha2-recertification-gate-not-certified; no directory or network request was created'
-  );
-}
+assertSkinCenterDownloadCohort({ catalog, alpha2Recertification });
 const authority = catalog.skinCenter;
 const parsed = new URL(authority.tarballUrl);
 if (parsed.protocol !== 'https:' || parsed.username || parsed.password) {
