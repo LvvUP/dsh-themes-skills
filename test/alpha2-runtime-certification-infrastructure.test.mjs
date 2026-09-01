@@ -309,6 +309,15 @@ test('privacy scanner rejects query credentials and standalone 43-character Brow
     () => assertNoRuntimeSecrets(`{"value":"${'A'.repeat(43)}"}`),
     /forbidden secret/u
   );
+  for (const contents of [
+    '{"tokenDigest":false}',
+    `{"cookieFingerprint":"${'a'.repeat(64)}"}`,
+  ]) {
+    assert.throws(
+      () => assertNoRuntimeSecrets(contents),
+      /forbidden secret/u
+    );
+  }
   const root = await mkdtemp(join(tmpdir(), 'alpha2-runtime-secret-test-'));
   try {
     await writeFile(join(root, 'receipt.json'), `{"value":"${'B'.repeat(43)}"}\n`);

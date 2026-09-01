@@ -56,6 +56,16 @@ forbidden in tuple receipts, aggregate candidates, logs, screenshots, and
 attestations. The privacy scanner fails the task before upload if it detects
 credential-shaped material.
 
+Private build and install receipts are bounded canonical JSON with closed,
+authority-bound schemas. Their required
+`capturesCredentialDerivedDigest: false` assertion is validated first and then
+omitted only from a temporary scanner projection because its defensive field
+name intentionally matches the generic derived-credential rule. Every other
+key and value still passes through the unchanged scanner, and the original
+canonical receipt bytes remain the bytes bound by the public SHA-256. This
+schema-aware exception does not apply to logs, public receipts, candidates, or
+arbitrary evidence.
+
 ## Candidate aggregation
 
 Aggregation accepts exactly one canonical receipt for each tuple. All six must

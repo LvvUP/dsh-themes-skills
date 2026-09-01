@@ -6,6 +6,7 @@ import {
   mkdir,
   mkdtemp,
   readFile,
+  readdir,
   realpath,
   rm,
   writeFile,
@@ -35,6 +36,13 @@ import {
 } from '../skills/dsh-harness-installer/scripts/authority.mjs';
 import { parseRunArgs } from '../skills/dsh-harness-installer/scripts/run-source-built.mjs';
 import { parseRunArgs as parseOfficialRunArgs } from '../skills/dsh-harness-installer/scripts/run-official.mjs';
+import {
+  assertNoRuntimeSecrets,
+  canonicalRuntimeJson,
+  readPrivateBuildReceipt,
+  readPrivateInstallReceipt,
+} from '../skills/dsh-harness-installer/scripts/runtime-certification.mjs';
+import { runtimeTasks } from '../skills/dsh-harness-installer/scripts/runtime-authority.mjs';
 import { materializePnpmToolchain } from '../skills/dsh-harness-installer/scripts/pnpm-toolchain.mjs';
 import { inspectTarEntries } from '../skills/dsh-harness-installer/scripts/tar-policy.mjs';
 
@@ -240,6 +248,56 @@ test('official npm install receipt schema is closed and bound to the frozen reso
     const changed = installReceipt(authority);
     mutate(changed);
     assert.throws(() => validateInstallReceipt(changed, authority));
+  }
+});
+
+test('private receipt readers preserve the strict scanner after validating the false privacy assertion', async () => {
+  const authority = await loadAuthority();
+  const root = await mkdtemp(join(tmpdir(), 'dsh-private-receipt-proof-'));
+  try {
+    const buildPath = join(root, 'build.json');
+    const installPath = join(root, 'install.json');
+    for (const task of runtimeTasks()) {
+      const build = receipt(authority);
+      const install = installReceipt(authority);
+      Object.assign(build.toolchain, task);
+      Object.assign(install.toolchain, task);
+      const buildBytes = canonicalRuntimeJson(build);
+      const installBytes = canonicalRuntimeJson(install);
+      await writeFile(buildPath, buildBytes);
+      await writeFile(installPath, installBytes);
+
+      assert.throws(
+        () => assertNoRuntimeSecrets(installBytes, 'generic evidence'),
+        /forbidden secret material/u
+      );
+      const loadedBuild = await readPrivateBuildReceipt(buildPath, authority);
+      const loadedInstall = await readPrivateInstallReceipt(
+        installPath,
+        authority
+      );
+      assert.deepEqual(loadedBuild.value, build);
+      assert.deepEqual(loadedInstall.value, install);
+      assert.equal(loadedBuild.bytes.toString('utf8'), buildBytes);
+      assert.equal(loadedInstall.bytes.toString('utf8'), installBytes);
+    }
+
+    const install = installReceipt(authority);
+    await writeFile(installPath, JSON.stringify(install));
+    await assert.rejects(
+      readPrivateInstallReceipt(installPath, authority),
+      /canonical JSON bytes/u
+    );
+
+    const credentialLike = installReceipt(authority);
+    credentialLike.privacy.capturesCredentialDerivedDigest = 'A'.repeat(43);
+    await writeFile(installPath, canonicalRuntimeJson(credentialLike));
+    await assert.rejects(
+      readPrivateInstallReceipt(installPath, authority),
+      /credential-like material/u
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
   }
 });
 
@@ -463,6 +521,45 @@ test('bundled pnpm toolchain materializes exactly and tar policy rejects ambiguo
         : '#!/bin/sh\nset -eu\nexec "$DSH_BUILD_PNPM_NODE" "$DSH_BUILD_PNPM_CLI" "$@"\n'
     );
     assert.doesNotMatch(wrapperText, /\b(?:CALL|START)\b/iu);
+    assert.deepEqual(
+      (await readdir(command.bin)).sort(),
+      process.platform === 'win32'
+        ? ['pnpm.cmd']
+        : ['dirname', 'pnpm', 'sed', 'uname']
+    );
+    if (process.platform !== 'win32') {
+      for (const name of ['dirname', 'sed', 'uname']) {
+        assert.equal(
+          await readFile(join(command.bin, name), 'utf8'),
+          `#!/bin/sh\nset -eu\nexec "/usr/bin/${name}" "$@"\n`
+        );
+      }
+      const dirnameProof = spawnSync('dirname', ['/alpha/beta'], {
+        encoding: 'utf8',
+        env: environment,
+        shell: false,
+      });
+      assert.equal(dirnameProof.status, 0);
+      assert.equal(dirnameProof.stdout.trim(), '/alpha');
+      assert.equal(dirnameProof.stderr, '');
+      const sedProof = spawnSync('sed', ['-e', 's/a/b/'], {
+        encoding: 'utf8',
+        env: environment,
+        input: 'a\n',
+        shell: false,
+      });
+      assert.equal(sedProof.status, 0);
+      assert.equal(sedProof.stdout, 'b\n');
+      assert.equal(sedProof.stderr, '');
+      const unameProof = spawnSync('uname', ['-a'], {
+        encoding: 'utf8',
+        env: environment,
+        shell: false,
+      });
+      assert.equal(unameProof.status, 0);
+      assert.notEqual(unameProof.stdout.trim(), '');
+      assert.equal(unameProof.stderr, '');
+    }
 
     const lifecycleBin = join(root, 'node_modules', '.bin');
     await mkdir(lifecycleBin, { recursive: true });
@@ -484,6 +581,23 @@ test('bundled pnpm toolchain materializes exactly and tar policy rejects ambiguo
       /shadows build authority/u
     );
     await rm(hostilePnpm);
+    if (process.platform !== 'win32') {
+      for (const name of ['dirname', 'sed', 'uname']) {
+        const hostileUtility = join(lifecycleBin, name);
+        await writeFile(hostileUtility, '#!/bin/sh\nexit 99\n', {
+          mode: 0o700,
+        });
+        await assert.rejects(
+          () => verifyNoLifecycleToolShadow(root),
+          /shadows build authority/u
+        );
+        await assert.rejects(
+          () => createLifecyclePnpmCommand(root),
+          /shadows build authority/u
+        );
+        await rm(hostileUtility);
+      }
+    }
     const lifecycleCommand = await createLifecyclePnpmCommand(root);
     assert.equal(
       await readFile(lifecycleCommand.wrapper, 'utf8'),
@@ -515,6 +629,39 @@ test('bundled pnpm toolchain materializes exactly and tar policy rejects ambiguo
     );
     assert.equal(shimVersion.stderr.trim(), '');
     assert.match(shimVersion.stdout, /(?:^|\n)11\.7\.0(?:\n|$)/u);
+
+    if (process.platform !== 'win32') {
+      const pnpmStyleShim = join(lifecycleBin, 'tsx-proof');
+      await writeFile(
+        pnpmStyleShim,
+        '#!/bin/sh\n' +
+          'basedir=$(dirname "$(echo "$0" | sed -e \'s,\\\\,/,g\')")\n' +
+          'case `uname -a` in\n' +
+          '  *CYGWIN*|*MINGW*|*MSYS*) exit 97;;\n' +
+          'esac\n' +
+          'printf "%s\\n" "$basedir"\n',
+        { mode: 0o700 }
+      );
+      const pnpmStyleProof = spawnSync(pnpmStyleShim, [], {
+        cwd: root,
+        encoding: 'utf8',
+        env: {
+          ...environment,
+          PATH: [lifecycleBin, command.bin, dirname(process.execPath)].join(
+            delimiter
+          ),
+        },
+        shell: false,
+      });
+      assert.equal(
+        pnpmStyleProof.status,
+        0,
+        `${pnpmStyleProof.stdout ?? ''}\n${pnpmStyleProof.stderr ?? ''}`
+      );
+      assert.equal(pnpmStyleProof.stdout.trim(), lifecycleBin);
+      assert.equal(pnpmStyleProof.stderr, '');
+      await rm(pnpmStyleShim);
+    }
 
     if (process.platform === 'win32') {
       assert.equal(environment.NoDefaultCurrentDirectoryInExePath, '1');
