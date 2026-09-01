@@ -15,6 +15,7 @@ import { spawnSync } from 'node:child_process';
 import test from 'node:test';
 
 import { assertBundledCssSafe } from '../skills/dsh-community-skin-installer/scripts/bundled-skin-policy.mjs';
+import { validateCommunityRecord } from '../skills/dsh-community-skin-installer/scripts/catalog-authority.mjs';
 
 const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const skillRoot = join(repoRoot, 'skills/dsh-community-skin-installer');
@@ -77,7 +78,7 @@ function directoryRecord(catalog, current, skin) {
     (item) => item.catalogId === skin.catalogId && item.slug === skin.slug
   );
   assert.ok(currentItem);
-  const verified = currentItem.status === 'runtime-verified';
+  const verified = currentItem.installable === true;
   const repository = new URL(skin.sourceRepository).pathname.replace(/^\//, '');
   const sourcePackage = skin.slug === 'dsh-deep-whale-maid-atelier'
     ? { name: 'dsh-deep-whale-maid-atelier', version: undefined }
@@ -158,11 +159,11 @@ test('alpha.2 authority, schema, shared Harness binding, and six planned guards 
   const schemaBytes = await readFile(alpha2RecertificationSchemaPath);
   assert.equal(
     createHash('sha256').update(authorityBytes).digest('hex'),
-    'c1456b221050479e70ee74e7eab5422414a1fe9043f6c63e5d91a194d80e06b8'
+    '9957b098139820f2b9acca089495e0b22c27c52323c5ecf881ce72087e5f92fd'
   );
   assert.equal(
     createHash('sha256').update(schemaBytes).digest('hex'),
-    'ff4ba6954be7213d6ea14804ca67408b14af367ea54834684a6a4d93429d1103'
+    '944f8e27cb78bc25f81db05af0c4b0e7d51c9773f635ef82e75111d490c3cbd0'
   );
   const validated = JSON.parse(run(scripts.alpha2Validate, []).stdout);
   assert.equal(
@@ -170,10 +171,13 @@ test('alpha.2 authority, schema, shared Harness binding, and six planned guards 
     'deepseek-harness/dsh-v0.1.2-alpha.2@0a53fb55bea101816fa226bb964ae2bed71c343b'
   );
   assert.equal(validated.requiredItems, 11);
+  assert.equal(validated.reviewedItems, 0);
   assert.equal(validated.requiredTasks, 66);
   assert.equal(validated.completedTasks, 0);
+  assert.equal(validated.installableItems, 0);
   assert.equal(validated.installable, false);
-  assert.equal(validated.publicationAllowed, false);
+  assert.equal(validated.showcasePublicationAllowed, true);
+  assert.equal(validated.installPublicationAllowed, false);
   assert.equal(validated.runtimeExecuted, false);
   assert.equal(validated.receiptProduced, false);
   for (const target of ['darwin-arm64', 'linux-x64', 'win32-x64']) {
@@ -241,17 +245,24 @@ test('community authority preserves alpha.1 and RC.8 history but closes the alph
     '64ccbfa8e0caa4711cd4a75717ef9e022657961b'
   );
   assert.equal(current.gate.requiredItems, 11);
-  assert.equal(current.gate.completedItems, 0);
+  assert.equal(current.gate.reviewedItems, 0);
   assert.equal(current.gate.completedTasks, 0);
+  assert.equal(current.gate.installableItems, 0);
   assert.equal(current.gate.installable, false);
-  assert.equal(current.gate.publicationAllowed, false);
+  assert.equal(current.gate.showcasePublicationAllowed, true);
+  assert.equal(current.gate.installPublicationAllowed, false);
   assert.equal(current.gate.runtimeReceiptSetSha256, null);
   assert.equal(current.gate.rollbackReceiptSetSha256, null);
   assert.ok(
     current.items.every(
       (item) =>
         item.status === 'verification-pending' &&
+        item.reviewed === false &&
         item.completedTasks === 0 &&
+        item.installable === false &&
+        item.showcaseVisible === true &&
+        JSON.stringify(item.ineligibilityReasons) ===
+          JSON.stringify(['alpha2-item-runtime-evidence-pending']) &&
         item.runtimeReceiptSetSha256 === null &&
         item.rollbackReceiptSetSha256 === null
     )
@@ -298,6 +309,73 @@ test('community authority preserves alpha.1 and RC.8 history but closes the alph
   assert.match(trading.riskDisclosure, /404/);
 });
 
+test('completed review keeps failed items visible while passing items remain individually gated', async () => {
+  const catalog = JSON.parse(await readFile(catalogPath, 'utf8'));
+  const current = JSON.parse(
+    await readFile(alpha2RecertificationPath, 'utf8')
+  );
+  const future = structuredClone(current);
+  future.gate = {
+    ...future.gate,
+    status: 'alpha2-review-complete',
+    reviewedItems: 11,
+    completedTasks: 66,
+    installableItems: 1,
+    installable: true,
+    installPublicationAllowed: true,
+    runtimeReceiptSetSha256: 'a'.repeat(64),
+    rollbackReceiptSetSha256: 'b'.repeat(64),
+  };
+  future.items = future.items.map((item, index) =>
+    index === 0
+      ? {
+          ...item,
+          status: 'runtime-verified-installable',
+          reviewed: true,
+          completedTasks: 6,
+          installable: true,
+          ineligibilityReasons: [],
+          runtimeReceiptSetSha256: 'c'.repeat(64),
+          rollbackReceiptSetSha256: 'd'.repeat(64),
+        }
+      : {
+          ...item,
+          status: 'runtime-verification-failed',
+          reviewed: true,
+          completedTasks: 6,
+          installable: false,
+          ineligibilityReasons: ['alpha2-functional-probe-failed'],
+        }
+  );
+
+  const passingSkin = catalog.skins.find(
+    (skin) => skin.catalogId === future.items[0].catalogId
+  );
+  const passing = validateCommunityRecord(
+    directoryRecord(catalog, future, passingSkin),
+    { catalog, alpha2Recertification: future },
+    { mode: 'inspect' }
+  );
+  assert.equal(passing.installable, false);
+  assert.deepEqual(passing.blockingReasons, [
+    'alpha2-runtime-receipt-verifier-not-implemented',
+  ]);
+
+  const failedSkin = catalog.skins.find(
+    (skin) => skin.catalogId === future.items[1].catalogId
+  );
+  const failed = validateCommunityRecord(
+    directoryRecord(catalog, future, failedSkin),
+    { catalog, alpha2Recertification: future },
+    { mode: 'inspect' }
+  );
+  assert.equal(failed.installable, false);
+  assert.equal(future.items[1].showcaseVisible, true);
+  assert.deepEqual(failed.blockingReasons, [
+    'alpha2-functional-probe-failed',
+  ]);
+});
+
 test('baseline inspector defaults to the alpha.2 0/66 current lane', () => {
   const inspected = JSON.parse(
     run(scripts.inspectBaseline, []).stdout
@@ -308,8 +386,10 @@ test('baseline inspector defaults to the alpha.2 0/66 current lane', () => {
   assert.equal(inspected.inspectionEnabled, true);
   assert.equal(inspected.installable, false);
   assert.equal(inspected.itemsPlanned, 11);
+  assert.equal(inspected.itemsReviewed, 0);
   assert.equal(inspected.itemsVerified, 0);
   assert.equal(inspected.installableRecords, 0);
+  assert.equal(inspected.showcaseRecords, 11);
   assert.equal(inspected.websiteDistribution, 'external-showcase');
   assert.equal(inspected.websiteInstallability, 'showcase-only');
   assert.equal(inspected.websiteCompatibility, 'verification-pending');
@@ -336,7 +416,7 @@ test('nested directory records inspect but cannot install before alpha.2 recerti
   assert.equal(inspected.recordShape, 'directory-v1');
   assert.equal(inspected.installable, false);
   assert.deepEqual(inspected.blockingReasons, [
-    'item-runtime-verification-pending',
+    'alpha2-item-runtime-evidence-pending',
     'alpha2-recertification-gate-not-certified',
   ]);
   assert.equal(inspected.baseline.dshPackageVersion, '0.1.2-alpha.2');
@@ -419,7 +499,7 @@ test('all 11 current website records are showcase-only and reject install mode',
     assert.equal(inspected.skin.catalogId, skin.catalogId);
     assert.equal(inspected.installable, false);
     assert.deepEqual(inspected.blockingReasons, [
-      'item-runtime-verification-pending',
+      'alpha2-item-runtime-evidence-pending',
       'alpha2-recertification-gate-not-certified',
     ]);
 
@@ -594,7 +674,7 @@ test('Finder and Installer carry byte-identical current alpha.2 0/66 authority',
   );
   assert.equal(
     createHash('sha256').update(finderAuthority).digest('hex'),
-    'c1456b221050479e70ee74e7eab5422414a1fe9043f6c63e5d91a194d80e06b8'
+    '9957b098139820f2b9acca089495e0b22c27c52323c5ecf881ce72087e5f92fd'
   );
 });
 
@@ -605,10 +685,11 @@ test('local Installer exposes no promoted alpha.2 item receipt set', async () =>
   );
   assert.equal(catalog.skins.length, 11);
   assert.equal(current.items.length, 11);
-  assert.equal(current.gate.completedItems, 0);
+  assert.equal(current.gate.reviewedItems, 0);
   assert.equal(current.gate.runtimeReceiptSetSha256, null);
   assert.equal(current.gate.rollbackReceiptSetSha256, null);
   assert.equal(current.gate.completedTasks, 0);
+  assert.equal(current.gate.installableItems, 0);
   assert.equal(current.historicalAuthority.alpha1MayAuthorizeAlpha2, false);
   assert.equal(current.historicalAuthority.rc8MayAuthorizeAlpha2, false);
 });

@@ -1,13 +1,13 @@
 ---
 name: dsh-community-skin-installer
-description: Inspect the 11 allowlisted community skins and enforce their current DeepSeek Harness alpha.2 re-certification gate. Installation remains blocked until each item has fresh alpha.2 runtime, removal, and rollback evidence.
+description: Inspect the 11 allowlisted community skins and enforce their current DeepSeek Harness alpha.2 item-level re-certification gate. All items must be reviewed, while only individually passing items may later become installable and failures remain showcase-only.
 ---
 
 # DSH Community Skin Installer
 
 Use this Skill only for the 11 allowlisted community records: Maid Atelier and ten `dsh-web-ui` appearances. It is a separate trust lane from `dsh-theme-manager`.
 
-The current target is exact DeepSeek Harness `dsh-v0.1.2-alpha.2` at commit `0a53fb55bea101816fa226bb964ae2bed71c343b` and tree `64ccbfa8e0caa4711cd4a75717ef9e022657961b`. The official npm runtime and the exact-source cross-build are independent artifacts and must not be described as byte-equivalent. The 11 items have **0/66** current-baseline task receipts, so this revision is inspect-only and every installation attempt must fail closed before a download or Profile access.
+The current target is exact DeepSeek Harness `dsh-v0.1.2-alpha.2` at commit `0a53fb55bea101816fa226bb964ae2bed71c343b` and tree `64ccbfa8e0caa4711cd4a75717ef9e022657961b`. The official npm runtime and the exact-source cross-build are independent artifacts and must not be described as byte-equivalent. The review is currently **0/11 items** and **0/66 tasks**, with **0/11 installable items**. This revision is inspect-only, every record remains visible as showcase-only, and every installation attempt must fail closed before a download or Profile access.
 
 ## Required authority
 
@@ -47,7 +47,7 @@ DSH setup remains a separate prerequisite. This Skill never installs or downgrad
 3. Report the Public ID, normalized slug, exact source identity, license and asset restrictions, executable/network capabilities, current baseline, and every blocking reason.
 4. Delete the temporary record.
 
-For the current authority, every result must have `installable: false` and include `item-runtime-verification-pending` plus `alpha2-recertification-gate-not-certified`. A nested website record must use:
+For the current authority, every result must have `installable: false` and include `alpha2-item-runtime-evidence-pending` plus `alpha2-recertification-gate-not-certified`. The machine authority distinguishes `reviewedItems`, `completedTasks`, and `installableItems`; do not collapse these into one all-or-nothing count. A nested website record must use:
 
 - `distribution.kind: "external-showcase"`
 - `distribution.installability: "showcase-only"`
@@ -71,7 +71,7 @@ The RC.2 runtime-baseline and candidate lanes also remain historical. A baseline
 
 ## Reopening requirements
 
-The installation lane may reopen only in a reviewed future Skill release that binds, for each of all 11 items:
+The review decision may close only after all 11 items complete all 66 matrix tasks. That decision is not an all-or-nothing installation gate: a reviewed future Skill release may reopen only each individually passing item, while a failed item must remain visible as showcase-only with a concise ineligibility reason. For every item considered installable, bind:
 
 - macOS arm64, Linux x64, and Windows x64;
 - Node 22.19 and 24.15;
@@ -80,6 +80,6 @@ The installation lane may reopen only in a reviewed future Skill release that bi
 - a sanitized receipt set with no token, cookie, credential, or correlatable digest;
 - current runtime and rollback receipt-set digests plus a validator that checks those exact alpha.2 receipts.
 
-Until then, no old item, remote `verified: true`, mutable version, branch name, title match, Manager evidence, or local edit may reopen the gate.
+The aggregate authority must report `reviewedItems: 11`, `completedTasks: 66`, and the actual `installableItems` count. It must never mark a failed item installable or hide that item solely because certification failed. Until then, no old item, remote `verified: true`, mutable version, branch name, title match, Manager evidence, or local edit may reopen the gate.
 
 Never use `~`, `$HOME`, unresolved environment variables, `latest`, `next`, branch names, `npx`, `pnpm dlx`, a PATH `dsh`, source lifecycle scripts, or non-loopback Harness URLs.

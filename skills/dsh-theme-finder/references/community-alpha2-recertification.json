@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "purpose": "alpha2-community-skin-item-recertification",
   "baseline": {
     "baselineId": "deepseek-harness/dsh-v0.1.2-alpha.2@0a53fb55bea101816fa226bb964ae2bed71c343b",
@@ -27,26 +27,28 @@
   "gate": {
     "status": "alpha2-item-runtime-evidence-pending",
     "requiredItems": 11,
-    "completedItems": 0,
+    "reviewedItems": 0,
     "completedTasks": 0,
+    "installableItems": 0,
     "installable": false,
-    "publicationAllowed": false,
+    "showcasePublicationAllowed": true,
+    "installPublicationAllowed": false,
     "runtimeReceiptSetSha256": null,
     "rollbackReceiptSetSha256": null,
-    "publicationRule": "All 11 exact items must pass macOS arm64, Linux x64, and Windows x64 on Node 22.19.0 and 24.15.0. Each sanitized task receipt must prove web Profile snapshot, exact install, dump-config, cold restart, functional probe, removal, complete rollback, and restored-state verification before any installation entry can reopen."
+    "publicationRule": "All 11 exact items must complete review across macOS arm64, Linux x64, and Windows x64 on Node 22.19.0 and 24.15.0 before the release decision is final. Each item becomes installable independently only when all six sanitized task receipts prove web Profile snapshot, exact install, dump-config, cold restart, functional probe, removal, complete rollback, and restored-state verification. A failed item remains visible as showcase-only with its ineligibility reason and never blocks eligible items from reopening after the 66-task review is complete."
   },
   "items": [
-    { "catalogId": 2101, "slug": "dsh-deep-whale-maid-atelier", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
-    { "catalogId": 2201, "slug": "dsh-web-ui-blue-fantasy", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
-    { "catalogId": 2202, "slug": "dsh-web-ui-dragon-heir", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
-    { "catalogId": 2203, "slug": "dsh-web-ui-harbor", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
-    { "catalogId": 2204, "slug": "dsh-web-ui-miku", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
-    { "catalogId": 2205, "slug": "dsh-web-ui-minecraft", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
-    { "catalogId": 2206, "slug": "dsh-web-ui-qq98", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
-    { "catalogId": 2207, "slug": "dsh-web-ui-ths", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
-    { "catalogId": 2208, "slug": "dsh-web-ui-trading", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
-    { "catalogId": 2209, "slug": "dsh-web-ui-whale-song", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
-    { "catalogId": 2210, "slug": "dsh-web-ui-xp", "status": "verification-pending", "completedTasks": 0, "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null }
+    { "catalogId": 2101, "slug": "dsh-deep-whale-maid-atelier", "status": "verification-pending", "reviewed": false, "completedTasks": 0, "installable": false, "showcaseVisible": true, "ineligibilityReasons": ["alpha2-item-runtime-evidence-pending"], "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2201, "slug": "dsh-web-ui-blue-fantasy", "status": "verification-pending", "reviewed": false, "completedTasks": 0, "installable": false, "showcaseVisible": true, "ineligibilityReasons": ["alpha2-item-runtime-evidence-pending"], "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2202, "slug": "dsh-web-ui-dragon-heir", "status": "verification-pending", "reviewed": false, "completedTasks": 0, "installable": false, "showcaseVisible": true, "ineligibilityReasons": ["alpha2-item-runtime-evidence-pending"], "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2203, "slug": "dsh-web-ui-harbor", "status": "verification-pending", "reviewed": false, "completedTasks": 0, "installable": false, "showcaseVisible": true, "ineligibilityReasons": ["alpha2-item-runtime-evidence-pending"], "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2204, "slug": "dsh-web-ui-miku", "status": "verification-pending", "reviewed": false, "completedTasks": 0, "installable": false, "showcaseVisible": true, "ineligibilityReasons": ["alpha2-item-runtime-evidence-pending"], "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2205, "slug": "dsh-web-ui-minecraft", "status": "verification-pending", "reviewed": false, "completedTasks": 0, "installable": false, "showcaseVisible": true, "ineligibilityReasons": ["alpha2-item-runtime-evidence-pending"], "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2206, "slug": "dsh-web-ui-qq98", "status": "verification-pending", "reviewed": false, "completedTasks": 0, "installable": false, "showcaseVisible": true, "ineligibilityReasons": ["alpha2-item-runtime-evidence-pending"], "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2207, "slug": "dsh-web-ui-ths", "status": "verification-pending", "reviewed": false, "completedTasks": 0, "installable": false, "showcaseVisible": true, "ineligibilityReasons": ["alpha2-item-runtime-evidence-pending"], "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2208, "slug": "dsh-web-ui-trading", "status": "verification-pending", "reviewed": false, "completedTasks": 0, "installable": false, "showcaseVisible": true, "ineligibilityReasons": ["alpha2-item-runtime-evidence-pending"], "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2209, "slug": "dsh-web-ui-whale-song", "status": "verification-pending", "reviewed": false, "completedTasks": 0, "installable": false, "showcaseVisible": true, "ineligibilityReasons": ["alpha2-item-runtime-evidence-pending"], "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },
+    { "catalogId": 2210, "slug": "dsh-web-ui-xp", "status": "verification-pending", "reviewed": false, "completedTasks": 0, "installable": false, "showcaseVisible": true, "ineligibilityReasons": ["alpha2-item-runtime-evidence-pending"], "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null }
   ],
   "historicalAuthority": {
     "alpha1Path": "alpha1-recertification.json",

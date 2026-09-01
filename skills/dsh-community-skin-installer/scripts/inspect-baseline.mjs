@@ -73,20 +73,23 @@ if (
     lane.officialNpmTarballSha256 !==
       '5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47' ||
     lane.communityItemsRequired !== 11 ||
-    lane.communityItemsCompleted !== 0 ||
+    lane.communityItemsReviewed !== 0 ||
     lane.communityTasksRequired !== 66 ||
     lane.communityTasksCompleted !== 0 ||
     lane.communityInstallableRecords !== 0 ||
+    lane.communityShowcaseRecords !== 11 ||
     lane.websiteDistribution !== 'external-showcase' ||
     lane.websiteInstallability !== 'showcase-only' ||
     lane.websiteCompatibility !== 'verification-pending' ||
     evidence.baseline?.baselineId !== lane.baselineId ||
     evidence.gate?.status !== lane.status ||
     evidence.gate?.requiredItems !== 11 ||
-    evidence.gate?.completedItems !== 0 ||
+    evidence.gate?.reviewedItems !== 0 ||
     evidence.gate?.completedTasks !== 0 ||
+    evidence.gate?.installableItems !== 0 ||
     evidence.gate?.installable !== false ||
-    evidence.gate?.publicationAllowed !== false ||
+    evidence.gate?.showcasePublicationAllowed !== true ||
+    evidence.gate?.installPublicationAllowed !== false ||
     evidence.matrix?.requiredTasksPerItem !== 6 ||
     evidence.matrix?.requiredTotalTasks !== 66 ||
     evidence.gate?.runtimeReceiptSetSha256 !== null ||
@@ -95,7 +98,12 @@ if (
     evidence.items.some(
       (item) =>
         item.status !== 'verification-pending' ||
+        item.reviewed !== false ||
         item.completedTasks !== 0 ||
+        item.installable !== false ||
+        item.showcaseVisible !== true ||
+        JSON.stringify(item.ineligibilityReasons) !==
+          JSON.stringify(['alpha2-item-runtime-evidence-pending']) ||
         item.runtimeReceiptSetSha256 !== null ||
         item.rollbackReceiptSetSha256 !== null
     ) ||
@@ -205,12 +213,14 @@ process.stdout.write(`${JSON.stringify({
     evidence.gate?.requiredItems ??
     receipt?.summary?.itemsPlanned ??
     receipt?.summary?.runtimeMatrixRequired,
+  itemsReviewed: evidence.gate?.reviewedItems,
   itemsVerified:
-    evidence.gate?.completedItems ??
+    evidence.gate?.installableItems ??
     receipt?.summary?.itemsVerified ??
     receipt?.summary?.runtimeMatrixPassed,
   installableRecords:
     lane.communityInstallableRecords ?? receipt?.summary?.installableRecords,
+  showcaseRecords: lane.communityShowcaseRecords,
   websiteDistribution: lane.websiteDistribution,
   websiteInstallability: lane.websiteInstallability,
   websiteCompatibility: lane.websiteCompatibility,
