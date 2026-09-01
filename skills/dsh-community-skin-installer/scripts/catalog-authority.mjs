@@ -3,7 +3,9 @@ import { readFile } from 'node:fs/promises';
 
 import {
   ALPHA1_RECERTIFICATION_SHA256,
+  ALPHA2_COHORT_POLICY,
   ALPHA2_HARNESS_AUTHORITY_SHA256,
+  ALPHA2_SKIN_CENTER_COHORT_IDS,
   ALPHA2_RECERTIFICATION_SCHEMA_SHA256,
   ALPHA2_RECERTIFICATION_SHA256,
   loadAlpha2RecertificationAuthority,
@@ -539,6 +541,11 @@ export async function loadCommunityAuthority() {
   exact(alpha2Recertification.gate?.installableItems, 0, 'alpha2 installable items');
   exact(alpha2Recertification.gate?.runtimeReceiptSetSha256, null, 'alpha2 runtime receipt set');
   exact(alpha2Recertification.gate?.rollbackReceiptSetSha256, null, 'alpha2 rollback receipt set');
+  exactObject(
+    alpha2Recertification.gate?.cohortPolicy,
+    ALPHA2_COHORT_POLICY,
+    'alpha2 cohort policy'
+  );
 
   exact(
     runtimeReceipt.status,
@@ -602,6 +609,20 @@ export async function loadCommunityAuthority() {
   };
 }
 
+function isAlpha2RuntimeVerifiedItem(item) {
+  return (
+    item?.status === 'runtime-verified-installable' &&
+    item.reviewed === true &&
+    item.completedTasks === 6 &&
+    item.installable === true &&
+    item.showcaseVisible === true &&
+    Array.isArray(item.ineligibilityReasons) &&
+    item.ineligibilityReasons.length === 0 &&
+    /^[a-f0-9]{64}$/.test(item.runtimeReceiptSetSha256 ?? '') &&
+    /^[a-f0-9]{64}$/.test(item.rollbackReceiptSetSha256 ?? '')
+  );
+}
+
 export function validateCommunityRecord(
   raw,
   { catalog, alpha2Recertification },
@@ -617,6 +638,11 @@ export function validateCommunityRecord(
     (item) => item.catalogId === local.catalogId && item.slug === local.slug
   );
   if (!currentItem) fail('Catalog slug is not in the alpha2 recertification set');
+  exactObject(
+    alpha2Recertification.gate?.cohortPolicy,
+    ALPHA2_COHORT_POLICY,
+    'alpha2 cohort policy'
+  );
 
   const normalized = Number.isSafeInteger(selected.catalogId)
     ? validateDirectoryRecord(
@@ -628,16 +654,17 @@ export function validateCommunityRecord(
       )
     : validateLegacyRecord(selected, local, catalog);
 
-  const runtimeVerified =
-    currentItem.status === 'runtime-verified-installable' &&
-    currentItem.reviewed === true &&
-    currentItem.completedTasks === 6 &&
-    currentItem.installable === true &&
-    currentItem.showcaseVisible === true &&
-    Array.isArray(currentItem.ineligibilityReasons) &&
-    currentItem.ineligibilityReasons.length === 0 &&
-    /^[a-f0-9]{64}$/.test(currentItem.runtimeReceiptSetSha256 ?? '') &&
-    /^[a-f0-9]{64}$/.test(currentItem.rollbackReceiptSetSha256 ?? '');
+  const runtimeVerified = isAlpha2RuntimeVerifiedItem(currentItem);
+  const isSkinCenterCohortItem = ALPHA2_SKIN_CENTER_COHORT_IDS.includes(
+    currentItem.catalogId
+  );
+  const skinCenterCohortVerified =
+    !isSkinCenterCohortItem ||
+    ALPHA2_SKIN_CENTER_COHORT_IDS.every((catalogId) =>
+      isAlpha2RuntimeVerifiedItem(
+        alpha2Recertification.items.find((item) => item.catalogId === catalogId)
+      )
+    );
   const alpha2GateCertified =
     alpha2Recertification.gate?.status === 'alpha2-review-complete' &&
     alpha2Recertification.gate?.installable === true &&
@@ -674,7 +701,10 @@ export function validateCommunityRecord(
   if (!alpha2GateCertified) {
     blockingReasons.push('alpha2-recertification-gate-not-certified');
   }
-  if (runtimeVerified && alpha2GateCertified) {
+  if (!skinCenterCohortVerified) {
+    blockingReasons.push('alpha2-skin-center-cohort-not-certified');
+  }
+  if (runtimeVerified && alpha2GateCertified && skinCenterCohortVerified) {
     blockingReasons.push('alpha2-runtime-receipt-verifier-not-implemented');
   }
   const installable = blockingReasons.length === 0;

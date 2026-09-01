@@ -6,7 +6,7 @@ The upstream prerelease publishes the official `@deepseek-ai/dsh@0.1.2-alpha.2` 
 
 `baseline-policy.json` selects `currentAlpha2`; `alpha2-recertification.json` and its digest-bound schema are the current installation gate. They record 11 required items, 0 reviewed items, 66 required platform/Node tasks, 0 completed tasks, and 0 installable items. Every website record must consequently remain `external-showcase`, `showcase-only`, and `verification-pending` on baseline `0.1.2-alpha.2`.
 
-The final review is item-level, not all-or-nothing: all 11 items must be reviewed and all 66 tasks must finish, but only items with six passing runtime/removal/rollback receipts may become installable. Failed items remain visible as showcase-only with a reason and do not inherit authority from passing items.
+The final review is not all-or-nothing across all 11 records: all 11 items must be reviewed and all 66 tasks must finish, the nine shared Skin Center records reopen only as one all-passing cohort, and QQ98 plus THS remain item-level decisions. Failed items remain visible as showcase-only with a reason; one failed Skin Center member blocks all nine shared records, while an independent failure does not transfer to the other independent item.
 
 ## Historical evidence
 

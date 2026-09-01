@@ -4,21 +4,20 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
+import {
+  rankTop10ScoreItems,
+  scoreAuthorityItemSha256,
+  TOP10_TIE_BREAKS,
+  TOP10_WEIGHTS,
+  validateTop10ScoreAuthority,
+} from './top10-score-authority.mjs';
+
 const releaseSetUrl = new URL('../references/top10-release-set.json', import.meta.url);
 const releaseSetSchemaUrl = new URL('../references/top10-release-set.schema.json', import.meta.url);
+const scoreAuthorityUrl = new URL('../references/top10-score-authority.json', import.meta.url);
+const candidateIntakeUrl = new URL('../references/plugin-candidate-intake.json', import.meta.url);
 
 const SHA64 = /^[a-f0-9]{64}$/;
-const WEIGHTS = {
-  userValueAndUseCaseClarity: 25,
-  stabilityMaintenanceAndAlpha2Fit: 25,
-  securityAndPermissionRestraint: 15,
-  crossPlatformInstallRemoveRollback: 15,
-  nonTechnicalUsabilityAndDocs: 10,
-  combinationComplementarity: 10,
-};
-const TIE_BREAKS = ['stability-plus-security', 'maintenance-activity', 'lower-public-id'];
-const SCORE_KEYS = Object.keys(WEIGHTS);
-const USE_CASE = /^[a-z0-9-]{3,48}$/;
 
 function fail(message) {
   throw new Error(message);
@@ -43,12 +42,6 @@ function exactKeys(value, keys, label) {
   }
 }
 
-function validIsoDate(value) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
-  const date = new Date(`${value}T00:00:00.000Z`);
-  return !Number.isNaN(date.valueOf()) && date.toISOString().slice(0, 10) === value;
-}
-
 export function releaseSetPayloadSha256(releaseSet) {
   const payload = structuredClone(releaseSet);
   delete payload.releaseSetPayloadSha256;
@@ -59,64 +52,78 @@ export function itemAuthoritySha256(item) {
   return sha256(Buffer.from(`${JSON.stringify(stable(item))}\n`, 'utf8'));
 }
 
-export function validateTop10ReleaseSet(releaseSet, { authority = null } = {}) {
+export function validateTop10ReleaseSet(
+  releaseSet,
+  { authority = null, scoreAuthorityBytes = null, candidateIntakeBytes = null } = {}
+) {
   exactKeys(releaseSet, [
     'schemaVersion', 'capturedAt', 'purpose', 'releaseSet', 'status', 'frozen',
-    'baseline', 'scoring', 'entries', 'gate', 'releaseSetPayloadSha256',
+    'baseline', 'scoreAuthority', 'scoring', 'entries', 'gate', 'releaseSetPayloadSha256',
   ], 'Top10 release set');
-  if (releaseSet.schemaVersion !== 1 || releaseSet.purpose !== 'dsh-plugin-top10-release-set' ||
+  if (releaseSet.schemaVersion !== 2 || releaseSet.purpose !== 'dsh-plugin-top10-release-set' ||
       !/^\d{4}-\d{2}-\d{2}$/.test(releaseSet.capturedAt) ||
       !/^[a-z0-9-]{8,80}$/.test(releaseSet.releaseSet)) fail('Top10 release-set header mismatch');
   exactKeys(releaseSet.baseline, ['tag', 'commit'], 'Top10 baseline');
   if (releaseSet.baseline.tag !== 'dsh-v0.1.2-alpha.2' ||
       releaseSet.baseline.commit !== '0a53fb55bea101816fa226bb964ae2bed71c343b') fail('Top10 baseline mismatch');
+  exactKeys(
+    releaseSet.scoreAuthority,
+    ['path', 'sha256', 'payloadSha256'],
+    'Top10 score authority binding'
+  );
+  if (
+    releaseSet.scoreAuthority.path !== 'top10-score-authority.json' ||
+    !SHA64.test(releaseSet.scoreAuthority.sha256) ||
+    !SHA64.test(releaseSet.scoreAuthority.payloadSha256) ||
+    !Buffer.isBuffer(scoreAuthorityBytes) ||
+    sha256(scoreAuthorityBytes) !== releaseSet.scoreAuthority.sha256
+  ) {
+    fail('Top10 release set is not bound to the exact complete score authority bytes');
+  }
+  let scoreAuthority;
+  try {
+    scoreAuthority = validateTop10ScoreAuthority(JSON.parse(scoreAuthorityBytes), {
+      authority,
+      candidateIntakeBytes,
+    });
+  } catch (error) {
+    fail(`Top10 complete score authority is invalid: ${error.message}`);
+  }
+  if (scoreAuthority.scoreAuthorityPayloadSha256 !== releaseSet.scoreAuthority.payloadSha256) {
+    fail('Top10 release set score-authority payload digest mismatch');
+  }
   exactKeys(releaseSet.scoring, [
     'weights', 'minimumUseCaseCategories', 'coveredUseCaseCategories',
     'coverageStatus', 'tieBreakOrder',
   ], 'Top10 scoring');
-  exactKeys(releaseSet.scoring.weights, Object.keys(WEIGHTS), 'Top10 weights');
-  if (JSON.stringify(releaseSet.scoring.weights) !== JSON.stringify(WEIGHTS) ||
+  exactKeys(releaseSet.scoring.weights, Object.keys(TOP10_WEIGHTS), 'Top10 weights');
+  if (JSON.stringify(releaseSet.scoring.weights) !== JSON.stringify(TOP10_WEIGHTS) ||
       releaseSet.scoring.minimumUseCaseCategories !== 8 ||
       !Array.isArray(releaseSet.scoring.coveredUseCaseCategories) ||
       new Set(releaseSet.scoring.coveredUseCaseCategories).size !== releaseSet.scoring.coveredUseCaseCategories.length ||
-      releaseSet.scoring.coveredUseCaseCategories.some((entry) => !USE_CASE.test(entry)) ||
+      releaseSet.scoring.coveredUseCaseCategories.some(
+        (entry) => !scoreAuthority.scoring.useCaseCategories.includes(entry)
+      ) ||
       JSON.stringify(releaseSet.scoring.coveredUseCaseCategories) !==
         JSON.stringify([...releaseSet.scoring.coveredUseCaseCategories].sort()) ||
-      JSON.stringify(releaseSet.scoring.tieBreakOrder) !== JSON.stringify(TIE_BREAKS)) {
+      JSON.stringify(releaseSet.scoring.tieBreakOrder) !== JSON.stringify(TOP10_TIE_BREAKS)) {
     fail('Top10 scoring, coverage, or tie-break rules mismatch');
   }
   if (!Array.isArray(releaseSet.entries) || ![0, 10].includes(releaseSet.entries.length)) {
     fail('Top10 entries must be empty while pending or contain ten frozen entries');
   }
   const ids = [];
-  const coveredUseCases = new Set();
   for (let index = 0; index < releaseSet.entries.length; index += 1) {
     const entry = releaseSet.entries[index];
     exactKeys(entry, [
-      'rank', 'publicId', 'catalogId', 'itemAuthoritySha256', 'useCaseCategories',
-      'scores', 'totalScore', 'maintenanceActivityAt', 'maintenanceActivityReceiptSha256',
+      'rank', 'publicId', 'catalogId', 'itemAuthoritySha256', 'scoreAuthorityItemSha256',
     ], `Top10 entries[${index}]`);
     if (entry.rank !== index + 1 || !Number.isSafeInteger(entry.catalogId) ||
         entry.catalogId < 3000 || entry.catalogId > 3999 || entry.publicId !== `#${entry.catalogId}` ||
         !SHA64.test(entry.itemAuthoritySha256) ||
-        !Array.isArray(entry.useCaseCategories) || entry.useCaseCategories.length < 1 ||
-        new Set(entry.useCaseCategories).size !== entry.useCaseCategories.length ||
-        entry.useCaseCategories.some((category) => !USE_CASE.test(category)) ||
-        JSON.stringify(entry.useCaseCategories) !== JSON.stringify([...entry.useCaseCategories].sort()) ||
-        !validIsoDate(entry.maintenanceActivityAt) ||
-        !SHA64.test(entry.maintenanceActivityReceiptSha256)) {
+        !SHA64.test(entry.scoreAuthorityItemSha256)) {
       fail(`Top10 entries[${index}] identity or digest mismatch`);
     }
-    exactKeys(entry.scores, SCORE_KEYS, `Top10 entries[${index}].scores`);
-    for (const key of SCORE_KEYS) {
-      if (!Number.isSafeInteger(entry.scores[key]) || entry.scores[key] < 0 ||
-          entry.scores[key] > WEIGHTS[key]) {
-        fail(`Top10 entries[${index}].scores.${key} exceeds its fixed weight`);
-      }
-    }
-    const total = SCORE_KEYS.reduce((sum, key) => sum + entry.scores[key], 0);
-    if (entry.totalScore !== total) fail(`Top10 entries[${index}] total score mismatch`);
-    entry.useCaseCategories.forEach((category) => coveredUseCases.add(category));
     ids.push(entry.catalogId);
   }
   if (new Set(ids).size !== ids.length) fail('Top10 Public IDs must be unique');
@@ -157,10 +164,12 @@ export function validateTop10ReleaseSet(releaseSet, { authority = null } = {}) {
     gate.transactionPreflightVerified, gate.transactionRollbackVerified,
     gate.webCoexistenceVerified, gate.conflictMatrixVerified,
   ].every((value) => value === true);
+  const anyReadyFlag = booleanGateKeys.some((key) => gate[key] === true);
   if (!releaseSet.frozen) {
     if (releaseSet.status !== 'candidate-pending' || releaseSet.scoring.coverageStatus !== 'candidate-unverified' ||
         releaseSet.entries.length !== 0 || releaseSet.scoring.coveredUseCaseCategories.length !== 0 ||
-        readyFlags || gate.verifiedPluginCount !== 0 || gate.verifiedMatrixTasksPerItem !== 0 ||
+        scoreAuthority.frozen !== false || scoreAuthority.status !== 'candidate-pending' ||
+        anyReadyFlag || gate.verifiedPluginCount !== 0 || gate.verifiedMatrixTasksPerItem !== 0 ||
         gate.itemAuthoritySetSha256 !== null || gate.platformNodeMatrixSetSha256 !== null ||
         gate.transactionPreflightReceiptSha256 !== null || gate.transactionRollbackReceiptSha256 !== null ||
         gate.webCoexistenceReceiptSha256 !== null || gate.conflictMatrixReceiptSha256 !== null) {
@@ -169,6 +178,10 @@ export function validateTop10ReleaseSet(releaseSet, { authority = null } = {}) {
     return releaseSet;
   }
   if (!authority) fail('frozen Top10 release set requires the full Plugin authority');
+  const rankedScoreItems = rankTop10ScoreItems(scoreAuthority.items);
+  const coveredUseCases = new Set(
+    rankedScoreItems.flatMap((scoreItem) => scoreItem.useCaseCategories)
+  );
   if (releaseSet.status !== 'verified-frozen' || releaseSet.scoring.coverageStatus !== 'verified' ||
       releaseSet.entries.length !== 10 || coveredUseCases.size < releaseSet.scoring.minimumUseCaseCategories ||
       JSON.stringify([...coveredUseCases].sort()) !== JSON.stringify(releaseSet.scoring.coveredUseCaseCategories) || !readyFlags ||
@@ -178,25 +191,19 @@ export function validateTop10ReleaseSet(releaseSet, { authority = null } = {}) {
       !SHA64.test(gate.transactionRollbackReceiptSha256) ||
       !SHA64.test(gate.webCoexistenceReceiptSha256) ||
       !SHA64.test(gate.conflictMatrixReceiptSha256) ||
+      scoreAuthority.frozen !== true || scoreAuthority.status !== 'verified-frozen' ||
       authority.harness?.installable !== true || authority.publication?.publishedInstallable !== true ||
       authority.items?.length !== 80) fail('frozen Top10 release set lacks the complete 80/80 six-task gate');
-  const ranked = [...releaseSet.entries].sort((left, right) => {
-    if (left.totalScore !== right.totalScore) return right.totalScore - left.totalScore;
-    const leftSubtotal = left.scores.stabilityMaintenanceAndAlpha2Fit +
-      left.scores.securityAndPermissionRestraint;
-    const rightSubtotal = right.scores.stabilityMaintenanceAndAlpha2Fit +
-      right.scores.securityAndPermissionRestraint;
-    if (leftSubtotal !== rightSubtotal) return rightSubtotal - leftSubtotal;
-    if (left.maintenanceActivityAt !== right.maintenanceActivityAt) {
-      return right.maintenanceActivityAt.localeCompare(left.maintenanceActivityAt, 'en');
-    }
-    return left.catalogId - right.catalogId;
-  });
-  if (ranked.some((entry, index) => entry.catalogId !== releaseSet.entries[index].catalogId)) {
-    fail('Top10 entries are not ordered by total score and the fixed tie-break sequence');
-  }
   const byId = new Map(authority.items.map((item) => [item.catalogId, item]));
-  for (const entry of releaseSet.entries) {
+  for (let index = 0; index < releaseSet.entries.length; index += 1) {
+    const entry = releaseSet.entries[index];
+    const scoreItem = rankedScoreItems[index];
+    if (
+      entry.catalogId !== scoreItem.catalogId ||
+      entry.scoreAuthorityItemSha256 !== scoreAuthorityItemSha256(scoreItem)
+    ) {
+      fail('Top10 entries omit a higher-ranked item or differ from the global deterministic ranking');
+    }
     const item = byId.get(entry.catalogId);
     if (!item || entry.itemAuthoritySha256 !== itemAuthoritySha256(item)) {
       fail(`Top10 #${entry.catalogId} item authority digest mismatch`);
@@ -218,11 +225,20 @@ export function validateTop10ReleaseSet(releaseSet, { authority = null } = {}) {
 }
 
 export async function loadTop10ReleaseSet() {
-  const bytes = await readFile(releaseSetUrl);
+  const [bytes, scoreAuthorityBytes, candidateIntakeBytes] = await Promise.all([
+    readFile(releaseSetUrl),
+    readFile(scoreAuthorityUrl),
+    readFile(candidateIntakeUrl),
+  ]);
   return {
-    releaseSet: validateTop10ReleaseSet(JSON.parse(bytes)),
+    releaseSet: validateTop10ReleaseSet(JSON.parse(bytes), {
+      scoreAuthorityBytes,
+      candidateIntakeBytes,
+    }),
     bytes,
     sha256: sha256(bytes),
+    scoreAuthorityBytes,
+    candidateIntakeBytes,
   };
 }
 

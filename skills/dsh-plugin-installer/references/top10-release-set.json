@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "capturedAt": "2026-09-01",
   "purpose": "dsh-plugin-top10-release-set",
   "releaseSet": "top10-alpha2-candidate-2026-09",
@@ -8,6 +8,11 @@
   "baseline": {
     "tag": "dsh-v0.1.2-alpha.2",
     "commit": "0a53fb55bea101816fa226bb964ae2bed71c343b"
+  },
+  "scoreAuthority": {
+    "path": "top10-score-authority.json",
+    "sha256": "6bb528c469919f4c9533f9edafc2439d1dd8b620f6e7a42b31c431ab0cdae346",
+    "payloadSha256": "5ab95ab51133bc637105ff030017dbdfacac27f8d11e4c71a268897959d6e394"
   },
   "scoring": {
     "weights": {
@@ -47,5 +52,5 @@
     "itemAuthoritySetSha256": null,
     "platformNodeMatrixSetSha256": null
   },
-  "releaseSetPayloadSha256": "d5a769cc620dea16d8057ae50b2e1e670f85098a9dddc4044ab498da5be23201"
+  "releaseSetPayloadSha256": "10a6aa8a6e3921a1c52dfeddec53de8fcee62eda5235f1b464622fa45e19a87b"
 }

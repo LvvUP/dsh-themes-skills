@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": ["schemaVersion", "purpose", "baseline", "matrix", "gate", "items", "historicalAuthority"],
   "properties": {
-    "schemaVersion": { "const": 2 },
+    "schemaVersion": { "const": 3 },
     "purpose": { "const": "alpha2-community-skin-item-recertification" },
     "baseline": {
       "type": "object",
@@ -53,7 +53,7 @@
     "gate": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["status", "requiredItems", "reviewedItems", "completedTasks", "installableItems", "installable", "showcasePublicationAllowed", "installPublicationAllowed", "runtimeReceiptSetSha256", "rollbackReceiptSetSha256", "publicationRule"],
+      "required": ["status", "requiredItems", "reviewedItems", "completedTasks", "installableItems", "installable", "showcasePublicationAllowed", "installPublicationAllowed", "runtimeReceiptSetSha256", "rollbackReceiptSetSha256", "cohortPolicy", "publicationRule"],
       "properties": {
         "status": { "const": "alpha2-item-runtime-evidence-pending" },
         "requiredItems": { "const": 11 },
@@ -65,6 +65,36 @@
         "installPublicationAllowed": { "const": false },
         "runtimeReceiptSetSha256": { "type": "null" },
         "rollbackReceiptSetSha256": { "type": "null" },
+        "cohortPolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["skinCenterBuiltin", "independentItems"],
+          "properties": {
+            "skinCenterBuiltin": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["cohortId", "members", "requiredMembers", "allMembersMustPass", "allMembersRollbackVerified", "installability"],
+              "properties": {
+                "cohortId": { "const": "skin-center-builtin-0.2.5" },
+                "members": { "const": [2101, 2201, 2202, 2203, 2204, 2205, 2208, 2209, 2210] },
+                "requiredMembers": { "const": 9 },
+                "allMembersMustPass": { "const": true },
+                "allMembersRollbackVerified": { "const": true },
+                "installability": { "const": "all-or-none" }
+              }
+            },
+            "independentItems": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["members", "requiredMembers", "installability"],
+              "properties": {
+                "members": { "const": [2206, 2207] },
+                "requiredMembers": { "const": 2 },
+                "installability": { "const": "item-level" }
+              }
+            }
+          }
+        },
         "publicationRule": { "type": "string", "minLength": 120 }
       }
     },

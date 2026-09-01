@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "purpose": "alpha2-community-skin-item-recertification",
   "baseline": {
     "baselineId": "deepseek-harness/dsh-v0.1.2-alpha.2@0a53fb55bea101816fa226bb964ae2bed71c343b",
@@ -35,7 +35,22 @@
     "installPublicationAllowed": false,
     "runtimeReceiptSetSha256": null,
     "rollbackReceiptSetSha256": null,
-    "publicationRule": "All 11 exact items must complete review across macOS arm64, Linux x64, and Windows x64 on Node 22.19.0 and 24.15.0 before the release decision is final. Each item becomes installable independently only when all six sanitized task receipts prove web Profile snapshot, exact install, dump-config, cold restart, functional probe, removal, complete rollback, and restored-state verification. A failed item remains visible as showcase-only with its ineligibility reason and never blocks eligible items from reopening after the 66-task review is complete."
+    "cohortPolicy": {
+      "skinCenterBuiltin": {
+        "cohortId": "skin-center-builtin-0.2.5",
+        "members": [2101, 2201, 2202, 2203, 2204, 2205, 2208, 2209, 2210],
+        "requiredMembers": 9,
+        "allMembersMustPass": true,
+        "allMembersRollbackVerified": true,
+        "installability": "all-or-none"
+      },
+      "independentItems": {
+        "members": [2206, 2207],
+        "requiredMembers": 2,
+        "installability": "item-level"
+      }
+    },
+    "publicationRule": "All 11 exact items must complete review across macOS arm64, Linux x64, and Windows x64 on Node 22.19.0 and 24.15.0 before the release decision is final. The nine Skin Center built-in items form one shared-artifact cohort: none may become installable unless all nine pass all six sanitized tasks and prove complete rollback and restored-state verification. QQ98 #2206 and THS #2207 remain item-level decisions after the 66-task review. Every failed item remains visible as showcase-only with its ineligibility reason; one failed Skin Center member blocks all nine shared-artifact items but does not block an independently passing QQ98 or THS item."
   },
   "items": [
     { "catalogId": 2101, "slug": "dsh-deep-whale-maid-atelier", "status": "verification-pending", "reviewed": false, "completedTasks": 0, "installable": false, "showcaseVisible": true, "ineligibilityReasons": ["alpha2-item-runtime-evidence-pending"], "runtimeReceiptSetSha256": null, "rollbackReceiptSetSha256": null },

@@ -84,6 +84,7 @@ actual package mutation receives.
 
 The website currently publishes 80 curated Plugin records, but the bundled
 authority contains zero verified items. The independent
+`top10-score-authority.json` is pending with 0/80 score records, and
 `top10-release-set.json` is not frozen, its entries array is empty, and its
 six-task counters are zero. No provisional Top10 IDs are published. Plugins
 cannot be prepared or installed. Do not manufacture package
@@ -142,12 +143,15 @@ while the promoted authority still contains zero installable items.
 Promotion is all-or-nothing: published catalog count, required verified
 count, verified count, authority count, and actual item count must all be
 exactly 80. Public IDs and package names must be unique. Top10 becomes
-installable only as the exact ordered ten-ID subset of those 80 items after
-its fixed `25/25/15/15/10/10` per-entry scoring and exact totals,
-eight-category coverage, deterministic ranking/tie-break order, per-item
-authority hashes, overall payload digest, six-task matrix, Web coexistence,
-pairwise conflict receipts, full preflight, and failure rollback gates all
-validate and `frozen` is true.
+installable only after the separate score authority binds all 80 candidate
+inputs, item authorities, six fixed `25/25/15/15/10/10` dimensions, exact
+totals, canonical use cases, upstream-commit maintenance evidence, matrix
+digests, and score-review receipts. The release set must be exactly the first
+ten records of the global deterministic ordering; no lower-scored substitute
+may omit a higher-ranked record. Those ten must cover at least eight categories
+and bind per-item score/item hashes, the overall payload digest, six-task
+matrix, Web coexistence, pairwise conflict receipts, full preflight, and
+failure rollback gates before both authorities can be `frozen: true`.
 
 The exact alpha.2 official npm runtime has a promoted 6/6 Harness receipt set.
 Plugin installation still requires both that promoted baseline and item-level

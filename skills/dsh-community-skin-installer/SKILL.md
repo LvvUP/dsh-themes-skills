@@ -1,6 +1,6 @@
 ---
 name: dsh-community-skin-installer
-description: Inspect the 11 allowlisted community skins and enforce their current DeepSeek Harness alpha.2 item-level re-certification gate. All items must be reviewed, while only individually passing items may later become installable and failures remain showcase-only.
+description: Inspect the 11 allowlisted community skins and enforce their current DeepSeek Harness alpha.2 re-certification gate. All items must be reviewed; nine shared Skin Center items reopen only as one passing cohort, while QQ98 and THS remain item-level decisions and failures stay showcase-only.
 ---
 
 # DSH Community Skin Installer
@@ -80,7 +80,7 @@ The RC.2 runtime-baseline and candidate lanes also remain historical. A baseline
 
 ## Reopening requirements
 
-The review decision may close only after all 11 items complete all 66 matrix tasks. That decision is not an all-or-nothing installation gate: a reviewed future Skill release may reopen only each individually passing item, while a failed item must remain visible as showcase-only with a concise ineligibility reason. For every item considered installable, bind:
+The review decision may close only after all 11 items complete all 66 matrix tasks. It is not all-or-nothing across the entire 11-item set: the nine Skin Center built-in records form one all-or-none shared-artifact cohort, while QQ98 and THS remain independent item-level decisions. One failed Skin Center member blocks installation publication for all nine; a failed QQ98 or THS item does not block the other independent item or a fully passing Skin Center cohort. Every failed item remains visible as showcase-only with a concise ineligibility reason. For every item considered installable, bind:
 
 - macOS arm64, Linux x64, and Windows x64;
 - Node 22.19 and 24.15;

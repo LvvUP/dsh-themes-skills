@@ -3,7 +3,7 @@
 The authority has two layers:
 
 - `community-catalog.json` preserves the exact 11-item identity, rights, asset, and historical RC.8 evidence.
-- `alpha2-recertification.json` plus its digest-bound schema alone decides current-baseline item installability. It separately counts reviewed items, completed matrix tasks, and installable items; all 11 must be reviewed, but a failed item remains showcase-only and does not block individually passing items after the 66-task review completes. `alpha1-recertification.json` is historical and cannot authorize alpha.2.
+- `alpha2-recertification.json` plus its digest-bound schema alone decides current-baseline item installability. It separately counts reviewed items, completed matrix tasks, and installable items; all 11 must be reviewed. The nine Skin Center built-in records are one all-or-none shared-artifact cohort, while QQ98 and THS retain item-level decisions. A failed item remains showcase-only; one failed Skin Center member blocks all nine shared records, but does not block an independently passing QQ98 or THS item after the 66-task review completes. `alpha1-recertification.json` is historical and cannot authorize alpha.2.
 
 ## Independent axes
 

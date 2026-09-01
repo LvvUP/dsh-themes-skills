@@ -31,6 +31,16 @@ import {
   releaseSetPayloadSha256,
   validateTop10ReleaseSet,
 } from '../skills/dsh-plugin-installer/scripts/top10-authority.mjs';
+import {
+  candidateInputSha256,
+  maintenanceEvidenceSha256,
+  rankTop10ScoreItems,
+  scoreAuthorityItemSha256,
+  scoreAuthorityPayloadSha256,
+  scoreReceiptSha256,
+  scoringPolicySha256,
+  validateTop10ScoreAuthority,
+} from '../skills/dsh-plugin-installer/scripts/top10-score-authority.mjs';
 import { loadAuthority as loadHarnessAuthority } from '../skills/dsh-harness-installer/scripts/authority.mjs';
 import {
   runtimeProvenanceSetSha256,
@@ -42,6 +52,14 @@ import {
 
 function sha256(bytes) {
   return createHash('sha256').update(bytes).digest('hex');
+}
+
+function stable(value) {
+  if (Array.isArray(value)) return value.map(stable);
+  if (value !== null && typeof value === 'object') {
+    return Object.fromEntries(Object.keys(value).sort().map((key) => [key, stable(value[key])]));
+  }
+  return value;
 }
 
 function integrity(digest) {
@@ -259,6 +277,9 @@ test('pending Plugin and Top10 authorities expose no install item or provisional
   const loaded = await loadPluginAuthority();
   assert.equal(loaded.authority.publication.verifiedInstallableCount, 0);
   assert.equal(loaded.authority.items.length, 0);
+  assert.equal(loaded.top10ScoreAuthority.frozen, false);
+  assert.equal(loaded.top10ScoreAuthority.pluginSet.verifiedItemCount, 0);
+  assert.deepEqual(loaded.top10ScoreAuthority.items, []);
   assert.equal(loaded.top10ReleaseSet.frozen, false);
   assert.deepEqual(loaded.top10ReleaseSet.entries, []);
   assert.deepEqual(loaded.top10ReleaseSet.scoring.coveredUseCaseCategories, []);
@@ -736,51 +757,124 @@ test('authority-bound source fetch verifies exact npm, GitHub Release, and full 
   );
 });
 
-test('future frozen Top10 requires six scores, exact totals, ranking, eight-use-case union, and coexistence receipts', async () => {
+test('future frozen Top10 is the exact global top ten of one complete, receipt-bound 80-item score authority', async () => {
   const loaded = await loadPluginAuthority();
-  const items = Array.from({ length: 80 }, (_, index) => ({
-    catalogId: 3000 + index,
+  const candidates = JSON.parse(loaded.candidateIntakeBytes).items;
+  const items = candidates.map((candidate, index) => ({
+    catalogId: candidate.catalogId,
     identity: `fixture-${index}`,
     receipts: { platformNodeMatrixSha256: sha256(Buffer.from(`matrix-${index}`)) },
   }));
-  const entries = items.slice(0, 10).map((item, index) => {
-    const scores = {
-      userValueAndUseCaseClarity: 25 - index,
-      stabilityMaintenanceAndAlpha2Fit: 25,
-      securityAndPermissionRestraint: 15,
-      crossPlatformInstallRemoveRollback: 15,
-      nonTechnicalUsabilityAndDocs: 10,
-      combinationComplementarity: 10,
+  const authority = {
+    harness: { installable: true },
+    publication: { publishedInstallable: true },
+    items,
+  };
+  const coverage = [
+    'build-and-review',
+    'collaborate-and-notify',
+    'discover-and-start',
+    'govern-and-secure',
+    'measure-and-optimize',
+    'navigate-and-focus',
+    'plan-and-automate',
+    'remember-and-retrieve',
+  ];
+  const scoreAuthority = structuredClone(loaded.top10ScoreAuthority);
+  scoreAuthority.status = 'verified-frozen';
+  scoreAuthority.frozen = true;
+  scoreAuthority.pluginSet.verifiedItemCount = 80;
+  scoreAuthority.items = candidates.map((candidate, index) => {
+    const item = items[index];
+    const scores = index < 10
+      ? {
+          userValueAndUseCaseClarity: 25 - index,
+          stabilityMaintenanceAndAlpha2Fit: 25,
+          securityAndPermissionRestraint: 15,
+          crossPlatformInstallRemoveRollback: 15,
+          nonTechnicalUsabilityAndDocs: 10,
+          combinationComplementarity: 10,
+        }
+      : {
+          userValueAndUseCaseClarity: 10,
+          stabilityMaintenanceAndAlpha2Fit: 10,
+          securityAndPermissionRestraint: 5,
+          crossPlatformInstallRemoveRollback: 5,
+          nonTechnicalUsabilityAndDocs: 5,
+          combinationComplementarity: 5,
+        };
+    const useCaseCategories = [...new Set([
+      candidate.primaryUseCase,
+      ...(index < 10 ? [coverage[index % coverage.length]] : []),
+    ])].sort();
+    const maintenanceEvidence = {
+      kind: 'github-commit-metadata',
+      repository: candidate.repository,
+      commit: candidate.commit,
+      committedAt: '2026-08-30T00:00:00.000Z',
+      observedAt: '2026-09-01T00:00:00.000Z',
+      evidenceUrl: `${candidate.repository.replace(/\.git$/u, '')}/commit/${candidate.commit}`,
+      sourceResponseSha256: sha256(Buffer.from(`maintenance-source-${candidate.catalogId}`)),
+    };
+    const totalScore = Object.values(scores).reduce((sum, value) => sum + value, 0);
+    const scoreReceipt = {
+      schemaVersion: 1,
+      purpose: 'dsh-plugin-top10-score-review',
+      capturedAt: '2026-09-01',
+      baselineCommit: '0a53fb55bea101816fa226bb964ae2bed71c343b',
+      catalogId: candidate.catalogId,
+      candidateInputSha256: candidateInputSha256(candidate),
+      itemAuthoritySha256: itemAuthoritySha256(item),
+      platformNodeMatrixSha256: item.receipts.platformNodeMatrixSha256,
+      scoringPolicySha256: scoringPolicySha256(),
+      useCaseCategories,
+      scores,
+      totalScore,
+      maintenanceEvidenceSha256: maintenanceEvidenceSha256(maintenanceEvidence),
     };
     return {
-      rank: index + 1,
-      publicId: `#${item.catalogId}`,
-      catalogId: item.catalogId,
+      catalogId: candidate.catalogId,
+      publicId: `#${candidate.catalogId}`,
+      candidateInputSha256: candidateInputSha256(candidate),
       itemAuthoritySha256: itemAuthoritySha256(item),
-      useCaseCategories: [`category-${String(index).padStart(2, '0')}`],
+      useCaseCategories,
       scores,
-      totalScore: Object.values(scores).reduce((sum, value) => sum + value, 0),
-      maintenanceActivityAt: '2026-08-30',
-      maintenanceActivityReceiptSha256: sha256(Buffer.from(`activity-${index}`)),
+      totalScore,
+      maintenanceEvidence,
+      scoreReceipt,
+      scoreReceiptSha256: scoreReceiptSha256(scoreReceipt),
     };
   });
-  const itemAuthoritySetSha256 = sha256(Buffer.from(`${JSON.stringify(entries.map((entry) => ({
-    catalogId: entry.catalogId,
-    itemAuthoritySha256: entry.itemAuthoritySha256,
-  })))}\n`));
-  const platformNodeMatrixSetSha256 = sha256(Buffer.from(`${JSON.stringify(entries.map((entry) => ({
-    catalogId: entry.catalogId,
-    platformNodeMatrixSha256: items.find((item) => item.catalogId === entry.catalogId)
-      .receipts.platformNodeMatrixSha256,
-  })))}\n`));
+  scoreAuthority.pluginSet.itemAuthoritySetSha256 = sha256(Buffer.from(
+    `${JSON.stringify(stable(scoreAuthority.items.map((item) => ({
+      catalogId: item.catalogId,
+      itemAuthoritySha256: item.itemAuthoritySha256,
+    }))))}\n`
+  ));
+  scoreAuthority.scoreAuthorityPayloadSha256 = scoreAuthorityPayloadSha256(scoreAuthority);
+  const scoreAuthorityBytes = Buffer.from(`${JSON.stringify(scoreAuthority, null, 2)}\n`);
+  validateTop10ScoreAuthority(scoreAuthority, {
+    authority,
+    candidateIntakeBytes: loaded.candidateIntakeBytes,
+  });
+
+  const selected = rankTop10ScoreItems(scoreAuthority.items);
   const releaseSet = structuredClone(loaded.top10ReleaseSet);
   releaseSet.status = 'verified-frozen';
   releaseSet.frozen = true;
+  releaseSet.scoreAuthority.sha256 = sha256(scoreAuthorityBytes);
+  releaseSet.scoreAuthority.payloadSha256 = scoreAuthority.scoreAuthorityPayloadSha256;
   releaseSet.scoring.coverageStatus = 'verified';
-  releaseSet.scoring.coveredUseCaseCategories = entries
-    .flatMap((entry) => entry.useCaseCategories)
-    .sort();
-  releaseSet.entries = entries;
+  releaseSet.scoring.coveredUseCaseCategories = [...new Set(
+    selected.flatMap((item) => item.useCaseCategories)
+  )].sort();
+  releaseSet.entries = selected.map((scoreItem, index) => ({
+    rank: index + 1,
+    publicId: scoreItem.publicId,
+    catalogId: scoreItem.catalogId,
+    itemAuthoritySha256: scoreItem.itemAuthoritySha256,
+    scoreAuthorityItemSha256: scoreAuthorityItemSha256(scoreItem),
+  }));
   Object.assign(releaseSet.gate, {
     verifiedPluginCount: 80,
     verifiedMatrixTasksPerItem: 6,
@@ -795,32 +889,145 @@ test('future frozen Top10 requires six scores, exact totals, ranking, eight-use-
     transactionRollbackReceiptSha256: '2'.repeat(64),
     webCoexistenceReceiptSha256: '3'.repeat(64),
     conflictMatrixReceiptSha256: '4'.repeat(64),
-    itemAuthoritySetSha256,
-    platformNodeMatrixSetSha256,
+    itemAuthoritySetSha256: sha256(Buffer.from(`${JSON.stringify(releaseSet.entries.map((entry) => ({
+      catalogId: entry.catalogId,
+      itemAuthoritySha256: entry.itemAuthoritySha256,
+    })))}\n`)),
+    platformNodeMatrixSetSha256: sha256(Buffer.from(`${JSON.stringify(releaseSet.entries.map((entry) => ({
+      catalogId: entry.catalogId,
+      platformNodeMatrixSha256: items.find((item) => item.catalogId === entry.catalogId)
+        .receipts.platformNodeMatrixSha256,
+    })))}\n`)),
   });
   releaseSet.releaseSetPayloadSha256 = releaseSetPayloadSha256(releaseSet);
-  const authority = {
-    harness: { installable: true },
-    publication: { publishedInstallable: true },
-    items,
+  const validationOptions = {
+    authority,
+    scoreAuthorityBytes,
+    candidateIntakeBytes: loaded.candidateIntakeBytes,
   };
-  validateTop10ReleaseSet(releaseSet, { authority });
+  validateTop10ReleaseSet(releaseSet, validationOptions);
 
-  const badTotal = structuredClone(releaseSet);
-  badTotal.entries[0].totalScore -= 1;
-  badTotal.releaseSetPayloadSha256 = releaseSetPayloadSha256(badTotal);
-  assert.throws(() => validateTop10ReleaseSet(badTotal, { authority }), /total score/u);
+  const selfReportedScore = structuredClone(releaseSet);
+  selfReportedScore.entries[0].scores = { userValueAndUseCaseClarity: 25 };
+  selfReportedScore.releaseSetPayloadSha256 = releaseSetPayloadSha256(selfReportedScore);
+  assert.throws(
+    () => validateTop10ReleaseSet(selfReportedScore, validationOptions),
+    /entries\[0\] keys mismatch/u
+  );
 
-  const badRank = structuredClone(releaseSet);
-  [badRank.entries[0], badRank.entries[1]] = [badRank.entries[1], badRank.entries[0]];
-  badRank.entries.forEach((entry, index) => { entry.rank = index + 1; });
-  badRank.releaseSetPayloadSha256 = releaseSetPayloadSha256(badRank);
-  assert.throws(() => validateTop10ReleaseSet(badRank, { authority }), /not ordered/u);
+  const selfReportedMaintenance = structuredClone(releaseSet);
+  selfReportedMaintenance.entries[0].maintenanceActivityAt = '2099-01-01';
+  selfReportedMaintenance.entries[0].maintenanceActivityReceiptSha256 = '9'.repeat(64);
+  selfReportedMaintenance.releaseSetPayloadSha256 = releaseSetPayloadSha256(selfReportedMaintenance);
+  assert.throws(
+    () => validateTop10ReleaseSet(selfReportedMaintenance, validationOptions),
+    /entries\[0\] keys mismatch/u
+  );
+
+  const badTotal = structuredClone(scoreAuthority);
+  badTotal.items[0].totalScore -= 1;
+  badTotal.scoreAuthorityPayloadSha256 = scoreAuthorityPayloadSha256(badTotal);
+  assert.throws(
+    () => validateTop10ScoreAuthority(badTotal, {
+      authority,
+      candidateIntakeBytes: loaded.candidateIntakeBytes,
+    }),
+    /total score/u
+  );
+
+  const fakeReceipt = structuredClone(scoreAuthority);
+  fakeReceipt.items[0].scoreReceiptSha256 = '9'.repeat(64);
+  fakeReceipt.scoreAuthorityPayloadSha256 = scoreAuthorityPayloadSha256(fakeReceipt);
+  assert.throws(
+    () => validateTop10ScoreAuthority(fakeReceipt, {
+      authority,
+      candidateIntakeBytes: loaded.candidateIntakeBytes,
+    }),
+    /score receipt/u
+  );
+
+  const changedMaintenance = structuredClone(scoreAuthority);
+  changedMaintenance.items[0].maintenanceEvidence.committedAt = '2099-01-01T00:00:00.000Z';
+  changedMaintenance.scoreAuthorityPayloadSha256 = scoreAuthorityPayloadSha256(changedMaintenance);
+  const changedMaintenanceBytes = Buffer.from(`${JSON.stringify(changedMaintenance, null, 2)}\n`);
+  assert.throws(
+    () => validateTop10ReleaseSet(releaseSet, {
+      ...validationOptions,
+      scoreAuthorityBytes: changedMaintenanceBytes,
+    }),
+    /exact complete score authority bytes/u
+  );
+
+  const arbitrarySelfSelected = structuredClone(releaseSet);
+  arbitrarySelfSelected.entries = scoreAuthority.items.slice(-10).map((scoreItem, index) => ({
+    rank: index + 1,
+    publicId: scoreItem.publicId,
+    catalogId: scoreItem.catalogId,
+    itemAuthoritySha256: scoreItem.itemAuthoritySha256,
+    scoreAuthorityItemSha256: scoreAuthorityItemSha256(scoreItem),
+  }));
+  arbitrarySelfSelected.releaseSetPayloadSha256 =
+    releaseSetPayloadSha256(arbitrarySelfSelected);
+  assert.throws(
+    () => validateTop10ReleaseSet(arbitrarySelfSelected, validationOptions),
+    /omit a higher-ranked item|global deterministic ranking/u
+  );
+
+  const omittedHigherScore = structuredClone(releaseSet);
+  const eleventh = scoreAuthority.items.find((item) => item.catalogId === candidates[10].catalogId);
+  omittedHigherScore.entries[9] = {
+    rank: 10,
+    publicId: eleventh.publicId,
+    catalogId: eleventh.catalogId,
+    itemAuthoritySha256: eleventh.itemAuthoritySha256,
+    scoreAuthorityItemSha256: scoreAuthorityItemSha256(eleventh),
+  };
+  omittedHigherScore.releaseSetPayloadSha256 = releaseSetPayloadSha256(omittedHigherScore);
+  assert.throws(
+    () => validateTop10ReleaseSet(omittedHigherScore, validationOptions),
+    /omit a higher-ranked item|global deterministic ranking/u
+  );
+
+  const insufficientCoverageAuthority = structuredClone(scoreAuthority);
+  for (let index = 0; index < 10; index += 1) {
+    const scoreItem = insufficientCoverageAuthority.items[index];
+    scoreItem.useCaseCategories = [candidates[index].primaryUseCase];
+    scoreItem.scoreReceipt.useCaseCategories = scoreItem.useCaseCategories;
+    scoreItem.scoreReceiptSha256 = scoreReceiptSha256(scoreItem.scoreReceipt);
+  }
+  insufficientCoverageAuthority.scoreAuthorityPayloadSha256 =
+    scoreAuthorityPayloadSha256(insufficientCoverageAuthority);
+  const insufficientCoverageBytes = Buffer.from(
+    `${JSON.stringify(insufficientCoverageAuthority, null, 2)}\n`
+  );
+  const insufficientCoverage = structuredClone(releaseSet);
+  insufficientCoverage.scoreAuthority.sha256 = sha256(insufficientCoverageBytes);
+  insufficientCoverage.scoreAuthority.payloadSha256 =
+    insufficientCoverageAuthority.scoreAuthorityPayloadSha256;
+  const insufficientRanked = rankTop10ScoreItems(insufficientCoverageAuthority.items);
+  insufficientCoverage.entries.forEach((entry, index) => {
+    entry.scoreAuthorityItemSha256 = scoreAuthorityItemSha256(insufficientRanked[index]);
+  });
+  insufficientCoverage.scoring.coveredUseCaseCategories = [...new Set(
+    insufficientRanked.flatMap((item) => item.useCaseCategories)
+  )].sort();
+  insufficientCoverage.releaseSetPayloadSha256 = releaseSetPayloadSha256(insufficientCoverage);
+  assert.throws(
+    () => validateTop10ReleaseSet(insufficientCoverage, {
+      authority,
+      scoreAuthorityBytes: insufficientCoverageBytes,
+      candidateIntakeBytes: loaded.candidateIntakeBytes,
+    }),
+    /complete 80\/80 six-task gate/u
+  );
 
   const noCoexistence = structuredClone(releaseSet);
   noCoexistence.gate.webCoexistenceVerified = false;
   noCoexistence.releaseSetPayloadSha256 = releaseSetPayloadSha256(noCoexistence);
-  assert.throws(() => validateTop10ReleaseSet(noCoexistence, { authority }), /complete 80\/80/u);
+  assert.throws(
+    () => validateTop10ReleaseSet(noCoexistence, validationOptions),
+    /complete 80\/80/u
+  );
 });
 
 test('Harness alpha.2 promoted authority and runtime set bind the canonical dual-artifact six-task matrix', async () => {

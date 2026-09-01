@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dsh-themes.com/schemas/dsh-plugin-top10-release-set-v1.json",
+  "$id": "https://dsh-themes.com/schemas/dsh-plugin-top10-release-set-v2.json",
   "title": "DSH Plugin Top10 release set",
   "type": "object",
   "additionalProperties": false,
@@ -11,15 +11,16 @@
       "else": { "properties": { "entries": { "maxItems": 0 } } }
     }
   ],
-  "required": ["schemaVersion", "capturedAt", "purpose", "releaseSet", "status", "frozen", "baseline", "scoring", "entries", "gate", "releaseSetPayloadSha256"],
+  "required": ["schemaVersion", "capturedAt", "purpose", "releaseSet", "status", "frozen", "baseline", "scoreAuthority", "scoring", "entries", "gate", "releaseSetPayloadSha256"],
   "properties": {
-    "schemaVersion": { "const": 1 },
+    "schemaVersion": { "const": 2 },
     "capturedAt": { "type": "string", "format": "date" },
     "purpose": { "const": "dsh-plugin-top10-release-set" },
     "releaseSet": { "type": "string", "pattern": "^[a-z0-9-]{8,80}$" },
     "status": { "enum": ["candidate-pending", "verified-frozen"] },
     "frozen": { "type": "boolean" },
     "baseline": { "$ref": "#/$defs/baseline" },
+    "scoreAuthority": { "$ref": "#/$defs/scoreAuthority" },
     "scoring": { "$ref": "#/$defs/scoring" },
     "entries": { "type": "array", "maxItems": 10, "items": { "$ref": "#/$defs/entry" } },
     "gate": { "$ref": "#/$defs/gate" },
@@ -34,6 +35,16 @@
       "properties": {
         "tag": { "const": "dsh-v0.1.2-alpha.2" },
         "commit": { "const": "0a53fb55bea101816fa226bb964ae2bed71c343b" }
+      }
+    },
+    "scoreAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "payloadSha256"],
+      "properties": {
+        "path": { "const": "top10-score-authority.json" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "payloadSha256": { "$ref": "#/$defs/sha256" }
       }
     },
     "weights": {
@@ -56,7 +67,7 @@
       "properties": {
         "weights": { "$ref": "#/$defs/weights" },
         "minimumUseCaseCategories": { "const": 8 },
-        "coveredUseCaseCategories": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z0-9-]{3,48}$" } },
+        "coveredUseCaseCategories": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/useCase" } },
         "coverageStatus": { "enum": ["candidate-unverified", "verified"] },
         "tieBreakOrder": { "const": ["stability-plus-security", "maintenance-activity", "lower-public-id"] }
       }
@@ -64,31 +75,28 @@
     "entry": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["rank", "publicId", "catalogId", "itemAuthoritySha256", "useCaseCategories", "scores", "totalScore", "maintenanceActivityAt", "maintenanceActivityReceiptSha256"],
+      "required": ["rank", "publicId", "catalogId", "itemAuthoritySha256", "scoreAuthorityItemSha256"],
       "properties": {
         "rank": { "type": "integer", "minimum": 1, "maximum": 10 },
         "publicId": { "type": "string", "pattern": "^#3[0-9]{3}$" },
         "catalogId": { "type": "integer", "minimum": 3000, "maximum": 3999 },
         "itemAuthoritySha256": { "$ref": "#/$defs/sha256" },
-        "useCaseCategories": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z0-9-]{3,48}$" } },
-        "scores": { "$ref": "#/$defs/scores" },
-        "totalScore": { "type": "integer", "minimum": 0, "maximum": 100 },
-        "maintenanceActivityAt": { "type": "string", "format": "date" },
-        "maintenanceActivityReceiptSha256": { "$ref": "#/$defs/sha256" }
+        "scoreAuthorityItemSha256": { "$ref": "#/$defs/sha256" }
       }
     },
-    "scores": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["userValueAndUseCaseClarity", "stabilityMaintenanceAndAlpha2Fit", "securityAndPermissionRestraint", "crossPlatformInstallRemoveRollback", "nonTechnicalUsabilityAndDocs", "combinationComplementarity"],
-      "properties": {
-        "userValueAndUseCaseClarity": { "type": "integer", "minimum": 0, "maximum": 25 },
-        "stabilityMaintenanceAndAlpha2Fit": { "type": "integer", "minimum": 0, "maximum": 25 },
-        "securityAndPermissionRestraint": { "type": "integer", "minimum": 0, "maximum": 15 },
-        "crossPlatformInstallRemoveRollback": { "type": "integer", "minimum": 0, "maximum": 15 },
-        "nonTechnicalUsabilityAndDocs": { "type": "integer", "minimum": 0, "maximum": 10 },
-        "combinationComplementarity": { "type": "integer", "minimum": 0, "maximum": 10 }
-      }
+    "useCase": {
+      "enum": [
+        "build-and-review",
+        "collaborate-and-notify",
+        "discover-and-start",
+        "govern-and-secure",
+        "measure-and-optimize",
+        "navigate-and-focus",
+        "plan-and-automate",
+        "remember-and-retrieve",
+        "research-the-web",
+        "see-and-understand"
+      ]
     },
     "gate": {
       "type": "object",

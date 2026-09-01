@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "capturedAt": "2026-09-01",
   "purpose": "dsh-plugin-install-authority",
   "harness": {
@@ -25,7 +25,7 @@
     "schemaSha256": "48ceef982d6a86856c925c1cec3d319c00d2ec3809383b7c7d200afcc88a87a3",
     "sha256": "d113a04a1d64ceeea6068624433ef60fe5e192c0ccecd1a39b76d31f5c802005",
     "candidateIntakePath": "plugin-candidate-intake.json",
-    "candidateIntakeSha256": "7babb98c801aee0a87653195c8e9fad7f7b38b8b1c39c81e62dab072b5e1830b",
+    "candidateIntakeSha256": "f85bcf6b72929385bab9adcd252a37c088b1ce8c199d9d7c0f7538054354de09",
     "status": "static-reviewed-pending-runtime",
     "retainedCurrentCatalogCount": 52,
     "retiredCatalogCount": 28,
@@ -40,9 +40,17 @@
     "verifiedInstallableCount": 0,
     "authorityItemCount": 0
   },
+  "top10ScoreAuthority": {
+    "path": "top10-score-authority.json",
+    "schemaPath": "top10-score-authority.schema.json",
+    "schemaSha256": "05e5883d2fb8c985bad908b8b65db5d52e1e45ccf97a7c38646285dd70061bda",
+    "sha256": "6bb528c469919f4c9533f9edafc2439d1dd8b620f6e7a42b31c431ab0cdae346"
+  },
   "top10ReleaseSet": {
     "path": "top10-release-set.json",
-    "sha256": "8eaaa395f417576791406058cf100c63933ab2f0a92fb72444aad1d5413b8d21"
+    "schemaPath": "top10-release-set.schema.json",
+    "schemaSha256": "7dd00e70d1e8cf7649eef72729fecd8016e1b4b234406d13c9b16c26b0b9a1b5",
+    "sha256": "a8052fdba38cd10adf5149a6f73a81dae920e930a94d969dab98037f356d524a"
   },
   "items": []
 }
