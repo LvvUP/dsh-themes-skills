@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh-themes.com/schemas/community-alpha2-certification-aggregate-receipt-v1.json",
+  "title": "DSH community skin alpha.2 66-task certification candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "scope",
+    "reviewStatus",
+    "authorityMutation",
+    "installability",
+    "certificationPlanSha256",
+    "authority",
+    "baseline",
+    "run",
+    "gate",
+    "cohorts",
+    "items",
+    "receiptSetPayloadSha256"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "status": { "const": "community-alpha2-certification-candidate" },
+    "scope": { "const": "eleven-items-sixty-six-tasks" },
+    "reviewStatus": { "const": "pending-review" },
+    "authorityMutation": { "const": false },
+    "installability": { "const": "none" },
+    "certificationPlanSha256": { "$ref": "#/$defs/sha256" },
+    "authority": { "$ref": "#/$defs/authority" },
+    "baseline": { "$ref": "#/$defs/baseline" },
+    "run": { "$ref": "#/$defs/run" },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requiredItems",
+        "completedItems",
+        "passedItems",
+        "failedItems",
+        "requiredTasks",
+        "completedTasks",
+        "passedTasks",
+        "failedTasks",
+        "rollbackVerifiedTasks",
+        "cartesianProductComplete"
+      ],
+      "properties": {
+        "requiredItems": { "const": 11 },
+        "completedItems": { "const": 11 },
+        "passedItems": { "type": "integer", "minimum": 0, "maximum": 11 },
+        "failedItems": { "type": "integer", "minimum": 0, "maximum": 11 },
+        "requiredTasks": { "const": 66 },
+        "completedTasks": { "const": 66 },
+        "passedTasks": { "type": "integer", "minimum": 0, "maximum": 66 },
+        "failedTasks": { "type": "integer", "minimum": 0, "maximum": 66 },
+        "rollbackVerifiedTasks": { "const": 66 },
+        "cartesianProductComplete": { "const": true }
+      }
+    },
+    "cohorts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skinCenterBuiltin", "independentItems"],
+      "properties": {
+        "skinCenterBuiltin": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "cohortId",
+            "requiredMembers",
+            "members",
+            "allMembersTaskPassed",
+            "allMembersRollbackVerified",
+            "candidateEligible"
+          ],
+          "properties": {
+            "cohortId": { "const": "skin-center-builtin-0.2.5" },
+            "requiredMembers": { "const": 9 },
+            "members": {
+              "type": "array",
+              "minItems": 9,
+              "maxItems": 9,
+              "uniqueItems": true,
+              "items": { "type": "integer" }
+            },
+            "allMembersTaskPassed": { "type": "boolean" },
+            "allMembersRollbackVerified": { "const": true },
+            "candidateEligible": { "type": "boolean" }
+          }
+        },
+        "independentItems": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requiredMembers", "members"],
+          "properties": {
+            "requiredMembers": { "const": 2 },
+            "members": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["catalogId", "candidateEligible"],
+                "properties": {
+                  "catalogId": { "enum": [2206, 2207] },
+                  "candidateEligible": { "type": "boolean" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "minItems": 11,
+      "maxItems": 11,
+      "items": {
+        "$ref": "alpha2-community-certification-item-receipt.schema.json"
+      }
+    },
+    "receiptSetPayloadSha256": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": {
+    "sha40": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "currentGateSha256",
+        "catalogSha256",
+        "harnessAuthoritySha256"
+      ],
+      "properties": {
+        "currentGateSha256": { "$ref": "#/$defs/sha256" },
+        "catalogSha256": { "$ref": "#/$defs/sha256" },
+        "harnessAuthoritySha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baselineId",
+        "packageVersion",
+        "tag",
+        "commit",
+        "tree",
+        "officialNpmTarballSha256"
+      ],
+      "properties": {
+        "baselineId": {
+          "const": "deepseek-harness/dsh-v0.1.2-alpha.2@0a53fb55bea101816fa226bb964ae2bed71c343b"
+        },
+        "packageVersion": { "const": "0.1.2-alpha.2" },
+        "tag": { "const": "dsh-v0.1.2-alpha.2" },
+        "commit": {
+          "const": "0a53fb55bea101816fa226bb964ae2bed71c343b"
+        },
+        "tree": {
+          "const": "64ccbfa8e0caa4711cd4a75717ef9e022657961b"
+        },
+        "officialNpmTarballSha256": {
+          "const": "5bf062a26a490853ffb9294fe3c9fb2047f029be3545612dea45718a81920a47"
+        }
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "workflow",
+        "workflowSha256",
+        "event",
+        "ref",
+        "runId",
+        "runAttempt",
+        "headSha"
+      ],
+      "properties": {
+        "repository": { "const": "LvvUP/dsh-themes-skills" },
+        "workflow": { "const": "alpha2-community-skin-certification" },
+        "workflowSha256": { "$ref": "#/$defs/sha256" },
+        "event": { "const": "workflow_dispatch" },
+        "ref": { "const": "refs/heads/main" },
+        "runId": { "type": "string", "pattern": "^[1-9][0-9]{0,19}$" },
+        "runAttempt": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "headSha": { "$ref": "#/$defs/sha40" }
+      }
+    }
+  }
+}

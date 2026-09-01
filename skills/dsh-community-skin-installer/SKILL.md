@@ -15,12 +15,21 @@ Read these files before evaluating a record:
 
 - `references/baseline-policy.json` — selects `currentAlpha2` as the current inspection lane and makes alpha.1/RC lanes non-operational.
 - `references/alpha2-recertification.json` plus its schema — current machine gate; authoritative for installability.
+- `references/alpha2-community-certification-{task,item,aggregate}-receipt.schema.json` — candidate-only receipt contracts for the future 66-task review. Read them with `scripts/alpha2-community-certification.mjs`; they are not current installation authority.
 - `references/alpha1-recertification.json` — immutable historical alpha.1 pending evidence only.
 - `references/community-catalog.json` — pinned item identity, rights, assets, and historical RC.8 metadata.
 - `references/compatibility.md` — baseline and promotion boundary.
 - `references/runtime-receipt.rc8.json` — immutable historical evidence only; it cannot authorize alpha.2 installation.
 
 Do not treat a repository URL, preview, title, author string, page prose, old receipt, old Manager attestation, or `release-state.json` as an install command. Do not change the current gate locally to bypass missing evidence.
+
+## Candidate certification contract (non-executing)
+
+`scripts/alpha2-community-certification.mjs` exposes deterministic, read-only `plan`, `verify-task`, `aggregate`, and `scan` modes. The plan is the exact 11-item × 6-tuple Cartesian product. Task verification binds the current gate, catalog, Harness baseline, source/artifact identity, observed platform/architecture/Node tuple, terminal evidence, full rollback, one CI run, and the no-secret/no-machine-path receipt boundary. Aggregation always emits `reviewStatus: "pending-review"`, `authorityMutation: false`, and `installability: "none"`; it never edits `alpha2-recertification.json`, Finder authority, or an installation state.
+
+The `run-task` mode is deliberately unavailable and must stop with `executor-not-reviewed` before reading or changing a Profile, creating an output directory, or opening a network request. Do not substitute another installer or ad hoc shell execution for it.
+
+Nine records use the shared Skin Center artifact, including Maid Atelier. They retain individual six-task outcomes, but the shared artifact cohort may become a candidate only if all nine pass and all nine prove rollback. One failed cohort member blocks all nine from installation publication. QQ98 and THS remain independently evaluated. These are future review rules only; the current authority remains 0/66 and blocks every mutation.
 
 ## Beginner-facing input
 
