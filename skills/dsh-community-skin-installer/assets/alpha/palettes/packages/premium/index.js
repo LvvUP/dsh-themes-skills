@@ -1,3 +1,91 @@
+// themes/community-alpha/palette-api-security.mjs
+function authorizePaletteRequest(connection, req, res) {
+  if (typeof connection?.requestRejection !== "function") {
+    res.writeHead(503);
+    res.end();
+    return false;
+  }
+  const rejection = connection.requestRejection(req);
+  if (rejection === void 0) return true;
+  res.writeHead(rejection === 401 ? 401 : 403);
+  res.end(rejection === 401 ? "unauthorized" : "forbidden");
+  return false;
+}
+var PREMIUM_BODY_LIMIT_BYTES = 64 * 1024;
+function readPaletteJson(req, res) {
+  const respond = (status, error) => {
+    if (!res.destroyed && !res.headersSent) {
+      res.writeHead(status, { "content-type": "application/json" });
+      res.end(JSON.stringify({ error }));
+    }
+  };
+  const mediaType = String(req.headers["content-type"] ?? "").split(";", 1)[0].trim().toLowerCase();
+  if (mediaType !== "application/json") {
+    respond(415, "application/json required");
+    req.resume();
+    return Promise.resolve(void 0);
+  }
+  return new Promise((resolve2) => {
+    const chunks = [];
+    let size = 0;
+    let settled = false;
+    const fail = (status, message) => {
+      if (settled) return;
+      settled = true;
+      chunks.length = 0;
+      respond(status, message);
+      resolve2(void 0);
+    };
+    const cleanup = () => {
+      req.off("data", onData);
+      req.off("end", onEnd);
+      req.off("error", onError);
+      req.off("aborted", onAborted);
+      req.off("close", onClose);
+    };
+    const onData = (part) => {
+      if (settled) return;
+      const chunk = Buffer.isBuffer(part) ? part : Buffer.from(part);
+      size += chunk.length;
+      if (size > PREMIUM_BODY_LIMIT_BYTES) {
+        fail(413, "request body exceeds 64 KiB");
+        return;
+      }
+      chunks.push(chunk);
+    };
+    const onEnd = () => {
+      cleanup();
+      if (settled) return;
+      try {
+        const value = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+        if (value === null || typeof value !== "object" || Array.isArray(value)) {
+          fail(400, "request body must be a JSON object");
+          return;
+        }
+        settled = true;
+        chunks.length = 0;
+        resolve2(value);
+      } catch {
+        fail(400, "request body must be a JSON object");
+      }
+    };
+    const onError = () => {
+      fail(400, "request body interrupted");
+      cleanup();
+    };
+    const onAborted = () => fail(400, "request body interrupted");
+    const onClose = () => {
+      if (!settled) fail(400, "request body interrupted");
+      cleanup();
+    };
+    req.on("data", onData);
+    req.once("end", onEnd);
+    req.once("error", onError);
+    req.once("aborted", onAborted);
+    req.once("close", onClose);
+  });
+}
+
 // ../../../.dsh-themes/runtimes/0.1.3-alpha.1/vendor/cosmokit/src/misc.ts
 function isNullable(value) {
   return value === null || value === void 0;
@@ -1068,29 +1156,9 @@ function readSelection(settings) {
     [CUSTOM_FIELD]: customs !== null && typeof customs === "object" ? { ...customs } : {}
   };
 }
-function readBody(req) {
-  return new Promise((resolve2, reject) => {
-    const chunks = [];
-    req.on("data", (chunk) => {
-      chunks.push(chunk);
-    });
-    req.on("end", () => {
-      resolve2(Buffer.concat(chunks).toString("utf8"));
-    });
-    req.on("error", reject);
-  });
-}
 function json(res, status, body) {
   res.writeHead(status, { "content-type": "application/json; charset=utf-8" });
   res.end(JSON.stringify(body));
-}
-async function readJson(req, res) {
-  try {
-    return JSON.parse(await readBody(req));
-  } catch {
-    json(res, 400, { error: "request body must be a JSON object" });
-    return void 0;
-  }
 }
 function normalizeImport(body) {
   const name = typeof body.name === "string" ? body.name.trim() : "";
@@ -1129,7 +1197,7 @@ async function paletteRouteHandler(settings, req, res) {
     res.end();
     return;
   }
-  const body = await readJson(req, res);
+  const body = await readPaletteJson(req, res);
   if (body === void 0) return;
   const base = body[BASE_FIELD];
   if (base !== void 0 && !isBasePreference(base)) {
@@ -1176,7 +1244,7 @@ async function customRouteHandler(settings, req, res) {
     json(res, 503, { error: "settings provider unavailable" });
     return;
   }
-  const body = await readJson(req, res);
+  const body = await readPaletteJson(req, res);
   if (body === void 0) return;
   const current = readSelection(settings);
   const customs = { ...current[CUSTOM_FIELD] };
@@ -1219,7 +1287,7 @@ function apply(ctx) {
   ctx.inject(["settings"], (settingsCtx) => {
     settingsCtx.settings.register(THEME_NAMESPACE, PremiumThemesSettingsSchema);
   });
-  ctx.inject(["webServer"], (httpCtx) => {
+  ctx.inject(["webServer", "connection"], (httpCtx) => {
     const settings = () => ctx.get("settings");
     httpCtx.effect(
       () => httpCtx.webServer.tapIndex((html) => {
@@ -1232,7 +1300,10 @@ function apply(ctx) {
       () => httpCtx.webServer.register({
         kind: "exact",
         path: PALETTE_ROUTE_PATH,
-        handler: (req, res) => paletteRouteHandler(settings(), req, res)
+        handler: (req, res) => {
+          if (!authorizePaletteRequest(httpCtx.connection, req, res)) return;
+          return paletteRouteHandler(settings(), req, res);
+        }
       }),
       "client-dsh-community-premium: palette route"
     );
@@ -1240,7 +1311,10 @@ function apply(ctx) {
       () => httpCtx.webServer.register({
         kind: "exact",
         path: CUSTOM_ROUTE_PATH,
-        handler: (req, res) => customRouteHandler(settings(), req, res)
+        handler: (req, res) => {
+          if (!authorizePaletteRequest(httpCtx.connection, req, res)) return;
+          return customRouteHandler(settings(), req, res);
+        }
       }),
       "client-dsh-community-premium: custom palette route"
     );

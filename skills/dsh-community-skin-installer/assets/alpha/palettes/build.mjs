@@ -7,6 +7,8 @@ import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import ts from 'typescript';
 
+import { securePremiumHostSource } from './palette-api-security.mjs';
+
 const require = createRequire(import.meta.url);
 const esbuild = require(
   createRequire(require.resolve('tsx')).resolve('esbuild')
@@ -143,7 +145,7 @@ async function packageOutput(group, source, themes, extras = {}) {
   const directory = path.join(outRoot, group);
   await mkdir(directory, { recursive: true });
   const name = `@dsh-themes-community/${group}-alpha`;
-  const version = '1.0.0-alpha.1';
+  const version = '1.0.0-alpha.2';
   const manifest = {
     name,
     version,
@@ -198,6 +200,28 @@ async function packageOutput(group, source, themes, extras = {}) {
     packageName: name,
     packageVersion: version,
     ...extras,
+    securityAdaptation: {
+      revision: 'palette-api-auth-20260906',
+      officialGuard: 'ctx.connection.requestRejection(req)',
+      beforeAnyRouteReadOrWrite: true,
+      premiumJsonBodyLimitBytes: group === 'premium' ? 65536 : undefined,
+      helper: {
+        path: 'themes/community-alpha/palette-api-security.mjs',
+        sha256: sha256(
+          await readFile(path.join(root, 'palette-api-security.mjs'))
+        ),
+      },
+      buildImplementationSha256: sha256(
+        await readFile(fileURLToPath(import.meta.url))
+      ),
+      ...(group === 'premium'
+        ? {}
+        : {
+            hostTemplateSha256: sha256(
+              await readFile(path.join(root, 'palette-host.mjs'))
+            ),
+          }),
+    },
   };
   await writeFile(
     path.join(directory, 'PROVENANCE.json'),
@@ -536,11 +560,20 @@ for (const group of ['theme-pack', 'catppuccin', 'solarized']) {
   const plugin = {
     name: 'reviewed-alpha-source',
     setup(build) {
-      build.onLoad({ filter: /\.[cm]?tsx?$/ }, async (args) => ({
-        contents: transformSource(await readFile(args.path, 'utf8')),
-        loader: args.path.endsWith('.tsx') ? 'tsx' : 'ts',
-        resolveDir: path.dirname(args.path),
-      }));
+      build.onLoad({ filter: /\.[cm]?tsx?$/ }, async (args) => {
+        let contents = transformSource(await readFile(args.path, 'utf8'));
+        if (args.path === path.join(directory, 'src/index.ts')) {
+          contents = securePremiumHostSource(
+            contents,
+            path.join(root, 'palette-api-security.mjs')
+          );
+        }
+        return {
+          contents,
+          loader: args.path.endsWith('.tsx') ? 'tsx' : 'ts',
+          resolveDir: path.dirname(args.path),
+        };
+      });
       build.onLoad({ filter: /\.module\.css$/ }, async (args) => {
         const lightning = require(
           path.join(runtime, 'node_modules/lightningcss')
@@ -551,9 +584,18 @@ for (const group of ['theme-pack', 'catppuccin', 'solarized']) {
           cssModules: { pattern: '[hash]_[local]' },
           minify: true,
         });
-        css.push({ file: path.relative(directory, args.path), text: transformed.code.toString() });
+        css.push({
+          file: path.relative(directory, args.path),
+          text: transformed.code.toString(),
+        });
         return {
-          contents: `export default ${JSON.stringify(Object.fromEntries(Object.entries(transformed.exports ?? {}).sort(([a], [b]) => a.localeCompare(b)).map(([key, val]) => [key, val.name])))};`,
+          contents: `export default ${JSON.stringify(
+            Object.fromEntries(
+              Object.entries(transformed.exports ?? {})
+                .sort(([a], [b]) => a.localeCompare(b))
+                .map(([key, val]) => [key, val.name])
+            )
+          )};`,
           loader: 'js',
         };
       });
@@ -589,7 +631,12 @@ for (const group of ['theme-pack', 'catppuccin', 'solarized']) {
     external,
     define: { 'process.env.NODE_ENV': '"production"' },
   });
-  const cssCode = JSON.stringify(css.sort((a, b) => a.file.localeCompare(b.file)).map((item) => item.text).join('\n'));
+  const cssCode = JSON.stringify(
+    css
+      .sort((a, b) => a.file.localeCompare(b.file))
+      .map((item) => item.text)
+      .join('\n')
+  );
   const lifecycle = `const upstreamApply=module.exports.apply; const adaptedExports={...module.exports,apply:(ctx)=>{ctx.effect(()=>{const tag=document.createElement('style');tag.dataset.plugin=${JSON.stringify(output.name)};tag.textContent=${cssCode};document.head.appendChild(tag);return()=>tag.remove();},'premium: owned styles');return upstreamApply(ctx);}};`;
   await writeFile(
     path.join(output.directory, 'client.js'),

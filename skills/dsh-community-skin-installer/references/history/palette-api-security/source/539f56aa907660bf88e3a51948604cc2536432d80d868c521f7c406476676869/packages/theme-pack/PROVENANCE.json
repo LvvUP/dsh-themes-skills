@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "adaptation": "DSH Themes",
+  "targetDshVersion": "0.1.3-alpha.1",
+  "upstream": {
+    "repository": "math-lrz/dsh-theme-pack",
+    "sourceCommit": "5a4cdbe9e6acc68f467be4af5458d2ea2e2b1616",
+    "archiveSha256": "9e0047fc7145e4cc0c6f195b83a03b1483bd2287277c9233dcd667be81b858c2",
+    "omitted": "Binary previews and media are not used by the palette adaptation.",
+    "files": [
+      {
+        "path": ".gitignore",
+        "sha256": "d3f4854d148f1febfe9dce0c36730f4bcd000366ee74a4ad49eba8a92033ebda",
+        "sizeBytes": 46
+      },
+      {
+        "path": "LICENSE",
+        "sha256": "ef6d36a9ea7adcab9f0c27c95df7bb0de953fb7482e29aebb1be98738a006ca9",
+        "sizeBytes": 1064
+      },
+      {
+        "path": "README.md",
+        "sha256": "746a7fcb670ea876c2ed2d8c14ccf121c0e857cab4905186ac1a85cfd1e18e65",
+        "sizeBytes": 7611
+      },
+      {
+        "path": "cordis.patch.yml",
+        "sha256": "0773ca2ff2f0baf67d7d9086cfca8fa7a329592371e105ecd12c7e4c580bd47d",
+        "sizeBytes": 64
+      },
+      {
+        "path": "lib/client.js",
+        "sha256": "5647f6c8cddc5787315ad232e91dc064617416cbbdce800109412e765103cee1",
+        "sizeBytes": 77933
+      },
+      {
+        "path": "lib/index.mjs",
+        "sha256": "449be35d621b424709bfe09e362922a493b0f6c52d8e3437928ce1fb094f3bd7",
+        "sizeBytes": 397
+      },
+      {
+        "path": "lib/themes.json",
+        "sha256": "8651ce9a59f5bf82dfbd4b166842508784ac961277aabb9e8b3255c357d9f925",
+        "sizeBytes": 83997
+      },
+      {
+        "path": "package.json",
+        "sha256": "2c9f418ed7310b25a5188269305690ad3dd83b956ed0d99b527ca7a87ae2cbcd",
+        "sizeBytes": 1094
+      },
+      {
+        "path": "preview/catppuccin-latte.html",
+        "sha256": "4dbd9f52118db01c7182f532ef5baa8ae94139671134f18ee26adf5f3d5c4762",
+        "sizeBytes": 11286
+      },
+      {
+        "path": "preview/catppuccin-mocha.html",
+        "sha256": "b6d4e4548c6bee7b447aa83f16ec32c8dccd7afe7362180482eb169db815bb7b",
+        "sizeBytes": 11262
+      },
+      {
+        "path": "preview/dracula.html",
+        "sha256": "2566dceca405a4202e86cf02faa7864de9ad164abe0d94ab4d3ae6ec06b23e69",
+        "sizeBytes": 11230
+      },
+      {
+        "path": "preview/everforest.html",
+        "sha256": "fb3cafcd3b8acfd40a6fa0f4dd3509b5ba1f56f73ce66bd5cc1cfcfec97e0e92",
+        "sizeBytes": 11234
+      },
+      {
+        "path": "preview/gallery.html",
+        "sha256": "295e1193bdaf3c6cf30dec14827226ef2cee3cd2691bdc11ec7ff3d1b84357df",
+        "sizeBytes": 3507
+      },
+      {
+        "path": "preview/gruvbox-dark.html",
+        "sha256": "50c3571d9ab716f34e0aac3d96182819a98a745243dc7da1f1ee7954d9c0910d",
+        "sizeBytes": 11230
+      },
+      {
+        "path": "preview/gruvbox-light.html",
+        "sha256": "9908ee5cde5104f39ac38023d01bca8b47f083486f52f65f65aa4ffaba56c194",
+        "sizeBytes": 11236
+      },
+      {
+        "path": "preview/kanagawa.html",
+        "sha256": "d826ef1b5998ccedcee3bded056d7db2b6c973caa2859d25e5a1fbb593715467",
+        "sizeBytes": 11259
+      },
+      {
+        "path": "preview/night-owl.html",
+        "sha256": "41543d028af29fe704f69c186a5010ec45ed80694140d3ce5a3adb033d6062f2",
+        "sizeBytes": 11216
+      },
+      {
+        "path": "preview/nord.html",
+        "sha256": "71453e324ed9aeb0fe645ae350bed87803d4560b885cc30affaa9731b053f02c",
+        "sizeBytes": 11238
+      },
+      {
+        "path": "preview/one-dark.html",
+        "sha256": "7f6ba083e6472e4eb44501daa8466df9430e20b59b617e4352673c1b845c3874",
+        "sizeBytes": 11213
+      },
+      {
+        "path": "preview/rose-pine-dawn.html",
+        "sha256": "7f6b9486a407f86d8dfbbe7ec21a875f48c70bcbc33abdf63942ec33332cacd1",
+        "sizeBytes": 11295
+      },
+      {
+        "path": "preview/rose-pine.html",
+        "sha256": "1844dd375492178f23c55ea97e7f60147a91685c4b611d439cde9bfe0ab2ce44",
+        "sizeBytes": 11242
+      },
+      {
+        "path": "preview/solarized-dark.html",
+        "sha256": "2aa05c8c072d9561b62dbabbaae279f3601594a22da95970328c25d8bd078d8d",
+        "sizeBytes": 11204
+      },
+      {
+        "path": "preview/solarized-light.html",
+        "sha256": "14cdf9c247a191d0d6ca5522a441a518d00995fb3819a5a151c3ddf046b02255",
+        "sizeBytes": 11285
+      },
+      {
+        "path": "preview/tokyo-night.html",
+        "sha256": "50b2f377a2ba3d310e6f41e0e3f6eee5d64e91b90c28542063e1b7a47148337b",
+        "sizeBytes": 11226
+      },
+      {
+        "path": "preview/tokyo-storm.html",
+        "sha256": "ef77ac756e3a1353010d63b57c3e3d6d3ce7776cbe818397fcb6429ad7789018",
+        "sizeBytes": 11253
+      },
+      {
+        "path": "scripts/build.mjs",
+        "sha256": "49bd77ab1ae7a86880ba6a534a32aeb2398e2b62f8a62b2dde7f62e5908053be",
+        "sizeBytes": 15287
+      },
+      {
+        "path": "scripts/smoke.mjs",
+        "sha256": "4412b1a551fd6b513656b8c5b9dc22dab19400b95cc3b6edc5b756f08894e81a",
+        "sizeBytes": 2093
+      },
+      {
+        "path": "src/palettes.mjs",
+        "sha256": "7bc4a79571dbd481468482aca4bd8a7342f68626e5676487ca389f0abb53c192",
+        "sizeBytes": 8295
+      },
+      {
+        "path": "src/tokens.mjs",
+        "sha256": "efbe9f5b9476dde78911148260eacb48002aebea3febe378f6f3d594b74ea5b0",
+        "sizeBytes": 7097
+      }
+    ]
+  },
+  "license": "MIT",
+  "packageName": "@dsh-themes-community/theme-pack-alpha",
+  "packageVersion": "1.0.0-alpha.1",
+  "changes": [
+    "Exact Alpha client injection declarations; no legacy peer dependency installation",
+    "Distinct theme IDs prevent collisions between installed palette packages",
+    "Selections persist through the official Host settings service and wait for built-in preference readiness",
+    "Original palette tokens and selector UI retained; original named CSS selectors remain best-effort styling",
+    "Directory IDs #1101–#1112 map to exact palette choices; all 16 upstream choices remain available",
+    "Picker CSS is disposed with the plugin"
+  ],
+  "tokenRepairs": [
+    {
+      "theme": "catppuccin-latte",
+      "token": "--dsw-alias-button-floating-hover",
+      "from": "rgb(NaN, 11, 36)",
+      "to": "rgb(246, 246, 248)"
+    },
+    {
+      "theme": "gruvbox-light",
+      "token": "--dsw-alias-button-floating-hover",
+      "from": "rgb(NaN, 11, 36)",
+      "to": "rgb(243, 237, 212)"
+    },
+    {
+      "theme": "solarized-light",
+      "token": "--dsw-alias-button-floating-hover",
+      "from": "rgb(NaN, 11, 36)",
+      "to": "rgb(247, 246, 238)"
+    },
+    {
+      "theme": "rose-pine-dawn",
+      "token": "--dsw-alias-button-floating-hover",
+      "from": "rgb(NaN, 11, 36)",
+      "to": "rgb(247, 242, 237)"
+    }
+  ]
+}

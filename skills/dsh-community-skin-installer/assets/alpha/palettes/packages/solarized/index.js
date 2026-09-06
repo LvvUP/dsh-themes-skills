@@ -811,6 +811,21 @@ defineMethod("transform", [
   "preserve"
 ], ({ inner }, isInner) => inner.toString(isInner));
 
+// themes/community-alpha/palette-api-security.mjs
+function authorizePaletteRequest(connection, req, res) {
+  if (typeof connection?.requestRejection !== "function") {
+    res.writeHead(503);
+    res.end();
+    return false;
+  }
+  const rejection = connection.requestRejection(req);
+  if (rejection === void 0) return true;
+  res.writeHead(rejection === 401 ? 401 : 403);
+  res.end(rejection === 401 ? "unauthorized" : "forbidden");
+  return false;
+}
+var PREMIUM_BODY_LIMIT_BYTES = 64 * 1024;
+
 // themes/community-alpha/palette-host.mjs
 var config = { "group": "solarized", "themes": [{ "id": "dsh-alpha-solarized-solarized-dark", "originalId": "solarized-dark", "name": "solarized-dark", "colorScheme": "dark", "baseColor": "#002b36" }, { "id": "dsh-alpha-solarized-solarized-light", "originalId": "solarized-light", "name": "solarized-light", "colorScheme": "light", "baseColor": "#fdf6e3" }, { "id": "dsh-alpha-solarized-selenized-dark", "originalId": "selenized-dark", "name": "selenized-dark", "colorScheme": "dark", "baseColor": "#103c48" }, { "id": "dsh-alpha-solarized-selenized-light", "originalId": "selenized-light", "name": "selenized-light", "colorScheme": "light", "baseColor": "#fbf3db" }] };
 var namespace = `dsh-community-${config.group}`;
@@ -828,7 +843,7 @@ function json(res, status, body) {
   res.end(JSON.stringify(body));
 }
 var name = `dsh-community-${config.group}`;
-var inject = ["settings", "webServer"];
+var inject = ["settings", "webServer", "connection"];
 function apply(ctx) {
   ctx.settings.register(namespace, schema);
   ctx.effect(
@@ -836,6 +851,7 @@ function apply(ctx) {
       kind: "exact",
       path: route,
       async handler(req, res) {
+        if (!authorizePaletteRequest(ctx.connection, req, res)) return;
         const current = () => ({
           ...ctx.settings.get(namespace),
           themes: config.themes

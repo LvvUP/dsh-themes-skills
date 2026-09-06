@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-09-06T13:17:57.527879+00:00",
+  "status": "current-exact-archives-lifecycle-passed",
+  "reviewer": "Codex /root",
+  "checks": {
+    "all32ExactChoices": true,
+    "all15ExactNumberedColdRestarts": true,
+    "actualUiImport": true,
+    "fontChangesAndCustomColdRestart": true,
+    "actualUiDeletionAndBothBuiltinModes": true,
+    "all5OwnedRoutesAbsentAfterUninstall": true,
+    "ownedStylesAndPaletteCardsAbsent": true,
+    "isolatedPortClosed": true,
+    "officialSourceClean": true
+  },
+  "inputs": [
+    {
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/output/playwright/community-palettes-alpha-security/attempt-1/verified-selections.json",
+      "sha256": "a4f89a33e878b2d89020cf73126e73d016f0bfbdaa74fb8b77cbe7f6da86873e",
+      "bytes": 19169
+    },
+    {
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/themes/community-alpha/catalog.json",
+      "sha256": "3406b1cda80e9ba6f984a567750dc935be3f52128dd4b28c5f1f3881760b4b14",
+      "bytes": 9828
+    },
+    {
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/alpha-palette-api-security/builtin-dark-observed.log",
+      "sha256": "f413fb13ff5218708a447b2920f13a860af0b1c3a26944d45ca09773d2970b5c",
+      "bytes": 1204
+    },
+    {
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/alpha-palette-api-security/builtin-light-observed.log",
+      "sha256": "05a8d452f26c0de11ff852e91fe2f063de5112704e12e0a7d7acf8dda754ae82",
+      "bytes": 1208
+    },
+    {
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/alpha-palette-api-security/healthy-console-before-recovery.log",
+      "sha256": "fb785f6bc4cae59945e35ea989a740211f390fe8442ef7334e1f416bf65f6d7a",
+      "bytes": 745
+    },
+    {
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/alpha-palette-api-security/browser-choices-1.log",
+      "sha256": "986cabac379151d05cc188f7f9380ca78209d87e8b6ff63c49f33d508947801d",
+      "bytes": 4027
+    },
+    {
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/alpha-palette-api-security/browser-restarts-1.log",
+      "sha256": "68c9393ab80915d49291fc1ebf9ade21a56924f0c4a11fc61bd994f2a3dc7143",
+      "bytes": 45323
+    },
+    {
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/alpha-palette-api-security/browser-custom-restart-1.log",
+      "sha256": "3bc5615166c26314331ffb64fbfef8b34a36319fffdbfe754a71bfff9138e89a",
+      "bytes": 3315
+    },
+    {
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/alpha-palette-api-security/browser-uninstall-recovery-1.log",
+      "sha256": "10010e5c67ad4d9daf0f6fb427f68ab7ecac4a1c928bf5e008897706b02735b5",
+      "bytes": 3330
+    },
+    {
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/alpha-palette-api-security/final-targeted-http-and-owned-server.log",
+      "sha256": "6d02a24d48ca19a5ea61865f32ae5b3d61b7af714c6f3022cb84f74b00b6da44",
+      "bytes": 1024
+    },
+    {
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/alpha-palette-api-security/visual-review.json",
+      "sha256": "9824f8875a17d4415b908b986bd715bc742ec278d9072151e75391933872d4b6",
+      "bytes": 1618
+    }
+  ],
+  "scope": "Root executed actual CLI/browser UI lifecycle, read custom import/delete snapshots and mode observations, viewed two actual screenshots, and rechecked all 32+15 saved observations against exact catalog expectations. This script is a review of those executed records, not a rerun.",
+  "limits": [
+    "Healthy console summary covers the final recovery-login navigation through custom deletion and built-in mode checks only, not every earlier restart.",
+    "The five intentional post-uninstall 404 probes happen after healthy sampling.",
+    "Package installation, archive equality and 75-case security HTTP proof have separately bound real execution records."
+  ]
+}

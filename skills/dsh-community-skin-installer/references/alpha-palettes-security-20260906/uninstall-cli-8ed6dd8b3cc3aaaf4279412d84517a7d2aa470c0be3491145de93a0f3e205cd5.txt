@@ -1,0 +1,10 @@
+✓ Lockfile passes supply-chain policies (verified 27m ago)
+
+dependencies:
+- @dsh-themes-community/catppuccin-alpha file:/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/themes/community-alpha/artifacts/catppuccin-alpha-1.0.0-alpha.2.tgz
+- @dsh-themes-community/premium-alpha file:/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/themes/community-alpha/artifacts/premium-alpha-1.0.0-alpha.2.tgz
+- @dsh-themes-community/solarized-alpha file:/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/themes/community-alpha/artifacts/solarized-alpha-1.0.0-alpha.2.tgz
+- @dsh-themes-community/theme-pack-alpha file:/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/themes/community-alpha/artifacts/theme-pack-alpha-1.0.0-alpha.2.tgz
+
+Already up to date
+Done in 340ms using pnpm v11.24.0

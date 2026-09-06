@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-09-06T12:38:14.533722+00:00",
+  "pid": 77144,
+  "cwd": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes",
+  "dshHome": "/Users/vvmacair/.dsh-themes/testing/community-palettes-alpha-api-security-20260906",
+  "port": 3427,
+  "log": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/output/playwright/community-palettes-alpha-security/attempt-1/server.log",
+  "status": "owned-runtime-ready"
+}

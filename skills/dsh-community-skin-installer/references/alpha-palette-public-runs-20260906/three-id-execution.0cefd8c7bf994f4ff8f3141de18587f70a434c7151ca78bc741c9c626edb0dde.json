@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "status": "command-passed-output-review-pending",
+  "catalogSha256": "8e048e66f5c9a6193027cefca150af90c193f8229ce6a18a7b281a03b26a76b4",
+  "driverSha256": "e178507eb9f85359e6b9091f45afb19bd860c72ef9e1cc927139bf7377ce70a7",
+  "snapshots": [
+    {
+      "sourcePath": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-community-skin-installer/references/community-recipes.json",
+      "path": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/0-community-recipes.json",
+      "sha256": "8e048e66f5c9a6193027cefca150af90c193f8229ce6a18a7b281a03b26a76b4"
+    },
+    {
+      "sourcePath": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-community-skin-installer/scripts/companion-files.mjs",
+      "path": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/1-companion-files.mjs",
+      "sha256": "36e5d72237851aab572b96a5a96866d28f3d7027bf158310ad367ae16486909d"
+    },
+    {
+      "sourcePath": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-community-skin-installer/scripts/install-alpha.mjs",
+      "path": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/2-install-alpha.mjs",
+      "sha256": "14c92f0b26b734bc73d098579e58f1f962ae81741078b726eda80c06307926f4"
+    },
+    {
+      "sourcePath": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-plugin-installer/scripts/install-plugins.mjs",
+      "path": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/3-install-plugins.mjs",
+      "sha256": "3f791ce0c81c5bf0e5dae8e0bc496a43e5ff1d910384d7c6e4e5596a4ae11321"
+    },
+    {
+      "sourcePath": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-theme-manager/scripts/dsh-alpha.mjs",
+      "path": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/4-dsh-alpha.mjs",
+      "sha256": "d7664679a96517ef8068a7dd4a6b33f640d18980f81f79223a75a7c8468cb6ff"
+    },
+    {
+      "sourcePath": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/themes/community-alpha/skin-center/verify-public-installation.mjs",
+      "path": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/5-verify-public-installation.mjs",
+      "sha256": "e178507eb9f85359e6b9091f45afb19bd860c72ef9e1cc927139bf7377ce70a7"
+    }
+  ],
+  "startedAt": "2026-09-06T13:20:24.300210+00:00",
+  "freeBeforeMiB": 1002,
+  "command": [
+    "/usr/bin/arch",
+    "-arm64",
+    "/Users/vvmacair/.nvm/versions/node/v24.15.0/bin/node",
+    "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/themes/community-alpha/skin-center/verify-public-installation.mjs"
+  ],
+  "environmentPolicy": {
+    "NODE_OPTIONS": "--max-old-space-size=768",
+    "DSH_PUBLIC_INSTALL_CANDIDATE_ONLY": "true",
+    "DSH_PUBLIC_INSTALL_OFFLINE": "false",
+    "DSH_PUBLIC_INSTALL_STORE_DIR": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-skin-center-alpha/security-3id-store-1788700824293852000"
+  },
+  "exitCode": 0,
+  "completedAt": "2026-09-06T13:20:53.126256+00:00",
+  "commandLogSha256": "c7a4f607b7fa308701af52198316ae474664596f4f4979aa87c6963e6f8fe758",
+  "inputsStillExact": true
+}

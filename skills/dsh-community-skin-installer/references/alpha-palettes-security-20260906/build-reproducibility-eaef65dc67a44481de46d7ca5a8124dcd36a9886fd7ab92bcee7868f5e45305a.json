@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-09-06T12:35:28.665642+00:00",
+  "status": "four-new-archives-reproducible-runtime-pending",
+  "version": "1.0.0-alpha.2",
+  "entries": [
+    {
+      "group": "theme-pack",
+      "artifactSha256": "20ed1b2b8dc7bf18670e9e1a7768bebbcf7cbfdfa00434b01433e388209bbb16",
+      "artifactBytes": 25622,
+      "clientSha256": "03b65a4eb74152672b2870a8868d75d772ebd5cdb0955b02f64c8eecd10f481f",
+      "clientExactOldBytes": true
+    },
+    {
+      "group": "catppuccin",
+      "artifactSha256": "ab01b5d157aa437413620a0bcbd2fd29b828a025644bf6169f2254c9e70cf08d",
+      "artifactBytes": 25676,
+      "clientSha256": "d736c00748803e63300c6f2d8296f79f46ab3fd28e3c39066e7e78949b3b08e7",
+      "clientExactOldBytes": true
+    },
+    {
+      "group": "solarized",
+      "artifactSha256": "44f1ae4e9a7d36022d19097ef83f2e287271d4ead02178d5f426ad1de7439f62",
+      "artifactBytes": 21144,
+      "clientSha256": "cb770486548a1ce2f5a4cb7f73bede8b9bc6b098f2df5b87ea3c3466276eef81",
+      "clientExactOldBytes": true
+    },
+    {
+      "group": "premium",
+      "artifactSha256": "7bf71d12f605bb6d0a320b5b754fca84256484a2da3d8f5d83b84aec4acbae50",
+      "artifactBytes": 36956,
+      "clientSha256": "ad2d6ef2e9d14419d8fcf60069ed0c962119a2b23a412ea1fa75e46d78eada05",
+      "clientExactOldBytes": true
+    }
+  ],
+  "checks": {
+    "twoBuildsExactArtifactAndCatalogBytes": true,
+    "allFourClientJavaScriptIncludingBundledCssExactPreviousBytes": true,
+    "allOriginalAlpha1ArchivesRetainedExactBytes": true
+  },
+  "inputs": [
+    {
+      "path": "themes/community-alpha/build.mjs",
+      "sha256": "e7c8c10278cdb8e75795f3a1856e0b70b57585e9796dd5cbf2777068f91f1ae6",
+      "bytes": 22610
+    },
+    {
+      "path": "themes/community-alpha/palette-host.mjs",
+      "sha256": "3ad44b9cd08387a2ccd7ece77316d8666aee5e60e5cdc42596262bc0a1d7e11e",
+      "bytes": 2882
+    },
+    {
+      "path": "themes/community-alpha/palette-api-security.mjs",
+      "sha256": "2e1a4ee5865b5c54f562ab684c7fc19c0261e0dbe4546c9423923c3c66e420d7",
+      "bytes": 4715
+    },
+    {
+      "path": "themes/community-alpha/catalog.json",
+      "sha256": "3406b1cda80e9ba6f984a567750dc935be3f52128dd4b28c5f1f3881760b4b14",
+      "bytes": 9828
+    }
+  ]
+}

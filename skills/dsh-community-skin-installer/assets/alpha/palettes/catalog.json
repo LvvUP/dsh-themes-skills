@@ -5,10 +5,10 @@
     {
       "group": "theme-pack",
       "packageName": "@dsh-themes-community/theme-pack-alpha",
-      "version": "1.0.0-alpha.1",
-      "file": "themes/community-alpha/artifacts/theme-pack-alpha-1.0.0-alpha.1.tgz",
-      "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160",
-      "sizeBytes": 25170,
+      "version": "1.0.0-alpha.2",
+      "file": "themes/community-alpha/artifacts/theme-pack-alpha-1.0.0-alpha.2.tgz",
+      "sha256": "20ed1b2b8dc7bf18670e9e1a7768bebbcf7cbfdfa00434b01433e388209bbb16",
+      "sizeBytes": 25622,
       "upstream": "math-lrz/dsh-theme-pack",
       "sourceCommit": "5a4cdbe9e6acc68f467be4af5458d2ea2e2b1616",
       "license": "MIT",
@@ -139,15 +139,15 @@
         }
       ],
       "selectionRoute": "/api/dsh-community-palettes/theme-pack",
-      "runtimeStatus": "verification-pending"
+      "runtimeStatus": "runtime-verified"
     },
     {
       "group": "catppuccin",
       "packageName": "@dsh-themes-community/catppuccin-alpha",
-      "version": "1.0.0-alpha.1",
-      "file": "themes/community-alpha/artifacts/catppuccin-alpha-1.0.0-alpha.1.tgz",
-      "sha256": "4cd4f8f04902e836a3596238984426e604b1878334a382a4e3079fdea4b29159",
-      "sizeBytes": 25283,
+      "version": "1.0.0-alpha.2",
+      "file": "themes/community-alpha/artifacts/catppuccin-alpha-1.0.0-alpha.2.tgz",
+      "sha256": "ab01b5d157aa437413620a0bcbd2fd29b828a025644bf6169f2254c9e70cf08d",
+      "sizeBytes": 25676,
       "upstream": "zhijun-dai/Catppuccin-dsh-theme",
       "sourceCommit": "9885d3e7ee93ad4c972e92be4b6f301105e73eb4",
       "license": "MIT",
@@ -182,15 +182,15 @@
         }
       ],
       "selectionRoute": "/api/dsh-community-palettes/catppuccin",
-      "runtimeStatus": "verification-pending"
+      "runtimeStatus": "runtime-verified"
     },
     {
       "group": "solarized",
       "packageName": "@dsh-themes-community/solarized-alpha",
-      "version": "1.0.0-alpha.1",
-      "file": "themes/community-alpha/artifacts/solarized-alpha-1.0.0-alpha.1.tgz",
-      "sha256": "1ade7da6d33025d8fc141b89940c122c35af611e2f0708778b64842fa9e2eeb7",
-      "sizeBytes": 20686,
+      "version": "1.0.0-alpha.2",
+      "file": "themes/community-alpha/artifacts/solarized-alpha-1.0.0-alpha.2.tgz",
+      "sha256": "44f1ae4e9a7d36022d19097ef83f2e287271d4ead02178d5f426ad1de7439f62",
+      "sizeBytes": 21144,
       "upstream": "zhijun-dai/Solarized-dsh-theme",
       "sourceCommit": "6b0614e53a4314c1705967b7e3c437b64dee64f2",
       "license": "MIT",
@@ -225,15 +225,15 @@
         }
       ],
       "selectionRoute": "/api/dsh-community-palettes/solarized",
-      "runtimeStatus": "verification-pending"
+      "runtimeStatus": "runtime-verified"
     },
     {
       "group": "premium",
       "packageName": "@dsh-themes-community/premium-alpha",
-      "version": "1.0.0-alpha.1",
-      "file": "themes/community-alpha/artifacts/premium-alpha-1.0.0-alpha.1.tgz",
-      "sha256": "2fa67a45ddb273e2c52ad02988d4f0251ad5f6ff7304d28e16a24be2a44174a7",
-      "sizeBytes": 36047,
+      "version": "1.0.0-alpha.2",
+      "file": "themes/community-alpha/artifacts/premium-alpha-1.0.0-alpha.2.tgz",
+      "sha256": "7bf71d12f605bb6d0a320b5b754fca84256484a2da3d8f5d83b84aec4acbae50",
+      "sizeBytes": 36956,
       "upstream": "xiaoyanzi191/dsh-premium-themes",
       "sourceCommit": "7e485999e45711396ba08806a40c9bfe3c650103",
       "license": "MIT",
@@ -296,7 +296,7 @@
         }
       ],
       "selectionRoute": "/api/dsh-community-palettes/premium/palette",
-      "runtimeStatus": "verification-pending"
+      "runtimeStatus": "runtime-verified"
     }
   ]
 }

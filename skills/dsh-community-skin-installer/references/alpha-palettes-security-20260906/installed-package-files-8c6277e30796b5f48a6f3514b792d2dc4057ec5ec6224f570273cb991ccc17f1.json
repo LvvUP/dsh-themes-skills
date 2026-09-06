@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-06T12:39:52.708087+00:00",
+  "status": "exact-four-alpha2-installed-by-cli-before-http-validation",
+  "packages": [
+    {
+      "group": "theme-pack",
+      "name": "@dsh-themes-community/theme-pack-alpha",
+      "version": "1.0.0-alpha.2",
+      "artifactSha256": "20ed1b2b8dc7bf18670e9e1a7768bebbcf7cbfdfa00434b01433e388209bbb16",
+      "resolvedInstallDirectory": "/Users/vvmacair/.dsh-themes/testing/community-palettes-alpha-api-security-20260906/profiles/web/node_modules/@dsh-themes-community/theme-pack-alpha",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "ef6d36a9ea7adcab9f0c27c95df7bb0de953fb7482e29aebb1be98738a006ca9",
+          "bytes": 1064
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "a2c96ac0bb49d2b83199638438a08ffc6f59f69e20f09cd6db183bd607a5c44a",
+          "bytes": 7224
+        },
+        {
+          "path": "client.js",
+          "sha256": "03b65a4eb74152672b2870a8868d75d772ebd5cdb0955b02f64c8eecd10f481f",
+          "bytes": 82479
+        },
+        {
+          "path": "cordis.patch.yml",
+          "sha256": "83569db14080347e2a033b39ec30a3dd796ee15fc78b150e7d849617eba02e49",
+          "bytes": 98
+        },
+        {
+          "path": "index.js",
+          "sha256": "15bc1f723b8b4bc9d895c2ca50539c1bf3ca19200275d3b5c1a5a993fb77c88c",
+          "bytes": 36507
+        },
+        {
+          "path": "package.json",
+          "sha256": "96ae795a3da9792fcd7db89016bcd17c1e3637b78c1dd5e56bfcc1838c2eb077",
+          "bytes": 800
+        }
+      ]
+    },
+    {
+      "group": "catppuccin",
+      "name": "@dsh-themes-community/catppuccin-alpha",
+      "version": "1.0.0-alpha.2",
+      "artifactSha256": "ab01b5d157aa437413620a0bcbd2fd29b828a025644bf6169f2254c9e70cf08d",
+      "resolvedInstallDirectory": "/Users/vvmacair/.dsh-themes/testing/community-palettes-alpha-api-security-20260906/profiles/web/node_modules/@dsh-themes-community/catppuccin-alpha",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "50ad9437b1428ac9713c8b95b33f1a3d7558601792791509985d785ffb997f1a",
+          "bytes": 1238
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "dd0ae75187527de60c2a7c51595aab950200defda3878704b04b2856e90ef792",
+          "bytes": 4351
+        },
+        {
+          "path": "client.js",
+          "sha256": "d736c00748803e63300c6f2d8296f79f46ab3fd28e3c39066e7e78949b3b08e7",
+          "bytes": 65183
+        },
+        {
+          "path": "cordis.patch.yml",
+          "sha256": "a82996566bc3359142e2c3f3e70431d16ee7762975886dc6ceefff4534a4d38a",
+          "bytes": 98
+        },
+        {
+          "path": "index.js",
+          "sha256": "64eb99ea25b2495fe3986913a5c4b89ad538c95be591b03db9c24cd27e63e086",
+          "bytes": 34412
+        },
+        {
+          "path": "package.json",
+          "sha256": "4f9ce94d663217e3ba7974e27bfac95436b7ce62b5bc944e81fa72f6734b3e28",
+          "bytes": 808
+        }
+      ]
+    },
+    {
+      "group": "solarized",
+      "name": "@dsh-themes-community/solarized-alpha",
+      "version": "1.0.0-alpha.2",
+      "artifactSha256": "44f1ae4e9a7d36022d19097ef83f2e287271d4ead02178d5f426ad1de7439f62",
+      "resolvedInstallDirectory": "/Users/vvmacair/.dsh-themes/testing/community-palettes-alpha-api-security-20260906/profiles/web/node_modules/@dsh-themes-community/solarized-alpha",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "4611653ee184c14eea36d59299fbc9c559784b744147baa429f99b8a0248e8d7",
+          "bytes": 1244
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "6ccf1a253e80afb5bc957a0b9f6d52e72e0239fc0967c3949ea87e96153451de",
+          "bytes": 3474
+        },
+        {
+          "path": "client.js",
+          "sha256": "cb770486548a1ce2f5a4cb7f73bede8b9bc6b098f2df5b87ea3c3466276eef81",
+          "bytes": 40547
+        },
+        {
+          "path": "cordis.patch.yml",
+          "sha256": "32600a9161605169e82cd9b097cf83187f9dee0d74c42e0b242adc055be8f9b9",
+          "bytes": 96
+        },
+        {
+          "path": "index.js",
+          "sha256": "dfcb566db916253f84ee980f39567c4b86495f026d0969623686238c7afd1278",
+          "bytes": 34416
+        },
+        {
+          "path": "package.json",
+          "sha256": "ebcc23f6b0c8742c63d534bfb53350d0f81d2d41646bb315469bdd3d7009b11b",
+          "bytes": 806
+        }
+      ]
+    },
+    {
+      "group": "premium",
+      "name": "@dsh-themes-community/premium-alpha",
+      "version": "1.0.0-alpha.2",
+      "artifactSha256": "7bf71d12f605bb6d0a320b5b754fca84256484a2da3d8f5d83b84aec4acbae50",
+      "resolvedInstallDirectory": "/Users/vvmacair/.dsh-themes/testing/community-palettes-alpha-api-security-20260906/profiles/web/node_modules/@dsh-themes-community/premium-alpha",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "f29ae1dd3a10404e16c0260861e7fea676d9bb293b2c58491f6cbcc838a3b46e",
+          "bytes": 1069
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "454a0f36130b1baa9a450d2247106c91be2bb07fd4cdc483cb9c1728bed1d20c",
+          "bytes": 6471
+        },
+        {
+          "path": "client.js",
+          "sha256": "ad2d6ef2e9d14419d8fcf60069ed0c962119a2b23a412ea1fa75e46d78eada05",
+          "bytes": 103302
+        },
+        {
+          "path": "cordis.patch.yml",
+          "sha256": "83e980953ae0fb39a02b87e91641aa67526bd547d8676c7f65e6d87fbb74470e",
+          "bytes": 92
+        },
+        {
+          "path": "index.js",
+          "sha256": "655cfc531a90dc2e17de24a0c805f92929ad624dd2d23b06e6f50bf42009fc7b",
+          "bytes": 50102
+        },
+        {
+          "path": "package.json",
+          "sha256": "3d1161ffae8f81c523a41456a2c2f93e7655e458ccaad0a932ce442d94edd7b6",
+          "bytes": 805
+        }
+      ]
+    }
+  ],
+  "scope": "Actual profile module files equal the newly reproduced fixed artifacts; process ownership has separate record. Runtime behavior is not inferred from these bytes."
+}

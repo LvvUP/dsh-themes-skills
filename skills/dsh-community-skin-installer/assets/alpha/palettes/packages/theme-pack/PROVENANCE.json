@@ -157,7 +157,7 @@
   },
   "license": "MIT",
   "packageName": "@dsh-themes-community/theme-pack-alpha",
-  "packageVersion": "1.0.0-alpha.1",
+  "packageVersion": "1.0.0-alpha.2",
   "changes": [
     "Exact Alpha client injection declarations; no legacy peer dependency installation",
     "Distinct theme IDs prevent collisions between installed palette packages",
@@ -191,5 +191,16 @@
       "from": "rgb(NaN, 11, 36)",
       "to": "rgb(247, 242, 237)"
     }
-  ]
+  ],
+  "securityAdaptation": {
+    "revision": "palette-api-auth-20260906",
+    "officialGuard": "ctx.connection.requestRejection(req)",
+    "beforeAnyRouteReadOrWrite": true,
+    "helper": {
+      "path": "themes/community-alpha/palette-api-security.mjs",
+      "sha256": "2e1a4ee5865b5c54f562ab684c7fc19c0261e0dbe4546c9423923c3c66e420d7"
+    },
+    "buildImplementationSha256": "e7c8c10278cdb8e75795f3a1856e0b70b57585e9796dd5cbf2777068f91f1ae6",
+    "hostTemplateSha256": "3ad44b9cd08387a2ccd7ece77316d8666aee5e60e5cdc42596262bc0a1d7e11e"
+  }
 }

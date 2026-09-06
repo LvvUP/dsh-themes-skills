@@ -1,0 +1,361 @@
+{
+  "schemaVersion": 1,
+  "status": "prepared-archive-byte-fixture-not-an-upgrade-result",
+  "catalogIds": [
+    1101,
+    1102,
+    1103,
+    1104,
+    1105,
+    1106,
+    1107,
+    1108,
+    1109,
+    1110,
+    1111,
+    1112,
+    1201,
+    1202,
+    1203
+  ],
+  "packages": [
+    {
+      "group": "theme-pack",
+      "packageName": "@dsh-themes-community/theme-pack-alpha",
+      "old": {
+        "artifactPath": "skills/dsh-community-skin-installer/assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+        "artifactSha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160",
+        "version": "1.0.0-alpha.1",
+        "files": [
+          {
+            "path": "client.js",
+            "sha256": "03b65a4eb74152672b2870a8868d75d772ebd5cdb0955b02f64c8eecd10f481f",
+            "bytes": 82479
+          },
+          {
+            "path": "cordis.patch.yml",
+            "sha256": "83569db14080347e2a033b39ec30a3dd796ee15fc78b150e7d849617eba02e49",
+            "bytes": 98
+          },
+          {
+            "path": "index.js",
+            "sha256": "7a5dd7cf8e4b5c2f1a95c035463a28d8b8dede1eddb200c9a3f8d9dd6da6c7cc",
+            "bytes": 35927
+          },
+          {
+            "path": "LICENSE",
+            "sha256": "ef6d36a9ea7adcab9f0c27c95df7bb0de953fb7482e29aebb1be98738a006ca9",
+            "bytes": 1064
+          },
+          {
+            "path": "package.json",
+            "sha256": "9b9b1ebce9bd27a6aa8efecf840435dea7f9e7d6073ac4ccc19a5d80ecb08743",
+            "bytes": 800
+          },
+          {
+            "path": "PROVENANCE.json",
+            "sha256": "539f56aa907660bf88e3a51948604cc2536432d80d868c521f7c406476676869",
+            "bytes": 6683
+          }
+        ]
+      },
+      "new": {
+        "artifactPath": "skills/dsh-community-skin-installer/assets/alpha/artifacts/20ed1b2b8dc7bf18670e9e1a7768bebbcf7cbfdfa00434b01433e388209bbb16.tgz",
+        "artifactSha256": "20ed1b2b8dc7bf18670e9e1a7768bebbcf7cbfdfa00434b01433e388209bbb16",
+        "version": "1.0.0-alpha.2",
+        "files": [
+          {
+            "path": "client.js",
+            "sha256": "03b65a4eb74152672b2870a8868d75d772ebd5cdb0955b02f64c8eecd10f481f",
+            "bytes": 82479
+          },
+          {
+            "path": "cordis.patch.yml",
+            "sha256": "83569db14080347e2a033b39ec30a3dd796ee15fc78b150e7d849617eba02e49",
+            "bytes": 98
+          },
+          {
+            "path": "index.js",
+            "sha256": "15bc1f723b8b4bc9d895c2ca50539c1bf3ca19200275d3b5c1a5a993fb77c88c",
+            "bytes": 36507
+          },
+          {
+            "path": "LICENSE",
+            "sha256": "ef6d36a9ea7adcab9f0c27c95df7bb0de953fb7482e29aebb1be98738a006ca9",
+            "bytes": 1064
+          },
+          {
+            "path": "package.json",
+            "sha256": "96ae795a3da9792fcd7db89016bcd17c1e3637b78c1dd5e56bfcc1838c2eb077",
+            "bytes": 800
+          },
+          {
+            "path": "PROVENANCE.json",
+            "sha256": "a2c96ac0bb49d2b83199638438a08ffc6f59f69e20f09cd6db183bd607a5c44a",
+            "bytes": 7224
+          }
+        ]
+      }
+    },
+    {
+      "group": "catppuccin",
+      "packageName": "@dsh-themes-community/catppuccin-alpha",
+      "old": {
+        "artifactPath": "skills/dsh-community-skin-installer/assets/alpha/artifacts/4cd4f8f04902e836a3596238984426e604b1878334a382a4e3079fdea4b29159.tgz",
+        "artifactSha256": "4cd4f8f04902e836a3596238984426e604b1878334a382a4e3079fdea4b29159",
+        "version": "1.0.0-alpha.1",
+        "files": [
+          {
+            "path": "client.js",
+            "sha256": "d736c00748803e63300c6f2d8296f79f46ab3fd28e3c39066e7e78949b3b08e7",
+            "bytes": 65183
+          },
+          {
+            "path": "cordis.patch.yml",
+            "sha256": "a82996566bc3359142e2c3f3e70431d16ee7762975886dc6ceefff4534a4d38a",
+            "bytes": 98
+          },
+          {
+            "path": "index.js",
+            "sha256": "28affa73c53b9501aa9a954d9d24da597d7c8d31f4270aef32acaced8213f8c8",
+            "bytes": 33832
+          },
+          {
+            "path": "LICENSE",
+            "sha256": "50ad9437b1428ac9713c8b95b33f1a3d7558601792791509985d785ffb997f1a",
+            "bytes": 1238
+          },
+          {
+            "path": "package.json",
+            "sha256": "13dc15c38a9ececc19883271854eddd0a640d1984640978294a168c2dec8cc09",
+            "bytes": 808
+          },
+          {
+            "path": "PROVENANCE.json",
+            "sha256": "ccc0c520ab3d66b79a09ab4f9f3088c212e3eb5754949ba9339df60a85da828f",
+            "bytes": 3810
+          }
+        ]
+      },
+      "new": {
+        "artifactPath": "skills/dsh-community-skin-installer/assets/alpha/artifacts/ab01b5d157aa437413620a0bcbd2fd29b828a025644bf6169f2254c9e70cf08d.tgz",
+        "artifactSha256": "ab01b5d157aa437413620a0bcbd2fd29b828a025644bf6169f2254c9e70cf08d",
+        "version": "1.0.0-alpha.2",
+        "files": [
+          {
+            "path": "client.js",
+            "sha256": "d736c00748803e63300c6f2d8296f79f46ab3fd28e3c39066e7e78949b3b08e7",
+            "bytes": 65183
+          },
+          {
+            "path": "cordis.patch.yml",
+            "sha256": "a82996566bc3359142e2c3f3e70431d16ee7762975886dc6ceefff4534a4d38a",
+            "bytes": 98
+          },
+          {
+            "path": "index.js",
+            "sha256": "64eb99ea25b2495fe3986913a5c4b89ad538c95be591b03db9c24cd27e63e086",
+            "bytes": 34412
+          },
+          {
+            "path": "LICENSE",
+            "sha256": "50ad9437b1428ac9713c8b95b33f1a3d7558601792791509985d785ffb997f1a",
+            "bytes": 1238
+          },
+          {
+            "path": "package.json",
+            "sha256": "4f9ce94d663217e3ba7974e27bfac95436b7ce62b5bc944e81fa72f6734b3e28",
+            "bytes": 808
+          },
+          {
+            "path": "PROVENANCE.json",
+            "sha256": "dd0ae75187527de60c2a7c51595aab950200defda3878704b04b2856e90ef792",
+            "bytes": 4351
+          }
+        ]
+      }
+    },
+    {
+      "group": "solarized",
+      "packageName": "@dsh-themes-community/solarized-alpha",
+      "old": {
+        "artifactPath": "skills/dsh-community-skin-installer/assets/alpha/artifacts/1ade7da6d33025d8fc141b89940c122c35af611e2f0708778b64842fa9e2eeb7.tgz",
+        "artifactSha256": "1ade7da6d33025d8fc141b89940c122c35af611e2f0708778b64842fa9e2eeb7",
+        "version": "1.0.0-alpha.1",
+        "files": [
+          {
+            "path": "client.js",
+            "sha256": "cb770486548a1ce2f5a4cb7f73bede8b9bc6b098f2df5b87ea3c3466276eef81",
+            "bytes": 40547
+          },
+          {
+            "path": "cordis.patch.yml",
+            "sha256": "32600a9161605169e82cd9b097cf83187f9dee0d74c42e0b242adc055be8f9b9",
+            "bytes": 96
+          },
+          {
+            "path": "index.js",
+            "sha256": "d69061213e00d366230421e0050e0d84b9e3a119a9421e6ce6cd249cdc6ad74b",
+            "bytes": 33836
+          },
+          {
+            "path": "LICENSE",
+            "sha256": "4611653ee184c14eea36d59299fbc9c559784b744147baa429f99b8a0248e8d7",
+            "bytes": 1244
+          },
+          {
+            "path": "package.json",
+            "sha256": "1dbd25384b748b266558bf5519bee86d4e71af42d78c5c5dd4fa1a92c7e3c7b8",
+            "bytes": 806
+          },
+          {
+            "path": "PROVENANCE.json",
+            "sha256": "55a76f75ef936ba2f0f3c71a112796899597c4c508dd35bcab983b0a55b86460",
+            "bytes": 2933
+          }
+        ]
+      },
+      "new": {
+        "artifactPath": "skills/dsh-community-skin-installer/assets/alpha/artifacts/44f1ae4e9a7d36022d19097ef83f2e287271d4ead02178d5f426ad1de7439f62.tgz",
+        "artifactSha256": "44f1ae4e9a7d36022d19097ef83f2e287271d4ead02178d5f426ad1de7439f62",
+        "version": "1.0.0-alpha.2",
+        "files": [
+          {
+            "path": "client.js",
+            "sha256": "cb770486548a1ce2f5a4cb7f73bede8b9bc6b098f2df5b87ea3c3466276eef81",
+            "bytes": 40547
+          },
+          {
+            "path": "cordis.patch.yml",
+            "sha256": "32600a9161605169e82cd9b097cf83187f9dee0d74c42e0b242adc055be8f9b9",
+            "bytes": 96
+          },
+          {
+            "path": "index.js",
+            "sha256": "dfcb566db916253f84ee980f39567c4b86495f026d0969623686238c7afd1278",
+            "bytes": 34416
+          },
+          {
+            "path": "LICENSE",
+            "sha256": "4611653ee184c14eea36d59299fbc9c559784b744147baa429f99b8a0248e8d7",
+            "bytes": 1244
+          },
+          {
+            "path": "package.json",
+            "sha256": "ebcc23f6b0c8742c63d534bfb53350d0f81d2d41646bb315469bdd3d7009b11b",
+            "bytes": 806
+          },
+          {
+            "path": "PROVENANCE.json",
+            "sha256": "6ccf1a253e80afb5bc957a0b9f6d52e72e0239fc0967c3949ea87e96153451de",
+            "bytes": 3474
+          }
+        ]
+      }
+    },
+    {
+      "group": "premium",
+      "packageName": "@dsh-themes-community/premium-alpha",
+      "old": {
+        "artifactPath": "skills/dsh-community-skin-installer/assets/alpha/artifacts/2fa67a45ddb273e2c52ad02988d4f0251ad5f6ff7304d28e16a24be2a44174a7.tgz",
+        "artifactSha256": "2fa67a45ddb273e2c52ad02988d4f0251ad5f6ff7304d28e16a24be2a44174a7",
+        "version": "1.0.0-alpha.1",
+        "files": [
+          {
+            "path": "client.js",
+            "sha256": "ad2d6ef2e9d14419d8fcf60069ed0c962119a2b23a412ea1fa75e46d78eada05",
+            "bytes": 103302
+          },
+          {
+            "path": "cordis.patch.yml",
+            "sha256": "83e980953ae0fb39a02b87e91641aa67526bd547d8676c7f65e6d87fbb74470e",
+            "bytes": 92
+          },
+          {
+            "path": "index.js",
+            "sha256": "ff49727dfcbcf4c11fe3969aa46255ef2679d72b5da27c9c8ef38afaae527d2b",
+            "bytes": 47637
+          },
+          {
+            "path": "LICENSE",
+            "sha256": "f29ae1dd3a10404e16c0260861e7fea676d9bb293b2c58491f6cbcc838a3b46e",
+            "bytes": 1069
+          },
+          {
+            "path": "package.json",
+            "sha256": "a98ae31158dff356f5a27ae0ca77e6be46bfd9bc06ac8a9b94b4eb04b950238f",
+            "bytes": 805
+          },
+          {
+            "path": "PROVENANCE.json",
+            "sha256": "1daf7f52ad42bc67178d09217161e72dea86011841b9c86d09417dac358e92a9",
+            "bytes": 5984
+          }
+        ]
+      },
+      "new": {
+        "artifactPath": "skills/dsh-community-skin-installer/assets/alpha/artifacts/7bf71d12f605bb6d0a320b5b754fca84256484a2da3d8f5d83b84aec4acbae50.tgz",
+        "artifactSha256": "7bf71d12f605bb6d0a320b5b754fca84256484a2da3d8f5d83b84aec4acbae50",
+        "version": "1.0.0-alpha.2",
+        "files": [
+          {
+            "path": "client.js",
+            "sha256": "ad2d6ef2e9d14419d8fcf60069ed0c962119a2b23a412ea1fa75e46d78eada05",
+            "bytes": 103302
+          },
+          {
+            "path": "cordis.patch.yml",
+            "sha256": "83e980953ae0fb39a02b87e91641aa67526bd547d8676c7f65e6d87fbb74470e",
+            "bytes": 92
+          },
+          {
+            "path": "index.js",
+            "sha256": "655cfc531a90dc2e17de24a0c805f92929ad624dd2d23b06e6f50bf42009fc7b",
+            "bytes": 50102
+          },
+          {
+            "path": "LICENSE",
+            "sha256": "f29ae1dd3a10404e16c0260861e7fea676d9bb293b2c58491f6cbcc838a3b46e",
+            "bytes": 1069
+          },
+          {
+            "path": "package.json",
+            "sha256": "3d1161ffae8f81c523a41456a2c2f93e7655e458ccaad0a932ce442d94edd7b6",
+            "bytes": 805
+          },
+          {
+            "path": "PROVENANCE.json",
+            "sha256": "454a0f36130b1baa9a450d2247106c91be2bb07fd4cdc483cb9c1728bed1d20c",
+            "bytes": 6471
+          }
+        ]
+      }
+    }
+  ],
+  "frozenHelpers": [
+    {
+      "path": "skills/dsh-community-skin-installer/scripts/companion-files.mjs",
+      "sha256": "36e5d72237851aab572b96a5a96866d28f3d7027bf158310ad367ae16486909d",
+      "bytes": 8259,
+      "mode": "0o644"
+    },
+    {
+      "path": "skills/dsh-community-skin-installer/scripts/install-alpha.mjs",
+      "sha256": "14c92f0b26b734bc73d098579e58f1f962ae81741078b726eda80c06307926f4",
+      "bytes": 10150,
+      "mode": "0o644"
+    },
+    {
+      "path": "skills/dsh-plugin-installer/scripts/install-plugins.mjs",
+      "sha256": "3f791ce0c81c5bf0e5dae8e0bc496a43e5ff1d910384d7c6e4e5596a4ae11321",
+      "bytes": 19296,
+      "mode": "0o644"
+    },
+    {
+      "path": "skills/dsh-theme-manager/scripts/dsh-alpha.mjs",
+      "sha256": "d7664679a96517ef8068a7dd4a6b33f640d18980f81f79223a75a7c8468cb6ff",
+      "bytes": 7330,
+      "mode": "0o644"
+    }
+  ]
+}

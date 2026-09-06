@@ -1,0 +1,1652 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "startedAt": "2026-09-06T12:39:52.796Z",
+  "purpose": "Actual HTTP validation of four community palette API security adaptations",
+  "target": {
+    "origin": "http://127.0.0.1:3427",
+    "profileOwnership": "Caller must independently confirm its isolated official process owns port 3427"
+  },
+  "inputs": {
+    "catalogPath": "themes/community-alpha/catalog.json",
+    "catalogSha256": "3406b1cda80e9ba6f984a567750dc935be3f52128dd4b28c5f1f3881760b4b14",
+    "packages": [
+      {
+        "group": "theme-pack",
+        "packageName": "@dsh-themes-community/theme-pack-alpha",
+        "version": "1.0.0-alpha.2",
+        "file": "themes/community-alpha/artifacts/theme-pack-alpha-1.0.0-alpha.2.tgz",
+        "sha256": "20ed1b2b8dc7bf18670e9e1a7768bebbcf7cbfdfa00434b01433e388209bbb16",
+        "sizeBytes": 25622
+      },
+      {
+        "group": "catppuccin",
+        "packageName": "@dsh-themes-community/catppuccin-alpha",
+        "version": "1.0.0-alpha.2",
+        "file": "themes/community-alpha/artifacts/catppuccin-alpha-1.0.0-alpha.2.tgz",
+        "sha256": "ab01b5d157aa437413620a0bcbd2fd29b828a025644bf6169f2254c9e70cf08d",
+        "sizeBytes": 25676
+      },
+      {
+        "group": "solarized",
+        "packageName": "@dsh-themes-community/solarized-alpha",
+        "version": "1.0.0-alpha.2",
+        "file": "themes/community-alpha/artifacts/solarized-alpha-1.0.0-alpha.2.tgz",
+        "sha256": "44f1ae4e9a7d36022d19097ef83f2e287271d4ead02178d5f426ad1de7439f62",
+        "sizeBytes": 21144
+      },
+      {
+        "group": "premium",
+        "packageName": "@dsh-themes-community/premium-alpha",
+        "version": "1.0.0-alpha.2",
+        "file": "themes/community-alpha/artifacts/premium-alpha-1.0.0-alpha.2.tgz",
+        "sha256": "7bf71d12f605bb6d0a320b5b754fca84256484a2da3d8f5d83b84aec4acbae50",
+        "sizeBytes": 36956
+      }
+    ],
+    "settingsPath": ".cache/alpha-palette-api-security/attempt-1-settings.json",
+    "settingsSha256": "2f16660d1e20bfb2f3444b96d7ee1e8ea8ed13267228756d38acd544a6792c6b",
+    "scriptSha256": "df6895729e2e4143261f5e5da7e7560ad4c4882f5aa95f2e8239b2f5be1c01ec",
+    "dshHome": "~/.dsh-themes/testing/community-palettes-alpha-api-security-20260906",
+    "serverLogPath": "output/playwright/community-palettes-alpha-security/attempt-1/server.log",
+    "serverLogCopied": false
+  },
+  "cases": [
+    {
+      "caseId": "guard:/api/dsh-community-palettes/theme-pack:GET:no-cookie",
+      "route": "/api/dsh-community-palettes/theme-pack",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/theme-pack:GET:foreign-origin",
+      "route": "/api/dsh-community-palettes/theme-pack",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/theme-pack:GET:null-origin",
+      "route": "/api/dsh-community-palettes/theme-pack",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/theme-pack:GET:untrusted-host",
+      "route": "/api/dsh-community-palettes/theme-pack",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/theme-pack:GET:cross-site",
+      "route": "/api/dsh-community-palettes/theme-pack",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/theme-pack:POST:no-cookie",
+      "route": "/api/dsh-community-palettes/theme-pack",
+      "method": "POST",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/theme-pack:POST:foreign-origin",
+      "route": "/api/dsh-community-palettes/theme-pack",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/theme-pack:POST:null-origin",
+      "route": "/api/dsh-community-palettes/theme-pack",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/theme-pack:POST:untrusted-host",
+      "route": "/api/dsh-community-palettes/theme-pack",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/theme-pack:POST:cross-site",
+      "route": "/api/dsh-community-palettes/theme-pack",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/catppuccin:GET:no-cookie",
+      "route": "/api/dsh-community-palettes/catppuccin",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/catppuccin:GET:foreign-origin",
+      "route": "/api/dsh-community-palettes/catppuccin",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/catppuccin:GET:null-origin",
+      "route": "/api/dsh-community-palettes/catppuccin",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/catppuccin:GET:untrusted-host",
+      "route": "/api/dsh-community-palettes/catppuccin",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/catppuccin:GET:cross-site",
+      "route": "/api/dsh-community-palettes/catppuccin",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/catppuccin:POST:no-cookie",
+      "route": "/api/dsh-community-palettes/catppuccin",
+      "method": "POST",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/catppuccin:POST:foreign-origin",
+      "route": "/api/dsh-community-palettes/catppuccin",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/catppuccin:POST:null-origin",
+      "route": "/api/dsh-community-palettes/catppuccin",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/catppuccin:POST:untrusted-host",
+      "route": "/api/dsh-community-palettes/catppuccin",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/catppuccin:POST:cross-site",
+      "route": "/api/dsh-community-palettes/catppuccin",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/solarized:GET:no-cookie",
+      "route": "/api/dsh-community-palettes/solarized",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/solarized:GET:foreign-origin",
+      "route": "/api/dsh-community-palettes/solarized",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/solarized:GET:null-origin",
+      "route": "/api/dsh-community-palettes/solarized",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/solarized:GET:untrusted-host",
+      "route": "/api/dsh-community-palettes/solarized",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/solarized:GET:cross-site",
+      "route": "/api/dsh-community-palettes/solarized",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/solarized:POST:no-cookie",
+      "route": "/api/dsh-community-palettes/solarized",
+      "method": "POST",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/solarized:POST:foreign-origin",
+      "route": "/api/dsh-community-palettes/solarized",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/solarized:POST:null-origin",
+      "route": "/api/dsh-community-palettes/solarized",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/solarized:POST:untrusted-host",
+      "route": "/api/dsh-community-palettes/solarized",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/solarized:POST:cross-site",
+      "route": "/api/dsh-community-palettes/solarized",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/palette:GET:no-cookie",
+      "route": "/api/dsh-community-palettes/premium/palette",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/palette:GET:foreign-origin",
+      "route": "/api/dsh-community-palettes/premium/palette",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/palette:GET:null-origin",
+      "route": "/api/dsh-community-palettes/premium/palette",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/palette:GET:untrusted-host",
+      "route": "/api/dsh-community-palettes/premium/palette",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/palette:GET:cross-site",
+      "route": "/api/dsh-community-palettes/premium/palette",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/palette:POST:no-cookie",
+      "route": "/api/dsh-community-palettes/premium/palette",
+      "method": "POST",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/palette:POST:foreign-origin",
+      "route": "/api/dsh-community-palettes/premium/palette",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/palette:POST:null-origin",
+      "route": "/api/dsh-community-palettes/premium/palette",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/palette:POST:untrusted-host",
+      "route": "/api/dsh-community-palettes/premium/palette",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/palette:POST:cross-site",
+      "route": "/api/dsh-community-palettes/premium/palette",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/custom:GET:no-cookie",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "GET",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/custom:GET:foreign-origin",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/custom:GET:null-origin",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/custom:GET:untrusted-host",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/custom:GET:cross-site",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "GET",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/custom:POST:no-cookie",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "POST",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/custom:POST:foreign-origin",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/custom:POST:null-origin",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/custom:POST:untrusted-host",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/custom:POST:cross-site",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "POST",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/custom:DELETE:no-cookie",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "DELETE",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/custom:DELETE:foreign-origin",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "DELETE",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/custom:DELETE:null-origin",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "DELETE",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/custom:DELETE:untrusted-host",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "DELETE",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "guard:/api/dsh-community-palettes/premium/custom:DELETE:cross-site",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "DELETE",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "body:/api/dsh-community-palettes/premium/palette:POST:text-plain",
+      "route": "/api/dsh-community-palettes/premium/palette",
+      "method": "POST",
+      "expectedStatus": 415,
+      "actualStatus": 415,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "body:/api/dsh-community-palettes/premium/palette:POST:malformed",
+      "route": "/api/dsh-community-palettes/premium/palette",
+      "method": "POST",
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "body:/api/dsh-community-palettes/premium/palette:POST:null",
+      "route": "/api/dsh-community-palettes/premium/palette",
+      "method": "POST",
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "body:/api/dsh-community-palettes/premium/palette:POST:array",
+      "route": "/api/dsh-community-palettes/premium/palette",
+      "method": "POST",
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "body:/api/dsh-community-palettes/premium/palette:POST:over-64-kib",
+      "route": "/api/dsh-community-palettes/premium/palette",
+      "method": "POST",
+      "expectedStatus": 413,
+      "actualStatus": 413,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "body:/api/dsh-community-palettes/premium/custom:POST:text-plain",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "POST",
+      "expectedStatus": 415,
+      "actualStatus": 415,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "body:/api/dsh-community-palettes/premium/custom:POST:malformed",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "POST",
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "body:/api/dsh-community-palettes/premium/custom:POST:null",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "POST",
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "body:/api/dsh-community-palettes/premium/custom:POST:array",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "POST",
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "body:/api/dsh-community-palettes/premium/custom:POST:over-64-kib",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "POST",
+      "expectedStatus": 413,
+      "actualStatus": 413,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "body:/api/dsh-community-palettes/premium/custom:DELETE:text-plain",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "DELETE",
+      "expectedStatus": 415,
+      "actualStatus": 415,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "body:/api/dsh-community-palettes/premium/custom:DELETE:malformed",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "DELETE",
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "body:/api/dsh-community-palettes/premium/custom:DELETE:null",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "DELETE",
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "body:/api/dsh-community-palettes/premium/custom:DELETE:array",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "DELETE",
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "body:/api/dsh-community-palettes/premium/custom:DELETE:over-64-kib",
+      "route": "/api/dsh-community-palettes/premium/custom",
+      "method": "DELETE",
+      "expectedStatus": 413,
+      "actualStatus": 413,
+      "stateUnchanged": true,
+      "beforeSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "afterSha256": {
+        "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+        "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+        "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+        "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+        "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "caseId": "valid:theme-pack:select-and-readback",
+      "actualStatus": 200
+    },
+    {
+      "caseId": "valid:catppuccin:select-and-readback",
+      "actualStatus": 200
+    },
+    {
+      "caseId": "valid:solarized:select-and-readback",
+      "actualStatus": 200
+    },
+    {
+      "caseId": "valid:premium:select-and-readback",
+      "actualStatus": 200
+    },
+    {
+      "caseId": "valid:custom:import-select-delete-readback",
+      "actualStatus": 200,
+      "restoredOffOnDeletion": true
+    }
+  ],
+  "cleanup": {
+    "attempted": true,
+    "restoredInitialState": true,
+    "finalSha256": {
+      "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+      "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+      "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+      "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+      "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    }
+  },
+  "limitations": [
+    "Prepared script; execution status is set only by a complete real HTTP run.",
+    "Catalog and archive hashes identify test inputs, not independent proof of loaded package bytes; pair with the caller installation/host receipt.",
+    "No browser, visual, restart, account, model, external-service, or arbitrary-origin acceptance claims.",
+    "State equality means byte-for-byte equality of all five authenticated GET responses, including all four settings sections and Premium custom definitions; it is not a direct disk-file audit.",
+    "No credentials, launch URLs, request/response headers, response bodies, or unfiltered errors are persisted."
+  ],
+  "initialStateSha256": {
+    "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+    "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+    "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+    "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+    "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+  },
+  "completedAt": "2026-09-06T12:39:53.365Z",
+  "elapsedMs": 569,
+  "summary": {
+    "supportedRouteMethods": 11,
+    "authorizationRejections": 55,
+    "premiumBodyRejections": 15,
+    "successfulPaletteSelections": 4,
+    "successfulCustomLifecycle": 1,
+    "restoredInitialState": true
+  }
+}

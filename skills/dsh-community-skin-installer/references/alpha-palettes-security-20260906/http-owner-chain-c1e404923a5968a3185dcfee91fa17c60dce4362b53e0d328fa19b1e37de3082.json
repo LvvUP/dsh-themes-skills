@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-09-06T12:39:32.864246+00:00",
+  "port": 3427,
+  "ownerRecord": {
+    "schemaVersion": 1,
+    "createdAt": "2026-09-06T12:38:14.533722+00:00",
+    "pid": 77144,
+    "cwd": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes",
+    "dshHome": "/Users/vvmacair/.dsh-themes/testing/community-palettes-alpha-api-security-20260906",
+    "port": 3427,
+    "log": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/output/playwright/community-palettes-alpha-security/attempt-1/server.log",
+    "status": "owned-runtime-ready"
+  },
+  "chain": [
+    {
+      "pid": 77195,
+      "ppid": 77165,
+      "command": "node --import tsx/esm apps/cli/src/bin.ts web --host 127.0.0.1 --port 3427 --no-open"
+    },
+    {
+      "pid": 77165,
+      "ppid": 77144,
+      "command": "node /Users/vvmacair/.nvm/versions/node/v24.15.0/bin/corepack pnpm --silent dsh web --host 127.0.0.1 --port 3427 --no-open"
+    },
+    {
+      "pid": 77144,
+      "ppid": 1,
+      "command": "/Users/vvmacair/.nvm/versions/node/v24.15.0/bin/node /Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-theme-manager/scripts/dsh-alpha.mjs web --host 127.0.0.1 --port 3427 --no-open"
+    }
+  ]
+}
