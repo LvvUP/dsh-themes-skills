@@ -1,0 +1,50 @@
+{
+  "name": "@dsh-themes/community-dsh-homepage-skin",
+  "version": "0.1.12-dsh-alpha.1",
+  "description": "DeepSeek Harness homepage-style background skin: WebGL fluid, dot grid and digital whale. Dark and light variants included.",
+  "license": "MIT",
+  "author": "yushi-xxh",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yushi-xxh/dsh-homepage-skin.git"
+  },
+  "homepage": "https://github.com/yushi-xxh/dsh-homepage-skin#readme",
+  "bugs": {
+    "url": "https://github.com/yushi-xxh/dsh-homepage-skin/issues"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "theme",
+    "skin",
+    "homepage"
+  ],
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "LICENSE",
+    "README.md",
+    "DSH-ALPHA-ADAPTATION.json"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-theme"
+      ],
+      "platform": "web",
+      "immediately": true
+    }
+  }
+}

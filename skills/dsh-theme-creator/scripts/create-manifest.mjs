@@ -6,6 +6,20 @@ import { dirname, isAbsolute, resolve, sep } from 'node:path';
 
 import sharp from 'sharp';
 
+import { ALPHA_SOURCE, readAlphaRuntime } from '../../dsh-theme-manager/scripts/dsh-alpha.mjs';
+import { loadAlphaHostedAuthority, stableAlphaJson } from '../../dsh-theme-manager/scripts/alpha-authority.mjs';
+
+async function selectedCompatibility(baseline = 'alpha') {
+  if (baseline === 'historical-rc8') return HISTORICAL_COMPATIBILITY;
+  if (baseline !== 'alpha') throw new Error('baseline must be alpha or historical-rc8');
+  const bytes = await readFile(new URL('../references/compatibility-alpha.json', import.meta.url));
+  if (createHash('sha256').update(bytes).digest('hex') !== '1df3347e072b79d6c7607de2e7728f4b50e40c29591c1f307b4634ebb3d16032') throw new Error('Alpha authoring/submission sidecar digest differs');
+  const compatibility = JSON.parse(bytes.toString('utf8'));
+  const runtime = readAlphaRuntime();
+  if (loadAlphaHostedAuthority().status !== 'runtime-verified' || stableAlphaJson(compatibility) !== stableAlphaJson({ ...runtime.compatibility, runtimeAttestationSha256: ALPHA_SOURCE.verification.sha256 })) throw new Error('Alpha draft compatibility differs from the reviewed source and hosted authority');
+  return compatibility;
+}
+
 const TOKENS = [
   '--dsw-alias-bg-base', '--dsw-alias-bg-layer-1', '--dsw-alias-bg-layer-2', '--dsw-alias-bg-overlay',
   '--dsw-alias-border-l1', '--dsw-alias-border-l2', '--dsw-alias-brand-primary', '--dsw-alias-label-primary',
@@ -83,13 +97,15 @@ if (
 ) {
   throw new Error('certified authoring sidecar digest differs');
 }
-const COMPATIBILITY = JSON.parse(compatibilityBytes.toString('utf8'));
+const HISTORICAL_COMPATIBILITY = JSON.parse(compatibilityBytes.toString('utf8'));
 
 function parseArgs(argv) {
   const values = {};
   for (let index = 0; index < argv.length; index += 2) {
     if (!argv[index]?.startsWith('--') || argv[index + 1] == null) throw new Error('Arguments must be --key value pairs');
-    values[argv[index].slice(2)] = argv[index + 1];
+    const key = argv[index].slice(2);
+    if (!['input', 'output', 'baseline'].includes(key) || Object.hasOwn(values, key)) throw new Error('Unknown or duplicate argument');
+    values[key] = argv[index + 1];
   }
   if (!values.input || !values.output) throw new Error('Usage: create-manifest.mjs --input <absolute-json> --output <new-absolute-json>');
   return values;
@@ -166,7 +182,7 @@ function normalizeLicensePolicy(value, identifier) {
 function previewUrl(value, label) {
   const input = text(value, label, 2048);
   if (input.startsWith('/')) {
-    if (!/^\/(?:theme-studio|imgs|theme-packages)\/[A-Za-z0-9][A-Za-z0-9._~!$&'()*+,;=:@%/-]*$/.test(input) || decodeURIComponent(input).split('/').some((part) => part === '..' || part === '.')) throw new Error(`${label} is not a safe local URL`);
+    if (!/^\/(?:api\/theme-studio|__dsh-themes|imgs|theme-packages)\/[A-Za-z0-9][A-Za-z0-9._~!$&'()*+,;=:@%/-]*$/.test(input) || decodeURIComponent(input).split('/').some((part) => part === '..' || part === '.')) throw new Error(`${label} is not a safe local URL`);
     return input;
   }
   return httpsUrl(input, label);
@@ -273,6 +289,7 @@ function stable(value) {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
+  const COMPATIBILITY = await selectedCompatibility(args.baseline);
   if (!isAbsolute(args.input) || !isAbsolute(args.output)) throw new Error('input and output must use absolute paths');
   const source = JSON.parse(await readFile(resolve(args.input), 'utf8'));
   object(source, 'root');
@@ -281,7 +298,7 @@ async function main() {
   if (source.schemaVersion !== '3.0') throw new Error('schemaVersion must equal 3.0');
   if (!['theme', 'full-skin'].includes(source.kind)) throw new Error('kind must be theme or full-skin');
   if (!SLUG.test(source.slug) || source.slug.length > 64) throw new Error('slug must be lowercase kebab-case');
-  if (!VERSION.test(source.version)) throw new Error('version must be exact semantic version');
+  if (typeof source.version !== 'string' || source.version.length > 64 || !VERSION.test(source.version)) throw new Error('version must be exact semantic version of at most 64 characters');
   if (typeof source.license !== 'string' || source.license !== source.license.trim() || !LICENSE.test(source.license)) {
     throw new Error('license must be a concise SPDX or LicenseRef identifier');
   }
@@ -289,7 +306,7 @@ async function main() {
   object(source.compatibility, 'compatibility', ['dshPackageVersion']);
   if (source.compatibility.dshPackageVersion !== COMPATIBILITY.dshPackageVersion) {
     throw new Error(
-      `Only the certified DSH ${COMPATIBILITY.dshPackageVersion} V3 baseline is accepted`
+      `Only the selected DSH ${COMPATIBILITY.dshPackageVersion} V3 baseline is accepted`
     );
   }
   const author = object(source.author, 'author', ['name', 'url']);
@@ -357,7 +374,12 @@ async function main() {
     for (const role of REQUIRED_ROLES) if (!roles.has(role)) throw new Error(`full-skin is missing the ${role} asset`);
     if (new Set(assets.map((asset) => asset.path)).size !== assets.length) throw new Error('asset contents must be unique');
     assets.sort((left, right) => left.role.localeCompare(right.role));
-    const visual = object(source.visual, 'visual', ['preset', 'focus', 'surfaceOpacity', 'overlayOpacity', 'borderStrength', 'glowStrength']);
+    const visual = object(source.visual, 'visual', ['preset', 'focus', 'surfaceOpacity', 'overlayOpacity', 'borderStrength', 'glowStrength', 'mobileWelcomeSurface', 'mobileWelcomeOffset', 'desktopWelcomeLayout', 'desktopWelcomeSurface', 'mobileDarkFocusX']);
+    if (visual.mobileWelcomeSurface !== undefined && typeof visual.mobileWelcomeSurface !== 'boolean') throw new Error('visual.mobileWelcomeSurface must be boolean');
+    if (visual.mobileWelcomeOffset !== undefined && (!Number.isInteger(visual.mobileWelcomeOffset) || visual.mobileWelcomeOffset < -120 || visual.mobileWelcomeOffset > 120)) throw new Error('visual.mobileWelcomeOffset must be an integer from -120 to 120');
+  if (visual.desktopWelcomeLayout !== undefined && !['compact-left', 'compact-center'].includes(visual.desktopWelcomeLayout)) throw new Error('visual.desktopWelcomeLayout is invalid');
+  if (visual.desktopWelcomeSurface !== undefined && typeof visual.desktopWelcomeSurface !== 'boolean') throw new Error('visual.desktopWelcomeSurface must be boolean');
+  if (visual.mobileDarkFocusX !== undefined && (!Number.isInteger(visual.mobileDarkFocusX) || visual.mobileDarkFocusX < 0 || visual.mobileDarkFocusX > 100)) throw new Error('visual.mobileDarkFocusX must be an integer from 0 to 100');
     if (!PRESET.has(visual.preset)) throw new Error('Unsupported visual preset');
     const focus = object(visual.focus, 'visual.focus', ['x', 'y']);
     const previewLight = assets.find((asset) => asset.role === 'preview-light');
@@ -377,6 +399,11 @@ async function main() {
         preset: visual.preset, focus: { x: focusPercent(focus.x, 'visual.focus.x'), y: focusPercent(focus.y, 'visual.focus.y') },
         surfaceOpacity: ratio(visual.surfaceOpacity, 'visual.surfaceOpacity'), overlayOpacity: ratio(visual.overlayOpacity, 'visual.overlayOpacity'),
         borderStrength: ratio(visual.borderStrength, 'visual.borderStrength'), glowStrength: ratio(visual.glowStrength, 'visual.glowStrength'),
+        ...(visual.mobileWelcomeSurface !== undefined ? { mobileWelcomeSurface: visual.mobileWelcomeSurface } : {}),
+        ...(visual.mobileWelcomeOffset !== undefined ? { mobileWelcomeOffset: visual.mobileWelcomeOffset } : {}),
+        ...(visual.desktopWelcomeLayout !== undefined ? { desktopWelcomeLayout: visual.desktopWelcomeLayout } : {}),
+        ...(visual.desktopWelcomeSurface !== undefined ? { desktopWelcomeSurface: visual.desktopWelcomeSurface } : {}),
+        ...(visual.mobileDarkFocusX !== undefined ? { mobileDarkFocusX: visual.mobileDarkFocusX } : {}),
       },
       assets,
       preview: { light: previewFrom(previewLight), dark: previewFrom(previewDark) },
@@ -384,7 +411,7 @@ async function main() {
   }
 
   await writeFile(resolve(args.output), `${JSON.stringify(stable(manifest), null, 2)}\n`, { flag: 'wx', mode: 0o600 });
-  process.stdout.write(`${JSON.stringify({ output: resolve(args.output), kind: manifest.kind, assets: manifest.assets?.length ?? 0, dshPackageVersion: COMPATIBILITY.dshPackageVersion, provisionalAssets: manifest.kind === 'full-skin' })}\n`);
+  process.stdout.write(`${JSON.stringify({ output: resolve(args.output), kind: manifest.kind, assets: manifest.assets?.length ?? 0, dshPackageVersion: COMPATIBILITY.dshPackageVersion, baseline: args.baseline ?? 'alpha', draft: true, provisionalAssets: manifest.kind === 'full-skin' })}\n`);
 }
 
 main().catch((error) => {

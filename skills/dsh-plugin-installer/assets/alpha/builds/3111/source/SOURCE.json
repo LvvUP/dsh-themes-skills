@@ -1,0 +1,14 @@
+{
+  "sourceRepository": "Scorp1o117/dsh-soul-md",
+  "sourceRevision": "ac4b78e8f5115c73951147f02c257732fbf72d37",
+  "files": {
+    "LICENSE": "3144a5b7dd8fc1edcc49e809abbf4d09eb6449b18bd9cf69a805c01b68769637",
+    "README.md": "75328672a1260a5f383313c20073f1137710c43f58777781de8d084799ffbc4a",
+    "client.js": "8a0127539b13e770196ad36566e5c11167c13c7948b136a909fc49fc844d46b1",
+    "cordis.patch.yml": "96e8249c8749d1bf44750276cfaebd434f1cc0ac01046e25faa7215e678dd81b",
+    "index.js": "24a61ba86a2fa9b0464ff0a2892771cd56658de09fb5d64c579f35f8ecc22879",
+    "package.json": "28eb0b922a65ce7c76dc95b41b780651c7764a841945298bf3b7b155e0a8c0df",
+    "examples/memory.example.md": "5c2233100a92f264ee2243941b19f42fe4521a9e82346a7e139d7944b4701152",
+    "examples/soul.example.md": "0a144a8e890f22fde7d268db9f99a542bc17d76947d103c7478b7439a78b672a"
+  }
+}

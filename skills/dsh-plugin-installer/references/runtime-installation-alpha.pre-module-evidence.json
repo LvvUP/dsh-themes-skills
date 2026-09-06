@@ -1,0 +1,2698 @@
+{
+  "schemaVersion": 1,
+  "dshVersion": "0.1.3-alpha.1",
+  "scope": "Installation, actual web client or headless host-tree activation, and package removal. Probe details are per item. Account-dependent features are not certified.",
+  "items": [
+    {
+      "catalogId": 3004,
+      "packageName": "@0xsline/dsh-spotlight",
+      "specifier": "@0xsline/dsh-spotlight@0.0.2",
+      "sourceRepository": "0xsline/dsh-spotlight",
+      "sourceRevision": "dd7ef5ed160aa1a624559de16eafd4ea9406d7ed",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:26:36.475Z",
+      "finishedAt": "2026-09-05T22:26:50.784Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3004,
+        "slug": "dsh-spotlight",
+        "packageName": "@0xsline/dsh-spotlight",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.0.2",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "019d1335b508afb5122b74763ec000adcaf3c058f4e0abd4da0c59be9f2ee6e8"
+    },
+    {
+      "catalogId": 3005,
+      "packageName": "dsh-sticky-disclosure",
+      "specifier": "github:Han-1413141/dsh-sticky-disclosure#873bc91035e51dc598e5e60ad0c06df3a1a552d6",
+      "sourceRepository": "Han-1413141/dsh-sticky-disclosure",
+      "sourceRevision": "873bc91035e51dc598e5e60ad0c06df3a1a552d6",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:47:28.674Z",
+      "finishedAt": "2026-09-05T22:47:42.009Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3005,
+        "slug": "dsh-sticky-disclosure",
+        "packageName": "dsh-sticky-disclosure",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "1.0.1",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "bbac66ff4105f0208f3c550ac997178a467938212d469ef2a5b4edbaa647b613"
+    },
+    {
+      "catalogId": 3006,
+      "packageName": "dsh-better-model-selector",
+      "specifier": "dsh-better-model-selector@1.0.0",
+      "sourceRepository": "Khellendros97/dsh-better-model-selector",
+      "sourceRevision": "4781f4c215f1ad4d55a44e1409bafe58f05b721f",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:37:21.190Z",
+      "finishedAt": "2026-09-05T22:37:34.081Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3006,
+        "slug": "dsh-better-model-selector",
+        "packageName": "dsh-better-model-selector",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "1.0.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "b351339d2b16b2952131c6bd75816e8886d295a4bf8d39844a3f5da02fc727dc"
+    },
+    {
+      "catalogId": 3009,
+      "packageName": "dsh-smooth-stream",
+      "specifier": "dsh-smooth-stream@0.6.0",
+      "sourceRepository": "Laplace-bit/dsh-smooth-stream",
+      "sourceRevision": "23cd3625708a245bb2a42b9e8e84c58dc47823bf",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:37:34.084Z",
+      "finishedAt": "2026-09-05T22:37:46.743Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3009,
+        "slug": "dsh-smooth-stream",
+        "packageName": "dsh-smooth-stream",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.6.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "7641edb44ae40e837d43920eb514eb48f223c8eb189ed340468c266c98d2d095"
+    },
+    {
+      "catalogId": 3011,
+      "packageName": "arcana",
+      "specifier": "github:GooodWei/arcana#82f910c0b5e645c65c2a34be0b0e47035d0489a7",
+      "sourceRepository": "GooodWei/arcana",
+      "sourceRevision": "82f910c0b5e645c65c2a34be0b0e47035d0489a7",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:48:28.514Z",
+      "finishedAt": "2026-09-05T22:48:42.651Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3011,
+        "slug": "arcana",
+        "packageName": "arcana",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "3ddedd6225009b66cbe626f70ec26df689454157ba45791f0ec542cfff2e3831"
+    },
+    {
+      "catalogId": 3012,
+      "packageName": "dsh-markdown-preview",
+      "specifier": "dsh-markdown-preview@0.3.0",
+      "sourceRepository": "GitHubJiKe/dsh-markdown-preview",
+      "sourceRevision": "06fe5ace32e028484e321a6fd0fe42adb76faaca",
+      "artifact": {
+        "path": "assets/alpha/artifacts/b933f9f03834e33688beccb0de6803e856a8f9775f158d095d7d6635c8f4d3d4.tgz",
+        "sha256": "b933f9f03834e33688beccb0de6803e856a8f9775f158d095d7d6635c8f4d3d4",
+        "bytes": 118909,
+        "packageVersion": "0.3.0-dsh.alpha.1",
+        "runtimeDependencies": {},
+        "sourcePath": "assets/alpha/adapters/3012/PROVENANCE.json"
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-06T00:32:50.443Z",
+      "finishedAt": "2026-09-06T00:33:01.693Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3012,
+        "slug": "dsh-markdown-preview",
+        "packageName": "dsh-markdown-preview",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.3.0-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "ui",
+              "text": "Open a conversation that produced a Markdown file and click its file chip to expand the in-chat preview."
+            }
+          ],
+          "requirements": [],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/GitHubJiKe/dsh-markdown-preview/blob/06fe5ace32e028484e321a6fd0fe42adb76faaca/README.md",
+            "sha256": "988f03c0b694120b7086a7c4f38642314c46eb21c64dde28b2ac08271fb9c7a3"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "70459ac361571ebef442758ac22409d43ae2a384bdd47ba0d2d7027bee9e92df"
+    },
+    {
+      "catalogId": 3015,
+      "packageName": "@dsh-external/dsh-workspace-menu",
+      "specifier": "github:0imzero/dsh-workspace-menu#afd55510f82821cde60a8364e42f752e244b5b31",
+      "sourceRepository": "0imzero/dsh-workspace-menu",
+      "sourceRevision": "afd55510f82821cde60a8364e42f752e244b5b31",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:48:42.654Z",
+      "finishedAt": "2026-09-05T22:48:57.162Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3015,
+        "slug": "dsh-workspace-menu",
+        "packageName": "@dsh-external/dsh-workspace-menu",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "1.2.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "0cac64bcc3461023bd211cade9680501fb8f9ec73ce14597b76068dd3c49161e"
+    },
+    {
+      "catalogId": 3016,
+      "packageName": "dsh-plugin-description",
+      "specifier": "github:MysaDC/dsh-plugin-description#64047f40cd023dfa1b64a74778244abbe6452e23",
+      "sourceRepository": "MysaDC/dsh-plugin-description",
+      "sourceRevision": "64047f40cd023dfa1b64a74778244abbe6452e23",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:48:57.164Z",
+      "finishedAt": "2026-09-05T22:49:10.427Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3016,
+        "slug": "dsh-plugin-description",
+        "packageName": "dsh-plugin-description",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "1.2.1",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "ad8e1fc97d46e31038d5a33f3c28cd4da1466e49856b51fcb53d286500b79712"
+    },
+    {
+      "catalogId": 3017,
+      "packageName": "dsh-plugin-list-plus",
+      "specifier": "dsh-plugin-list-plus@0.1.0",
+      "sourceRepository": "yibiner/dsh-plugin-list-plus",
+      "sourceRevision": "f62e6ba7be47f42accae372bb84dc879972d071a",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:42:01.866Z",
+      "finishedAt": "2026-09-05T22:42:14.597Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3017,
+        "slug": "dsh-plugin-list-plus",
+        "packageName": "dsh-plugin-list-plus",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "f44380ef92e61c264e8894517ffe7be842f5c75bf6b589906174d58a5aec6e8e"
+    },
+    {
+      "catalogId": 3018,
+      "packageName": "dsh-builtin-toggles",
+      "specifier": "dsh-builtin-toggles@0.3.2",
+      "sourceRepository": "Starfie1d1272/dsh-builtin-toggles",
+      "sourceRevision": "d1d7205970aa7e77d69d423acb7ab0fd1fb1db7b",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:27:05.422Z",
+      "finishedAt": "2026-09-05T22:27:19.846Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3018,
+        "slug": "dsh-builtin-toggles",
+        "packageName": "dsh-builtin-toggles",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.3.2",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "43a1fa37dfecb3a59a4cbe9ab109db743fce112aa618e5925b9929e9b858a3ff"
+    },
+    {
+      "catalogId": 3019,
+      "packageName": "dsh-plan-switch",
+      "specifier": "github:a903067276-rgb/dsh-plan-switch#7038ef4f996c577eaeba0c98eb07a233707f0ab9",
+      "sourceRepository": "a903067276-rgb/dsh-plan-switch",
+      "sourceRevision": "7038ef4f996c577eaeba0c98eb07a233707f0ab9",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:49:10.429Z",
+      "finishedAt": "2026-09-05T22:49:24.765Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3019,
+        "slug": "dsh-plan-switch",
+        "packageName": "dsh-plan-switch",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.3.2",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "e931c7485a2b45164b5f91feb8e21237ff511da8e54913963cd6363ec4fa75c3"
+    },
+    {
+      "catalogId": 3020,
+      "packageName": "dsh-file-mentions",
+      "specifier": "github:a903067276-rgb/dsh-file-mentions#661e233451ff96cb142857ab93e4f7153f180216",
+      "sourceRepository": "a903067276-rgb/dsh-file-mentions",
+      "sourceRevision": "661e233451ff96cb142857ab93e4f7153f180216",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:49:24.767Z",
+      "finishedAt": "2026-09-05T22:49:38.145Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3020,
+        "slug": "dsh-file-mentions",
+        "packageName": "dsh-file-mentions",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "1.0.13",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "6ddbe9730ef7f4cfd9b3887cac0501051674446728f1a5efe48409227060f0b5"
+    },
+    {
+      "catalogId": 3022,
+      "packageName": "dsh-session-pin",
+      "specifier": "dsh-session-pin@0.7.4",
+      "sourceRepository": "PerryLink/dsh-session-pin",
+      "sourceRevision": "12811aabd0527f5adaea5abfffc11c46423cef4c",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:42:14.599Z",
+      "finishedAt": "2026-09-05T22:42:27.403Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3022,
+        "slug": "dsh-session-pin",
+        "packageName": "dsh-session-pin",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.7.4",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "856e0d05eb933f9aeabdb07cc7f7b73a3dfb00306fac91b626c92a2b5cbbfebb"
+    },
+    {
+      "catalogId": 3023,
+      "packageName": "pbr-render",
+      "specifier": "github:dhb861832993-star/pbr-render#8931eb36d84015cfc39e34e8bab126fdbdbdd6f5",
+      "sourceRepository": "dhb861832993-star/pbr-render",
+      "sourceRevision": "8931eb36d84015cfc39e34e8bab126fdbdbdd6f5",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:49:38.147Z",
+      "finishedAt": "2026-09-05T22:49:54.573Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3023,
+        "slug": "pbr-render",
+        "packageName": "pbr-render",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "5b4f9dcc6d9a4b94e90f878832cd1b9de73bc9ec58f0f3da8ef54ec9e02cc739"
+    },
+    {
+      "catalogId": 3027,
+      "packageName": "dskin",
+      "specifier": "github:dancingmemory/dskin#3ed971ae31802861a5dfd8349ba7a2fbf611a3e1",
+      "sourceRepository": "dancingmemory/dskin",
+      "sourceRevision": "3ed971ae31802861a5dfd8349ba7a2fbf611a3e1",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-06T00:29:18.698Z",
+      "finishedAt": "2026-09-06T00:29:29.676Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3027,
+        "slug": "dskin-pixel-cats",
+        "packageName": "dskin",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "1.0.17",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "ui",
+              "text": "Open the paw button in the lower-right corner of DSH Web to configure the pixel cats."
+            }
+          ],
+          "requirements": [],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/dancingmemory/dskin/blob/3ed971ae31802861a5dfd8349ba7a2fbf611a3e1/README.md",
+            "sha256": "a632996e6a7008c4579073999c5975d2b9e483296d73a097c5a1a20a04b38f03"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "384404b9a169238b11686c7aa48e2f67659fd6b5e1c6bf7993e5c3fe8b9df42c"
+    },
+    {
+      "catalogId": 3031,
+      "packageName": "@liustack/modlens",
+      "specifier": "@liustack/modlens@3.25.4",
+      "sourceRepository": "liustack/modlens",
+      "sourceRevision": "926a6beea81ca6ea1fecc267bc1b02d880572669",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:42:27.404Z",
+      "finishedAt": "2026-09-05T22:42:41.522Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3031,
+        "slug": "modlens",
+        "packageName": "@liustack/modlens",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "3.25.4",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "f2b68edb4467989df0f6b7803d9566622727f012cf009b95018771a1c3a8dd3d"
+    },
+    {
+      "catalogId": 3032,
+      "packageName": "dsh-context",
+      "specifier": "dsh-context@0.43.0",
+      "sourceRepository": "bowenliang123/dsh-context",
+      "sourceRevision": "dda9e7a43c76d31e4c7739e48f78e33cecc863ec",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:42:41.523Z",
+      "finishedAt": "2026-09-05T22:42:55.982Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3032,
+        "slug": "dsh-context",
+        "packageName": "dsh-context",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.43.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "fbbdbd62b2736e0bece55bd9cd4159c3db8815c3c7e0ea408bd1895ae7a4ee3c"
+    },
+    {
+      "catalogId": 3033,
+      "packageName": "@liustack/modsearch",
+      "specifier": "@liustack/modsearch@5.10.1",
+      "sourceRepository": "liustack/modsearch",
+      "sourceRevision": "d5097a7b83d18ff65c1614204c3d9253ad3cf751",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:42:55.983Z",
+      "finishedAt": "2026-09-05T22:43:09.162Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3033,
+        "slug": "modsearch",
+        "packageName": "@liustack/modsearch",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "5.10.1",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "7834e2354da42f5d3e4824a5c0152428830df85bab103ce445c508322cb3fd94"
+    },
+    {
+      "catalogId": 3036,
+      "packageName": "dsh-plugin-doctor",
+      "specifier": "github:lin-cheng-lab/dsh-plugin-doctor#21f59e49768b1154869cb2cb9de2b6be3a7300dc",
+      "sourceRepository": "lin-cheng-lab/dsh-plugin-doctor",
+      "sourceRevision": "21f59e49768b1154869cb2cb9de2b6be3a7300dc",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:50:00.299Z",
+      "finishedAt": "2026-09-05T22:50:15.279Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3036,
+        "slug": "dsh-plugin-doctor",
+        "packageName": "dsh-plugin-doctor",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "bfed5753709460143be64f1038da2ab0f3d1b08e9a00d45065c18b740672b70d"
+    },
+    {
+      "catalogId": 3037,
+      "packageName": "@dsh-plugin/dsh-review-loop",
+      "specifier": "github:wuxiangru915/dsh-review-loop#eb4190498ef76daec21dfcf5c24c44f337a61ed3",
+      "sourceRepository": "wuxiangru915/dsh-review-loop",
+      "sourceRevision": "eb4190498ef76daec21dfcf5c24c44f337a61ed3",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:50:15.281Z",
+      "finishedAt": "2026-09-05T22:50:29.818Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3037,
+        "slug": "dsh-review-loop",
+        "packageName": "@dsh-plugin/dsh-review-loop",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "36abd20644b8f6de5a8d693858d405f9cf05682f6ca07257daa0da294c0c1b44"
+    },
+    {
+      "catalogId": 3040,
+      "packageName": "dsh-kanban",
+      "specifier": "github:Ericwong5021/dsh-kanban#f7fa24c14db47ee4827cad5c827ad7aa3fd13434",
+      "sourceRepository": "Ericwong5021/dsh-kanban",
+      "sourceRevision": "f7fa24c14db47ee4827cad5c827ad7aa3fd13434",
+      "artifact": {
+        "path": "assets/alpha/artifacts/32f697cc8ddc5fe760d67648e3aa32262714ba22717a0b3a9129b8d12dcbf036.tgz",
+        "sha256": "32f697cc8ddc5fe760d67648e3aa32262714ba22717a0b3a9129b8d12dcbf036",
+        "bytes": 10124,
+        "packageVersion": "0.1.1-dsh.alpha.1",
+        "runtimeDependencies": {},
+        "sourcePath": "assets/alpha/builds/3040/source/SOURCE.json"
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T23:54:14.547Z",
+      "finishedAt": "2026-09-05T23:54:26.461Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3040,
+        "slug": "dsh-kanban",
+        "packageName": "dsh-kanban",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.1-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "ui",
+              "text": "Select the task board in the sidebar, then drag an idle session between Inbox and Ready or open its original conversation."
+            }
+          ],
+          "requirements": [],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/Ericwong5021/dsh-kanban/blob/f7fa24c14db47ee4827cad5c827ad7aa3fd13434/README.md",
+            "sha256": "3824fbe8c273b5b2b290e7a6fb39b9f4ca95677a2a1d3888e537fd06a4507668"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "402fdbdf09e99edfbb798caa85634f3f6f288efdfc88e2ada67e52e1eb7ddf5f"
+    },
+    {
+      "catalogId": 3041,
+      "packageName": "context-vista",
+      "specifier": "context-vista@0.1.0",
+      "sourceRepository": "GooodWei/context-vista",
+      "sourceRevision": "8fdcabc6276e3921c32e4e973ff7eaf68cbdf334",
+      "artifact": {
+        "path": "assets/alpha/artifacts/f5de7bb437a244943534b669c5b600091024bec4cc26ad7276e9705158a49725.tgz",
+        "sha256": "f5de7bb437a244943534b669c5b600091024bec4cc26ad7276e9705158a49725",
+        "bytes": 19951,
+        "packageVersion": "0.1.0-dsh.alpha.1",
+        "sourcePath": "assets/alpha/adapters/3041/PROVENANCE.json",
+        "runtimeDependencies": {}
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T23:54:26.463Z",
+      "finishedAt": "2026-09-05T23:54:37.449Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3041,
+        "slug": "context-vista",
+        "packageName": "context-vista",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.0-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "command",
+              "text": "/context"
+            }
+          ],
+          "requirements": [
+            "Optional pricing overrides belong in the context-vista section of DSH settings.yaml. Enter your provider's actual prices; displayed costs are estimates."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/GooodWei/context-vista/blob/8fdcabc6276e3921c32e4e973ff7eaf68cbdf334/README.md",
+            "sha256": "9c29fcc8ef41e1862155154018ff45400bc953ac92564b4e592a22e8fcc26a28"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "af6c596ffd29a1aad50ac396d114d91c978902241a82e69e095dd5c57c318d66"
+    },
+    {
+      "catalogId": 3042,
+      "packageName": "dsh-wikilink",
+      "specifier": "github:zhaoscsc/dsh-wikilink#c42ba65260ac56b3422aea99fe5ab084251d9ae6",
+      "sourceRepository": "zhaoscsc/dsh-wikilink",
+      "sourceRevision": "c42ba65260ac56b3422aea99fe5ab084251d9ae6",
+      "artifact": {
+        "path": "assets/alpha/artifacts/5fe379a52214b4ea4075c07c68e109d4276d923876f173fc651d48a5480bb857.tgz",
+        "sha256": "5fe379a52214b4ea4075c07c68e109d4276d923876f173fc651d48a5480bb857",
+        "bytes": 152654,
+        "packageVersion": "0.2.1-dsh.alpha.1",
+        "runtimeDependencies": {},
+        "sourcePath": "assets/alpha/builds/3042/source/SOURCE.json"
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T23:54:37.450Z",
+      "finishedAt": "2026-09-05T23:54:48.562Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3042,
+        "slug": "dsh-wikilink",
+        "packageName": "dsh-wikilink",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.2.1-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "ui",
+              "text": "Type [[ in the composer, search for a workspace note, and press Enter to insert its wiki link."
+            }
+          ],
+          "requirements": [
+            "The selected workspace must contain the notes you want to reference. Enable Wikilinks in Settings if needed."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/zhaoscsc/dsh-wikilink/blob/c42ba65260ac56b3422aea99fe5ab084251d9ae6/README.md",
+            "sha256": "c09eaaa3ea0cf63cb6acd7ca6dfde16db7a2e9609bf9f30ab0dffaeead54d04b"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "7a1c0f2b5f9dbc7440f0f60c7f16ffad81616d15d5696879d4d947e4e9b8143d"
+    },
+    {
+      "catalogId": 3043,
+      "packageName": "dsh-open-in-vscode",
+      "specifier": "github:omdsh-dev/dsh-open-in-vscode#8aed144abdc158a332aa73bce42fc217d962f751",
+      "sourceRepository": "omdsh-dev/dsh-open-in-vscode",
+      "sourceRevision": "8aed144abdc158a332aa73bce42fc217d962f751",
+      "artifact": {
+        "path": "assets/alpha/artifacts/cb655d993bc2d2cdfd3068d8872144a3cd48673842c2f4e52df9d027aace771d.tgz",
+        "sha256": "cb655d993bc2d2cdfd3068d8872144a3cd48673842c2f4e52df9d027aace771d",
+        "bytes": 147629,
+        "packageVersion": "0.1.6-dsh.alpha.1",
+        "runtimeDependencies": {},
+        "sourcePath": "assets/alpha/builds/3043/source/SOURCE.json"
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T23:54:48.564Z",
+      "finishedAt": "2026-09-05T23:54:59.742Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3043,
+        "slug": "dsh-open-in-vscode",
+        "packageName": "dsh-open-in-vscode",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.6-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "ui",
+              "text": "Open a workspace row menu and select Open in VSCode."
+            }
+          ],
+          "requirements": [
+            "Install VS Code and make its code command available, or configure the editor executable on the plugin row."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/omdsh-dev/dsh-open-in-vscode/blob/8aed144abdc158a332aa73bce42fc217d962f751/README.md",
+            "sha256": "ecc21f29b13cd09a543cefcc7addbc4bd374f91db39a9a9dd93f6285e39fecef"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "427da627e42c3f9a7532ec209d2f8d15fb873a74bba1c68b5e10f67d10a73211"
+    },
+    {
+      "catalogId": 3044,
+      "packageName": "dsh-notification",
+      "specifier": "github:omdsh-dev/dsh-notification#675aab9b43d5011738feb6185281596c0365ccba",
+      "sourceRepository": "omdsh-dev/dsh-notification",
+      "sourceRevision": "675aab9b43d5011738feb6185281596c0365ccba",
+      "artifact": {
+        "path": "assets/alpha/artifacts/1b468a466c465cbd652eb374284a2ebf764487b8f3f98aa3032841961d6dc03c.tgz",
+        "sha256": "1b468a466c465cbd652eb374284a2ebf764487b8f3f98aa3032841961d6dc03c",
+        "bytes": 87841,
+        "packageVersion": "0.1.4-dsh.alpha.1",
+        "runtimeDependencies": {},
+        "sourcePath": "assets/alpha/builds/3044/source/SOURCE.json"
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T23:54:59.744Z",
+      "finishedAt": "2026-09-05T23:55:10.773Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3044,
+        "slug": "dsh-notification",
+        "packageName": "dsh-notification",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.4-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "ui",
+              "text": "Open Settings → Notifications, grant browser notification permission, and send a test notification."
+            }
+          ],
+          "requirements": [
+            "Browser notification permission must be granted. Keep the DSH page open to receive notifications."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/omdsh-dev/dsh-notification/blob/675aab9b43d5011738feb6185281596c0365ccba/README.md",
+            "sha256": "5f3e17a916c10ae706be88cb112d2a12e30e8f12e6ba49abac7fb93e5efd8094"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "be352face80ffec977695db57adfe7353e75ec58d305cb6a9ff3c32ae118bf95"
+    },
+    {
+      "catalogId": 3049,
+      "packageName": "@dsh-external/dsh-better-browser",
+      "specifier": "github:titanwings/dsh-better-browser#506493224a21510c3f9cc7329a17e84af20879dc",
+      "sourceRepository": "titanwings/dsh-better-browser",
+      "sourceRevision": "506493224a21510c3f9cc7329a17e84af20879dc",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:50:29.819Z",
+      "finishedAt": "2026-09-05T22:50:43.755Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3049,
+        "slug": "dsh-better-browser",
+        "packageName": "@dsh-external/dsh-better-browser",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.3.6",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "c83bad415bb27fe987aecdcb925d8b68891353bceaa46a2c371d055edef69bf7"
+    },
+    {
+      "catalogId": 3052,
+      "packageName": "dsh-deeptutor",
+      "specifier": "dsh-deeptutor@0.1.9",
+      "sourceRepository": "TecFancy/dsh-deeptutor",
+      "sourceRevision": "0cb81a7c7e4153f9fec58f084ad2ba1e70dbc04c",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:43:31.838Z",
+      "finishedAt": "2026-09-05T22:43:45.057Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3052,
+        "slug": "dsh-deeptutor",
+        "packageName": "dsh-deeptutor",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.9",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "66db0d9d4f9c35d9c60f0aed83ba9d04847c6afb1e723c243241629dab131a45"
+    },
+    {
+      "catalogId": 3054,
+      "packageName": "dsh-superpowers",
+      "specifier": "dsh-superpowers@0.1.0",
+      "sourceRepository": "codeAnqiang-ma/dsh-superpowers",
+      "sourceRevision": "f2785c52e18485ae3187216bc82ad79f4bfeaf1a",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:43:45.059Z",
+      "finishedAt": "2026-09-05T22:43:58.042Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3054,
+        "slug": "dsh-superpowers",
+        "packageName": "dsh-superpowers",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "445db31748565d7c3173b4356a0008d9a3cc4cbc0d788062a67a6c3c1951cb7a"
+    },
+    {
+      "catalogId": 3055,
+      "packageName": "@dsh-external/dsh-plannotator",
+      "specifier": "github:titanwings/dsh-plannotator#053c982f96b77fd750360ee66384bf90d5c1e603",
+      "sourceRepository": "titanwings/dsh-plannotator",
+      "sourceRevision": "053c982f96b77fd750360ee66384bf90d5c1e603",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:50:43.756Z",
+      "finishedAt": "2026-09-05T22:50:57.823Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3055,
+        "slug": "dsh-plannotator",
+        "packageName": "@dsh-external/dsh-plannotator",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.4",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "2261f873cf9605b991b2253bd4f7488bfdab93e8f4e1c56c74c32120e2fe7016"
+    },
+    {
+      "catalogId": 3056,
+      "packageName": "dsh-share",
+      "specifier": "dsh-share@0.4.0",
+      "sourceRepository": "hellodigua/dsh-share",
+      "sourceRevision": "4cca10110cc3cde7b58febfd2c1ffdbdc66c630d",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:43:58.043Z",
+      "finishedAt": "2026-09-05T22:44:10.960Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3056,
+        "slug": "dsh-share",
+        "packageName": "dsh-share",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.4.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "84e4c78475684eee81252aec4782a906472698064d9308c30712a5c3316e8e88"
+    },
+    {
+      "catalogId": 3058,
+      "packageName": "dsh-record-replay",
+      "specifier": "github:humblebanana/dsh-record-replay#32d06f7db906914e278d1552728d1d63f191d6ad",
+      "sourceRepository": "humblebanana/dsh-record-replay",
+      "sourceRevision": "32d06f7db906914e278d1552728d1d63f191d6ad",
+      "artifact": {
+        "path": "assets/alpha/artifacts/9c3cc2325af6597360fb3a7987169cdd7061090109edb0db14805457ef3e356c.tgz",
+        "sha256": "9c3cc2325af6597360fb3a7987169cdd7061090109edb0db14805457ef3e356c",
+        "bytes": 12603,
+        "packageVersion": "0.2.0-dsh.alpha.1",
+        "runtimeDependencies": {},
+        "sourcePath": "assets/alpha/builds/3058/source/SOURCE.json"
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-06T00:29:29.678Z",
+      "finishedAt": "2026-09-06T00:29:40.663Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3058,
+        "slug": "dsh-record-replay",
+        "packageName": "dsh-record-replay",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.2.0-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "prompt",
+              "text": "Use orr_permissions_check to check whether recording permissions are ready."
+            }
+          ],
+          "requirements": [
+            "Install open-record-replay, configure its local CLI path, and grant the OS permissions needed for recording."
+          ],
+          "configurationExamples": [
+            {
+              "language": "sh",
+              "code": "export ORR_CLI_PATH='/absolute/path/to/open-record-replay/bin/orr.js'"
+            }
+          ],
+          "documentation": {
+            "url": "https://github.com/humblebanana/dsh-record-replay/blob/32d06f7db906914e278d1552728d1d63f191d6ad/README.md",
+            "sha256": "109007ecf7a3a4d9c6cb5d6e63e5752fd419c1c2963ec54fb1592417d86da2b2"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "af6116529dc5aad73941d261c8c3c26385cb2961208d0d5c997d235a5bf4a97d"
+    },
+    {
+      "catalogId": 3059,
+      "packageName": "dsh-translator",
+      "specifier": "github:SiYue-ZO/dsh-translator#7ab238541380bb194478df088607d5dc5c351b77",
+      "sourceRepository": "SiYue-ZO/dsh-translator",
+      "sourceRevision": "7ab238541380bb194478df088607d5dc5c351b77",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:50:57.824Z",
+      "finishedAt": "2026-09-05T22:51:15.044Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3059,
+        "slug": "dsh-translator",
+        "packageName": "dsh-translator",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.2.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "c747402e44ffdcffab1dd2319687d13a5dc15a5d7ead20fed4921ad421d4721b"
+    },
+    {
+      "catalogId": 3062,
+      "packageName": "@deepseek-ai/dsh-security-audit",
+      "specifier": "github:omdsh-dev/dsh-security-audit#58f9a1dced597aac8c67220aaecedf340a3fdd92",
+      "sourceRepository": "omdsh-dev/dsh-security-audit",
+      "sourceRevision": "58f9a1dced597aac8c67220aaecedf340a3fdd92",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "headless",
+      "startedAt": "2026-09-05T23:16:57.257Z",
+      "finishedAt": "2026-09-05T23:17:04.456Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3062,
+        "slug": "dsh-security-audit",
+        "packageName": "@deepseek-ai/dsh-security-audit",
+        "profile": "headless",
+        "status": "installed",
+        "installedVersion": "0.0.1",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "headless-host-ready",
+        "hostTreeReady": true,
+        "packageActive": true,
+        "entries": [
+          {
+            "name": "@deepseek-ai/dsh-security-audit",
+            "disabled": false,
+            "state": 2
+          }
+        ],
+        "probe": "The official headless profile with its one-shot Agent runner disabled, and a read-only appReady probe. No model task is sent."
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "8c9de0037ef786cc245e42f96522282108bc33ff198f5bc5fc0743bc1bbd3e68"
+    },
+    {
+      "catalogId": 3063,
+      "packageName": "@deepseek-ai/dsh-session-health",
+      "specifier": "github:omdsh-dev/dsh-session-health#8fdb377ef0fd9bab7981a3212b0952ab26b62dac",
+      "sourceRepository": "omdsh-dev/dsh-session-health",
+      "sourceRevision": "8fdb377ef0fd9bab7981a3212b0952ab26b62dac",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "headless",
+      "startedAt": "2026-09-05T23:17:04.459Z",
+      "finishedAt": "2026-09-05T23:17:12.492Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3063,
+        "slug": "dsh-session-health",
+        "packageName": "@deepseek-ai/dsh-session-health",
+        "profile": "headless",
+        "status": "installed",
+        "installedVersion": "0.0.1",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "headless-host-ready",
+        "hostTreeReady": true,
+        "packageActive": true,
+        "entries": [
+          {
+            "name": "@deepseek-ai/dsh-session-health",
+            "disabled": false,
+            "state": 2
+          }
+        ],
+        "probe": "The official headless profile with its one-shot Agent runner disabled, and a read-only appReady probe. No model task is sent."
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "a0e7fed48615100e8e09a55764cef36fad1f55ea0fdafe7a55315bb2a8f1f95d"
+    },
+    {
+      "catalogId": 3064,
+      "packageName": "@deepseek-ai/dsh-toolkit",
+      "specifier": "github:omdsh-dev/dsh-toolkit#3c691801241ea2b232b1c31810a2078dee0642af",
+      "sourceRepository": "omdsh-dev/dsh-toolkit",
+      "sourceRevision": "3c691801241ea2b232b1c31810a2078dee0642af",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "headless",
+      "startedAt": "2026-09-05T23:17:12.495Z",
+      "finishedAt": "2026-09-05T23:17:22.050Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3064,
+        "slug": "dsh-toolkit",
+        "packageName": "@deepseek-ai/dsh-toolkit",
+        "profile": "headless",
+        "status": "installed",
+        "installedVersion": "0.0.1",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "headless-host-ready",
+        "hostTreeReady": true,
+        "packageActive": true,
+        "entries": [
+          {
+            "name": "@deepseek-ai/dsh-toolkit",
+            "disabled": false,
+            "state": 2
+          }
+        ],
+        "probe": "The official headless profile with its one-shot Agent runner disabled, and a read-only appReady probe. No model task is sent."
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "b8fe49c60c827f92cc98ba4707a3dd17e55f9017ade3948bec963e3918c80693"
+    },
+    {
+      "catalogId": 3065,
+      "packageName": "@anionex/dsh-turn-rewind",
+      "specifier": "github:Anionex/dsh-turn-rewind#9a2acfc44a6f5c94fd81e8cd217a1f54c75750f4",
+      "sourceRepository": "Anionex/dsh-turn-rewind",
+      "sourceRevision": "9a2acfc44a6f5c94fd81e8cd217a1f54c75750f4",
+      "artifact": {
+        "path": "assets/alpha/artifacts/86796373963db548951b286281c2c0dd08084ff6aac3ddb54ef23585f640935a.tgz",
+        "sha256": "86796373963db548951b286281c2c0dd08084ff6aac3ddb54ef23585f640935a",
+        "bytes": 92594,
+        "packageVersion": "0.2.2-dsh.alpha.1",
+        "sourcePath": "assets/alpha/adapters/3065/PROVENANCE.json",
+        "runtimeDependencies": {}
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T23:47:00.421Z",
+      "finishedAt": "2026-09-05T23:47:11.408Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3065,
+        "slug": "dsh-turn-rewind",
+        "packageName": "@anionex/dsh-turn-rewind",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.2.2-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "ui",
+              "text": "Open the rewind dialog for an earlier turn and review the affected files before choosing a restore action."
+            }
+          ],
+          "requirements": [
+            "Rewind changes persistent conversation or workspace state only after the final restore action."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/Anionex/dsh-turn-rewind/blob/9a2acfc44a6f5c94fd81e8cd217a1f54c75750f4/README.md",
+            "sha256": "debcb386af99497802d794a40bc637a79697df0b8cb9445cd7a39c0319d3669b"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "88ae0ae9d1cb877e67a05d0c8caa366c82c69e5f4f58dc328e6ee96a9362c3b6"
+    },
+    {
+      "catalogId": 3066,
+      "packageName": "dsh-llm-fallbacks",
+      "specifier": "dsh-llm-fallbacks@0.4.1",
+      "sourceRepository": "omdsh-dev/dsh-llm-fallbacks",
+      "sourceRevision": "a5be34dac1279f52cf7dd81deefdf23572783bb5",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:44:10.962Z",
+      "finishedAt": "2026-09-05T22:44:25.130Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3066,
+        "slug": "dsh-llm-fallbacks",
+        "packageName": "dsh-llm-fallbacks",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.4.1",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "c4385c7e041ebc7d74fd7cc19ce1f5b961921485e6989ed16e48ffa43c0e2675"
+    },
+    {
+      "catalogId": 3068,
+      "packageName": "task-passport",
+      "specifier": "task-passport@0.3.1",
+      "sourceRepository": "dongsheng123132/task-passport",
+      "sourceRevision": "c9c31c4caa63771f21919c27fd5a14b2a3eb511f",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:44:25.131Z",
+      "finishedAt": "2026-09-05T22:44:37.716Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3068,
+        "slug": "task-passport",
+        "packageName": "task-passport",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.3.1",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "5bf4ad96eb7f32606b48d34798fa9927524575c442105935b67ce8d7d4a05f14"
+    },
+    {
+      "catalogId": 3069,
+      "packageName": "dsh-tool-policy",
+      "specifier": "github:Drifter-yh/dsh-tool-policy#c3b613fd1e829ad0781e79612c0d53dd1b40ec05",
+      "sourceRepository": "Drifter-yh/dsh-tool-policy",
+      "sourceRevision": "c3b613fd1e829ad0781e79612c0d53dd1b40ec05",
+      "artifact": {
+        "path": "assets/alpha/artifacts/da3da253647b02ea4b8966270b2277d5ac29cb071951937967059f60a1506d9b.tgz",
+        "sha256": "da3da253647b02ea4b8966270b2277d5ac29cb071951937967059f60a1506d9b",
+        "bytes": 10175,
+        "packageVersion": "0.2.0-dsh.alpha.1",
+        "runtimeDependencies": {},
+        "sourcePath": "assets/alpha/builds/3069/source/SOURCE.json"
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "headless",
+      "startedAt": "2026-09-06T00:29:40.664Z",
+      "finishedAt": "2026-09-06T00:29:46.995Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3069,
+        "slug": "dsh-tool-policy",
+        "packageName": "dsh-tool-policy",
+        "profile": "headless",
+        "status": "installed",
+        "installedVersion": "0.2.0-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "prompt",
+              "text": "Explain which tools the configured tool-policy rules allow, deny, or send for approval."
+            }
+          ],
+          "requirements": [
+            "Review the policy before use: its default decision is deny."
+          ],
+          "configurationExamples": [
+            {
+              "language": "yaml",
+              "code": "- id: tool-policy\n  config:\n    defaultDecision: deny\n    rules:\n      - tool: 'read_*'\n        decision: allow\n      - tool: bash\n        decision: ask"
+            }
+          ],
+          "documentation": {
+            "url": "https://github.com/Drifter-yh/dsh-tool-policy/blob/c3b613fd1e829ad0781e79612c0d53dd1b40ec05/README.md",
+            "sha256": "4eeec6d1ac2d88da4ca5cfe748078e24568057a4ea6cc04596db8601d25440ca"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "headless-host-ready",
+        "hostTreeReady": true,
+        "packageActive": true,
+        "entries": [
+          {
+            "name": "dsh-tool-policy",
+            "disabled": false,
+            "state": 2
+          }
+        ],
+        "probe": "The official headless profile with its one-shot Agent runner disabled, and a read-only appReady probe. No model task is sent."
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "d76e1022e029a66aff94f2a54257243f94a8a1ff90f163fc41734a7632cd8592"
+    },
+    {
+      "catalogId": 3070,
+      "packageName": "dsh-tool-approval",
+      "specifier": "dsh-tool-approval@0.1.0",
+      "sourceRepository": "ilharp/dsh-tool-approval",
+      "sourceRevision": "c01801a7e39c36515d8445747abff6a6388c1278",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:52:03.166Z",
+      "finishedAt": "2026-09-05T22:52:16.037Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3070,
+        "slug": "dsh-tool-approval",
+        "packageName": "dsh-tool-approval",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "6581ad9e9d750491c128fff74641cbab607f2a00664ee0e1f2482d2c756d7f2f"
+    },
+    {
+      "catalogId": 3074,
+      "packageName": "@dsh-routines/bundle",
+      "specifier": "github:Jesse-njx/dsh-routines#cb47bf3579fd7018e78c0933855e263685ad6fb9",
+      "sourceRepository": "Jesse-njx/dsh-routines",
+      "sourceRevision": "cb47bf3579fd7018e78c0933855e263685ad6fb9",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "headless",
+      "startedAt": "2026-09-05T23:21:49.202Z",
+      "finishedAt": "2026-09-05T23:22:12.229Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3074,
+        "slug": "dsh-routines",
+        "packageName": "@dsh-routines/bundle",
+        "profile": "headless",
+        "status": "installed",
+        "installedVersion": "0.1.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "headless-host-ready",
+        "hostTreeReady": true,
+        "packageActive": true,
+        "entries": [
+          {
+            "name": "@dsh-routines/bundle/store",
+            "disabled": false,
+            "state": 2
+          },
+          {
+            "name": "@dsh-routines/bundle/scheduler",
+            "disabled": false,
+            "state": 2
+          },
+          {
+            "name": "@dsh-routines/bundle/cli",
+            "disabled": false,
+            "state": 2
+          }
+        ],
+        "probe": "The official headless profile with its one-shot Agent runner disabled, and a read-only appReady probe. No model task is sent."
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "0aadd468b5e3a06741bda4acdf9a6ac0012980c6d06bea029b1fa754090a8f8e"
+    },
+    {
+      "catalogId": 3075,
+      "packageName": "@jiesou/dsh-stream-rules",
+      "specifier": "@jiesou/dsh-stream-rules@0.1.7",
+      "sourceRepository": "jiesou/dsh-stream-rules",
+      "sourceRevision": "e0178c043c58e469fcf5abc595180c6f9df5aecc",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:52:52.116Z",
+      "finishedAt": "2026-09-05T22:53:07.599Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3075,
+        "slug": "dsh-stream-rules",
+        "packageName": "@jiesou/dsh-stream-rules",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.7",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "8bd8375792fb54998c70a8dd30e031e02468dbdfce849517d3cfc51382f48713"
+    },
+    {
+      "catalogId": 3077,
+      "packageName": "self-control-guard",
+      "specifier": "github:pandashere/dsh-self-control-guard#652800ef31c7e352021c6d6683b6ba5204c8ac5a",
+      "sourceRepository": "pandashere/dsh-self-control-guard",
+      "sourceRevision": "652800ef31c7e352021c6d6683b6ba5204c8ac5a",
+      "artifact": {
+        "path": "assets/alpha/artifacts/c63aa5cd6e833a053f95dfa5300270ec6cdd7dc50df4c5e6e4ef34267471a71c.tgz",
+        "sha256": "c63aa5cd6e833a053f95dfa5300270ec6cdd7dc50df4c5e6e4ef34267471a71c",
+        "bytes": 22119,
+        "packageVersion": "0.1.0-dsh.alpha.1",
+        "runtimeDependencies": {},
+        "sourcePath": "assets/alpha/builds/3077/source/SOURCE.json"
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "headless",
+      "startedAt": "2026-09-06T00:30:19.894Z",
+      "finishedAt": "2026-09-06T00:30:26.193Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3077,
+        "slug": "dsh-self-control-guard",
+        "packageName": "self-control-guard",
+        "profile": "headless",
+        "status": "installed",
+        "installedVersion": "0.1.0-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "ui",
+              "text": "Inspect Self Control Guard in the installed plugin list and review its exit/restart configuration."
+            }
+          ],
+          "requirements": [
+            "Controlled restart remains disabled unless you explicitly configure a suitable supervisor."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/pandashere/dsh-self-control-guard/blob/652800ef31c7e352021c6d6683b6ba5204c8ac5a/README.md",
+            "sha256": "a9eb9c387031852d5e25db5e9a205130c23fe31571e51db4188e9d84d1b5d436"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "headless-host-ready",
+        "hostTreeReady": true,
+        "packageActive": true,
+        "entries": [
+          {
+            "name": "self-control-guard",
+            "disabled": false,
+            "state": 2
+          }
+        ],
+        "probe": "The official headless profile with its one-shot Agent runner disabled, and a read-only appReady probe. No model task is sent."
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "9a6a005a1085b7ac0e497912d6abb8d7866d97bccfe533379185d9b1d998005b"
+    },
+    {
+      "catalogId": 3078,
+      "packageName": "dsh-interconnect",
+      "specifier": "dsh-interconnect@0.10.1",
+      "sourceRepository": "Chinesezjc/dsh-interconnect",
+      "sourceRevision": "63754356efa21408dd4b7db0ac9db2fc7e18fce8",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:53:25.917Z",
+      "finishedAt": "2026-09-05T22:53:42.878Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3078,
+        "slug": "dsh-interconnect",
+        "packageName": "dsh-interconnect",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.10.1",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "e630de913a256d2536ecd30478a2dafd2631e0b949dafdf1e65878b598db587b"
+    },
+    {
+      "catalogId": 3081,
+      "packageName": "@dsh-external/dsh-kb-sieve",
+      "specifier": "github:omdsh-dev/dsh-kb-sieve#01aba653f576658974b70514573c1f6b7b4ce4df",
+      "sourceRepository": "omdsh-dev/dsh-kb-sieve",
+      "sourceRevision": "01aba653f576658974b70514573c1f6b7b4ce4df",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:53:42.880Z",
+      "finishedAt": "2026-09-05T22:54:03.560Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3081,
+        "slug": "dsh-kb-sieve",
+        "packageName": "@dsh-external/dsh-kb-sieve",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "cb52471333514a71e8c9c6e5b4f2da0ee8dcf504e6ea2267c391db3411ec70a0"
+    },
+    {
+      "catalogId": 3082,
+      "packageName": "@deepseek-ai/dsh-tool-csv",
+      "specifier": "github:omdsh-dev/dsh-tool-csv#5ee40cf13c224a734bd809ee10a9be3edd860b49",
+      "sourceRepository": "omdsh-dev/dsh-tool-csv",
+      "sourceRevision": "5ee40cf13c224a734bd809ee10a9be3edd860b49",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "headless",
+      "startedAt": "2026-09-05T23:17:32.834Z",
+      "finishedAt": "2026-09-05T23:17:46.276Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3082,
+        "slug": "dsh-tool-csv",
+        "packageName": "@deepseek-ai/dsh-tool-csv",
+        "profile": "headless",
+        "status": "installed",
+        "installedVersion": "0.0.1",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "headless-host-ready",
+        "hostTreeReady": true,
+        "packageActive": true,
+        "entries": [
+          {
+            "name": "@deepseek-ai/dsh-tool-csv",
+            "disabled": false,
+            "state": 2
+          }
+        ],
+        "probe": "The official headless profile with its one-shot Agent runner disabled, and a read-only appReady probe. No model task is sent."
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "dafb21fd7b4f6c4bc6b0f136ff5ddec24a812562fb330268305be532e7d17efd"
+    },
+    {
+      "catalogId": 3084,
+      "packageName": "@a179-sanae/dsh-code-check",
+      "specifier": "github:a179-sanae/dsh-code-check#bb7c76fbbb6ecfc665cccc0c1df7e9b698ea327a",
+      "sourceRepository": "a179-sanae/dsh-code-check",
+      "sourceRevision": "bb7c76fbbb6ecfc665cccc0c1df7e9b698ea327a",
+      "artifact": {
+        "path": "assets/alpha/artifacts/a90f3c61148a96076ee1d9a20e1f6c817a5b73eb774442c32f415254bfaf89b6.tgz",
+        "sha256": "a90f3c61148a96076ee1d9a20e1f6c817a5b73eb774442c32f415254bfaf89b6",
+        "bytes": 10943,
+        "packageVersion": "0.1.0-dsh.alpha.1",
+        "runtimeDependencies": {},
+        "sourcePath": "assets/alpha/builds/3084/source/SOURCE.json"
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "headless",
+      "startedAt": "2026-09-06T00:30:32.969Z",
+      "finishedAt": "2026-09-06T00:30:39.225Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3084,
+        "slug": "dsh-code-check",
+        "packageName": "@a179-sanae/dsh-code-check",
+        "profile": "headless",
+        "status": "installed",
+        "installedVersion": "0.1.0-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "prompt",
+              "text": "Use code_check with run set to true to check the current TypeScript workspace."
+            }
+          ],
+          "requirements": [
+            "The workspace needs TypeScript and a tsconfig.json file."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/a179-sanae/dsh-code-check/blob/bb7c76fbbb6ecfc665cccc0c1df7e9b698ea327a/README.md",
+            "sha256": "85772cc941a602c2becb9a7b6c32b6dd424fbd9e279952df5da4cca18d6f30ee"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "headless-host-ready",
+        "hostTreeReady": true,
+        "packageActive": true,
+        "entries": [
+          {
+            "name": "@a179-sanae/dsh-code-check",
+            "disabled": false,
+            "state": 2
+          }
+        ],
+        "probe": "The official headless profile with its one-shot Agent runner disabled, and a read-only appReady probe. No model task is sent."
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "a2106a6d7f9b4f9254cb510cb529a0c8a6a348fffb028ec73eec4031defe5ee5"
+    },
+    {
+      "catalogId": 3085,
+      "packageName": "dsh-mcp-proxy",
+      "specifier": "dsh-mcp-proxy@0.1.0",
+      "sourceRepository": "ben7am1n/dsh-mcp-proxy",
+      "sourceRevision": "45274b29b6782b06be96bd15fbce18a7ead85642",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:54:23.646Z",
+      "finishedAt": "2026-09-05T22:54:41.192Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3085,
+        "slug": "dsh-mcp-proxy",
+        "packageName": "dsh-mcp-proxy",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "fcf61d7cfb0466de73e95534248d92d114d2b0c7efffddbf934e7feb9151fa09"
+    },
+    {
+      "catalogId": 3088,
+      "packageName": "dsh-plugin-miliastra-toolbox",
+      "specifier": "github:1475505/dsh-plugin-miliastra-toolbox#a1380cd664725e5c0e9933a7ab1c6f858ebf2aed",
+      "sourceRepository": "1475505/dsh-plugin-miliastra-toolbox",
+      "sourceRevision": "a1380cd664725e5c0e9933a7ab1c6f858ebf2aed",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "headless",
+      "startedAt": "2026-09-05T23:17:46.279Z",
+      "finishedAt": "2026-09-05T23:17:56.355Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3088,
+        "slug": "dsh-plugin-miliastra-toolbox",
+        "packageName": "dsh-plugin-miliastra-toolbox",
+        "profile": "headless",
+        "status": "installed",
+        "installedVersion": "0.1.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "headless-host-ready",
+        "hostTreeReady": true,
+        "packageActive": true,
+        "entries": [
+          {
+            "name": "dsh-plugin-miliastra-toolbox",
+            "disabled": false,
+            "state": 2
+          }
+        ],
+        "probe": "The official headless profile with its one-shot Agent runner disabled, and a read-only appReady probe. No model task is sent."
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "f0c16564a0c20a2f2c747847daf7acdd4a4413a08014298f64f70203d1419af7"
+    },
+    {
+      "catalogId": 3089,
+      "packageName": "dsh-hdc-bridge",
+      "specifier": "dsh-hdc-bridge@0.9.0",
+      "sourceRepository": "1na-ko/dsh-hdc-bridge",
+      "sourceRevision": "516941105a8bf558a7fb8bd5e9b0f7669e38b344",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T22:54:49.164Z",
+      "finishedAt": "2026-09-05T22:55:01.905Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3089,
+        "slug": "dsh-hdc-bridge",
+        "packageName": "dsh-hdc-bridge",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.9.0",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "ae132fc0a3a32d07d97e94361f4c139654c663bdca037fd5795fc96557a2c903"
+    },
+    {
+      "catalogId": 3090,
+      "packageName": "dsh-lens-lite",
+      "specifier": "dsh-lens-lite@0.1.0",
+      "sourceRepository": "ben7am1n/dsh-lens-lite",
+      "sourceRevision": "b4bfe25c7e8fce3701b8fd84dda0f14de8fab447",
+      "artifact": {
+        "path": "assets/alpha/artifacts/a33bc6502f5470da9bec33b26d11c45a9cf617b6e46a2d2bdcb3bd47cf2a430e.tgz",
+        "sha256": "a33bc6502f5470da9bec33b26d11c45a9cf617b6e46a2d2bdcb3bd47cf2a430e",
+        "bytes": 7925,
+        "packageVersion": "0.1.0-dsh.alpha.1",
+        "runtimeDependencies": {},
+        "sourcePath": "assets/alpha/builds/3090/source/SOURCE.json"
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "headless",
+      "startedAt": "2026-09-06T00:30:39.226Z",
+      "finishedAt": "2026-09-06T00:30:45.474Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3090,
+        "slug": "dsh-lens-lite",
+        "packageName": "dsh-lens-lite",
+        "profile": "headless",
+        "status": "installed",
+        "installedVersion": "0.1.0-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "prompt",
+              "text": "After editing a TypeScript file, show the diagnostics returned by the configured checker."
+            }
+          ],
+          "requirements": [
+            "Configure checker argv and file extensions for your toolchain. The plugin has no built-in checker commands."
+          ],
+          "configurationExamples": [
+            {
+              "language": "yaml",
+              "code": "- id: lens-lite\n  config:\n    tools: [write, edit, str_replace_editor]\n    maxDiagnosticChars: 4000\n    checkers:\n      - name: tsc\n        extensions: ['.ts', '.tsx']\n        argv: ['npx', '--no-install', 'tsc', '--noEmit']\n        cwd: '.'\n        timeoutMs: 60000"
+            }
+          ],
+          "documentation": {
+            "url": "https://github.com/ben7am1n/dsh-lens-lite/blob/b4bfe25c7e8fce3701b8fd84dda0f14de8fab447/README.md",
+            "sha256": "b2356cdee6c3acf70034a62406e5e1726e6e8daa51b6af3f9238be43c0a60503"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "headless-host-ready",
+        "hostTreeReady": true,
+        "packageActive": true,
+        "entries": [
+          {
+            "name": "dsh-lens-lite",
+            "disabled": false,
+            "state": 2
+          }
+        ],
+        "probe": "The official headless profile with its one-shot Agent runner disabled, and a read-only appReady probe. No model task is sent."
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "ed934752ef903ba51cb81ddd48bb1f0104a71520e0b1a416ca8671b140e00848"
+    },
+    {
+      "catalogId": 3092,
+      "packageName": "@dingyi222666/dsh-focus-chat",
+      "specifier": "github:dingyi222666/dsh-focus-chat#43bd71a5db0e2237329b53548c8a347a36b10605",
+      "sourceRepository": "dingyi222666/dsh-focus-chat",
+      "sourceRevision": "43bd71a5db0e2237329b53548c8a347a36b10605",
+      "artifact": {
+        "path": "assets/alpha/artifacts/7b7bcffbcc30255e8fd79267345e14d0841e98b0b7c54019efb614b79d7d07b9.tgz",
+        "sha256": "7b7bcffbcc30255e8fd79267345e14d0841e98b0b7c54019efb614b79d7d07b9",
+        "bytes": 74186,
+        "packageVersion": "0.4.0-dsh.alpha.1",
+        "runtimeDependencies": {},
+        "sourcePath": "assets/alpha/builds/3092/source/SOURCE.json"
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T23:47:11.410Z",
+      "finishedAt": "2026-09-05T23:47:22.575Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3092,
+        "slug": "dsh-focus-chat",
+        "packageName": "@dingyi222666/dsh-focus-chat",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.4.0-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "ui",
+              "text": "Open a conversation's Focus chat tab. Expand a Worked for summary to inspect its tool calls and reasoning."
+            }
+          ],
+          "requirements": [],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/dingyi222666/dsh-focus-chat/blob/43bd71a5db0e2237329b53548c8a347a36b10605/README.md",
+            "sha256": "380213dbcd92ac02cd74b0774cf26bee87f47d0bdcdf11c85cca910e0d10fd61"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "7eadda14dcdf2782ab4398f005d483f7dfb2ca60f461ab327b7c4ea9e65e40e3"
+    },
+    {
+      "catalogId": 3093,
+      "packageName": "@dingyi222666/dsh-session-notification",
+      "specifier": "github:dingyi222666/dsh-session-notification#c7bb90eb736b60b9581ea45d9309bc3adf7c95fd",
+      "sourceRepository": "dingyi222666/dsh-session-notification",
+      "sourceRevision": "c7bb90eb736b60b9581ea45d9309bc3adf7c95fd",
+      "artifact": {
+        "path": "assets/alpha/artifacts/45bf81bcf7a4929abb7d006b7886ebd87f87e2e037b4652236933bda14ba0fb6.tgz",
+        "sha256": "45bf81bcf7a4929abb7d006b7886ebd87f87e2e037b4652236933bda14ba0fb6",
+        "bytes": 17235,
+        "packageVersion": "0.1.9-dsh.alpha.1",
+        "runtimeDependencies": {},
+        "sourcePath": "assets/alpha/builds/3093/source/SOURCE.json"
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-05T23:55:10.775Z",
+      "finishedAt": "2026-09-05T23:55:21.878Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3093,
+        "slug": "dsh-session-notification",
+        "packageName": "@dingyi222666/dsh-session-notification",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.1.9-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "ui",
+              "text": "Open Settings → Notifications, preview a sound, and send a test browser notification."
+            }
+          ],
+          "requirements": [
+            "Grant browser notification permission and enable sound if desired."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/dingyi222666/dsh-session-notification/blob/c7bb90eb736b60b9581ea45d9309bc3adf7c95fd/README.md",
+            "sha256": "61f8ba45e9ee69ffe678f84497fd460be836f2c7f21c077a75a1182d09528711"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "b99b6fe4e9a4cfa61968c3053f0498e39163a8104587553d8eb7868b8d6df5e4"
+    },
+    {
+      "catalogId": 3096,
+      "packageName": "dsh-agent-messaging",
+      "specifier": "github:happyren/dsh-agent-messaging#cd295a5daa13b301e4e2f5a6164ff28bddd6acf2",
+      "sourceRepository": "happyren/dsh-agent-messaging",
+      "sourceRevision": "cd295a5daa13b301e4e2f5a6164ff28bddd6acf2",
+      "artifact": {
+        "path": "assets/alpha/artifacts/f3bd511db19c3993de6fbf306c4a01c1569eb6f0e5d18d7aa1d577a5eead0d9f.tgz",
+        "sha256": "f3bd511db19c3993de6fbf306c4a01c1569eb6f0e5d18d7aa1d577a5eead0d9f",
+        "bytes": 52667,
+        "packageVersion": "0.13.0-dsh.alpha.1",
+        "runtimeDependencies": {},
+        "sourcePath": "assets/alpha/builds/3096/source/SOURCE.json"
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-06T00:31:07.264Z",
+      "finishedAt": "2026-09-06T00:31:18.206Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3096,
+        "slug": "dsh-agent-messaging",
+        "packageName": "dsh-agent-messaging",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "0.13.0-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "prompt",
+              "text": "Use peer_list to find available agents before choosing a recipient."
+            }
+          ],
+          "requirements": [
+            "Configure inbound policy and trusted peers before enabling direct action from peer messages."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/happyren/dsh-agent-messaging/blob/cd295a5daa13b301e4e2f5a6164ff28bddd6acf2/README.md",
+            "sha256": "09e2fa90dd2acb3253928e0f9119cb2970e8059d3bb0e3dd6d2a7335eaaae155"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "3e142414a099951b49907a04dbb9cf9f79c1c7c1077b6a5434f17caf776bca7b"
+    },
+    {
+      "catalogId": 3108,
+      "packageName": "@deepseek-ai/dsh-tool-markdown",
+      "specifier": "github:omdsh-dev/dsh-tool-markdown#98bc9449d215fa0eec769213c8cf318a25f43339",
+      "sourceRepository": "omdsh-dev/dsh-tool-markdown",
+      "sourceRevision": "98bc9449d215fa0eec769213c8cf318a25f43339",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "headless",
+      "startedAt": "2026-09-05T23:22:12.239Z",
+      "finishedAt": "2026-09-05T23:22:41.848Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3108,
+        "slug": "dsh-tool-markdown",
+        "packageName": "@deepseek-ai/dsh-tool-markdown",
+        "profile": "headless",
+        "status": "installed",
+        "installedVersion": "0.0.1",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "headless-host-ready",
+        "hostTreeReady": true,
+        "packageActive": true,
+        "entries": [
+          {
+            "name": "@deepseek-ai/dsh-tool-markdown",
+            "disabled": false,
+            "state": 2
+          }
+        ],
+        "probe": "The official headless profile with its one-shot Agent runner disabled, and a read-only appReady probe. No model task is sent."
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "0bd20766d03cb715f5a2efe66385c4ae14c53f19bf235294392b5185caf215f0"
+    },
+    {
+      "catalogId": 3109,
+      "packageName": "@deepseek-ai/dsh-tool-stat",
+      "specifier": "github:omdsh-dev/dsh-tool-stat#1db9240310804e2aa0862cd3626ab341ce12f298",
+      "sourceRepository": "omdsh-dev/dsh-tool-stat",
+      "sourceRevision": "1db9240310804e2aa0862cd3626ab341ce12f298",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "headless",
+      "startedAt": "2026-09-05T23:22:41.854Z",
+      "finishedAt": "2026-09-05T23:22:57.027Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3109,
+        "slug": "dsh-tool-stat",
+        "packageName": "@deepseek-ai/dsh-tool-stat",
+        "profile": "headless",
+        "status": "installed",
+        "installedVersion": "0.0.1",
+        "setup": null
+      },
+      "runtime": {
+        "kind": "headless-host-ready",
+        "hostTreeReady": true,
+        "packageActive": true,
+        "entries": [
+          {
+            "name": "@deepseek-ai/dsh-tool-stat",
+            "disabled": false,
+            "state": 2
+          }
+        ],
+        "probe": "The official headless profile with its one-shot Agent runner disabled, and a read-only appReady probe. No model task is sent."
+      },
+      "removal": {
+        "code": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "4348f716ac452b3dfc9be1c8ca4fe03271f5a612cdf2d8792273bdc4e609f596"
+    },
+    {
+      "catalogId": 3110,
+      "packageName": "@deepseek-ai/dsh-tool-time",
+      "specifier": "github:omdsh-dev/dsh-tool-time#39f72c8fa462996957c7a642a89b1f8ee6b485e9",
+      "sourceRepository": "omdsh-dev/dsh-tool-time",
+      "sourceRevision": "39f72c8fa462996957c7a642a89b1f8ee6b485e9",
+      "artifact": null,
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "headless",
+      "startedAt": "2026-09-05T23:37:19.444Z",
+      "finishedAt": "2026-09-05T23:37:26.374Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3110,
+        "slug": "dsh-tool-time",
+        "packageName": "@deepseek-ai/dsh-tool-time",
+        "profile": "headless",
+        "status": "installed",
+        "installedVersion": "0.0.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "prompt",
+              "text": "Use time with action now and timezone Asia/Shanghai."
+            }
+          ],
+          "requirements": [],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/omdsh-dev/dsh-tool-time/blob/39f72c8fa462996957c7a642a89b1f8ee6b485e9/README.md",
+            "sha256": "52e65381df940338b063f4e1bdc07eb997fb6db5e05c4e666e33e4e79549ba8d"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "headless-host-ready",
+        "hostTreeReady": true,
+        "packageActive": true,
+        "entries": [
+          {
+            "name": "@deepseek-ai/dsh-tool-time",
+            "disabled": false,
+            "state": 2
+          }
+        ],
+        "probe": "The official headless profile with its one-shot Agent runner disabled, and a read-only appReady probe. No model task is sent."
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "92015a46cc3dc55d666c133b0d5dd5c30dcae21fe814ce1ea54faacd2ef2091f"
+    },
+    {
+      "catalogId": 3112,
+      "packageName": "@tappass/dsh-governance",
+      "specifier": "@tappass/dsh-governance@0.2.1",
+      "sourceRepository": "tappass/dsh-governance",
+      "sourceRevision": "ac9ccbc16ed2dd5359619a6c87899106a3eecd65",
+      "artifact": {
+        "path": "assets/alpha/artifacts/b3809342b48af6d012768c1797f6ac42c8c0c10449cd51fd7900f0f139653cf6.tgz",
+        "sha256": "b3809342b48af6d012768c1797f6ac42c8c0c10449cd51fd7900f0f139653cf6",
+        "bytes": 7118,
+        "packageVersion": "0.2.1-dsh.alpha.1",
+        "runtimeDependencies": {},
+        "sourcePath": "assets/alpha/builds/3112/source/SOURCE.json"
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "headless",
+      "startedAt": "2026-09-06T00:31:29.084Z",
+      "finishedAt": "2026-09-06T00:31:35.377Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3112,
+        "slug": "dsh-governance",
+        "packageName": "@tappass/dsh-governance",
+        "profile": "headless",
+        "status": "installed",
+        "installedVersion": "0.2.1-dsh.alpha.1",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "prompt",
+              "text": "Show how the installed governance policy records tool decisions in observe mode."
+            }
+          ],
+          "requirements": [
+            "Configure TAPPASS_API_KEY locally. The governance service receives tool-call data according to the selected mode."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/tappass/dsh-governance/blob/ac9ccbc16ed2dd5359619a6c87899106a3eecd65/README.md",
+            "sha256": "6a19b86d15fac29f75c48c201cce0d3bca9f63f316ffcc1b0dcd85650db057b2"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "headless-host-ready",
+        "hostTreeReady": true,
+        "packageActive": true,
+        "entries": [
+          {
+            "name": "@tappass/dsh-governance",
+            "disabled": false,
+            "state": 2
+          }
+        ],
+        "probe": "The official headless profile with its one-shot Agent runner disabled, and a read-only appReady probe. No model task is sent."
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "c80cbc58361c52f76938192b095540d4be396f0d99bdf4f0b12f33722f11bbdd"
+    },
+    {
+      "catalogId": 3118,
+      "packageName": "dsh-side-panel",
+      "specifier": "dsh-side-panel@1.0.0",
+      "sourceRepository": "XYZ1024-alt/dsh-side-panel",
+      "sourceRevision": "4714c7bf0e049abdd551686a7bdaf5cdb383570b",
+      "artifact": {
+        "path": "assets/alpha/artifacts/f8c387ff2cab294c57a3d2939d8e448604513f99b648d7f68e2f2da40edfdd05.tgz",
+        "sha256": "f8c387ff2cab294c57a3d2939d8e448604513f99b648d7f68e2f2da40edfdd05",
+        "bytes": 12199,
+        "packageVersion": "1.0.0",
+        "runtimeDependencies": {},
+        "upstreamRelease": true
+      },
+      "dshVersion": "0.1.3-alpha.1",
+      "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+      "profile": "web",
+      "startedAt": "2026-09-06T00:32:08.265Z",
+      "finishedAt": "2026-09-06T00:32:19.206Z",
+      "pnpmVersion": "11.7.0",
+      "installation": {
+        "catalogId": 3118,
+        "slug": "dsh-side-panel",
+        "packageName": "dsh-side-panel",
+        "profile": "web",
+        "status": "installed",
+        "installedVersion": "1.0.0",
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "ui",
+              "text": "Open the panel from the right edge of DSH Web and select a file or changed path to preview it."
+            }
+          ],
+          "requirements": [
+            "Use this upstream panel on a local or trusted host; its own routes have no additional authentication."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/XYZ1024-alt/dsh-side-panel/blob/4714c7bf0e049abdd551686a7bdaf5cdb383570b/README.md",
+            "sha256": "f0e2761f1aeca7fcd1c52a48d32f67a1364e8637fb8d983fb259ab81bad5767a"
+          }
+        }
+      },
+      "runtime": {
+        "kind": "web-client",
+        "httpStatus": 200,
+        "title": "DeepSeek Harness",
+        "pageAndConsoleErrors": [],
+        "failedHttpRequests": [],
+        "clientLoaded": true
+      },
+      "removal": {
+        "code": 0,
+        "verificationCode": 0,
+        "packageAbsent": true
+      },
+      "featureVerification": "not-exercised",
+      "evidenceSha256": "13d0b4e5237721cb17fe2c6d3b889633874e13be9fd193b17e07eec96d68c8f1"
+    }
+  ]
+}

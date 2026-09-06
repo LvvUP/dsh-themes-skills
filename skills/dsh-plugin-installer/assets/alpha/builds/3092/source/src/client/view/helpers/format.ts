@@ -1,0 +1,237 @@
+/** Time, text, and geometry helpers of the focus view (pure). */
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import type { FocusTranslate } from '../../contract/props.ts'
+
+export function firstLine(text: string): string {
+  const newline = text.indexOf('\n')
+  return newline === -1 ? text : text.slice(0, newline)
+}
+
+/** Latest non-empty line of a streaming text (the running tail preview). */
+export function latestLine(text: string): string {
+  const visible = text.trimEnd()
+  const newline = visible.lastIndexOf('\n')
+  return newline === -1 ? visible : visible.slice(newline + 1)
+}
+
+/** Zero-padded two-digit number (the chat clock's rhythm). */
+export function pad2(n: number): string {
+  return String(n).padStart(2, '0')
+}
+
+/** The original-image lightbox strings (the chat image-labels bridge). */
+export function basename(path: string): string {
+  const at = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'))
+  return at === -1 ? path : path.slice(at + 1)
+}
+
+/** Decode-throughput figure: whole tokens from ten up, one decimal below. */
+export function formatTokensPerSecond(tps: number): string {
+  const clamped = Math.max(0, tps)
+  return clamped >= 10 ? String(Math.round(clamped)) : String(Math.round(clamped * 10) / 10)
+}
+
+/**
+ * Localized elapsed-time label for the turn-time pill (the chat
+ * formatRunDuration): whole minutes with padded seconds, or whole seconds.
+ * @param ms - Elapsed duration in milliseconds (negatives clamp to zero).
+ * @param t - focus locale seat supplying the duration templates.
+ * @returns the display string.
+ */
+export function formatRunDuration(ms: number, t: FocusTranslate): string {
+  const total = Math.max(0, Math.floor(ms / 1000))
+  const minutes = Math.floor(total / 60)
+  const seconds = total % 60
+  return minutes > 0
+    ? t('duration.minutes', { minutes, seconds: String(seconds).padStart(2, '0') })
+    : t('duration.seconds', { seconds })
+}
+
+/** Sub-turn latency figure: one decimal under ten seconds, whole seconds
+ *  beyond (the chat formatLatencySeconds). */
+export function formatLatencySeconds(ms: number): string {
+  const s = Math.max(0, ms) / 1000
+  return s < 10 ? String(Math.round(s * 10) / 10) : String(Math.round(s))
+}
+
+/** Compact token count: 517 / 12.2K / 517K / 1.2M (the chat reading). */
+export function formatTokens(value: number, t: FocusTranslate): string {
+  const scaled = (candidate: number): string =>
+    candidate >= 100 ? String(Math.round(candidate)) : String(Math.round(candidate * 10) / 10)
+  if (value < 1_000) return String(value)
+  if (value < 1_000_000) return t('number.thousand', { value: scaled(value / 1_000) })
+  return t('number.million', { value: scaled(value / 1_000_000) })
+}
+
+/** Exact integer token count with locale-owned digit grouping (the chat reading). */
+export function formatExactTokens(value: number, t: FocusTranslate): string {
+  const digits = String(value)
+  const groups: string[] = []
+  for (let end = digits.length; end > 0; end -= 3) {
+    groups.unshift(digits.slice(Math.max(0, end - 3), end))
+  }
+  return groups.join(t('number.groupSeparator'))
+}
+
+/** Round a cache-read ratio to exact percentage units, with positive ties rounded up. */
+function roundedPercentUnits(cacheReadTokens: number, denominator: number, decimalPlaces: 0 | 1): number {
+  const unitsPerPercent = decimalPlaces === 0 ? 1 : 10
+  const scale = unitsPerPercent * 100
+  const doubledScale = scale * 2
+  const denominatorQuotient = Math.floor(denominator / doubledScale)
+  const denominatorRemainder = denominator % doubledScale
+  let lower = 0
+  let upper = scale
+  while (lower < upper) {
+    const candidate = Math.floor((lower + upper + 1) / 2)
+    const factor = candidate * 2 - 1
+    const threshold = factor * denominatorQuotient
+      + Math.ceil(factor * denominatorRemainder / doubledScale)
+    if (cacheReadTokens >= threshold) lower = candidate
+    else upper = candidate - 1
+  }
+  return lower
+}
+
+function displayPercentUnits(units: number, decimalPlaces: 0 | 1): string {
+  if (decimalPlaces === 0) return String(units)
+  const whole = Math.floor(units / 10)
+  const tenths = units % 10
+  return tenths === 0 ? String(whole) : `${whole}.${tenths}`
+}
+
+/** Display-ready cache-hit share without rounding a partial hit to 100%
+ *  (the chat formatCacheHitPercent). */
+export function formatCacheHitPercent(
+  cacheReadTokens: number,
+  promptTokens: number,
+  decimalPlaces: 0 | 1 = 0,
+): string | null {
+  if (promptTokens === 0) return null
+  const missedInputTokens = promptTokens - cacheReadTokens
+  if (missedInputTokens === 0) return '100'
+
+  const roundedUnits = roundedPercentUnits(cacheReadTokens, promptTokens, decimalPlaces)
+  const fullHitUnits = decimalPlaces === 0 ? 100 : 1_000
+  if (roundedUnits < fullHitUnits) return displayPercentUnits(roundedUnits, decimalPlaces)
+
+  let distinguishingPlaces = 1
+  let scaledDoubleGap = missedInputTokens * 200
+  const denominatorTens = Math.floor(promptTokens / 10)
+  while (scaledDoubleGap <= denominatorTens) {
+    scaledDoubleGap *= 10
+    distinguishingPlaces += 1
+  }
+  const denominatorOnes = promptTokens % 10
+  let roundedLoss = 5
+  for (let loss = 1; loss < 5; loss += 1) {
+    const factor = loss * 2 + 1
+    const threshold = factor * denominatorTens + Math.floor(factor * denominatorOnes / 10)
+    if (scaledDoubleGap <= threshold) {
+      roundedLoss = loss
+      break
+    }
+  }
+  return `99.${'9'.repeat(distinguishingPlaces - 1)}${10 - roundedLoss}`
+}
+
+/** Local calendar-day epoch (ms at local midnight) for an instant. */
+export function startOfLocalDay(ms: number): number {
+  const d = new Date(ms)
+  d.setHours(0, 0, 0, 0)
+  return d.getTime()
+}
+
+/** Delay until the next local midnight after `ms` (at least 1ms). */
+export function msUntilNextLocalMidnight(ms: number): number {
+  const next = new Date(ms)
+  next.setHours(24, 0, 0, 0)
+  return Math.max(next.getTime() - ms, 1)
+}
+
+/** The current local calendar-day epoch, re-resolved at each midnight. */
+export function useCalendarDay(): number {
+  const [day, setDay] = useState(() => startOfLocalDay(Date.now()))
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>
+    const schedule = (): void => {
+      timer = window.setTimeout(() => {
+        setDay(startOfLocalDay(Date.now()))
+        schedule()
+      }, msUntilNextLocalMidnight(Date.now()))
+    }
+    schedule()
+    return () => { clearTimeout(timer) }
+  }, [])
+  return day
+}
+
+/**
+ * Compact local timestamp for message chrome (the chat clock): same local
+ * calendar day → `HH:mm`; earlier this year → the `clock.md` template;
+ * other years → `clock.ymd`.
+ * @param time - Unix epoch ms from the source session event.
+ * @param t - focus locale seat supplying the date templates.
+ * @param now - reference instant for the day/year cut.
+ * @returns the date-aware clock string.
+ */
+export function formatMessageClock(time: number, t: FocusTranslate, now: number = Date.now()): string {
+  const d = new Date(time)
+  const n = new Date(now)
+  const clock = `${pad2(d.getHours())}:${pad2(d.getMinutes())}`
+  if (
+    d.getFullYear() === n.getFullYear()
+    && d.getMonth() === n.getMonth()
+    && d.getDate() === n.getDate()
+  ) return clock
+  const params = { y: d.getFullYear(), m: d.getMonth() + 1, d: d.getDate() }
+  const md = d.getFullYear() === n.getFullYear() ? t('clock.md', params) : t('clock.ymd', params)
+  return `${md} ${clock}`
+}
+
+/** Concatenated text blocks of a message (the chat bubble's join). */
+export function useThrottledVisualUpdate(
+  update: () => void,
+  intervalFrames = 3,
+): () => void {
+  const updateRef = useRef(update)
+  updateRef.current = update
+  const pendingFrameRef = useRef<number | null>(null)
+
+  useLayoutEffect(() => () => {
+    if (pendingFrameRef.current === null) return
+    cancelAnimationFrame(pendingFrameRef.current)
+    pendingFrameRef.current = null
+  }, [])
+
+  return useCallback(() => {
+    if (pendingFrameRef.current !== null) return
+    let remainingFrames = intervalFrames
+    const advance = (): void => {
+      remainingFrames -= 1
+      if (remainingFrames > 0) {
+        pendingFrameRef.current = requestAnimationFrame(advance)
+        return
+      }
+      pendingFrameRef.current = null
+      updateRef.current()
+    }
+    pendingFrameRef.current = requestAnimationFrame(advance)
+  }, [intervalFrames])
+}
+
+export function formatElapsed(ms: number, t: FocusTranslate): string {
+  const total = Math.max(0, Math.floor(ms / 1000))
+  const days = Math.floor(total / 86_400)
+  const hours = Math.floor((total % 86_400) / 3_600)
+  const minutes = Math.floor((total % 3_600) / 60)
+  const seconds = total % 60
+  // Long-running turns read compact: "1h 23m", "1day 3h 20m" — a pure
+  // minute reading (123m) is unreadable once the clock passes an hour.
+  if (days > 0) return t('duration.days', { days, hours, minutes })
+  if (hours > 0) return t('duration.hours', { hours, minutes })
+  if (minutes > 0) return t('duration.minutes', { minutes, seconds: String(seconds).padStart(2, '0') })
+  return t('duration.seconds', { seconds })
+}
+
+/** Turn-level running signal: "Deep diving..." plus an elapsed clock past 15s. */

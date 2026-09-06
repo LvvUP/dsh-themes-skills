@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "upstream": {
+    "repository": "HeiGeAi/deepseek-harness-skin",
+    "revision": "238d114d1e5bf7358c4cb101b36ae129e70a55fe",
+    "license": "MIT"
+  },
+  "adaptedBy": "DSH Themes",
+  "scope": "21 original seed palettes and upstream color derivation. Independent Alpha plugin controls and durable preferences. Upstream character and wallpaper images are not included; users may choose their own local image.",
+  "files": [
+    {
+      "path": "upstream/skins/color.ts",
+      "sourcePath": "tree/packages/client/ui-theme/src/skins/color.ts",
+      "sha256": "608f02e94190c908011ad6b0aa2637facf27c82b75a05b55338dfa66524a520b"
+    },
+    {
+      "path": "upstream/skins/derive.ts",
+      "sourcePath": "tree/packages/client/ui-theme/src/skins/derive.ts",
+      "sha256": "c08174f6167da21142e50de7b38a6ae26c281bbab7629c0e8b6865d22bc34495"
+    },
+    {
+      "path": "upstream/skins/stock.ts",
+      "sourcePath": "tree/packages/client/ui-theme/src/skins/stock.ts",
+      "sha256": "75dd0b25c389d7aacd94a2faf6ff0eb82ac587860502e09c4233b4e41ac33ffa"
+    },
+    {
+      "path": "upstream/styles/skins/generated/stock.ts",
+      "sourcePath": "tree/packages/client/ui-theme/src/styles/skins/generated/stock.ts",
+      "sha256": "527f17a74a038f64aad66f91ef50e252457bf9b25e20b2166ae958dfb54b4514"
+    },
+    {
+      "path": "upstream/LICENSE",
+      "sourcePath": "LICENSE",
+      "sha256": "62a3675a2abadee1af7000afd29a02f352b883d39850a97ecebacb9656953fdf"
+    },
+    {
+      "path": "upstream/NOTICE.md",
+      "sourcePath": "NOTICE.md",
+      "sha256": "b3c0129644ef45739ca79dc6ff2e01b7eee5e10734ed59ca11e59029d25864bf"
+    },
+    {
+      "path": "upstream/ASSET_PROVENANCE.md",
+      "sourcePath": "ASSET_PROVENANCE.md",
+      "sha256": "bc4d627b052169d57ab64cf667b2a49dd96984a2ac4c510a6d20c8225a31aa0b"
+    }
+  ]
+}

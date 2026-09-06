@@ -393,7 +393,12 @@ test('release documentation exposes runtime, item, and historical lanes', async 
   for (const path of documents) {
     const contents = await readFile(new URL(path, root), 'utf8');
     contentsByPath.set(path, contents);
-    assert.ok(contents.includes(state.certified.dshPackageVersion));
+    if (path.endsWith('references/catalog-contract.md') || path.endsWith('references/compatibility.md')) {
+      assert.ok(contents.includes(state.certified.dshPackageVersion), path);
+      assert.match(contents, /historical|retained/i, path);
+    } else {
+      assert.ok(contents.includes('0.1.3-alpha.1'), path);
+    }
   }
   const combined = [...contentsByPath.values()].join('\n');
   assert.ok(combined.includes(state.candidate.dshPackageVersion));

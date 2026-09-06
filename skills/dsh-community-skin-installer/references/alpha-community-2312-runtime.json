@@ -1,0 +1,580 @@
+{
+  "schemaVersion": 1,
+  "catalogId": 2312,
+  "verifiedAt": "2026-09-06T00:18:12.253Z",
+  "dshVersion": "0.1.3-alpha.1",
+  "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "packageName": "@dsh-themes/community-xiaoyao-great-wall-snow",
+  "packageVersion": "0.1.1-dsh-alpha.1",
+  "artifactSha256": "82b020c16ac1c21434131b12897d4504fc91076b16ad71391c7817696725c751",
+  "installation": {
+    "officialCliAdd": true,
+    "exactPackagePresent": true,
+    "profile": "web"
+  },
+  "boot": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-dsh-great-wall-skin": "",
+        "data-dsh-great-wall-snow": ""
+      },
+      "base": "#faf9f629",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n雪岭长城\nGREAT WALL / SNOW PASS\n沉浸模式\n长城三境 · 03\nXIAOYAO × DSH\nLOCAL ONLY",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        },
+        {
+          "text": "沉浸模式",
+          "aria": null
+        }
+      ],
+      "newSessionButton": {
+        "color": "rgb(38, 48, 57)",
+        "background": "rgba(250, 249, 246, 0.96)"
+      },
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0
+    },
+    "modes": [
+      {
+        "mode": "light",
+        "title": "DeepSeek Harness",
+        "attrs": {
+          "data-dsh-great-wall-skin": "",
+          "data-dsh-great-wall-snow": ""
+        },
+        "base": "#faf9f629",
+        "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n雪岭长城\nGREAT WALL / SNOW PASS\n沉浸模式\n长城三境 · 03\nXIAOYAO × DSH\nLOCAL ONLY",
+        "buttons": [
+          {
+            "text": "",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "收起侧边栏"
+          },
+          {
+            "text": "新会话",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "搜索会话"
+          },
+          {
+            "text": "",
+            "aria": "视图选项"
+          },
+          {
+            "text": "",
+            "aria": "添加工作区"
+          },
+          {
+            "text": "设置",
+            "aria": null
+          },
+          {
+            "text": "选择工作区",
+            "aria": "选择工作区"
+          },
+          {
+            "text": "标准模式",
+            "aria": null
+          },
+          {
+            "text": "",
+            "aria": "指令"
+          },
+          {
+            "text": "",
+            "aria": "添加附件"
+          },
+          {
+            "text": "",
+            "aria": "发送消息"
+          },
+          {
+            "text": "沉浸模式",
+            "aria": null
+          }
+        ],
+        "newSessionButton": {
+          "color": "rgb(38, 48, 57)",
+          "background": "rgba(250, 249, 246, 0.96)"
+        },
+        "width": {
+          "viewport": 1280,
+          "scroll": 1280
+        },
+        "brokenImages": 0
+      },
+      {
+        "mode": "dark",
+        "title": "DeepSeek Harness",
+        "attrs": {
+          "data-dsh-great-wall-skin": "",
+          "data-dsh-great-wall-snow": "",
+          "data-ds-dark-theme": ""
+        },
+        "base": "#faf9f629",
+        "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n雪岭长城\nGREAT WALL / SNOW PASS\n沉浸模式\n长城三境 · 03\nXIAOYAO × DSH\nLOCAL ONLY",
+        "buttons": [
+          {
+            "text": "",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "收起侧边栏"
+          },
+          {
+            "text": "新会话",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "搜索会话"
+          },
+          {
+            "text": "",
+            "aria": "视图选项"
+          },
+          {
+            "text": "",
+            "aria": "添加工作区"
+          },
+          {
+            "text": "设置",
+            "aria": null
+          },
+          {
+            "text": "选择工作区",
+            "aria": "选择工作区"
+          },
+          {
+            "text": "标准模式",
+            "aria": null
+          },
+          {
+            "text": "",
+            "aria": "指令"
+          },
+          {
+            "text": "",
+            "aria": "添加附件"
+          },
+          {
+            "text": "",
+            "aria": "发送消息"
+          },
+          {
+            "text": "沉浸模式",
+            "aria": null
+          }
+        ],
+        "newSessionButton": {
+          "color": "rgb(38, 48, 57)",
+          "background": "rgba(250, 249, 246, 0.96)"
+        },
+        "width": {
+          "viewport": 1280,
+          "scroll": 1280
+        },
+        "brokenImages": 0
+      }
+    ],
+    "controls": [
+      {
+        "action": "focus-on",
+        "pressed": "true",
+        "attributes": {
+          "data-dsh-great-wall-skin": "",
+          "data-dsh-great-wall-snow": "",
+          "data-ds-dark-theme": "",
+          "data-dsh-great-wall-focus": ""
+        }
+      },
+      {
+        "action": "focus-off",
+        "pressed": "false"
+      }
+    ],
+    "narrow": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-dsh-great-wall-skin": "",
+        "data-dsh-great-wall-snow": "",
+        "data-ds-dark-theme": ""
+      },
+      "base": "#faf9f629",
+      "text": "探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n长城三境 · 03",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "打开侧边栏"
+        },
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        },
+        {
+          "text": "",
+          "aria": null
+        }
+      ],
+      "newSessionButton": {
+        "color": "rgb(38, 48, 57)",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "width": {
+        "viewport": 390,
+        "scroll": 390
+      },
+      "brokenImages": 0
+    },
+    "geometry": [
+      {
+        "className": "Xakt6q_sidebarCol",
+        "left": 8,
+        "width": 56,
+        "right": 64
+      },
+      {
+        "className": "Xakt6q_centerCol",
+        "left": 64,
+        "width": 318,
+        "right": 382
+      }
+    ],
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": [],
+    "evidenceDirectory": "output/playwright/community-alpha/2312/82b020c16ac1c21434131b12897d4504fc91076b16ad71391c7817696725c751"
+  },
+  "cold": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-ds-dark-theme": "",
+        "data-dsh-great-wall-skin": "",
+        "data-dsh-great-wall-snow": ""
+      },
+      "base": "#faf9f629",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n雪岭长城\nGREAT WALL / SNOW PASS\n沉浸模式\n长城三境 · 03\nXIAOYAO × DSH\nLOCAL ONLY",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        },
+        {
+          "text": "沉浸模式",
+          "aria": null
+        }
+      ],
+      "newSessionButton": {
+        "color": "rgb(38, 48, 57)",
+        "background": "rgba(250, 249, 246, 0.96)"
+      },
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0
+    },
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": [],
+    "evidenceDirectory": "output/playwright/community-alpha/2312/82b020c16ac1c21434131b12897d4504fc91076b16ad71391c7817696725c751"
+  },
+  "coldProcessRestart": {
+    "before": {
+      "wrapper": 65398,
+      "listener": 65422,
+      "startedAt": "2026-09-06T00:18:14.469Z"
+    },
+    "after": {
+      "wrapper": 65728,
+      "listener": 65752,
+      "startedAt": "2026-09-06T00:18:29.101Z"
+    },
+    "portConfirmedClosed": true
+  },
+  "removed": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-ds-dark-theme": ""
+      },
+      "base": "#151517",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        }
+      ],
+      "newSessionButton": {
+        "color": "rgb(249, 250, 251)",
+        "background": "rgb(67, 69, 74)"
+      },
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0
+    },
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": [],
+    "evidenceDirectory": "output/playwright/community-alpha/2312/82b020c16ac1c21434131b12897d4504fc91076b16ad71391c7817696725c751"
+  },
+  "removal": {
+    "officialCliRemove": true,
+    "packageAbsent": true,
+    "skinAttributesAbsent": true,
+    "base": "#151517",
+    "process": {
+      "wrapper": 66028,
+      "listener": 66064,
+      "startedAt": "2026-09-06T00:18:39.579Z"
+    }
+  },
+  "status": "passed",
+  "sourceRepository": "147228/dsh-xiaoyao-skins",
+  "sourceRevision": "174f65d9135e932383a8f3a19fa522f16875a139",
+  "licenseExpression": "MIT AND CC-BY-NC-4.0",
+  "environment": {
+    "os": "macOS",
+    "architecture": "arm64",
+    "node": "24.15.0",
+    "browser": "Google Chrome 152.0.7977.76",
+    "installationPnpm": "11.7.0"
+  },
+  "limitations": [
+    "Executed on this macOS arm64 host with an isolated web profile and no model credentials. No Linux, Windows, other-browser, user-session or model-call coverage is claimed.",
+    "Light/dark checks use the browser system color-scheme setting. The skin artwork intentionally keeps its own visual character.",
+    "On a 390px screen, the built-in sidebar was collapsed before checking the main view and skin controls.",
+    "Focus/guide state resets according to the original plugin behavior; only skin activation and rendering are required to survive a process restart."
+  ],
+  "visualReview": {
+    "desktopLight": true,
+    "desktopDark": true,
+    "narrowControls": true,
+    "removedBaseline": true
+  },
+  "adaptation": {
+    "author": "DSH Themes contributors",
+    "sourcePath": "assets/alpha/xiaoyao/packages/great-wall-snow",
+    "license": "MIT AND CC-BY-NC-4.0",
+    "description": "DSH Themes Alpha CSS specificity and current sidebar/conversation/details layout selectors. Sky Lab adds a dark reading surface. Original code/art attribution and licenses retained."
+  },
+  "evidence": [
+    {
+      "path": "output/playwright/community-alpha/2312/82b020c16ac1c21434131b12897d4504fc91076b16ad71391c7817696725c751/cold.png",
+      "sha256": "e4097a2cf8acd82271cdf30e2994146a46c80f4da3d41c3cff9b3f9086d99e21",
+      "bytes": 750602
+    },
+    {
+      "path": "output/playwright/community-alpha/2312/82b020c16ac1c21434131b12897d4504fc91076b16ad71391c7817696725c751/dark.png",
+      "sha256": "50395415e7bf275fb51210c14aa76853fa17e1a56e6bc5a89d549e5300bb4e9c",
+      "bytes": 750600
+    },
+    {
+      "path": "output/playwright/community-alpha/2312/82b020c16ac1c21434131b12897d4504fc91076b16ad71391c7817696725c751/focus.png",
+      "sha256": "930f61ea2d689ecce0bf0c3dcf75c2824e89c032c7232cb3f038ca99e20587ec",
+      "bytes": 218803
+    },
+    {
+      "path": "output/playwright/community-alpha/2312/82b020c16ac1c21434131b12897d4504fc91076b16ad71391c7817696725c751/light.png",
+      "sha256": "6ac29e8f48d930c00dda0aa714948be2d06f8f42fe691b56b3b1884d290107e8",
+      "bytes": 750801
+    },
+    {
+      "path": "output/playwright/community-alpha/2312/82b020c16ac1c21434131b12897d4504fc91076b16ad71391c7817696725c751/narrow-final.png",
+      "sha256": "3422038a8bac1aa22e698035ab6a4a874ed2902760e2458be016fbba4e65fbb8",
+      "bytes": 236361
+    },
+    {
+      "path": "output/playwright/community-alpha/2312/82b020c16ac1c21434131b12897d4504fc91076b16ad71391c7817696725c751/removed.png",
+      "sha256": "55808054eb754e42f701eec53fe2e8984eb043e2a1b7c6d93d0e7d45ac6cbc07",
+      "bytes": 30163
+    }
+  ]
+}

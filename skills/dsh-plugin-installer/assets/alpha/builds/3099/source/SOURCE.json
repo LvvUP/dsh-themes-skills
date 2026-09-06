@@ -1,0 +1,22 @@
+{
+  "sourceRepository": "HuanLinOTO/dsh-plugin-mineru",
+  "sourceRevision": "67abfedd5e3bd63043bac62222f5fbdc3281dae7",
+  "files": {
+    "LICENSE": "6c9b694e984d6e7e59d769122ff926cdb320e86ce0ca37400aa61ce0754a88e0",
+    "README.md": "ffb71e1bec889520df669bb5bdffed7b30b421c7e6c1a37577450cdc67d49ebc",
+    "cordis.patch.yml": "8354aa60352e35295bbc0ab6e6f7039a90155efa469347d404854ff0149a9609",
+    "package.json": "118028197820a6c215a68ec52173250a21828b9c4e81738ea35bcbfa5863d285",
+    "src/client.ts": "cad8122a6489c56bceb88100f9c92f127c6eba4b24ff13abf74f09c5d10ad1eb",
+    "src/client/SettingsPage.module.css": "720b8f7424381247db14e2541f744c7cf17c882422366bd1d948b50070c03e54",
+    "src/client/SettingsPage.tsx": "c77a3f0d40df3f3a9c39bb79b3d0ac0659fabc23d261dc8ef13f0fcb206f6d39",
+    "src/client/dictionaries.ts": "084759fc63508d00cd53c46b5c5ecb951cdf619d6f2bdc98bab6a6e4ba621002",
+    "src/client/index.ts": "34301f89a724ed5d5f91d9b80ab2310482a1058ecd8bada0d91f4d7210ad67f6",
+    "src/client/locales.ts": "271c5cbbfaced63854313bf97cec4926780a1bc4aba31e813f8dbe4b1bed9923",
+    "src/css-modules.ts": "654943bade142b3aaef3e79a1b802336dc408588f7f6827afbbfff7ba3b4d735",
+    "src/index.ts": "d8067cb23a7bb8f3c2b24129ee0f05fc2024f80d3593dab26d8626a327c9a952",
+    "src/rpc.ts": "74f5a5320149057d42f2a886d5d52ff071626d69a735f544da26d9eaa92561dd",
+    "src/tools.ts": "4bb9d94d9e1c4e1b988f04d6bede4ab300601ee52402c7ecd2f1bc1742a327df",
+    "src/types.d.ts": "0d4584e171510bfd09f0c8d7b0fb043b7bc6f437f8c73e97e1d876d302503040",
+    "tsdown.config.ts": "46d94f5d83130957c57b50bb3277e87cfa502195f53f2fbdda77cbffb3ba1a1d"
+  }
+}

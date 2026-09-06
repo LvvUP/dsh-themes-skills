@@ -1,0 +1,2513 @@
+{
+  "schemaVersion": 1,
+  "dshVersion": "0.1.3-alpha.1",
+  "items": [
+    {
+      "catalogId": 1101,
+      "slug": "dsh-theme-pack-catppuccin-mocha",
+      "sourceRepository": "math-lrz/dsh-theme-pack",
+      "sourceRevision": "5a4cdbe9e6acc68f467be4af5458d2ea2e2b1616",
+      "packageName": "@dsh-themes-community/theme-pack-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+        "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/palettes",
+        "license": "MIT"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dsh-alpha-theme-pack-catppuccin-mocha",
+        "deselectRequests": [
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "path": "/api/dsh-community-palettes/theme-pack",
+          "body": {
+            "catalogId": 1101,
+            "base": "system"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact palette in the authenticated local session, then reload the client."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-palettes-runtime.json",
+        "receiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+        "runtimeReceipt": "references/alpha-palettes-runtime.json",
+        "runtimeReceiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353"
+      }
+    },
+    {
+      "catalogId": 1102,
+      "slug": "dsh-theme-pack-gruvbox-dark",
+      "sourceRepository": "math-lrz/dsh-theme-pack",
+      "sourceRevision": "5a4cdbe9e6acc68f467be4af5458d2ea2e2b1616",
+      "packageName": "@dsh-themes-community/theme-pack-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+        "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/palettes",
+        "license": "MIT"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dsh-alpha-theme-pack-gruvbox-dark",
+        "deselectRequests": [
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "path": "/api/dsh-community-palettes/theme-pack",
+          "body": {
+            "catalogId": 1102,
+            "base": "system"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact palette in the authenticated local session, then reload the client."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-palettes-runtime.json",
+        "receiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+        "runtimeReceipt": "references/alpha-palettes-runtime.json",
+        "runtimeReceiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353"
+      }
+    },
+    {
+      "catalogId": 1103,
+      "slug": "dsh-theme-pack-everforest",
+      "sourceRepository": "math-lrz/dsh-theme-pack",
+      "sourceRevision": "5a4cdbe9e6acc68f467be4af5458d2ea2e2b1616",
+      "packageName": "@dsh-themes-community/theme-pack-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+        "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/palettes",
+        "license": "MIT"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dsh-alpha-theme-pack-everforest",
+        "deselectRequests": [
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "path": "/api/dsh-community-palettes/theme-pack",
+          "body": {
+            "catalogId": 1103,
+            "base": "system"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact palette in the authenticated local session, then reload the client."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-palettes-runtime.json",
+        "receiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+        "runtimeReceipt": "references/alpha-palettes-runtime.json",
+        "runtimeReceiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353"
+      }
+    },
+    {
+      "catalogId": 1104,
+      "slug": "dsh-theme-pack-rose-pine",
+      "sourceRepository": "math-lrz/dsh-theme-pack",
+      "sourceRevision": "5a4cdbe9e6acc68f467be4af5458d2ea2e2b1616",
+      "packageName": "@dsh-themes-community/theme-pack-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+        "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/palettes",
+        "license": "MIT"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dsh-alpha-theme-pack-rose-pine",
+        "deselectRequests": [
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "path": "/api/dsh-community-palettes/theme-pack",
+          "body": {
+            "catalogId": 1104,
+            "base": "system"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact palette in the authenticated local session, then reload the client."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-palettes-runtime.json",
+        "receiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+        "runtimeReceipt": "references/alpha-palettes-runtime.json",
+        "runtimeReceiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353"
+      }
+    },
+    {
+      "catalogId": 1105,
+      "slug": "dsh-theme-pack-solarized-dark",
+      "sourceRepository": "math-lrz/dsh-theme-pack",
+      "sourceRevision": "5a4cdbe9e6acc68f467be4af5458d2ea2e2b1616",
+      "packageName": "@dsh-themes-community/theme-pack-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+        "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/palettes",
+        "license": "MIT"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dsh-alpha-theme-pack-solarized-dark",
+        "deselectRequests": [
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "path": "/api/dsh-community-palettes/theme-pack",
+          "body": {
+            "catalogId": 1105,
+            "base": "system"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact palette in the authenticated local session, then reload the client."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-palettes-runtime.json",
+        "receiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+        "runtimeReceipt": "references/alpha-palettes-runtime.json",
+        "runtimeReceiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353"
+      }
+    },
+    {
+      "catalogId": 1106,
+      "slug": "dsh-theme-pack-kanagawa",
+      "sourceRepository": "math-lrz/dsh-theme-pack",
+      "sourceRevision": "5a4cdbe9e6acc68f467be4af5458d2ea2e2b1616",
+      "packageName": "@dsh-themes-community/theme-pack-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+        "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/palettes",
+        "license": "MIT"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dsh-alpha-theme-pack-kanagawa",
+        "deselectRequests": [
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "path": "/api/dsh-community-palettes/theme-pack",
+          "body": {
+            "catalogId": 1106,
+            "base": "system"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact palette in the authenticated local session, then reload the client."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-palettes-runtime.json",
+        "receiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+        "runtimeReceipt": "references/alpha-palettes-runtime.json",
+        "runtimeReceiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353"
+      }
+    },
+    {
+      "catalogId": 1107,
+      "slug": "dsh-theme-pack-tokyo-night",
+      "sourceRepository": "math-lrz/dsh-theme-pack",
+      "sourceRevision": "5a4cdbe9e6acc68f467be4af5458d2ea2e2b1616",
+      "packageName": "@dsh-themes-community/theme-pack-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+        "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/palettes",
+        "license": "MIT"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dsh-alpha-theme-pack-tokyo-night",
+        "deselectRequests": [
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "path": "/api/dsh-community-palettes/theme-pack",
+          "body": {
+            "catalogId": 1107,
+            "base": "system"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact palette in the authenticated local session, then reload the client."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-palettes-runtime.json",
+        "receiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+        "runtimeReceipt": "references/alpha-palettes-runtime.json",
+        "runtimeReceiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353"
+      }
+    },
+    {
+      "catalogId": 1108,
+      "slug": "dsh-theme-pack-tokyo-storm",
+      "sourceRepository": "math-lrz/dsh-theme-pack",
+      "sourceRevision": "5a4cdbe9e6acc68f467be4af5458d2ea2e2b1616",
+      "packageName": "@dsh-themes-community/theme-pack-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+        "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/palettes",
+        "license": "MIT"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dsh-alpha-theme-pack-tokyo-storm",
+        "deselectRequests": [
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "path": "/api/dsh-community-palettes/theme-pack",
+          "body": {
+            "catalogId": 1108,
+            "base": "system"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact palette in the authenticated local session, then reload the client."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-palettes-runtime.json",
+        "receiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+        "runtimeReceipt": "references/alpha-palettes-runtime.json",
+        "runtimeReceiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353"
+      }
+    },
+    {
+      "catalogId": 1109,
+      "slug": "dsh-theme-pack-night-owl",
+      "sourceRepository": "math-lrz/dsh-theme-pack",
+      "sourceRevision": "5a4cdbe9e6acc68f467be4af5458d2ea2e2b1616",
+      "packageName": "@dsh-themes-community/theme-pack-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+        "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/palettes",
+        "license": "MIT"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dsh-alpha-theme-pack-night-owl",
+        "deselectRequests": [
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "path": "/api/dsh-community-palettes/theme-pack",
+          "body": {
+            "catalogId": 1109,
+            "base": "system"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact palette in the authenticated local session, then reload the client."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-palettes-runtime.json",
+        "receiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+        "runtimeReceipt": "references/alpha-palettes-runtime.json",
+        "runtimeReceiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353"
+      }
+    },
+    {
+      "catalogId": 1110,
+      "slug": "dsh-theme-pack-nord",
+      "sourceRepository": "math-lrz/dsh-theme-pack",
+      "sourceRevision": "5a4cdbe9e6acc68f467be4af5458d2ea2e2b1616",
+      "packageName": "@dsh-themes-community/theme-pack-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+        "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/palettes",
+        "license": "MIT"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dsh-alpha-theme-pack-nord",
+        "deselectRequests": [
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "path": "/api/dsh-community-palettes/theme-pack",
+          "body": {
+            "catalogId": 1110,
+            "base": "system"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact palette in the authenticated local session, then reload the client."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-palettes-runtime.json",
+        "receiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+        "runtimeReceipt": "references/alpha-palettes-runtime.json",
+        "runtimeReceiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353"
+      }
+    },
+    {
+      "catalogId": 1111,
+      "slug": "dsh-theme-pack-dracula",
+      "sourceRepository": "math-lrz/dsh-theme-pack",
+      "sourceRevision": "5a4cdbe9e6acc68f467be4af5458d2ea2e2b1616",
+      "packageName": "@dsh-themes-community/theme-pack-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+        "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/palettes",
+        "license": "MIT"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dsh-alpha-theme-pack-dracula",
+        "deselectRequests": [
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "path": "/api/dsh-community-palettes/theme-pack",
+          "body": {
+            "catalogId": 1111,
+            "base": "system"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact palette in the authenticated local session, then reload the client."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-palettes-runtime.json",
+        "receiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+        "runtimeReceipt": "references/alpha-palettes-runtime.json",
+        "runtimeReceiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353"
+      }
+    },
+    {
+      "catalogId": 1112,
+      "slug": "dsh-theme-pack-one-dark",
+      "sourceRepository": "math-lrz/dsh-theme-pack",
+      "sourceRevision": "5a4cdbe9e6acc68f467be4af5458d2ea2e2b1616",
+      "packageName": "@dsh-themes-community/theme-pack-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+        "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/palettes",
+        "license": "MIT"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dsh-alpha-theme-pack-one-dark",
+        "deselectRequests": [
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "path": "/api/dsh-community-palettes/theme-pack",
+          "body": {
+            "catalogId": 1112,
+            "base": "system"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact palette in the authenticated local session, then reload the client."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-palettes-runtime.json",
+        "receiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+        "runtimeReceipt": "references/alpha-palettes-runtime.json",
+        "runtimeReceiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353"
+      }
+    },
+    {
+      "catalogId": 1201,
+      "slug": "catppuccin-dsh-theme",
+      "sourceRepository": "zhijun-dai/Catppuccin-dsh-theme",
+      "sourceRevision": "9885d3e7ee93ad4c972e92be4b6f301105e73eb4",
+      "packageName": "@dsh-themes-community/catppuccin-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/4cd4f8f04902e836a3596238984426e604b1878334a382a4e3079fdea4b29159.tgz",
+        "sha256": "4cd4f8f04902e836a3596238984426e604b1878334a382a4e3079fdea4b29159"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/palettes",
+        "license": "MIT"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dsh-alpha-catppuccin-catppuccin-latte",
+        "deselectRequests": [
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/theme-pack",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "path": "/api/dsh-community-palettes/catppuccin",
+          "body": {
+            "selection": "dsh-alpha-catppuccin-catppuccin-latte",
+            "base": "system"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact palette in the authenticated local session, then reload the client."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-palettes-runtime.json",
+        "receiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+        "runtimeReceipt": "references/alpha-palettes-runtime.json",
+        "runtimeReceiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353"
+      }
+    },
+    {
+      "catalogId": 1202,
+      "slug": "solarized-dsh-theme",
+      "sourceRepository": "zhijun-dai/Solarized-dsh-theme",
+      "sourceRevision": "6b0614e53a4314c1705967b7e3c437b64dee64f2",
+      "packageName": "@dsh-themes-community/solarized-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/1ade7da6d33025d8fc141b89940c122c35af611e2f0708778b64842fa9e2eeb7.tgz",
+        "sha256": "1ade7da6d33025d8fc141b89940c122c35af611e2f0708778b64842fa9e2eeb7"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/palettes",
+        "license": "MIT"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dsh-alpha-solarized-solarized-dark",
+        "deselectRequests": [
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/theme-pack",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "path": "/api/dsh-community-palettes/solarized",
+          "body": {
+            "selection": "dsh-alpha-solarized-solarized-dark",
+            "base": "system"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact palette in the authenticated local session, then reload the client."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-palettes-runtime.json",
+        "receiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+        "runtimeReceipt": "references/alpha-palettes-runtime.json",
+        "runtimeReceiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353"
+      }
+    },
+    {
+      "catalogId": 1203,
+      "slug": "dsh-premium-themes",
+      "sourceRepository": "xiaoyanzi191/dsh-premium-themes",
+      "sourceRevision": "7e485999e45711396ba08806a40c9bfe3c650103",
+      "packageName": "@dsh-themes-community/premium-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/2fa67a45ddb273e2c52ad02988d4f0251ad5f6ff7304d28e16a24be2a44174a7.tgz",
+        "sha256": "2fa67a45ddb273e2c52ad02988d4f0251ad5f6ff7304d28e16a24be2a44174a7"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/palettes",
+        "license": "MIT"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dsh-alpha-premium-tokyo-night",
+        "deselectRequests": [
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/theme-pack",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          },
+          {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "allowMissing": true
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "path": "/api/dsh-community-palettes/premium/palette",
+          "body": {
+            "palette": "dsh-alpha-premium-tokyo-night",
+            "base": "system"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact palette in the authenticated local session, then reload the client."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-palettes-runtime.json",
+        "receiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+        "runtimeReceipt": "references/alpha-palettes-runtime.json",
+        "runtimeReceiptSha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353"
+      }
+    },
+    {
+      "catalogId": 2101,
+      "slug": "dsh-deep-whale-maid-atelier",
+      "skinId": "maid-atelier",
+      "sourceRepository": "Small-tailqwq/dsh-deep-whale",
+      "sourceRevision": "0a3d03251d1e88a08de79e27fb884ed9200913ad",
+      "sourceSubdir": "maid-atelier",
+      "packageName": "@dsh-themes-community/skin-center-alpha",
+      "packageVersion": "0.2.5-alpha.2",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924.tgz",
+        "sha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+        "bytes": 59023874
+      },
+      "upstreamArtifact": {
+        "repository": "zhu1090093659/dsh-web-ui",
+        "revision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+        "packageName": "@linxin666/dsh-client-ui-skin-center",
+        "version": "0.2.5",
+        "url": "https://registry.npmjs.org/@linxin666/dsh-client-ui-skin-center/-/dsh-client-ui-skin-center-0.2.5.tgz",
+        "sha256": "5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499",
+        "sizeBytes": 58988084
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/skin-center",
+        "license": "Original package Apache-2.0 metadata / BSD-3-Clause LICENSE conflict retained; per-skin notices remain authoritative.",
+        "sourceProvenanceSha256": "2f25d0d3333bbda986b0367cd65e0cdb0a5de60e24439abe0e6232e8ff9601e5"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "maid-atelier",
+        "request": {
+          "method": "POST",
+          "path": "/api/skin-center/v2/active",
+          "body": {
+            "active": "maid-atelier"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact skin ID in the authenticated local session, then reload the client.",
+        "deselectRequests": [
+          {
+            "path": "/api/dsh-community-palettes/theme-pack",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          }
+        ]
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-skin-center-runtime.json",
+        "receiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a",
+        "runtimeReceipt": "references/alpha-skin-center-runtime.json",
+        "runtimeReceiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a"
+      }
+    },
+    {
+      "catalogId": 2201,
+      "slug": "dsh-web-ui-blue-fantasy",
+      "skinId": "blue-fantasy",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/blue-fantasy",
+      "packageName": "@dsh-themes-community/skin-center-alpha",
+      "packageVersion": "0.2.5-alpha.2",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924.tgz",
+        "sha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+        "bytes": 59023874
+      },
+      "upstreamArtifact": {
+        "repository": "zhu1090093659/dsh-web-ui",
+        "revision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+        "packageName": "@linxin666/dsh-client-ui-skin-center",
+        "version": "0.2.5",
+        "url": "https://registry.npmjs.org/@linxin666/dsh-client-ui-skin-center/-/dsh-client-ui-skin-center-0.2.5.tgz",
+        "sha256": "5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499",
+        "sizeBytes": 58988084
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/skin-center",
+        "license": "Original package Apache-2.0 metadata / BSD-3-Clause LICENSE conflict retained; per-skin notices remain authoritative.",
+        "sourceProvenanceSha256": "2f25d0d3333bbda986b0367cd65e0cdb0a5de60e24439abe0e6232e8ff9601e5"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "blue-fantasy",
+        "request": {
+          "method": "POST",
+          "path": "/api/skin-center/v2/active",
+          "body": {
+            "active": "blue-fantasy"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact skin ID in the authenticated local session, then reload the client.",
+        "deselectRequests": [
+          {
+            "path": "/api/dsh-community-palettes/theme-pack",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          }
+        ]
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-skin-center-runtime.json",
+        "receiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a",
+        "runtimeReceipt": "references/alpha-skin-center-runtime.json",
+        "runtimeReceiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a"
+      }
+    },
+    {
+      "catalogId": 2202,
+      "slug": "dsh-web-ui-dragon-heir",
+      "skinId": "dragon-heir",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/dragon-heir",
+      "packageName": "@dsh-themes-community/skin-center-alpha",
+      "packageVersion": "0.2.5-alpha.2",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924.tgz",
+        "sha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+        "bytes": 59023874
+      },
+      "upstreamArtifact": {
+        "repository": "zhu1090093659/dsh-web-ui",
+        "revision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+        "packageName": "@linxin666/dsh-client-ui-skin-center",
+        "version": "0.2.5",
+        "url": "https://registry.npmjs.org/@linxin666/dsh-client-ui-skin-center/-/dsh-client-ui-skin-center-0.2.5.tgz",
+        "sha256": "5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499",
+        "sizeBytes": 58988084
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/skin-center",
+        "license": "Original package Apache-2.0 metadata / BSD-3-Clause LICENSE conflict retained; per-skin notices remain authoritative.",
+        "sourceProvenanceSha256": "2f25d0d3333bbda986b0367cd65e0cdb0a5de60e24439abe0e6232e8ff9601e5"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "dragon-heir",
+        "request": {
+          "method": "POST",
+          "path": "/api/skin-center/v2/active",
+          "body": {
+            "active": "dragon-heir"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact skin ID in the authenticated local session, then reload the client.",
+        "deselectRequests": [
+          {
+            "path": "/api/dsh-community-palettes/theme-pack",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          }
+        ]
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-skin-center-runtime.json",
+        "receiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a",
+        "runtimeReceipt": "references/alpha-skin-center-runtime.json",
+        "runtimeReceiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a"
+      }
+    },
+    {
+      "catalogId": 2203,
+      "slug": "dsh-web-ui-harbor",
+      "skinId": "harbor",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/harbor",
+      "packageName": "@dsh-themes-community/skin-center-alpha",
+      "packageVersion": "0.2.5-alpha.2",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924.tgz",
+        "sha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+        "bytes": 59023874
+      },
+      "upstreamArtifact": {
+        "repository": "zhu1090093659/dsh-web-ui",
+        "revision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+        "packageName": "@linxin666/dsh-client-ui-skin-center",
+        "version": "0.2.5",
+        "url": "https://registry.npmjs.org/@linxin666/dsh-client-ui-skin-center/-/dsh-client-ui-skin-center-0.2.5.tgz",
+        "sha256": "5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499",
+        "sizeBytes": 58988084
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/skin-center",
+        "license": "Original package Apache-2.0 metadata / BSD-3-Clause LICENSE conflict retained; per-skin notices remain authoritative.",
+        "sourceProvenanceSha256": "2f25d0d3333bbda986b0367cd65e0cdb0a5de60e24439abe0e6232e8ff9601e5"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "harbor",
+        "request": {
+          "method": "POST",
+          "path": "/api/skin-center/v2/active",
+          "body": {
+            "active": "harbor"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact skin ID in the authenticated local session, then reload the client.",
+        "deselectRequests": [
+          {
+            "path": "/api/dsh-community-palettes/theme-pack",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          }
+        ]
+      },
+      "appearance": {
+        "fixedDark": true,
+        "note": "Harbor and Minecraft retain their upstream fixed dark appearance while the official light/dark preference changes. The other nine use mode-dependent palettes."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-skin-center-runtime.json",
+        "receiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a",
+        "runtimeReceipt": "references/alpha-skin-center-runtime.json",
+        "runtimeReceiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a"
+      }
+    },
+    {
+      "catalogId": 2204,
+      "slug": "dsh-web-ui-miku",
+      "skinId": "miku",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/miku",
+      "packageName": "@dsh-themes-community/skin-center-alpha",
+      "packageVersion": "0.2.5-alpha.2",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924.tgz",
+        "sha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+        "bytes": 59023874
+      },
+      "upstreamArtifact": {
+        "repository": "zhu1090093659/dsh-web-ui",
+        "revision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+        "packageName": "@linxin666/dsh-client-ui-skin-center",
+        "version": "0.2.5",
+        "url": "https://registry.npmjs.org/@linxin666/dsh-client-ui-skin-center/-/dsh-client-ui-skin-center-0.2.5.tgz",
+        "sha256": "5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499",
+        "sizeBytes": 58988084
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/skin-center",
+        "license": "Original package Apache-2.0 metadata / BSD-3-Clause LICENSE conflict retained; per-skin notices remain authoritative.",
+        "sourceProvenanceSha256": "2f25d0d3333bbda986b0367cd65e0cdb0a5de60e24439abe0e6232e8ff9601e5"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "miku",
+        "request": {
+          "method": "POST",
+          "path": "/api/skin-center/v2/active",
+          "body": {
+            "active": "miku"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact skin ID in the authenticated local session, then reload the client.",
+        "deselectRequests": [
+          {
+            "path": "/api/dsh-community-palettes/theme-pack",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          }
+        ]
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-skin-center-runtime.json",
+        "receiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a",
+        "runtimeReceipt": "references/alpha-skin-center-runtime.json",
+        "runtimeReceiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a"
+      }
+    },
+    {
+      "catalogId": 2205,
+      "slug": "dsh-web-ui-minecraft",
+      "skinId": "minecraft",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/minecraft",
+      "packageName": "@dsh-themes-community/skin-center-alpha",
+      "packageVersion": "0.2.5-alpha.2",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924.tgz",
+        "sha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+        "bytes": 59023874
+      },
+      "upstreamArtifact": {
+        "repository": "zhu1090093659/dsh-web-ui",
+        "revision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+        "packageName": "@linxin666/dsh-client-ui-skin-center",
+        "version": "0.2.5",
+        "url": "https://registry.npmjs.org/@linxin666/dsh-client-ui-skin-center/-/dsh-client-ui-skin-center-0.2.5.tgz",
+        "sha256": "5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499",
+        "sizeBytes": 58988084
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/skin-center",
+        "license": "Original package Apache-2.0 metadata / BSD-3-Clause LICENSE conflict retained; per-skin notices remain authoritative.",
+        "sourceProvenanceSha256": "2f25d0d3333bbda986b0367cd65e0cdb0a5de60e24439abe0e6232e8ff9601e5"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "minecraft",
+        "request": {
+          "method": "POST",
+          "path": "/api/skin-center/v2/active",
+          "body": {
+            "active": "minecraft"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact skin ID in the authenticated local session, then reload the client.",
+        "deselectRequests": [
+          {
+            "path": "/api/dsh-community-palettes/theme-pack",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          }
+        ]
+      },
+      "appearance": {
+        "fixedDark": true,
+        "note": "Harbor and Minecraft retain their upstream fixed dark appearance while the official light/dark preference changes. The other nine use mode-dependent palettes."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-skin-center-runtime.json",
+        "receiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a",
+        "runtimeReceipt": "references/alpha-skin-center-runtime.json",
+        "runtimeReceiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a"
+      }
+    },
+    {
+      "catalogId": 2206,
+      "slug": "dsh-web-ui-qq98",
+      "skinId": "qq98",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "a9b915cee0f12f2fd13a6575bc8feaa9ee09d6ed",
+      "sourceSubdir": "packages/skins/qq98",
+      "packageName": "@dsh-themes-community/skin-center-alpha",
+      "packageVersion": "0.2.5-alpha.2",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924.tgz",
+        "sha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+        "bytes": 59023874
+      },
+      "upstreamArtifact": {
+        "repository": "zhu1090093659/dsh-web-ui",
+        "revision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+        "packageName": "@linxin666/dsh-client-ui-skin-center",
+        "version": "0.2.5",
+        "url": "https://registry.npmjs.org/@linxin666/dsh-client-ui-skin-center/-/dsh-client-ui-skin-center-0.2.5.tgz",
+        "sha256": "5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499",
+        "sizeBytes": 58988084
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/skin-center",
+        "license": "Original package Apache-2.0 metadata / BSD-3-Clause LICENSE conflict retained; per-skin notices remain authoritative.",
+        "sourceProvenanceSha256": "2f25d0d3333bbda986b0367cd65e0cdb0a5de60e24439abe0e6232e8ff9601e5"
+      },
+      "companion": {
+        "kind": "bundled-user-skin",
+        "skinId": "qq98",
+        "sourcePath": "assets/alpha/skin-center/user-skins/qq98",
+        "version": "0.2.5-dsh-themes.2-alpha.1",
+        "files": [
+          {
+            "path": "LICENSE",
+            "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+            "bytes": 1521
+          },
+          {
+            "path": "NOTICE",
+            "sha256": "ad78fd2e39dc3be9e2d9eb0ee8a4f5c1c02385633c1a4e3e7ad35e21c184a350",
+            "bytes": 975
+          },
+          {
+            "path": "PROVENANCE.json",
+            "sha256": "000613dbdcdc99f0ef2f6ef8012a15ec445a6173d319d654704449a213eff684",
+            "bytes": 764
+          },
+          {
+            "path": "patches.css",
+            "sha256": "d62653ea7b5061e9f91c70069eb5edf93ba92e179fd8ba3a50dda75a51097833",
+            "bytes": 34823
+          },
+          {
+            "path": "skin.css",
+            "sha256": "6e414c9f689dbfa978001f8d332237e64b22fedd51da16e2b20a48f3550937a2",
+            "bytes": 506
+          },
+          {
+            "path": "skin.json",
+            "sha256": "53e20c335d0fef3e802281e2636e35719a2c39c19433bb42363480ba24103140",
+            "bytes": 1327
+          }
+        ]
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "qq98",
+        "request": {
+          "method": "POST",
+          "path": "/api/skin-center/v2/active",
+          "body": {
+            "active": "qq98"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact skin ID in the authenticated local session, then reload the client.",
+        "deselectRequests": [
+          {
+            "path": "/api/dsh-community-palettes/theme-pack",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          }
+        ]
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-skin-center-runtime.json",
+        "receiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a",
+        "runtimeReceipt": "references/alpha-skin-center-runtime.json",
+        "runtimeReceiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a",
+        "companionRecoveryReceipt": "references/alpha-skin-center-companion-recovery.json",
+        "companionRecoveryReceiptSha256": "f8605084ff284e34b81703b7ceeec3a0ae39a87cc4f049299f1ba4136787dbec"
+      }
+    },
+    {
+      "catalogId": 2207,
+      "slug": "dsh-web-ui-ths",
+      "skinId": "ths",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "a9b915cee0f12f2fd13a6575bc8feaa9ee09d6ed",
+      "sourceSubdir": "packages/skins/ths",
+      "packageName": "@dsh-themes-community/skin-center-alpha",
+      "packageVersion": "0.2.5-alpha.2",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924.tgz",
+        "sha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+        "bytes": 59023874
+      },
+      "upstreamArtifact": {
+        "repository": "zhu1090093659/dsh-web-ui",
+        "revision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+        "packageName": "@linxin666/dsh-client-ui-skin-center",
+        "version": "0.2.5",
+        "url": "https://registry.npmjs.org/@linxin666/dsh-client-ui-skin-center/-/dsh-client-ui-skin-center-0.2.5.tgz",
+        "sha256": "5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499",
+        "sizeBytes": 58988084
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/skin-center",
+        "license": "Original package Apache-2.0 metadata / BSD-3-Clause LICENSE conflict retained; per-skin notices remain authoritative.",
+        "sourceProvenanceSha256": "2f25d0d3333bbda986b0367cd65e0cdb0a5de60e24439abe0e6232e8ff9601e5"
+      },
+      "companion": {
+        "kind": "bundled-user-skin",
+        "skinId": "ths",
+        "sourcePath": "assets/alpha/skin-center/user-skins/ths",
+        "version": "0.2.5-dsh-themes.2-alpha.1",
+        "files": [
+          {
+            "path": "LICENSE",
+            "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+            "bytes": 1521
+          },
+          {
+            "path": "NOTICE",
+            "sha256": "a02b7b8074d87aa8ba6e1a606fc7dd841773729dc66349fd688016bc19615850",
+            "bytes": 974
+          },
+          {
+            "path": "PROVENANCE.json",
+            "sha256": "68ebcc6bbfb3c8daf2973491fede2d85719d788703037b2510f71ffab7d4c917",
+            "bytes": 762
+          },
+          {
+            "path": "patches.css",
+            "sha256": "5bec645eac154a86a8439b44df7301e55990937562e1a8715667a8392334f664",
+            "bytes": 31056
+          },
+          {
+            "path": "skin.css",
+            "sha256": "b5cb4887e98ada90f28b2c90fccd23a2c7416a8cae0acca71a3d8268b08af7e2",
+            "bytes": 506
+          },
+          {
+            "path": "skin.json",
+            "sha256": "54cf95283d617e0f853a56db99182c38b34e83173af79ba8540772d3bf15c08b",
+            "bytes": 1355
+          }
+        ]
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "ths",
+        "request": {
+          "method": "POST",
+          "path": "/api/skin-center/v2/active",
+          "body": {
+            "active": "ths"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact skin ID in the authenticated local session, then reload the client.",
+        "deselectRequests": [
+          {
+            "path": "/api/dsh-community-palettes/theme-pack",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          }
+        ]
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-skin-center-runtime.json",
+        "receiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a",
+        "runtimeReceipt": "references/alpha-skin-center-runtime.json",
+        "runtimeReceiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a",
+        "companionRecoveryReceipt": "references/alpha-skin-center-companion-recovery.json",
+        "companionRecoveryReceiptSha256": "f8605084ff284e34b81703b7ceeec3a0ae39a87cc4f049299f1ba4136787dbec"
+      }
+    },
+    {
+      "catalogId": 2208,
+      "slug": "dsh-web-ui-trading",
+      "skinId": "trading",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/trading",
+      "packageName": "@dsh-themes-community/skin-center-alpha",
+      "packageVersion": "0.2.5-alpha.2",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924.tgz",
+        "sha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+        "bytes": 59023874
+      },
+      "upstreamArtifact": {
+        "repository": "zhu1090093659/dsh-web-ui",
+        "revision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+        "packageName": "@linxin666/dsh-client-ui-skin-center",
+        "version": "0.2.5",
+        "url": "https://registry.npmjs.org/@linxin666/dsh-client-ui-skin-center/-/dsh-client-ui-skin-center-0.2.5.tgz",
+        "sha256": "5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499",
+        "sizeBytes": 58988084
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/skin-center",
+        "license": "Original package Apache-2.0 metadata / BSD-3-Clause LICENSE conflict retained; per-skin notices remain authoritative.",
+        "sourceProvenanceSha256": "2f25d0d3333bbda986b0367cd65e0cdb0a5de60e24439abe0e6232e8ff9601e5"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "trading",
+        "request": {
+          "method": "POST",
+          "path": "/api/skin-center/v2/active",
+          "body": {
+            "active": "trading"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact skin ID in the authenticated local session, then reload the client.",
+        "deselectRequests": [
+          {
+            "path": "/api/dsh-community-palettes/theme-pack",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          }
+        ]
+      },
+      "runtimeDisclosure": {
+        "catalogId": 2208,
+        "optionalMissingPlugin": "dsh-ticker",
+        "path": "/plugins/dsh-ticker/api/settings",
+        "status": 404,
+        "observedExternalOrigins": [
+          "https://qt.gtimg.cn",
+          "https://api.binance.com",
+          "https://api.frankfurter.dev"
+        ],
+        "unobservedDeclaredFallbacks": [
+          "https://data-api.binance.vision",
+          "https://api.frankfurter.app"
+        ],
+        "quoteAccuracyVerified": false,
+        "titlebarTapeStatusbarVisible": true,
+        "chromeRemovedOnSwitchAway": true
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-skin-center-runtime.json",
+        "receiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a",
+        "runtimeReceipt": "references/alpha-skin-center-runtime.json",
+        "runtimeReceiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a"
+      }
+    },
+    {
+      "catalogId": 2209,
+      "slug": "dsh-web-ui-whale-song",
+      "skinId": "whale-song",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/whale-song",
+      "packageName": "@dsh-themes-community/skin-center-alpha",
+      "packageVersion": "0.2.5-alpha.2",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924.tgz",
+        "sha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+        "bytes": 59023874
+      },
+      "upstreamArtifact": {
+        "repository": "zhu1090093659/dsh-web-ui",
+        "revision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+        "packageName": "@linxin666/dsh-client-ui-skin-center",
+        "version": "0.2.5",
+        "url": "https://registry.npmjs.org/@linxin666/dsh-client-ui-skin-center/-/dsh-client-ui-skin-center-0.2.5.tgz",
+        "sha256": "5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499",
+        "sizeBytes": 58988084
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/skin-center",
+        "license": "Original package Apache-2.0 metadata / BSD-3-Clause LICENSE conflict retained; per-skin notices remain authoritative.",
+        "sourceProvenanceSha256": "2f25d0d3333bbda986b0367cd65e0cdb0a5de60e24439abe0e6232e8ff9601e5"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "whale-song",
+        "request": {
+          "method": "POST",
+          "path": "/api/skin-center/v2/active",
+          "body": {
+            "active": "whale-song"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact skin ID in the authenticated local session, then reload the client.",
+        "deselectRequests": [
+          {
+            "path": "/api/dsh-community-palettes/theme-pack",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          }
+        ]
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-skin-center-runtime.json",
+        "receiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a",
+        "runtimeReceipt": "references/alpha-skin-center-runtime.json",
+        "runtimeReceiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a"
+      }
+    },
+    {
+      "catalogId": 2210,
+      "slug": "dsh-web-ui-xp",
+      "skinId": "xp",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/xp",
+      "packageName": "@dsh-themes-community/skin-center-alpha",
+      "packageVersion": "0.2.5-alpha.2",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924.tgz",
+        "sha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+        "bytes": 59023874
+      },
+      "upstreamArtifact": {
+        "repository": "zhu1090093659/dsh-web-ui",
+        "revision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+        "packageName": "@linxin666/dsh-client-ui-skin-center",
+        "version": "0.2.5",
+        "url": "https://registry.npmjs.org/@linxin666/dsh-client-ui-skin-center/-/dsh-client-ui-skin-center-0.2.5.tgz",
+        "sha256": "5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499",
+        "sizeBytes": 58988084
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/skin-center",
+        "license": "Original package Apache-2.0 metadata / BSD-3-Clause LICENSE conflict retained; per-skin notices remain authoritative.",
+        "sourceProvenanceSha256": "2f25d0d3333bbda986b0367cd65e0cdb0a5de60e24439abe0e6232e8ff9601e5"
+      },
+      "activation": {
+        "kind": "http",
+        "themeId": "xp",
+        "request": {
+          "method": "POST",
+          "path": "/api/skin-center/v2/active",
+          "body": {
+            "active": "xp"
+          }
+        },
+        "restartRequired": true,
+        "description": "Save the exact skin ID in the authenticated local session, then reload the client.",
+        "deselectRequests": [
+          {
+            "path": "/api/dsh-community-palettes/theme-pack",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/catppuccin",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/solarized",
+            "body": {
+              "selection": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          },
+          {
+            "path": "/api/dsh-community-palettes/premium/palette",
+            "body": {
+              "palette": "off",
+              "base": "system"
+            },
+            "method": "POST",
+            "allowMissing": true
+          }
+        ]
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "receiptPath": "references/alpha-skin-center-runtime.json",
+        "receiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a",
+        "runtimeReceipt": "references/alpha-skin-center-runtime.json",
+        "runtimeReceiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a"
+      }
+    },
+    {
+      "catalogId": 2301,
+      "slug": "open-sea-skin",
+      "sourceRepository": "d-dev0101/open-sea-skin",
+      "sourceRevision": "2437d80a96de4124c54fbe89872fa7090103f025",
+      "packageName": "@dsh-themes/community-open-sea-skin",
+      "packageVersion": "1.2.1-dsh-alpha.1",
+      "profile": "web",
+      "activation": {
+        "kind": "plugin-controls",
+        "description": "Use the installed skin’s appearance controls."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "runtimeReceipt": "references/alpha-community-2301-runtime.json",
+        "runtimeReceiptSha256": "24fc7160e3821a38c1c8dbc50cdea5eecf3fd3b35b86d026128a1ecb235595c1"
+      },
+      "artifact": {
+        "path": "assets/alpha/artifacts/bb6ca0d2b0ed0ff1f627c1c584c271b42d65fbfd6a816885a8e8483ddccb2768.tgz",
+        "sha256": "bb6ca0d2b0ed0ff1f627c1c584c271b42d65fbfd6a816885a8e8483ddccb2768"
+      },
+      "adaptation": {
+        "author": "DSH Themes contributors",
+        "sourcePath": "assets/alpha/community-packages/open-sea-skin",
+        "license": "MIT",
+        "description": "DSH Themes distribution metadata and ModuleLoader package identity only. All 21 runtime/license/notice files exactly match the declared source revision; manifest and README taken from that same revision. WebGPU behavior must pass actual runtime verification."
+      }
+    },
+    {
+      "catalogId": 2302,
+      "slug": "dsh-dream-skin",
+      "sourceRepository": "RevolutionLA/dsh-dream-skin",
+      "sourceRevision": "7334b77169cc3ffbfc7f052c7c883ae33b2f9446",
+      "packageName": "@dsh-themes/community-dsh-dream-skin",
+      "packageVersion": "0.4.1-dsh-alpha.1",
+      "profile": "web",
+      "activation": {
+        "kind": "plugin-controls",
+        "description": "Use the installed skin’s appearance controls."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "runtimeReceipt": "references/alpha-community-2302-runtime.json",
+        "runtimeReceiptSha256": "1cda782bd56fdf291956cc1f6d7d9c2eaa1352a5776cb74adaf9e88db6d7b811"
+      },
+      "artifact": {
+        "path": "assets/alpha/artifacts/828f9e4f2de142b29bc009a2edc8f8a7d2ffe1162628b7e98dca735cb36f193c.tgz",
+        "sha256": "828f9e4f2de142b29bc009a2edc8f8a7d2ffe1162628b7e98dca735cb36f193c"
+      },
+      "adaptation": {
+        "author": "DSH Themes contributors",
+        "sourcePath": "assets/alpha/community-packages/dsh-dream-skin",
+        "license": "MIT",
+        "description": "DSH Themes Alpha module ID and profile metadata; legacy defineStore import now uses the official shared client-store module. Original feature implementation, source coordinate and license retained."
+      }
+    },
+    {
+      "catalogId": 2303,
+      "slug": "dsh-scenery-background",
+      "sourceRepository": "soslowsnail/dsh-scenery-background",
+      "sourceRevision": "05620f7d7167735a8057cc1195d6fa283fc14ae5",
+      "packageName": "@dsh-themes/community-dsh-scenery-background",
+      "packageVersion": "1.0.0-dsh-alpha.1",
+      "profile": "web",
+      "activation": {
+        "kind": "plugin-controls",
+        "description": "Use the installed skin’s appearance controls."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "runtimeReceipt": "references/alpha-community-2303-runtime.json",
+        "runtimeReceiptSha256": "33688e9b4008014cb933f6f1296f043b4e0adcf23c504132260e41568dc2065d"
+      },
+      "artifact": {
+        "path": "assets/alpha/artifacts/ab289379fdc126e6b8748ff75b2c5de9ec547ba8ddbccf412c563b8abc3fc218.tgz",
+        "sha256": "ab289379fdc126e6b8748ff75b2c5de9ec547ba8ddbccf412c563b8abc3fc218"
+      },
+      "adaptation": {
+        "author": "DSH Themes contributors",
+        "sourcePath": "assets/alpha/community-packages/dsh-scenery-background",
+        "license": "MIT",
+        "description": "DSH Themes Alpha package metadata and resilient layout selectors; original scenery controls and Unsplash attribution retained."
+      }
+    },
+    {
+      "catalogId": 2304,
+      "slug": "dsh-skin-community",
+      "sourceRepository": "KinGao294/dsh-skin",
+      "sourceRevision": "0a571a27adcc5f780b7b72386c9c294243eec5b3",
+      "packageName": "@dsh-themes/community-dsh-skin-community",
+      "packageVersion": "0.4.0-dsh-alpha.1",
+      "profile": "web",
+      "activation": {
+        "kind": "plugin-controls",
+        "description": "Use the installed skin’s appearance controls."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "runtimeReceipt": "references/alpha-community-2304-runtime.json",
+        "runtimeReceiptSha256": "fd821ba03abc238d7f8fe91a6bcb6cbe75ebeef49d61d11e2ed375d0f029e1f5"
+      },
+      "artifact": {
+        "path": "assets/alpha/artifacts/b3bd1fb03f096d33e0929c69c99e1766ac5e061a886f6ce340cb3fe017f446d5.tgz",
+        "sha256": "b3bd1fb03f096d33e0929c69c99e1766ac5e061a886f6ce340cb3fe017f446d5"
+      },
+      "adaptation": {
+        "author": "DSH Themes contributors",
+        "sourcePath": "assets/alpha/community-packages/dsh-skin-community",
+        "license": "MIT",
+        "description": "DSH Themes Alpha module ID and profile metadata; legacy defineStore import now uses the official shared client-store module. Original feature implementation, source coordinate and license retained."
+      }
+    },
+    {
+      "catalogId": 2305,
+      "slug": "dsh-homepage-skin",
+      "sourceRepository": "yushi-xxh/dsh-homepage-skin",
+      "sourceRevision": "44933213da11f82caefd609ad1bdfe84ac95b3e0",
+      "packageName": "@dsh-themes/community-dsh-homepage-skin",
+      "packageVersion": "0.1.12-dsh-alpha.1",
+      "profile": "web",
+      "activation": {
+        "kind": "plugin-controls",
+        "description": "Use the installed skin’s appearance controls."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "runtimeReceipt": "references/alpha-community-2305-runtime.json",
+        "runtimeReceiptSha256": "a8db635edef34298d46c4f84619a262f730c04643af44d64fc59981c84f3a0b3"
+      },
+      "artifact": {
+        "path": "assets/alpha/artifacts/abc28e4ced1560efa79b2ba741ebc5c829ac497baf84024201efb2aae93a3859.tgz",
+        "sha256": "abc28e4ced1560efa79b2ba741ebc5c829ac497baf84024201efb2aae93a3859"
+      },
+      "adaptation": {
+        "author": "DSH Themes contributors",
+        "sourcePath": "assets/alpha/community-packages/dsh-homepage-skin",
+        "license": "MIT",
+        "description": "DSH Themes Alpha module ID and profile metadata; legacy defineStore import now uses the official shared client-store module. Original feature implementation, source coordinate and license retained."
+      }
+    },
+    {
+      "catalogId": 2306,
+      "slug": "deepseek-harness-skin-collection",
+      "sourceRepository": "HeiGeAi/deepseek-harness-skin",
+      "sourceRevision": "238d114d1e5bf7358c4cb101b36ae129e70a55fe",
+      "packageName": "@dsh-themes/community-heigeai-skin-center",
+      "packageVersion": "0.1.0-alpha.1",
+      "profile": "web",
+      "artifact": {
+        "path": "assets/alpha/artifacts/d26d61bde5b93f8b7e4f72d04b438413081312dbc63c0d1d10dafe2ce640a23f.tgz",
+        "sha256": "d26d61bde5b93f8b7e4f72d04b438413081312dbc63c0d1d10dafe2ce640a23f"
+      },
+      "adaptation": {
+        "author": "DSH Themes",
+        "sourcePath": "assets/alpha/heigeai",
+        "license": "MIT",
+        "description": "Independent Alpha palette plugin using the original 21 seed presets and derivation. User-supplied local images only."
+      },
+      "activation": {
+        "kind": "plugin-controls",
+        "description": "Open the 21 palettes button and choose a preset or your own seed colors."
+      },
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "runtimeReceipt": "references/alpha-heigeai-runtime.json",
+        "runtimeReceiptSha256": "a71f7766597f3b3c2152734aa6236d65844b395c11a6b6efed3dc429690e8af8"
+      }
+    },
+    {
+      "catalogId": 2307,
+      "slug": "xiaoyao-ocean-lab",
+      "sourceRepository": "147228/dsh-xiaoyao-skins",
+      "sourceRevision": "174f65d9135e932383a8f3a19fa522f16875a139",
+      "sourceSubdir": "packages/skins/ocean",
+      "packageName": "@xiaoyao-ai/dsh-client-ui-skin-xiaoyao",
+      "packageVersion": "0.1.1",
+      "artifact": {
+        "url": "https://github.com/147228/dsh-xiaoyao-skins/releases/download/v0.1.3/xiaoyao-skin-ocean.tgz",
+        "sha256": "5e1f231f194a9eb255d663170fba549d01c59c70d499cfad9c7688cb10d7ef92"
+      },
+      "profile": "web",
+      "activation": {
+        "kind": "automatic",
+        "description": "The skin activates when its client plugin loads."
+      },
+      "licenseExpression": "MIT AND CC-BY-NC-4.0",
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "releaseTag": "v0.1.3",
+        "resolvedReleaseRevision": "174f65d9135e932383a8f3a19fa522f16875a139",
+        "runtimeReceipt": "references/alpha-community-2307-runtime.json",
+        "runtimeReceiptSha256": "4a1ba99a290884deebe6d277a10e76bfd299ab3d298d56ef6fb024b6d2ff2955"
+      }
+    },
+    {
+      "catalogId": 2308,
+      "slug": "xiaoyao-black-whale-lab",
+      "sourceRepository": "147228/dsh-xiaoyao-skins",
+      "sourceRevision": "174f65d9135e932383a8f3a19fa522f16875a139",
+      "sourceSubdir": "packages/skins/black-whale",
+      "packageName": "@dsh-themes/community-xiaoyao-black-whale",
+      "packageVersion": "0.1.4-dsh-alpha.1",
+      "artifact": {
+        "path": "assets/alpha/artifacts/7747676f742580e2ca09925631bacf7ab778c43e2071f8521bef3f20cbbb8efe.tgz",
+        "sha256": "7747676f742580e2ca09925631bacf7ab778c43e2071f8521bef3f20cbbb8efe"
+      },
+      "profile": "web",
+      "activation": {
+        "kind": "automatic",
+        "description": "The skin activates when its client plugin loads."
+      },
+      "licenseExpression": "MIT AND CC-BY-NC-4.0",
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "runtimeReceipt": "references/alpha-community-2308-runtime.json",
+        "runtimeReceiptSha256": "6492215525ae1343c65f3194ec39afd9e5baa82eb579daa188f5fa02e765655b"
+      },
+      "upstreamArtifact": {
+        "url": "https://github.com/147228/dsh-xiaoyao-skins/releases/download/v0.1.3/xiaoyao-skin-black-whale.tgz",
+        "sha256": "5c3e131bdfe8c848e80ce94379ac140137b05498f3b45390be70fef3538c2acb"
+      },
+      "adaptation": {
+        "author": "DSH Themes contributors",
+        "sourcePath": "assets/alpha/xiaoyao/packages/black-whale",
+        "license": "MIT AND CC-BY-NC-4.0",
+        "description": "DSH Themes Alpha CSS specificity and current sidebar/conversation/details layout selectors. Sky Lab adds a dark reading surface. Original code/art attribution and licenses retained."
+      }
+    },
+    {
+      "catalogId": 2309,
+      "slug": "xiaoyao-sky-lab",
+      "sourceRepository": "147228/dsh-xiaoyao-skins",
+      "sourceRevision": "174f65d9135e932383a8f3a19fa522f16875a139",
+      "sourceSubdir": "packages/skins/sky-lab",
+      "packageName": "@dsh-themes/community-xiaoyao-sky-lab",
+      "packageVersion": "0.1.1-dsh-alpha.1",
+      "artifact": {
+        "path": "assets/alpha/artifacts/c91c03c39d1a8284db88cba0810cbfca39df6adc83bbe82901189faae6b3c053.tgz",
+        "sha256": "c91c03c39d1a8284db88cba0810cbfca39df6adc83bbe82901189faae6b3c053"
+      },
+      "profile": "web",
+      "activation": {
+        "kind": "automatic",
+        "description": "The skin activates when its client plugin loads."
+      },
+      "licenseExpression": "MIT AND CC-BY-NC-4.0",
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "runtimeReceipt": "references/alpha-community-2309-runtime.json",
+        "runtimeReceiptSha256": "79867674a1aac79552eaf1506baa732fdd90b03d29ce0c6e4b2c32b12d01ca53"
+      },
+      "upstreamArtifact": {
+        "url": "https://github.com/147228/dsh-xiaoyao-skins/releases/download/v0.1.3/xiaoyao-skin-sky-lab.tgz",
+        "sha256": "a2efd3ee3f0b3708b053e785d2c93610d5584d32187a7125fd0cb1cb5debd4af"
+      },
+      "adaptation": {
+        "author": "DSH Themes contributors",
+        "sourcePath": "assets/alpha/xiaoyao/packages/sky-lab",
+        "license": "MIT AND CC-BY-NC-4.0",
+        "description": "DSH Themes Alpha CSS specificity and current sidebar/conversation/details layout selectors. Sky Lab adds a dark reading surface. Original code/art attribution and licenses retained."
+      }
+    },
+    {
+      "catalogId": 2310,
+      "slug": "xiaoyao-great-wall-beacon",
+      "sourceRepository": "147228/dsh-xiaoyao-skins",
+      "sourceRevision": "174f65d9135e932383a8f3a19fa522f16875a139",
+      "sourceSubdir": "packages/skins/great-wall-beacon",
+      "packageName": "@dsh-themes/community-xiaoyao-great-wall-beacon",
+      "packageVersion": "0.1.1-dsh-alpha.1",
+      "artifact": {
+        "path": "assets/alpha/artifacts/75df9ec54b89c1b99567f818183fafd57c48c3bf3a9b172a2f9ffff934851fcc.tgz",
+        "sha256": "75df9ec54b89c1b99567f818183fafd57c48c3bf3a9b172a2f9ffff934851fcc"
+      },
+      "profile": "web",
+      "activation": {
+        "kind": "automatic",
+        "description": "The skin activates when its client plugin loads."
+      },
+      "licenseExpression": "MIT AND CC-BY-NC-4.0",
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "runtimeReceipt": "references/alpha-community-2310-runtime.json",
+        "runtimeReceiptSha256": "73d7cddc707b43f2c3e1fad90783aaa3212355f276d79d806b7bc3e589707c4b"
+      },
+      "upstreamArtifact": {
+        "url": "https://github.com/147228/dsh-xiaoyao-skins/releases/download/v0.1.3/xiaoyao-skin-great-wall-beacon.tgz",
+        "sha256": "562b1d0332d5e6f21a08d5fefe3c61bda8d6c9bc4986c3759c54e34f889af766"
+      },
+      "adaptation": {
+        "author": "DSH Themes contributors",
+        "sourcePath": "assets/alpha/xiaoyao/packages/great-wall-beacon",
+        "license": "MIT AND CC-BY-NC-4.0",
+        "description": "DSH Themes Alpha CSS specificity and current sidebar/conversation/details layout selectors. Sky Lab adds a dark reading surface. Original code/art attribution and licenses retained."
+      }
+    },
+    {
+      "catalogId": 2311,
+      "slug": "xiaoyao-great-wall-sunrise",
+      "sourceRepository": "147228/dsh-xiaoyao-skins",
+      "sourceRevision": "174f65d9135e932383a8f3a19fa522f16875a139",
+      "sourceSubdir": "packages/skins/great-wall-sunrise",
+      "packageName": "@dsh-themes/community-xiaoyao-great-wall-sunrise",
+      "packageVersion": "0.1.1-dsh-alpha.1",
+      "artifact": {
+        "path": "assets/alpha/artifacts/d8c9f33b000ee6e28d5589f5179879a5d9e3984b1bbc23bc3dbb074e3a62520d.tgz",
+        "sha256": "d8c9f33b000ee6e28d5589f5179879a5d9e3984b1bbc23bc3dbb074e3a62520d"
+      },
+      "profile": "web",
+      "activation": {
+        "kind": "automatic",
+        "description": "The skin activates when its client plugin loads."
+      },
+      "licenseExpression": "MIT AND CC-BY-NC-4.0",
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "runtimeReceipt": "references/alpha-community-2311-runtime.json",
+        "runtimeReceiptSha256": "cec198ede615441bd4448fedd25a97fc467616cc2e3662ab96c8c8f4355a0ae6"
+      },
+      "upstreamArtifact": {
+        "url": "https://github.com/147228/dsh-xiaoyao-skins/releases/download/v0.1.3/xiaoyao-skin-great-wall-sunrise.tgz",
+        "sha256": "e9f064fd1a9f5520dd54130f60029b5bef60ae98336770235dc7fe18741d58df"
+      },
+      "adaptation": {
+        "author": "DSH Themes contributors",
+        "sourcePath": "assets/alpha/xiaoyao/packages/great-wall-sunrise",
+        "license": "MIT AND CC-BY-NC-4.0",
+        "description": "DSH Themes Alpha CSS specificity and current sidebar/conversation/details layout selectors. Sky Lab adds a dark reading surface. Original code/art attribution and licenses retained."
+      }
+    },
+    {
+      "catalogId": 2312,
+      "slug": "xiaoyao-great-wall-snow",
+      "sourceRepository": "147228/dsh-xiaoyao-skins",
+      "sourceRevision": "174f65d9135e932383a8f3a19fa522f16875a139",
+      "sourceSubdir": "packages/skins/great-wall-snow",
+      "packageName": "@dsh-themes/community-xiaoyao-great-wall-snow",
+      "packageVersion": "0.1.1-dsh-alpha.1",
+      "artifact": {
+        "path": "assets/alpha/artifacts/82b020c16ac1c21434131b12897d4504fc91076b16ad71391c7817696725c751.tgz",
+        "sha256": "82b020c16ac1c21434131b12897d4504fc91076b16ad71391c7817696725c751"
+      },
+      "profile": "web",
+      "activation": {
+        "kind": "automatic",
+        "description": "The skin activates when its client plugin loads."
+      },
+      "licenseExpression": "MIT AND CC-BY-NC-4.0",
+      "validation": {
+        "status": "runtime-verified",
+        "checkedAt": "2026-09-06",
+        "runtimeReceipt": "references/alpha-community-2312-runtime.json",
+        "runtimeReceiptSha256": "4025e011d6094585535f8f1b7e6929093ddba4e6dbf1bf4a864e2ce5b4832951"
+      },
+      "upstreamArtifact": {
+        "url": "https://github.com/147228/dsh-xiaoyao-skins/releases/download/v0.1.3/xiaoyao-skin-great-wall-snow.tgz",
+        "sha256": "8108c837a402bd5792b3c34c7d3ba359e4c4aac6687ad8f751c8cd254f0a5179"
+      },
+      "adaptation": {
+        "author": "DSH Themes contributors",
+        "sourcePath": "assets/alpha/xiaoyao/packages/great-wall-snow",
+        "license": "MIT AND CC-BY-NC-4.0",
+        "description": "DSH Themes Alpha CSS specificity and current sidebar/conversation/details layout selectors. Sky Lab adds a dark reading surface. Original code/art attribution and licenses retained."
+      }
+    }
+  ]
+}

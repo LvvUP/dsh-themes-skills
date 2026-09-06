@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "Codex /root",
+  "recordedAt": "2026-09-06T10:28:11.662393+00:00",
+  "status": "passed",
+  "scope": "Four actual source screenshots viewed in this continuation. Native and skinned welcome states remain visually consistent after closing Spotlight/Settings, including native focus restoration. This review checks coexistence and restoration, not a new skin design review.",
+  "files": [
+    {
+      "path": ".cache/dsh-top10-runtime/final-spotlight-1788690001757/spotlight-before-skin-before.png",
+      "sha256": "a8430a752d10e0ab895178ca0e07b7501542c09043193f53c96f5b42a99c5265"
+    },
+    {
+      "path": ".cache/dsh-top10-runtime/final-spotlight-1788690001757/spotlight-before-skin-closed.png",
+      "sha256": "7a9734a69dc65864ca342aa6ac63cfee2c67ca8197d790773a39202ce5b140f7"
+    },
+    {
+      "path": ".cache/dsh-top10-runtime/final-spotlight-1788690001757/spotlight-with-skin-before.png",
+      "sha256": "7d8dee5e2cb432786f176c8d07685f820bd27828d739c5ea6926ffda7690448e"
+    },
+    {
+      "path": ".cache/dsh-top10-runtime/final-spotlight-1788690001757/spotlight-with-skin-closed.png",
+      "sha256": "8045027b9071549deab02d17b33564aa57a95ef6bdcb490b6d5f09478b2b8218"
+    }
+  ]
+}

@@ -1,0 +1,438 @@
+--- upstream/package.json
++++ alpha/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "@anionex/dsh-computer-use",
+-  "version": "0.3.2",
++  "version": "0.3.2-dsh.alpha.2",
+   "description": "Accessibility-first macOS Computer Use capability for DeepSeek Harness with stale-observation protection, app leases, confirmations, screenshots, and Web diagnostics",
+   "keywords": [
+     "deepseek",
+@@ -18,7 +18,6 @@
+     "url": "https://github.com/Anionex/dsh-computer-use/issues"
+   },
+   "type": "module",
+-  "packageManager": "pnpm@11.20.0",
+   "engines": {
+     "node": "^22.19.0 || >=24.0.0"
+   },
+@@ -56,29 +55,17 @@
+     "cordis.patch.yml",
+     "README.md",
+     "README.zh.md",
+-    "LICENSE"
++    "LICENSE",
++    "ALPHA.md",
++    "licenses"
+   ],
+-  "scripts": {
+-    "native:build": "node scripts/build-native.mjs",
+-    "check:native": "node scripts/check-native.mjs",
+-    "build": "pnpm run native:build && tsc -p tsconfig.json && tsc -p tsconfig.client.json && node scripts/build-client.mjs",
+-    "prepack": "pnpm run build",
+-    "test": "pnpm run build && vitest run tests",
+-    "test:model": "node scripts/model-e2e.mjs",
+-    "test:watch": "vitest tests",
+-    "validate": "node scripts/validate.mjs --lane all",
+-    "validate:local": "node scripts/validate.mjs --lane local",
+-    "validate:profile": "node scripts/validate.mjs --lane profile",
+-    "validate:model": "node scripts/model-e2e.mjs",
+-    "validate:release": "pnpm run validate && pnpm run validate:model"
+-  },
+   "dsh": {
+     "bundle": {
+       "patch": "./cordis.patch.yml"
+     },
+     "client": {
+       "inject": [
+-        "@deepseek-ai/dsh-client-runtime",
++        "@deepseek-ai/dsh-client-ui-renderer",
+         "@deepseek-ai/dsh-client-ui-settings",
+         "@deepseek-ai/dsh-client-locale",
+         "@deepseek-ai/dsh-api-remotes"
+@@ -86,57 +73,12 @@
+       "platform": "web"
+     },
+     "compatibility": {
+-      "dsh": ">=0.1.0-rc.8 <0.2.0",
+-      "dshReleases": {
+-        "0.1.0-rc.8": "compatible",
+-        "0.1.1-rc.1": "compatible",
+-        "0.1.1-rc.2": "compatible",
+-        "0.1.2-alpha.3": "compatible",
+-        "0.1.2-alpha.4": "compatible",
+-        "0.1.2-alpha.5": "compatible"
+-      },
++      "dsh": "0.1.3-alpha.1",
+       "profiles": [
+         "web"
+-      ]
++      ],
++      "note": "Fixed source adaptation; runtime verification is recorded separately."
+     }
+-  },
+-  "peerDependencies": {
+-    "@deepseek-ai/dsh-agent": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-api-remotes": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-brand": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-client-locale": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-client-runtime": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-client-ui-primitives": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-client-ui-settings": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-client-ui-slots": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-host-webserver": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-llm": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-session": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-settings": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-skill": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-storage-domain": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-subprocess": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-system-prompt": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-tools": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-user-approval": "^0.1.0-rc.6",
+-    "@deepseek-ai/cordis": "^4.0.1",
+-    "react": "^18.2.0",
+-    "@deepseek-ai/schemastery": "^3.18.1"
+-  },
+-  "peerDependenciesMeta": {
+-    "@deepseek-ai/dsh-host-webserver": {
+-      "optional": true
+-    }
+-  },
+-  "devDependencies": {
+-    "@types/node": "^22.20.0",
+-    "@types/react": "~18.3.1",
+-    "@types/react-dom": "~18.3.0",
+-    "typescript": "^6.0.3",
+-    "vitest": "^4.1.10"
+-  },
+-  "dependencies": {
+-    "zod": "^4.4.3"
+   },
+   "license": "MIT"
+ }
+
+--- upstream/src/config.ts
++++ alpha/src/config.ts
+@@ -2,11 +2,10 @@
+ 
+ import z from '@deepseek-ai/schemastery'
+ import type Schema from '@deepseek-ai/schemastery'
+-import { settingsNamespace } from '@deepseek-ai/dsh-settings'
+ import { ComputerUseError } from './errors.ts'
+ 
+ /** Settings document namespace owned by this package. */
+-export const COMPUTER_USE_SETTINGS_NAMESPACE = settingsNamespace('computer-use')
++export const COMPUTER_USE_SETTINGS_NAMESPACE = 'computer-use'
+ 
+ /** One persisted application grant. Wildcards are intentionally unsupported. */
+ export interface ComputerUseAppGrant {
+
+--- upstream/lib/types/config.d.ts
++++ alpha/lib/types/config.d.ts
+@@ -1,7 +1,7 @@
+ /** Validated provider, observation, settlement, artifact, and app-policy configuration. */
+ import type Schema from '@deepseek-ai/schemastery';
+ /** Settings document namespace owned by this package. */
+-export declare const COMPUTER_USE_SETTINGS_NAMESPACE: import("@deepseek-ai/dsh-settings").SettingsNamespace;
++export declare const COMPUTER_USE_SETTINGS_NAMESPACE: "computer-use";
+ /** One persisted application grant. Wildcards are intentionally unsupported. */
+ export interface ComputerUseAppGrant {
+     bundleId: string;
+
+--- upstream/lib/config.js
++++ alpha/lib/config.js
+@@ -1,130 +1,130 @@
+-/** Validated provider, observation, settlement, artifact, and app-policy configuration. */
+-import z from '@deepseek-ai/schemastery';
+-import { settingsNamespace } from '@deepseek-ai/dsh-settings';
++import z from "@deepseek-ai/schemastery";
+ import { ComputerUseError } from "./errors.js";
+-/** Settings document namespace owned by this package. */
+-export const COMPUTER_USE_SETTINGS_NAMESPACE = settingsNamespace('computer-use');
+-/** Configuration schema used by Cordis and the Settings provider. */
+-export const Config = z.object({
+-    observationTtlMs: z.number().default(0),
+-    confirmationTtlMs: z.number().default(300000),
+-    actionTimeoutMs: z.number().default(15000),
+-    settleMs: z.number().default(250),
+-    maxSettleMs: z.number().default(5000),
+-    maxNodes: z.number().default(500),
+-    maxDepth: z.number().default(14),
+-    maxTextBytes: z.number().default(64000),
+-    maxScreenshotBytes: z.number().default(33554432),
+-    artifactRoot: z.string().default('.dsh-computer-use/artifacts'),
+-    helper: z.object({
+-        path: z.string(),
+-        allowSourceBuild: z.boolean().default(false),
+-    }),
+-    interaction: z.object({
+-        focusPolicy: z.union(['preserve', 'activate']).default('preserve'),
+-        keyboardPolicy: z.union(['preserve', 'activate']).default('preserve'),
+-        pointerInputPolicy: z.union(['deny', 'targeted']).default('targeted'),
+-        cursorVisualization: z.union(['hidden', 'visible']).default('visible'),
+-        cursorMotionMs: z.number(),
+-        cursorSpeedPxPerSecond: z.number().default(1600),
+-        cursorAccelerationPxPerSecondSquared: z.number().default(6000),
+-        cursorClickDelayMs: z.number().default(90),
+-        cursorAutoHideMs: z.number().default(0),
+-    }),
+-    allowAllApps: z.boolean().default(false),
+-    grants: z.array(z.object({
+-        bundleId: z.string(),
+-        read: z.boolean().default(false),
+-        control: z.boolean().default(false),
+-    })).default([]),
++const COMPUTER_USE_SETTINGS_NAMESPACE = "computer-use";
++const Config = z.object({
++  observationTtlMs: z.number().default(0),
++  confirmationTtlMs: z.number().default(3e5),
++  actionTimeoutMs: z.number().default(15e3),
++  settleMs: z.number().default(250),
++  maxSettleMs: z.number().default(5e3),
++  maxNodes: z.number().default(500),
++  maxDepth: z.number().default(14),
++  maxTextBytes: z.number().default(64e3),
++  maxScreenshotBytes: z.number().default(33554432),
++  artifactRoot: z.string().default(".dsh-computer-use/artifacts"),
++  helper: z.object({
++    path: z.string(),
++    allowSourceBuild: z.boolean().default(false)
++  }),
++  interaction: z.object({
++    focusPolicy: z.union(["preserve", "activate"]).default("preserve"),
++    keyboardPolicy: z.union(["preserve", "activate"]).default("preserve"),
++    pointerInputPolicy: z.union(["deny", "targeted"]).default("targeted"),
++    cursorVisualization: z.union(["hidden", "visible"]).default("visible"),
++    cursorMotionMs: z.number(),
++    cursorSpeedPxPerSecond: z.number().default(1600),
++    cursorAccelerationPxPerSecondSquared: z.number().default(6e3),
++    cursorClickDelayMs: z.number().default(90),
++    cursorAutoHideMs: z.number().default(0)
++  }),
++  allowAllApps: z.boolean().default(false),
++  grants: z.array(z.object({
++    bundleId: z.string(),
++    read: z.boolean().default(false),
++    control: z.boolean().default(false)
++  })).default([])
+ });
+ function integer(name, value, min, max) {
+-    if (!Number.isInteger(value) || value < min || value > max) {
+-        throw new ComputerUseError('COMPUTER_PROVIDER_FAILURE', `${name} must be an integer between ${min} and ${max}`);
+-    }
+-    return value;
++  if (!Number.isInteger(value) || value < min || value > max) {
++    throw new ComputerUseError("COMPUTER_PROVIDER_FAILURE", `${name} must be an integer between ${min} and ${max}`);
++  }
++  return value;
+ }
+ function option(name, value, allowed) {
+-    if (!allowed.includes(value)) {
+-        throw new ComputerUseError('COMPUTER_PROVIDER_FAILURE', `${name} must be one of ${allowed.join(', ')}`);
++  if (!allowed.includes(value)) {
++    throw new ComputerUseError("COMPUTER_PROVIDER_FAILURE", `${name} must be one of ${allowed.join(", ")}`);
++  }
++  return value;
++}
++function resolveConfig(config = {}) {
++  const observationTtl = config.observationTtlMs ?? 0;
++  const observationTtlMs = observationTtl === 0 ? 0 : integer("observationTtlMs", observationTtl, 1e3, 864e5);
++  const confirmationTtlMs = integer("confirmationTtlMs", config.confirmationTtlMs ?? 3e5, 1e3, 9e5);
++  const actionTimeoutMs = integer("actionTimeoutMs", config.actionTimeoutMs ?? 15e3, 1e3, 12e4);
++  const settleMs = integer("settleMs", config.settleMs ?? 250, 0, 1e4);
++  const maxSettleMs = integer("maxSettleMs", config.maxSettleMs ?? 5e3, 100, 6e4);
++  if (settleMs > maxSettleMs) {
++    throw new ComputerUseError("COMPUTER_PROVIDER_FAILURE", "settleMs must be no greater than maxSettleMs");
++  }
++  const maxNodes = integer("maxNodes", config.maxNodes ?? 500, 10, 5e3);
++  const maxDepth = integer("maxDepth", config.maxDepth ?? 14, 1, 64);
++  const maxTextBytes = integer("maxTextBytes", config.maxTextBytes ?? 64e3, 1024, 1048576);
++  const maxScreenshotBytes = integer("maxScreenshotBytes", config.maxScreenshotBytes ?? 33554432, 1024, 268435456);
++  const artifactRoot = (config.artifactRoot ?? ".dsh-computer-use/artifacts").trim();
++  if (artifactRoot.length === 0 || artifactRoot.startsWith("/") || artifactRoot.split(/[\\/]+/u).includes("..")) {
++    throw new ComputerUseError("COMPUTER_PROVIDER_FAILURE", "artifactRoot must be a non-empty workspace-relative path without ..");
++  }
++  const helperPath = config.helper?.path?.trim();
++  if (helperPath !== void 0 && helperPath.length === 0) {
++    throw new ComputerUseError("COMPUTER_PROVIDER_FAILURE", "helper.path must not be empty");
++  }
++  const focusPolicy = option("interaction.focusPolicy", config.interaction?.focusPolicy ?? "preserve", ["preserve", "activate"]);
++  const keyboardPolicy = option("interaction.keyboardPolicy", config.interaction?.keyboardPolicy ?? "preserve", ["preserve", "activate"]);
++  const pointerInputPolicy = option("interaction.pointerInputPolicy", config.interaction?.pointerInputPolicy ?? "targeted", ["deny", "targeted"]);
++  const cursorVisualization = option("interaction.cursorVisualization", config.interaction?.cursorVisualization ?? "visible", ["hidden", "visible"]);
++  if (config.interaction?.cursorMotionMs !== void 0) {
++    integer("interaction.cursorMotionMs", config.interaction.cursorMotionMs, 0, 2e3);
++  }
++  const cursorSpeedPxPerSecond = integer("interaction.cursorSpeedPxPerSecond", config.interaction?.cursorSpeedPxPerSecond ?? 1600, 100, 5e4);
++  const cursorAccelerationPxPerSecondSquared = integer("interaction.cursorAccelerationPxPerSecondSquared", config.interaction?.cursorAccelerationPxPerSecondSquared ?? 6e3, 100, 5e5);
++  const cursorClickDelayMs = integer("interaction.cursorClickDelayMs", config.interaction?.cursorClickDelayMs ?? 90, 0, 1e3);
++  const cursorAutoHideMs = integer("interaction.cursorAutoHideMs", config.interaction?.cursorAutoHideMs ?? 0, 0, 3e4);
++  const allowAllApps = config.allowAllApps ?? false;
++  const seen = /* @__PURE__ */ new Set();
++  const grants = (config.grants ?? []).map((grant) => {
++    const bundleId = grant.bundleId.trim();
++    if (bundleId.length === 0 || bundleId === "*" || bundleId.includes("*")) {
++      throw new ComputerUseError("COMPUTER_PROVIDER_FAILURE", "grants[].bundleId must be one exact non-wildcard bundle id");
+     }
+-    return value;
++    if (seen.has(bundleId)) {
++      throw new ComputerUseError("COMPUTER_PROVIDER_FAILURE", `duplicate app grant for ${bundleId}`);
++    }
++    seen.add(bundleId);
++    const control = grant.control ?? false;
++    return { bundleId, read: (grant.read ?? false) || control, control };
++  });
++  return {
++    observationTtlMs,
++    confirmationTtlMs,
++    actionTimeoutMs,
++    settleMs,
++    maxSettleMs,
++    maxNodes,
++    maxDepth,
++    maxTextBytes,
++    maxScreenshotBytes,
++    artifactRoot,
++    helper: {
++      ...helperPath === void 0 ? {} : { path: helperPath },
++      allowSourceBuild: config.helper?.allowSourceBuild ?? false
++    },
++    interaction: {
++      focusPolicy,
++      keyboardPolicy,
++      pointerInputPolicy,
++      cursorVisualization,
++      cursorSpeedPxPerSecond,
++      cursorAccelerationPxPerSecondSquared,
++      cursorClickDelayMs,
++      cursorAutoHideMs
++    },
++    allowAllApps,
++    grants
++  };
+ }
+-/** Validate and normalize one raw config object. */
+-export function resolveConfig(config = {}) {
+-    const observationTtl = config.observationTtlMs ?? 0;
+-    const observationTtlMs = observationTtl === 0 ? 0 : integer('observationTtlMs', observationTtl, 1000, 86400000);
+-    const confirmationTtlMs = integer('confirmationTtlMs', config.confirmationTtlMs ?? 300000, 1000, 900000);
+-    const actionTimeoutMs = integer('actionTimeoutMs', config.actionTimeoutMs ?? 15000, 1000, 120000);
+-    const settleMs = integer('settleMs', config.settleMs ?? 250, 0, 10000);
+-    const maxSettleMs = integer('maxSettleMs', config.maxSettleMs ?? 5000, 100, 60000);
+-    if (settleMs > maxSettleMs) {
+-        throw new ComputerUseError('COMPUTER_PROVIDER_FAILURE', 'settleMs must be no greater than maxSettleMs');
+-    }
+-    const maxNodes = integer('maxNodes', config.maxNodes ?? 500, 10, 5000);
+-    const maxDepth = integer('maxDepth', config.maxDepth ?? 14, 1, 64);
+-    const maxTextBytes = integer('maxTextBytes', config.maxTextBytes ?? 64000, 1024, 1048576);
+-    const maxScreenshotBytes = integer('maxScreenshotBytes', config.maxScreenshotBytes ?? 33554432, 1024, 268435456);
+-    const artifactRoot = (config.artifactRoot ?? '.dsh-computer-use/artifacts').trim();
+-    if (artifactRoot.length === 0 || artifactRoot.startsWith('/') || artifactRoot.split(/[\\/]+/u).includes('..')) {
+-        throw new ComputerUseError('COMPUTER_PROVIDER_FAILURE', 'artifactRoot must be a non-empty workspace-relative path without ..');
+-    }
+-    const helperPath = config.helper?.path?.trim();
+-    if (helperPath !== undefined && helperPath.length === 0) {
+-        throw new ComputerUseError('COMPUTER_PROVIDER_FAILURE', 'helper.path must not be empty');
+-    }
+-    const focusPolicy = option('interaction.focusPolicy', config.interaction?.focusPolicy ?? 'preserve', ['preserve', 'activate']);
+-    const keyboardPolicy = option('interaction.keyboardPolicy', config.interaction?.keyboardPolicy ?? 'preserve', ['preserve', 'activate']);
+-    const pointerInputPolicy = option('interaction.pointerInputPolicy', config.interaction?.pointerInputPolicy ?? 'targeted', ['deny', 'targeted']);
+-    const cursorVisualization = option('interaction.cursorVisualization', config.interaction?.cursorVisualization ?? 'visible', ['hidden', 'visible']);
+-    if (config.interaction?.cursorMotionMs !== undefined) {
+-        integer('interaction.cursorMotionMs', config.interaction.cursorMotionMs, 0, 2000);
+-    }
+-    const cursorSpeedPxPerSecond = integer('interaction.cursorSpeedPxPerSecond', config.interaction?.cursorSpeedPxPerSecond ?? 1600, 100, 50000);
+-    const cursorAccelerationPxPerSecondSquared = integer('interaction.cursorAccelerationPxPerSecondSquared', config.interaction?.cursorAccelerationPxPerSecondSquared ?? 6000, 100, 500000);
+-    const cursorClickDelayMs = integer('interaction.cursorClickDelayMs', config.interaction?.cursorClickDelayMs ?? 90, 0, 1000);
+-    const cursorAutoHideMs = integer('interaction.cursorAutoHideMs', config.interaction?.cursorAutoHideMs ?? 0, 0, 30000);
+-    const allowAllApps = config.allowAllApps ?? false;
+-    const seen = new Set();
+-    const grants = (config.grants ?? []).map((grant) => {
+-        const bundleId = grant.bundleId.trim();
+-        if (bundleId.length === 0 || bundleId === '*' || bundleId.includes('*')) {
+-            throw new ComputerUseError('COMPUTER_PROVIDER_FAILURE', 'grants[].bundleId must be one exact non-wildcard bundle id');
+-        }
+-        if (seen.has(bundleId)) {
+-            throw new ComputerUseError('COMPUTER_PROVIDER_FAILURE', `duplicate app grant for ${bundleId}`);
+-        }
+-        seen.add(bundleId);
+-        const control = grant.control ?? false;
+-        return { bundleId, read: (grant.read ?? false) || control, control };
+-    });
+-    return {
+-        observationTtlMs,
+-        confirmationTtlMs,
+-        actionTimeoutMs,
+-        settleMs,
+-        maxSettleMs,
+-        maxNodes,
+-        maxDepth,
+-        maxTextBytes,
+-        maxScreenshotBytes,
+-        artifactRoot,
+-        helper: {
+-            ...(helperPath === undefined ? {} : { path: helperPath }),
+-            allowSourceBuild: config.helper?.allowSourceBuild ?? false,
+-        },
+-        interaction: {
+-            focusPolicy,
+-            keyboardPolicy,
+-            pointerInputPolicy,
+-            cursorVisualization,
+-            cursorSpeedPxPerSecond,
+-            cursorAccelerationPxPerSecondSquared,
+-            cursorClickDelayMs,
+-            cursorAutoHideMs,
+-        },
+-        allowAllApps,
+-        grants,
+-    };
+-}
+-//# sourceMappingURL=config.js.map+export {
++  COMPUTER_USE_SETTINGS_NAMESPACE,
++  Config,
++  resolveConfig
++};
++//# sourceMappingURL=config.js.map
+
+--- upstream/lib/config.js.map
++++ alpha/lib/config.js.map
+@@ -1 +1,6 @@
+-{"version":3,"file":"config.js","sourceRoot":"","sources":["../src/config.ts"],"names":[],"mappings":"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"}+{
++  "version": 3,
++  "sources": ["../src/config.ts"],
++  "mappings": "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",
++  "names": []
++}
+
+--- upstream/src/client/index.tsx
++++ alpha/src/client/index.tsx
+@@ -533,10 +533,10 @@
+ }
+ 
+ const CSS = `
+-.dcu-settings{display:grid;gap:14px;max-width:920px;padding:2px 0 24px}.dcu-footer{display:flex;justify-content:space-between;gap:22px;align-items:flex-start;margin-top:8px;padding:20px 2px 4px;border-top:1px solid var(--dsw-alias-border-subtle,#dedbd5);opacity:.82}.dcu-footer h2{margin:4px 0 6px;font-size:18px}.dcu-footer p{margin:0;max-width:610px;font-size:11px;line-height:1.55;color:var(--dsw-alias-fg-muted,#706d67)}.dcu-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#687f74;font-weight:700}.dcu-release{display:grid;gap:5px;min-width:220px;padding:10px 12px;border-radius:11px;background:var(--dsw-alias-bg-layer-2,#f7f5f1);font-size:10px}.dcu-release span{display:flex;justify-content:space-between;gap:12px;white-space:nowrap}.dcu-release .ok{color:#277d52}.dcu-release .bad{color:#aa3939}.dcu-panel{display:grid;gap:13px;padding:16px;border:1px solid var(--dsw-alias-border-subtle,#dedbd5);border-radius:14px;background:var(--dsw-alias-bg-layer-1,#fff)}.dcu-essential{border-color:color-mix(in srgb,#687f74 35%,var(--dsw-alias-border-subtle,#dedbd5));box-shadow:0 0 0 3px rgba(104,127,116,.05)}.dcu-panel-title{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.dcu-panel-title h3{margin:0;font-size:14px}.dcu-panel-title p{margin:4px 0 0;font-size:10px;line-height:1.45;color:var(--dsw-alias-fg-muted,#706d67)}.dcu-permissions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.dcu-permission{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px;border-radius:11px;background:var(--dsw-alias-bg-layer-2,#f7f5f1);border-left:3px solid #cc5555}.dcu-permission[data-granted]{border-left-color:#3ca26b}.dcu-permission div{display:grid;gap:3px}.dcu-permission span{font-size:10px}.dcu-permission strong{font-size:11px}.dcu-path{display:block;overflow:auto;padding:8px 10px;border-radius:8px;background:var(--dsw-alias-bg-layer-2,#f7f5f1);font-size:10px;color:var(--dsw-alias-fg-muted,#706d67)}.dcu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.dcu-field{display:grid;gap:5px}.dcu-field>span{font-size:10px;font-weight:650}.dcu-field select,.dcu-panel textarea{border:1px solid var(--dsw-alias-border-subtle,#dedbd5);border-radius:9px;background:var(--dsw-alias-bg-layer-1,#fff);color:inherit}.dcu-field select{min-height:34px;padding:6px 9px;font:11px inherit}.dcu-check{display:flex;align-items:center;gap:8px;padding-top:19px;font-size:11px}.dcu-check-primary{align-items:flex-start;padding:10px 0}.dcu-check-primary input{margin-top:2px}.dcu-check-primary span{display:grid;gap:3px}.dcu-check-primary strong{font-size:12px}.dcu-check-primary small{font-size:10px;line-height:1.45;color:var(--dsw-alias-fg-muted,#706d67)}.dcu-panel textarea{min-height:110px;resize:vertical;padding:10px;font:12px ui-monospace,SFMono-Regular,Menlo,monospace}.dcu-alert{padding:10px 12px;border-radius:10px;font-size:11px}.dcu-alert.error{background:rgba(205,72,72,.1);color:#a13b3b}.dcu-alert.warning{background:rgba(211,151,49,.12);color:#8b651f}.dcu-alert.ok{background:rgba(48,154,100,.12);color:#267d52}.dcu-actions{display:flex;justify-content:flex-start;padding:2px 0}@media(max-width:720px){.dcu-footer{display:grid}.dcu-release{width:auto}.dcu-grid,.dcu-permissions{grid-template-columns:1fr}}
++.dcu-settings{display:grid;gap:14px;max-width:920px;padding:2px 0 24px}.dcu-footer{display:flex;justify-content:space-between;gap:22px;align-items:flex-start;margin-top:8px;padding:20px 2px 4px;border-top:1px solid var(--dsw-alias-border-l1,#dedbd5);opacity:.82}.dcu-footer h2{margin:4px 0 6px;font-size:18px}.dcu-footer p{margin:0;max-width:610px;font-size:11px;line-height:1.55;color:var(--dsw-alias-label-secondary,#706d67)}.dcu-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#687f74;font-weight:700}.dcu-release{display:grid;gap:5px;min-width:220px;padding:10px 12px;border-radius:11px;background:var(--dsw-alias-bg-layer-2,#f7f5f1);font-size:10px}.dcu-release span{display:flex;justify-content:space-between;gap:12px;white-space:nowrap}.dcu-release .ok{color:#277d52}.dcu-release .bad{color:#aa3939}.dcu-panel{display:grid;gap:13px;padding:16px;border:1px solid var(--dsw-alias-border-l1,#dedbd5);border-radius:14px;background:var(--dsw-alias-bg-layer-1,#fff)}.dcu-essential{border-color:color-mix(in srgb,#687f74 35%,var(--dsw-alias-border-l1,#dedbd5));box-shadow:0 0 0 3px rgba(104,127,116,.05)}.dcu-panel-title{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.dcu-panel-title h3{margin:0;font-size:14px}.dcu-panel-title p{margin:4px 0 0;font-size:10px;line-height:1.45;color:var(--dsw-alias-label-secondary,#706d67)}.dcu-permissions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.dcu-permission{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px;border-radius:11px;background:var(--dsw-alias-bg-layer-2,#f7f5f1);border-left:3px solid #cc5555}.dcu-permission[data-granted]{border-left-color:#3ca26b}.dcu-permission div{display:grid;gap:3px}.dcu-permission span{font-size:10px}.dcu-permission strong{font-size:11px}.dcu-path{display:block;overflow:auto;padding:8px 10px;border-radius:8px;background:var(--dsw-alias-bg-layer-2,#f7f5f1);font-size:10px;color:var(--dsw-alias-label-secondary,#706d67)}.dcu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.dcu-field{display:grid;gap:5px}.dcu-field>span{font-size:10px;font-weight:650}.dcu-field select,.dcu-panel textarea{border:1px solid var(--dsw-alias-border-l1,#dedbd5);border-radius:9px;background:var(--dsw-alias-bg-layer-1,#fff);color:inherit}.dcu-field select{min-height:34px;padding:6px 9px;font:11px inherit}.dcu-check{display:flex;align-items:center;gap:8px;padding-top:19px;font-size:11px}.dcu-check-primary{align-items:flex-start;padding:10px 0}.dcu-check-primary input{margin-top:2px}.dcu-check-primary span{display:grid;gap:3px}.dcu-check-primary strong{font-size:12px}.dcu-check-primary small{font-size:10px;line-height:1.45;color:var(--dsw-alias-label-secondary,#706d67)}.dcu-panel textarea{min-height:110px;resize:vertical;padding:10px;font:12px ui-monospace,SFMono-Regular,Menlo,monospace}.dcu-alert{padding:10px 12px;border-radius:10px;font-size:11px}.dcu-alert.error{background:rgba(205,72,72,.1);color:#a13b3b}.dcu-alert.warning{background:rgba(211,151,49,.12);color:#8b651f}.dcu-alert.ok{background:rgba(48,154,100,.12);color:#267d52}.dcu-actions{display:flex;justify-content:flex-start;padding:2px 0}@media(max-width:720px){.dcu-footer{display:grid}.dcu-release{width:auto}.dcu-grid,.dcu-permissions{grid-template-columns:1fr}}
+ `
+ 
+-const ADVANCED_CSS = `.dcu-advanced{border:1px solid var(--dsw-alias-border-subtle,#dedbd5);border-radius:14px;background:var(--dsw-alias-bg-layer-1,#fff);overflow:hidden}.dcu-advanced>summary{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;list-style:none;font-size:13px;font-weight:650}.dcu-advanced>summary::-webkit-details-marker{display:none}.dcu-advanced>summary small{margin-left:auto;font-size:10px;font-weight:400;color:var(--dsw-alias-fg-muted,#706d67)}.dcu-advanced>summary::after{content:"▸";margin-left:2px;font-size:12px;color:var(--dsw-alias-fg-muted,#706d67);transform:rotate(0deg);transition:transform .15s ease}.dcu-advanced[open]>summary::after{transform:rotate(90deg)}.dcu-advanced-body{display:grid;gap:14px;padding:2px 16px 16px}`
++const ADVANCED_CSS = `.dcu-advanced{border:1px solid var(--dsw-alias-border-l1,#dedbd5);border-radius:14px;background:var(--dsw-alias-bg-layer-1,#fff);overflow:hidden}.dcu-advanced>summary{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;list-style:none;font-size:13px;font-weight:650}.dcu-advanced>summary::-webkit-details-marker{display:none}.dcu-advanced>summary small{margin-left:auto;font-size:10px;font-weight:400;color:var(--dsw-alias-label-secondary,#706d67)}.dcu-advanced>summary::after{content:"▸";margin-left:2px;font-size:12px;color:var(--dsw-alias-label-secondary,#706d67);transform:rotate(0deg);transition:transform .15s ease}.dcu-advanced[open]>summary::after{transform:rotate(90deg)}.dcu-advanced-body{display:grid;gap:14px;padding:2px 16px 16px}`
+ 
+ function installStyles(): () => void {
+   const id = '@anionex/dsh-computer-use/client'
+
+--- upstream/lib/client.js
++++ alpha/lib/client.js
+@@ -325,9 +325,9 @@
+     return (0, jsx_runtime_1.jsxs)("div", { className: "dcu-settings", children: [snapshot.provider.lastError === undefined ? null : (0, jsx_runtime_1.jsx)("div", { className: "dcu-alert error", children: snapshot.provider.lastError }), !snapshot.writable ? (0, jsx_runtime_1.jsx)("div", { className: "dcu-alert warning", children: t('readOnly') }) : null, state.error === undefined && draftError === undefined ? null : (0, jsx_runtime_1.jsx)("div", { className: "dcu-alert error", children: draftError ?? state.error }), state.notice === 'saved' ? (0, jsx_runtime_1.jsx)("div", { className: "dcu-alert ok", children: t('saved') }) : null, (0, jsx_runtime_1.jsxs)("section", { className: "dcu-panel", children: [(0, jsx_runtime_1.jsxs)("div", { className: "dcu-panel-title", children: [(0, jsx_runtime_1.jsx)("h3", { children: t('privacy') }), (0, jsx_runtime_1.jsx)(dsh_client_ui_primitives_1.Button, { variant: "outline", onClick: () => { void controller.action('health', {}, 'health'); }, children: t('refresh') })] }), (0, jsx_runtime_1.jsxs)("div", { className: "dcu-permissions", children: [(0, jsx_runtime_1.jsx)(PermissionCard, { label: t('accessibility'), state: snapshot.provider.accessibility, kind: "accessibility", controller: controller, t: t }), (0, jsx_runtime_1.jsx)(PermissionCard, { label: t('screenRecording'), state: snapshot.provider.screenRecording, kind: "screen-recording", controller: controller, t: t })] })] }), (0, jsx_runtime_1.jsxs)("section", { className: "dcu-panel dcu-essential", children: [(0, jsx_runtime_1.jsx)("div", { className: "dcu-panel-title", children: (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("h3", { children: t('access') }), (0, jsx_runtime_1.jsx)("p", { children: t('accessHint') })] }) }), (0, jsx_runtime_1.jsxs)("label", { className: "dcu-check dcu-check-primary", children: [(0, jsx_runtime_1.jsx)("input", { type: "checkbox", checked: draft.allowAllApps, onChange: event => update('allowAllApps', event.target.checked) }), (0, jsx_runtime_1.jsxs)("span", { children: [(0, jsx_runtime_1.jsx)("strong", { children: t('allowAllApps') }), (0, jsx_runtime_1.jsx)("small", { children: t('allowAllAppsHint') })] })] })] }), (0, jsx_runtime_1.jsx)("div", { className: "dcu-actions", children: (0, jsx_runtime_1.jsx)(dsh_client_ui_primitives_1.Button, { variant: "primary", disabled: !snapshot.writable || state.action !== undefined, onClick: save, children: state.action === 'save' ? t('saving') : t('save') }) }), (0, jsx_runtime_1.jsxs)("details", { className: "dcu-advanced", children: [(0, jsx_runtime_1.jsxs)("summary", { children: [(0, jsx_runtime_1.jsx)("span", { children: t('advanced') }), (0, jsx_runtime_1.jsx)("small", { children: t('advancedHint') })] }), (0, jsx_runtime_1.jsxs)("div", { className: "dcu-advanced-body", children: [(0, jsx_runtime_1.jsxs)("section", { className: "dcu-panel", children: [(0, jsx_runtime_1.jsx)("div", { className: "dcu-panel-title", children: (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("h3", { children: t('interaction') }), (0, jsx_runtime_1.jsx)("p", { children: t('interactionHint') })] }) }), (0, jsx_runtime_1.jsxs)("div", { className: "dcu-grid", children: [(0, jsx_runtime_1.jsx)(Field, { label: t('focusPolicy'), children: (0, jsx_runtime_1.jsxs)("select", { value: draft.focusPolicy, onChange: event => update('focusPolicy', event.target.value), children: [(0, jsx_runtime_1.jsx)("option", { value: "preserve", children: t('focusPreserve') }), (0, jsx_runtime_1.jsx)("option", { value: "activate", children: t('focusActivate') })] }) }), (0, jsx_runtime_1.jsx)(Field, { label: t('keyboardPolicy'), children: (0, jsx_runtime_1.jsxs)("select", { value: draft.keyboardPolicy, onChange: event => update('keyboardPolicy', event.target.value), children: [(0, jsx_runtime_1.jsx)("option", { value: "preserve", children: t('keyboardPreserve') }), (0, jsx_runtime_1.jsx)("option", { value: "activate", children: t('keyboardActivate') })] }) }), (0, jsx_runtime_1.jsx)(Field, { label: t('pointerInputPolicy'), children: (0, jsx_runtime_1.jsxs)("select", { value: draft.pointerInputPolicy, onChange: event => update('pointerInputPolicy', event.target.value), children: [(0, jsx_runtime_1.jsx)("option", { value: "deny", children: t('pointerDeny') }), (0, jsx_runtime_1.jsx)("option", { value: "targeted", children: t('pointerAllow') })] }) }), (0, jsx_runtime_1.jsx)(Field, { label: t('cursorVisualization'), children: (0, jsx_runtime_1.jsxs)("select", { value: draft.cursorVisualization, onChange: event => update('cursorVisualization', event.target.value), children: [(0, jsx_runtime_1.jsx)("option", { value: "visible", children: t('cursorVisible') }), (0, jsx_runtime_1.jsx)("option", { value: "hidden", children: t('cursorHidden') })] }) })] })] }), (0, jsx_runtime_1.jsxs)("section", { className: "dcu-panel", children: [(0, jsx_runtime_1.jsx)("div", { className: "dcu-panel-title", children: (0, jsx_runtime_1.jsx)("h3", { children: t('limits') }) }), (0, jsx_runtime_1.jsxs)("div", { className: "dcu-grid", children: [numberField('observationTtlMs', t('ttl')), numberField('confirmationTtlMs', t('confirmationTtl')), numberField('actionTimeoutMs', t('actionTimeout')), numberField('settleMs', t('settle')), numberField('maxSettleMs', t('maxSettle')), numberField('maxNodes', t('maxNodes')), numberField('maxDepth', t('maxDepth')), numberField('maxTextBytes', t('maxText')), numberField('maxScreenshotBytes', t('maxScreenshot')), (0, jsx_runtime_1.jsx)(Field, { label: t('artifactRoot'), children: (0, jsx_runtime_1.jsx)(dsh_client_ui_primitives_1.Input, { value: draft.artifactRoot, onChange: event => update('artifactRoot', event.target.value) }) })] })] }), (0, jsx_runtime_1.jsxs)("section", { className: "dcu-panel", children: [(0, jsx_runtime_1.jsx)("div", { className: "dcu-panel-title", children: (0, jsx_runtime_1.jsx)("h3", { children: t('cursorTiming') }) }), (0, jsx_runtime_1.jsxs)("div", { className: "dcu-grid", children: [numberField('cursorSpeedPxPerSecond', t('cursorSpeed'), { min: 100, max: 50000 }), numberField('cursorAccelerationPxPerSecondSquared', t('cursorAcceleration'), { min: 100, max: 500000 }), numberField('cursorClickDelayMs', t('cursorClickDelay'), { max: 1000 }), numberField('cursorAutoHideMs', t('cursorAutoHide'), { max: 30000 })] })] }), (0, jsx_runtime_1.jsxs)("section", { className: "dcu-panel", children: [(0, jsx_runtime_1.jsx)("div", { className: "dcu-panel-title", children: (0, jsx_runtime_1.jsx)("h3", { children: t('helper') }) }), (0, jsx_runtime_1.jsx)("code", { className: "dcu-path", children: snapshot.provider.helperPath }), snapshot.provider.helperSha256 === undefined ? null : (0, jsx_runtime_1.jsxs)("code", { className: "dcu-path", children: ["sha256 ", snapshot.provider.helperSha256] }), (0, jsx_runtime_1.jsxs)("div", { className: "dcu-grid", children: [(0, jsx_runtime_1.jsx)(Field, { label: t('helperPath'), children: (0, jsx_runtime_1.jsx)(dsh_client_ui_primitives_1.Input, { value: draft.helperPath, placeholder: "managed", onChange: event => update('helperPath', event.target.value) }) }), (0, jsx_runtime_1.jsxs)("label", { className: "dcu-check", children: [(0, jsx_runtime_1.jsx)("input", { type: "checkbox", checked: draft.allowSourceBuild, onChange: event => update('allowSourceBuild', event.target.checked) }), (0, jsx_runtime_1.jsx)("span", { children: t('sourceBuild') })] })] })] }), (0, jsx_runtime_1.jsxs)("section", { className: "dcu-panel", children: [(0, jsx_runtime_1.jsx)("div", { className: "dcu-panel-title", children: (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("h3", { children: t('grants') }), (0, jsx_runtime_1.jsx)("p", { children: t('grantsHint') })] }) }), (0, jsx_runtime_1.jsx)("textarea", { value: draft.grants, disabled: draft.allowAllApps, onChange: event => update('grants', event.target.value), placeholder: 'com.example.App read\ncom.example.Editor read,control' })] })] })] }), (0, jsx_runtime_1.jsxs)("footer", { className: "dcu-footer", children: [(0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("span", { className: "dcu-kicker", children: t('pluginKind') }), (0, jsx_runtime_1.jsx)("h2", { children: t('title') }), (0, jsx_runtime_1.jsx)("p", { children: t('intro') })] }), (0, jsx_runtime_1.jsxs)("div", { className: "dcu-release", children: [(0, jsx_runtime_1.jsxs)("span", { children: [t('helper'), " ", (0, jsx_runtime_1.jsx)("strong", { children: snapshot.provider.helperVersion ?? t('helperUnknown') })] }), (0, jsx_runtime_1.jsxs)("span", { children: [t('generation'), " ", (0, jsx_runtime_1.jsx)("strong", { children: t('generationValue', { generation: snapshot.provider.generation }) })] }), (0, jsx_runtime_1.jsx)("span", { className: snapshot.provider.ready ? 'ok' : 'bad', children: snapshot.provider.ready ? t('ready') : t('unavailable') })] })] })] });
+ }
+ const CSS = `
+-.dcu-settings{display:grid;gap:14px;max-width:920px;padding:2px 0 24px}.dcu-footer{display:flex;justify-content:space-between;gap:22px;align-items:flex-start;margin-top:8px;padding:20px 2px 4px;border-top:1px solid var(--dsw-alias-border-subtle,#dedbd5);opacity:.82}.dcu-footer h2{margin:4px 0 6px;font-size:18px}.dcu-footer p{margin:0;max-width:610px;font-size:11px;line-height:1.55;color:var(--dsw-alias-fg-muted,#706d67)}.dcu-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#687f74;font-weight:700}.dcu-release{display:grid;gap:5px;min-width:220px;padding:10px 12px;border-radius:11px;background:var(--dsw-alias-bg-layer-2,#f7f5f1);font-size:10px}.dcu-release span{display:flex;justify-content:space-between;gap:12px;white-space:nowrap}.dcu-release .ok{color:#277d52}.dcu-release .bad{color:#aa3939}.dcu-panel{display:grid;gap:13px;padding:16px;border:1px solid var(--dsw-alias-border-subtle,#dedbd5);border-radius:14px;background:var(--dsw-alias-bg-layer-1,#fff)}.dcu-essential{border-color:color-mix(in srgb,#687f74 35%,var(--dsw-alias-border-subtle,#dedbd5));box-shadow:0 0 0 3px rgba(104,127,116,.05)}.dcu-panel-title{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.dcu-panel-title h3{margin:0;font-size:14px}.dcu-panel-title p{margin:4px 0 0;font-size:10px;line-height:1.45;color:var(--dsw-alias-fg-muted,#706d67)}.dcu-permissions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.dcu-permission{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px;border-radius:11px;background:var(--dsw-alias-bg-layer-2,#f7f5f1);border-left:3px solid #cc5555}.dcu-permission[data-granted]{border-left-color:#3ca26b}.dcu-permission div{display:grid;gap:3px}.dcu-permission span{font-size:10px}.dcu-permission strong{font-size:11px}.dcu-path{display:block;overflow:auto;padding:8px 10px;border-radius:8px;background:var(--dsw-alias-bg-layer-2,#f7f5f1);font-size:10px;color:var(--dsw-alias-fg-muted,#706d67)}.dcu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.dcu-field{display:grid;gap:5px}.dcu-field>span{font-size:10px;font-weight:650}.dcu-field select,.dcu-panel textarea{border:1px solid var(--dsw-alias-border-subtle,#dedbd5);border-radius:9px;background:var(--dsw-alias-bg-layer-1,#fff);color:inherit}.dcu-field select{min-height:34px;padding:6px 9px;font:11px inherit}.dcu-check{display:flex;align-items:center;gap:8px;padding-top:19px;font-size:11px}.dcu-check-primary{align-items:flex-start;padding:10px 0}.dcu-check-primary input{margin-top:2px}.dcu-check-primary span{display:grid;gap:3px}.dcu-check-primary strong{font-size:12px}.dcu-check-primary small{font-size:10px;line-height:1.45;color:var(--dsw-alias-fg-muted,#706d67)}.dcu-panel textarea{min-height:110px;resize:vertical;padding:10px;font:12px ui-monospace,SFMono-Regular,Menlo,monospace}.dcu-alert{padding:10px 12px;border-radius:10px;font-size:11px}.dcu-alert.error{background:rgba(205,72,72,.1);color:#a13b3b}.dcu-alert.warning{background:rgba(211,151,49,.12);color:#8b651f}.dcu-alert.ok{background:rgba(48,154,100,.12);color:#267d52}.dcu-actions{display:flex;justify-content:flex-start;padding:2px 0}@media(max-width:720px){.dcu-footer{display:grid}.dcu-release{width:auto}.dcu-grid,.dcu-permissions{grid-template-columns:1fr}}
++.dcu-settings{display:grid;gap:14px;max-width:920px;padding:2px 0 24px}.dcu-footer{display:flex;justify-content:space-between;gap:22px;align-items:flex-start;margin-top:8px;padding:20px 2px 4px;border-top:1px solid var(--dsw-alias-border-l1,#dedbd5);opacity:.82}.dcu-footer h2{margin:4px 0 6px;font-size:18px}.dcu-footer p{margin:0;max-width:610px;font-size:11px;line-height:1.55;color:var(--dsw-alias-label-secondary,#706d67)}.dcu-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#687f74;font-weight:700}.dcu-release{display:grid;gap:5px;min-width:220px;padding:10px 12px;border-radius:11px;background:var(--dsw-alias-bg-layer-2,#f7f5f1);font-size:10px}.dcu-release span{display:flex;justify-content:space-between;gap:12px;white-space:nowrap}.dcu-release .ok{color:#277d52}.dcu-release .bad{color:#aa3939}.dcu-panel{display:grid;gap:13px;padding:16px;border:1px solid var(--dsw-alias-border-l1,#dedbd5);border-radius:14px;background:var(--dsw-alias-bg-layer-1,#fff)}.dcu-essential{border-color:color-mix(in srgb,#687f74 35%,var(--dsw-alias-border-l1,#dedbd5));box-shadow:0 0 0 3px rgba(104,127,116,.05)}.dcu-panel-title{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.dcu-panel-title h3{margin:0;font-size:14px}.dcu-panel-title p{margin:4px 0 0;font-size:10px;line-height:1.45;color:var(--dsw-alias-label-secondary,#706d67)}.dcu-permissions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.dcu-permission{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px;border-radius:11px;background:var(--dsw-alias-bg-layer-2,#f7f5f1);border-left:3px solid #cc5555}.dcu-permission[data-granted]{border-left-color:#3ca26b}.dcu-permission div{display:grid;gap:3px}.dcu-permission span{font-size:10px}.dcu-permission strong{font-size:11px}.dcu-path{display:block;overflow:auto;padding:8px 10px;border-radius:8px;background:var(--dsw-alias-bg-layer-2,#f7f5f1);font-size:10px;color:var(--dsw-alias-label-secondary,#706d67)}.dcu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.dcu-field{display:grid;gap:5px}.dcu-field>span{font-size:10px;font-weight:650}.dcu-field select,.dcu-panel textarea{border:1px solid var(--dsw-alias-border-l1,#dedbd5);border-radius:9px;background:var(--dsw-alias-bg-layer-1,#fff);color:inherit}.dcu-field select{min-height:34px;padding:6px 9px;font:11px inherit}.dcu-check{display:flex;align-items:center;gap:8px;padding-top:19px;font-size:11px}.dcu-check-primary{align-items:flex-start;padding:10px 0}.dcu-check-primary input{margin-top:2px}.dcu-check-primary span{display:grid;gap:3px}.dcu-check-primary strong{font-size:12px}.dcu-check-primary small{font-size:10px;line-height:1.45;color:var(--dsw-alias-label-secondary,#706d67)}.dcu-panel textarea{min-height:110px;resize:vertical;padding:10px;font:12px ui-monospace,SFMono-Regular,Menlo,monospace}.dcu-alert{padding:10px 12px;border-radius:10px;font-size:11px}.dcu-alert.error{background:rgba(205,72,72,.1);color:#a13b3b}.dcu-alert.warning{background:rgba(211,151,49,.12);color:#8b651f}.dcu-alert.ok{background:rgba(48,154,100,.12);color:#267d52}.dcu-actions{display:flex;justify-content:flex-start;padding:2px 0}@media(max-width:720px){.dcu-footer{display:grid}.dcu-release{width:auto}.dcu-grid,.dcu-permissions{grid-template-columns:1fr}}
+ `;
+-const ADVANCED_CSS = `.dcu-advanced{border:1px solid var(--dsw-alias-border-subtle,#dedbd5);border-radius:14px;background:var(--dsw-alias-bg-layer-1,#fff);overflow:hidden}.dcu-advanced>summary{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;list-style:none;font-size:13px;font-weight:650}.dcu-advanced>summary::-webkit-details-marker{display:none}.dcu-advanced>summary small{margin-left:auto;font-size:10px;font-weight:400;color:var(--dsw-alias-fg-muted,#706d67)}.dcu-advanced>summary::after{content:"▸";margin-left:2px;font-size:12px;color:var(--dsw-alias-fg-muted,#706d67);transform:rotate(0deg);transition:transform .15s ease}.dcu-advanced[open]>summary::after{transform:rotate(90deg)}.dcu-advanced-body{display:grid;gap:14px;padding:2px 16px 16px}`;
++const ADVANCED_CSS = `.dcu-advanced{border:1px solid var(--dsw-alias-border-l1,#dedbd5);border-radius:14px;background:var(--dsw-alias-bg-layer-1,#fff);overflow:hidden}.dcu-advanced>summary{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;list-style:none;font-size:13px;font-weight:650}.dcu-advanced>summary::-webkit-details-marker{display:none}.dcu-advanced>summary small{margin-left:auto;font-size:10px;font-weight:400;color:var(--dsw-alias-label-secondary,#706d67)}.dcu-advanced>summary::after{content:"▸";margin-left:2px;font-size:12px;color:var(--dsw-alias-label-secondary,#706d67);transform:rotate(0deg);transition:transform .15s ease}.dcu-advanced[open]>summary::after{transform:rotate(90deg)}.dcu-advanced-body{display:grid;gap:14px;padding:2px 16px 16px}`;
+ function installStyles() {
+     const id = '@anionex/dsh-computer-use/client';
+     const existing = document.querySelector(`style[data-plugin-css="${id}"]`);

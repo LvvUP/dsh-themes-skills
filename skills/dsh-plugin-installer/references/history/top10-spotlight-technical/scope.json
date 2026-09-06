@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "kind": "top10-technical-stage-scope",
+  "status": "technical-passed-visual-pending",
+  "receiptSha256": "b53558b77feb6206e7791020713c34cfe54937dd2c3b8a3de39ec02793e276fb",
+  "catalogSha256": "9707f2379e772a2ef5390b0620ffe2caa523261032b8cabc39796df6af4da54f",
+  "catalogIds": [
+    3092,
+    3052,
+    3032,
+    3033,
+    3040,
+    3044,
+    3036,
+    3010,
+    3041,
+    3004
+  ],
+  "technicalStages": [
+    "install-top10",
+    "repeat-install-top10",
+    "remove-pair-for-controlled-install-failure",
+    "partial-install-disappeared-private-archive",
+    "repair-controlled-install-failure",
+    "uninstall-top10",
+    "repeat-uninstall-top10"
+  ],
+  "commandCount": 165,
+  "expectedControlledFailures": 1,
+  "additionalSkinCommands": 2,
+  "limitations": [
+    "This original receipt records the checks performed by its exact eight execution snapshots. Its passed status covers the technical lifecycle and automated coexistence assertions, not complete visual acceptance.",
+    "Manual screenshot review found the existing Reasoning Tide alpha.1 sidebar backdrop-filter confines the native Settings dialog. The final current Top 10 remains pending a separate coexistence run with the corrected first-party skin artifact.",
+    "No model task, paid API call or configured third-party account feature was exercised."
+  ],
+  "executionSnapshots": [
+    {
+      "name": "install-plugins.mjs",
+      "sha256": "3f791ce0c81c5bf0e5dae8e0bc496a43e5ff1d910384d7c6e4e5596a4ae11321"
+    },
+    {
+      "name": "uninstall-plugins.mjs",
+      "sha256": "ace37dc4a62a350ebc418834a1bcc460740e6393976667e9bb133dedeedf4706"
+    },
+    {
+      "name": "dsh-alpha.mjs",
+      "sha256": "d7664679a96517ef8068a7dd4a6b33f640d18980f81f79223a75a7c8468cb6ff"
+    },
+    {
+      "name": "verify-dsh-top10-runtime.mjs",
+      "sha256": "cc3baf43576296ff722e95bfda87e938e5a0246dde488ff6acd51ce45d62c5ec"
+    },
+    {
+      "name": "verify-dsh-plugin-runtime.mjs",
+      "sha256": "bc7128a9aa5f787b3e167d340aeb50fcad007233e0af1ba32cb034b5ea3525a3"
+    },
+    {
+      "name": "verify-dsh-spotlight-runtime.mjs",
+      "sha256": "31edfd19167b5dfe705312bff733673a6913059ef584c134667667b657a5be5d"
+    },
+    {
+      "name": "dsh-plugin-optional-runtime.mjs",
+      "sha256": "fad580d34131a441f20a8899d773f839faad481004ff3cf3ac992effc45df3f1"
+    },
+    {
+      "name": "plugin-recommendation-contract.mjs",
+      "sha256": "ef7f90b2ccd5134d250010024916824f4bcc0f3aa6ca829572422ba5bbbafa03"
+    }
+  ]
+}

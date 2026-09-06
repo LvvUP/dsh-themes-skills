@@ -1,0 +1,3 @@
+- insert:
+    - id: dsh-community-catppuccin
+      name: '@dsh-themes-community/catppuccin-alpha'

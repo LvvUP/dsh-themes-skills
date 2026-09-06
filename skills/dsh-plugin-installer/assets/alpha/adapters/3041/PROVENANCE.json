@@ -1,0 +1,25 @@
+{
+  "catalogId": 3041,
+  "sourceRepository": "GooodWei/context-vista",
+  "sourceRevision": "8fdcabc6276e3921c32e4e973ff7eaf68cbdf334",
+  "originalSpecifier": "context-vista@0.1.0",
+  "registryIntegrity": "sha512-oE8xX1j4NZK40MlL9eu7k5a+p1YN2fMFqHep7kzKVo8rQHWEishrN9bEUYRu8nNq+YCw5ynXeAxduDVvC5vGiA==",
+  "originalArchiveSha256": "15fa4e4c562fa4edbd4c0b3dca0c40b0f15118bb5a3a547ea69a6c9dc56ab5c8",
+  "license": "MIT",
+  "adaptedBy": "DSH Themes contributors",
+  "targetDshVersion": "0.1.3-alpha.1",
+  "changes": [
+    "Replace removed settings namespace/helper exports with the Alpha settings provider instance API, retaining scoped registration and live updates.",
+    "Remove the obsolete client-runtime injector declaration after migrating its APIs.",
+    "Express the three optional pricing override fields with Schemastery required(false), preserving optional-value semantics."
+  ],
+  "files": {
+    "LICENSE": "d6f94cf3e57ae523350935e797d446e9a55a1602d63f4520cfd483a056dd99aa",
+    "README.en.md": "0e69bf4e90e62c5b791907303a300fa57138f25011353b76d3284a0e5a81fc46",
+    "README.md": "9c29fcc8ef41e1862155154018ff45400bc953ac92564b4e592a22e8fcc26a28",
+    "cordis.patch.yml": "9f9406662c11d1d5e1f4a769cd5359a3f82fe2d96c87a1a8012e353aa6dbdaaf",
+    "lib/client.js": "3087ae6ed20c2f64fdb0ef5f9a8a2a9a75ae1847d792a952fc0f22b72048b8ef",
+    "lib/index.js": "bea7c9e166019f0f20dcd3ffc626d9851693b4bd9773bc19348322f32ae76dea",
+    "package.json": "3493a9595f9ebd8703b367ef5f216f4a16391fccba1c48ea997104702714bab0"
+  }
+}

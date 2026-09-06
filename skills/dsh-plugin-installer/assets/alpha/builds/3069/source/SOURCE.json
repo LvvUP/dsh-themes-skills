@@ -1,0 +1,13 @@
+{
+  "sourceRepository": "Drifter-yh/dsh-tool-policy",
+  "sourceRevision": "c3b613fd1e829ad0781e79612c0d53dd1b40ec05",
+  "files": {
+    "LICENSE": "a37d15caa67deb0c34f7fe3d14694b4e45a0f58100e8b316ec82ede4a1bf873a",
+    "README.md": "4eeec6d1ac2d88da4ca5cfe748078e24568057a4ea6cc04596db8601d25440ca",
+    "cordis.patch.yml": "fdb2bb8d4e03d3240298826f1d3c20c98ff9aebdb08f67d30e975794dad0f5a4",
+    "package.json": "56104ed3f633692a518b7f19fc59fcfc6e60abeb96f3f2d0fd84c8681cd79b59",
+    "src/index.ts": "350d71c6ffcac604401c202cf5781a8669daf9f8a15ffb096753ea98876980e5",
+    "src/policy.ts": "af19db031f152c764058be9f0dc619b7780e1bdb5d086e6dd290cb54d27e76e8",
+    "tsdown.config.ts": "c3ad94897e4fa22823673d86545ed4f98a6671c3dbc50231d80a17af95f10025"
+  }
+}

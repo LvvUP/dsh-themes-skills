@@ -1,0 +1,78 @@
+{
+  "sourceRepository": "RevolutionLA/dsh-dream-skin",
+  "sourceRevision": "7334b77169cc3ffbfc7f052c7c883ae33b2f9446",
+  "files": [
+    {
+      "path": "LICENSE",
+      "gitBlob": "1fb51fff18ede0dc0a9e87304da0cd2ed8181c99",
+      "sha256": "57b73211ddb23f3dc76c513962c39d0a43e1ca57fa4512910ca7dad603923c05",
+      "bytes": 1084
+    },
+    {
+      "path": "README.md",
+      "gitBlob": "2999baba8eede8eba078c610e69d4c85aa19b65e",
+      "sha256": "ffdef77f001f06a85c61d6c566bfca97ef24263231bde9746feb9c144a7735d5",
+      "bytes": 18586
+    },
+    {
+      "path": "cordis.patch.yml",
+      "gitBlob": "65b6c6a47c0cf43f44b7965d4be04c9185608717",
+      "sha256": "cd64473da5428bba261dfa9709d4134711d3cb62bf319bb11bbf195fc9aaf089",
+      "bytes": 356
+    },
+    {
+      "path": "lib/client.js",
+      "gitBlob": "c2199e59ff8498e00ab9294eb2f6d609ba58e0d7",
+      "sha256": "8cccfc5882f3f3ad2b3f623549d9d3c30321e1431a192a2b5792bbb09acd4b89",
+      "bytes": 126790
+    },
+    {
+      "path": "lib/index.js",
+      "gitBlob": "f65d84ac10b726a5551c37af0db1ff2844b7c48f",
+      "sha256": "6b936d6a0eee52aa9cf9f3b1b8729acc300ecf53fb91e2bb68e430fd0fe59167",
+      "bytes": 11128
+    },
+    {
+      "path": "lib/types/client/index.d.ts",
+      "gitBlob": "90b7b444c82cec18f985ee7c1bb818c79fa76ee1",
+      "sha256": "ebf3495997fe4c466dea7c081c6ac9276c626fd847e1dc10ec34c76a47a03e2e",
+      "bytes": 2201
+    },
+    {
+      "path": "lib/types/index.d.ts",
+      "gitBlob": "364c4d732b36b0d607d079e617c0d7abceb5bf70",
+      "sha256": "84e6fe63ab6750ff7a107ffbc928e87332267145833f1981885e58af413e750b",
+      "bytes": 2055
+    },
+    {
+      "path": "package.json",
+      "gitBlob": "9de3b512b3aaa5a01a6700a07960842bedbaf3c8",
+      "sha256": "82dfa8813dd5d2fa486b8f88fc22a0fb0a1d33cbb8fca6d35835814ac23a240b",
+      "bytes": 2465
+    }
+  ],
+  "adaptation": "DSH Themes Alpha module ID and profile metadata; legacy defineStore import now uses the official shared client-store module. Original feature implementation, source coordinate and license retained.",
+  "alphaMaterialAdaptation": {
+    "reason": "The original hard-coded CSS module hashes do not occur in the fixed Alpha build. Add narrowly scoped Alpha semantic selectors while retaining the original fallback selectors.",
+    "targets": [
+      "composer card and its immediate root",
+      "todo panel",
+      "queue dock",
+      "question card directly inside data-question-key"
+    ],
+    "scope": "No blur or filter is added to frame, sidebar, conversation, or settings ancestors.",
+    "reviewedSource": [
+      "packages/client/ui-conversation/src/client/skeleton/InputBar.tsx",
+      "packages/client/ui-conversation/src/client/skeleton/TodoPanel.tsx",
+      "packages/client/ui-conversation/src/client/queue/QueueDock.tsx",
+      "packages/client/ui-user-questions/src/client/QuestionComposer.tsx"
+    ],
+    "runtimeStatus": "Candidate at packaging time; current verification status and exact-byte receipt are maintained outside this archive in community-recipes.json."
+  },
+  "alphaWallpaperAdaptation": {
+    "reason": "Alpha ThemeSnapshot.active includes composed override tokens. Reusing this package's prior wash retained the previous palette after a live selection, while a cold restore used the correct new palette.",
+    "change": "Resolve wallpaper base/sidebar colors from snapshot.themes registration matching active.id before applying opacity. Keep the original palette definitions and wallpaper preferences.",
+    "officialSource": "packages/client/ui-theme/src/client/index.ts@d347e703908d0406b7a7ef80e3a0e594d86b2215",
+    "verification": "Live Abyss to Aurora palette switch must match the saved Aurora cold-restart background."
+  }
+}

@@ -1,0 +1,21 @@
+# Bundle patch layer for self-control-guard.
+# Applied when a profile lists this bundle (dsh plugin --profile <name> add .).
+# A patch replaces a row's whole config; rows are addressed by id, later
+# layers win. Reference: docs/user/develop/basic/publish.md in the harness.
+- insert:
+    - id: self-control-guard
+      name: self-control-guard
+      config:
+        enabled: true
+        confirmationCalls: 2        # total calls: first arms the token, final confirms
+        confirmationTtlMs: 60000    # token validity window
+        retryCooldownMs: 10000      # lockout after a failed attempt at the call ceiling
+        interceptModes: [kill-host-pid, kill-parent, pkill-dsh, killall-dsh]
+        exitCode: 0                 # code requested by dsh_self_exit
+        restartExitCode: 42         # code requested by dsh_self_restart; must differ from exitCode
+        restartEnabled: false        # hidden by default: no supervisor on web; TBD
+        headlessRestart: deny       # headless one-shot restart policy: deny | exit-code
+        allowedAgents: roots        # who may request host exit: roots | all
+        manifestPath: ''            # opt-in: set a path to write the restart recovery roster
+        privilegedBash:
+          enabled: false            # explicit escape hatch; opt in after reviewing the documented gates

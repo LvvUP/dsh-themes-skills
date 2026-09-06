@@ -1,0 +1,13 @@
+{
+  "sourceRepository": "tappass/dsh-governance",
+  "sourceRevision": "ac9ccbc16ed2dd5359619a6c87899106a3eecd65",
+  "files": {
+    "LICENSE": "ae6ff194f04e4720f62415ae45442fb356c02399adefb76236adeb506b5236ae",
+    "README.md": "6a19b86d15fac29f75c48c201cce0d3bca9f63f316ffcc1b0dcd85650db057b2",
+    "cordis.patch.yml": "47c6ee44da6f342f42e40f41b5a07d74eea1be6c42a4c239e74cb3b274c81128",
+    "package.json": "5cb57d8367d00bda1d8fa2bc9f8e3e9fb434b63a24e3a1f0d851adc4e37c3241",
+    "src/config.ts": "c80c4c69aeb2933d6bec7fed47a4d1413b29fb4007f22331f6c1b660a10896fc",
+    "src/govern.ts": "922d1941bd7dc50f2e9bb18c9c1a364292b00946b2fafbce41c41bd0d197336a",
+    "src/index.ts": "e9c877786514d5d0e662b96b0045e74ba7d8458390a2a327377b1a964a6aac01"
+  }
+}

@@ -1,0 +1,574 @@
+{
+  "schemaVersion": 1,
+  "catalogId": 2308,
+  "verifiedAt": "2026-09-06T00:13:44.285Z",
+  "dshVersion": "0.1.3-alpha.1",
+  "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "packageName": "@dsh-themes/community-xiaoyao-black-whale",
+  "packageVersion": "0.1.4-dsh-alpha.1",
+  "artifactSha256": "7747676f742580e2ca09925631bacf7ab778c43e2071f8521bef3f20cbbb8efe",
+  "installation": {
+    "officialCliAdd": true,
+    "exactPackagePresent": true,
+    "profile": "web"
+  },
+  "boot": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-dsh-black-whale": ""
+      },
+      "base": "#04040514",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\nBLACK WHALE LAB\nXIAOYAO / DSH · 02\n专注模式\nBLACK WHALE\nSKIN 02\nLOCAL ONLY",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        },
+        {
+          "text": "专注模式",
+          "aria": null
+        }
+      ],
+      "newSessionButton": {
+        "color": "rgb(244, 244, 245)",
+        "background": "rgba(17, 17, 20, 0.94)"
+      },
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0
+    },
+    "modes": [
+      {
+        "mode": "light",
+        "title": "DeepSeek Harness",
+        "attrs": {
+          "data-dsh-black-whale": ""
+        },
+        "base": "#04040514",
+        "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\nBLACK WHALE LAB\nXIAOYAO / DSH · 02\n专注模式\nBLACK WHALE\nSKIN 02\nLOCAL ONLY",
+        "buttons": [
+          {
+            "text": "",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "收起侧边栏"
+          },
+          {
+            "text": "新会话",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "搜索会话"
+          },
+          {
+            "text": "",
+            "aria": "视图选项"
+          },
+          {
+            "text": "",
+            "aria": "添加工作区"
+          },
+          {
+            "text": "设置",
+            "aria": null
+          },
+          {
+            "text": "选择工作区",
+            "aria": "选择工作区"
+          },
+          {
+            "text": "标准模式",
+            "aria": null
+          },
+          {
+            "text": "",
+            "aria": "指令"
+          },
+          {
+            "text": "",
+            "aria": "添加附件"
+          },
+          {
+            "text": "",
+            "aria": "发送消息"
+          },
+          {
+            "text": "专注模式",
+            "aria": null
+          }
+        ],
+        "newSessionButton": {
+          "color": "rgb(244, 244, 245)",
+          "background": "rgba(17, 17, 20, 0.94)"
+        },
+        "width": {
+          "viewport": 1280,
+          "scroll": 1280
+        },
+        "brokenImages": 0
+      },
+      {
+        "mode": "dark",
+        "title": "DeepSeek Harness",
+        "attrs": {
+          "data-dsh-black-whale": "",
+          "data-ds-dark-theme": ""
+        },
+        "base": "#04040514",
+        "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\nBLACK WHALE LAB\nXIAOYAO / DSH · 02\n专注模式\nBLACK WHALE\nSKIN 02\nLOCAL ONLY",
+        "buttons": [
+          {
+            "text": "",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "收起侧边栏"
+          },
+          {
+            "text": "新会话",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "搜索会话"
+          },
+          {
+            "text": "",
+            "aria": "视图选项"
+          },
+          {
+            "text": "",
+            "aria": "添加工作区"
+          },
+          {
+            "text": "设置",
+            "aria": null
+          },
+          {
+            "text": "选择工作区",
+            "aria": "选择工作区"
+          },
+          {
+            "text": "标准模式",
+            "aria": null
+          },
+          {
+            "text": "",
+            "aria": "指令"
+          },
+          {
+            "text": "",
+            "aria": "添加附件"
+          },
+          {
+            "text": "",
+            "aria": "发送消息"
+          },
+          {
+            "text": "专注模式",
+            "aria": null
+          }
+        ],
+        "newSessionButton": {
+          "color": "rgb(244, 244, 245)",
+          "background": "rgba(17, 17, 20, 0.94)"
+        },
+        "width": {
+          "viewport": 1280,
+          "scroll": 1280
+        },
+        "brokenImages": 0
+      }
+    ],
+    "controls": [
+      {
+        "action": "focus-on",
+        "pressed": "true",
+        "attributes": {
+          "data-dsh-black-whale": "",
+          "data-ds-dark-theme": "",
+          "data-dsh-black-whale-focus": ""
+        }
+      },
+      {
+        "action": "focus-off",
+        "pressed": "false"
+      }
+    ],
+    "narrow": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-dsh-black-whale": "",
+        "data-ds-dark-theme": ""
+      },
+      "base": "#04040514",
+      "text": "探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n专注模式",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "打开侧边栏"
+        },
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        },
+        {
+          "text": "专注模式",
+          "aria": null
+        }
+      ],
+      "newSessionButton": {
+        "color": "rgb(244, 244, 245)",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "width": {
+        "viewport": 390,
+        "scroll": 390
+      },
+      "brokenImages": 0
+    },
+    "geometry": [
+      {
+        "className": "Xakt6q_sidebarCol",
+        "left": 8,
+        "width": 56,
+        "right": 64
+      },
+      {
+        "className": "Xakt6q_centerCol",
+        "left": 64,
+        "width": 318,
+        "right": 382
+      }
+    ],
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": [],
+    "evidenceDirectory": "output/playwright/community-alpha/2308/7747676f742580e2ca09925631bacf7ab778c43e2071f8521bef3f20cbbb8efe"
+  },
+  "cold": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-ds-dark-theme": "",
+        "data-dsh-black-whale": ""
+      },
+      "base": "#04040514",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\nBLACK WHALE LAB\nXIAOYAO / DSH · 02\n专注模式\nBLACK WHALE\nSKIN 02\nLOCAL ONLY",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        },
+        {
+          "text": "专注模式",
+          "aria": null
+        }
+      ],
+      "newSessionButton": {
+        "color": "rgb(244, 244, 245)",
+        "background": "rgba(17, 17, 20, 0.94)"
+      },
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0
+    },
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": [],
+    "evidenceDirectory": "output/playwright/community-alpha/2308/7747676f742580e2ca09925631bacf7ab778c43e2071f8521bef3f20cbbb8efe"
+  },
+  "coldProcessRestart": {
+    "before": {
+      "wrapper": 60195,
+      "listener": 60231,
+      "startedAt": "2026-09-06T00:13:46.481Z"
+    },
+    "after": {
+      "wrapper": 60509,
+      "listener": 60533,
+      "startedAt": "2026-09-06T00:14:00.521Z"
+    },
+    "portConfirmedClosed": true
+  },
+  "removed": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-ds-dark-theme": ""
+      },
+      "base": "#151517",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        }
+      ],
+      "newSessionButton": {
+        "color": "rgb(249, 250, 251)",
+        "background": "rgb(67, 69, 74)"
+      },
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0
+    },
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": [],
+    "evidenceDirectory": "output/playwright/community-alpha/2308/7747676f742580e2ca09925631bacf7ab778c43e2071f8521bef3f20cbbb8efe"
+  },
+  "removal": {
+    "officialCliRemove": true,
+    "packageAbsent": true,
+    "skinAttributesAbsent": true,
+    "base": "#151517",
+    "process": {
+      "wrapper": 60798,
+      "listener": 60822,
+      "startedAt": "2026-09-06T00:14:10.435Z"
+    }
+  },
+  "status": "passed",
+  "sourceRepository": "147228/dsh-xiaoyao-skins",
+  "sourceRevision": "174f65d9135e932383a8f3a19fa522f16875a139",
+  "licenseExpression": "MIT AND CC-BY-NC-4.0",
+  "environment": {
+    "os": "macOS",
+    "architecture": "arm64",
+    "node": "24.15.0",
+    "browser": "Google Chrome 152.0.7977.76",
+    "installationPnpm": "11.7.0"
+  },
+  "limitations": [
+    "Executed on this macOS arm64 host with an isolated web profile and no model credentials. No Linux, Windows, other-browser, user-session or model-call coverage is claimed.",
+    "Light/dark checks use the browser system color-scheme setting. The skin artwork intentionally keeps its own visual character.",
+    "On a 390px screen, the built-in sidebar was collapsed before checking the main view and skin controls.",
+    "Focus/guide state resets according to the original plugin behavior; only skin activation and rendering are required to survive a process restart."
+  ],
+  "visualReview": {
+    "desktopLight": true,
+    "desktopDark": true,
+    "narrowControls": true,
+    "removedBaseline": true
+  },
+  "adaptation": {
+    "author": "DSH Themes contributors",
+    "sourcePath": "assets/alpha/xiaoyao/packages/black-whale",
+    "license": "MIT AND CC-BY-NC-4.0",
+    "description": "DSH Themes Alpha CSS specificity and current sidebar/conversation/details layout selectors. Sky Lab adds a dark reading surface. Original code/art attribution and licenses retained."
+  },
+  "evidence": [
+    {
+      "path": "output/playwright/community-alpha/2308/7747676f742580e2ca09925631bacf7ab778c43e2071f8521bef3f20cbbb8efe/cold.png",
+      "sha256": "96f8c769939c6a75db1c1ac15e8176f2a7b4441bb307e0b028e9dde069f9f5ee",
+      "bytes": 789860
+    },
+    {
+      "path": "output/playwright/community-alpha/2308/7747676f742580e2ca09925631bacf7ab778c43e2071f8521bef3f20cbbb8efe/dark.png",
+      "sha256": "55df0d3d1e40dd5b8e0a268cc67a0cb8d155c02e196993b2cf0212744a9d8dac",
+      "bytes": 789862
+    },
+    {
+      "path": "output/playwright/community-alpha/2308/7747676f742580e2ca09925631bacf7ab778c43e2071f8521bef3f20cbbb8efe/focus.png",
+      "sha256": "bf844335ad0fde48eaf5fcc6dd150b2f09055f5f81b63abd2381a48926133e2d",
+      "bytes": 204746
+    },
+    {
+      "path": "output/playwright/community-alpha/2308/7747676f742580e2ca09925631bacf7ab778c43e2071f8521bef3f20cbbb8efe/light.png",
+      "sha256": "675756d6eca772e4cf6e444517f5cc29d8ea6d11720bcce10ec22b19fc324d98",
+      "bytes": 789979
+    },
+    {
+      "path": "output/playwright/community-alpha/2308/7747676f742580e2ca09925631bacf7ab778c43e2071f8521bef3f20cbbb8efe/narrow-final.png",
+      "sha256": "122b8c4f8aba87674a1720ba5365d84963754db0057917092952aa03e30f7d81",
+      "bytes": 232997
+    },
+    {
+      "path": "output/playwright/community-alpha/2308/7747676f742580e2ca09925631bacf7ab778c43e2071f8521bef3f20cbbb8efe/removed.png",
+      "sha256": "55808054eb754e42f701eec53fe2e8984eb043e2a1b7c6d93d0e7d45ac6cbc07",
+      "bytes": 30163
+    }
+  ]
+}

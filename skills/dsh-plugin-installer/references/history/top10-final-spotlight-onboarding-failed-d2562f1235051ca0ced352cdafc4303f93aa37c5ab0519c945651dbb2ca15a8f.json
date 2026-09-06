@@ -1,0 +1,319 @@
+{
+  "schemaVersion": 1,
+  "kind": "spotlight-final-skin-coexistence",
+  "status": "failed",
+  "home": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684",
+  "startedAt": "2026-09-06T10:15:28.685Z",
+  "dshVersion": "0.1.3-alpha.1",
+  "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "technicalReceiptSha256": "b53558b77feb6206e7791020713c34cfe54937dd2c3b8a3de39ec02793e276fb",
+  "catalogSha256": "9707f2379e772a2ef5390b0620ffe2caa523261032b8cabc39796df6af4da54f",
+  "recommendationTransitionSha256": "d76b6d661d947e46f37f931a2534fa3d8e3afe43dd12eba420b23787927368f7",
+  "spotlight": {
+    "catalogId": 3004,
+    "packageName": "@0xsline/dsh-spotlight",
+    "profile": "web",
+    "sourceRevision": "dd7ef5ed160aa1a624559de16eafd4ea9406d7ed",
+    "specifier": "@0xsline/dsh-spotlight@0.0.2",
+    "artifact": {
+      "catalogId": 3004,
+      "path": "assets/alpha/artifacts/c37667331ed43b2cf75af5585fd9fd5b9e7b43637008765fded2647787a72b92.tgz",
+      "sha256": "c37667331ed43b2cf75af5585fd9fd5b9e7b43637008765fded2647787a72b92",
+      "bytes": 32395,
+      "packageVersion": "0.0.2-dsh.alpha.1",
+      "runtimeDependencies": {},
+      "sourcePath": "assets/alpha/adapters/alpha-api-patches.json"
+    }
+  },
+  "helperSha256": {
+    "install-plugins.mjs": "3f791ce0c81c5bf0e5dae8e0bc496a43e5ff1d910384d7c6e4e5596a4ae11321",
+    "uninstall-plugins.mjs": "ace37dc4a62a350ebc418834a1bcc460740e6393976667e9bb133dedeedf4706",
+    "dsh-alpha.mjs": "d7664679a96517ef8068a7dd4a6b33f640d18980f81f79223a75a7c8468cb6ff"
+  },
+  "executionSnapshots": [
+    {
+      "name": "install-plugins.mjs",
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-plugin-installer/scripts/install-plugins.mjs",
+      "snapshotPath": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/execution-snapshots/install-plugins.mjs",
+      "sha256": "3f791ce0c81c5bf0e5dae8e0bc496a43e5ff1d910384d7c6e4e5596a4ae11321"
+    },
+    {
+      "name": "uninstall-plugins.mjs",
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-plugin-installer/scripts/uninstall-plugins.mjs",
+      "snapshotPath": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/execution-snapshots/uninstall-plugins.mjs",
+      "sha256": "ace37dc4a62a350ebc418834a1bcc460740e6393976667e9bb133dedeedf4706"
+    },
+    {
+      "name": "dsh-alpha.mjs",
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-theme-manager/scripts/dsh-alpha.mjs",
+      "snapshotPath": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/execution-snapshots/dsh-alpha.mjs",
+      "sha256": "d7664679a96517ef8068a7dd4a6b33f640d18980f81f79223a75a7c8468cb6ff"
+    },
+    {
+      "name": "verify-dsh-spotlight-final-runtime.mjs",
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/scripts/verify-dsh-spotlight-final-runtime.mjs",
+      "snapshotPath": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/execution-snapshots/verify-dsh-spotlight-final-runtime.mjs",
+      "sha256": "5b4211aa8c12ae7faef8bf3b10a790deecc99bed9ed4c8bd8b0796a12c746f2d"
+    },
+    {
+      "name": "verify-dsh-spotlight-final-surface.mjs",
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/scripts/verify-dsh-spotlight-final-surface.mjs",
+      "snapshotPath": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/execution-snapshots/verify-dsh-spotlight-final-surface.mjs",
+      "sha256": "bd714afe84a31eeacbbb2e0725e17c1afec1c9aa5c2f37573f790502947fea1a"
+    },
+    {
+      "name": "verify-dsh-plugin-runtime.mjs",
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/scripts/verify-dsh-plugin-runtime.mjs",
+      "snapshotPath": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/execution-snapshots/verify-dsh-plugin-runtime.mjs",
+      "sha256": "bc7128a9aa5f787b3e167d340aeb50fcad007233e0af1ba32cb034b5ea3525a3"
+    },
+    {
+      "name": "dsh-plugin-optional-runtime.mjs",
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/scripts/dsh-plugin-optional-runtime.mjs",
+      "snapshotPath": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/execution-snapshots/dsh-plugin-optional-runtime.mjs",
+      "sha256": "fad580d34131a441f20a8899d773f839faad481004ff3cf3ac992effc45df3f1"
+    },
+    {
+      "name": "plugin-recommendation-contract.mjs",
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/scripts/plugin-recommendation-contract.mjs",
+      "snapshotPath": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/execution-snapshots/plugin-recommendation-contract.mjs",
+      "sha256": "ef7f90b2ccd5134d250010024916824f4bcc0f3aa6ca829572422ba5bbbafa03"
+    },
+    {
+      "name": "alpha-plugin-collection-contract.mjs",
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/scripts/alpha-plugin-collection-contract.mjs",
+      "snapshotPath": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/execution-snapshots/alpha-plugin-collection-contract.mjs",
+      "sha256": "d217e30602a3b3dfda79e82e45225f675685ff233c4f447cc35abe58de245cc3"
+    },
+    {
+      "name": "alpha-spotlight-contract.mjs",
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/scripts/alpha-spotlight-contract.mjs",
+      "snapshotPath": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/execution-snapshots/alpha-spotlight-contract.mjs",
+      "sha256": "cb9dc02336dad63be492d97adca0e9e93db9bac2e1f73c8c1cd1bbb277faa948"
+    }
+  ],
+  "commands": [
+    {
+      "args": [
+        "--version"
+      ],
+      "code": 0,
+      "stdout": "0.1.3-alpha.1\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "plugin",
+        "--profile",
+        "web",
+        "list",
+        "--depth",
+        "0",
+        "--json"
+      ],
+      "code": 0,
+      "stdout": "[\n  {\n    \"name\": \"dsh-profile-web\",\n    \"path\": \"/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/profiles/web\",\n    \"private\": true\n  }\n]\n",
+      "stderr": "dsh: initialized profile web at /Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/profiles/web\n"
+    },
+    {
+      "args": [
+        "plugin",
+        "--profile",
+        "web",
+        "add",
+        "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-plugin-installer/assets/alpha/artifacts/c37667331ed43b2cf75af5585fd9fd5b9e7b43637008765fded2647787a72b92.tgz",
+        "--save-exact"
+      ],
+      "code": 0,
+      "stdout": "Progress: resolved 0, reused 0, downloaded 1, added 0\n[WARN] Issues with peer dependencies found. Run \"pnpm peers check\" to list them.\n\ndependencies:\n+ @0xsline/dsh-spotlight file:/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-plugin-installer/assets/alpha/artifacts/c37667331ed43b2cf75af5585fd9fd5b9e7b43637008765fded2647787a72b92.tgz\n\nPackages: +1\n+\nProgress: resolved 1, reused 0, downloaded 1, added 1, done\nDone in 371ms using pnpm v11.7.0\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "plugin",
+        "--profile",
+        "web",
+        "list",
+        "--depth",
+        "0",
+        "--json"
+      ],
+      "code": 0,
+      "stdout": "[\n  {\n    \"name\": \"dsh-profile-web\",\n    \"path\": \"/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/profiles/web\",\n    \"private\": true,\n    \"dependencies\": {\n      \"@0xsline/dsh-spotlight\": {\n        \"from\": \"@0xsline/dsh-spotlight\",\n        \"version\": \"0.0.2-dsh.alpha.1\",\n        \"resolved\": \"file:../../../../../../dsh-themes-skills/skills/dsh-plugin-installer/assets/alpha/artifacts/c37667331ed43b2cf75af5585fd9fd5b9e7b43637008765fded2647787a72b92.tgz\",\n        \"path\": \"/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/profiles/web/node_modules/.pnpm/@0xsline+dsh-spotlight@file+..+..+..+..+..+..+dsh-themes-skills+skills+dsh-plugin-insta_d7977dbc1c4a3f938b9642a68a503971/node_modules/@0xsline/dsh-spotlight\"\n      }\n    }\n  }\n]\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "--profile",
+        "web",
+        "--dump-config"
+      ],
+      "code": 0,
+      "stdout": "# == @deepseek-ai/dsh-base\n- id: timer\n  name: '@deepseek-ai/cordis-plugin-timer'\n- id: hmr\n  name: '@deepseek-ai/cordis-plugin-hmr'\n  disabled: true\n  config:\n    root:\n      - .\n- id: llm\n  name: '@deepseek-ai/dsh-llm'\n- id: deepseek-llm-api-extensions\n  name: '@deepseek-ai/dsh-deepseek-llm-api-extensions'\n- id: session\n  name: '@deepseek-ai/dsh-session'\n- id: session-log-deepseek\n  name: '@deepseek-ai/dsh-session-log-deepseek'\n- id: typert\n  name: '@deepseek-ai/dsh-typert-registry'\n- id: typert-loader\n  name: '@deepseek-ai/dsh-typert-loader'\n- id: typert-gateway\n  name: '@deepseek-ai/dsh-api-gateway'\n- id: session-title\n  name: '@deepseek-ai/dsh-session-title'\n  config:\n    fallbackMaxWords: 5\n    fallbackMaxBytes: 40\n    maxTitleBytes: 80\n- id: session-title-llm\n  name: '@deepseek-ai/dsh-session-title-first-prompt-llm'\n  config:\n    targetWords: 5\n    targetCjkCharacters: 10\n    maxInputBytes: 4096\n    maxOutputTokens: 64\n    timeoutMs: 60000\n- id: user-questions\n  name: '@deepseek-ai/dsh-user-questions'\n- id: agent\n  name: '@deepseek-ai/dsh-agent'\n- id: plugin-package-inventory-deepseek\n  name: '@deepseek-ai/dsh-plugin-package-inventory-deepseek'\n- id: agent-default-model\n  name: '@deepseek-ai/dsh-agent-default-model'\n  config:\n    provider: deepseek-official\n    model: deepseek-v4-flash\n- id: jobs\n  name: '@deepseek-ai/dsh-jobs-local'\n- id: llm-retry\n  name: '@deepseek-ai/dsh-llm-retry'\n- id: settings\n  name: '@deepseek-ai/dsh-settings-file'\n- id: credentials\n  name: '@deepseek-ai/dsh-credentials-local'\n- id: llm-pi-ai\n  name: '@deepseek-ai/dsh-llm-pi-ai'\n- id: session-persistence-jsonl\n  name: '@deepseek-ai/dsh-session-persistence-jsonl'\n  config:\n    root: !!js dshHomePath('sessions')\n- id: attachment-local\n  name: '@deepseek-ai/dsh-attachment-local'\n- id: session-query-sqlite\n  name: '@deepseek-ai/dsh-session-query-sqlite'\n  config:\n    path: ':memory:'\n    openAt: never\n- id: session-projection\n  name: '@deepseek-ai/dsh-session-projection'\n- id: storage\n  name: '@deepseek-ai/dsh-storage'\n- id: storage-json\n  name: '@deepseek-ai/dsh-storage-json'\n  config:\n    root: !!js dshHomePath('storages')\n- id: storage-domain\n  name: '@deepseek-ai/dsh-storage-domain'\n  config:\n    backend: json\n- id: session-projection-cache\n  name: '@deepseek-ai/dsh-session-projection-cache'\n  config:\n    writeEveryEvents: 200\n    writeIntervalMs: 5000\n- id: session-telemetry-otel\n  name: '@deepseek-ai/dsh-session-telemetry-otel'\n  config:\n    mode: !!js process.env.DSH_TELEMETRY_MODE || 'FEEDBACK_ONLY'\n    shutdownTimeoutMillis: 3000\n    exporter:\n      url: !!js >-\n        process.env.DSH_TELEMETRY_OTLP_URL ??\n        'https://harness-telemetry.deepseeksvc.com/v1/logs'\n      compression: gzip\n      timeoutMillis: 1000\n    processor:\n      scheduledDelayMillis: 10000\n      maxQueueSize: 2048\n      maxExportBatchSize: 2048\n      exportTimeoutMillis: 1500\n- id: subprocess\n  name: '@deepseek-ai/dsh-subprocess-local'\n- id: sandbox\n  name: '@deepseek-ai/dsh-sandbox-local'\n- id: sandbox-policy\n  name: '@deepseek-ai/dsh-sandbox-policy'\n  config:\n    mode: !!js process.env.DSH_PERMISSION_MODE ?? 'workspace-write'\n    workspaceRoot: !!js process.cwd()\n- id: bash-sandbox\n  name: '@deepseek-ai/dsh-bash-sandbox'\n  disabled: !!js process.platform === 'win32'\n  config:\n    timeoutMs: 60000\n- id: pwsh-sandbox\n  name: '@deepseek-ai/dsh-pwsh-sandbox'\n  disabled: !!js process.platform !== 'win32'\n- id: approval\n  name: '@deepseek-ai/dsh-user-approval'\n  config:\n    policy: !!js >-\n      (process.env.DSH_PERMISSION_MODE ?? 'workspace-write') ===\n      'danger-full-access' ? 'never' : 'ask'\n- id: permission\n  name: '@deepseek-ai/dsh-permission-presets'\n  config:\n    presets:\n      read-only:\n        sandbox: read-only\n        approval: ask\n      workspace-write:\n        sandbox: workspace-write\n        approval: ask\n      danger-full-access:\n        sandbox: danger-full-access\n        approval: never\n- id: shell-env\n  name: '@deepseek-ai/dsh-shell-env'\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: tool-bash\n  name: '@deepseek-ai/dsh-tool-bash'\n  disabled: true\n- id: tool-pwsh\n  name: '@deepseek-ai/dsh-tool-pwsh'\n  disabled: true\n- id: tool-jobs\n  name: '@deepseek-ai/dsh-tool-jobs'\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: fs-observation-policy\n  name: '@deepseek-ai/dsh-fs-observation-policy'\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: tool-fs\n  name: '@deepseek-ai/dsh-tool-fs'\n  disabled: true\n- id: tool-fs-search\n  name: '@deepseek-ai/dsh-tool-fs-search'\n  config:\n    sampleOverCapGlobResults: false\n  disabled: true\n- id: agent-instructions\n  name: '@deepseek-ai/dsh-agent-instructions'\n  config:\n    maxBytes: 65536\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: skill\n  name: '@deepseek-ai/dsh-skill'\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: skill-filesystem\n  name: '@deepseek-ai/dsh-skill-filesystem'\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: skill-badge\n  name: '@deepseek-ai/dsh-skill-badge'\n  disabled: true\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: tool-skill\n  name: '@deepseek-ai/dsh-tool-skill'\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: commands\n  name: '@deepseek-ai/dsh-commands'\n- id: command-feedback\n  name: '@deepseek-ai/dsh-command-feedback'\n- id: goal\n  name: '@deepseek-ai/dsh-goal'\n- id: goal-round-driver\n  name: '@deepseek-ai/dsh-goal-round-driver'\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: command-goal\n  name: '@deepseek-ai/dsh-command-goal'\n  disabled: true\n- id: plan-mode\n  name: '@deepseek-ai/dsh-plan-mode'\n  config:\n    section: >\n      You are in plan mode. Stay in plan mode until exit_plan_mode succeeds or\n      the user switches the session mode. Imperative language to implement\n      changes means plan the implementation, not execute it. A user's\n      conversational agreement — including an answer confirming something you\n      asked — approves nothing and does not end plan mode; fold the confirmed\n      decision into the plan and submit it through exit_plan_mode.\n\n\n      Explore first. Use non-mutating reads, searches, static analysis, and\n      checks to ground the plan in the actual repository. Do not edit or write\n      files, change configuration, run formatters or code generation that\n      rewrites tracked files, commit, or otherwise carry out the plan. Prefer\n      existing functions and patterns over new machinery.\n\n\n      The tool catalog stays the same across modes for request-cache stability.\n      These plan-mode rules override any later tool description or guidance that\n      suggests using mutation tools; those tools remain listed only to keep the\n      request shape stable. Do not use todo_write to track this planning phase:\n      it tracks implementation after an approved plan, while the plan itself\n      belongs in exit_plan_mode.\n\n\n      Resolve discoverable facts by inspection. Use ask_user_question only for\n      user-owned choices or material ambiguity that inspection cannot answer. Do\n      not ask the user where code lives or how current behavior works when you\n      can find out.\n\n\n      Make the plan decision-complete: state the goal and success criteria;\n      group implementation changes by subsystem; identify public API, schema,\n      and data-flow changes; cover edge cases, failure modes, tests, acceptance\n      criteria, and explicit assumptions. Keep it concise enough to review but\n      detailed enough that another engineer can implement it without making\n      design decisions.\n\n\n      When ready, call exit_plan_mode with the complete plan markdown, starting\n      with a # title. Make exit_plan_mode the only and final tool call in that\n      assistant response: it presents the plan for approval, and implementation\n      begins only in a later step after approval. Do not paste the final plan as\n      a plain reply or ask \"should I proceed?\" through prose or\n      ask_user_question. If review rejects it, incorporate the feedback and\n      present again. If the review channel is unavailable or aborted, stay in\n      plan mode and ask the user to switch modes manually; do not proceed with\n      implementation.\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: token-meter\n  name: '@deepseek-ai/dsh-token-meter'\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: compaction-basic\n  name: '@deepseek-ai/dsh-compaction-basic'\n  disabled: true\n- id: command-compact\n  name: '@deepseek-ai/dsh-command-compact'\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: subagent\n  name: '@deepseek-ai/dsh-subagent'\n- id: subagent-spawn-in-process\n  name: '@deepseek-ai/dsh-subagent-spawn-in-process'\n  config:\n    providerName: spawn\n- id: subagent-fork-in-process\n  name: '@deepseek-ai/dsh-subagent-fork-in-process'\n  config:\n    providerName: fork\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: tool-subagent-control\n  name: '@deepseek-ai/dsh-tool-subagent-control'\n  disabled: true\n- id: tool-subagent-list-agents\n  name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'\n  disabled: true\n- id: tool-subagent\n  name: '@deepseek-ai/dsh-tool-subagent'\n  config:\n    provider: spawn\n    toolName: subagent\n    backgroundMode: continuable\n  disabled: true\n- id: tool-subagent-fork\n  name: '@deepseek-ai/dsh-tool-subagent'\n  config:\n    provider: fork\n    toolName: subagent_fork\n    backgroundMode: one-shot\n  disabled: true\n- id: workflow-worker-thread\n  name: '@deepseek-ai/dsh-workflow-worker-thread'\n  config:\n    provider: spawn\n  disabled: true\n- id: tool-workflow\n  name: '@deepseek-ai/dsh-tool-workflow'\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: timeout-policy\n  name: '@deepseek-ai/dsh-tool-call-timeout-policy'\n- id: spill-local\n  name: '@deepseek-ai/dsh-spill-local'\n- id: spill-policy\n  name: '@deepseek-ai/dsh-spill-policy'\n  config:\n    maxInlineBytes: 50000\n- id: session-checkpoint-policy\n  name: '@deepseek-ai/dsh-session-checkpoint-policy'\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: tool-result-pruner\n  name: '@deepseek-ai/dsh-compaction-tool-result-pruner'\n  config:\n    thresholdChars: 8192\n    headChars: 4096\n    tailChars: 1024\n  disabled: true\n- id: tool-todo\n  name: '@deepseek-ai/dsh-tool-todo'\n  config:\n    allowParallelInProgress: true\n  disabled: true\n- id: tool-goal\n  name: '@deepseek-ai/dsh-tool-goal'\n  disabled: true\n- id: tool-ralph\n  name: '@deepseek-ai/dsh-tool-ralph'\n  config:\n    subagentProvider: spawn\n    maxRounds: 64\n  disabled: true\n- id: tool-str-replace-editor\n  name: '@deepseek-ai/dsh-tool-str-replace-editor'\n  config:\n    maxOutputChars: 16000\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: repeat-tool-reminder\n  name: '@deepseek-ai/dsh-repeat-tool-reminder'\n  config:\n    thresholds:\n      - 3\n      - 5\n      - 8\n    argumentsPreviewChars: 500\n- id: web\n  name: '@deepseek-ai/dsh-web'\n  config:\n    searchProvider: deepseek-official\n    fetchProvider: http\n- id: web-search-deepseek\n  name: '@deepseek-ai/dsh-web-search-deepseek'\n  config:\n    apiKeyEnv: DEEPSEEK_API_KEY\n- id: web-fetch-http\n  name: '@deepseek-ai/dsh-web-fetch-http'\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: tool-web\n  name: '@deepseek-ai/dsh-tool-web'\n  config:\n    fetch: true\n    searchTimeoutMs: 60000\n  disabled: true\n- id: tools\n  name: '@deepseek-ai/dsh-tools'\n  config:\n    mode: !!js process.env.DSH_TOOLS_MODE\n- id: system-prompt\n  name: '@deepseek-ai/dsh-system-prompt'\n  config:\n    persona: >-\n      You are a coding agent powered by the {{model}} model. Your working\n      directory is {{cwd}}.\n# == @deepseek-ai/dsh-base\n- id: agent-loop\n  name: '@deepseek-ai/dsh-agent-loop'\n  config:\n    agents: []\n- id: fs-sandbox\n  name: '@deepseek-ai/dsh-fs-sandbox'\n- id: llm-deepseek\n  name: '@deepseek-ai/dsh-llm-deepseek'\n# == @deepseek-ai/dsh-web-app\n- id: subagent-model-selection-settings\n  name: '@deepseek-ai/dsh-tool-subagent/model-selection-settings'\n- id: code-runtime\n  name: '@deepseek-ai/dsh-code-runtime-worker-thread'\n- id: message-feedback\n  name: '@deepseek-ai/dsh-message-feedback'\n  config:\n    maxNoteBytes: 8192\n- id: session-log-download\n  name: '@deepseek-ai/dsh-session-log-export'\n- id: workspace\n  name: '@deepseek-ai/dsh-workspace'\n- id: session-reference\n  name: '@deepseek-ai/dsh-session-reference'\n- id: file-reference-local\n  name: '@deepseek-ai/dsh-file-reference-local'\n- id: session-stats\n  name: '@deepseek-ai/dsh-session-stats'\n- id: session-turn-outline\n  name: '@deepseek-ai/dsh-session-turn-outline'\n- id: directory-picker\n  name: '@deepseek-ai/dsh-host-directory-picker-auto'\n- id: plugin-inventory\n  name: '@deepseek-ai/dsh-host-plugin-inventory'\n- id: session-controller\n  name: '@deepseek-ai/dsh-api-session-controller'\n- id: settings-controller\n  name: '@deepseek-ai/dsh-api-settings-controller'\n- id: workspace-controller\n  name: '@deepseek-ai/dsh-api-workspace-controller'\n- id: cordis-host-runner\n  name: '@deepseek-ai/dsh-cordis-host-runner'\n- id: web-startup\n  name: '@deepseek-ai/dsh-web-app/startup'\n- id: webserver\n  name: '@deepseek-ai/dsh-host-webserver'\n  inject:\n    - webStartup\n  config:\n    host: !!js ctx.webStartup.host ?? '127.0.0.1'\n    port: !!js ctx.webStartup.port ?? 3080\n    compression: gzip\n    compressionLevel: 1\n    compressionThresholdBytes: 1024\n- id: web-runtime\n  name: '@deepseek-ai/dsh-web-app'\n  inject:\n    - webStartup\n  config:\n    openBrowser: !!js ctx.webStartup.openBrowser\n    printUrl: true\n    surfaceContext: true\n    trustedHosts: !!js ctx.webStartup.trustedHosts\n- id: client-hmr\n  name: '@deepseek-ai/dsh-client-hmr'\n- id: modules\n  name: '@deepseek-ai/dsh-client-modules'\n- id: connection\n  name: '@deepseek-ai/dsh-client-connection'\n  inject:\n    - webRuntime\n  config:\n    trustedHosts: !!js ctx.webRuntime.trustedHosts\n- id: file-upload\n  name: '@deepseek-ai/dsh-client-file-upload'\n- id: api-remotes\n  name: '@deepseek-ai/dsh-api-remotes'\n- id: cordis-client-runner\n  name: '@deepseek-ai/dsh-cordis-client-runner'\n- id: ui-theme\n  name: '@deepseek-ai/dsh-client-ui-theme'\n- id: locale\n  name: '@deepseek-ai/dsh-client-locale'\n- id: ui-layout\n  name: '@deepseek-ai/dsh-client-ui-layout'\n- id: ui-renderer\n  name: '@deepseek-ai/dsh-client-ui-renderer'\n- id: ui-session\n  name: '@deepseek-ai/dsh-client-ui-session'\n- id: ui-sidebar\n  name: '@deepseek-ai/dsh-client-ui-sidebar'\n- id: ui-settings\n  name: '@deepseek-ai/dsh-client-ui-settings'\n- id: ui-settings-general\n  name: '@deepseek-ai/dsh-client-ui-settings-general'\n- id: ui-settings-models\n  name: '@deepseek-ai/dsh-client-ui-settings-models'\n- id: ui-settings-plugin-inventory\n  name: '@deepseek-ai/dsh-client-ui-settings-plugin-inventory'\n- id: ui-conversation\n  name: '@deepseek-ai/dsh-client-ui-conversation'\n- id: ui-approval\n  name: '@deepseek-ai/dsh-client-ui-approval'\n- id: ui-chat\n  name: '@deepseek-ai/dsh-client-ui-chat'\n- id: ui-brand-official\n  name: '@deepseek-ai/dsh-client-ui-brand-official'\n- id: ui-attachment\n  name: '@deepseek-ai/dsh-client-ui-attachment'\n- id: ui-tool\n  name: '@deepseek-ai/dsh-client-ui-tool'\n- id: ui-cordis\n  name: '@deepseek-ai/dsh-client-ui-cordis'\n- id: ui-workflow-run\n  name: '@deepseek-ai/dsh-client-ui-workflow-run'\n- id: ui-deliverables\n  name: '@deepseek-ai/dsh-client-ui-deliverables'\n- id: ui-workspace\n  name: '@deepseek-ai/dsh-client-ui-workspace'\n- id: ui-input-trigger\n  name: '@deepseek-ai/dsh-client-ui-input-trigger'\n- id: ui-commands\n  name: '@deepseek-ai/dsh-client-ui-commands'\n- id: ui-skill\n  name: '@deepseek-ai/dsh-client-ui-skill'\n- id: ui-subagent\n  name: '@deepseek-ai/dsh-client-ui-subagent'\n- id: ui-reference\n  name: '@deepseek-ai/dsh-client-ui-reference'\n- id: ui-schedule\n  name: '@deepseek-ai/dsh-client-ui-schedule'\n  disabled: true\n- id: ui-jobs\n  name: '@deepseek-ai/dsh-client-ui-jobs'\n- id: ui-goal\n  name: '@deepseek-ai/dsh-client-ui-goal'\n- id: ui-message-feedback\n  name: '@deepseek-ai/dsh-client-ui-message-feedback'\n- id: ui-model-selection\n  name: '@deepseek-ai/dsh-client-ui-model-selection'\n- id: ui-permission\n  name: '@deepseek-ai/dsh-client-ui-permission-presets'\n- id: ui-agent-preset\n  name: '@deepseek-ai/dsh-client-ui-agent-preset'\n- id: ui-settings-plugins\n  name: '@deepseek-ai/dsh-client-ui-settings-plugins'\n- id: ui-plan\n  name: '@deepseek-ai/dsh-client-ui-plan'\n- id: ui-user-questions\n  name: '@deepseek-ai/dsh-client-ui-user-questions'\n- id: ui-trajectory\n  name: '@deepseek-ai/dsh-client-ui-trajectory'\n- id: agent-presets\n  name: '@deepseek-ai/dsh-agent-presets'\n  config:\n    default: standard\n# == @0xsline/dsh-spotlight\n- id: dsh-spotlight\n  name: '@0xsline/dsh-spotlight'\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "--version"
+      ],
+      "code": 0,
+      "stdout": "0.1.3-alpha.1\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "plugin",
+        "--profile",
+        "web",
+        "list",
+        "--depth",
+        "0",
+        "--json"
+      ],
+      "code": 0,
+      "stdout": "[\n  {\n    \"name\": \"dsh-profile-web\",\n    \"path\": \"/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/profiles/web\",\n    \"private\": true,\n    \"dependencies\": {\n      \"@0xsline/dsh-spotlight\": {\n        \"from\": \"@0xsline/dsh-spotlight\",\n        \"version\": \"0.0.2-dsh.alpha.1\",\n        \"resolved\": \"file:../../../../../../dsh-themes-skills/skills/dsh-plugin-installer/assets/alpha/artifacts/c37667331ed43b2cf75af5585fd9fd5b9e7b43637008765fded2647787a72b92.tgz\",\n        \"path\": \"/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/profiles/web/node_modules/.pnpm/@0xsline+dsh-spotlight@file+..+..+..+..+..+..+dsh-themes-skills+skills+dsh-plugin-insta_d7977dbc1c4a3f938b9642a68a503971/node_modules/@0xsline/dsh-spotlight\"\n      }\n    }\n  }\n]\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "plugin",
+        "--profile",
+        "web",
+        "remove",
+        "@0xsline/dsh-spotlight"
+      ],
+      "code": 0,
+      "stdout": "✓ Lockfile passes supply-chain policies (verified 48s ago)\n\ndependencies:\n- @0xsline/dsh-spotlight file:/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-plugin-installer/assets/alpha/artifacts/c37667331ed43b2cf75af5585fd9fd5b9e7b43637008765fded2647787a72b92.tgz\n\nAlready up to date\nDone in 296ms using pnpm v11.7.0\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "plugin",
+        "--profile",
+        "web",
+        "list",
+        "--depth",
+        "0",
+        "--json"
+      ],
+      "code": 0,
+      "stdout": "[\n  {\n    \"name\": \"dsh-profile-web\",\n    \"path\": \"/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/profiles/web\",\n    \"private\": true\n  }\n]\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "--profile",
+        "web",
+        "--dump-config"
+      ],
+      "code": 0,
+      "stdout": "# == @deepseek-ai/dsh-base\n- id: timer\n  name: '@deepseek-ai/cordis-plugin-timer'\n- id: hmr\n  name: '@deepseek-ai/cordis-plugin-hmr'\n  disabled: true\n  config:\n    root:\n      - .\n- id: llm\n  name: '@deepseek-ai/dsh-llm'\n- id: deepseek-llm-api-extensions\n  name: '@deepseek-ai/dsh-deepseek-llm-api-extensions'\n- id: session\n  name: '@deepseek-ai/dsh-session'\n- id: session-log-deepseek\n  name: '@deepseek-ai/dsh-session-log-deepseek'\n- id: typert\n  name: '@deepseek-ai/dsh-typert-registry'\n- id: typert-loader\n  name: '@deepseek-ai/dsh-typert-loader'\n- id: typert-gateway\n  name: '@deepseek-ai/dsh-api-gateway'\n- id: session-title\n  name: '@deepseek-ai/dsh-session-title'\n  config:\n    fallbackMaxWords: 5\n    fallbackMaxBytes: 40\n    maxTitleBytes: 80\n- id: session-title-llm\n  name: '@deepseek-ai/dsh-session-title-first-prompt-llm'\n  config:\n    targetWords: 5\n    targetCjkCharacters: 10\n    maxInputBytes: 4096\n    maxOutputTokens: 64\n    timeoutMs: 60000\n- id: user-questions\n  name: '@deepseek-ai/dsh-user-questions'\n- id: agent\n  name: '@deepseek-ai/dsh-agent'\n- id: plugin-package-inventory-deepseek\n  name: '@deepseek-ai/dsh-plugin-package-inventory-deepseek'\n- id: agent-default-model\n  name: '@deepseek-ai/dsh-agent-default-model'\n  config:\n    provider: deepseek-official\n    model: deepseek-v4-flash\n- id: jobs\n  name: '@deepseek-ai/dsh-jobs-local'\n- id: llm-retry\n  name: '@deepseek-ai/dsh-llm-retry'\n- id: settings\n  name: '@deepseek-ai/dsh-settings-file'\n- id: credentials\n  name: '@deepseek-ai/dsh-credentials-local'\n- id: llm-pi-ai\n  name: '@deepseek-ai/dsh-llm-pi-ai'\n- id: session-persistence-jsonl\n  name: '@deepseek-ai/dsh-session-persistence-jsonl'\n  config:\n    root: !!js dshHomePath('sessions')\n- id: attachment-local\n  name: '@deepseek-ai/dsh-attachment-local'\n- id: session-query-sqlite\n  name: '@deepseek-ai/dsh-session-query-sqlite'\n  config:\n    path: ':memory:'\n    openAt: never\n- id: session-projection\n  name: '@deepseek-ai/dsh-session-projection'\n- id: storage\n  name: '@deepseek-ai/dsh-storage'\n- id: storage-json\n  name: '@deepseek-ai/dsh-storage-json'\n  config:\n    root: !!js dshHomePath('storages')\n- id: storage-domain\n  name: '@deepseek-ai/dsh-storage-domain'\n  config:\n    backend: json\n- id: session-projection-cache\n  name: '@deepseek-ai/dsh-session-projection-cache'\n  config:\n    writeEveryEvents: 200\n    writeIntervalMs: 5000\n- id: session-telemetry-otel\n  name: '@deepseek-ai/dsh-session-telemetry-otel'\n  config:\n    mode: !!js process.env.DSH_TELEMETRY_MODE || 'FEEDBACK_ONLY'\n    shutdownTimeoutMillis: 3000\n    exporter:\n      url: !!js >-\n        process.env.DSH_TELEMETRY_OTLP_URL ??\n        'https://harness-telemetry.deepseeksvc.com/v1/logs'\n      compression: gzip\n      timeoutMillis: 1000\n    processor:\n      scheduledDelayMillis: 10000\n      maxQueueSize: 2048\n      maxExportBatchSize: 2048\n      exportTimeoutMillis: 1500\n- id: subprocess\n  name: '@deepseek-ai/dsh-subprocess-local'\n- id: sandbox\n  name: '@deepseek-ai/dsh-sandbox-local'\n- id: sandbox-policy\n  name: '@deepseek-ai/dsh-sandbox-policy'\n  config:\n    mode: !!js process.env.DSH_PERMISSION_MODE ?? 'workspace-write'\n    workspaceRoot: !!js process.cwd()\n- id: bash-sandbox\n  name: '@deepseek-ai/dsh-bash-sandbox'\n  disabled: !!js process.platform === 'win32'\n  config:\n    timeoutMs: 60000\n- id: pwsh-sandbox\n  name: '@deepseek-ai/dsh-pwsh-sandbox'\n  disabled: !!js process.platform !== 'win32'\n- id: approval\n  name: '@deepseek-ai/dsh-user-approval'\n  config:\n    policy: !!js >-\n      (process.env.DSH_PERMISSION_MODE ?? 'workspace-write') ===\n      'danger-full-access' ? 'never' : 'ask'\n- id: permission\n  name: '@deepseek-ai/dsh-permission-presets'\n  config:\n    presets:\n      read-only:\n        sandbox: read-only\n        approval: ask\n      workspace-write:\n        sandbox: workspace-write\n        approval: ask\n      danger-full-access:\n        sandbox: danger-full-access\n        approval: never\n- id: shell-env\n  name: '@deepseek-ai/dsh-shell-env'\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: tool-bash\n  name: '@deepseek-ai/dsh-tool-bash'\n  disabled: true\n- id: tool-pwsh\n  name: '@deepseek-ai/dsh-tool-pwsh'\n  disabled: true\n- id: tool-jobs\n  name: '@deepseek-ai/dsh-tool-jobs'\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: fs-observation-policy\n  name: '@deepseek-ai/dsh-fs-observation-policy'\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: tool-fs\n  name: '@deepseek-ai/dsh-tool-fs'\n  disabled: true\n- id: tool-fs-search\n  name: '@deepseek-ai/dsh-tool-fs-search'\n  config:\n    sampleOverCapGlobResults: false\n  disabled: true\n- id: agent-instructions\n  name: '@deepseek-ai/dsh-agent-instructions'\n  config:\n    maxBytes: 65536\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: skill\n  name: '@deepseek-ai/dsh-skill'\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: skill-filesystem\n  name: '@deepseek-ai/dsh-skill-filesystem'\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: skill-badge\n  name: '@deepseek-ai/dsh-skill-badge'\n  disabled: true\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: tool-skill\n  name: '@deepseek-ai/dsh-tool-skill'\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: commands\n  name: '@deepseek-ai/dsh-commands'\n- id: command-feedback\n  name: '@deepseek-ai/dsh-command-feedback'\n- id: goal\n  name: '@deepseek-ai/dsh-goal'\n- id: goal-round-driver\n  name: '@deepseek-ai/dsh-goal-round-driver'\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: command-goal\n  name: '@deepseek-ai/dsh-command-goal'\n  disabled: true\n- id: plan-mode\n  name: '@deepseek-ai/dsh-plan-mode'\n  config:\n    section: >\n      You are in plan mode. Stay in plan mode until exit_plan_mode succeeds or\n      the user switches the session mode. Imperative language to implement\n      changes means plan the implementation, not execute it. A user's\n      conversational agreement — including an answer confirming something you\n      asked — approves nothing and does not end plan mode; fold the confirmed\n      decision into the plan and submit it through exit_plan_mode.\n\n\n      Explore first. Use non-mutating reads, searches, static analysis, and\n      checks to ground the plan in the actual repository. Do not edit or write\n      files, change configuration, run formatters or code generation that\n      rewrites tracked files, commit, or otherwise carry out the plan. Prefer\n      existing functions and patterns over new machinery.\n\n\n      The tool catalog stays the same across modes for request-cache stability.\n      These plan-mode rules override any later tool description or guidance that\n      suggests using mutation tools; those tools remain listed only to keep the\n      request shape stable. Do not use todo_write to track this planning phase:\n      it tracks implementation after an approved plan, while the plan itself\n      belongs in exit_plan_mode.\n\n\n      Resolve discoverable facts by inspection. Use ask_user_question only for\n      user-owned choices or material ambiguity that inspection cannot answer. Do\n      not ask the user where code lives or how current behavior works when you\n      can find out.\n\n\n      Make the plan decision-complete: state the goal and success criteria;\n      group implementation changes by subsystem; identify public API, schema,\n      and data-flow changes; cover edge cases, failure modes, tests, acceptance\n      criteria, and explicit assumptions. Keep it concise enough to review but\n      detailed enough that another engineer can implement it without making\n      design decisions.\n\n\n      When ready, call exit_plan_mode with the complete plan markdown, starting\n      with a # title. Make exit_plan_mode the only and final tool call in that\n      assistant response: it presents the plan for approval, and implementation\n      begins only in a later step after approval. Do not paste the final plan as\n      a plain reply or ask \"should I proceed?\" through prose or\n      ask_user_question. If review rejects it, incorporate the feedback and\n      present again. If the review channel is unavailable or aborted, stay in\n      plan mode and ask the user to switch modes manually; do not proceed with\n      implementation.\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: token-meter\n  name: '@deepseek-ai/dsh-token-meter'\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: compaction-basic\n  name: '@deepseek-ai/dsh-compaction-basic'\n  disabled: true\n- id: command-compact\n  name: '@deepseek-ai/dsh-command-compact'\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: subagent\n  name: '@deepseek-ai/dsh-subagent'\n- id: subagent-spawn-in-process\n  name: '@deepseek-ai/dsh-subagent-spawn-in-process'\n  config:\n    providerName: spawn\n- id: subagent-fork-in-process\n  name: '@deepseek-ai/dsh-subagent-fork-in-process'\n  config:\n    providerName: fork\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: tool-subagent-control\n  name: '@deepseek-ai/dsh-tool-subagent-control'\n  disabled: true\n- id: tool-subagent-list-agents\n  name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'\n  disabled: true\n- id: tool-subagent\n  name: '@deepseek-ai/dsh-tool-subagent'\n  config:\n    provider: spawn\n    toolName: subagent\n    backgroundMode: continuable\n  disabled: true\n- id: tool-subagent-fork\n  name: '@deepseek-ai/dsh-tool-subagent'\n  config:\n    provider: fork\n    toolName: subagent_fork\n    backgroundMode: one-shot\n  disabled: true\n- id: workflow-worker-thread\n  name: '@deepseek-ai/dsh-workflow-worker-thread'\n  config:\n    provider: spawn\n  disabled: true\n- id: tool-workflow\n  name: '@deepseek-ai/dsh-tool-workflow'\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: timeout-policy\n  name: '@deepseek-ai/dsh-tool-call-timeout-policy'\n- id: spill-local\n  name: '@deepseek-ai/dsh-spill-local'\n- id: spill-policy\n  name: '@deepseek-ai/dsh-spill-policy'\n  config:\n    maxInlineBytes: 50000\n- id: session-checkpoint-policy\n  name: '@deepseek-ai/dsh-session-checkpoint-policy'\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: tool-result-pruner\n  name: '@deepseek-ai/dsh-compaction-tool-result-pruner'\n  config:\n    thresholdChars: 8192\n    headChars: 4096\n    tailChars: 1024\n  disabled: true\n- id: tool-todo\n  name: '@deepseek-ai/dsh-tool-todo'\n  config:\n    allowParallelInProgress: true\n  disabled: true\n- id: tool-goal\n  name: '@deepseek-ai/dsh-tool-goal'\n  disabled: true\n- id: tool-ralph\n  name: '@deepseek-ai/dsh-tool-ralph'\n  config:\n    subagentProvider: spawn\n    maxRounds: 64\n  disabled: true\n- id: tool-str-replace-editor\n  name: '@deepseek-ai/dsh-tool-str-replace-editor'\n  config:\n    maxOutputChars: 16000\n  disabled: true\n# == @deepseek-ai/dsh-base\n- id: repeat-tool-reminder\n  name: '@deepseek-ai/dsh-repeat-tool-reminder'\n  config:\n    thresholds:\n      - 3\n      - 5\n      - 8\n    argumentsPreviewChars: 500\n- id: web\n  name: '@deepseek-ai/dsh-web'\n  config:\n    searchProvider: deepseek-official\n    fetchProvider: http\n- id: web-search-deepseek\n  name: '@deepseek-ai/dsh-web-search-deepseek'\n  config:\n    apiKeyEnv: DEEPSEEK_API_KEY\n- id: web-fetch-http\n  name: '@deepseek-ai/dsh-web-fetch-http'\n# == @deepseek-ai/dsh-base, patched by @deepseek-ai/dsh-web-app\n- id: tool-web\n  name: '@deepseek-ai/dsh-tool-web'\n  config:\n    fetch: true\n    searchTimeoutMs: 60000\n  disabled: true\n- id: tools\n  name: '@deepseek-ai/dsh-tools'\n  config:\n    mode: !!js process.env.DSH_TOOLS_MODE\n- id: system-prompt\n  name: '@deepseek-ai/dsh-system-prompt'\n  config:\n    persona: >-\n      You are a coding agent powered by the {{model}} model. Your working\n      directory is {{cwd}}.\n# == @deepseek-ai/dsh-base\n- id: agent-loop\n  name: '@deepseek-ai/dsh-agent-loop'\n  config:\n    agents: []\n- id: fs-sandbox\n  name: '@deepseek-ai/dsh-fs-sandbox'\n- id: llm-deepseek\n  name: '@deepseek-ai/dsh-llm-deepseek'\n# == @deepseek-ai/dsh-web-app\n- id: subagent-model-selection-settings\n  name: '@deepseek-ai/dsh-tool-subagent/model-selection-settings'\n- id: code-runtime\n  name: '@deepseek-ai/dsh-code-runtime-worker-thread'\n- id: message-feedback\n  name: '@deepseek-ai/dsh-message-feedback'\n  config:\n    maxNoteBytes: 8192\n- id: session-log-download\n  name: '@deepseek-ai/dsh-session-log-export'\n- id: workspace\n  name: '@deepseek-ai/dsh-workspace'\n- id: session-reference\n  name: '@deepseek-ai/dsh-session-reference'\n- id: file-reference-local\n  name: '@deepseek-ai/dsh-file-reference-local'\n- id: session-stats\n  name: '@deepseek-ai/dsh-session-stats'\n- id: session-turn-outline\n  name: '@deepseek-ai/dsh-session-turn-outline'\n- id: directory-picker\n  name: '@deepseek-ai/dsh-host-directory-picker-auto'\n- id: plugin-inventory\n  name: '@deepseek-ai/dsh-host-plugin-inventory'\n- id: session-controller\n  name: '@deepseek-ai/dsh-api-session-controller'\n- id: settings-controller\n  name: '@deepseek-ai/dsh-api-settings-controller'\n- id: workspace-controller\n  name: '@deepseek-ai/dsh-api-workspace-controller'\n- id: cordis-host-runner\n  name: '@deepseek-ai/dsh-cordis-host-runner'\n- id: web-startup\n  name: '@deepseek-ai/dsh-web-app/startup'\n- id: webserver\n  name: '@deepseek-ai/dsh-host-webserver'\n  inject:\n    - webStartup\n  config:\n    host: !!js ctx.webStartup.host ?? '127.0.0.1'\n    port: !!js ctx.webStartup.port ?? 3080\n    compression: gzip\n    compressionLevel: 1\n    compressionThresholdBytes: 1024\n- id: web-runtime\n  name: '@deepseek-ai/dsh-web-app'\n  inject:\n    - webStartup\n  config:\n    openBrowser: !!js ctx.webStartup.openBrowser\n    printUrl: true\n    surfaceContext: true\n    trustedHosts: !!js ctx.webStartup.trustedHosts\n- id: client-hmr\n  name: '@deepseek-ai/dsh-client-hmr'\n- id: modules\n  name: '@deepseek-ai/dsh-client-modules'\n- id: connection\n  name: '@deepseek-ai/dsh-client-connection'\n  inject:\n    - webRuntime\n  config:\n    trustedHosts: !!js ctx.webRuntime.trustedHosts\n- id: file-upload\n  name: '@deepseek-ai/dsh-client-file-upload'\n- id: api-remotes\n  name: '@deepseek-ai/dsh-api-remotes'\n- id: cordis-client-runner\n  name: '@deepseek-ai/dsh-cordis-client-runner'\n- id: ui-theme\n  name: '@deepseek-ai/dsh-client-ui-theme'\n- id: locale\n  name: '@deepseek-ai/dsh-client-locale'\n- id: ui-layout\n  name: '@deepseek-ai/dsh-client-ui-layout'\n- id: ui-renderer\n  name: '@deepseek-ai/dsh-client-ui-renderer'\n- id: ui-session\n  name: '@deepseek-ai/dsh-client-ui-session'\n- id: ui-sidebar\n  name: '@deepseek-ai/dsh-client-ui-sidebar'\n- id: ui-settings\n  name: '@deepseek-ai/dsh-client-ui-settings'\n- id: ui-settings-general\n  name: '@deepseek-ai/dsh-client-ui-settings-general'\n- id: ui-settings-models\n  name: '@deepseek-ai/dsh-client-ui-settings-models'\n- id: ui-settings-plugin-inventory\n  name: '@deepseek-ai/dsh-client-ui-settings-plugin-inventory'\n- id: ui-conversation\n  name: '@deepseek-ai/dsh-client-ui-conversation'\n- id: ui-approval\n  name: '@deepseek-ai/dsh-client-ui-approval'\n- id: ui-chat\n  name: '@deepseek-ai/dsh-client-ui-chat'\n- id: ui-brand-official\n  name: '@deepseek-ai/dsh-client-ui-brand-official'\n- id: ui-attachment\n  name: '@deepseek-ai/dsh-client-ui-attachment'\n- id: ui-tool\n  name: '@deepseek-ai/dsh-client-ui-tool'\n- id: ui-cordis\n  name: '@deepseek-ai/dsh-client-ui-cordis'\n- id: ui-workflow-run\n  name: '@deepseek-ai/dsh-client-ui-workflow-run'\n- id: ui-deliverables\n  name: '@deepseek-ai/dsh-client-ui-deliverables'\n- id: ui-workspace\n  name: '@deepseek-ai/dsh-client-ui-workspace'\n- id: ui-input-trigger\n  name: '@deepseek-ai/dsh-client-ui-input-trigger'\n- id: ui-commands\n  name: '@deepseek-ai/dsh-client-ui-commands'\n- id: ui-skill\n  name: '@deepseek-ai/dsh-client-ui-skill'\n- id: ui-subagent\n  name: '@deepseek-ai/dsh-client-ui-subagent'\n- id: ui-reference\n  name: '@deepseek-ai/dsh-client-ui-reference'\n- id: ui-schedule\n  name: '@deepseek-ai/dsh-client-ui-schedule'\n  disabled: true\n- id: ui-jobs\n  name: '@deepseek-ai/dsh-client-ui-jobs'\n- id: ui-goal\n  name: '@deepseek-ai/dsh-client-ui-goal'\n- id: ui-message-feedback\n  name: '@deepseek-ai/dsh-client-ui-message-feedback'\n- id: ui-model-selection\n  name: '@deepseek-ai/dsh-client-ui-model-selection'\n- id: ui-permission\n  name: '@deepseek-ai/dsh-client-ui-permission-presets'\n- id: ui-agent-preset\n  name: '@deepseek-ai/dsh-client-ui-agent-preset'\n- id: ui-settings-plugins\n  name: '@deepseek-ai/dsh-client-ui-settings-plugins'\n- id: ui-plan\n  name: '@deepseek-ai/dsh-client-ui-plan'\n- id: ui-user-questions\n  name: '@deepseek-ai/dsh-client-ui-user-questions'\n- id: ui-trajectory\n  name: '@deepseek-ai/dsh-client-ui-trajectory'\n- id: agent-presets\n  name: '@deepseek-ai/dsh-agent-presets'\n  config:\n    default: standard\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "plugin",
+        "--profile",
+        "web",
+        "remove",
+        "@dsh-themes/reasoning-tide"
+      ],
+      "code": 1,
+      "stdout": "[ERR_PNPM_CANNOT_REMOVE_MISSING_DEPS] Cannot remove '@dsh-themes/reasoning-tide': project has no dependencies of any kind\n",
+      "stderr": "dsh: pnpm failed in profile directory /Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/profiles/web\n"
+    }
+  ],
+  "stages": [
+    {
+      "name": "install-spotlight",
+      "result": {
+        "dshVersion": "0.1.3-alpha.1",
+        "status": "installed",
+        "items": [
+          {
+            "catalogId": 3004,
+            "slug": "dsh-spotlight",
+            "packageName": "@0xsline/dsh-spotlight",
+            "profile": "web",
+            "status": "installed",
+            "installedVersion": "0.0.2-dsh.alpha.1",
+            "setup": {
+              "usageExamples": [
+                {
+                  "kind": "command",
+                  "text": "/spotlight"
+                }
+              ],
+              "requirements": [],
+              "configurationExamples": [],
+              "documentation": {
+                "url": "https://github.com/0xsline/dsh-spotlight/blob/dd7ef5ed160aa1a624559de16eafd4ea9406d7ed/README.md",
+                "sha256": "35b3ef92d762279fd77a57d9d227b55fdff09971eb61d5e8153b08e5cb8d619c"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "modelTask": false,
+  "coexistence": {
+    "status": "pending",
+    "skin": {
+      "catalogId": 2002,
+      "slug": "reasoning-tide",
+      "packageName": "@dsh-themes/reasoning-tide",
+      "version": "1.1.1-alpha.2",
+      "artifactSha256": "3c92893022e77809c0f9fadce2edf0e368f47666b771e18c86bf1812ebc5fe73",
+      "cssSha256": "31576e5eb5ba35f725f7fd62de483b8925a513710c972a824a76324da044e7b6",
+      "manifestSha256": "ebb80acd55873c92c8f1f3df231d9cfa47222d92d83027f740d7e2684cd4afd2",
+      "payloadSha256": "e6578f9e18ad2f05a479356f58dd71a0631b17b8d9c81397d635233159842fcc"
+    },
+    "commands": [],
+    "phases": [
+      {
+        "phase": "before-skin",
+        "withSpotlight": true,
+        "withSkin": false,
+        "modelTask": false,
+        "status": "failed",
+        "screenshots": [],
+        "error": "AssertionError [ERR_ASSERTION]: Already up to date\nDone in 532ms using pnpm v11.7.0\n\n╔════════════════════════════════════════════════════════════════════╗\n║ Update available for @playwright/cli: 0.1.18 → 0.1.19              ║\n║ Run `npm install -g @playwright/cli@latest` (global) or            ║\n║ `npm install --save-dev @playwright/cli@latest` (local) to update. ║\n╚════════════════════════════════════════════════════════════════════╝\n\n### Error\nTimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('dialog', { name: /^(Settings|设置)$/ }).getByRole('button', { name: /^(Close|关闭)$/ })\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" class=\"XB6esq_close\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div aria-hidden=\"true\" class=\"_mask_w1urq_14\"></div> from <div role=\"presentation\" class=\"_root_w1urq_2\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div aria-hidden=\"true\" class=\"_mask_w1urq_14\"></div> from <div role=\"presentation\" class=\"_root_w1urq_2\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    58 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div aria-hidden=\"true\" class=\"_mask_w1urq_14\"></div> from <div role=\"presentation\" class=\"_root_w1urq_2\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n    at checkFinalSpotlightSurface (file:///Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/scripts/verify-dsh-spotlight-final-surface.mjs:181:12)\n    at async surface (file:///Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/scripts/verify-dsh-spotlight-final-runtime.mjs:201:18)\n    at async file:///Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/scripts/verify-dsh-spotlight-final-runtime.mjs:227:3",
+        "processStopped": true,
+        "portProbe": {
+          "host": "127.0.0.1",
+          "port": 4016,
+          "closed": true,
+          "code": "ECONNREFUSED"
+        },
+        "portClosed": true,
+        "logSha256": {
+          "stdout": "b335faababc65ea656c8e7b30da8320dfda25f647976cae9300487d8abebcc1a",
+          "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    ]
+  },
+  "error": "AssertionError [ERR_ASSERTION]: Final surface failed: before-skin\n\n'failed' !== 'passed'\n\n    at surface (file:///Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/scripts/verify-dsh-spotlight-final-runtime.mjs:213:10)\n    at async file:///Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/scripts/verify-dsh-spotlight-final-runtime.mjs:227:3",
+  "cleanupSpotlight": {
+    "dshVersion": "0.1.3-alpha.1",
+    "status": "removed",
+    "items": [
+      {
+        "catalogId": 3004,
+        "slug": "dsh-spotlight",
+        "packageName": "@0xsline/dsh-spotlight",
+        "profile": "web",
+        "status": "removed",
+        "restartRequired": true
+      }
+    ]
+  },
+  "cleanupSkin": {
+    "code": 1,
+    "stdout": "[ERR_PNPM_CANNOT_REMOVE_MISSING_DEPS] Cannot remove '@dsh-themes/reasoning-tide': project has no dependencies of any kind\n",
+    "stderr": "dsh: pnpm failed in profile directory /Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-top10-runtime/final-spotlight-1788689728684/profiles/web\n"
+  },
+  "snapshotsUnchangedAtCompletion": true,
+  "finishedAt": "2026-09-06T10:16:21.400Z"
+}

@@ -1,0 +1,54 @@
+{
+  "sourceRepository": "yushi-xxh/dsh-homepage-skin",
+  "sourceRevision": "44933213da11f82caefd609ad1bdfe84ac95b3e0",
+  "files": [
+    {
+      "path": "LICENSE",
+      "gitBlob": "dd32e9a87d728884c45396f3af2f4cff51729813",
+      "sha256": "ae8b5bda032493734950b838ec5bd5b0a623219a46e53bbeea944043083bd9e1",
+      "bytes": 1066
+    },
+    {
+      "path": "README.md",
+      "gitBlob": "a80b54778e97c436862c16e4f321dd444d6d279c",
+      "sha256": "444b9e10f112988a009daa670174a43b6f5d3912655e639118de0afcefc9486a",
+      "bytes": 1643
+    },
+    {
+      "path": "cordis.patch.yml",
+      "gitBlob": "e08ccf15f3e32668ded4826fd95c266bce2b8a6b",
+      "sha256": "04a8c79821bc4f0a35fcd6bba6f05833fcb52f61e2cf52c21d8db629d5f045f4",
+      "bytes": 64
+    },
+    {
+      "path": "lib/client.js",
+      "gitBlob": "fceec3395f4dba18bc6743c73e2334993ed0c073",
+      "sha256": "7aee778bae44543d16400a2cccc780e423b1b69ee132d975e60e873e2cf7ea3a",
+      "bytes": 52927
+    },
+    {
+      "path": "lib/index.js",
+      "gitBlob": "19b0c0c18d569bb35065a568a681e183963805a2",
+      "sha256": "fb4bd92a712b6ad76987a490737055a4c914bd471a383fe006a4877b817da3a8",
+      "bytes": 220
+    },
+    {
+      "path": "package.json",
+      "gitBlob": "028dd95537bbd0717b63969e43c1dc61f2c9eb5e",
+      "sha256": "cbf440bd2b06ec0abded546b5d6f211fb69b98ac51a2d30cbe304adec7564c00",
+      "bytes": 1483
+    }
+  ],
+  "adaptation": "DSH Themes Alpha module ID and profile metadata; legacy defineStore import now uses the official shared client-store module. Original feature implementation, source coordinate and license retained.",
+  "alphaLayoutAdaptation": {
+    "reason": "The four upstream hard-coded CSS module hashes are absent from the fixed Alpha build.",
+    "frameSelector": "[class*=_frame]:has(> [class*=_sidebarCol])",
+    "surfaceScope": "Alpha center column and the immediate root inside its conversation slot; input cards and nested tool cards remain unchanged",
+    "reviewedSource": [
+      "packages/client/ui-layout/src/client/AppFrame.tsx",
+      "packages/client/ui-conversation/src/client/skeleton/ConversationRoot.module.css"
+    ],
+    "runtimeStatus": "Candidate at packaging time; current verification status and exact-byte receipt are maintained outside this archive in community-recipes.json.",
+    "observedRuntimeStructure": "The conversation slot is a display:contents wrapper between centerCol and ConversationRoot. A direct child root selector does not reach the actual opaque conversation background."
+  }
+}

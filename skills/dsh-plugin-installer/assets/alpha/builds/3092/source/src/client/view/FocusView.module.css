@@ -1,0 +1,176 @@
+/* Focus flow: the same width and 16px rhythm as the chat column; the host
+   scrollport owns overflow and this view is ordinary flow content. */
+
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+/* The focus view's own scroll container; under the conversation column host
+   ([data-conversation-scroll]) the host owns overflow and this becomes
+   ordinary flow (ChatView's scroll split). Inline-size query container:
+   wide markdown tables size their breakout against this box's content width
+   (100cqw in the md-table-wide rule) — the chat view's container-type. */
+.scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  /* Sides = composer clearance + 16px, the chat view's rule: the transcript
+     stays exactly 32px narrower than the input card on narrow viewports,
+     and the turn navigator's rail positions against this padding box — its
+     negative `right` returns it to the content column's right edge. Without
+     this padding the rail's negative offset would push it past the scrollport
+     into the scrollbar/outside the view. */
+  padding: 16px calc(var(--dsh-composer-side-clearance) + 16px);
+  /* Inline-size query container: wide markdown tables size their breakout
+     against this box's content width (100cqw in the md-table-wide rule) —
+     the chat view's container-type. */
+  container-type: inline-size;
+}
+
+:global([data-conversation-scroll]) .root {
+  flex: 0 0 auto;
+  min-height: auto;
+  height: auto;
+}
+
+:global([data-conversation-scroll]) .scroll {
+  overflow: visible;
+  flex: 0 0 auto;
+  min-height: auto;
+}
+
+.column {
+  max-width: var(--dsh-chat-content-width);
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.flowItem {
+  min-width: 0;
+}
+
+.flowItem:empty {
+  display: none;
+}
+
+
+.older {
+  display: flex;
+  justify-content: center;
+}
+
+/* The chat pager's quiet solid pill. */
+.olderButton {
+  border: none;
+  border-radius: 14px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--dsw-alias-label-secondary);
+  background: var(--dsw-alias-interactive-bg-hover-solid);
+  cursor: pointer;
+}
+
+.olderButton:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.empty {
+  align-self: center;
+  padding: 24px 0;
+  color: var(--dsw-alias-label-tertiary);
+  font-size: var(--dsh-content-font-size-secondary, 13px);
+  line-height: 20px;
+}
+
+
+.hint {
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.openError {
+  color: var(--dsw-alias-state-error-primary);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.toBottomSlot {
+  position: sticky;
+  bottom: 16px;
+  z-index: 8;
+  height: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: max(0px, calc((100% - var(--dsh-chat-content-width)) / 2));
+  pointer-events: none;
+}
+
+:global([data-conversation-scroll]) .toBottomSlot {
+  /* Clears the sticky composer stack (the chat rule): under the conversation
+     column host the control rides above the input card, not under it. */
+  bottom: calc(var(--dsh-composer-height, 152px) + 16px);
+}
+
+.toBottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin-top: -34px;
+  padding: 0;
+  border: 0;
+  --dsw-elevation-stroke-color: var(--dsw-alias-border-l3);
+  border-radius: 100px;
+  corner-shape: round;
+  color: var(--dsw-alias-label-primary);
+  background: var(--dsw-alias-button-floating-fill);
+  box-shadow: var(--dsw-elevation-panel);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.toBottom:hover {
+  background: var(--dsw-alias-button-floating-hover);
+}
+
+/* Command row: name · settlement with an expandable multiline body. */
+
+.runningCalls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+
+/* In-page Host open-path refusal dialog actions (the chat view's modal). */
+.modalAction {
+  min-width: 72px;
+}
+
+/* Markdown inline-code highlight mode: the official box (background chip +
+   0.5px border + radius + padding) reads as a bordered chip; the highlight
+   rendering strips the whole box, border included, and paints the code text
+   in the dsh primary color instead. Scoped under the view root's data
+   attribute (higher specificity than the primitives' `.markdown :not(pre) >
+   code`), so the default rendering stays untouched unless the preference
+   opts in. */
+.root[data-focus-md-style='highlight'] :not(pre) > code {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  color: var(--dsw-alias-state-business-primary);
+}

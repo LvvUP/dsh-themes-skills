@@ -1,0 +1,25 @@
+{
+  "sourceRepository": "dingyi222666/dsh-session-notification",
+  "sourceRevision": "c7bb90eb736b60b9581ea45d9309bc3adf7c95fd",
+  "files": {
+    "README.md": "61f8ba45e9ee69ffe678f84497fd460be836f2c7f21c077a75a1182d09528711",
+    "cordis.patch.yml": "3e074821b9cdce6c226f25dc7333d8e622f28bb887cf7207fa25a97d508a26b3",
+    "package.json": "00fdcaf449b407279973b73fbfa10309736bd317cbc76dc41a160277f20ae6b3",
+    "src/client/NotificationsSection.module.css": "eafc5025e85a95bb4852af3e03a0593a080bdb7981831fb185e61bf7f003489b",
+    "src/client/NotificationsSection.tsx": "63a76001b1a3106631f9fc2d89e2d6a289ff8efdfe555c4d62e6d885c07eced6",
+    "src/client/browser-notify.ts": "7999e2a40ac03b26db21632d557667ab76a627e3128501725c1ea458be06b1f6",
+    "src/client/custom-audio.ts": "d9c14d3da8ac4633e8d9ea9f04d8607c17ce1d9f6ea9c32a3ead11f30a195d34",
+    "src/client/index.ts": "be4cec2e195fd045bcc13ffce39b78c20bae862f99374c25feacd5833c78a09b",
+    "src/client/local-settings.ts": "c12d0b6d6aec881a336b885fe7ce6e73d6a777a1a2a9cf2d129c34d907c8100f",
+    "src/client/locales.ts": "c07f46e15d5444ad124251dbf8a3580d2f35fbabc05fa1985165dde798d69a4e",
+    "src/client/notification-service.ts": "092f05e8f2293da040c50fc81b4e772a8fe79bf379fb1f20c07e4e6757dcd9c6",
+    "src/client/settings-store.ts": "82ddc472e17da0188eb49c770d2012e32114d88b3f62cae5c8aa1bc91cc81c21",
+    "src/client/sounds.ts": "95ba15623fdb03322e6ccdf1c193660cccd573efd65e6b9f274efa078720a055",
+    "src/css-modules.d.ts": "e28410d74a0d763364c04fa690c2ca2202ad3019c74f8f5205e8dc6cba69c02f",
+    "src/index.ts": "48817ffc7226eaaaaa2370c287bd23dfd142a56884ca4e67bfd3f7a9d381d748",
+    "src/invariant.ts": "a93659d589fb8030931285918622fc36f0809ce5de3a749f226e6838317b41ac",
+    "src/schema.ts": "3442c1cee07ab9ad71eaacb46d9aa46f44f7211ca6bdf42fc83c83b9b1b4a67b",
+    "src/settings.ts": "51e5112c4ed864d9bc6419c1a734352861b370d7b7cfb7fafb8566f4bf8726df",
+    "tsdown.config.ts": "59c65265f4bfc4056a1396de67eae2f3911d5eade7fbf4d0118a90467be52dcb"
+  }
+}

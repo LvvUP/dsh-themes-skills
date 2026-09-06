@@ -4,6 +4,20 @@ import { createHash } from 'node:crypto';
 import { readFile, stat } from 'node:fs/promises';
 import { isAbsolute, resolve } from 'node:path';
 
+import { ALPHA_SOURCE, readAlphaRuntime } from '../../dsh-theme-manager/scripts/dsh-alpha.mjs';
+import { loadAlphaHostedAuthority, stableAlphaJson } from '../../dsh-theme-manager/scripts/alpha-authority.mjs';
+
+async function selectedCompatibility(baseline = 'alpha') {
+  if (baseline === 'historical-rc8') return HISTORICAL_COMPATIBILITY;
+  if (baseline !== 'alpha') throw new Error('baseline must be alpha or historical-rc8');
+  const bytes = await readFile(new URL('../references/compatibility-alpha.json', import.meta.url));
+  if (createHash('sha256').update(bytes).digest('hex') !== '1df3347e072b79d6c7607de2e7728f4b50e40c29591c1f307b4634ebb3d16032') throw new Error('Alpha authoring/submission sidecar digest differs');
+  const compatibility = JSON.parse(bytes.toString('utf8'));
+  const runtime = readAlphaRuntime();
+  if (loadAlphaHostedAuthority().status !== 'runtime-verified' || stableAlphaJson(compatibility) !== stableAlphaJson({ ...runtime.compatibility, runtimeAttestationSha256: ALPHA_SOURCE.verification.sha256 })) throw new Error('Alpha draft compatibility differs from the reviewed source and hosted authority');
+  return compatibility;
+}
+
 const TOKENS = [
   '--dsw-alias-bg-base', '--dsw-alias-bg-layer-1', '--dsw-alias-bg-layer-2', '--dsw-alias-bg-overlay',
   '--dsw-alias-border-l1', '--dsw-alias-border-l2', '--dsw-alias-brand-primary', '--dsw-alias-label-primary',
@@ -67,8 +81,8 @@ if (
 ) {
   throw new Error('certified submission sidecar digest differs');
 }
-const COMPATIBILITY = JSON.parse(compatibilityBytes.toString('utf8'));
-if (typeof COMPATIBILITY.dshPackageVersion !== 'string') {
+const HISTORICAL_COMPATIBILITY = JSON.parse(compatibilityBytes.toString('utf8'));
+if (typeof HISTORICAL_COMPATIBILITY.dshPackageVersion !== 'string') {
   throw new Error('certified submission sidecar lacks an exact DSH version');
 }
 const SHA256 = /^[0-9a-f]{64}$/;
@@ -85,7 +99,9 @@ function parseArgs(argv) {
   const values = {};
   for (let index = 0; index < argv.length; index += 2) {
     if (!argv[index]?.startsWith('--') || argv[index + 1] == null) throw new Error('Arguments must be --key value pairs');
-    values[argv[index].slice(2)] = argv[index + 1];
+    const key = argv[index].slice(2);
+    if (!['manifest', 'site', 'baseline'].includes(key) || Object.hasOwn(values, key)) throw new Error('Unknown or duplicate argument');
+    values[key] = argv[index + 1];
   }
   if (!values.manifest || !values.site) throw new Error('Usage: validate-submission.mjs --manifest <absolute-json> --site <https-origin>');
   return values;
@@ -164,7 +180,7 @@ function submissionOrigin(value) {
 function validateCompatibility(value) {
   const input = object(value, 'compatibility');
   if (JSON.stringify(stable(input)) !== JSON.stringify(stable(COMPATIBILITY))) {
-    throw new Error('compatibility must exactly match the certified V3 evidence');
+    throw new Error('compatibility must exactly match the selected V3 evidence');
   }
 }
 
@@ -208,6 +224,8 @@ function validatePreviewAsset(value, label) {
 }
 
 const args = parseArgs(process.argv.slice(2));
+const COMPATIBILITY = await selectedCompatibility(args.baseline);
+const historical = args.baseline === 'historical-rc8';
 if (!isAbsolute(args.manifest)) throw new Error('manifest path must be absolute');
 const path = resolve(args.manifest);
 const metadata = await stat(path);
@@ -223,7 +241,7 @@ for (const key of Object.keys(manifest)) if (!allowedRoot.includes(key)) throw n
 if (manifest.schemaVersion !== '3.0') throw new Error('schemaVersion must equal 3.0');
 if (!['theme', 'full-skin'].includes(manifest.kind)) throw new Error('kind must be theme or full-skin');
 if (!SLUG.test(manifest.slug) || manifest.slug.length > 64) throw new Error('invalid slug');
-if (!VERSION.test(manifest.version)) throw new Error('version must be exact semantic version');
+if (typeof manifest.version !== 'string' || manifest.version.length > 64 || !VERSION.test(manifest.version)) throw new Error('version must be exact semantic version of at most 64 characters');
 if (
   typeof manifest.license !== 'string' || manifest.license !== manifest.license.trim() ||
   !LICENSE.test(manifest.license)
@@ -270,7 +288,12 @@ if (manifest.kind === 'theme') {
     copyright.source === 'licensed' && licensePolicy.attributionRequired &&
     (!copyright.attribution || !copyright.noticeUrl)
   ) throw new Error('Attribution-required licensed art requires attribution and noticeUrl');
-  const visual = object(manifest.visual, 'visual', ['preset', 'focus', 'surfaceOpacity', 'overlayOpacity', 'borderStrength', 'glowStrength']);
+  const visual = object(manifest.visual, 'visual', ['preset', 'focus', 'surfaceOpacity', 'overlayOpacity', 'borderStrength', 'glowStrength', 'mobileWelcomeSurface', 'mobileWelcomeOffset', 'desktopWelcomeLayout', 'desktopWelcomeSurface', 'mobileDarkFocusX']);
+  if (visual.mobileWelcomeSurface !== undefined && typeof visual.mobileWelcomeSurface !== 'boolean') throw new Error('visual.mobileWelcomeSurface must be boolean');
+  if (visual.mobileWelcomeOffset !== undefined && (!Number.isInteger(visual.mobileWelcomeOffset) || visual.mobileWelcomeOffset < -120 || visual.mobileWelcomeOffset > 120)) throw new Error('visual.mobileWelcomeOffset must be an integer from -120 to 120');
+  if (visual.desktopWelcomeLayout !== undefined && !['compact-left', 'compact-center'].includes(visual.desktopWelcomeLayout)) throw new Error('visual.desktopWelcomeLayout is invalid');
+  if (visual.desktopWelcomeSurface !== undefined && typeof visual.desktopWelcomeSurface !== 'boolean') throw new Error('visual.desktopWelcomeSurface must be boolean');
+  if (visual.mobileDarkFocusX !== undefined && (!Number.isInteger(visual.mobileDarkFocusX) || visual.mobileDarkFocusX < 0 || visual.mobileDarkFocusX > 100)) throw new Error('visual.mobileDarkFocusX must be an integer from 0 to 100');
   if (!['glass', 'outline', 'glow'].includes(visual.preset)) throw new Error('invalid visual preset');
   const focus = object(visual.focus, 'visual.focus', ['x', 'y']);
   focusPercent(focus.x, 'visual.focus.x'); focusPercent(focus.y, 'visual.focus.y');
@@ -309,7 +332,7 @@ const submission = new URL(manifest.kind === 'full-skin' ? '/create' : '/submit'
 submission.searchParams.set('source', 'dsh-theme-submitter');
 submission.searchParams.set('slug', manifest.slug);
 process.stdout.write(`${JSON.stringify({
-  ready: true, slug: manifest.slug, version: manifest.version, kind: manifest.kind,
+  ready: !historical, historical, draft: true, slug: manifest.slug, version: manifest.version, kind: manifest.kind,
   dshPackageVersion: manifest.compatibility.dshPackageVersion,
   runtimeAttestationSha256: manifest.compatibility.runtimeAttestationSha256,
   manifestSha256: createHash('sha256').update(bytes).digest('hex'),
@@ -319,8 +342,8 @@ process.stdout.write(`${JSON.stringify({
     : licensePolicy.commercialUse === 'prohibited'
       ? 'external-showcase-only'
       : 'rights-clearance-required',
-  submissionUrl: submission.href,
-  next: provisionalAssets
+  ...(historical ? {} : { submissionUrl: submission.href }),
+  next: historical ? 'Historical RC.8 validation only. This result does not authorize the current Alpha website handoff.' : provisionalAssets
     ? 'Sign in, upload the original raster files in Theme Studio, and let the website replace provisional URLs before moderation.'
     : 'Sign in in your browser, review the parsed declaration, and submit it for moderation.',
 }, null, 2)}\n`);

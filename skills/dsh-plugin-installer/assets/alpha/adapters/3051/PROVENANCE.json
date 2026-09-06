@@ -1,0 +1,613 @@
+{
+  "schemaVersion": 1,
+  "catalogId": 3051,
+  "sourceRepository": "Scorp1o117/dsh-tdai-memory",
+  "sourceRevision": "e55f5d8b1c8d2ec90d13d6fa4735c2090e96bf7d",
+  "upstreamArchive": {
+    "url": "https://registry.npmjs.org/dsh-tdai-memory/-/dsh-tdai-memory-0.3.0.tgz",
+    "integrity": "sha512-l28qDyPFAFqEf5eh0Ho18/7qPgsdkGk30HKf+BlwRE6ebHEBiff+cwSzxJRtB/6ek46QSDJR56pwQ4nzWnKLTw==",
+    "sha256": "3d2f117bb0395b371428b7c79c79469237fb29b572debd7c8016fb9c12e55dbb",
+    "bytes": 193252
+  },
+  "adaptedBy": "DSH Themes contributors",
+  "license": "MIT",
+  "changes": [
+    "Default memory storage now resolves through the official dshHomePath helper under the active DSH_HOME; an explicitly configured dataDir remains unchanged. Existing global TDAI data is not automatically copied or deleted.",
+    "Debug diagnostics report whether a key is configured without disclosing any key characters.",
+    "Alpha peer coordinates replace old release candidates. All extraction, recall, conversation capture, embedding backends, tools, UI, and production dependencies are retained."
+  ],
+  "runtimeDependencies": {
+    "@ai-sdk/openai": "^3.0.53",
+    "@deepseek-ai/schemastery": "^3.18.1",
+    "@node-rs/jieba": "^2.0.1",
+    "@tencentdb-agent-memory/tcvdb-text": "^0.1.1",
+    "ai": "^6.0.164",
+    "json5": "^2.2.3",
+    "sqlite-vec": "0.1.7-alpha.2",
+    "undici": "^8.1.0"
+  },
+  "originalFiles": {
+    "LICENSE": {
+      "bytes": 1067,
+      "sha256": "3144a5b7dd8fc1edcc49e809abbf4d09eb6449b18bd9cf69a805c01b68769637"
+    },
+    "README.md": {
+      "bytes": 6649,
+      "sha256": "db1de9cf925c6b388ccce9936012a0ca498b9ad7a4c9c0f3c4bf345fe8e94e89"
+    },
+    "README.zh.md": {
+      "bytes": 5126,
+      "sha256": "97a724d515d8d0772df84247d6ecd5b22282e85d7882c69e0b3e83973c82a9c3"
+    },
+    "THIRD-PARTY-NOTICES.md": {
+      "bytes": 874,
+      "sha256": "0a70fd906eb0d8536107447a9166e8509f5fdadfa5451f58cda96e9c63a7644f"
+    },
+    "client.js": {
+      "bytes": 20562,
+      "sha256": "236f59b21b93b525e07de86f674bf6e050d391b6a72550c6a539917533bb21c9"
+    },
+    "cordis.patch.yml": {
+      "bytes": 312,
+      "sha256": "992a64a5f34230bd7d600ffdaffebc4892d8d9b0f46310e407bb7adbf93ff39e"
+    },
+    "index.js": {
+      "bytes": 20291,
+      "sha256": "d063fc4918d8178e338a4df0501495fd5acd844fa3b7963419f51480aa0c0858"
+    },
+    "package.json": {
+      "bytes": 2341,
+      "sha256": "bed4701c3f8c285efbcc89ecb61357bb17b8c8a100394fceffea71b28b763a93"
+    },
+    "recall-inject.js": {
+      "bytes": 3437,
+      "sha256": "e0a192fef4f13d71b2b736e77208ea081139e4306db985255cd635a9bf3512e8"
+    },
+    "vendor/tdai/adapters/index.js": {
+      "bytes": 694,
+      "sha256": "2e30fdf78d859fd454257843b1c1ac06ad39b6264742474cbbf1dc4057c9bc48"
+    },
+    "vendor/tdai/adapters/openclaw/host-adapter.js": {
+      "bytes": 2807,
+      "sha256": "54f99f37b72ca2d025d99bcb5497150f039c9de1c55704eee26453327efc980c"
+    },
+    "vendor/tdai/adapters/openclaw/index.js": {
+      "bytes": 184,
+      "sha256": "47f51902119b6e9adcf3c66488cc7ab5b0546db9dadbc1b854bcd43176317d03"
+    },
+    "vendor/tdai/adapters/openclaw/llm-runner.js": {
+      "bytes": 2453,
+      "sha256": "c124e5f5eef7f59763739ed05a47b576048eecb3123005b3e205cb85c32952ec"
+    },
+    "vendor/tdai/adapters/standalone/host-adapter.js": {
+      "bytes": 1814,
+      "sha256": "18a9c1644842fd4461774d86e04cd5ac8caf0a6eeecbefc5ae42f83b4c419c6b"
+    },
+    "vendor/tdai/adapters/standalone/index.js": {
+      "bytes": 192,
+      "sha256": "ea2915f71ea031c3dead88cc91d324193284ad65a6edcb66f8a21c2a069a07d8"
+    },
+    "vendor/tdai/adapters/standalone/llm-runner.js": {
+      "bytes": 12257,
+      "sha256": "ba60adcc94244dfd83b5d87b0946e93c384c5d089e4086da428bb47a39ced280"
+    },
+    "vendor/tdai/config.js": {
+      "bytes": 16498,
+      "sha256": "1a6caa3ff129a53ec2d9f17d20c874dd6477411e979d3de3379acfcdb0138ca9"
+    },
+    "vendor/tdai/core/conversation/l0-recorder.js": {
+      "bytes": 20149,
+      "sha256": "585a00be3d6752520c7e30f6a8b6cc23ac13749a70c9419c37737097176b04c2"
+    },
+    "vendor/tdai/core/hooks/auto-capture.js": {
+      "bytes": 13036,
+      "sha256": "3fd83bfdad91314331572822c8ff5349bf55e777369970348e5ad32dccab3945"
+    },
+    "vendor/tdai/core/hooks/auto-recall.js": {
+      "bytes": 32781,
+      "sha256": "348fb8036f79e81e075323857db9a12dd7a6e0275e2742788cdf74565827083d"
+    },
+    "vendor/tdai/core/index.js": {
+      "bytes": 281,
+      "sha256": "b204bdf649de868e376a374015a12340973ce304941dc11c1bb024e37f44d65d"
+    },
+    "vendor/tdai/core/persona/persona-generator.js": {
+      "bytes": 9141,
+      "sha256": "90336cd73e40fe08d3f7193a8761347dda056d79669c0bc2b856192e9c787144"
+    },
+    "vendor/tdai/core/persona/persona-trigger.js": {
+      "bytes": 4187,
+      "sha256": "40ee6fdc9156e80f1b012b599b215765379c7139e33e664b623a07e2ea3caa87"
+    },
+    "vendor/tdai/core/profile/profile-sync.js": {
+      "bytes": 8136,
+      "sha256": "b09b53e48c8656f54d0cb0e872205f45760ad497c1112d5db12b56dd5a94d65c"
+    },
+    "vendor/tdai/core/prompts/l1-dedup.js": {
+      "bytes": 7122,
+      "sha256": "237bb877f77218059f4b1a85ad1e059f4b478c162e37a48e7f86836e7c26b779"
+    },
+    "vendor/tdai/core/prompts/l1-extraction.js": {
+      "bytes": 6878,
+      "sha256": "f0861097344267f92db4776358b68aad311780d7e90fc8390e7d9a7da1a05789"
+    },
+    "vendor/tdai/core/prompts/persona-generation.js": {
+      "bytes": 8223,
+      "sha256": "f402b88d8270300034ba0adc297affac1835a8f54160d7d53d6d4946f6583c05"
+    },
+    "vendor/tdai/core/prompts/scene-extraction.js": {
+      "bytes": 17028,
+      "sha256": "a67b250bfd23034e65e4d7ec82e51ab711bf00d99909ab0b3e056099f8d4ec08"
+    },
+    "vendor/tdai/core/record/l1-dedup.js": {
+      "bytes": 14006,
+      "sha256": "932bb352bf6bedfeaf7bb06a696d3f0d151f041a2dc5dca5ae32072e0c757a3b"
+    },
+    "vendor/tdai/core/record/l1-extractor.js": {
+      "bytes": 15831,
+      "sha256": "281d47fa4968693daf005a5d97090ab1518dea9bec6651fe784a8826931c0553"
+    },
+    "vendor/tdai/core/record/l1-reader.js": {
+      "bytes": 6072,
+      "sha256": "982b465b2208da22831a09dc0c61afb152829a32cfec0723a5e2c397a4677894"
+    },
+    "vendor/tdai/core/record/l1-writer.js": {
+      "bytes": 6340,
+      "sha256": "e8082f64284a838f6ec4f4001e6fb9f43d3b81a7ec274ee7f46f3a0516e3da68"
+    },
+    "vendor/tdai/core/report/reporter.js": {
+      "bytes": 2580,
+      "sha256": "cf29bfd65fee91fd3941d0a5dd586644a8f1a44fe994aad3a0610efde50cf0ef"
+    },
+    "vendor/tdai/core/scene/filename-normalizer.js": {
+      "bytes": 6769,
+      "sha256": "20e33c4869a1f720f5b3eef697ad0733520ca441242e78dfa4f26c55080b8428"
+    },
+    "vendor/tdai/core/scene/scene-extractor.js": {
+      "bytes": 21293,
+      "sha256": "ee46e39e2ccd0a4b5dd9dbb1536c21dfb2c25a4649095ba5b29bbbbb03c08897"
+    },
+    "vendor/tdai/core/scene/scene-format.js": {
+      "bytes": 1686,
+      "sha256": "ad555688ec1267f393ef01e039788232224e59de62eeaaba3277fc9bd86f3f99"
+    },
+    "vendor/tdai/core/scene/scene-index.js": {
+      "bytes": 2842,
+      "sha256": "5c21599a9c37c1a7a69375041ea50e7f1c391fdc768adb16bdd020a365d43b68"
+    },
+    "vendor/tdai/core/scene/scene-navigation.js": {
+      "bytes": 2403,
+      "sha256": "bb02be14e4dd10b3064911ca5bc01492a05e289460dc7692ba928fdec996a37e"
+    },
+    "vendor/tdai/core/seed/input.js": {
+      "bytes": 15857,
+      "sha256": "1ecb379845f353c87483cfc4effbb351fabc79d2a6d67de65be8a56954c36fe3"
+    },
+    "vendor/tdai/core/seed/seed-runtime.js": {
+      "bytes": 14955,
+      "sha256": "ced622dab7a978fbd2097a498a65bf0f320e38eba1e82516320c3a36a911073b"
+    },
+    "vendor/tdai/core/seed/types.js": {
+      "bytes": 199,
+      "sha256": "71e06eb3a60784134d03d51a706a84815a1c5e33d53202cf485606cd0578c6b9"
+    },
+    "vendor/tdai/core/store/bm25-client.js": {
+      "bytes": 4263,
+      "sha256": "6cefb5842676e55f96f7eecb47d6cb7c96610514111ddb90ac9f61c3f7beaedc"
+    },
+    "vendor/tdai/core/store/bm25-local.js": {
+      "bytes": 2264,
+      "sha256": "75c5dc01826168b5307646d6021d120413d3ba3acc996e6e32f066ded3d1a62e"
+    },
+    "vendor/tdai/core/store/embedding.js": {
+      "bytes": 26107,
+      "sha256": "de560eca5ba8f7d77aa6578553fcdf1ecf683c6ee8feb8b246a480d1f92d67f9"
+    },
+    "vendor/tdai/core/store/factory.js": {
+      "bytes": 4163,
+      "sha256": "f1efa80e52eeb0dc254e3f84e31fc0eb9fcf06c22c8dfb6a42c055da3254d6fb"
+    },
+    "vendor/tdai/core/store/search-utils.js": {
+      "bytes": 1798,
+      "sha256": "acac3c350f106605ba44eea786ad8a676a55fb946850336b49d05e0812b33d2f"
+    },
+    "vendor/tdai/core/store/sqlite.js": {
+      "bytes": 81870,
+      "sha256": "cae13808d5eed184e2cda45a9a2c5bc51274c30382a1c4ee4a2fbf5d07d87742"
+    },
+    "vendor/tdai/core/store/tcvdb-client.js": {
+      "bytes": 9517,
+      "sha256": "1811372b4b139e91987a5f17b002c17d3bd916cd948c3997d627d56118bd29ec"
+    },
+    "vendor/tdai/core/store/tcvdb.js": {
+      "bytes": 45033,
+      "sha256": "b5ea0c1b1d4f03facedbddb1a6532ff7422a7a428d55554ba3c2d69a6854c210"
+    },
+    "vendor/tdai/core/store/types.js": {
+      "bytes": 850,
+      "sha256": "d2b4154aaa6d2cead09711f706e668c04f731a8874d31fdf4a4c52b51b06525d"
+    },
+    "vendor/tdai/core/tdai-core.js": {
+      "bytes": 20044,
+      "sha256": "70928ec3c78f8e1f8395b5a17379f2cc5b912c02af3882828fb80d4aa62e2b4a"
+    },
+    "vendor/tdai/core/tools/conversation-search.js": {
+      "bytes": 8405,
+      "sha256": "25dd67fc493d64247cb8e54209256dcf979da0e7597e009a322d538cbccac3b6"
+    },
+    "vendor/tdai/core/tools/memory-search.js": {
+      "bytes": 8860,
+      "sha256": "d3f0e08815ba2f5173a9251256b3d86a92d8c2ba3cf48f8802fd783bdb0065ab"
+    },
+    "vendor/tdai/core/types.js": {
+      "bytes": 506,
+      "sha256": "f7c2fe1443c0534af2d077b96ca26a1f8dca8fc71b534b8529f59848b43ef876"
+    },
+    "vendor/tdai/utils/backup.js": {
+      "bytes": 7310,
+      "sha256": "926623eb7f6cf4fc47dd8133ceaf05674c319c9624c9e8d52e65aebd05cba480"
+    },
+    "vendor/tdai/utils/checkpoint.js": {
+      "bytes": 15057,
+      "sha256": "d24f018151121b44554bd355a286687557204a5269937bb2451f0c4372371ec1"
+    },
+    "vendor/tdai/utils/clean-context-runner.js": {
+      "bytes": 22505,
+      "sha256": "070cc8b483a2187de8646bffac6647925a95f9c0e226b34d0dd0f9b89cc29232"
+    },
+    "vendor/tdai/utils/ensure-hook-policy.js": {
+      "bytes": 8213,
+      "sha256": "3cfebe14be2872a9fe415714705621d3e568c767a7f8be98b8c64949813b84be"
+    },
+    "vendor/tdai/utils/env.js": {
+      "bytes": 500,
+      "sha256": "4906aec47ecca3f9e6b77ebff84553606414773ed107d4ddf951bbe65bdebe76"
+    },
+    "vendor/tdai/utils/managed-timer.js": {
+      "bytes": 4775,
+      "sha256": "eeffa378ec6fc3d8c7b8ec7a5be895c5e2e4bc9b96cc21230ffc1c0cbca4dc4e"
+    },
+    "vendor/tdai/utils/manifest.js": {
+      "bytes": 3264,
+      "sha256": "cf5df986cebbed87fdd5c1d506a2f5f79def049d9b97f1790b15cf0a33d7bfc5"
+    },
+    "vendor/tdai/utils/memory-cleaner.js": {
+      "bytes": 12800,
+      "sha256": "7df890be7eabbb626d1205cfdcc23ad764c9075f6d79f3de111c2f7b55415259"
+    },
+    "vendor/tdai/utils/no-think-fetch.js": {
+      "bytes": 4346,
+      "sha256": "92ec0437b580a741a30ad3dadaf8cfca91c04bc32cde5c51ab9cb7503c1a3e12"
+    },
+    "vendor/tdai/utils/openclaw-state-dir.js": {
+      "bytes": 1217,
+      "sha256": "1ba8eb4403d6f613109dd0e03cd77c1632b434cc755495e95ccc4109976e80bf"
+    },
+    "vendor/tdai/utils/pipeline-factory.js": {
+      "bytes": 23632,
+      "sha256": "d223041c2712e45fbedc1d0ca671fa27775a63d37b6b6772661afbc0b6c9e61f"
+    },
+    "vendor/tdai/utils/pipeline-manager.js": {
+      "bytes": 41568,
+      "sha256": "0440c014e58f5d96847b12daec9869ce69bae0227b5789b5703e78d223c6eb0a"
+    },
+    "vendor/tdai/utils/sanitize.js": {
+      "bytes": 16532,
+      "sha256": "4cb993cd50addc1cf5b21ed37aac78c43d165950950b83fe3b0ff7f8747e8691"
+    },
+    "vendor/tdai/utils/serial-queue.js": {
+      "bytes": 3452,
+      "sha256": "b295ae6a8cbf6af7346527dd416a583f4205aa090b2792e87f01b2039934b508"
+    },
+    "vendor/tdai/utils/session-filter.js": {
+      "bytes": 3185,
+      "sha256": "6166dd4bd86d263287602436749697f4461b9e47aac5b7813ea1a8f17d1d41fd"
+    },
+    "vendor/tdai/utils/session-header-fetch.js": {
+      "bytes": 3360,
+      "sha256": "12e523055dd351c25df560619da71199c576da963c21cb37e9a15a1ac26473a9"
+    },
+    "vendor/tdai/utils/text-utils.js": {
+      "bytes": 950,
+      "sha256": "994e201984373d73dda8372bc2d45ff62ba9006a6b7d3119e0b8baeca494b96e"
+    },
+    "vendor/tdai/utils/time.js": {
+      "bytes": 9765,
+      "sha256": "01aa836e6baf80e7eb7e4825c3c50f97e33d0dd2d3c7ffc249ca68075c672dab"
+    }
+  },
+  "adaptedFiles": {
+    "LICENSE": {
+      "bytes": 1067,
+      "sha256": "3144a5b7dd8fc1edcc49e809abbf4d09eb6449b18bd9cf69a805c01b68769637"
+    },
+    "NOTICE.alpha": {
+      "bytes": 664,
+      "sha256": "2c0ca9f2d08d211f382bbaa927b5dfe46583e05e7042c9c31ccf00c076ba6a9f"
+    },
+    "README.md": {
+      "bytes": 6649,
+      "sha256": "db1de9cf925c6b388ccce9936012a0ca498b9ad7a4c9c0f3c4bf345fe8e94e89"
+    },
+    "README.zh.md": {
+      "bytes": 5126,
+      "sha256": "97a724d515d8d0772df84247d6ecd5b22282e85d7882c69e0b3e83973c82a9c3"
+    },
+    "THIRD-PARTY-NOTICES.md": {
+      "bytes": 874,
+      "sha256": "0a70fd906eb0d8536107447a9166e8509f5fdadfa5451f58cda96e9c63a7644f"
+    },
+    "client.js": {
+      "bytes": 20562,
+      "sha256": "236f59b21b93b525e07de86f674bf6e050d391b6a72550c6a539917533bb21c9"
+    },
+    "cordis.patch.yml": {
+      "bytes": 312,
+      "sha256": "992a64a5f34230bd7d600ffdaffebc4892d8d9b0f46310e407bb7adbf93ff39e"
+    },
+    "index.js": {
+      "bytes": 20248,
+      "sha256": "4f5403c66c525ee27bdd07af49218c6d64b64228d520fe9a7ceeb9d3e4beaa27"
+    },
+    "package.json": {
+      "bytes": 2050,
+      "sha256": "cc3aa5d90d71db235818c0cc62fab8536fd3dfa6c619a2b58b5b409305564f81"
+    },
+    "recall-inject.js": {
+      "bytes": 3437,
+      "sha256": "e0a192fef4f13d71b2b736e77208ea081139e4306db985255cd635a9bf3512e8"
+    },
+    "vendor/tdai/adapters/index.js": {
+      "bytes": 694,
+      "sha256": "2e30fdf78d859fd454257843b1c1ac06ad39b6264742474cbbf1dc4057c9bc48"
+    },
+    "vendor/tdai/adapters/openclaw/host-adapter.js": {
+      "bytes": 2807,
+      "sha256": "54f99f37b72ca2d025d99bcb5497150f039c9de1c55704eee26453327efc980c"
+    },
+    "vendor/tdai/adapters/openclaw/index.js": {
+      "bytes": 184,
+      "sha256": "47f51902119b6e9adcf3c66488cc7ab5b0546db9dadbc1b854bcd43176317d03"
+    },
+    "vendor/tdai/adapters/openclaw/llm-runner.js": {
+      "bytes": 2453,
+      "sha256": "c124e5f5eef7f59763739ed05a47b576048eecb3123005b3e205cb85c32952ec"
+    },
+    "vendor/tdai/adapters/standalone/host-adapter.js": {
+      "bytes": 1814,
+      "sha256": "18a9c1644842fd4461774d86e04cd5ac8caf0a6eeecbefc5ae42f83b4c419c6b"
+    },
+    "vendor/tdai/adapters/standalone/index.js": {
+      "bytes": 192,
+      "sha256": "ea2915f71ea031c3dead88cc91d324193284ad65a6edcb66f8a21c2a069a07d8"
+    },
+    "vendor/tdai/adapters/standalone/llm-runner.js": {
+      "bytes": 12257,
+      "sha256": "ba60adcc94244dfd83b5d87b0946e93c384c5d089e4086da428bb47a39ced280"
+    },
+    "vendor/tdai/config.js": {
+      "bytes": 16498,
+      "sha256": "1a6caa3ff129a53ec2d9f17d20c874dd6477411e979d3de3379acfcdb0138ca9"
+    },
+    "vendor/tdai/core/conversation/l0-recorder.js": {
+      "bytes": 20149,
+      "sha256": "585a00be3d6752520c7e30f6a8b6cc23ac13749a70c9419c37737097176b04c2"
+    },
+    "vendor/tdai/core/hooks/auto-capture.js": {
+      "bytes": 13036,
+      "sha256": "3fd83bfdad91314331572822c8ff5349bf55e777369970348e5ad32dccab3945"
+    },
+    "vendor/tdai/core/hooks/auto-recall.js": {
+      "bytes": 32781,
+      "sha256": "348fb8036f79e81e075323857db9a12dd7a6e0275e2742788cdf74565827083d"
+    },
+    "vendor/tdai/core/index.js": {
+      "bytes": 281,
+      "sha256": "b204bdf649de868e376a374015a12340973ce304941dc11c1bb024e37f44d65d"
+    },
+    "vendor/tdai/core/persona/persona-generator.js": {
+      "bytes": 9141,
+      "sha256": "90336cd73e40fe08d3f7193a8761347dda056d79669c0bc2b856192e9c787144"
+    },
+    "vendor/tdai/core/persona/persona-trigger.js": {
+      "bytes": 4187,
+      "sha256": "40ee6fdc9156e80f1b012b599b215765379c7139e33e664b623a07e2ea3caa87"
+    },
+    "vendor/tdai/core/profile/profile-sync.js": {
+      "bytes": 8136,
+      "sha256": "b09b53e48c8656f54d0cb0e872205f45760ad497c1112d5db12b56dd5a94d65c"
+    },
+    "vendor/tdai/core/prompts/l1-dedup.js": {
+      "bytes": 7122,
+      "sha256": "237bb877f77218059f4b1a85ad1e059f4b478c162e37a48e7f86836e7c26b779"
+    },
+    "vendor/tdai/core/prompts/l1-extraction.js": {
+      "bytes": 6878,
+      "sha256": "f0861097344267f92db4776358b68aad311780d7e90fc8390e7d9a7da1a05789"
+    },
+    "vendor/tdai/core/prompts/persona-generation.js": {
+      "bytes": 8223,
+      "sha256": "f402b88d8270300034ba0adc297affac1835a8f54160d7d53d6d4946f6583c05"
+    },
+    "vendor/tdai/core/prompts/scene-extraction.js": {
+      "bytes": 17028,
+      "sha256": "a67b250bfd23034e65e4d7ec82e51ab711bf00d99909ab0b3e056099f8d4ec08"
+    },
+    "vendor/tdai/core/record/l1-dedup.js": {
+      "bytes": 14006,
+      "sha256": "932bb352bf6bedfeaf7bb06a696d3f0d151f041a2dc5dca5ae32072e0c757a3b"
+    },
+    "vendor/tdai/core/record/l1-extractor.js": {
+      "bytes": 15831,
+      "sha256": "281d47fa4968693daf005a5d97090ab1518dea9bec6651fe784a8826931c0553"
+    },
+    "vendor/tdai/core/record/l1-reader.js": {
+      "bytes": 6072,
+      "sha256": "982b465b2208da22831a09dc0c61afb152829a32cfec0723a5e2c397a4677894"
+    },
+    "vendor/tdai/core/record/l1-writer.js": {
+      "bytes": 6340,
+      "sha256": "e8082f64284a838f6ec4f4001e6fb9f43d3b81a7ec274ee7f46f3a0516e3da68"
+    },
+    "vendor/tdai/core/report/reporter.js": {
+      "bytes": 2580,
+      "sha256": "cf29bfd65fee91fd3941d0a5dd586644a8f1a44fe994aad3a0610efde50cf0ef"
+    },
+    "vendor/tdai/core/scene/filename-normalizer.js": {
+      "bytes": 6769,
+      "sha256": "20e33c4869a1f720f5b3eef697ad0733520ca441242e78dfa4f26c55080b8428"
+    },
+    "vendor/tdai/core/scene/scene-extractor.js": {
+      "bytes": 21293,
+      "sha256": "ee46e39e2ccd0a4b5dd9dbb1536c21dfb2c25a4649095ba5b29bbbbb03c08897"
+    },
+    "vendor/tdai/core/scene/scene-format.js": {
+      "bytes": 1686,
+      "sha256": "ad555688ec1267f393ef01e039788232224e59de62eeaaba3277fc9bd86f3f99"
+    },
+    "vendor/tdai/core/scene/scene-index.js": {
+      "bytes": 2842,
+      "sha256": "5c21599a9c37c1a7a69375041ea50e7f1c391fdc768adb16bdd020a365d43b68"
+    },
+    "vendor/tdai/core/scene/scene-navigation.js": {
+      "bytes": 2403,
+      "sha256": "bb02be14e4dd10b3064911ca5bc01492a05e289460dc7692ba928fdec996a37e"
+    },
+    "vendor/tdai/core/seed/input.js": {
+      "bytes": 15857,
+      "sha256": "1ecb379845f353c87483cfc4effbb351fabc79d2a6d67de65be8a56954c36fe3"
+    },
+    "vendor/tdai/core/seed/seed-runtime.js": {
+      "bytes": 14955,
+      "sha256": "ced622dab7a978fbd2097a498a65bf0f320e38eba1e82516320c3a36a911073b"
+    },
+    "vendor/tdai/core/seed/types.js": {
+      "bytes": 199,
+      "sha256": "71e06eb3a60784134d03d51a706a84815a1c5e33d53202cf485606cd0578c6b9"
+    },
+    "vendor/tdai/core/store/bm25-client.js": {
+      "bytes": 4263,
+      "sha256": "6cefb5842676e55f96f7eecb47d6cb7c96610514111ddb90ac9f61c3f7beaedc"
+    },
+    "vendor/tdai/core/store/bm25-local.js": {
+      "bytes": 2264,
+      "sha256": "75c5dc01826168b5307646d6021d120413d3ba3acc996e6e32f066ded3d1a62e"
+    },
+    "vendor/tdai/core/store/embedding.js": {
+      "bytes": 26107,
+      "sha256": "de560eca5ba8f7d77aa6578553fcdf1ecf683c6ee8feb8b246a480d1f92d67f9"
+    },
+    "vendor/tdai/core/store/factory.js": {
+      "bytes": 4163,
+      "sha256": "f1efa80e52eeb0dc254e3f84e31fc0eb9fcf06c22c8dfb6a42c055da3254d6fb"
+    },
+    "vendor/tdai/core/store/search-utils.js": {
+      "bytes": 1798,
+      "sha256": "acac3c350f106605ba44eea786ad8a676a55fb946850336b49d05e0812b33d2f"
+    },
+    "vendor/tdai/core/store/sqlite.js": {
+      "bytes": 81870,
+      "sha256": "cae13808d5eed184e2cda45a9a2c5bc51274c30382a1c4ee4a2fbf5d07d87742"
+    },
+    "vendor/tdai/core/store/tcvdb-client.js": {
+      "bytes": 9517,
+      "sha256": "1811372b4b139e91987a5f17b002c17d3bd916cd948c3997d627d56118bd29ec"
+    },
+    "vendor/tdai/core/store/tcvdb.js": {
+      "bytes": 45033,
+      "sha256": "b5ea0c1b1d4f03facedbddb1a6532ff7422a7a428d55554ba3c2d69a6854c210"
+    },
+    "vendor/tdai/core/store/types.js": {
+      "bytes": 850,
+      "sha256": "d2b4154aaa6d2cead09711f706e668c04f731a8874d31fdf4a4c52b51b06525d"
+    },
+    "vendor/tdai/core/tdai-core.js": {
+      "bytes": 20044,
+      "sha256": "70928ec3c78f8e1f8395b5a17379f2cc5b912c02af3882828fb80d4aa62e2b4a"
+    },
+    "vendor/tdai/core/tools/conversation-search.js": {
+      "bytes": 8405,
+      "sha256": "25dd67fc493d64247cb8e54209256dcf979da0e7597e009a322d538cbccac3b6"
+    },
+    "vendor/tdai/core/tools/memory-search.js": {
+      "bytes": 8860,
+      "sha256": "d3f0e08815ba2f5173a9251256b3d86a92d8c2ba3cf48f8802fd783bdb0065ab"
+    },
+    "vendor/tdai/core/types.js": {
+      "bytes": 506,
+      "sha256": "f7c2fe1443c0534af2d077b96ca26a1f8dca8fc71b534b8529f59848b43ef876"
+    },
+    "vendor/tdai/utils/backup.js": {
+      "bytes": 7310,
+      "sha256": "926623eb7f6cf4fc47dd8133ceaf05674c319c9624c9e8d52e65aebd05cba480"
+    },
+    "vendor/tdai/utils/checkpoint.js": {
+      "bytes": 15057,
+      "sha256": "d24f018151121b44554bd355a286687557204a5269937bb2451f0c4372371ec1"
+    },
+    "vendor/tdai/utils/clean-context-runner.js": {
+      "bytes": 22505,
+      "sha256": "070cc8b483a2187de8646bffac6647925a95f9c0e226b34d0dd0f9b89cc29232"
+    },
+    "vendor/tdai/utils/ensure-hook-policy.js": {
+      "bytes": 8213,
+      "sha256": "3cfebe14be2872a9fe415714705621d3e568c767a7f8be98b8c64949813b84be"
+    },
+    "vendor/tdai/utils/env.js": {
+      "bytes": 500,
+      "sha256": "4906aec47ecca3f9e6b77ebff84553606414773ed107d4ddf951bbe65bdebe76"
+    },
+    "vendor/tdai/utils/managed-timer.js": {
+      "bytes": 4775,
+      "sha256": "eeffa378ec6fc3d8c7b8ec7a5be895c5e2e4bc9b96cc21230ffc1c0cbca4dc4e"
+    },
+    "vendor/tdai/utils/manifest.js": {
+      "bytes": 3264,
+      "sha256": "cf5df986cebbed87fdd5c1d506a2f5f79def049d9b97f1790b15cf0a33d7bfc5"
+    },
+    "vendor/tdai/utils/memory-cleaner.js": {
+      "bytes": 12800,
+      "sha256": "7df890be7eabbb626d1205cfdcc23ad764c9075f6d79f3de111c2f7b55415259"
+    },
+    "vendor/tdai/utils/no-think-fetch.js": {
+      "bytes": 4346,
+      "sha256": "92ec0437b580a741a30ad3dadaf8cfca91c04bc32cde5c51ab9cb7503c1a3e12"
+    },
+    "vendor/tdai/utils/openclaw-state-dir.js": {
+      "bytes": 1217,
+      "sha256": "1ba8eb4403d6f613109dd0e03cd77c1632b434cc755495e95ccc4109976e80bf"
+    },
+    "vendor/tdai/utils/pipeline-factory.js": {
+      "bytes": 23632,
+      "sha256": "d223041c2712e45fbedc1d0ca671fa27775a63d37b6b6772661afbc0b6c9e61f"
+    },
+    "vendor/tdai/utils/pipeline-manager.js": {
+      "bytes": 41568,
+      "sha256": "0440c014e58f5d96847b12daec9869ce69bae0227b5789b5703e78d223c6eb0a"
+    },
+    "vendor/tdai/utils/sanitize.js": {
+      "bytes": 16532,
+      "sha256": "4cb993cd50addc1cf5b21ed37aac78c43d165950950b83fe3b0ff7f8747e8691"
+    },
+    "vendor/tdai/utils/serial-queue.js": {
+      "bytes": 3452,
+      "sha256": "b295ae6a8cbf6af7346527dd416a583f4205aa090b2792e87f01b2039934b508"
+    },
+    "vendor/tdai/utils/session-filter.js": {
+      "bytes": 3185,
+      "sha256": "6166dd4bd86d263287602436749697f4461b9e47aac5b7813ea1a8f17d1d41fd"
+    },
+    "vendor/tdai/utils/session-header-fetch.js": {
+      "bytes": 3360,
+      "sha256": "12e523055dd351c25df560619da71199c576da963c21cb37e9a15a1ac26473a9"
+    },
+    "vendor/tdai/utils/text-utils.js": {
+      "bytes": 950,
+      "sha256": "994e201984373d73dda8372bc2d45ff62ba9006a6b7d3119e0b8baeca494b96e"
+    },
+    "vendor/tdai/utils/time.js": {
+      "bytes": 9765,
+      "sha256": "01aa836e6baf80e7eb7e4825c3c50f97e33d0dd2d3c7ffc249ca68075c672dab"
+    }
+  }
+}

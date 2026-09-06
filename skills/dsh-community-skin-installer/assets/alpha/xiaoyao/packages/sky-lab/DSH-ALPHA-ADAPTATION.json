@@ -1,0 +1,11 @@
+{
+  "catalogId": 2309,
+  "sourceRepository": "147228/dsh-xiaoyao-skins",
+  "sourceRevision": "174f65d9135e932383a8f3a19fa522f16875a139",
+  "upstreamArtifact": {
+    "url": "https://github.com/147228/dsh-xiaoyao-skins/releases/download/v0.1.3/xiaoyao-skin-sky-lab.tgz",
+    "sha256": "a2efd3ee3f0b3708b053e785d2c93610d5584d32187a7125fd0cb1cb5debd4af"
+  },
+  "adaptation": "DSH Themes Alpha CSS specificity and current sidebar/conversation/details layout selectors. Sky Lab adds a dark reading surface. Original code/art attribution and licenses retained.",
+  "licenseExpression": "MIT AND CC-BY-NC-4.0"
+}

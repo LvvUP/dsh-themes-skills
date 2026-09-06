@@ -1,0 +1,151 @@
+{
+  "catalogId": 2301,
+  "sourceRepository": "d-dev0101/open-sea-skin",
+  "sourceRevision": "2437d80a96de4124c54fbe89872fa7090103f025",
+  "releaseArtifact": {
+    "url": "https://github.com/d-dev0101/open-sea-skin/releases/download/v1.2.1/open-sea-skin-1.2.1.tgz",
+    "sha256": "6001a34def78610468ddc0db7eeb25a7f4a1c4b10dc6cbc72b083ac256b167c9",
+    "releaseRevision": "5bc053cb1ff2168695d4d0be710c68f8dd3ff0e2"
+  },
+  "files": [
+    {
+      "path": "LICENSE",
+      "gitBlob": "932f68f04a2be21289156f5b2809beab852968f7",
+      "sha256": "264af43df38547e2b9fd77ee9d69f266d108104324c9ca9e921369e60655fc3f",
+      "bytes": 1083
+    },
+    {
+      "path": "native-dist/styles.css",
+      "gitBlob": "4e63db9d555731f2d459843da8409724153cb3bb",
+      "sha256": "c124be23faebf6df0fa8bc9845861d25d71628d5ec6c28c81f85180762fb6cd2",
+      "bytes": 9161
+    },
+    {
+      "path": "native-dist/skin.html",
+      "gitBlob": "5486345dfcae76cd2471b47003ff6b271ad67668",
+      "sha256": "c40fd773c677782887188a0a89100bf9252257209e8e5147d97ed429542b7569",
+      "bytes": 703
+    },
+    {
+      "path": "native-dist/vendor/addons/tsl/display/BloomNode.js",
+      "gitBlob": "972c3f41661618f5013e3e4cdb79aea30412e58a",
+      "sha256": "8c4ddd478679e7ff326135d4c2058b8545ea2ca021161bb8638d3905d0054b1b",
+      "bytes": 5432
+    },
+    {
+      "path": "plugin/client.js",
+      "gitBlob": "d719231fed27a8ea512fdbf691e846fd12961813",
+      "sha256": "7f874b94cdb51b91a6c90b55e45e5077334f5355ca03e86faefcd283b60e524b",
+      "bytes": 21184
+    },
+    {
+      "path": "plugin/index.js",
+      "gitBlob": "a625055dc9d069e2e539828315631cfb2fd4ca43",
+      "sha256": "dc8a69166ef5c3ed8a2fb8cafc3b79b1feed3025326cfd8642d27bba4f2fda03",
+      "bytes": 2169
+    },
+    {
+      "path": "native-dist/loader.js",
+      "gitBlob": "2bb9fda44c34426bd07a25db803355ebf7fdd44b",
+      "sha256": "715cab46bf348fd8ff20bccd518d9d2c67bfb3b12c692590071097399419ebce",
+      "bytes": 20738
+    },
+    {
+      "path": "native-dist/ocean.js",
+      "gitBlob": "b67aefa4e07894e95460ccc9a3673d9f8c09aff1",
+      "sha256": "42e6367549ed637a7b25115de4fa0f777a2b47bd564c765cdb71930012d2fbce",
+      "bytes": 24264
+    },
+    {
+      "path": "native-dist/vendor/addons/controls/OrbitControls.js",
+      "gitBlob": "9960f2ed167e76bb661b4b8d35b60f50c969a6f8",
+      "sha256": "e4237d304135433f8d048b3de658576f445d0874bf9c07d840a357bb30cd865b",
+      "bytes": 19171
+    },
+    {
+      "path": "native-dist/vendor/three.core.js",
+      "gitBlob": "4511bbcf74e7c2cfabc39e51e4a89bcdc04a9e20",
+      "sha256": "009a1cec934fff122522581857e9c6a00fe81922a88fadb8381026157a1155bd",
+      "bytes": 377210
+    },
+    {
+      "path": "native-dist/vendor/three.tsl.js",
+      "gitBlob": "a5350b54f5fc1b634efc7e34c652f95f27dbf895",
+      "sha256": "f007eeb3c23e2b20e6995020fabbfcecb8a042e143a99ba3f99f29367501f224",
+      "bytes": 19885
+    },
+    {
+      "path": "native-dist/vendor/three.webgpu.js",
+      "gitBlob": "927693290a7cf930839040957adf68c9c42834bf",
+      "sha256": "d4b228e0c2ebe7f60223e0d6cef915e8bb6bb1874f7b279e77090e3c454a4cb7",
+      "bytes": 568164
+    },
+    {
+      "path": "CHANGELOG.md",
+      "gitBlob": "8a461070e2d4760490f8a758e6c2dc0e9680d7a7",
+      "sha256": "ba986f0ef6896cea9675e4ce26f5616da56d70ca5b859b3edad7021de6dc4a95",
+      "bytes": 1387
+    },
+    {
+      "path": "native-dist/README.md",
+      "gitBlob": "df4716223da69f9024a3b110a22c939fc8209153",
+      "sha256": "ea843b8fc76dd158a22e8c8dab7c960297fd3fb265d40a5804dc5e7dd6955550",
+      "bytes": 1895
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "gitBlob": "8900335039570005c2aab7599de6d491c255b261",
+      "sha256": "16378d4bafa29813ec5ecb71fc873a1408e803b47cd6a422352948bc9f2434c1",
+      "bytes": 1190
+    },
+    {
+      "path": "native-dist/vendor/licenses/geist-OFL.txt",
+      "gitBlob": "fc8163792611342f623860bb483b0fa43c7d50c3",
+      "sha256": "10b8538f915e2019199b12e39c45d08513b8fff034e6eb0a9d77555300637169",
+      "bytes": 4382
+    },
+    {
+      "path": "native-dist/vendor/licenses/three-LICENSE.txt",
+      "gitBlob": "2330b5224316632b87283f88ff29225724725fb0",
+      "sha256": "83a7ede038f581247e9968a6a8e6de77a45ecc88092909afee3d48192dab2242",
+      "bytes": 1077
+    },
+    {
+      "path": "native-dist/vendor/fonts/geist-mono-latin-400.woff2",
+      "gitBlob": "8a27d80bf409c6d5af43d4a9298e5d7dd17d725a",
+      "sha256": "3f98383b122fe015a48536cd4a1cda855a201718923ffe74931a01597107b9b5",
+      "bytes": 9864
+    },
+    {
+      "path": "native-dist/vendor/fonts/geist-sans-latin-400.woff2",
+      "gitBlob": "9867e874ec0bdf03d2d0528134a590d261ab0038",
+      "sha256": "e6ef6abb39c762ed2259cc814e6f16888c540cd84835962227b56ab2354f27f1",
+      "bytes": 33400
+    },
+    {
+      "path": "native-dist/vendor/fonts/geist-sans-latin-500.woff2",
+      "gitBlob": "f6ee691a9622ab07c047ed23cac3ac201abd8580",
+      "sha256": "40073e90816315c92e4f4381bd50b6fdc950b22b0dd010a4179046cf588d4f12",
+      "bytes": 34716
+    },
+    {
+      "path": "cordis.patch.yml",
+      "gitBlob": "cffa76f4c1a369211edc81feab09243b20ff6bc8",
+      "sha256": "c5ba9aa66d47616d7e3ff0873aea10c6dfe87cb57ba3ef348380afafdd39eb37",
+      "bytes": 277
+    },
+    {
+      "path": "package.json",
+      "gitBlob": "b5585e3325444483033329ff46c92f25d0c029d0",
+      "sha256": "922fe78f0da9e0e12c3e5ebbbffb0e3986d2d797a5cef56eab422851a2c7acfa",
+      "bytes": 1882
+    },
+    {
+      "path": "README.md",
+      "gitBlob": "bb78b920e2478ae37ba2aecc190960b4503d4cfd",
+      "sha256": "aca84e74e104182b4722fb0d495d42089ff2094e64b510200a0bddac28239fbd",
+      "bytes": 8222
+    }
+  ],
+  "adaptation": "DSH Themes distribution metadata and ModuleLoader package identity only. All 21 runtime/license/notice files exactly match the declared source revision; manifest and README taken from that same revision. WebGPU behavior must pass actual runtime verification."
+}

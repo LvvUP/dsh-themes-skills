@@ -1,0 +1,12 @@
+{
+  "sourceRepository": "ben7am1n/dsh-lens-lite",
+  "sourceRevision": "b4bfe25c7e8fce3701b8fd84dda0f14de8fab447",
+  "files": {
+    "LICENSE": "f41434b3b5de393cddfbaf93f4c210dc986fac107b27211d190a45c97fb91a21",
+    "README.md": "b2356cdee6c3acf70034a62406e5e1726e6e8daa51b6af3f9238be43c0a60503",
+    "cordis.patch.yml": "24ecabdbea2a2419e7939f6e09f52cfdc930479a1c2fe86f8ff205457bf27f0a",
+    "package.json": "59bd42d68ab14873f433b37fdac947c25341c99d51e3c2ba4071566f2ecadce7",
+    "src/index.ts": "1688c715f5ac58c0c0138943c153ded5afb43a0eae0f47e441cfd253c6914a3e",
+    "tsdown.config.ts": "9a266aad3059a3278af59d7814ffa426aaaa28f011737d89c651e87c8602dce4"
+  }
+}

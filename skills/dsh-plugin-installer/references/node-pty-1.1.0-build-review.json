@@ -1,0 +1,16 @@
+{
+  "catalogId": 3039,
+  "dependency": "node-pty@1.1.0",
+  "reviewedRegistry": "https://registry.npmjs.org/node-pty/1.1.0",
+  "integrity": "sha512-20JqtutY6JPXTUnL0ij1uad7Qe1baT46lyolh2sSENDd4sTzKZ4nmAFkeAARDKwmlLjPx6XKRlwRUxwjOy+lUg==",
+  "scripts": {
+    "install": "node scripts/prebuild.js || node-gyp rebuild",
+    "postinstall": "node scripts/post-install.js"
+  },
+  "finding": "The fixed archive contains darwin-arm64/pty.node and spawn-helper. prebuild.js checks the current platform directory; post-install.js confines cleanup to the package build/Release directory and skips Windows copies on macOS. No network fetch in these scripts; node-gyp is fallback if the platform prebuild is missing.",
+  "allowBuilds": [
+    "node-pty"
+  ],
+  "globalScriptsAllowed": false,
+  "actualRuntime": "The original Better Sidebar package installed with only node-pty build permission, loaded its chosen client module in Alpha, and was removed successfully. Interactive terminal commands were not exercised."
+}

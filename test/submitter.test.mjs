@@ -10,14 +10,14 @@ const creator = resolve('skills/dsh-theme-creator/scripts/create-manifest.mjs');
 const submitter = resolve('skills/dsh-theme-submitter/scripts/validate-submission.mjs');
 const redlineAttribution = 'Clean-room original artwork generated for DSH-Themes; experimental full-skin concept inspired by the general idea of dsh-ui, without copying its code or protected media.';
 const certifiedCompatibility = JSON.parse(await readFile(
-  resolve('skills/dsh-theme-submitter/references/compatibility-v3.json'),
+  resolve('skills/dsh-theme-submitter/references/compatibility-alpha.json'),
   'utf8',
 ));
 
 async function writeAuthoring(directory, overrides = {}) {
   return writeLegacyAuthoring(directory, {
     schemaVersion: '3.0',
-    compatibility: { dshPackageVersion: '0.1.0-rc.8' },
+    compatibility: { dshPackageVersion: '0.1.3-alpha.1' },
     ...overrides,
   });
 }
@@ -35,13 +35,13 @@ test('submitter validates locally and returns a credential-free browser handoff'
   assert.equal(output.submissionUrl, 'https://themes.example/create?source=dsh-theme-submitter&slug=ocean-workbench');
   assert.equal(output.provisionalAssets, true);
   assert.equal(output.distributionEligibility, 'eligible-for-hosted-review');
-  assert.equal(output.dshPackageVersion, '0.1.0-rc.8');
+  assert.equal(output.dshPackageVersion, '0.1.3-alpha.1');
   assert.equal(output.runtimeAttestationSha256, certifiedCompatibility.runtimeAttestationSha256);
-  assert.equal(output.runtimeAttestationSha256, '1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae');
+  assert.equal(output.runtimeAttestationSha256, 'bdf642512562483aa052224698416a3c216060df54f0ff07f43c50298beb5f81');
   assert.equal(/cookie|api.?key|password/i.test(result.stdout), false);
 });
 
-test('submitter fails closed on any RC.8 final-evidence drift', async (t) => {
+test('submitter fails closed on any Alpha source-evidence drift', async (t) => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-submit-compatibility-'));
   const input = await writeAuthoring(directory);
   const manifest = join(directory, 'manifest.json');
@@ -50,7 +50,10 @@ test('submitter fails closed on any RC.8 final-evidence drift', async (t) => {
 
   const cases = [
     ['runtime attestation', (value) => { value.compatibility.runtimeAttestationSha256 = '2'.repeat(64); }],
-    ['nested npm digest', (value) => { value.compatibility.npmArtifacts.uiTheme.shasum = '3'.repeat(40); }],
+    ['invented npm evidence', (value) => { value.compatibility.npmArtifacts = { dsh: { shasum: '3'.repeat(40) } }; }],
+    ['source commit', value => { value.compatibility.officialRelease.sourceCommit = '3'.repeat(40); }],
+    ['lockfile digest', value => { value.compatibility.sourceBuild.lockfileSha256 = '3'.repeat(64); }],
+    ['client module digest', value => { value.compatibility.sourceBuild.clientModuleSet.sha256 = '3'.repeat(64); }],
     ['extra candidate field', (value) => { value.compatibility.certificationStatus = 'pending'; }],
     ['mixed RC.7 version', (value) => { value.compatibility.dshPackageVersion = '0.1.0-rc.7'; }],
   ];
@@ -66,7 +69,7 @@ test('submitter fails closed on any RC.8 final-evidence drift', async (t) => {
         '--site', 'https://themes.example',
       ]);
       assert.notEqual(result.code, 0);
-      assert.match(result.stderr, /exactly match the certified V3 evidence/);
+      assert.match(result.stderr, /exactly match the selected V3 evidence/);
     });
   }
 });

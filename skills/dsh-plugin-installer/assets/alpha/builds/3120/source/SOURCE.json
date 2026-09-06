@@ -1,0 +1,23 @@
+{
+  "sourceRepository": "elves-ai/dsh-web-search-firecrawl",
+  "sourceRevision": "0a86de7809e8275239786b793d6ff417c0a61d44",
+  "files": {
+    "LICENSE": "04bd50e05d1a1861747ad1460c53c8c65caafe10a4646193030ed537ba4c34dc",
+    "README.md": "fe0b86c40b657eb9e36b9f5764f192ddd2725951afd477304f6ab49f28bc9edb",
+    "cordis.patch.yml": "d6e280a1faeb4de8c3daa28ad7d9e288515413441e6155b1aeb563477959b2db",
+    "package.json": "807e381893b1338369eb4c7ad391903a4f1ca0c9e2dd7bf9f535773ddfc427ad",
+    "src/client/FirecrawlSettingsSection.module.css": "1b803c365001d86d03c1c5830abc17444a96b78e51a13f660fa904766881e5b7",
+    "src/client/FirecrawlSettingsSection.tsx": "2d18d1559ccf67cd6cfa0461d77e6e18c7807c9b20d1cf42428fd3013dc7ac11",
+    "src/client/api.ts": "bed72719d490d52d2b3c17fcdf46366f9709924b3003223dcbc330387e7fb5fd",
+    "src/client/css-modules.d.ts": "ae4a6fc200e9bc81fee07d86e088a2158ede12e8317a0b66d68c6d040dce73b8",
+    "src/client/index.tsx": "fa7d28c1df527163a5aeca4998e4d101b3f91651bb77b2685e4266b44af2b0ce",
+    "src/deepseek-provider.ts": "272f3db44515ada234ab9ea5f5608461fc0bff735668d6444e401a48e2997b3d",
+    "src/index.ts": "4e14df187fc1eca9813efef1c1e8428b95e031545b883e03262a3b8c4c03a49d",
+    "src/invariant.ts": "64d654d738cc62cccd204d57e53ea6fc54ba6ead0c320e09450caf5f54f8ff84",
+    "src/provider.ts": "fe6047f3875f6e8906b2a575984df8d03af45779e1c6e166db2a0f7fd8b24d10",
+    "src/settings-routes.ts": "d8d4c2624b7336d6b774d96c526ae88854b122bd4ab47eb6434987c87bc55a3b",
+    "src/settings-shared.ts": "d5f00cc0ff785b3b197a073cb45faeb1178fd4412216a32661ac63d0102a6a36",
+    "src/types.ts": "7b0629e95eaf10e79ce3a962aae2345c8cf2b8d36b1fdb387f485d765e7e8796",
+    "tsdown.config.ts": "ec818e09b93abe23fe3f44112d351727301e3f1eebe6d305c41ae97a54d3075a"
+  }
+}

@@ -1,0 +1,871 @@
+{
+  "schemaVersion": 1,
+  "sourceArchiveSha256": "5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499",
+  "candidateArchiveSha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+  "files": [
+    {
+      "path": "package/LICENSE",
+      "sourceSha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+      "outputSha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+      "unchanged": true
+    },
+    {
+      "path": "package/README.i18n.yaml",
+      "sourceSha256": "18e75c66a620d21163f6a3ae5f3c8a697720a1e1b6d4221aac733682863bfa11",
+      "outputSha256": "18e75c66a620d21163f6a3ae5f3c8a697720a1e1b6d4221aac733682863bfa11",
+      "unchanged": true
+    },
+    {
+      "path": "package/README.md",
+      "sourceSha256": "07523687587858d4347358c7f1332d8a4ec8d3abfae106c28517b6587f7efafe",
+      "outputSha256": "07523687587858d4347358c7f1332d8a4ec8d3abfae106c28517b6587f7efafe",
+      "unchanged": true
+    },
+    {
+      "path": "package/README.zh.md",
+      "sourceSha256": "b7580f26f04b3fc30147f0f484eeb64af275312d6b3b2306ba65114d93fa3eb8",
+      "outputSha256": "b7580f26f04b3fc30147f0f484eeb64af275312d6b3b2306ba65114d93fa3eb8",
+      "unchanged": true
+    },
+    {
+      "path": "package/contracts/README.md",
+      "sourceSha256": "d905f11e5f8800e3a8acabc82f7547481f9098c6e2b80f11dd078112df508253",
+      "outputSha256": "d905f11e5f8800e3a8acabc82f7547481f9098c6e2b80f11dd078112df508253",
+      "unchanged": true
+    },
+    {
+      "path": "package/contracts/hooks-api.d.ts",
+      "sourceSha256": "788701725fc21534a13cd113024e0fc1d91d054e6bd589eed55c7f8257d319c5",
+      "outputSha256": "788701725fc21534a13cd113024e0fc1d91d054e6bd589eed55c7f8257d319c5",
+      "unchanged": true
+    },
+    {
+      "path": "package/contracts/official-tokens-v1.json",
+      "sourceSha256": "8c41132ac435dba25d0d64ba3552fc4b290b128f2e296699c31e7537585ec4a2",
+      "outputSha256": "8c41132ac435dba25d0d64ba3552fc4b290b128f2e296699c31e7537585ec4a2",
+      "unchanged": true
+    },
+    {
+      "path": "package/contracts/semantic-attrs-v1.md",
+      "sourceSha256": "ec554cf880a041dc8dd73680eedfb3996940a40e6b3cdab4b0faf34ed8239ef0",
+      "outputSha256": "ec554cf880a041dc8dd73680eedfb3996940a40e6b3cdab4b0faf34ed8239ef0",
+      "unchanged": true
+    },
+    {
+      "path": "package/contracts/skin-manifest-v2.schema.json",
+      "sourceSha256": "97f364ff1f753b16950798ed5a039a18c22a4a9b2ded026fc1ab28b61738cc22",
+      "outputSha256": "97f364ff1f753b16950798ed5a039a18c22a4a9b2ded026fc1ab28b61738cc22",
+      "unchanged": true
+    },
+    {
+      "path": "package/cordis.patch.yml",
+      "sourceSha256": "4358e468673c91b3a323487507505cd471ede88ff770ac8d97f72bba553f3c03",
+      "outputSha256": "6889dcc6702136514446b8c19908800dd23112ce5ec6e4728d8565d27a6b7749",
+      "unchanged": false
+    },
+    {
+      "path": "package/lib/client.js",
+      "sourceSha256": "a84deef1f36601f6e5d560a76301aa5956b33a892742e144d0a834bfc8e318b8",
+      "outputSha256": "e0c8267f01980eb09c5dcf1a5c44b376010a041f3939b4772fb731a41b9b971b",
+      "unchanged": false
+    },
+    {
+      "path": "package/lib/client.js.map",
+      "sourceSha256": "68a83ea0ceb8233c5f406fc97a2e91f6b1cafe5579b48c80ec2e61670af01d16",
+      "outputSha256": "68a83ea0ceb8233c5f406fc97a2e91f6b1cafe5579b48c80ec2e61670af01d16",
+      "unchanged": true
+    },
+    {
+      "path": "package/lib/index.js",
+      "sourceSha256": "8c179973355056a1e50bbb1901d0f484f0eb06760ae2b6c398c17ea9e027effc",
+      "outputSha256": "0c109408ebee1f70aa4a3ad62bca7daa0a06e37ba221c9bd1f2af80804c94745",
+      "unchanged": false
+    },
+    {
+      "path": "package/package.json",
+      "sourceSha256": "3966fb4c45990b829ef13cc9a1db281dc953f4a9f0cfd6f29476f88ef57e2b7a",
+      "outputSha256": "f12ae0516e336f2c81ccd9c74f17effcc2f6828226e04458b0e34fdbea99431a",
+      "unchanged": false
+    },
+    {
+      "path": "package/skins/blue-fantasy/assets/whale-art.jpg",
+      "sourceSha256": "1bec59fd53652555e727e529046422db25b977624e9c291bb8b78e0caf952303",
+      "outputSha256": "1bec59fd53652555e727e529046422db25b977624e9c291bb8b78e0caf952303",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/blue-fantasy/assets/whale-icon.png",
+      "sourceSha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe",
+      "outputSha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/blue-fantasy/hooks.mjs",
+      "sourceSha256": "21ac2ad4d4423acf31e3391bfba18ce2d9eec7b192f7a0ba47e8a0c843ff15a5",
+      "outputSha256": "21ac2ad4d4423acf31e3391bfba18ce2d9eec7b192f7a0ba47e8a0c843ff15a5",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/blue-fantasy/patches.css",
+      "sourceSha256": "0f4d48904763b1928c36ed109df5bd8f6666824e0313a650ab9a4adbaad9927d",
+      "outputSha256": "0f4d48904763b1928c36ed109df5bd8f6666824e0313a650ab9a4adbaad9927d",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/blue-fantasy/preview/dark.png",
+      "sourceSha256": "2db1d964ca8b61b45097b8d6022e4a2e3cc3830f8b9d3abf997cbb186b642f33",
+      "outputSha256": "2db1d964ca8b61b45097b8d6022e4a2e3cc3830f8b9d3abf997cbb186b642f33",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/blue-fantasy/preview/light.png",
+      "sourceSha256": "100b14a00d65990371f25a122e8e840e187bd526581c868858d203e1764243d7",
+      "outputSha256": "100b14a00d65990371f25a122e8e840e187bd526581c868858d203e1764243d7",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/blue-fantasy/skin.css",
+      "sourceSha256": "5ba64c7d6d09c88fdf53dd6fb48ecd99567673685aef21a3a3498302c110de78",
+      "outputSha256": "5ba64c7d6d09c88fdf53dd6fb48ecd99567673685aef21a3a3498302c110de78",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/blue-fantasy/skin.json",
+      "sourceSha256": "61ec24dfb0ff9434c74e92d882b9d5e254d83535688e854da108b18ea959bc39",
+      "outputSha256": "61ec24dfb0ff9434c74e92d882b9d5e254d83535688e854da108b18ea959bc39",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/cyber-night/README.md",
+      "sourceSha256": "8cc9087bbe45a361e9d23b80de5d52ab95359c271d8df03bd0f78c97b2d454df",
+      "outputSha256": "8cc9087bbe45a361e9d23b80de5d52ab95359c271d8df03bd0f78c97b2d454df",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/cyber-night/README.zh.md",
+      "sourceSha256": "85f4569c7b4655adb276bad8fe61b9330a8c488354079323fde30e6fa80bb20c",
+      "outputSha256": "85f4569c7b4655adb276bad8fe61b9330a8c488354079323fde30e6fa80bb20c",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/cyber-night/assets/cyber-night-art.webp",
+      "sourceSha256": "166f2d1431778be44d99c25738adb21c6c287df812ad96e39399e62a2d2206b3",
+      "outputSha256": "166f2d1431778be44d99c25738adb21c6c287df812ad96e39399e62a2d2206b3",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/cyber-night/assets/cyber-night-icon.svg",
+      "sourceSha256": "cb313f828b2a67342c454aba9ea4beea172a12c8f4a94132403f8efef4429321",
+      "outputSha256": "cb313f828b2a67342c454aba9ea4beea172a12c8f4a94132403f8efef4429321",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/cyber-night/hooks.mjs",
+      "sourceSha256": "199f37fe6969e3dfae4891708604b6b639f011068c10356f774145512fd3be69",
+      "outputSha256": "199f37fe6969e3dfae4891708604b6b639f011068c10356f774145512fd3be69",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/cyber-night/patches.css",
+      "sourceSha256": "35a8744495f6f1bf78b9e40581d8a93d399141bf008c255a54811326e96c582e",
+      "outputSha256": "35a8744495f6f1bf78b9e40581d8a93d399141bf008c255a54811326e96c582e",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/cyber-night/preview/dark.png",
+      "sourceSha256": "66db15c9b02bdd66923583d287ada76847d67ebd5a07f7280e18ff7f0b8ed305",
+      "outputSha256": "66db15c9b02bdd66923583d287ada76847d67ebd5a07f7280e18ff7f0b8ed305",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/cyber-night/preview/light.png",
+      "sourceSha256": "c419e590b98b51bb5c879ec6f1b918a84197f14f5add7b539e188346345b2ad2",
+      "outputSha256": "c419e590b98b51bb5c879ec6f1b918a84197f14f5add7b539e188346345b2ad2",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/cyber-night/skin.css",
+      "sourceSha256": "1e646b3c16adb2f779737c3bbf443b2b53bda00766283c838b3a371d54cd5193",
+      "outputSha256": "1e646b3c16adb2f779737c3bbf443b2b53bda00766283c838b3a371d54cd5193",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/cyber-night/skin.json",
+      "sourceSha256": "9e6de744a9978df55bd01c25280c85c38e4d3d5c0fa85b8eaa2f0d7d86edf45b",
+      "outputSha256": "9e6de744a9978df55bd01c25280c85c38e4d3d5c0fa85b8eaa2f0d7d86edf45b",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/dragon-heir/assets/dark-art.webp",
+      "sourceSha256": "1c3b334a4bce1d5be2b103cd8edb24a1e19a8b65fca6133082b2b05ee446b9e2",
+      "outputSha256": "1c3b334a4bce1d5be2b103cd8edb24a1e19a8b65fca6133082b2b05ee446b9e2",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/dragon-heir/assets/light-art.webp",
+      "sourceSha256": "f78831a369daab14d2c36ef7bf2cdd33600aed5bf11d15d7d4f2b79e2499f9af",
+      "outputSha256": "f78831a369daab14d2c36ef7bf2cdd33600aed5bf11d15d7d4f2b79e2499f9af",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/dragon-heir/hooks.mjs",
+      "sourceSha256": "ccc644148fd71cc32723891e97ed586b86fe2f86e0f36362133de7d66d08f5bd",
+      "outputSha256": "ccc644148fd71cc32723891e97ed586b86fe2f86e0f36362133de7d66d08f5bd",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/dragon-heir/patches.css",
+      "sourceSha256": "90e01cc5e098f90c02d74b3cbccce37df636804dab3cd316ebc9569e8161e43b",
+      "outputSha256": "90e01cc5e098f90c02d74b3cbccce37df636804dab3cd316ebc9569e8161e43b",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/dragon-heir/preview/dark.png",
+      "sourceSha256": "2f9278f8198dad08e792c2487178b25da9e405d36301b9e77fd85fe5b36e039c",
+      "outputSha256": "2f9278f8198dad08e792c2487178b25da9e405d36301b9e77fd85fe5b36e039c",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/dragon-heir/preview/light.png",
+      "sourceSha256": "d202a391aee65c17dd58950b4201606e3ecad6ab9a0e6a869392474c370816f4",
+      "outputSha256": "d202a391aee65c17dd58950b4201606e3ecad6ab9a0e6a869392474c370816f4",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/dragon-heir/skin.css",
+      "sourceSha256": "7a50c1b55227f897722430f99c910d02c359a5ce31f8d380893301c27690f4ed",
+      "outputSha256": "7a50c1b55227f897722430f99c910d02c359a5ce31f8d380893301c27690f4ed",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/dragon-heir/skin.json",
+      "sourceSha256": "6d261d9c0311ee6bda8ddedb981d37a2e942af7366919993d9e455ce899c9a52",
+      "outputSha256": "6d261d9c0311ee6bda8ddedb981d37a2e942af7366919993d9e455ce899c9a52",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/furina/LICENSE",
+      "sourceSha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+      "outputSha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/furina/README.md",
+      "sourceSha256": "10d1c419631da3d42b6df208c0e9175e7c0678566efc31886ec8af41fd01afea",
+      "outputSha256": "10d1c419631da3d42b6df208c0e9175e7c0678566efc31886ec8af41fd01afea",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/furina/README.zh.md",
+      "sourceSha256": "77d3f6939f68813a134528ff75e92e280bff988a1e4d629c8d8649669c79dee7",
+      "outputSha256": "77d3f6939f68813a134528ff75e92e280bff988a1e4d629c8d8649669c79dee7",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/furina/assets/furina-art.jpg",
+      "sourceSha256": "5d73357c5ee028fa67e3615379a89f67d4543dc902f89ee4535bfedcfd77a659",
+      "outputSha256": "5d73357c5ee028fa67e3615379a89f67d4543dc902f89ee4535bfedcfd77a659",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/furina/assets/furina-icon.png",
+      "sourceSha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe",
+      "outputSha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/furina/hooks.mjs",
+      "sourceSha256": "713668d3a50da8878337feb4553f953eea781734934610af37a58dea37112ec9",
+      "outputSha256": "713668d3a50da8878337feb4553f953eea781734934610af37a58dea37112ec9",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/furina/patches.css",
+      "sourceSha256": "0f4d48904763b1928c36ed109df5bd8f6666824e0313a650ab9a4adbaad9927d",
+      "outputSha256": "0f4d48904763b1928c36ed109df5bd8f6666824e0313a650ab9a4adbaad9927d",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/furina/preview/dark.png",
+      "sourceSha256": "8c22c92ac4afeab2dc9edfb898facaf9f909abfbb73905590addbf75f9c1b31e",
+      "outputSha256": "8c22c92ac4afeab2dc9edfb898facaf9f909abfbb73905590addbf75f9c1b31e",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/furina/preview/light.png",
+      "sourceSha256": "84b5b7dc9696d32f1451006204538a2678b40516c302df2ae671c920aab996eb",
+      "outputSha256": "84b5b7dc9696d32f1451006204538a2678b40516c302df2ae671c920aab996eb",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/furina/skin.css",
+      "sourceSha256": "3325709c7c7ad7433bbaa3685d7b6bbf24c6099ec86b26839a698a25ba7925f6",
+      "outputSha256": "3325709c7c7ad7433bbaa3685d7b6bbf24c6099ec86b26839a698a25ba7925f6",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/furina/skin.json",
+      "sourceSha256": "2eb7afbf5256186882b9b89f5611e899249dd4dad8a9f618df5107a246c31d7d",
+      "outputSha256": "2eb7afbf5256186882b9b89f5611e899249dd4dad8a9f618df5107a246c31d7d",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/harbor/assets/harbor-art.webp",
+      "sourceSha256": "8b580f05bf017027d0c8b3d1d0d321a84d89af1efbc43c89cc0705e62557fda2",
+      "outputSha256": "8b580f05bf017027d0c8b3d1d0d321a84d89af1efbc43c89cc0705e62557fda2",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/harbor/assets/harbor-icon.svg",
+      "sourceSha256": "fc9f82e5fa4998cb3e48a85662bcb719c7ecbd305acc7b544e181605192dbf45",
+      "outputSha256": "fc9f82e5fa4998cb3e48a85662bcb719c7ecbd305acc7b544e181605192dbf45",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/harbor/hooks.mjs",
+      "sourceSha256": "7981a2f98d1ade2815f7e33e2d79672c280334001a00406bb11b5362ce8182bf",
+      "outputSha256": "7981a2f98d1ade2815f7e33e2d79672c280334001a00406bb11b5362ce8182bf",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/harbor/patches.css",
+      "sourceSha256": "2683af321f8cc80987550e93768c290a244c0e7f6c321e333550c9bb6927829a",
+      "outputSha256": "2683af321f8cc80987550e93768c290a244c0e7f6c321e333550c9bb6927829a",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/harbor/preview/dark.png",
+      "sourceSha256": "f0290197f1d8a236704bf5307405aafa9670cb2166a1dd0f18cebe95568fe8da",
+      "outputSha256": "f0290197f1d8a236704bf5307405aafa9670cb2166a1dd0f18cebe95568fe8da",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/harbor/preview/light.png",
+      "sourceSha256": "0dba1a82df8b940ec6c96dbd66f2eca29f3140dfa02e8a53b445a71972537da7",
+      "outputSha256": "0dba1a82df8b940ec6c96dbd66f2eca29f3140dfa02e8a53b445a71972537da7",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/harbor/skin.css",
+      "sourceSha256": "ab942b183c21bb3fda441770feced0548915b3d7827fe73be7473094216ff7f0",
+      "outputSha256": "ab942b183c21bb3fda441770feced0548915b3d7827fe73be7473094216ff7f0",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/harbor/skin.json",
+      "sourceSha256": "14873330c16c059dc1076badf09d852ecce6352d4f9dafe7174a56db9bd670ea",
+      "outputSha256": "14873330c16c059dc1076badf09d852ecce6352d4f9dafe7174a56db9bd670ea",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/LICENSE",
+      "sourceSha256": "1349a4b6148492b44f629e64eed676612e234fe9a839e4f3b277c1482c8849f1",
+      "outputSha256": "1349a4b6148492b44f629e64eed676612e234fe9a839e4f3b277c1482c8849f1",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/NOTICE",
+      "sourceSha256": "ca42fd8e4b877137d965afa51ee108d833fa0d6b8f5c7397d7dfcebdddcf5ef6",
+      "outputSha256": "ca42fd8e4b877137d965afa51ee108d833fa0d6b8f5c7397d7dfcebdddcf5ef6",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-atelier-icon.webp",
+      "sourceSha256": "be7ea360355b13213250b5920c69d2036f10db003c4bcc8756366f409656b6b0",
+      "outputSha256": "be7ea360355b13213250b5920c69d2036f10db003c4bcc8756366f409656b6b0",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-atelier-maid-left-v5.webp",
+      "sourceSha256": "af7bfd2e18505fc9d6f94cefd9febc92b31c1b2b66c756982d91fc7b93fb184c",
+      "outputSha256": "af7bfd2e18505fc9d6f94cefd9febc92b31c1b2b66c756982d91fc7b93fb184c",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-atelier-maid-right-v6.webp",
+      "sourceSha256": "34b55580ada4af5b9d519f5ae09e8656164197a3cbadceace73d98f3da278ca7",
+      "outputSha256": "34b55580ada4af5b9d519f5ae09e8656164197a3cbadceace73d98f3da278ca7",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-atelier-palace-day-v4.webp",
+      "sourceSha256": "52e7dce6993e3f955c3fbb2875885e7ab60fb38ca89adb15d977c7a85d58c073",
+      "outputSha256": "52e7dce6993e3f955c3fbb2875885e7ab60fb38ca89adb15d977c7a85d58c073",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-atelier-palace-night-v4.webp",
+      "sourceSha256": "ae6917bb1aafa71e6a10cfcaa1289f13e265aa7f32d3fb7c1988004bf50f8983",
+      "outputSha256": "ae6917bb1aafa71e6a10cfcaa1289f13e265aa7f32d3fb7c1988004bf50f8983",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-bottom-crest-v1.webp",
+      "sourceSha256": "24f2fb04ce2d38574a3817f6d675b8c1ee5d9322588eec651271f67aabfcb48d",
+      "outputSha256": "24f2fb04ce2d38574a3817f6d675b8c1ee5d9322588eec651271f67aabfcb48d",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-bottom-trim-tile-v1.webp",
+      "sourceSha256": "47072d2d652f09e857dbc8555ff5c1917c926ef5d4581641f7018b1607c42fda",
+      "outputSha256": "47072d2d652f09e857dbc8555ff5c1917c926ef5d4581641f7018b1607c42fda",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-bow-v1.webp",
+      "sourceSha256": "dcf64a43ad6b9e71c24c91fb9b1d7fe8af534497fd421213472bea96e6bc04b5",
+      "outputSha256": "dcf64a43ad6b9e71c24c91fb9b1d7fe8af534497fd421213472bea96e6bc04b5",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-chibi-v1.webp",
+      "sourceSha256": "405917afdb68d725624bbf7e4f1619a35fc4004039b7d553c5528ca5f65308d3",
+      "outputSha256": "405917afdb68d725624bbf7e4f1619a35fc4004039b7d553c5528ca5f65308d3",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-composer-frame-v4.webp",
+      "sourceSha256": "3135deb5d14d3ea44940edcf296ba2ffa14e242d5342a1a94618df0c57979482",
+      "outputSha256": "3135deb5d14d3ea44940edcf296ba2ffa14e242d5342a1a94618df0c57979482",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-new-session-v1.webp",
+      "sourceSha256": "fa6d49a717c04651fd7d1afb30b853f63cbaa5bf483e58cb4bfe5ef69fc6ff50",
+      "outputSha256": "fa6d49a717c04651fd7d1afb30b853f63cbaa5bf483e58cb4bfe5ef69fc6ff50",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-settings-frame-v1.webp",
+      "sourceSha256": "3d2b126caf0549c2e86684dcbc0ff4443b887e5e1684190710d2df7940466d98",
+      "outputSha256": "3d2b126caf0549c2e86684dcbc0ff4443b887e5e1684190710d2df7940466d98",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-sidebar-corner-v1.webp",
+      "sourceSha256": "707f05bf4abed25405ca45c5c32bcf95ab7cb3a6dae3e53da29f814a8495665c",
+      "outputSha256": "707f05bf4abed25405ca45c5c32bcf95ab7cb3a6dae3e53da29f814a8495665c",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-sidebar-swag-v1.webp",
+      "sourceSha256": "cd728ce5c1794ec4958ef75c4cdd60a3d513b871bea99e3b526656f14089fd74",
+      "outputSha256": "cd728ce5c1794ec4958ef75c4cdd60a3d513b871bea99e3b526656f14089fd74",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-top-trim-tile-v1.webp",
+      "sourceSha256": "e49115f3942ea5c5034c81016c61944b5261c8ea410318cb0419b445c990b063",
+      "outputSha256": "e49115f3942ea5c5034c81016c61944b5261c8ea410318cb0419b445c990b063",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-workspace-ribbon-v2.webp",
+      "sourceSha256": "e2b04c3eca1871c5e73417674582a09b13de60119ca9bb9c112317232c5049fa",
+      "outputSha256": "e2b04c3eca1871c5e73417674582a09b13de60119ca9bb9c112317232c5049fa",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/assets/maid-workspace-shield-v2.webp",
+      "sourceSha256": "b59aa9d4ecfbbae6e62d872c964bce8ec870ed500e7cbc7a7f02bbdd0b93e87e",
+      "outputSha256": "b59aa9d4ecfbbae6e62d872c964bce8ec870ed500e7cbc7a7f02bbdd0b93e87e",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/hooks.mjs",
+      "sourceSha256": "54394436db0a9dfd51972adbc31c567b1871632cb599e1a8440b87b98401a2d4",
+      "outputSha256": "54394436db0a9dfd51972adbc31c567b1871632cb599e1a8440b87b98401a2d4",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/patches.css",
+      "sourceSha256": "27b0da69ac0f62206b9f19487b9538b1a5ad6814b71139a9399b2d1f6d3460e5",
+      "outputSha256": "27b0da69ac0f62206b9f19487b9538b1a5ad6814b71139a9399b2d1f6d3460e5",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/preview/dark.png",
+      "sourceSha256": "eeb0be8f8f743f1fea87ad4e12cde6e1de151b6063c21306d56944dc71dc535a",
+      "outputSha256": "eeb0be8f8f743f1fea87ad4e12cde6e1de151b6063c21306d56944dc71dc535a",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/preview/light.png",
+      "sourceSha256": "90fd9dcf47e6efff8b672c154dc17f72561dc3e04c704ae2e3de32fdebc39765",
+      "outputSha256": "90fd9dcf47e6efff8b672c154dc17f72561dc3e04c704ae2e3de32fdebc39765",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/skin.css",
+      "sourceSha256": "cc4530cb981e0aae73ab3bdf785135379dc065ea28ab374204b19e14e2fbb4d9",
+      "outputSha256": "cc4530cb981e0aae73ab3bdf785135379dc065ea28ab374204b19e14e2fbb4d9",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/maid-atelier/skin.json",
+      "sourceSha256": "53d2fa5bb7f6d1bfe8e9753bf0c6e05ed01ddf76d4a66d69de7fac64d9e4f7b7",
+      "outputSha256": "53d2fa5bb7f6d1bfe8e9753bf0c6e05ed01ddf76d4a66d69de7fac64d9e4f7b7",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/matrix/hooks.mjs",
+      "sourceSha256": "2e13e495adabe900df797cdbe930b8cb7fdb2ce721c1ba021e6eb2e74326e551",
+      "outputSha256": "2e13e495adabe900df797cdbe930b8cb7fdb2ce721c1ba021e6eb2e74326e551",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/matrix/patches.css",
+      "sourceSha256": "d416957ea4a7761409b2cf945e5235aed941cd8e74948e0806cc7c5f9c8f7bab",
+      "outputSha256": "d416957ea4a7761409b2cf945e5235aed941cd8e74948e0806cc7c5f9c8f7bab",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/matrix/preview/dark.png",
+      "sourceSha256": "d85eee4d75f777f354ae6aac86cfa1663f676fe568af3b9a5bfbdbe96950246e",
+      "outputSha256": "d85eee4d75f777f354ae6aac86cfa1663f676fe568af3b9a5bfbdbe96950246e",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/matrix/preview/light.png",
+      "sourceSha256": "d85eee4d75f777f354ae6aac86cfa1663f676fe568af3b9a5bfbdbe96950246e",
+      "outputSha256": "d85eee4d75f777f354ae6aac86cfa1663f676fe568af3b9a5bfbdbe96950246e",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/matrix/skin.css",
+      "sourceSha256": "08b317825085f5e2803ced8a76cfdb6d1d429af9ecf5276ae6379ebc69b36032",
+      "outputSha256": "08b317825085f5e2803ced8a76cfdb6d1d429af9ecf5276ae6379ebc69b36032",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/matrix/skin.json",
+      "sourceSha256": "007ff2822caae57fb001801347452957e6a81b28b664dde0d3921b8361681117",
+      "outputSha256": "007ff2822caae57fb001801347452957e6a81b28b664dde0d3921b8361681117",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/miku/assets/miku-art-light.jpg",
+      "sourceSha256": "fcdec57ca0fef16fd775ac598908d24ffcbb7f04dc6a9bb18ed3d8ba4625e61e",
+      "outputSha256": "fcdec57ca0fef16fd775ac598908d24ffcbb7f04dc6a9bb18ed3d8ba4625e61e",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/miku/assets/miku-art.webp",
+      "sourceSha256": "baa346f68e8aa8b8e5471781d9fc1a56463bd3da4dd261cc5dba34884e2fcfa8",
+      "outputSha256": "baa346f68e8aa8b8e5471781d9fc1a56463bd3da4dd261cc5dba34884e2fcfa8",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/miku/hooks.mjs",
+      "sourceSha256": "34d12bbc572de39aa2e281b1b035128637e14ff59fc0b2c1122687f10d364b5a",
+      "outputSha256": "34d12bbc572de39aa2e281b1b035128637e14ff59fc0b2c1122687f10d364b5a",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/miku/patches.css",
+      "sourceSha256": "8afa80ae43371cfd3e4a1f6fdf08b6993f1ed7daf5aac59bbcc3a332411fe353",
+      "outputSha256": "8afa80ae43371cfd3e4a1f6fdf08b6993f1ed7daf5aac59bbcc3a332411fe353",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/miku/preview/dark.png",
+      "sourceSha256": "dcfb6107123351f23ea21c2c579df229a41fe7e3242dace5870e861c7d9865db",
+      "outputSha256": "dcfb6107123351f23ea21c2c579df229a41fe7e3242dace5870e861c7d9865db",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/miku/preview/light.png",
+      "sourceSha256": "3e5d964aaf49c106b0be6c2c23325d847f7e5c8856c04158faf26497d8739a99",
+      "outputSha256": "3e5d964aaf49c106b0be6c2c23325d847f7e5c8856c04158faf26497d8739a99",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/miku/skin.css",
+      "sourceSha256": "054a33cac5bc7baa3828f513c59f027b0fa1800903ce00a93b5d47ac3927646f",
+      "outputSha256": "054a33cac5bc7baa3828f513c59f027b0fa1800903ce00a93b5d47ac3927646f",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/miku/skin.json",
+      "sourceSha256": "b7051188bf34dc9bfdf2909ee4d90c351eca1e71a75c059bf094bc6f0b20560a",
+      "outputSha256": "b7051188bf34dc9bfdf2909ee4d90c351eca1e71a75c059bf094bc6f0b20560a",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/minecraft/hooks.mjs",
+      "sourceSha256": "deb4abe5e9dc64b075cb6ab1cfbdb153534a6cf837e3558cc0daee7b1bc6eb1a",
+      "outputSha256": "deb4abe5e9dc64b075cb6ab1cfbdb153534a6cf837e3558cc0daee7b1bc6eb1a",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/minecraft/patches.css",
+      "sourceSha256": "610d7aa2b7f0dbf7ae55b23c39f6ac7494e74ab736a821e4e03927a9e3a03435",
+      "outputSha256": "610d7aa2b7f0dbf7ae55b23c39f6ac7494e74ab736a821e4e03927a9e3a03435",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/minecraft/preview/dark.png",
+      "sourceSha256": "99827797621c7120f5f018ff0fd35101327b64e5ce8da984372a99add03477a7",
+      "outputSha256": "99827797621c7120f5f018ff0fd35101327b64e5ce8da984372a99add03477a7",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/minecraft/preview/light.png",
+      "sourceSha256": "04001a4694d2a069985d3c4d6ee34f4be22858664b1a1553772be69c2a6ae28c",
+      "outputSha256": "04001a4694d2a069985d3c4d6ee34f4be22858664b1a1553772be69c2a6ae28c",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/minecraft/skin.css",
+      "sourceSha256": "bc976480c58bbf7662d53448d6e1c2b245cb002088bbca670ef8dd3bf739bcbd",
+      "outputSha256": "bc976480c58bbf7662d53448d6e1c2b245cb002088bbca670ef8dd3bf739bcbd",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/minecraft/skin.json",
+      "sourceSha256": "30b5dbc662302e3b2eff1498bba57a4c4d36aa70bf3933f099db8bba96fd8550",
+      "outputSha256": "30b5dbc662302e3b2eff1498bba57a4c4d36aa70bf3933f099db8bba96fd8550",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/mint/preview/dark.png",
+      "sourceSha256": "39bf28383c7b92bacc5831e7eef97632e7ceb437a3a1f471536f3d3f8cbcc734",
+      "outputSha256": "39bf28383c7b92bacc5831e7eef97632e7ceb437a3a1f471536f3d3f8cbcc734",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/mint/preview/light.png",
+      "sourceSha256": "36542170c803d7a754d62594b7deb8bd5d0f258d13c1489dcfcd3ae43ba7f06d",
+      "outputSha256": "36542170c803d7a754d62594b7deb8bd5d0f258d13c1489dcfcd3ae43ba7f06d",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/mint/skin.css",
+      "sourceSha256": "ee49e1ef04ab70d3ac12ccad5e6214d165ff18a8659baeb4f7b9a085c1b33622",
+      "outputSha256": "ee49e1ef04ab70d3ac12ccad5e6214d165ff18a8659baeb4f7b9a085c1b33622",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/mint/skin.json",
+      "sourceSha256": "e33eaa5b0340f299a6b801c95df031e7f08aa5ac27cfba06a53c864b17ec8cb7",
+      "outputSha256": "e33eaa5b0340f299a6b801c95df031e7f08aa5ac27cfba06a53c864b17ec8cb7",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/summer-liquid-glass/README.md",
+      "sourceSha256": "42b1cb8bca14c1cb6f929162a0a42000d0f1465c63ef9f0a90ec5a113ee6a68a",
+      "outputSha256": "42b1cb8bca14c1cb6f929162a0a42000d0f1465c63ef9f0a90ec5a113ee6a68a",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/summer-liquid-glass/README.zh.md",
+      "sourceSha256": "2f9b489cbe580af2cf93c81d427edfde8371a2445857ac7735e7d235c4b2968f",
+      "outputSha256": "2f9b489cbe580af2cf93c81d427edfde8371a2445857ac7735e7d235c4b2968f",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/summer-liquid-glass/assets/summer-liquid-glass-art.jpg",
+      "sourceSha256": "4d6548db1996b79f6f0f3e3f608e099c5d06d54af7f1bcbdb59d82dea1f1b531",
+      "outputSha256": "4d6548db1996b79f6f0f3e3f608e099c5d06d54af7f1bcbdb59d82dea1f1b531",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/summer-liquid-glass/patches.css",
+      "sourceSha256": "33290aa22a16737efb42d441f1d87a03ee8412083b3e11cfd7dfe033c6ab5743",
+      "outputSha256": "33290aa22a16737efb42d441f1d87a03ee8412083b3e11cfd7dfe033c6ab5743",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/summer-liquid-glass/preview/dark.png",
+      "sourceSha256": "7a230ebd10bbef83ea1621e9287f0a4aae8598d1cea7485850c4b4aa384be392",
+      "outputSha256": "7a230ebd10bbef83ea1621e9287f0a4aae8598d1cea7485850c4b4aa384be392",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/summer-liquid-glass/preview/light.png",
+      "sourceSha256": "31d94185128722314b594893b05432140d38543cc9de350afeb761b69529c1d2",
+      "outputSha256": "31d94185128722314b594893b05432140d38543cc9de350afeb761b69529c1d2",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/summer-liquid-glass/skin.css",
+      "sourceSha256": "0d80e3d8b022231afb139e897d13192f0a7933c782f00a6da4e6046f499d6a14",
+      "outputSha256": "0d80e3d8b022231afb139e897d13192f0a7933c782f00a6da4e6046f499d6a14",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/summer-liquid-glass/skin.json",
+      "sourceSha256": "36f98977957f4c6091e10ca593a60dc0cd5733e41993b854d97c074a620f80fd",
+      "outputSha256": "36f98977957f4c6091e10ca593a60dc0cd5733e41993b854d97c074a620f80fd",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/trading/hooks.mjs",
+      "sourceSha256": "ccdb09baf852656bdd654cd30d5bba0a19c22fab0f3a9f6917a144f53251cec1",
+      "outputSha256": "ccdb09baf852656bdd654cd30d5bba0a19c22fab0f3a9f6917a144f53251cec1",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/trading/patches.css",
+      "sourceSha256": "05fcc37240efb14e87e1ce3417a651b64b597d3ea22da42efccf95d3ab765c02",
+      "outputSha256": "05fcc37240efb14e87e1ce3417a651b64b597d3ea22da42efccf95d3ab765c02",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/trading/preview/dark.png",
+      "sourceSha256": "36ce4a96d2c92588c654815798da30ab104a4a2b9b926b696de34f0056752be6",
+      "outputSha256": "36ce4a96d2c92588c654815798da30ab104a4a2b9b926b696de34f0056752be6",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/trading/preview/light.png",
+      "sourceSha256": "5d39809cd6d923f043b9ff57b41f90ea7e0288fe626d318acb794b280cea6f60",
+      "outputSha256": "5d39809cd6d923f043b9ff57b41f90ea7e0288fe626d318acb794b280cea6f60",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/trading/skin.css",
+      "sourceSha256": "3413531a54f1b7762d5cbd995f23fed2fd7e68aa59d9691e673066a846332c39",
+      "outputSha256": "3413531a54f1b7762d5cbd995f23fed2fd7e68aa59d9691e673066a846332c39",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/trading/skin.json",
+      "sourceSha256": "486bab0ccee7b627c3a8c9787bde883774b57778593301aeca7c99cade49ef90",
+      "outputSha256": "486bab0ccee7b627c3a8c9787bde883774b57778593301aeca7c99cade49ef90",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-mom/assets/whale-icon.svg",
+      "sourceSha256": "868ad60bce433f097c5ce4844a46b80c00fd4e68f6a925499d36aaa2fdea8e35",
+      "outputSha256": "868ad60bce433f097c5ce4844a46b80c00fd4e68f6a925499d36aaa2fdea8e35",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-mom/assets/whale-mom-art.jpg",
+      "sourceSha256": "358d1913f4c535ca1903f2a16bc3fc57abc5362a8cbf29d38cba24ad4d6e32ef",
+      "outputSha256": "358d1913f4c535ca1903f2a16bc3fc57abc5362a8cbf29d38cba24ad4d6e32ef",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-mom/hooks.mjs",
+      "sourceSha256": "be8921f66e7ef6d73a0c12686f9b0134fb1f4d47e38d1dedc09f4a74c1533b83",
+      "outputSha256": "be8921f66e7ef6d73a0c12686f9b0134fb1f4d47e38d1dedc09f4a74c1533b83",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-mom/patches.css",
+      "sourceSha256": "64787e7cf34ec876a5c9e7513ed53114ce102d171702d8a0360e7f64c1d3121a",
+      "outputSha256": "64787e7cf34ec876a5c9e7513ed53114ce102d171702d8a0360e7f64c1d3121a",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-mom/preview/dark.png",
+      "sourceSha256": "4c392a62e140062cbdad3166799752ea62218bdceef6c11862b802d288b36ffc",
+      "outputSha256": "4c392a62e140062cbdad3166799752ea62218bdceef6c11862b802d288b36ffc",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-mom/preview/light.png",
+      "sourceSha256": "73bd728ff2b9fbe2205e899974303ed69112fb169debfb3115daff2c8cd149c7",
+      "outputSha256": "73bd728ff2b9fbe2205e899974303ed69112fb169debfb3115daff2c8cd149c7",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-mom/skin.css",
+      "sourceSha256": "4b341bab3d52e725e67e913867fe93b72425df54d008b77520064eb8e919d2a8",
+      "outputSha256": "4b341bab3d52e725e67e913867fe93b72425df54d008b77520064eb8e919d2a8",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-mom/skin.json",
+      "sourceSha256": "597ed1e8924ef04211f7facb340d593b3430b6091624adc17570b0c6797aca66",
+      "outputSha256": "597ed1e8924ef04211f7facb340d593b3430b6091624adc17570b0c6797aca66",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-song/assets/whale-art.webp",
+      "sourceSha256": "9b74076df6da331a69875b9dcee6233193f1ac6254694fd429e179cefaf5d95d",
+      "outputSha256": "9b74076df6da331a69875b9dcee6233193f1ac6254694fd429e179cefaf5d95d",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-song/assets/whale-icon.png",
+      "sourceSha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe",
+      "outputSha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-song/hooks.mjs",
+      "sourceSha256": "beb0f140dab1abb40bda52ad2ae1970feb761e2184e64e1d5810fab7c32dfff3",
+      "outputSha256": "beb0f140dab1abb40bda52ad2ae1970feb761e2184e64e1d5810fab7c32dfff3",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-song/patches.css",
+      "sourceSha256": "ef9f430bc7ec045e7aa7e19ae0dc6fa9c8178d28878966dee0044f0bb38b8f45",
+      "outputSha256": "ef9f430bc7ec045e7aa7e19ae0dc6fa9c8178d28878966dee0044f0bb38b8f45",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-song/preview/dark.png",
+      "sourceSha256": "4bb6efd96420b2ad2a24305131ec93ba491e3d5a8948373b8979703769572a07",
+      "outputSha256": "4bb6efd96420b2ad2a24305131ec93ba491e3d5a8948373b8979703769572a07",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-song/preview/light.png",
+      "sourceSha256": "b7b5733f209a2e4c1d380a0a8ec88ecc29d5140f90d1469451a58dffe72f0bad",
+      "outputSha256": "b7b5733f209a2e4c1d380a0a8ec88ecc29d5140f90d1469451a58dffe72f0bad",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-song/skin.css",
+      "sourceSha256": "3a7bb95a121858937dd077b2f3b93f89a639b81ff81c165acefc41e6c47e6992",
+      "outputSha256": "3a7bb95a121858937dd077b2f3b93f89a639b81ff81c165acefc41e6c47e6992",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/whale-song/skin.json",
+      "sourceSha256": "0064dc3e004fee30d8290f57f9e90abff4e661cc955fb53067a4b0a89e2718c8",
+      "outputSha256": "0064dc3e004fee30d8290f57f9e90abff4e661cc955fb53067a4b0a89e2718c8",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/xp/hooks.mjs",
+      "sourceSha256": "823f25fd5f969feb8e51d8ff1577c1cbecbad847b2abac6e5020fc9ef543663f",
+      "outputSha256": "823f25fd5f969feb8e51d8ff1577c1cbecbad847b2abac6e5020fc9ef543663f",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/xp/patches.css",
+      "sourceSha256": "b0ddb4e0671e5ec19866429bdb0d9b1dd5c8bdbef8d7dd3f719bdd33bc91cd00",
+      "outputSha256": "b0ddb4e0671e5ec19866429bdb0d9b1dd5c8bdbef8d7dd3f719bdd33bc91cd00",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/xp/preview/dark.png",
+      "sourceSha256": "26f856e19a03153f4276794ba549a6193bfc012a14deb1efc5b4dd83ff8aba41",
+      "outputSha256": "26f856e19a03153f4276794ba549a6193bfc012a14deb1efc5b4dd83ff8aba41",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/xp/preview/light.png",
+      "sourceSha256": "fe6c40241a76af4b00a5adbb2688c117b6e4930d592242d5d40f359f80cf946e",
+      "outputSha256": "fe6c40241a76af4b00a5adbb2688c117b6e4930d592242d5d40f359f80cf946e",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/xp/skin.css",
+      "sourceSha256": "e9230ac95016aca20f482b578d9be4c36556c45d1f61f8a6ab679467c91369e3",
+      "outputSha256": "e9230ac95016aca20f482b578d9be4c36556c45d1f61f8a6ab679467c91369e3",
+      "unchanged": true
+    },
+    {
+      "path": "package/skins/xp/skin.json",
+      "sourceSha256": "45df73f14c1ed8b8d3e4dd267f1ab879a7d2c4e99c748048c3d0d99f646b682c",
+      "outputSha256": "45df73f14c1ed8b8d3e4dd267f1ab879a7d2c4e99c748048c3d0d99f646b682c",
+      "unchanged": true
+    }
+  ]
+}

@@ -1,0 +1,571 @@
+{
+  "schemaVersion": 1,
+  "catalogId": 2309,
+  "verifiedAt": "2026-09-05T23:18:56.035Z",
+  "dshVersion": "0.1.3-alpha.1",
+  "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "packageName": "@dsh-themes/community-xiaoyao-sky-lab",
+  "packageVersion": "0.1.1-dsh-alpha.1",
+  "artifactSha256": "c91c03c39d1a8284db88cba0810cbfca39df6adc83bbe82901189faae6b3c053",
+  "installation": {
+    "officialCliAdd": true,
+    "exactPackagePresent": true,
+    "profile": "web"
+  },
+  "boot": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-ds-dark-theme": "",
+        "data-dsh-sky-lab": ""
+      },
+      "base": "#0512310f",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n蓝粉双子 · 晴空研究所\nCREATIVE SYSTEM ONLINE",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        },
+        {
+          "text": "",
+          "aria": "打开双子研究所向导"
+        },
+        {
+          "text": "",
+          "aria": "关闭"
+        }
+      ],
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0
+    },
+    "modes": [
+      {
+        "mode": "light",
+        "title": "DeepSeek Harness",
+        "attrs": {
+          "data-dsh-sky-lab": ""
+        },
+        "base": "#f8fcff0f",
+        "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n蓝粉双子 · 晴空研究所\nCREATIVE SYSTEM ONLINE",
+        "buttons": [
+          {
+            "text": "",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "收起侧边栏"
+          },
+          {
+            "text": "新会话",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "搜索会话"
+          },
+          {
+            "text": "",
+            "aria": "视图选项"
+          },
+          {
+            "text": "",
+            "aria": "添加工作区"
+          },
+          {
+            "text": "设置",
+            "aria": null
+          },
+          {
+            "text": "选择工作区",
+            "aria": "选择工作区"
+          },
+          {
+            "text": "标准模式",
+            "aria": null
+          },
+          {
+            "text": "",
+            "aria": "指令"
+          },
+          {
+            "text": "",
+            "aria": "添加附件"
+          },
+          {
+            "text": "",
+            "aria": "发送消息"
+          },
+          {
+            "text": "",
+            "aria": "打开双子研究所向导"
+          },
+          {
+            "text": "",
+            "aria": "关闭"
+          }
+        ],
+        "width": {
+          "viewport": 1280,
+          "scroll": 1280
+        },
+        "brokenImages": 0
+      },
+      {
+        "mode": "dark",
+        "title": "DeepSeek Harness",
+        "attrs": {
+          "data-dsh-sky-lab": "",
+          "data-ds-dark-theme": ""
+        },
+        "base": "#0512310f",
+        "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n蓝粉双子 · 晴空研究所\nCREATIVE SYSTEM ONLINE",
+        "buttons": [
+          {
+            "text": "",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "收起侧边栏"
+          },
+          {
+            "text": "新会话",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "搜索会话"
+          },
+          {
+            "text": "",
+            "aria": "视图选项"
+          },
+          {
+            "text": "",
+            "aria": "添加工作区"
+          },
+          {
+            "text": "设置",
+            "aria": null
+          },
+          {
+            "text": "选择工作区",
+            "aria": "选择工作区"
+          },
+          {
+            "text": "标准模式",
+            "aria": null
+          },
+          {
+            "text": "",
+            "aria": "指令"
+          },
+          {
+            "text": "",
+            "aria": "添加附件"
+          },
+          {
+            "text": "",
+            "aria": "发送消息"
+          },
+          {
+            "text": "",
+            "aria": "打开双子研究所向导"
+          },
+          {
+            "text": "",
+            "aria": "关闭"
+          }
+        ],
+        "width": {
+          "viewport": 1280,
+          "scroll": 1280
+        },
+        "brokenImages": 0
+      }
+    ],
+    "controls": [
+      {
+        "action": "open-guide",
+        "expanded": "true",
+        "text": "×\nTWIN SKY LAB\n两位搭档，双路协作\n\n蓝鲸女仆处理工具与代码，小瑶负责选题与内容。"
+      },
+      {
+        "action": "close-guide",
+        "expanded": "false"
+      }
+    ],
+    "narrow": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-dsh-sky-lab": "",
+        "data-ds-dark-theme": ""
+      },
+      "base": "#0512310f",
+      "text": "探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n×\nTWIN SKY LAB\n两位搭档，双路协作\n\n蓝鲸女仆处理工具与代码，小瑶负责选题与内容。",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "打开侧边栏"
+        },
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        },
+        {
+          "text": "",
+          "aria": "打开双子研究所向导"
+        },
+        {
+          "text": "×",
+          "aria": "关闭"
+        }
+      ],
+      "width": {
+        "viewport": 390,
+        "scroll": 390
+      },
+      "brokenImages": 0
+    },
+    "geometry": [
+      {
+        "className": "Xakt6q_sidebarCol",
+        "left": 8,
+        "width": 56,
+        "right": 64
+      },
+      {
+        "className": "Xakt6q_centerCol",
+        "left": 64,
+        "width": 318,
+        "right": 382
+      },
+      {
+        "className": "KHoiLa_card",
+        "left": 6,
+        "width": 376,
+        "right": 382
+      },
+      {
+        "className": "",
+        "left": 28,
+        "width": 300,
+        "right": 328
+      }
+    ],
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": []
+  },
+  "cold": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-ds-dark-theme": "",
+        "data-dsh-sky-lab": ""
+      },
+      "base": "#0512310f",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n蓝粉双子 · 晴空研究所\nCREATIVE SYSTEM ONLINE",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        },
+        {
+          "text": "",
+          "aria": "打开双子研究所向导"
+        },
+        {
+          "text": "",
+          "aria": "关闭"
+        }
+      ],
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0
+    },
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": []
+  },
+  "coldProcessRestart": {
+    "before": {
+      "wrapper": 71795,
+      "listener": 71845,
+      "startedAt": "2026-09-05T23:19:01.142Z"
+    },
+    "after": {
+      "wrapper": 72425,
+      "listener": 72469,
+      "startedAt": "2026-09-05T23:19:23.312Z"
+    },
+    "portConfirmedClosed": true
+  },
+  "removed": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-ds-dark-theme": ""
+      },
+      "base": "#151517",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        }
+      ],
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0
+    },
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": []
+  },
+  "removal": {
+    "officialCliRemove": true,
+    "packageAbsent": true,
+    "skinAttributesAbsent": true,
+    "base": "#151517",
+    "process": {
+      "wrapper": 73109,
+      "listener": 73133,
+      "startedAt": "2026-09-05T23:19:41.820Z"
+    }
+  },
+  "status": "passed",
+  "sourceRepository": "147228/dsh-xiaoyao-skins",
+  "sourceRevision": "174f65d9135e932383a8f3a19fa522f16875a139",
+  "licenseExpression": "MIT AND CC-BY-NC-4.0",
+  "environment": {
+    "os": "macOS",
+    "architecture": "arm64",
+    "node": "24.15.0",
+    "browser": "Google Chrome 152.0.7977.76",
+    "installationPnpm": "11.7.0"
+  },
+  "limitations": [
+    "Executed on this macOS arm64 host with an isolated web profile and no model credentials. No Linux, Windows, other-browser, user-session or model-call coverage is claimed.",
+    "Light/dark checks use the browser system color-scheme setting. The skin artwork intentionally keeps its own visual character.",
+    "On a 390px screen, the built-in sidebar was collapsed before checking the main view and skin controls.",
+    "Focus/guide state resets according to the original plugin behavior; only skin activation and rendering are required to survive a process restart."
+  ],
+  "visualReview": {
+    "desktopLight": true,
+    "desktopDark": true,
+    "narrowControls": true,
+    "removedBaseline": true
+  },
+  "adaptation": {
+    "author": "DSH Themes contributors",
+    "sourcePath": "assets/alpha/xiaoyao/packages/sky-lab",
+    "license": "MIT AND CC-BY-NC-4.0",
+    "description": "DSH Themes Alpha CSS specificity and current sidebar/conversation/details layout selectors. Sky Lab adds a dark reading surface. Original code/art attribution and licenses retained."
+  },
+  "evidence": [
+    {
+      "path": "output/playwright/community-alpha/2309/cold.png",
+      "sha256": "ce32cff57581112725b4ff5b2123f238690d120c1f264c33c21d93928834c77b",
+      "bytes": 933908
+    },
+    {
+      "path": "output/playwright/community-alpha/2309/dark.png",
+      "sha256": "f3a53b0d1d3beb717f20a4172a87084b20165fbc8da8ac088d4a3bf6a05841ba",
+      "bytes": 933862
+    },
+    {
+      "path": "output/playwright/community-alpha/2309/light.png",
+      "sha256": "266beee02d642b145c329e39a890b799eb0160dee2689554e8a756aebb721556",
+      "bytes": 1274165
+    },
+    {
+      "path": "output/playwright/community-alpha/2309/narrow-final.png",
+      "sha256": "a76b9e3a747d4ce56d109d55d07e8bc232da0c96d6743ced505db3d585c43a3a",
+      "bytes": 366805
+    },
+    {
+      "path": "output/playwright/community-alpha/2309/removed.png",
+      "sha256": "55808054eb754e42f701eec53fe2e8984eb043e2a1b7c6d93d0e7d45ac6cbc07",
+      "bytes": 30163
+    }
+  ]
+}

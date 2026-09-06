@@ -1,0 +1,30 @@
+[
+  {
+    "catalogId": 3050,
+    "sourceRepository": "titanwings/dsh-automation",
+    "sourceRevision": "17bfe356d71e9b7455663b294afa43315a1ffc37",
+    "url": "https://codeload.github.com/titanwings/dsh-automation/tar.gz/17bfe356d71e9b7455663b294afa43315a1ffc37",
+    "sha256": "e28ced004543d25aff20d01e76f60e3d794306dad18cbf15343e10c5d1f0ba42",
+    "bytes": 2931217,
+    "packageName": "@dsh-external/dsh-automation",
+    "changes": [
+      "Keep the complete upstream compiled host and client, including bundled Luxon and Zod; remove only their redundant external dependency declarations after checking the compiled imports.",
+      "Remove the obsolete dsh-client-runtime injector; the client uses the separately declared locale, conversation, sidebar and connection services.",
+      "Read both live Session event histories through snapshotEvents(), preserving the original scheduled-run result and owned-session checks."
+    ]
+  },
+  {
+    "catalogId": 3091,
+    "packageName": "dsh-memory-evolve",
+    "sourceRepository": "csyangwen/dsh-memory-evolve",
+    "sourceRevision": "999a0edb39894ebb2c5ceeb97712db8c3a9c5093",
+    "url": "https://codeload.github.com/csyangwen/dsh-memory-evolve/tar.gz/999a0edb39894ebb2c5ceeb97712db8c3a9c5093",
+    "sha256": "b567f2a3a237186da84e576617e154a1d4b113a25a53914ba51b8a7f0bf6376b",
+    "bytes": 5619260,
+    "changes": [
+      "Preserve the complete upstream host, client, vendor Mermaid renderer, skills and documentation. Omit repository-only tests and source maps from the distribution.",
+      "Read the live advisor Session event history through snapshotEvents(), preserving the observer behavior; remove the obsolete unused client-runtime injector.",
+      "Read the authoritative runtime configuration before probing the seven optional modules, retaining their existing disabled state and error handling without issuing requests to unregistered routes."
+    ]
+  }
+]

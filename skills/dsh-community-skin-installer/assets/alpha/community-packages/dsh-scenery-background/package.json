@@ -1,0 +1,52 @@
+{
+  "name": "@dsh-themes/community-dsh-scenery-background",
+  "version": "1.0.0-dsh-alpha.1",
+  "description": "山海背景每日轮换插件：唯美的山·海大美景色背景（每日一图 / 循环轮播）、毛玻璃半透明界面、悬浮控制按钮。",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [],
+      "platform": "web"
+    }
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "LICENSE",
+    "README.md",
+    "DSH-ALPHA-ADAPTATION.json"
+  ],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "background",
+    "scenery",
+    "wallpaper",
+    "mountain",
+    "sea"
+  ],
+  "license": "MIT",
+  "author": "slowsnail <671645@qq.com>",
+  "homepage": "https://github.com/soslowsnail/dsh-scenery-background#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soslowsnail/dsh-scenery-background.git"
+  },
+  "bugs": {
+    "url": "https://github.com/soslowsnail/dsh-scenery-background/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,2930 @@
+{
+  "schemaVersion": 1,
+  "stage": "final",
+  "status": "passed",
+  "indexSha256": "fe689b334694b4acc0da8d42adba4a84ecf1a8533e24c71b6dbb1dd67b9d35de",
+  "dshVersion": "0.1.3-alpha.1",
+  "sourceCommit": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "requestedSlugs": [],
+  "results": [
+    {
+      "catalogId": 2001,
+      "slug": "abyssal-maid",
+      "kind": "full-skin",
+      "status": "passed",
+      "artifactSha256": "6bd91fda57faf6df29509bfd5f7509300fdc8f0709816b109ffca90b484653b4",
+      "manifestSha256": "cd68a6e74ba1cdca7de4f3a771e98d7ed8be01bf1b2c10bb15e155b0f9e7706f",
+      "packedManifestSha256": "8789983d9ad9fdbdc991f678c499314a5bc8523eb43074e6e00edb735c4f07bc",
+      "rendered": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": "abyssal-maid",
+          "backgroundImage": "linear-gradient(rgba(6, 19, 33, 0.12), rgba(6, 19, 33, 0.12)), url(\"http://127.0.0.1:4015/__dsh-themes/abyssal-maid/assets/6ca73fd6c2426e5421f0cfeb9e61f19303d31c0aa539aae63df3ddd8eb0aa08c.webp\")",
+          "stylesheet": "/__dsh-themes/abyssal-maid/skin.css",
+          "tokens": {
+            "--dsw-alias-bg-base": "#061321E8",
+            "--dsw-alias-bg-layer-1": "#0A1C2BE6",
+            "--dsw-alias-bg-layer-2": "#102A40E0",
+            "--dsw-alias-bg-overlay": "#15344CEB",
+            "--dsw-alias-border-l1": "#2A6382",
+            "--dsw-alias-border-l2": "#55A9D2",
+            "--dsw-alias-brand-primary": "#56C5FF",
+            "--dsw-alias-label-primary": "#F2FAFF",
+            "--dsw-alias-label-secondary": "#B4D5E8",
+            "--dsw-alias-state-error-primary": "#FF8294",
+            "--dsw-alias-state-success-primary": "#56E2BD",
+            "--dsw-alias-state-warn-primary": "#FFD078",
+            "--dsw-specific-sidebar-fill": "#071827EB"
+          }
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "tokens": {
+              "--dsw-alias-bg-base": "#EAF6FFD9",
+              "--dsw-alias-bg-layer-1": "#FFFFFFE8",
+              "--dsw-alias-bg-layer-2": "#D9EEFFE0",
+              "--dsw-alias-bg-overlay": "#F8FCFFF0",
+              "--dsw-alias-border-l1": "#A8D6F0",
+              "--dsw-alias-border-l2": "#68B3DD",
+              "--dsw-alias-brand-primary": "#0A75D8",
+              "--dsw-alias-label-primary": "#082A45",
+              "--dsw-alias-label-secondary": "#3D6680",
+              "--dsw-alias-state-error-primary": "#B8334A",
+              "--dsw-alias-state-success-primary": "#087A66",
+              "--dsw-alias-state-warn-primary": "#96600D",
+              "--dsw-specific-sidebar-fill": "#D7EDFAE8"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/abyssal-maid/skin.css",
+                "status": 200,
+                "sha256": "d4bc4e56f3746bf401080e848185a5c01532466a95a8d4fc42b57479b0349f78",
+                "expectedSha256": "d4bc4e56f3746bf401080e848185a5c01532466a95a8d4fc42b57479b0349f78",
+                "sizeBytes": 5550
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/abyssal-maid/assets/7b2a8a8f1c321f136579872a565ec7b37da55627f6fab4beb426f84c3fa0b21a.webp",
+                "status": 200,
+                "sha256": "7b2a8a8f1c321f136579872a565ec7b37da55627f6fab4beb426f84c3fa0b21a",
+                "expectedSha256": "7b2a8a8f1c321f136579872a565ec7b37da55627f6fab4beb426f84c3fa0b21a",
+                "sizeBytes": 154566
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/abyssal-maid/assets/42016dc4724f7c263f62ee975f2d9616fe74cc41478dbefbfbd42d0bf5b43ad7.webp",
+                "status": 200,
+                "sha256": "42016dc4724f7c263f62ee975f2d9616fe74cc41478dbefbfbd42d0bf5b43ad7",
+                "expectedSha256": "42016dc4724f7c263f62ee975f2d9616fe74cc41478dbefbfbd42d0bf5b43ad7",
+                "sizeBytes": 130652
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/abyssal-maid/assets/d6514935e5fa91f69fffa5db10205da6be12fd6ae88b00c3a53725953da6ee7c.webp",
+                "status": 200,
+                "sha256": "d6514935e5fa91f69fffa5db10205da6be12fd6ae88b00c3a53725953da6ee7c",
+                "expectedSha256": "d6514935e5fa91f69fffa5db10205da6be12fd6ae88b00c3a53725953da6ee7c",
+                "sizeBytes": 69642
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/abyssal-maid/assets/6ca73fd6c2426e5421f0cfeb9e61f19303d31c0aa539aae63df3ddd8eb0aa08c.webp",
+                "status": 200,
+                "sha256": "6ca73fd6c2426e5421f0cfeb9e61f19303d31c0aa539aae63df3ddd8eb0aa08c",
+                "expectedSha256": "6ca73fd6c2426e5421f0cfeb9e61f19303d31c0aa539aae63df3ddd8eb0aa08c",
+                "sizeBytes": 168396
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/abyssal-maid/assets/5b0795cca1a6673ba81b6470c72e7b1414a18269ea3b4573a063c11601445689.webp",
+                "status": 200,
+                "sha256": "5b0795cca1a6673ba81b6470c72e7b1414a18269ea3b4573a063c11601445689",
+                "expectedSha256": "5b0795cca1a6673ba81b6470c72e7b1414a18269ea3b4573a063c11601445689",
+                "sizeBytes": 123696
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/abyssal-maid/assets/c8395b39b5109a599cc893109ea440461d15b41b7f85fe99179d3a77170d7bc6.webp",
+                "status": 200,
+                "sha256": "c8395b39b5109a599cc893109ea440461d15b41b7f85fe99179d3a77170d7bc6",
+                "expectedSha256": "c8395b39b5109a599cc893109ea440461d15b41b7f85fe99179d3a77170d7bc6",
+                "sizeBytes": 56590
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/abyssal-maid/assets/4043c86be1ece49d20a24d5965729d3536663804d9925f222c8c2495ec77c3a1.webp",
+                "status": 200,
+                "sha256": "4043c86be1ece49d20a24d5965729d3536663804d9925f222c8c2495ec77c3a1",
+                "expectedSha256": "4043c86be1ece49d20a24d5965729d3536663804d9925f222c8c2495ec77c3a1",
+                "sizeBytes": 49244
+              }
+            ],
+            "dataSkin": "abyssal-maid",
+            "dark": false,
+            "colorScheme": "light",
+            "bodyBackground": "rgba(234, 246, 255, 0.85)",
+            "backgroundImage": "linear-gradient(rgba(234, 246, 255, 0.067), rgba(234, 246, 255, 0.067)), url(\"http://127.0.0.1:4015/__dsh-themes/abyssal-maid/assets/7b2a8a8f1c321f136579872a565ec7b37da55627f6fab4beb426f84c3fa0b21a.webp\")",
+            "stylesheet": "/__dsh-themes/abyssal-maid/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          },
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#061321E8",
+              "--dsw-alias-bg-layer-1": "#0A1C2BE6",
+              "--dsw-alias-bg-layer-2": "#102A40E0",
+              "--dsw-alias-bg-overlay": "#15344CEB",
+              "--dsw-alias-border-l1": "#2A6382",
+              "--dsw-alias-border-l2": "#55A9D2",
+              "--dsw-alias-brand-primary": "#56C5FF",
+              "--dsw-alias-label-primary": "#F2FAFF",
+              "--dsw-alias-label-secondary": "#B4D5E8",
+              "--dsw-alias-state-error-primary": "#FF8294",
+              "--dsw-alias-state-success-primary": "#56E2BD",
+              "--dsw-alias-state-warn-primary": "#FFD078",
+              "--dsw-specific-sidebar-fill": "#071827EB"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/abyssal-maid/skin.css",
+                "status": 200,
+                "sha256": "d4bc4e56f3746bf401080e848185a5c01532466a95a8d4fc42b57479b0349f78",
+                "expectedSha256": "d4bc4e56f3746bf401080e848185a5c01532466a95a8d4fc42b57479b0349f78",
+                "sizeBytes": 5550
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/abyssal-maid/assets/7b2a8a8f1c321f136579872a565ec7b37da55627f6fab4beb426f84c3fa0b21a.webp",
+                "status": 200,
+                "sha256": "7b2a8a8f1c321f136579872a565ec7b37da55627f6fab4beb426f84c3fa0b21a",
+                "expectedSha256": "7b2a8a8f1c321f136579872a565ec7b37da55627f6fab4beb426f84c3fa0b21a",
+                "sizeBytes": 154566
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/abyssal-maid/assets/42016dc4724f7c263f62ee975f2d9616fe74cc41478dbefbfbd42d0bf5b43ad7.webp",
+                "status": 200,
+                "sha256": "42016dc4724f7c263f62ee975f2d9616fe74cc41478dbefbfbd42d0bf5b43ad7",
+                "expectedSha256": "42016dc4724f7c263f62ee975f2d9616fe74cc41478dbefbfbd42d0bf5b43ad7",
+                "sizeBytes": 130652
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/abyssal-maid/assets/d6514935e5fa91f69fffa5db10205da6be12fd6ae88b00c3a53725953da6ee7c.webp",
+                "status": 200,
+                "sha256": "d6514935e5fa91f69fffa5db10205da6be12fd6ae88b00c3a53725953da6ee7c",
+                "expectedSha256": "d6514935e5fa91f69fffa5db10205da6be12fd6ae88b00c3a53725953da6ee7c",
+                "sizeBytes": 69642
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/abyssal-maid/assets/6ca73fd6c2426e5421f0cfeb9e61f19303d31c0aa539aae63df3ddd8eb0aa08c.webp",
+                "status": 200,
+                "sha256": "6ca73fd6c2426e5421f0cfeb9e61f19303d31c0aa539aae63df3ddd8eb0aa08c",
+                "expectedSha256": "6ca73fd6c2426e5421f0cfeb9e61f19303d31c0aa539aae63df3ddd8eb0aa08c",
+                "sizeBytes": 168396
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/abyssal-maid/assets/5b0795cca1a6673ba81b6470c72e7b1414a18269ea3b4573a063c11601445689.webp",
+                "status": 200,
+                "sha256": "5b0795cca1a6673ba81b6470c72e7b1414a18269ea3b4573a063c11601445689",
+                "expectedSha256": "5b0795cca1a6673ba81b6470c72e7b1414a18269ea3b4573a063c11601445689",
+                "sizeBytes": 123696
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/abyssal-maid/assets/c8395b39b5109a599cc893109ea440461d15b41b7f85fe99179d3a77170d7bc6.webp",
+                "status": 200,
+                "sha256": "c8395b39b5109a599cc893109ea440461d15b41b7f85fe99179d3a77170d7bc6",
+                "expectedSha256": "c8395b39b5109a599cc893109ea440461d15b41b7f85fe99179d3a77170d7bc6",
+                "sizeBytes": 56590
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/abyssal-maid/assets/4043c86be1ece49d20a24d5965729d3536663804d9925f222c8c2495ec77c3a1.webp",
+                "status": 200,
+                "sha256": "4043c86be1ece49d20a24d5965729d3536663804d9925f222c8c2495ec77c3a1",
+                "expectedSha256": "4043c86be1ece49d20a24d5965729d3536663804d9925f222c8c2495ec77c3a1",
+                "sizeBytes": 49244
+              }
+            ],
+            "dataSkin": "abyssal-maid",
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgba(6, 19, 33, 0.91)",
+            "backgroundImage": "linear-gradient(rgba(6, 19, 33, 0.12), rgba(6, 19, 33, 0.12)), url(\"http://127.0.0.1:4015/__dsh-themes/abyssal-maid/assets/6ca73fd6c2426e5421f0cfeb9e61f19303d31c0aa539aae63df3ddd8eb0aa08c.webp\")",
+            "stylesheet": "/__dsh-themes/abyssal-maid/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "disk": {
+        "freeBeforeBytes": 2525614080,
+        "freeAfterBytes": 2481987584
+      },
+      "coldRestart": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": "abyssal-maid",
+          "backgroundImage": "linear-gradient(rgba(6, 19, 33, 0.12), rgba(6, 19, 33, 0.12)), url(\"http://127.0.0.1:4015/__dsh-themes/abyssal-maid/assets/6ca73fd6c2426e5421f0cfeb9e61f19303d31c0aa539aae63df3ddd8eb0aa08c.webp\")",
+          "stylesheet": "/__dsh-themes/abyssal-maid/skin.css",
+          "tokens": {
+            "--dsw-alias-bg-base": "#061321E8",
+            "--dsw-alias-bg-layer-1": "#0A1C2BE6",
+            "--dsw-alias-bg-layer-2": "#102A40E0",
+            "--dsw-alias-bg-overlay": "#15344CEB",
+            "--dsw-alias-border-l1": "#2A6382",
+            "--dsw-alias-border-l2": "#55A9D2",
+            "--dsw-alias-brand-primary": "#56C5FF",
+            "--dsw-alias-label-primary": "#F2FAFF",
+            "--dsw-alias-label-secondary": "#B4D5E8",
+            "--dsw-alias-state-error-primary": "#FF8294",
+            "--dsw-alias-state-success-primary": "#56E2BD",
+            "--dsw-alias-state-warn-primary": "#FFD078",
+            "--dsw-specific-sidebar-fill": "#071827EB"
+          }
+        },
+        "modes": [
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#061321E8",
+              "--dsw-alias-bg-layer-1": "#0A1C2BE6",
+              "--dsw-alias-bg-layer-2": "#102A40E0",
+              "--dsw-alias-bg-overlay": "#15344CEB",
+              "--dsw-alias-border-l1": "#2A6382",
+              "--dsw-alias-border-l2": "#55A9D2",
+              "--dsw-alias-brand-primary": "#56C5FF",
+              "--dsw-alias-label-primary": "#F2FAFF",
+              "--dsw-alias-label-secondary": "#B4D5E8",
+              "--dsw-alias-state-error-primary": "#FF8294",
+              "--dsw-alias-state-success-primary": "#56E2BD",
+              "--dsw-alias-state-warn-primary": "#FFD078",
+              "--dsw-specific-sidebar-fill": "#071827EB"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/abyssal-maid/skin.css",
+                "status": 200,
+                "sha256": "d4bc4e56f3746bf401080e848185a5c01532466a95a8d4fc42b57479b0349f78",
+                "expectedSha256": "d4bc4e56f3746bf401080e848185a5c01532466a95a8d4fc42b57479b0349f78",
+                "sizeBytes": 5550
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/abyssal-maid/assets/7b2a8a8f1c321f136579872a565ec7b37da55627f6fab4beb426f84c3fa0b21a.webp",
+                "status": 200,
+                "sha256": "7b2a8a8f1c321f136579872a565ec7b37da55627f6fab4beb426f84c3fa0b21a",
+                "expectedSha256": "7b2a8a8f1c321f136579872a565ec7b37da55627f6fab4beb426f84c3fa0b21a",
+                "sizeBytes": 154566
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/abyssal-maid/assets/42016dc4724f7c263f62ee975f2d9616fe74cc41478dbefbfbd42d0bf5b43ad7.webp",
+                "status": 200,
+                "sha256": "42016dc4724f7c263f62ee975f2d9616fe74cc41478dbefbfbd42d0bf5b43ad7",
+                "expectedSha256": "42016dc4724f7c263f62ee975f2d9616fe74cc41478dbefbfbd42d0bf5b43ad7",
+                "sizeBytes": 130652
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/abyssal-maid/assets/d6514935e5fa91f69fffa5db10205da6be12fd6ae88b00c3a53725953da6ee7c.webp",
+                "status": 200,
+                "sha256": "d6514935e5fa91f69fffa5db10205da6be12fd6ae88b00c3a53725953da6ee7c",
+                "expectedSha256": "d6514935e5fa91f69fffa5db10205da6be12fd6ae88b00c3a53725953da6ee7c",
+                "sizeBytes": 69642
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/abyssal-maid/assets/6ca73fd6c2426e5421f0cfeb9e61f19303d31c0aa539aae63df3ddd8eb0aa08c.webp",
+                "status": 200,
+                "sha256": "6ca73fd6c2426e5421f0cfeb9e61f19303d31c0aa539aae63df3ddd8eb0aa08c",
+                "expectedSha256": "6ca73fd6c2426e5421f0cfeb9e61f19303d31c0aa539aae63df3ddd8eb0aa08c",
+                "sizeBytes": 168396
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/abyssal-maid/assets/5b0795cca1a6673ba81b6470c72e7b1414a18269ea3b4573a063c11601445689.webp",
+                "status": 200,
+                "sha256": "5b0795cca1a6673ba81b6470c72e7b1414a18269ea3b4573a063c11601445689",
+                "expectedSha256": "5b0795cca1a6673ba81b6470c72e7b1414a18269ea3b4573a063c11601445689",
+                "sizeBytes": 123696
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/abyssal-maid/assets/c8395b39b5109a599cc893109ea440461d15b41b7f85fe99179d3a77170d7bc6.webp",
+                "status": 200,
+                "sha256": "c8395b39b5109a599cc893109ea440461d15b41b7f85fe99179d3a77170d7bc6",
+                "expectedSha256": "c8395b39b5109a599cc893109ea440461d15b41b7f85fe99179d3a77170d7bc6",
+                "sizeBytes": 56590
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/abyssal-maid/assets/4043c86be1ece49d20a24d5965729d3536663804d9925f222c8c2495ec77c3a1.webp",
+                "status": 200,
+                "sha256": "4043c86be1ece49d20a24d5965729d3536663804d9925f222c8c2495ec77c3a1",
+                "expectedSha256": "4043c86be1ece49d20a24d5965729d3536663804d9925f222c8c2495ec77c3a1",
+                "sizeBytes": 49244
+              }
+            ],
+            "dataSkin": "abyssal-maid",
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgba(6, 19, 33, 0.91)",
+            "backgroundImage": "linear-gradient(rgba(6, 19, 33, 0.12), rgba(6, 19, 33, 0.12)), url(\"http://127.0.0.1:4015/__dsh-themes/abyssal-maid/assets/6ca73fd6c2426e5421f0cfeb9e61f19303d31c0aa539aae63df3ddd8eb0aa08c.webp\")",
+            "stylesheet": "/__dsh-themes/abyssal-maid/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "recovery": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": null,
+          "backgroundImage": "none",
+          "stylesheet": null,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          }
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "tokens": {
+              "--dsw-alias-bg-base": "#fff",
+              "--dsw-alias-bg-layer-1": "#fff",
+              "--dsw-alias-bg-layer-2": "#fff",
+              "--dsw-alias-bg-overlay": "#e9ecf2",
+              "--dsw-alias-border-l1": "#0000000a",
+              "--dsw-alias-border-l2": "#0000001a",
+              "--dsw-alias-brand-primary": "#0f1115",
+              "--dsw-alias-label-primary": "#0f1115",
+              "--dsw-alias-label-secondary": "#61666b",
+              "--dsw-alias-state-error-primary": "#ec1313",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#f9fafb"
+            },
+            "resources": [],
+            "dataSkin": null,
+            "dark": false,
+            "colorScheme": "light",
+            "bodyBackground": "rgb(255, 255, 255)",
+            "backgroundImage": "none",
+            "stylesheet": null,
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          },
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#151517",
+              "--dsw-alias-bg-layer-1": "#232324",
+              "--dsw-alias-bg-layer-2": "#2c2c2e",
+              "--dsw-alias-bg-overlay": "#61666b",
+              "--dsw-alias-border-l1": "#ffffff0f",
+              "--dsw-alias-border-l2": "#ffffff1f",
+              "--dsw-alias-brand-primary": "#f9fafb",
+              "--dsw-alias-label-primary": "#f9fafb",
+              "--dsw-alias-label-secondary": "#cfd3d6",
+              "--dsw-alias-state-error-primary": "#f25a5a",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#1b1b1c"
+            },
+            "resources": [],
+            "dataSkin": null,
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgb(21, 21, 23)",
+            "backgroundImage": "none",
+            "stylesheet": null,
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [
+          {
+            "url": "/__dsh-themes/abyssal-maid/skin.css",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/abyssal-maid/assets/7b2a8a8f1c321f136579872a565ec7b37da55627f6fab4beb426f84c3fa0b21a.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/abyssal-maid/assets/42016dc4724f7c263f62ee975f2d9616fe74cc41478dbefbfbd42d0bf5b43ad7.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/abyssal-maid/assets/d6514935e5fa91f69fffa5db10205da6be12fd6ae88b00c3a53725953da6ee7c.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/abyssal-maid/assets/6ca73fd6c2426e5421f0cfeb9e61f19303d31c0aa539aae63df3ddd8eb0aa08c.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/abyssal-maid/assets/5b0795cca1a6673ba81b6470c72e7b1414a18269ea3b4573a063c11601445689.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/abyssal-maid/assets/c8395b39b5109a599cc893109ea440461d15b41b7f85fe99179d3a77170d7bc6.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/abyssal-maid/assets/4043c86be1ece49d20a24d5965729d3536663804d9925f222c8c2495ec77c3a1.webp",
+            "status": 404
+          }
+        ],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "completedAt": "2026-09-06T06:01:05.952Z"
+    },
+    {
+      "catalogId": 2004,
+      "slug": "copper-wire",
+      "kind": "full-skin",
+      "status": "passed",
+      "artifactSha256": "817c512fcbff541410c080890682c7f383bcbdb1e413871d38bee8204d1e2537",
+      "manifestSha256": "5af5b3b64913c53d3b5cf132cfec09456807ceb4db7ae302ad16339793565d29",
+      "packedManifestSha256": "7b0bf2fe9909ca6f4bbc9e131b80c9a203008cfb9ae26c6ea84386a2ac7b014a",
+      "rendered": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": "copper-wire",
+          "backgroundImage": "linear-gradient(rgba(11, 13, 12, 0.16), rgba(11, 13, 12, 0.16)), url(\"http://127.0.0.1:4015/__dsh-themes/copper-wire/assets/b39cc1289a0c0bbdbcea2bcbd9b63b6fe0c9be75babfabd5d5b97c27c6f692d1.webp\")",
+          "stylesheet": "/__dsh-themes/copper-wire/skin.css",
+          "tokens": {
+            "--dsw-alias-bg-base": "#0B0D0CF7",
+            "--dsw-alias-bg-layer-1": "#161713F5",
+            "--dsw-alias-bg-layer-2": "#25231BF3",
+            "--dsw-alias-bg-overlay": "#302D22F4",
+            "--dsw-alias-border-l1": "#4F503F",
+            "--dsw-alias-border-l2": "#8E7752",
+            "--dsw-alias-brand-primary": "#7DD3B7",
+            "--dsw-alias-label-primary": "#FFF4DC",
+            "--dsw-alias-label-secondary": "#D2C2A1",
+            "--dsw-alias-state-error-primary": "#FF7D73",
+            "--dsw-alias-state-success-primary": "#69D4A2",
+            "--dsw-alias-state-warn-primary": "#F4BE68",
+            "--dsw-specific-sidebar-fill": "#11130FF6"
+          }
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "tokens": {
+              "--dsw-alias-bg-base": "#F2E8D6F4",
+              "--dsw-alias-bg-layer-1": "#FFF8EBF6",
+              "--dsw-alias-bg-layer-2": "#E2D2B9F2",
+              "--dsw-alias-bg-overlay": "#F8EEDDF5",
+              "--dsw-alias-border-l1": "#B79D78",
+              "--dsw-alias-border-l2": "#7B674A",
+              "--dsw-alias-brand-primary": "#146A5B",
+              "--dsw-alias-label-primary": "#2A2118",
+              "--dsw-alias-label-secondary": "#665743",
+              "--dsw-alias-state-error-primary": "#B3302E",
+              "--dsw-alias-state-success-primary": "#2C7456",
+              "--dsw-alias-state-warn-primary": "#986017",
+              "--dsw-specific-sidebar-fill": "#E4D4BAF3"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/copper-wire/skin.css",
+                "status": 200,
+                "sha256": "085da101a7a627a39be3dce584257d4ebd984bc454e0b429e728931befb2c350",
+                "expectedSha256": "085da101a7a627a39be3dce584257d4ebd984bc454e0b429e728931befb2c350",
+                "sizeBytes": 5373
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/copper-wire/assets/6abd344662d4f4584105d0f27023fba33a846f5a457f0a716d507b83db96f640.webp",
+                "status": 200,
+                "sha256": "6abd344662d4f4584105d0f27023fba33a846f5a457f0a716d507b83db96f640",
+                "expectedSha256": "6abd344662d4f4584105d0f27023fba33a846f5a457f0a716d507b83db96f640",
+                "sizeBytes": 80638
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/copper-wire/assets/9db67e0d8252c437589be832cc903266af5251b1caf1e8a45980ec7b4b3ad369.webp",
+                "status": 200,
+                "sha256": "9db67e0d8252c437589be832cc903266af5251b1caf1e8a45980ec7b4b3ad369",
+                "expectedSha256": "9db67e0d8252c437589be832cc903266af5251b1caf1e8a45980ec7b4b3ad369",
+                "sizeBytes": 80890
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/copper-wire/assets/0816a6118f63d8e68a7c3486ab4ebc8efed3326d42b140f0c988f0ea9ba93bc3.webp",
+                "status": 200,
+                "sha256": "0816a6118f63d8e68a7c3486ab4ebc8efed3326d42b140f0c988f0ea9ba93bc3",
+                "expectedSha256": "0816a6118f63d8e68a7c3486ab4ebc8efed3326d42b140f0c988f0ea9ba93bc3",
+                "sizeBytes": 27576
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/copper-wire/assets/b39cc1289a0c0bbdbcea2bcbd9b63b6fe0c9be75babfabd5d5b97c27c6f692d1.webp",
+                "status": 200,
+                "sha256": "b39cc1289a0c0bbdbcea2bcbd9b63b6fe0c9be75babfabd5d5b97c27c6f692d1",
+                "expectedSha256": "b39cc1289a0c0bbdbcea2bcbd9b63b6fe0c9be75babfabd5d5b97c27c6f692d1",
+                "sizeBytes": 97610
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/copper-wire/assets/2265f1fd0fbd0bd1252b32251ff9b6ac9c3a205331536f390e79d850a34c8058.webp",
+                "status": 200,
+                "sha256": "2265f1fd0fbd0bd1252b32251ff9b6ac9c3a205331536f390e79d850a34c8058",
+                "expectedSha256": "2265f1fd0fbd0bd1252b32251ff9b6ac9c3a205331536f390e79d850a34c8058",
+                "sizeBytes": 86880
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/copper-wire/assets/fe42b7374fbd376a9d9d99960f36f4f07d07ebe3a5bc8851a67baba698ce9207.webp",
+                "status": 200,
+                "sha256": "fe42b7374fbd376a9d9d99960f36f4f07d07ebe3a5bc8851a67baba698ce9207",
+                "expectedSha256": "fe42b7374fbd376a9d9d99960f36f4f07d07ebe3a5bc8851a67baba698ce9207",
+                "sizeBytes": 32308
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/copper-wire/assets/0164eb6e1f4ddc14d8ddd3dfb8fecfbdc631518d2a9aa17bbc01760658e1d3cc.webp",
+                "status": 200,
+                "sha256": "0164eb6e1f4ddc14d8ddd3dfb8fecfbdc631518d2a9aa17bbc01760658e1d3cc",
+                "expectedSha256": "0164eb6e1f4ddc14d8ddd3dfb8fecfbdc631518d2a9aa17bbc01760658e1d3cc",
+                "sizeBytes": 27420
+              }
+            ],
+            "dataSkin": "copper-wire",
+            "dark": false,
+            "colorScheme": "light",
+            "bodyBackground": "rgba(242, 232, 214, 0.957)",
+            "backgroundImage": "linear-gradient(rgba(242, 232, 214, 0.086), rgba(242, 232, 214, 0.086)), url(\"http://127.0.0.1:4015/__dsh-themes/copper-wire/assets/6abd344662d4f4584105d0f27023fba33a846f5a457f0a716d507b83db96f640.webp\")",
+            "stylesheet": "/__dsh-themes/copper-wire/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          },
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#0B0D0CF7",
+              "--dsw-alias-bg-layer-1": "#161713F5",
+              "--dsw-alias-bg-layer-2": "#25231BF3",
+              "--dsw-alias-bg-overlay": "#302D22F4",
+              "--dsw-alias-border-l1": "#4F503F",
+              "--dsw-alias-border-l2": "#8E7752",
+              "--dsw-alias-brand-primary": "#7DD3B7",
+              "--dsw-alias-label-primary": "#FFF4DC",
+              "--dsw-alias-label-secondary": "#D2C2A1",
+              "--dsw-alias-state-error-primary": "#FF7D73",
+              "--dsw-alias-state-success-primary": "#69D4A2",
+              "--dsw-alias-state-warn-primary": "#F4BE68",
+              "--dsw-specific-sidebar-fill": "#11130FF6"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/copper-wire/skin.css",
+                "status": 200,
+                "sha256": "085da101a7a627a39be3dce584257d4ebd984bc454e0b429e728931befb2c350",
+                "expectedSha256": "085da101a7a627a39be3dce584257d4ebd984bc454e0b429e728931befb2c350",
+                "sizeBytes": 5373
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/copper-wire/assets/6abd344662d4f4584105d0f27023fba33a846f5a457f0a716d507b83db96f640.webp",
+                "status": 200,
+                "sha256": "6abd344662d4f4584105d0f27023fba33a846f5a457f0a716d507b83db96f640",
+                "expectedSha256": "6abd344662d4f4584105d0f27023fba33a846f5a457f0a716d507b83db96f640",
+                "sizeBytes": 80638
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/copper-wire/assets/9db67e0d8252c437589be832cc903266af5251b1caf1e8a45980ec7b4b3ad369.webp",
+                "status": 200,
+                "sha256": "9db67e0d8252c437589be832cc903266af5251b1caf1e8a45980ec7b4b3ad369",
+                "expectedSha256": "9db67e0d8252c437589be832cc903266af5251b1caf1e8a45980ec7b4b3ad369",
+                "sizeBytes": 80890
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/copper-wire/assets/0816a6118f63d8e68a7c3486ab4ebc8efed3326d42b140f0c988f0ea9ba93bc3.webp",
+                "status": 200,
+                "sha256": "0816a6118f63d8e68a7c3486ab4ebc8efed3326d42b140f0c988f0ea9ba93bc3",
+                "expectedSha256": "0816a6118f63d8e68a7c3486ab4ebc8efed3326d42b140f0c988f0ea9ba93bc3",
+                "sizeBytes": 27576
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/copper-wire/assets/b39cc1289a0c0bbdbcea2bcbd9b63b6fe0c9be75babfabd5d5b97c27c6f692d1.webp",
+                "status": 200,
+                "sha256": "b39cc1289a0c0bbdbcea2bcbd9b63b6fe0c9be75babfabd5d5b97c27c6f692d1",
+                "expectedSha256": "b39cc1289a0c0bbdbcea2bcbd9b63b6fe0c9be75babfabd5d5b97c27c6f692d1",
+                "sizeBytes": 97610
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/copper-wire/assets/2265f1fd0fbd0bd1252b32251ff9b6ac9c3a205331536f390e79d850a34c8058.webp",
+                "status": 200,
+                "sha256": "2265f1fd0fbd0bd1252b32251ff9b6ac9c3a205331536f390e79d850a34c8058",
+                "expectedSha256": "2265f1fd0fbd0bd1252b32251ff9b6ac9c3a205331536f390e79d850a34c8058",
+                "sizeBytes": 86880
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/copper-wire/assets/fe42b7374fbd376a9d9d99960f36f4f07d07ebe3a5bc8851a67baba698ce9207.webp",
+                "status": 200,
+                "sha256": "fe42b7374fbd376a9d9d99960f36f4f07d07ebe3a5bc8851a67baba698ce9207",
+                "expectedSha256": "fe42b7374fbd376a9d9d99960f36f4f07d07ebe3a5bc8851a67baba698ce9207",
+                "sizeBytes": 32308
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/copper-wire/assets/0164eb6e1f4ddc14d8ddd3dfb8fecfbdc631518d2a9aa17bbc01760658e1d3cc.webp",
+                "status": 200,
+                "sha256": "0164eb6e1f4ddc14d8ddd3dfb8fecfbdc631518d2a9aa17bbc01760658e1d3cc",
+                "expectedSha256": "0164eb6e1f4ddc14d8ddd3dfb8fecfbdc631518d2a9aa17bbc01760658e1d3cc",
+                "sizeBytes": 27420
+              }
+            ],
+            "dataSkin": "copper-wire",
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgba(11, 13, 12, 0.97)",
+            "backgroundImage": "linear-gradient(rgba(11, 13, 12, 0.16), rgba(11, 13, 12, 0.16)), url(\"http://127.0.0.1:4015/__dsh-themes/copper-wire/assets/b39cc1289a0c0bbdbcea2bcbd9b63b6fe0c9be75babfabd5d5b97c27c6f692d1.webp\")",
+            "stylesheet": "/__dsh-themes/copper-wire/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "disk": {
+        "freeBeforeBytes": 2481963008,
+        "freeAfterBytes": 2448195584
+      },
+      "coldRestart": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": "copper-wire",
+          "backgroundImage": "linear-gradient(rgba(11, 13, 12, 0.16), rgba(11, 13, 12, 0.16)), url(\"http://127.0.0.1:4015/__dsh-themes/copper-wire/assets/b39cc1289a0c0bbdbcea2bcbd9b63b6fe0c9be75babfabd5d5b97c27c6f692d1.webp\")",
+          "stylesheet": "/__dsh-themes/copper-wire/skin.css",
+          "tokens": {
+            "--dsw-alias-bg-base": "#0B0D0CF7",
+            "--dsw-alias-bg-layer-1": "#161713F5",
+            "--dsw-alias-bg-layer-2": "#25231BF3",
+            "--dsw-alias-bg-overlay": "#302D22F4",
+            "--dsw-alias-border-l1": "#4F503F",
+            "--dsw-alias-border-l2": "#8E7752",
+            "--dsw-alias-brand-primary": "#7DD3B7",
+            "--dsw-alias-label-primary": "#FFF4DC",
+            "--dsw-alias-label-secondary": "#D2C2A1",
+            "--dsw-alias-state-error-primary": "#FF7D73",
+            "--dsw-alias-state-success-primary": "#69D4A2",
+            "--dsw-alias-state-warn-primary": "#F4BE68",
+            "--dsw-specific-sidebar-fill": "#11130FF6"
+          }
+        },
+        "modes": [
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#0B0D0CF7",
+              "--dsw-alias-bg-layer-1": "#161713F5",
+              "--dsw-alias-bg-layer-2": "#25231BF3",
+              "--dsw-alias-bg-overlay": "#302D22F4",
+              "--dsw-alias-border-l1": "#4F503F",
+              "--dsw-alias-border-l2": "#8E7752",
+              "--dsw-alias-brand-primary": "#7DD3B7",
+              "--dsw-alias-label-primary": "#FFF4DC",
+              "--dsw-alias-label-secondary": "#D2C2A1",
+              "--dsw-alias-state-error-primary": "#FF7D73",
+              "--dsw-alias-state-success-primary": "#69D4A2",
+              "--dsw-alias-state-warn-primary": "#F4BE68",
+              "--dsw-specific-sidebar-fill": "#11130FF6"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/copper-wire/skin.css",
+                "status": 200,
+                "sha256": "085da101a7a627a39be3dce584257d4ebd984bc454e0b429e728931befb2c350",
+                "expectedSha256": "085da101a7a627a39be3dce584257d4ebd984bc454e0b429e728931befb2c350",
+                "sizeBytes": 5373
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/copper-wire/assets/6abd344662d4f4584105d0f27023fba33a846f5a457f0a716d507b83db96f640.webp",
+                "status": 200,
+                "sha256": "6abd344662d4f4584105d0f27023fba33a846f5a457f0a716d507b83db96f640",
+                "expectedSha256": "6abd344662d4f4584105d0f27023fba33a846f5a457f0a716d507b83db96f640",
+                "sizeBytes": 80638
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/copper-wire/assets/9db67e0d8252c437589be832cc903266af5251b1caf1e8a45980ec7b4b3ad369.webp",
+                "status": 200,
+                "sha256": "9db67e0d8252c437589be832cc903266af5251b1caf1e8a45980ec7b4b3ad369",
+                "expectedSha256": "9db67e0d8252c437589be832cc903266af5251b1caf1e8a45980ec7b4b3ad369",
+                "sizeBytes": 80890
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/copper-wire/assets/0816a6118f63d8e68a7c3486ab4ebc8efed3326d42b140f0c988f0ea9ba93bc3.webp",
+                "status": 200,
+                "sha256": "0816a6118f63d8e68a7c3486ab4ebc8efed3326d42b140f0c988f0ea9ba93bc3",
+                "expectedSha256": "0816a6118f63d8e68a7c3486ab4ebc8efed3326d42b140f0c988f0ea9ba93bc3",
+                "sizeBytes": 27576
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/copper-wire/assets/b39cc1289a0c0bbdbcea2bcbd9b63b6fe0c9be75babfabd5d5b97c27c6f692d1.webp",
+                "status": 200,
+                "sha256": "b39cc1289a0c0bbdbcea2bcbd9b63b6fe0c9be75babfabd5d5b97c27c6f692d1",
+                "expectedSha256": "b39cc1289a0c0bbdbcea2bcbd9b63b6fe0c9be75babfabd5d5b97c27c6f692d1",
+                "sizeBytes": 97610
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/copper-wire/assets/2265f1fd0fbd0bd1252b32251ff9b6ac9c3a205331536f390e79d850a34c8058.webp",
+                "status": 200,
+                "sha256": "2265f1fd0fbd0bd1252b32251ff9b6ac9c3a205331536f390e79d850a34c8058",
+                "expectedSha256": "2265f1fd0fbd0bd1252b32251ff9b6ac9c3a205331536f390e79d850a34c8058",
+                "sizeBytes": 86880
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/copper-wire/assets/fe42b7374fbd376a9d9d99960f36f4f07d07ebe3a5bc8851a67baba698ce9207.webp",
+                "status": 200,
+                "sha256": "fe42b7374fbd376a9d9d99960f36f4f07d07ebe3a5bc8851a67baba698ce9207",
+                "expectedSha256": "fe42b7374fbd376a9d9d99960f36f4f07d07ebe3a5bc8851a67baba698ce9207",
+                "sizeBytes": 32308
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/copper-wire/assets/0164eb6e1f4ddc14d8ddd3dfb8fecfbdc631518d2a9aa17bbc01760658e1d3cc.webp",
+                "status": 200,
+                "sha256": "0164eb6e1f4ddc14d8ddd3dfb8fecfbdc631518d2a9aa17bbc01760658e1d3cc",
+                "expectedSha256": "0164eb6e1f4ddc14d8ddd3dfb8fecfbdc631518d2a9aa17bbc01760658e1d3cc",
+                "sizeBytes": 27420
+              }
+            ],
+            "dataSkin": "copper-wire",
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgba(11, 13, 12, 0.97)",
+            "backgroundImage": "linear-gradient(rgba(11, 13, 12, 0.16), rgba(11, 13, 12, 0.16)), url(\"http://127.0.0.1:4015/__dsh-themes/copper-wire/assets/b39cc1289a0c0bbdbcea2bcbd9b63b6fe0c9be75babfabd5d5b97c27c6f692d1.webp\")",
+            "stylesheet": "/__dsh-themes/copper-wire/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "recovery": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": null,
+          "backgroundImage": "none",
+          "stylesheet": null,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          }
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "tokens": {
+              "--dsw-alias-bg-base": "#fff",
+              "--dsw-alias-bg-layer-1": "#fff",
+              "--dsw-alias-bg-layer-2": "#fff",
+              "--dsw-alias-bg-overlay": "#e9ecf2",
+              "--dsw-alias-border-l1": "#0000000a",
+              "--dsw-alias-border-l2": "#0000001a",
+              "--dsw-alias-brand-primary": "#0f1115",
+              "--dsw-alias-label-primary": "#0f1115",
+              "--dsw-alias-label-secondary": "#61666b",
+              "--dsw-alias-state-error-primary": "#ec1313",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#f9fafb"
+            },
+            "resources": [],
+            "dataSkin": null,
+            "dark": false,
+            "colorScheme": "light",
+            "bodyBackground": "rgb(255, 255, 255)",
+            "backgroundImage": "none",
+            "stylesheet": null,
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          },
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#151517",
+              "--dsw-alias-bg-layer-1": "#232324",
+              "--dsw-alias-bg-layer-2": "#2c2c2e",
+              "--dsw-alias-bg-overlay": "#61666b",
+              "--dsw-alias-border-l1": "#ffffff0f",
+              "--dsw-alias-border-l2": "#ffffff1f",
+              "--dsw-alias-brand-primary": "#f9fafb",
+              "--dsw-alias-label-primary": "#f9fafb",
+              "--dsw-alias-label-secondary": "#cfd3d6",
+              "--dsw-alias-state-error-primary": "#f25a5a",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#1b1b1c"
+            },
+            "resources": [],
+            "dataSkin": null,
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgb(21, 21, 23)",
+            "backgroundImage": "none",
+            "stylesheet": null,
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [
+          {
+            "url": "/__dsh-themes/copper-wire/skin.css",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/copper-wire/assets/6abd344662d4f4584105d0f27023fba33a846f5a457f0a716d507b83db96f640.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/copper-wire/assets/9db67e0d8252c437589be832cc903266af5251b1caf1e8a45980ec7b4b3ad369.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/copper-wire/assets/0816a6118f63d8e68a7c3486ab4ebc8efed3326d42b140f0c988f0ea9ba93bc3.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/copper-wire/assets/b39cc1289a0c0bbdbcea2bcbd9b63b6fe0c9be75babfabd5d5b97c27c6f692d1.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/copper-wire/assets/2265f1fd0fbd0bd1252b32251ff9b6ac9c3a205331536f390e79d850a34c8058.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/copper-wire/assets/fe42b7374fbd376a9d9d99960f36f4f07d07ebe3a5bc8851a67baba698ce9207.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/copper-wire/assets/0164eb6e1f4ddc14d8ddd3dfb8fecfbdc631518d2a9aa17bbc01760658e1d3cc.webp",
+            "status": 404
+          }
+        ],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "completedAt": "2026-09-06T06:01:54.050Z"
+    },
+    {
+      "catalogId": 2006,
+      "slug": "quiet-matrix",
+      "kind": "full-skin",
+      "status": "passed",
+      "artifactSha256": "507bb24be7f4d2efd8523998287d3a6e532669cd6cfa72f008a3cc055d47386b",
+      "manifestSha256": "efb7631d6cc930aad257598284faa3e140da086a429f623280f8d5813998edd5",
+      "packedManifestSha256": "c1a7375cdb5020c195ba4a067782e6898f96a0fdd5a16f00f2ac7be674890f5a",
+      "rendered": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": "quiet-matrix",
+          "backgroundImage": "linear-gradient(rgba(3, 6, 4, 0.18), rgba(3, 6, 4, 0.18)), url(\"http://127.0.0.1:4015/__dsh-themes/quiet-matrix/assets/585de748fbf3cdfcecfbfcdd5c68ff205488350ce68a609544be563ebf31aa22.webp\")",
+          "stylesheet": "/__dsh-themes/quiet-matrix/skin.css",
+          "tokens": {
+            "--dsw-alias-bg-base": "#030604F7",
+            "--dsw-alias-bg-layer-1": "#070D09F5",
+            "--dsw-alias-bg-layer-2": "#0C1710F3",
+            "--dsw-alias-bg-overlay": "#102017F4",
+            "--dsw-alias-border-l1": "#263B2D",
+            "--dsw-alias-border-l2": "#477157",
+            "--dsw-alias-brand-primary": "#71D59A",
+            "--dsw-alias-label-primary": "#EDF8F1",
+            "--dsw-alias-label-secondary": "#A7BEAF",
+            "--dsw-alias-state-error-primary": "#FF8090",
+            "--dsw-alias-state-success-primary": "#68D293",
+            "--dsw-alias-state-warn-primary": "#DCCB77",
+            "--dsw-specific-sidebar-fill": "#050A07F6"
+          }
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "tokens": {
+              "--dsw-alias-bg-base": "#F3F7F4F4",
+              "--dsw-alias-bg-layer-1": "#FCFEFCF5",
+              "--dsw-alias-bg-layer-2": "#E2EAE4F2",
+              "--dsw-alias-bg-overlay": "#F8FBF8F5",
+              "--dsw-alias-border-l1": "#B3C2B7",
+              "--dsw-alias-border-l2": "#728679",
+              "--dsw-alias-brand-primary": "#146B45",
+              "--dsw-alias-label-primary": "#132219",
+              "--dsw-alias-label-secondary": "#4B6354",
+              "--dsw-alias-state-error-primary": "#A83345",
+              "--dsw-alias-state-success-primary": "#11683F",
+              "--dsw-alias-state-warn-primary": "#735808",
+              "--dsw-specific-sidebar-fill": "#E0E8E2F2"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/quiet-matrix/skin.css",
+                "status": 200,
+                "sha256": "69e0cc8cf86dbf48c920ecfc125c8dd997ad3872def286fcecb4b066261a6992",
+                "expectedSha256": "69e0cc8cf86dbf48c920ecfc125c8dd997ad3872def286fcecb4b066261a6992",
+                "sizeBytes": 5379
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/quiet-matrix/assets/67b352cfd3e1e0509b098130fda1bf5ab0be9a94e3a418ebce4ba14eb145ee81.webp",
+                "status": 200,
+                "sha256": "67b352cfd3e1e0509b098130fda1bf5ab0be9a94e3a418ebce4ba14eb145ee81",
+                "expectedSha256": "67b352cfd3e1e0509b098130fda1bf5ab0be9a94e3a418ebce4ba14eb145ee81",
+                "sizeBytes": 54040
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/quiet-matrix/assets/4e9227fb3d0b3f0cef838086b2b0d893c1637005c4ab4f5b313a2d71524d84c8.webp",
+                "status": 200,
+                "sha256": "4e9227fb3d0b3f0cef838086b2b0d893c1637005c4ab4f5b313a2d71524d84c8",
+                "expectedSha256": "4e9227fb3d0b3f0cef838086b2b0d893c1637005c4ab4f5b313a2d71524d84c8",
+                "sizeBytes": 61308
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/quiet-matrix/assets/7d4d6c169b19a97347ea546917df8bd7a6f18a52bf224a030184868d2ffca49a.webp",
+                "status": 200,
+                "sha256": "7d4d6c169b19a97347ea546917df8bd7a6f18a52bf224a030184868d2ffca49a",
+                "expectedSha256": "7d4d6c169b19a97347ea546917df8bd7a6f18a52bf224a030184868d2ffca49a",
+                "sizeBytes": 21194
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/quiet-matrix/assets/585de748fbf3cdfcecfbfcdd5c68ff205488350ce68a609544be563ebf31aa22.webp",
+                "status": 200,
+                "sha256": "585de748fbf3cdfcecfbfcdd5c68ff205488350ce68a609544be563ebf31aa22",
+                "expectedSha256": "585de748fbf3cdfcecfbfcdd5c68ff205488350ce68a609544be563ebf31aa22",
+                "sizeBytes": 48280
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/quiet-matrix/assets/3b53800f0d4cc4268bf6ef808ac84fd19b2138a35c803220fb49d9fe9c7599c1.webp",
+                "status": 200,
+                "sha256": "3b53800f0d4cc4268bf6ef808ac84fd19b2138a35c803220fb49d9fe9c7599c1",
+                "expectedSha256": "3b53800f0d4cc4268bf6ef808ac84fd19b2138a35c803220fb49d9fe9c7599c1",
+                "sizeBytes": 58486
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/quiet-matrix/assets/981feebf9c3747491212baf943ce1a2dc374eb9228134f73d9698384e7ad8f1e.webp",
+                "status": 200,
+                "sha256": "981feebf9c3747491212baf943ce1a2dc374eb9228134f73d9698384e7ad8f1e",
+                "expectedSha256": "981feebf9c3747491212baf943ce1a2dc374eb9228134f73d9698384e7ad8f1e",
+                "sizeBytes": 26204
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/quiet-matrix/assets/854bed4cc0e950168270a9875130852e13e9369016174e48c1bfaaf9f59e07fb.webp",
+                "status": 200,
+                "sha256": "854bed4cc0e950168270a9875130852e13e9369016174e48c1bfaaf9f59e07fb",
+                "expectedSha256": "854bed4cc0e950168270a9875130852e13e9369016174e48c1bfaaf9f59e07fb",
+                "sizeBytes": 19760
+              }
+            ],
+            "dataSkin": "quiet-matrix",
+            "dark": false,
+            "colorScheme": "light",
+            "bodyBackground": "rgba(243, 247, 244, 0.957)",
+            "backgroundImage": "linear-gradient(rgba(243, 247, 244, 0.098), rgba(243, 247, 244, 0.098)), url(\"http://127.0.0.1:4015/__dsh-themes/quiet-matrix/assets/67b352cfd3e1e0509b098130fda1bf5ab0be9a94e3a418ebce4ba14eb145ee81.webp\")",
+            "stylesheet": "/__dsh-themes/quiet-matrix/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          },
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#030604F7",
+              "--dsw-alias-bg-layer-1": "#070D09F5",
+              "--dsw-alias-bg-layer-2": "#0C1710F3",
+              "--dsw-alias-bg-overlay": "#102017F4",
+              "--dsw-alias-border-l1": "#263B2D",
+              "--dsw-alias-border-l2": "#477157",
+              "--dsw-alias-brand-primary": "#71D59A",
+              "--dsw-alias-label-primary": "#EDF8F1",
+              "--dsw-alias-label-secondary": "#A7BEAF",
+              "--dsw-alias-state-error-primary": "#FF8090",
+              "--dsw-alias-state-success-primary": "#68D293",
+              "--dsw-alias-state-warn-primary": "#DCCB77",
+              "--dsw-specific-sidebar-fill": "#050A07F6"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/quiet-matrix/skin.css",
+                "status": 200,
+                "sha256": "69e0cc8cf86dbf48c920ecfc125c8dd997ad3872def286fcecb4b066261a6992",
+                "expectedSha256": "69e0cc8cf86dbf48c920ecfc125c8dd997ad3872def286fcecb4b066261a6992",
+                "sizeBytes": 5379
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/quiet-matrix/assets/67b352cfd3e1e0509b098130fda1bf5ab0be9a94e3a418ebce4ba14eb145ee81.webp",
+                "status": 200,
+                "sha256": "67b352cfd3e1e0509b098130fda1bf5ab0be9a94e3a418ebce4ba14eb145ee81",
+                "expectedSha256": "67b352cfd3e1e0509b098130fda1bf5ab0be9a94e3a418ebce4ba14eb145ee81",
+                "sizeBytes": 54040
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/quiet-matrix/assets/4e9227fb3d0b3f0cef838086b2b0d893c1637005c4ab4f5b313a2d71524d84c8.webp",
+                "status": 200,
+                "sha256": "4e9227fb3d0b3f0cef838086b2b0d893c1637005c4ab4f5b313a2d71524d84c8",
+                "expectedSha256": "4e9227fb3d0b3f0cef838086b2b0d893c1637005c4ab4f5b313a2d71524d84c8",
+                "sizeBytes": 61308
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/quiet-matrix/assets/7d4d6c169b19a97347ea546917df8bd7a6f18a52bf224a030184868d2ffca49a.webp",
+                "status": 200,
+                "sha256": "7d4d6c169b19a97347ea546917df8bd7a6f18a52bf224a030184868d2ffca49a",
+                "expectedSha256": "7d4d6c169b19a97347ea546917df8bd7a6f18a52bf224a030184868d2ffca49a",
+                "sizeBytes": 21194
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/quiet-matrix/assets/585de748fbf3cdfcecfbfcdd5c68ff205488350ce68a609544be563ebf31aa22.webp",
+                "status": 200,
+                "sha256": "585de748fbf3cdfcecfbfcdd5c68ff205488350ce68a609544be563ebf31aa22",
+                "expectedSha256": "585de748fbf3cdfcecfbfcdd5c68ff205488350ce68a609544be563ebf31aa22",
+                "sizeBytes": 48280
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/quiet-matrix/assets/3b53800f0d4cc4268bf6ef808ac84fd19b2138a35c803220fb49d9fe9c7599c1.webp",
+                "status": 200,
+                "sha256": "3b53800f0d4cc4268bf6ef808ac84fd19b2138a35c803220fb49d9fe9c7599c1",
+                "expectedSha256": "3b53800f0d4cc4268bf6ef808ac84fd19b2138a35c803220fb49d9fe9c7599c1",
+                "sizeBytes": 58486
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/quiet-matrix/assets/981feebf9c3747491212baf943ce1a2dc374eb9228134f73d9698384e7ad8f1e.webp",
+                "status": 200,
+                "sha256": "981feebf9c3747491212baf943ce1a2dc374eb9228134f73d9698384e7ad8f1e",
+                "expectedSha256": "981feebf9c3747491212baf943ce1a2dc374eb9228134f73d9698384e7ad8f1e",
+                "sizeBytes": 26204
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/quiet-matrix/assets/854bed4cc0e950168270a9875130852e13e9369016174e48c1bfaaf9f59e07fb.webp",
+                "status": 200,
+                "sha256": "854bed4cc0e950168270a9875130852e13e9369016174e48c1bfaaf9f59e07fb",
+                "expectedSha256": "854bed4cc0e950168270a9875130852e13e9369016174e48c1bfaaf9f59e07fb",
+                "sizeBytes": 19760
+              }
+            ],
+            "dataSkin": "quiet-matrix",
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgba(3, 6, 4, 0.97)",
+            "backgroundImage": "linear-gradient(rgba(3, 6, 4, 0.18), rgba(3, 6, 4, 0.18)), url(\"http://127.0.0.1:4015/__dsh-themes/quiet-matrix/assets/585de748fbf3cdfcecfbfcdd5c68ff205488350ce68a609544be563ebf31aa22.webp\")",
+            "stylesheet": "/__dsh-themes/quiet-matrix/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "disk": {
+        "freeBeforeBytes": 2534580224,
+        "freeAfterBytes": 2486636544
+      },
+      "coldRestart": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": "quiet-matrix",
+          "backgroundImage": "linear-gradient(rgba(3, 6, 4, 0.18), rgba(3, 6, 4, 0.18)), url(\"http://127.0.0.1:4015/__dsh-themes/quiet-matrix/assets/585de748fbf3cdfcecfbfcdd5c68ff205488350ce68a609544be563ebf31aa22.webp\")",
+          "stylesheet": "/__dsh-themes/quiet-matrix/skin.css",
+          "tokens": {
+            "--dsw-alias-bg-base": "#030604F7",
+            "--dsw-alias-bg-layer-1": "#070D09F5",
+            "--dsw-alias-bg-layer-2": "#0C1710F3",
+            "--dsw-alias-bg-overlay": "#102017F4",
+            "--dsw-alias-border-l1": "#263B2D",
+            "--dsw-alias-border-l2": "#477157",
+            "--dsw-alias-brand-primary": "#71D59A",
+            "--dsw-alias-label-primary": "#EDF8F1",
+            "--dsw-alias-label-secondary": "#A7BEAF",
+            "--dsw-alias-state-error-primary": "#FF8090",
+            "--dsw-alias-state-success-primary": "#68D293",
+            "--dsw-alias-state-warn-primary": "#DCCB77",
+            "--dsw-specific-sidebar-fill": "#050A07F6"
+          }
+        },
+        "modes": [
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#030604F7",
+              "--dsw-alias-bg-layer-1": "#070D09F5",
+              "--dsw-alias-bg-layer-2": "#0C1710F3",
+              "--dsw-alias-bg-overlay": "#102017F4",
+              "--dsw-alias-border-l1": "#263B2D",
+              "--dsw-alias-border-l2": "#477157",
+              "--dsw-alias-brand-primary": "#71D59A",
+              "--dsw-alias-label-primary": "#EDF8F1",
+              "--dsw-alias-label-secondary": "#A7BEAF",
+              "--dsw-alias-state-error-primary": "#FF8090",
+              "--dsw-alias-state-success-primary": "#68D293",
+              "--dsw-alias-state-warn-primary": "#DCCB77",
+              "--dsw-specific-sidebar-fill": "#050A07F6"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/quiet-matrix/skin.css",
+                "status": 200,
+                "sha256": "69e0cc8cf86dbf48c920ecfc125c8dd997ad3872def286fcecb4b066261a6992",
+                "expectedSha256": "69e0cc8cf86dbf48c920ecfc125c8dd997ad3872def286fcecb4b066261a6992",
+                "sizeBytes": 5379
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/quiet-matrix/assets/67b352cfd3e1e0509b098130fda1bf5ab0be9a94e3a418ebce4ba14eb145ee81.webp",
+                "status": 200,
+                "sha256": "67b352cfd3e1e0509b098130fda1bf5ab0be9a94e3a418ebce4ba14eb145ee81",
+                "expectedSha256": "67b352cfd3e1e0509b098130fda1bf5ab0be9a94e3a418ebce4ba14eb145ee81",
+                "sizeBytes": 54040
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/quiet-matrix/assets/4e9227fb3d0b3f0cef838086b2b0d893c1637005c4ab4f5b313a2d71524d84c8.webp",
+                "status": 200,
+                "sha256": "4e9227fb3d0b3f0cef838086b2b0d893c1637005c4ab4f5b313a2d71524d84c8",
+                "expectedSha256": "4e9227fb3d0b3f0cef838086b2b0d893c1637005c4ab4f5b313a2d71524d84c8",
+                "sizeBytes": 61308
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/quiet-matrix/assets/7d4d6c169b19a97347ea546917df8bd7a6f18a52bf224a030184868d2ffca49a.webp",
+                "status": 200,
+                "sha256": "7d4d6c169b19a97347ea546917df8bd7a6f18a52bf224a030184868d2ffca49a",
+                "expectedSha256": "7d4d6c169b19a97347ea546917df8bd7a6f18a52bf224a030184868d2ffca49a",
+                "sizeBytes": 21194
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/quiet-matrix/assets/585de748fbf3cdfcecfbfcdd5c68ff205488350ce68a609544be563ebf31aa22.webp",
+                "status": 200,
+                "sha256": "585de748fbf3cdfcecfbfcdd5c68ff205488350ce68a609544be563ebf31aa22",
+                "expectedSha256": "585de748fbf3cdfcecfbfcdd5c68ff205488350ce68a609544be563ebf31aa22",
+                "sizeBytes": 48280
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/quiet-matrix/assets/3b53800f0d4cc4268bf6ef808ac84fd19b2138a35c803220fb49d9fe9c7599c1.webp",
+                "status": 200,
+                "sha256": "3b53800f0d4cc4268bf6ef808ac84fd19b2138a35c803220fb49d9fe9c7599c1",
+                "expectedSha256": "3b53800f0d4cc4268bf6ef808ac84fd19b2138a35c803220fb49d9fe9c7599c1",
+                "sizeBytes": 58486
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/quiet-matrix/assets/981feebf9c3747491212baf943ce1a2dc374eb9228134f73d9698384e7ad8f1e.webp",
+                "status": 200,
+                "sha256": "981feebf9c3747491212baf943ce1a2dc374eb9228134f73d9698384e7ad8f1e",
+                "expectedSha256": "981feebf9c3747491212baf943ce1a2dc374eb9228134f73d9698384e7ad8f1e",
+                "sizeBytes": 26204
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/quiet-matrix/assets/854bed4cc0e950168270a9875130852e13e9369016174e48c1bfaaf9f59e07fb.webp",
+                "status": 200,
+                "sha256": "854bed4cc0e950168270a9875130852e13e9369016174e48c1bfaaf9f59e07fb",
+                "expectedSha256": "854bed4cc0e950168270a9875130852e13e9369016174e48c1bfaaf9f59e07fb",
+                "sizeBytes": 19760
+              }
+            ],
+            "dataSkin": "quiet-matrix",
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgba(3, 6, 4, 0.97)",
+            "backgroundImage": "linear-gradient(rgba(3, 6, 4, 0.18), rgba(3, 6, 4, 0.18)), url(\"http://127.0.0.1:4015/__dsh-themes/quiet-matrix/assets/585de748fbf3cdfcecfbfcdd5c68ff205488350ce68a609544be563ebf31aa22.webp\")",
+            "stylesheet": "/__dsh-themes/quiet-matrix/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "recovery": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": null,
+          "backgroundImage": "none",
+          "stylesheet": null,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          }
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "tokens": {
+              "--dsw-alias-bg-base": "#fff",
+              "--dsw-alias-bg-layer-1": "#fff",
+              "--dsw-alias-bg-layer-2": "#fff",
+              "--dsw-alias-bg-overlay": "#e9ecf2",
+              "--dsw-alias-border-l1": "#0000000a",
+              "--dsw-alias-border-l2": "#0000001a",
+              "--dsw-alias-brand-primary": "#0f1115",
+              "--dsw-alias-label-primary": "#0f1115",
+              "--dsw-alias-label-secondary": "#61666b",
+              "--dsw-alias-state-error-primary": "#ec1313",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#f9fafb"
+            },
+            "resources": [],
+            "dataSkin": null,
+            "dark": false,
+            "colorScheme": "light",
+            "bodyBackground": "rgb(255, 255, 255)",
+            "backgroundImage": "none",
+            "stylesheet": null,
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          },
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#151517",
+              "--dsw-alias-bg-layer-1": "#232324",
+              "--dsw-alias-bg-layer-2": "#2c2c2e",
+              "--dsw-alias-bg-overlay": "#61666b",
+              "--dsw-alias-border-l1": "#ffffff0f",
+              "--dsw-alias-border-l2": "#ffffff1f",
+              "--dsw-alias-brand-primary": "#f9fafb",
+              "--dsw-alias-label-primary": "#f9fafb",
+              "--dsw-alias-label-secondary": "#cfd3d6",
+              "--dsw-alias-state-error-primary": "#f25a5a",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#1b1b1c"
+            },
+            "resources": [],
+            "dataSkin": null,
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgb(21, 21, 23)",
+            "backgroundImage": "none",
+            "stylesheet": null,
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [
+          {
+            "url": "/__dsh-themes/quiet-matrix/skin.css",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/quiet-matrix/assets/67b352cfd3e1e0509b098130fda1bf5ab0be9a94e3a418ebce4ba14eb145ee81.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/quiet-matrix/assets/4e9227fb3d0b3f0cef838086b2b0d893c1637005c4ab4f5b313a2d71524d84c8.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/quiet-matrix/assets/7d4d6c169b19a97347ea546917df8bd7a6f18a52bf224a030184868d2ffca49a.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/quiet-matrix/assets/585de748fbf3cdfcecfbfcdd5c68ff205488350ce68a609544be563ebf31aa22.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/quiet-matrix/assets/3b53800f0d4cc4268bf6ef808ac84fd19b2138a35c803220fb49d9fe9c7599c1.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/quiet-matrix/assets/981feebf9c3747491212baf943ce1a2dc374eb9228134f73d9698384e7ad8f1e.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/quiet-matrix/assets/854bed4cc0e950168270a9875130852e13e9369016174e48c1bfaaf9f59e07fb.webp",
+            "status": 404
+          }
+        ],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "completedAt": "2026-09-06T06:04:01.635Z"
+    },
+    {
+      "catalogId": 2007,
+      "slug": "neon-afterline",
+      "kind": "full-skin",
+      "status": "passed",
+      "artifactSha256": "d6fc200513d578a7e5888d8da6302ed8d4830080b2e614bbd94b139e8305d8ce",
+      "manifestSha256": "7158b913357aa2717357157997f293431c3837f49e21ad14eb4d4ce744d5ac89",
+      "packedManifestSha256": "a6b9a1f47aa152713875a6d499b1d6517ba05156a55ec1fbb6f8e612c8844151",
+      "rendered": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": "neon-afterline",
+          "backgroundImage": "linear-gradient(rgba(5, 9, 12, 0.16), rgba(5, 9, 12, 0.16)), url(\"http://127.0.0.1:4015/__dsh-themes/neon-afterline/assets/45be0f4f4bcb6d3347ad9ad55a91642f4a6f127308d1928c37670daf52360fe0.webp\")",
+          "stylesheet": "/__dsh-themes/neon-afterline/skin.css",
+          "tokens": {
+            "--dsw-alias-bg-base": "#05090CF7",
+            "--dsw-alias-bg-layer-1": "#0A1218F5",
+            "--dsw-alias-bg-layer-2": "#101C23F3",
+            "--dsw-alias-bg-overlay": "#14272FF4",
+            "--dsw-alias-border-l1": "#2D4754",
+            "--dsw-alias-border-l2": "#41778B",
+            "--dsw-alias-brand-primary": "#F2C84A",
+            "--dsw-alias-label-primary": "#F4F7F8",
+            "--dsw-alias-label-secondary": "#AFC0C8",
+            "--dsw-alias-state-error-primary": "#FF7C8D",
+            "--dsw-alias-state-success-primary": "#5ED0A3",
+            "--dsw-alias-state-warn-primary": "#F4CF65",
+            "--dsw-specific-sidebar-fill": "#071016F6"
+          }
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "tokens": {
+              "--dsw-alias-bg-base": "#E9F1F4F5",
+              "--dsw-alias-bg-layer-1": "#F7FBFCF5",
+              "--dsw-alias-bg-layer-2": "#D5E4E9F2",
+              "--dsw-alias-bg-overlay": "#E6F0F2F5",
+              "--dsw-alias-border-l1": "#9FB4BE",
+              "--dsw-alias-border-l2": "#3F7385",
+              "--dsw-alias-brand-primary": "#006F89",
+              "--dsw-alias-label-primary": "#10242C",
+              "--dsw-alias-label-secondary": "#4A636E",
+              "--dsw-alias-state-error-primary": "#A62E42",
+              "--dsw-alias-state-success-primary": "#116B59",
+              "--dsw-alias-state-warn-primary": "#735A00",
+              "--dsw-specific-sidebar-fill": "#DCE7EAF2"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/neon-afterline/skin.css",
+                "status": 200,
+                "sha256": "e91e5bcb8c651b3eeb816fc17c13b2320b9849e37ebe56b8214b87fb54b6c77e",
+                "expectedSha256": "e91e5bcb8c651b3eeb816fc17c13b2320b9849e37ebe56b8214b87fb54b6c77e",
+                "sizeBytes": 5444
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/neon-afterline/assets/63ff021304a75466c0c332b55bb2f4a0860ac6e5781e2db7126590d9dda07a56.webp",
+                "status": 200,
+                "sha256": "63ff021304a75466c0c332b55bb2f4a0860ac6e5781e2db7126590d9dda07a56",
+                "expectedSha256": "63ff021304a75466c0c332b55bb2f4a0860ac6e5781e2db7126590d9dda07a56",
+                "sizeBytes": 85684
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/neon-afterline/assets/72ee4ba6bff69c56faf43cd0975cb7bea6942a1dc0083d5ff24af6a92e06dbef.webp",
+                "status": 200,
+                "sha256": "72ee4ba6bff69c56faf43cd0975cb7bea6942a1dc0083d5ff24af6a92e06dbef",
+                "expectedSha256": "72ee4ba6bff69c56faf43cd0975cb7bea6942a1dc0083d5ff24af6a92e06dbef",
+                "sizeBytes": 85500
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/neon-afterline/assets/4ebeaf6508dd85d675a6add1c9788dd8df7018f6ecc3cf455b6981da8cd4dfbe.webp",
+                "status": 200,
+                "sha256": "4ebeaf6508dd85d675a6add1c9788dd8df7018f6ecc3cf455b6981da8cd4dfbe",
+                "expectedSha256": "4ebeaf6508dd85d675a6add1c9788dd8df7018f6ecc3cf455b6981da8cd4dfbe",
+                "sizeBytes": 33698
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/neon-afterline/assets/45be0f4f4bcb6d3347ad9ad55a91642f4a6f127308d1928c37670daf52360fe0.webp",
+                "status": 200,
+                "sha256": "45be0f4f4bcb6d3347ad9ad55a91642f4a6f127308d1928c37670daf52360fe0",
+                "expectedSha256": "45be0f4f4bcb6d3347ad9ad55a91642f4a6f127308d1928c37670daf52360fe0",
+                "sizeBytes": 94860
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/neon-afterline/assets/38506ea5fd162ffe71e011f912b14a0d0c5609049214539c103704cbc14a6d35.webp",
+                "status": 200,
+                "sha256": "38506ea5fd162ffe71e011f912b14a0d0c5609049214539c103704cbc14a6d35",
+                "expectedSha256": "38506ea5fd162ffe71e011f912b14a0d0c5609049214539c103704cbc14a6d35",
+                "sizeBytes": 82352
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/neon-afterline/assets/1cd2095dfad2ed7f8ff31c584226f71b4054ee6c002b536dd766d06cf144b8d0.webp",
+                "status": 200,
+                "sha256": "1cd2095dfad2ed7f8ff31c584226f71b4054ee6c002b536dd766d06cf144b8d0",
+                "expectedSha256": "1cd2095dfad2ed7f8ff31c584226f71b4054ee6c002b536dd766d06cf144b8d0",
+                "sizeBytes": 36272
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/neon-afterline/assets/42f7b026fea431f0b7f971d92ecbe4f5701ed8bf3a960d8144bbf568e09e4c5a.webp",
+                "status": 200,
+                "sha256": "42f7b026fea431f0b7f971d92ecbe4f5701ed8bf3a960d8144bbf568e09e4c5a",
+                "expectedSha256": "42f7b026fea431f0b7f971d92ecbe4f5701ed8bf3a960d8144bbf568e09e4c5a",
+                "sizeBytes": 30342
+              }
+            ],
+            "dataSkin": "neon-afterline",
+            "dark": false,
+            "colorScheme": "light",
+            "bodyBackground": "rgba(233, 241, 244, 0.96)",
+            "backgroundImage": "linear-gradient(rgba(233, 241, 244, 0.086), rgba(233, 241, 244, 0.086)), url(\"http://127.0.0.1:4015/__dsh-themes/neon-afterline/assets/63ff021304a75466c0c332b55bb2f4a0860ac6e5781e2db7126590d9dda07a56.webp\")",
+            "stylesheet": "/__dsh-themes/neon-afterline/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          },
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#05090CF7",
+              "--dsw-alias-bg-layer-1": "#0A1218F5",
+              "--dsw-alias-bg-layer-2": "#101C23F3",
+              "--dsw-alias-bg-overlay": "#14272FF4",
+              "--dsw-alias-border-l1": "#2D4754",
+              "--dsw-alias-border-l2": "#41778B",
+              "--dsw-alias-brand-primary": "#F2C84A",
+              "--dsw-alias-label-primary": "#F4F7F8",
+              "--dsw-alias-label-secondary": "#AFC0C8",
+              "--dsw-alias-state-error-primary": "#FF7C8D",
+              "--dsw-alias-state-success-primary": "#5ED0A3",
+              "--dsw-alias-state-warn-primary": "#F4CF65",
+              "--dsw-specific-sidebar-fill": "#071016F6"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/neon-afterline/skin.css",
+                "status": 200,
+                "sha256": "e91e5bcb8c651b3eeb816fc17c13b2320b9849e37ebe56b8214b87fb54b6c77e",
+                "expectedSha256": "e91e5bcb8c651b3eeb816fc17c13b2320b9849e37ebe56b8214b87fb54b6c77e",
+                "sizeBytes": 5444
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/neon-afterline/assets/63ff021304a75466c0c332b55bb2f4a0860ac6e5781e2db7126590d9dda07a56.webp",
+                "status": 200,
+                "sha256": "63ff021304a75466c0c332b55bb2f4a0860ac6e5781e2db7126590d9dda07a56",
+                "expectedSha256": "63ff021304a75466c0c332b55bb2f4a0860ac6e5781e2db7126590d9dda07a56",
+                "sizeBytes": 85684
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/neon-afterline/assets/72ee4ba6bff69c56faf43cd0975cb7bea6942a1dc0083d5ff24af6a92e06dbef.webp",
+                "status": 200,
+                "sha256": "72ee4ba6bff69c56faf43cd0975cb7bea6942a1dc0083d5ff24af6a92e06dbef",
+                "expectedSha256": "72ee4ba6bff69c56faf43cd0975cb7bea6942a1dc0083d5ff24af6a92e06dbef",
+                "sizeBytes": 85500
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/neon-afterline/assets/4ebeaf6508dd85d675a6add1c9788dd8df7018f6ecc3cf455b6981da8cd4dfbe.webp",
+                "status": 200,
+                "sha256": "4ebeaf6508dd85d675a6add1c9788dd8df7018f6ecc3cf455b6981da8cd4dfbe",
+                "expectedSha256": "4ebeaf6508dd85d675a6add1c9788dd8df7018f6ecc3cf455b6981da8cd4dfbe",
+                "sizeBytes": 33698
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/neon-afterline/assets/45be0f4f4bcb6d3347ad9ad55a91642f4a6f127308d1928c37670daf52360fe0.webp",
+                "status": 200,
+                "sha256": "45be0f4f4bcb6d3347ad9ad55a91642f4a6f127308d1928c37670daf52360fe0",
+                "expectedSha256": "45be0f4f4bcb6d3347ad9ad55a91642f4a6f127308d1928c37670daf52360fe0",
+                "sizeBytes": 94860
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/neon-afterline/assets/38506ea5fd162ffe71e011f912b14a0d0c5609049214539c103704cbc14a6d35.webp",
+                "status": 200,
+                "sha256": "38506ea5fd162ffe71e011f912b14a0d0c5609049214539c103704cbc14a6d35",
+                "expectedSha256": "38506ea5fd162ffe71e011f912b14a0d0c5609049214539c103704cbc14a6d35",
+                "sizeBytes": 82352
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/neon-afterline/assets/1cd2095dfad2ed7f8ff31c584226f71b4054ee6c002b536dd766d06cf144b8d0.webp",
+                "status": 200,
+                "sha256": "1cd2095dfad2ed7f8ff31c584226f71b4054ee6c002b536dd766d06cf144b8d0",
+                "expectedSha256": "1cd2095dfad2ed7f8ff31c584226f71b4054ee6c002b536dd766d06cf144b8d0",
+                "sizeBytes": 36272
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/neon-afterline/assets/42f7b026fea431f0b7f971d92ecbe4f5701ed8bf3a960d8144bbf568e09e4c5a.webp",
+                "status": 200,
+                "sha256": "42f7b026fea431f0b7f971d92ecbe4f5701ed8bf3a960d8144bbf568e09e4c5a",
+                "expectedSha256": "42f7b026fea431f0b7f971d92ecbe4f5701ed8bf3a960d8144bbf568e09e4c5a",
+                "sizeBytes": 30342
+              }
+            ],
+            "dataSkin": "neon-afterline",
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgba(5, 9, 12, 0.97)",
+            "backgroundImage": "linear-gradient(rgba(5, 9, 12, 0.16), rgba(5, 9, 12, 0.16)), url(\"http://127.0.0.1:4015/__dsh-themes/neon-afterline/assets/45be0f4f4bcb6d3347ad9ad55a91642f4a6f127308d1928c37670daf52360fe0.webp\")",
+            "stylesheet": "/__dsh-themes/neon-afterline/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "disk": {
+        "freeBeforeBytes": 2486616064,
+        "freeAfterBytes": 2482884608
+      },
+      "coldRestart": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": "neon-afterline",
+          "backgroundImage": "linear-gradient(rgba(5, 9, 12, 0.16), rgba(5, 9, 12, 0.16)), url(\"http://127.0.0.1:4015/__dsh-themes/neon-afterline/assets/45be0f4f4bcb6d3347ad9ad55a91642f4a6f127308d1928c37670daf52360fe0.webp\")",
+          "stylesheet": "/__dsh-themes/neon-afterline/skin.css",
+          "tokens": {
+            "--dsw-alias-bg-base": "#05090CF7",
+            "--dsw-alias-bg-layer-1": "#0A1218F5",
+            "--dsw-alias-bg-layer-2": "#101C23F3",
+            "--dsw-alias-bg-overlay": "#14272FF4",
+            "--dsw-alias-border-l1": "#2D4754",
+            "--dsw-alias-border-l2": "#41778B",
+            "--dsw-alias-brand-primary": "#F2C84A",
+            "--dsw-alias-label-primary": "#F4F7F8",
+            "--dsw-alias-label-secondary": "#AFC0C8",
+            "--dsw-alias-state-error-primary": "#FF7C8D",
+            "--dsw-alias-state-success-primary": "#5ED0A3",
+            "--dsw-alias-state-warn-primary": "#F4CF65",
+            "--dsw-specific-sidebar-fill": "#071016F6"
+          }
+        },
+        "modes": [
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#05090CF7",
+              "--dsw-alias-bg-layer-1": "#0A1218F5",
+              "--dsw-alias-bg-layer-2": "#101C23F3",
+              "--dsw-alias-bg-overlay": "#14272FF4",
+              "--dsw-alias-border-l1": "#2D4754",
+              "--dsw-alias-border-l2": "#41778B",
+              "--dsw-alias-brand-primary": "#F2C84A",
+              "--dsw-alias-label-primary": "#F4F7F8",
+              "--dsw-alias-label-secondary": "#AFC0C8",
+              "--dsw-alias-state-error-primary": "#FF7C8D",
+              "--dsw-alias-state-success-primary": "#5ED0A3",
+              "--dsw-alias-state-warn-primary": "#F4CF65",
+              "--dsw-specific-sidebar-fill": "#071016F6"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/neon-afterline/skin.css",
+                "status": 200,
+                "sha256": "e91e5bcb8c651b3eeb816fc17c13b2320b9849e37ebe56b8214b87fb54b6c77e",
+                "expectedSha256": "e91e5bcb8c651b3eeb816fc17c13b2320b9849e37ebe56b8214b87fb54b6c77e",
+                "sizeBytes": 5444
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/neon-afterline/assets/63ff021304a75466c0c332b55bb2f4a0860ac6e5781e2db7126590d9dda07a56.webp",
+                "status": 200,
+                "sha256": "63ff021304a75466c0c332b55bb2f4a0860ac6e5781e2db7126590d9dda07a56",
+                "expectedSha256": "63ff021304a75466c0c332b55bb2f4a0860ac6e5781e2db7126590d9dda07a56",
+                "sizeBytes": 85684
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/neon-afterline/assets/72ee4ba6bff69c56faf43cd0975cb7bea6942a1dc0083d5ff24af6a92e06dbef.webp",
+                "status": 200,
+                "sha256": "72ee4ba6bff69c56faf43cd0975cb7bea6942a1dc0083d5ff24af6a92e06dbef",
+                "expectedSha256": "72ee4ba6bff69c56faf43cd0975cb7bea6942a1dc0083d5ff24af6a92e06dbef",
+                "sizeBytes": 85500
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/neon-afterline/assets/4ebeaf6508dd85d675a6add1c9788dd8df7018f6ecc3cf455b6981da8cd4dfbe.webp",
+                "status": 200,
+                "sha256": "4ebeaf6508dd85d675a6add1c9788dd8df7018f6ecc3cf455b6981da8cd4dfbe",
+                "expectedSha256": "4ebeaf6508dd85d675a6add1c9788dd8df7018f6ecc3cf455b6981da8cd4dfbe",
+                "sizeBytes": 33698
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/neon-afterline/assets/45be0f4f4bcb6d3347ad9ad55a91642f4a6f127308d1928c37670daf52360fe0.webp",
+                "status": 200,
+                "sha256": "45be0f4f4bcb6d3347ad9ad55a91642f4a6f127308d1928c37670daf52360fe0",
+                "expectedSha256": "45be0f4f4bcb6d3347ad9ad55a91642f4a6f127308d1928c37670daf52360fe0",
+                "sizeBytes": 94860
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/neon-afterline/assets/38506ea5fd162ffe71e011f912b14a0d0c5609049214539c103704cbc14a6d35.webp",
+                "status": 200,
+                "sha256": "38506ea5fd162ffe71e011f912b14a0d0c5609049214539c103704cbc14a6d35",
+                "expectedSha256": "38506ea5fd162ffe71e011f912b14a0d0c5609049214539c103704cbc14a6d35",
+                "sizeBytes": 82352
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/neon-afterline/assets/1cd2095dfad2ed7f8ff31c584226f71b4054ee6c002b536dd766d06cf144b8d0.webp",
+                "status": 200,
+                "sha256": "1cd2095dfad2ed7f8ff31c584226f71b4054ee6c002b536dd766d06cf144b8d0",
+                "expectedSha256": "1cd2095dfad2ed7f8ff31c584226f71b4054ee6c002b536dd766d06cf144b8d0",
+                "sizeBytes": 36272
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/neon-afterline/assets/42f7b026fea431f0b7f971d92ecbe4f5701ed8bf3a960d8144bbf568e09e4c5a.webp",
+                "status": 200,
+                "sha256": "42f7b026fea431f0b7f971d92ecbe4f5701ed8bf3a960d8144bbf568e09e4c5a",
+                "expectedSha256": "42f7b026fea431f0b7f971d92ecbe4f5701ed8bf3a960d8144bbf568e09e4c5a",
+                "sizeBytes": 30342
+              }
+            ],
+            "dataSkin": "neon-afterline",
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgba(5, 9, 12, 0.97)",
+            "backgroundImage": "linear-gradient(rgba(5, 9, 12, 0.16), rgba(5, 9, 12, 0.16)), url(\"http://127.0.0.1:4015/__dsh-themes/neon-afterline/assets/45be0f4f4bcb6d3347ad9ad55a91642f4a6f127308d1928c37670daf52360fe0.webp\")",
+            "stylesheet": "/__dsh-themes/neon-afterline/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "recovery": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": null,
+          "backgroundImage": "none",
+          "stylesheet": null,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          }
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "tokens": {
+              "--dsw-alias-bg-base": "#fff",
+              "--dsw-alias-bg-layer-1": "#fff",
+              "--dsw-alias-bg-layer-2": "#fff",
+              "--dsw-alias-bg-overlay": "#e9ecf2",
+              "--dsw-alias-border-l1": "#0000000a",
+              "--dsw-alias-border-l2": "#0000001a",
+              "--dsw-alias-brand-primary": "#0f1115",
+              "--dsw-alias-label-primary": "#0f1115",
+              "--dsw-alias-label-secondary": "#61666b",
+              "--dsw-alias-state-error-primary": "#ec1313",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#f9fafb"
+            },
+            "resources": [],
+            "dataSkin": null,
+            "dark": false,
+            "colorScheme": "light",
+            "bodyBackground": "rgb(255, 255, 255)",
+            "backgroundImage": "none",
+            "stylesheet": null,
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          },
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#151517",
+              "--dsw-alias-bg-layer-1": "#232324",
+              "--dsw-alias-bg-layer-2": "#2c2c2e",
+              "--dsw-alias-bg-overlay": "#61666b",
+              "--dsw-alias-border-l1": "#ffffff0f",
+              "--dsw-alias-border-l2": "#ffffff1f",
+              "--dsw-alias-brand-primary": "#f9fafb",
+              "--dsw-alias-label-primary": "#f9fafb",
+              "--dsw-alias-label-secondary": "#cfd3d6",
+              "--dsw-alias-state-error-primary": "#f25a5a",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#1b1b1c"
+            },
+            "resources": [],
+            "dataSkin": null,
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgb(21, 21, 23)",
+            "backgroundImage": "none",
+            "stylesheet": null,
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [
+          {
+            "url": "/__dsh-themes/neon-afterline/skin.css",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/neon-afterline/assets/63ff021304a75466c0c332b55bb2f4a0860ac6e5781e2db7126590d9dda07a56.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/neon-afterline/assets/72ee4ba6bff69c56faf43cd0975cb7bea6942a1dc0083d5ff24af6a92e06dbef.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/neon-afterline/assets/4ebeaf6508dd85d675a6add1c9788dd8df7018f6ecc3cf455b6981da8cd4dfbe.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/neon-afterline/assets/45be0f4f4bcb6d3347ad9ad55a91642f4a6f127308d1928c37670daf52360fe0.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/neon-afterline/assets/38506ea5fd162ffe71e011f912b14a0d0c5609049214539c103704cbc14a6d35.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/neon-afterline/assets/1cd2095dfad2ed7f8ff31c584226f71b4054ee6c002b536dd766d06cf144b8d0.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/neon-afterline/assets/42f7b026fea431f0b7f971d92ecbe4f5701ed8bf3a960d8144bbf568e09e4c5a.webp",
+            "status": 404
+          }
+        ],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "completedAt": "2026-09-06T06:04:22.192Z"
+    },
+    {
+      "catalogId": 2030,
+      "slug": "apex-telemetry",
+      "kind": "full-skin",
+      "status": "passed",
+      "artifactSha256": "a5bc2710d61c48591cf373f7849f1befd339deef053276462e00cdacb35ac4e6",
+      "manifestSha256": "a3deeef3097e48c99ac843a2dd77c288d47be95aedc2f804fe543e480332af31",
+      "packedManifestSha256": "0621a71c7b60c57bc9c3e94d25b1f583523d4536b916ad0a4381895a8187e9ed",
+      "rendered": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": "apex-telemetry",
+          "backgroundImage": "linear-gradient(rgba(8, 9, 12, 0.16), rgba(8, 9, 12, 0.16)), url(\"http://127.0.0.1:4015/__dsh-themes/apex-telemetry/assets/a6b4d6f078e9aeb31281e4687789ae9414be7e297cc13982de666f3f47e604fc.webp\")",
+          "stylesheet": "/__dsh-themes/apex-telemetry/skin.css",
+          "tokens": {
+            "--dsw-alias-bg-base": "#08090CF7",
+            "--dsw-alias-bg-layer-1": "#12141AF5",
+            "--dsw-alias-bg-layer-2": "#1E2028F3",
+            "--dsw-alias-bg-overlay": "#292B34F4",
+            "--dsw-alias-border-l1": "#454A55",
+            "--dsw-alias-border-l2": "#B94149",
+            "--dsw-alias-brand-primary": "#FF5A61",
+            "--dsw-alias-label-primary": "#FFF6EB",
+            "--dsw-alias-label-secondary": "#C9BFC0",
+            "--dsw-alias-state-error-primary": "#FF6070",
+            "--dsw-alias-state-success-primary": "#66D99A",
+            "--dsw-alias-state-warn-primary": "#FFC45E",
+            "--dsw-specific-sidebar-fill": "#0D0F14F6"
+          }
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "tokens": {
+              "--dsw-alias-bg-base": "#F4F0EAF4",
+              "--dsw-alias-bg-layer-1": "#FFFCF7F6",
+              "--dsw-alias-bg-layer-2": "#E8E1D8F2",
+              "--dsw-alias-bg-overlay": "#FAF6F0F5",
+              "--dsw-alias-border-l1": "#B8ABA0",
+              "--dsw-alias-border-l2": "#7A514F",
+              "--dsw-alias-brand-primary": "#A61B23",
+              "--dsw-alias-label-primary": "#241F1F",
+              "--dsw-alias-label-secondary": "#5F5653",
+              "--dsw-alias-state-error-primary": "#AD1728",
+              "--dsw-alias-state-success-primary": "#28704A",
+              "--dsw-alias-state-warn-primary": "#8A5B08",
+              "--dsw-specific-sidebar-fill": "#E8E1D8F3"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/apex-telemetry/skin.css",
+                "status": 200,
+                "sha256": "0027e8a15568852646febc38effe1e2d243fc2525ff62a3380c9a4e8b0b749ea",
+                "expectedSha256": "0027e8a15568852646febc38effe1e2d243fc2525ff62a3380c9a4e8b0b749ea",
+                "sizeBytes": 5441
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/apex-telemetry/assets/b20f56f44922889e19851d908d61460b873deb25ed7cd2766aa991a203fbc70a.webp",
+                "status": 200,
+                "sha256": "b20f56f44922889e19851d908d61460b873deb25ed7cd2766aa991a203fbc70a",
+                "expectedSha256": "b20f56f44922889e19851d908d61460b873deb25ed7cd2766aa991a203fbc70a",
+                "sizeBytes": 88630
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/apex-telemetry/assets/544fb6f92de5c42f136398915cda029ef91ebae80546fa89ac8003c3d0f5eab3.webp",
+                "status": 200,
+                "sha256": "544fb6f92de5c42f136398915cda029ef91ebae80546fa89ac8003c3d0f5eab3",
+                "expectedSha256": "544fb6f92de5c42f136398915cda029ef91ebae80546fa89ac8003c3d0f5eab3",
+                "sizeBytes": 84022
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/apex-telemetry/assets/89439a336066c05559fac838c8a0f2713a0d1de38c36c40583e564a2ec798f60.webp",
+                "status": 200,
+                "sha256": "89439a336066c05559fac838c8a0f2713a0d1de38c36c40583e564a2ec798f60",
+                "expectedSha256": "89439a336066c05559fac838c8a0f2713a0d1de38c36c40583e564a2ec798f60",
+                "sizeBytes": 36130
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/apex-telemetry/assets/a6b4d6f078e9aeb31281e4687789ae9414be7e297cc13982de666f3f47e604fc.webp",
+                "status": 200,
+                "sha256": "a6b4d6f078e9aeb31281e4687789ae9414be7e297cc13982de666f3f47e604fc",
+                "expectedSha256": "a6b4d6f078e9aeb31281e4687789ae9414be7e297cc13982de666f3f47e604fc",
+                "sizeBytes": 64442
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/apex-telemetry/assets/b1badfabec49573aed6b401822f2625440e8d62afa136c67d930a0a5265ea0e4.webp",
+                "status": 200,
+                "sha256": "b1badfabec49573aed6b401822f2625440e8d62afa136c67d930a0a5265ea0e4",
+                "expectedSha256": "b1badfabec49573aed6b401822f2625440e8d62afa136c67d930a0a5265ea0e4",
+                "sizeBytes": 53428
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/apex-telemetry/assets/805ee95770aac3daef4f7a58ee2e87cbc15146b9c6d14e3133065c8e158d689f.webp",
+                "status": 200,
+                "sha256": "805ee95770aac3daef4f7a58ee2e87cbc15146b9c6d14e3133065c8e158d689f",
+                "expectedSha256": "805ee95770aac3daef4f7a58ee2e87cbc15146b9c6d14e3133065c8e158d689f",
+                "sizeBytes": 37730
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/apex-telemetry/assets/f9fa1012b380ba60ec8fea9bf3f55c09defea476e4607acc984a904fac6e011c.webp",
+                "status": 200,
+                "sha256": "f9fa1012b380ba60ec8fea9bf3f55c09defea476e4607acc984a904fac6e011c",
+                "expectedSha256": "f9fa1012b380ba60ec8fea9bf3f55c09defea476e4607acc984a904fac6e011c",
+                "sizeBytes": 22712
+              }
+            ],
+            "dataSkin": "apex-telemetry",
+            "dark": false,
+            "colorScheme": "light",
+            "bodyBackground": "rgba(244, 240, 234, 0.957)",
+            "backgroundImage": "linear-gradient(rgba(244, 240, 234, 0.086), rgba(244, 240, 234, 0.086)), url(\"http://127.0.0.1:4015/__dsh-themes/apex-telemetry/assets/b20f56f44922889e19851d908d61460b873deb25ed7cd2766aa991a203fbc70a.webp\")",
+            "stylesheet": "/__dsh-themes/apex-telemetry/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          },
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#08090CF7",
+              "--dsw-alias-bg-layer-1": "#12141AF5",
+              "--dsw-alias-bg-layer-2": "#1E2028F3",
+              "--dsw-alias-bg-overlay": "#292B34F4",
+              "--dsw-alias-border-l1": "#454A55",
+              "--dsw-alias-border-l2": "#B94149",
+              "--dsw-alias-brand-primary": "#FF5A61",
+              "--dsw-alias-label-primary": "#FFF6EB",
+              "--dsw-alias-label-secondary": "#C9BFC0",
+              "--dsw-alias-state-error-primary": "#FF6070",
+              "--dsw-alias-state-success-primary": "#66D99A",
+              "--dsw-alias-state-warn-primary": "#FFC45E",
+              "--dsw-specific-sidebar-fill": "#0D0F14F6"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/apex-telemetry/skin.css",
+                "status": 200,
+                "sha256": "0027e8a15568852646febc38effe1e2d243fc2525ff62a3380c9a4e8b0b749ea",
+                "expectedSha256": "0027e8a15568852646febc38effe1e2d243fc2525ff62a3380c9a4e8b0b749ea",
+                "sizeBytes": 5441
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/apex-telemetry/assets/b20f56f44922889e19851d908d61460b873deb25ed7cd2766aa991a203fbc70a.webp",
+                "status": 200,
+                "sha256": "b20f56f44922889e19851d908d61460b873deb25ed7cd2766aa991a203fbc70a",
+                "expectedSha256": "b20f56f44922889e19851d908d61460b873deb25ed7cd2766aa991a203fbc70a",
+                "sizeBytes": 88630
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/apex-telemetry/assets/544fb6f92de5c42f136398915cda029ef91ebae80546fa89ac8003c3d0f5eab3.webp",
+                "status": 200,
+                "sha256": "544fb6f92de5c42f136398915cda029ef91ebae80546fa89ac8003c3d0f5eab3",
+                "expectedSha256": "544fb6f92de5c42f136398915cda029ef91ebae80546fa89ac8003c3d0f5eab3",
+                "sizeBytes": 84022
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/apex-telemetry/assets/89439a336066c05559fac838c8a0f2713a0d1de38c36c40583e564a2ec798f60.webp",
+                "status": 200,
+                "sha256": "89439a336066c05559fac838c8a0f2713a0d1de38c36c40583e564a2ec798f60",
+                "expectedSha256": "89439a336066c05559fac838c8a0f2713a0d1de38c36c40583e564a2ec798f60",
+                "sizeBytes": 36130
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/apex-telemetry/assets/a6b4d6f078e9aeb31281e4687789ae9414be7e297cc13982de666f3f47e604fc.webp",
+                "status": 200,
+                "sha256": "a6b4d6f078e9aeb31281e4687789ae9414be7e297cc13982de666f3f47e604fc",
+                "expectedSha256": "a6b4d6f078e9aeb31281e4687789ae9414be7e297cc13982de666f3f47e604fc",
+                "sizeBytes": 64442
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/apex-telemetry/assets/b1badfabec49573aed6b401822f2625440e8d62afa136c67d930a0a5265ea0e4.webp",
+                "status": 200,
+                "sha256": "b1badfabec49573aed6b401822f2625440e8d62afa136c67d930a0a5265ea0e4",
+                "expectedSha256": "b1badfabec49573aed6b401822f2625440e8d62afa136c67d930a0a5265ea0e4",
+                "sizeBytes": 53428
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/apex-telemetry/assets/805ee95770aac3daef4f7a58ee2e87cbc15146b9c6d14e3133065c8e158d689f.webp",
+                "status": 200,
+                "sha256": "805ee95770aac3daef4f7a58ee2e87cbc15146b9c6d14e3133065c8e158d689f",
+                "expectedSha256": "805ee95770aac3daef4f7a58ee2e87cbc15146b9c6d14e3133065c8e158d689f",
+                "sizeBytes": 37730
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/apex-telemetry/assets/f9fa1012b380ba60ec8fea9bf3f55c09defea476e4607acc984a904fac6e011c.webp",
+                "status": 200,
+                "sha256": "f9fa1012b380ba60ec8fea9bf3f55c09defea476e4607acc984a904fac6e011c",
+                "expectedSha256": "f9fa1012b380ba60ec8fea9bf3f55c09defea476e4607acc984a904fac6e011c",
+                "sizeBytes": 22712
+              }
+            ],
+            "dataSkin": "apex-telemetry",
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgba(8, 9, 12, 0.97)",
+            "backgroundImage": "linear-gradient(rgba(8, 9, 12, 0.16), rgba(8, 9, 12, 0.16)), url(\"http://127.0.0.1:4015/__dsh-themes/apex-telemetry/assets/a6b4d6f078e9aeb31281e4687789ae9414be7e297cc13982de666f3f47e604fc.webp\")",
+            "stylesheet": "/__dsh-themes/apex-telemetry/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "disk": {
+        "freeBeforeBytes": 2482860032,
+        "freeAfterBytes": 2485243904
+      },
+      "coldRestart": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": "apex-telemetry",
+          "backgroundImage": "linear-gradient(rgba(8, 9, 12, 0.16), rgba(8, 9, 12, 0.16)), url(\"http://127.0.0.1:4015/__dsh-themes/apex-telemetry/assets/a6b4d6f078e9aeb31281e4687789ae9414be7e297cc13982de666f3f47e604fc.webp\")",
+          "stylesheet": "/__dsh-themes/apex-telemetry/skin.css",
+          "tokens": {
+            "--dsw-alias-bg-base": "#08090CF7",
+            "--dsw-alias-bg-layer-1": "#12141AF5",
+            "--dsw-alias-bg-layer-2": "#1E2028F3",
+            "--dsw-alias-bg-overlay": "#292B34F4",
+            "--dsw-alias-border-l1": "#454A55",
+            "--dsw-alias-border-l2": "#B94149",
+            "--dsw-alias-brand-primary": "#FF5A61",
+            "--dsw-alias-label-primary": "#FFF6EB",
+            "--dsw-alias-label-secondary": "#C9BFC0",
+            "--dsw-alias-state-error-primary": "#FF6070",
+            "--dsw-alias-state-success-primary": "#66D99A",
+            "--dsw-alias-state-warn-primary": "#FFC45E",
+            "--dsw-specific-sidebar-fill": "#0D0F14F6"
+          }
+        },
+        "modes": [
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#08090CF7",
+              "--dsw-alias-bg-layer-1": "#12141AF5",
+              "--dsw-alias-bg-layer-2": "#1E2028F3",
+              "--dsw-alias-bg-overlay": "#292B34F4",
+              "--dsw-alias-border-l1": "#454A55",
+              "--dsw-alias-border-l2": "#B94149",
+              "--dsw-alias-brand-primary": "#FF5A61",
+              "--dsw-alias-label-primary": "#FFF6EB",
+              "--dsw-alias-label-secondary": "#C9BFC0",
+              "--dsw-alias-state-error-primary": "#FF6070",
+              "--dsw-alias-state-success-primary": "#66D99A",
+              "--dsw-alias-state-warn-primary": "#FFC45E",
+              "--dsw-specific-sidebar-fill": "#0D0F14F6"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/apex-telemetry/skin.css",
+                "status": 200,
+                "sha256": "0027e8a15568852646febc38effe1e2d243fc2525ff62a3380c9a4e8b0b749ea",
+                "expectedSha256": "0027e8a15568852646febc38effe1e2d243fc2525ff62a3380c9a4e8b0b749ea",
+                "sizeBytes": 5441
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/apex-telemetry/assets/b20f56f44922889e19851d908d61460b873deb25ed7cd2766aa991a203fbc70a.webp",
+                "status": 200,
+                "sha256": "b20f56f44922889e19851d908d61460b873deb25ed7cd2766aa991a203fbc70a",
+                "expectedSha256": "b20f56f44922889e19851d908d61460b873deb25ed7cd2766aa991a203fbc70a",
+                "sizeBytes": 88630
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/apex-telemetry/assets/544fb6f92de5c42f136398915cda029ef91ebae80546fa89ac8003c3d0f5eab3.webp",
+                "status": 200,
+                "sha256": "544fb6f92de5c42f136398915cda029ef91ebae80546fa89ac8003c3d0f5eab3",
+                "expectedSha256": "544fb6f92de5c42f136398915cda029ef91ebae80546fa89ac8003c3d0f5eab3",
+                "sizeBytes": 84022
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/apex-telemetry/assets/89439a336066c05559fac838c8a0f2713a0d1de38c36c40583e564a2ec798f60.webp",
+                "status": 200,
+                "sha256": "89439a336066c05559fac838c8a0f2713a0d1de38c36c40583e564a2ec798f60",
+                "expectedSha256": "89439a336066c05559fac838c8a0f2713a0d1de38c36c40583e564a2ec798f60",
+                "sizeBytes": 36130
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/apex-telemetry/assets/a6b4d6f078e9aeb31281e4687789ae9414be7e297cc13982de666f3f47e604fc.webp",
+                "status": 200,
+                "sha256": "a6b4d6f078e9aeb31281e4687789ae9414be7e297cc13982de666f3f47e604fc",
+                "expectedSha256": "a6b4d6f078e9aeb31281e4687789ae9414be7e297cc13982de666f3f47e604fc",
+                "sizeBytes": 64442
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/apex-telemetry/assets/b1badfabec49573aed6b401822f2625440e8d62afa136c67d930a0a5265ea0e4.webp",
+                "status": 200,
+                "sha256": "b1badfabec49573aed6b401822f2625440e8d62afa136c67d930a0a5265ea0e4",
+                "expectedSha256": "b1badfabec49573aed6b401822f2625440e8d62afa136c67d930a0a5265ea0e4",
+                "sizeBytes": 53428
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/apex-telemetry/assets/805ee95770aac3daef4f7a58ee2e87cbc15146b9c6d14e3133065c8e158d689f.webp",
+                "status": 200,
+                "sha256": "805ee95770aac3daef4f7a58ee2e87cbc15146b9c6d14e3133065c8e158d689f",
+                "expectedSha256": "805ee95770aac3daef4f7a58ee2e87cbc15146b9c6d14e3133065c8e158d689f",
+                "sizeBytes": 37730
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/apex-telemetry/assets/f9fa1012b380ba60ec8fea9bf3f55c09defea476e4607acc984a904fac6e011c.webp",
+                "status": 200,
+                "sha256": "f9fa1012b380ba60ec8fea9bf3f55c09defea476e4607acc984a904fac6e011c",
+                "expectedSha256": "f9fa1012b380ba60ec8fea9bf3f55c09defea476e4607acc984a904fac6e011c",
+                "sizeBytes": 22712
+              }
+            ],
+            "dataSkin": "apex-telemetry",
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgba(8, 9, 12, 0.97)",
+            "backgroundImage": "linear-gradient(rgba(8, 9, 12, 0.16), rgba(8, 9, 12, 0.16)), url(\"http://127.0.0.1:4015/__dsh-themes/apex-telemetry/assets/a6b4d6f078e9aeb31281e4687789ae9414be7e297cc13982de666f3f47e604fc.webp\")",
+            "stylesheet": "/__dsh-themes/apex-telemetry/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "recovery": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": null,
+          "backgroundImage": "none",
+          "stylesheet": null,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          }
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "tokens": {
+              "--dsw-alias-bg-base": "#fff",
+              "--dsw-alias-bg-layer-1": "#fff",
+              "--dsw-alias-bg-layer-2": "#fff",
+              "--dsw-alias-bg-overlay": "#e9ecf2",
+              "--dsw-alias-border-l1": "#0000000a",
+              "--dsw-alias-border-l2": "#0000001a",
+              "--dsw-alias-brand-primary": "#0f1115",
+              "--dsw-alias-label-primary": "#0f1115",
+              "--dsw-alias-label-secondary": "#61666b",
+              "--dsw-alias-state-error-primary": "#ec1313",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#f9fafb"
+            },
+            "resources": [],
+            "dataSkin": null,
+            "dark": false,
+            "colorScheme": "light",
+            "bodyBackground": "rgb(255, 255, 255)",
+            "backgroundImage": "none",
+            "stylesheet": null,
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          },
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#151517",
+              "--dsw-alias-bg-layer-1": "#232324",
+              "--dsw-alias-bg-layer-2": "#2c2c2e",
+              "--dsw-alias-bg-overlay": "#61666b",
+              "--dsw-alias-border-l1": "#ffffff0f",
+              "--dsw-alias-border-l2": "#ffffff1f",
+              "--dsw-alias-brand-primary": "#f9fafb",
+              "--dsw-alias-label-primary": "#f9fafb",
+              "--dsw-alias-label-secondary": "#cfd3d6",
+              "--dsw-alias-state-error-primary": "#f25a5a",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#1b1b1c"
+            },
+            "resources": [],
+            "dataSkin": null,
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgb(21, 21, 23)",
+            "backgroundImage": "none",
+            "stylesheet": null,
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [
+          {
+            "url": "/__dsh-themes/apex-telemetry/skin.css",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/apex-telemetry/assets/b20f56f44922889e19851d908d61460b873deb25ed7cd2766aa991a203fbc70a.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/apex-telemetry/assets/544fb6f92de5c42f136398915cda029ef91ebae80546fa89ac8003c3d0f5eab3.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/apex-telemetry/assets/89439a336066c05559fac838c8a0f2713a0d1de38c36c40583e564a2ec798f60.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/apex-telemetry/assets/a6b4d6f078e9aeb31281e4687789ae9414be7e297cc13982de666f3f47e604fc.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/apex-telemetry/assets/b1badfabec49573aed6b401822f2625440e8d62afa136c67d930a0a5265ea0e4.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/apex-telemetry/assets/805ee95770aac3daef4f7a58ee2e87cbc15146b9c6d14e3133065c8e158d689f.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/apex-telemetry/assets/f9fa1012b380ba60ec8fea9bf3f55c09defea476e4607acc984a904fac6e011c.webp",
+            "status": 404
+          }
+        ],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "completedAt": "2026-09-06T06:04:41.753Z"
+    },
+    {
+      "catalogId": 2044,
+      "slug": "fuji-dawn",
+      "kind": "full-skin",
+      "status": "passed",
+      "artifactSha256": "4d336d5afbb6c3b8253f84a9e0c740407f4e7266080353dd7d645b7542098cf1",
+      "manifestSha256": "801e130f35336959f70cff838434c498731ceaf09f1febb503e9fd083a28d2ff",
+      "packedManifestSha256": "80acc11b359e9937cb4927e422ed5df497960dace641aa78cc10415e87b9f43a",
+      "rendered": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": "fuji-dawn",
+          "backgroundImage": "linear-gradient(rgba(11, 30, 52, 0.1), rgba(11, 30, 52, 0.1)), url(\"http://127.0.0.1:4015/__dsh-themes/fuji-dawn/assets/dd7abda93923921252258663726ea726bc0126ebd7a614603ff06db731256e58.webp\")",
+          "stylesheet": "/__dsh-themes/fuji-dawn/skin.css",
+          "tokens": {
+            "--dsw-alias-bg-base": "#0B1E34",
+            "--dsw-alias-bg-layer-1": "#142D43",
+            "--dsw-alias-bg-layer-2": "#213E52",
+            "--dsw-alias-bg-overlay": "#1A3549",
+            "--dsw-alias-border-l1": "#4D7182",
+            "--dsw-alias-border-l2": "#89ADAC",
+            "--dsw-alias-brand-primary": "#9CDBCA",
+            "--dsw-alias-label-primary": "#EFF8F2",
+            "--dsw-alias-label-secondary": "#B0CDD1",
+            "--dsw-alias-state-error-primary": "#FF9BA7",
+            "--dsw-alias-state-success-primary": "#8FE0B4",
+            "--dsw-alias-state-warn-primary": "#F4D58D",
+            "--dsw-specific-sidebar-fill": "#10263B"
+          }
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "tokens": {
+              "--dsw-alias-bg-base": "#EFF4EE",
+              "--dsw-alias-bg-layer-1": "#FCFDF5",
+              "--dsw-alias-bg-layer-2": "#DEEADD",
+              "--dsw-alias-bg-overlay": "#FFFFF8",
+              "--dsw-alias-border-l1": "#A4BCB0",
+              "--dsw-alias-border-l2": "#6D968B",
+              "--dsw-alias-brand-primary": "#17605E",
+              "--dsw-alias-label-primary": "#183637",
+              "--dsw-alias-label-secondary": "#476666",
+              "--dsw-alias-state-error-primary": "#B62F40",
+              "--dsw-alias-state-success-primary": "#176E4A",
+              "--dsw-alias-state-warn-primary": "#885D0D",
+              "--dsw-specific-sidebar-fill": "#E4EDE2"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/fuji-dawn/skin.css",
+                "status": 200,
+                "sha256": "37cce94de9e85ebd2961ae7e9b4aa0d2394649ba819daa13a6dbd978ab71b3c6",
+                "expectedSha256": "37cce94de9e85ebd2961ae7e9b4aa0d2394649ba819daa13a6dbd978ab71b3c6",
+                "sizeBytes": 5440
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/fuji-dawn/assets/142b8ce5f7cd8ed102eaeac1e163c1aa4accfbcfc9cdfc755fcd6779b43f149b.webp",
+                "status": 200,
+                "sha256": "142b8ce5f7cd8ed102eaeac1e163c1aa4accfbcfc9cdfc755fcd6779b43f149b",
+                "expectedSha256": "142b8ce5f7cd8ed102eaeac1e163c1aa4accfbcfc9cdfc755fcd6779b43f149b",
+                "sizeBytes": 174828
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/fuji-dawn/assets/d542606e312815f4ff008ad9ac7313e6ee31330326124c278a9294539fa76b56.webp",
+                "status": 200,
+                "sha256": "d542606e312815f4ff008ad9ac7313e6ee31330326124c278a9294539fa76b56",
+                "expectedSha256": "d542606e312815f4ff008ad9ac7313e6ee31330326124c278a9294539fa76b56",
+                "sizeBytes": 129402
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/fuji-dawn/assets/3784db8cde58eb15747fc2d669ebd00371f2670d01d0454f68f4c2bdc6387e53.webp",
+                "status": 200,
+                "sha256": "3784db8cde58eb15747fc2d669ebd00371f2670d01d0454f68f4c2bdc6387e53",
+                "expectedSha256": "3784db8cde58eb15747fc2d669ebd00371f2670d01d0454f68f4c2bdc6387e53",
+                "sizeBytes": 65068
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/fuji-dawn/assets/dd7abda93923921252258663726ea726bc0126ebd7a614603ff06db731256e58.webp",
+                "status": 200,
+                "sha256": "dd7abda93923921252258663726ea726bc0126ebd7a614603ff06db731256e58",
+                "expectedSha256": "dd7abda93923921252258663726ea726bc0126ebd7a614603ff06db731256e58",
+                "sizeBytes": 99390
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/fuji-dawn/assets/147cb2e1e1aede36e896fe33b41c4ba171ac9d1c491323a30d2891f3df8f0cc3.webp",
+                "status": 200,
+                "sha256": "147cb2e1e1aede36e896fe33b41c4ba171ac9d1c491323a30d2891f3df8f0cc3",
+                "expectedSha256": "147cb2e1e1aede36e896fe33b41c4ba171ac9d1c491323a30d2891f3df8f0cc3",
+                "sizeBytes": 87578
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/fuji-dawn/assets/488ee4bf5c87c8110ea6e3208a833d7f0103bf55f546ec9d2cfaa01c5d77f6c7.webp",
+                "status": 200,
+                "sha256": "488ee4bf5c87c8110ea6e3208a833d7f0103bf55f546ec9d2cfaa01c5d77f6c7",
+                "expectedSha256": "488ee4bf5c87c8110ea6e3208a833d7f0103bf55f546ec9d2cfaa01c5d77f6c7",
+                "sizeBytes": 53856
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/fuji-dawn/assets/b88dd29a2500b08d63f23fab5111463cdf990cfeb80c27a794ef2c9031b8759f.webp",
+                "status": 200,
+                "sha256": "b88dd29a2500b08d63f23fab5111463cdf990cfeb80c27a794ef2c9031b8759f",
+                "expectedSha256": "b88dd29a2500b08d63f23fab5111463cdf990cfeb80c27a794ef2c9031b8759f",
+                "sizeBytes": 29928
+              }
+            ],
+            "dataSkin": "fuji-dawn",
+            "dark": false,
+            "colorScheme": "light",
+            "bodyBackground": "rgb(239, 244, 238)",
+            "backgroundImage": "linear-gradient(rgba(239, 244, 238, 0.055), rgba(239, 244, 238, 0.055)), url(\"http://127.0.0.1:4015/__dsh-themes/fuji-dawn/assets/142b8ce5f7cd8ed102eaeac1e163c1aa4accfbcfc9cdfc755fcd6779b43f149b.webp\")",
+            "stylesheet": "/__dsh-themes/fuji-dawn/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          },
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#0B1E34",
+              "--dsw-alias-bg-layer-1": "#142D43",
+              "--dsw-alias-bg-layer-2": "#213E52",
+              "--dsw-alias-bg-overlay": "#1A3549",
+              "--dsw-alias-border-l1": "#4D7182",
+              "--dsw-alias-border-l2": "#89ADAC",
+              "--dsw-alias-brand-primary": "#9CDBCA",
+              "--dsw-alias-label-primary": "#EFF8F2",
+              "--dsw-alias-label-secondary": "#B0CDD1",
+              "--dsw-alias-state-error-primary": "#FF9BA7",
+              "--dsw-alias-state-success-primary": "#8FE0B4",
+              "--dsw-alias-state-warn-primary": "#F4D58D",
+              "--dsw-specific-sidebar-fill": "#10263B"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/fuji-dawn/skin.css",
+                "status": 200,
+                "sha256": "37cce94de9e85ebd2961ae7e9b4aa0d2394649ba819daa13a6dbd978ab71b3c6",
+                "expectedSha256": "37cce94de9e85ebd2961ae7e9b4aa0d2394649ba819daa13a6dbd978ab71b3c6",
+                "sizeBytes": 5440
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/fuji-dawn/assets/142b8ce5f7cd8ed102eaeac1e163c1aa4accfbcfc9cdfc755fcd6779b43f149b.webp",
+                "status": 200,
+                "sha256": "142b8ce5f7cd8ed102eaeac1e163c1aa4accfbcfc9cdfc755fcd6779b43f149b",
+                "expectedSha256": "142b8ce5f7cd8ed102eaeac1e163c1aa4accfbcfc9cdfc755fcd6779b43f149b",
+                "sizeBytes": 174828
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/fuji-dawn/assets/d542606e312815f4ff008ad9ac7313e6ee31330326124c278a9294539fa76b56.webp",
+                "status": 200,
+                "sha256": "d542606e312815f4ff008ad9ac7313e6ee31330326124c278a9294539fa76b56",
+                "expectedSha256": "d542606e312815f4ff008ad9ac7313e6ee31330326124c278a9294539fa76b56",
+                "sizeBytes": 129402
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/fuji-dawn/assets/3784db8cde58eb15747fc2d669ebd00371f2670d01d0454f68f4c2bdc6387e53.webp",
+                "status": 200,
+                "sha256": "3784db8cde58eb15747fc2d669ebd00371f2670d01d0454f68f4c2bdc6387e53",
+                "expectedSha256": "3784db8cde58eb15747fc2d669ebd00371f2670d01d0454f68f4c2bdc6387e53",
+                "sizeBytes": 65068
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/fuji-dawn/assets/dd7abda93923921252258663726ea726bc0126ebd7a614603ff06db731256e58.webp",
+                "status": 200,
+                "sha256": "dd7abda93923921252258663726ea726bc0126ebd7a614603ff06db731256e58",
+                "expectedSha256": "dd7abda93923921252258663726ea726bc0126ebd7a614603ff06db731256e58",
+                "sizeBytes": 99390
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/fuji-dawn/assets/147cb2e1e1aede36e896fe33b41c4ba171ac9d1c491323a30d2891f3df8f0cc3.webp",
+                "status": 200,
+                "sha256": "147cb2e1e1aede36e896fe33b41c4ba171ac9d1c491323a30d2891f3df8f0cc3",
+                "expectedSha256": "147cb2e1e1aede36e896fe33b41c4ba171ac9d1c491323a30d2891f3df8f0cc3",
+                "sizeBytes": 87578
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/fuji-dawn/assets/488ee4bf5c87c8110ea6e3208a833d7f0103bf55f546ec9d2cfaa01c5d77f6c7.webp",
+                "status": 200,
+                "sha256": "488ee4bf5c87c8110ea6e3208a833d7f0103bf55f546ec9d2cfaa01c5d77f6c7",
+                "expectedSha256": "488ee4bf5c87c8110ea6e3208a833d7f0103bf55f546ec9d2cfaa01c5d77f6c7",
+                "sizeBytes": 53856
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/fuji-dawn/assets/b88dd29a2500b08d63f23fab5111463cdf990cfeb80c27a794ef2c9031b8759f.webp",
+                "status": 200,
+                "sha256": "b88dd29a2500b08d63f23fab5111463cdf990cfeb80c27a794ef2c9031b8759f",
+                "expectedSha256": "b88dd29a2500b08d63f23fab5111463cdf990cfeb80c27a794ef2c9031b8759f",
+                "sizeBytes": 29928
+              }
+            ],
+            "dataSkin": "fuji-dawn",
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgb(11, 30, 52)",
+            "backgroundImage": "linear-gradient(rgba(11, 30, 52, 0.1), rgba(11, 30, 52, 0.1)), url(\"http://127.0.0.1:4015/__dsh-themes/fuji-dawn/assets/dd7abda93923921252258663726ea726bc0126ebd7a614603ff06db731256e58.webp\")",
+            "stylesheet": "/__dsh-themes/fuji-dawn/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "disk": {
+        "freeBeforeBytes": 2485219328,
+        "freeAfterBytes": 2482618368
+      },
+      "coldRestart": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": "fuji-dawn",
+          "backgroundImage": "linear-gradient(rgba(11, 30, 52, 0.1), rgba(11, 30, 52, 0.1)), url(\"http://127.0.0.1:4015/__dsh-themes/fuji-dawn/assets/dd7abda93923921252258663726ea726bc0126ebd7a614603ff06db731256e58.webp\")",
+          "stylesheet": "/__dsh-themes/fuji-dawn/skin.css",
+          "tokens": {
+            "--dsw-alias-bg-base": "#0B1E34",
+            "--dsw-alias-bg-layer-1": "#142D43",
+            "--dsw-alias-bg-layer-2": "#213E52",
+            "--dsw-alias-bg-overlay": "#1A3549",
+            "--dsw-alias-border-l1": "#4D7182",
+            "--dsw-alias-border-l2": "#89ADAC",
+            "--dsw-alias-brand-primary": "#9CDBCA",
+            "--dsw-alias-label-primary": "#EFF8F2",
+            "--dsw-alias-label-secondary": "#B0CDD1",
+            "--dsw-alias-state-error-primary": "#FF9BA7",
+            "--dsw-alias-state-success-primary": "#8FE0B4",
+            "--dsw-alias-state-warn-primary": "#F4D58D",
+            "--dsw-specific-sidebar-fill": "#10263B"
+          }
+        },
+        "modes": [
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#0B1E34",
+              "--dsw-alias-bg-layer-1": "#142D43",
+              "--dsw-alias-bg-layer-2": "#213E52",
+              "--dsw-alias-bg-overlay": "#1A3549",
+              "--dsw-alias-border-l1": "#4D7182",
+              "--dsw-alias-border-l2": "#89ADAC",
+              "--dsw-alias-brand-primary": "#9CDBCA",
+              "--dsw-alias-label-primary": "#EFF8F2",
+              "--dsw-alias-label-secondary": "#B0CDD1",
+              "--dsw-alias-state-error-primary": "#FF9BA7",
+              "--dsw-alias-state-success-primary": "#8FE0B4",
+              "--dsw-alias-state-warn-primary": "#F4D58D",
+              "--dsw-specific-sidebar-fill": "#10263B"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/fuji-dawn/skin.css",
+                "status": 200,
+                "sha256": "37cce94de9e85ebd2961ae7e9b4aa0d2394649ba819daa13a6dbd978ab71b3c6",
+                "expectedSha256": "37cce94de9e85ebd2961ae7e9b4aa0d2394649ba819daa13a6dbd978ab71b3c6",
+                "sizeBytes": 5440
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/fuji-dawn/assets/142b8ce5f7cd8ed102eaeac1e163c1aa4accfbcfc9cdfc755fcd6779b43f149b.webp",
+                "status": 200,
+                "sha256": "142b8ce5f7cd8ed102eaeac1e163c1aa4accfbcfc9cdfc755fcd6779b43f149b",
+                "expectedSha256": "142b8ce5f7cd8ed102eaeac1e163c1aa4accfbcfc9cdfc755fcd6779b43f149b",
+                "sizeBytes": 174828
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/fuji-dawn/assets/d542606e312815f4ff008ad9ac7313e6ee31330326124c278a9294539fa76b56.webp",
+                "status": 200,
+                "sha256": "d542606e312815f4ff008ad9ac7313e6ee31330326124c278a9294539fa76b56",
+                "expectedSha256": "d542606e312815f4ff008ad9ac7313e6ee31330326124c278a9294539fa76b56",
+                "sizeBytes": 129402
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/fuji-dawn/assets/3784db8cde58eb15747fc2d669ebd00371f2670d01d0454f68f4c2bdc6387e53.webp",
+                "status": 200,
+                "sha256": "3784db8cde58eb15747fc2d669ebd00371f2670d01d0454f68f4c2bdc6387e53",
+                "expectedSha256": "3784db8cde58eb15747fc2d669ebd00371f2670d01d0454f68f4c2bdc6387e53",
+                "sizeBytes": 65068
+              },
+              {
+                "role": "background-dark",
+                "url": "/__dsh-themes/fuji-dawn/assets/dd7abda93923921252258663726ea726bc0126ebd7a614603ff06db731256e58.webp",
+                "status": 200,
+                "sha256": "dd7abda93923921252258663726ea726bc0126ebd7a614603ff06db731256e58",
+                "expectedSha256": "dd7abda93923921252258663726ea726bc0126ebd7a614603ff06db731256e58",
+                "sizeBytes": 99390
+              },
+              {
+                "role": "sidebar-dark",
+                "url": "/__dsh-themes/fuji-dawn/assets/147cb2e1e1aede36e896fe33b41c4ba171ac9d1c491323a30d2891f3df8f0cc3.webp",
+                "status": 200,
+                "sha256": "147cb2e1e1aede36e896fe33b41c4ba171ac9d1c491323a30d2891f3df8f0cc3",
+                "expectedSha256": "147cb2e1e1aede36e896fe33b41c4ba171ac9d1c491323a30d2891f3df8f0cc3",
+                "sizeBytes": 87578
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/fuji-dawn/assets/488ee4bf5c87c8110ea6e3208a833d7f0103bf55f546ec9d2cfaa01c5d77f6c7.webp",
+                "status": 200,
+                "sha256": "488ee4bf5c87c8110ea6e3208a833d7f0103bf55f546ec9d2cfaa01c5d77f6c7",
+                "expectedSha256": "488ee4bf5c87c8110ea6e3208a833d7f0103bf55f546ec9d2cfaa01c5d77f6c7",
+                "sizeBytes": 53856
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/fuji-dawn/assets/b88dd29a2500b08d63f23fab5111463cdf990cfeb80c27a794ef2c9031b8759f.webp",
+                "status": 200,
+                "sha256": "b88dd29a2500b08d63f23fab5111463cdf990cfeb80c27a794ef2c9031b8759f",
+                "expectedSha256": "b88dd29a2500b08d63f23fab5111463cdf990cfeb80c27a794ef2c9031b8759f",
+                "sizeBytes": 29928
+              }
+            ],
+            "dataSkin": "fuji-dawn",
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgb(11, 30, 52)",
+            "backgroundImage": "linear-gradient(rgba(11, 30, 52, 0.1), rgba(11, 30, 52, 0.1)), url(\"http://127.0.0.1:4015/__dsh-themes/fuji-dawn/assets/dd7abda93923921252258663726ea726bc0126ebd7a614603ff06db731256e58.webp\")",
+            "stylesheet": "/__dsh-themes/fuji-dawn/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "recovery": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": null,
+          "backgroundImage": "none",
+          "stylesheet": null,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          }
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "tokens": {
+              "--dsw-alias-bg-base": "#fff",
+              "--dsw-alias-bg-layer-1": "#fff",
+              "--dsw-alias-bg-layer-2": "#fff",
+              "--dsw-alias-bg-overlay": "#e9ecf2",
+              "--dsw-alias-border-l1": "#0000000a",
+              "--dsw-alias-border-l2": "#0000001a",
+              "--dsw-alias-brand-primary": "#0f1115",
+              "--dsw-alias-label-primary": "#0f1115",
+              "--dsw-alias-label-secondary": "#61666b",
+              "--dsw-alias-state-error-primary": "#ec1313",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#f9fafb"
+            },
+            "resources": [],
+            "dataSkin": null,
+            "dark": false,
+            "colorScheme": "light",
+            "bodyBackground": "rgb(255, 255, 255)",
+            "backgroundImage": "none",
+            "stylesheet": null,
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          },
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#151517",
+              "--dsw-alias-bg-layer-1": "#232324",
+              "--dsw-alias-bg-layer-2": "#2c2c2e",
+              "--dsw-alias-bg-overlay": "#61666b",
+              "--dsw-alias-border-l1": "#ffffff0f",
+              "--dsw-alias-border-l2": "#ffffff1f",
+              "--dsw-alias-brand-primary": "#f9fafb",
+              "--dsw-alias-label-primary": "#f9fafb",
+              "--dsw-alias-label-secondary": "#cfd3d6",
+              "--dsw-alias-state-error-primary": "#f25a5a",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#1b1b1c"
+            },
+            "resources": [],
+            "dataSkin": null,
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgb(21, 21, 23)",
+            "backgroundImage": "none",
+            "stylesheet": null,
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [
+          {
+            "url": "/__dsh-themes/fuji-dawn/skin.css",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/fuji-dawn/assets/142b8ce5f7cd8ed102eaeac1e163c1aa4accfbcfc9cdfc755fcd6779b43f149b.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/fuji-dawn/assets/d542606e312815f4ff008ad9ac7313e6ee31330326124c278a9294539fa76b56.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/fuji-dawn/assets/3784db8cde58eb15747fc2d669ebd00371f2670d01d0454f68f4c2bdc6387e53.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/fuji-dawn/assets/dd7abda93923921252258663726ea726bc0126ebd7a614603ff06db731256e58.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/fuji-dawn/assets/147cb2e1e1aede36e896fe33b41c4ba171ac9d1c491323a30d2891f3df8f0cc3.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/fuji-dawn/assets/488ee4bf5c87c8110ea6e3208a833d7f0103bf55f546ec9d2cfaa01c5d77f6c7.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/fuji-dawn/assets/b88dd29a2500b08d63f23fab5111463cdf990cfeb80c27a794ef2c9031b8759f.webp",
+            "status": 404
+          }
+        ],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "completedAt": "2026-09-06T06:05:00.133Z"
+    }
+  ],
+  "minFreeMiB": 700,
+  "baseline": {
+    "status": "passed",
+    "fresh": {
+      "dark": true,
+      "scheme": "dark",
+      "dataSkin": null,
+      "backgroundImage": "none",
+      "stylesheet": null,
+      "tokens": {
+        "--dsw-alias-bg-base": "#151517",
+        "--dsw-alias-bg-layer-1": "#232324",
+        "--dsw-alias-bg-layer-2": "#2c2c2e",
+        "--dsw-alias-bg-overlay": "#61666b",
+        "--dsw-alias-border-l1": "#ffffff0f",
+        "--dsw-alias-border-l2": "#ffffff1f",
+        "--dsw-alias-brand-primary": "#f9fafb",
+        "--dsw-alias-label-primary": "#f9fafb",
+        "--dsw-alias-label-secondary": "#cfd3d6",
+        "--dsw-alias-state-error-primary": "#f25a5a",
+        "--dsw-alias-state-success-primary": "#22c55e",
+        "--dsw-alias-state-warn-primary": "#f59e0b",
+        "--dsw-specific-sidebar-fill": "#1b1b1c"
+      }
+    },
+    "modes": [
+      {
+        "mode": "light",
+        "tokens": {
+          "--dsw-alias-bg-base": "#fff",
+          "--dsw-alias-bg-layer-1": "#fff",
+          "--dsw-alias-bg-layer-2": "#fff",
+          "--dsw-alias-bg-overlay": "#e9ecf2",
+          "--dsw-alias-border-l1": "#0000000a",
+          "--dsw-alias-border-l2": "#0000001a",
+          "--dsw-alias-brand-primary": "#0f1115",
+          "--dsw-alias-label-primary": "#0f1115",
+          "--dsw-alias-label-secondary": "#61666b",
+          "--dsw-alias-state-error-primary": "#ec1313",
+          "--dsw-alias-state-success-primary": "#22c55e",
+          "--dsw-alias-state-warn-primary": "#f59e0b",
+          "--dsw-specific-sidebar-fill": "#f9fafb"
+        },
+        "resources": [],
+        "dataSkin": null,
+        "dark": false,
+        "colorScheme": "light",
+        "bodyBackground": "rgb(255, 255, 255)",
+        "backgroundImage": "none",
+        "stylesheet": null,
+        "rootChildren": 1,
+        "horizontalOverflow": false,
+        "screenshotPath": null
+      },
+      {
+        "mode": "dark",
+        "tokens": {
+          "--dsw-alias-bg-base": "#151517",
+          "--dsw-alias-bg-layer-1": "#232324",
+          "--dsw-alias-bg-layer-2": "#2c2c2e",
+          "--dsw-alias-bg-overlay": "#61666b",
+          "--dsw-alias-border-l1": "#ffffff0f",
+          "--dsw-alias-border-l2": "#ffffff1f",
+          "--dsw-alias-brand-primary": "#f9fafb",
+          "--dsw-alias-label-primary": "#f9fafb",
+          "--dsw-alias-label-secondary": "#cfd3d6",
+          "--dsw-alias-state-error-primary": "#f25a5a",
+          "--dsw-alias-state-success-primary": "#22c55e",
+          "--dsw-alias-state-warn-primary": "#f59e0b",
+          "--dsw-specific-sidebar-fill": "#1b1b1c"
+        },
+        "resources": [],
+        "dataSkin": null,
+        "dark": true,
+        "colorScheme": "dark",
+        "bodyBackground": "rgb(21, 21, 23)",
+        "backgroundImage": "none",
+        "stylesheet": null,
+        "rootChildren": 1,
+        "horizontalOverflow": false,
+        "screenshotPath": null
+      }
+    ],
+    "errors": [],
+    "recoveryResources": [],
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+  }
+}

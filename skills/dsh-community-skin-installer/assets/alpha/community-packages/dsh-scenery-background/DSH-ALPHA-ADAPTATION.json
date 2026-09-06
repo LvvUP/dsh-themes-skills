@@ -1,0 +1,44 @@
+{
+  "sourceRepository": "soslowsnail/dsh-scenery-background",
+  "sourceRevision": "05620f7d7167735a8057cc1195d6fa283fc14ae5",
+  "files": [
+    {
+      "path": "LICENSE",
+      "gitBlob": "5720cd38663f16de7881e08a8f45657ddd31f988",
+      "sha256": "4dce97962409d034e20e96bb91937f2029d2e5ea8a953a461fc26179fdf3f676",
+      "bytes": 1066
+    },
+    {
+      "path": "README.md",
+      "gitBlob": "b8a9080ed9cae377d17bf2b3a7308de42dbaf7dd",
+      "sha256": "e79b8c01c4838fb16818f72d3070f0f5a147877ddf3746778d08ff0c01e47743",
+      "bytes": 5402
+    },
+    {
+      "path": "cordis.patch.yml",
+      "gitBlob": "bc08ae1c1925c5be2dea01a982dc25cdad43aa93",
+      "sha256": "aaa0426d6615a0b82011e65a9969bd50cab75fa06b69e8b9524d835d5d37637d",
+      "bytes": 152
+    },
+    {
+      "path": "lib/client.js",
+      "gitBlob": "854ac435afe6d1f172425d224f0a182210ede554",
+      "sha256": "016484440937fe7934ad03b70c0d2b4f4aec03478348f01a41a3bd972bebef35",
+      "bytes": 38158
+    },
+    {
+      "path": "lib/index.js",
+      "gitBlob": "0d475e697bb75c0e8c266779a2910d14131e904c",
+      "sha256": "c627d6397391004e5e0f4f45f63c8b547db0448128ba132d0422974c0ded47e3",
+      "bytes": 232
+    },
+    {
+      "path": "package.json",
+      "gitBlob": "ad1bd0f56f78776fd86f8dca60cf1ec6e5671979",
+      "sha256": "218528c7cbe56d84af3a133238c31060f9e6d643fbbbe1ac1f00c1d827aec068",
+      "bytes": 1178
+    }
+  ],
+  "adaptation": "DSH Themes Alpha package metadata and resilient layout selectors; original scenery controls and Unsplash attribution retained.",
+  "readabilityAdaptation": "Original transparent panels left Alpha secondary/tertiary navigation labels too faint over scenery in light mode. Add scheme-aware whole-background washes and scoped secondary/tertiary label tokens, retaining the original artwork, two overlay levels, controls, and source attribution."
+}

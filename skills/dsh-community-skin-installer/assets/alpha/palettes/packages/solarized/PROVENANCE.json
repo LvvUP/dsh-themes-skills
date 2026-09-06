@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "adaptation": "DSH Themes",
+  "targetDshVersion": "0.1.3-alpha.1",
+  "upstream": {
+    "repository": "zhijun-dai/Solarized-dsh-theme",
+    "sourceCommit": "6b0614e53a4314c1705967b7e3c437b64dee64f2",
+    "archiveSha256": "a44cae67361c366be457ca1e3e263819dc91a77046fcd5e3a640b3960c53986e",
+    "omitted": "Binary previews and media are not used by the palette adaptation.",
+    "files": [
+      {
+        "path": ".gitignore",
+        "sha256": "2f9aebd7a15d0a9e62d69bff1c888bb93ec5eab506a9db272de622defda4735c",
+        "sizeBytes": 30
+      },
+      {
+        "path": "LICENSE",
+        "sha256": "4611653ee184c14eea36d59299fbc9c559784b744147baa429f99b8a0248e8d7",
+        "sizeBytes": 1244
+      },
+      {
+        "path": "README.i18n.yaml",
+        "sha256": "c2c46645ed9281cc53e0a25e22210a47f541879d20ab78f987f2221dd22d510f",
+        "sizeBytes": 391
+      },
+      {
+        "path": "README.md",
+        "sha256": "d4425ed77b88304b0fdf88e7ca57e765ae64a6cdabe9b3b9fc54a5c0299c6410",
+        "sizeBytes": 4688
+      },
+      {
+        "path": "README.zh.md",
+        "sha256": "f9d447e4d853bd86511bb4c07309e67525957260aaced33f146afe648631bb4f",
+        "sizeBytes": 4584
+      },
+      {
+        "path": "cordis.patch.yml",
+        "sha256": "f1e4ec92014fbe30ec79c6993d4bfe570d927a49d225991caa06c7defa7ef0d7",
+        "sizeBytes": 380
+      },
+      {
+        "path": "lib/client.js",
+        "sha256": "a28c1177add655478079475b4bb528a531adee4643894949a11cd1c2a73f5539",
+        "sizeBytes": 40666
+      },
+      {
+        "path": "lib/index.js",
+        "sha256": "3ea589a82e090bf6d1b3be5c7252dd7b00f90b01b6e440cb6e5bf6abda840d1a",
+        "sizeBytes": 754
+      },
+      {
+        "path": "lib/types/client/index.d.ts",
+        "sha256": "a5b14a7d22ee9ffb4cfdb523f5252fe996cbbcc5919c6491773be02d82d54ee8",
+        "sizeBytes": 798
+      },
+      {
+        "path": "lib/types/index.d.ts",
+        "sha256": "0dedf2ed6d2ddc8bb0c7ae63d96e803ec019ad1a758fc47f104c164a840a0081",
+        "sizeBytes": 236
+      },
+      {
+        "path": "package.json",
+        "sha256": "081ca94a4777f284edbdcd65aa87a80611700bbe26988c64b391f2ca81100d7f",
+        "sizeBytes": 1712
+      },
+      {
+        "path": "scripts/gen-client.mjs",
+        "sha256": "c51da82c611bc3e2c23f0ccb8a5da44b54ddca58321ccd41330a40aceaaf524b",
+        "sizeBytes": 47375
+      }
+    ]
+  },
+  "license": "MIT",
+  "packageName": "@dsh-themes-community/solarized-alpha",
+  "packageVersion": "1.0.0-alpha.1",
+  "changes": [
+    "Exact Alpha client injection declarations; no legacy peer dependency installation",
+    "Distinct theme IDs prevent collisions between installed palette packages",
+    "Selections persist through the official Host settings service and wait for built-in preference readiness",
+    "Original palette tokens and selector UI retained; original named CSS selectors remain best-effort styling"
+  ],
+  "tokenRepairs": []
+}

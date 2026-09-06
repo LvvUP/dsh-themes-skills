@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   candidate-evidence-contract:
-    name: Candidate evidence contract only (${{ matrix.os }}, Node ${{ matrix.node }})
+    name: Repository contracts (${{ matrix.os }}, Node ${{ matrix.node }})
     strategy:
       fail-fast: false
       matrix:
@@ -29,7 +29,9 @@ jobs:
         run: node -e "const fs=require('node:fs'); for (const p of ['skills/dsh-theme-manager/runtime/node_modules','skills/dsh-theme-manager/runtime-rc8/node_modules','skills/dsh-theme-manager/runtime-dsh-0.1.1-rc.2/node_modules']) if (fs.existsSync(p)) process.exit(1)"
       - name: Test the advertised clean-clone workflow
         run: npm test
-      - name: Keep RC.2 runtime certification explicitly pending
+      - name: Validate retained RC.2 candidate evidence
         run: node skills/dsh-theme-manager/scripts/validate-baseline-candidate.mjs
+      - name: Verify committed Alpha artifacts and companion files
+        run: node scripts/sync-alpha-artifact-allowlist.mjs --check --check-tracked
       - run: npm run validate
-      - run: npm run format:check
+      - run: npm run format:check -- --check-index

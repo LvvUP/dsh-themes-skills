@@ -1,0 +1,338 @@
+[
+  {
+    "id": "qq-2007",
+    "name": {
+      "zh": "QQ 2007",
+      "en": "QQ 2007"
+    },
+    "appearance": "light",
+    "chrome": "flat",
+    "seeds": {
+      "accent": "#1e6eb5",
+      "secondary": "#0b3c6d",
+      "surface": "#c3d5e6",
+      "text": "#1a1a1a"
+    },
+    "order": 10
+  },
+  {
+    "id": "qq-2008",
+    "name": {
+      "zh": "QQ 2008·粉",
+      "en": "QQ 2008 Pink"
+    },
+    "appearance": "light",
+    "chrome": "glass",
+    "seeds": {
+      "accent": "#c8447e",
+      "secondary": "#d98bb0",
+      "surface": "#f6e2ec",
+      "text": "#2b1020"
+    },
+    "order": 20
+  },
+  {
+    "id": "miku",
+    "name": {
+      "zh": "初音未来",
+      "en": "Hatsune Miku"
+    },
+    "appearance": "light",
+    "chrome": "neon",
+    "seeds": {
+      "accent": "#19c9e5",
+      "secondary": "#ed6ec1",
+      "surface": "#f5f6fc",
+      "text": "#122c60"
+    },
+    "order": 50
+  },
+  {
+    "id": "genshin-light",
+    "name": {
+      "zh": "原神·蒙德",
+      "en": "Genshin Mondstadt"
+    },
+    "appearance": "light",
+    "chrome": "glass",
+    "seeds": {
+      "accent": "#5b7fd6",
+      "secondary": "#e0aa3e",
+      "surface": "#f2f1fb",
+      "text": "#2c3a6b"
+    },
+    "order": 60
+  },
+  {
+    "id": "genshin-dark",
+    "name": {
+      "zh": "原神·璃月夜",
+      "en": "Genshin Liyue Night"
+    },
+    "appearance": "dark",
+    "chrome": "neon",
+    "seeds": {
+      "accent": "#e0b458",
+      "secondary": "#7a86d8",
+      "surface": "#171a2e",
+      "text": "#f0e6c8"
+    },
+    "order": 70
+  },
+  {
+    "id": "deepspace-light",
+    "name": {
+      "zh": "恋与深空·星海",
+      "en": "Love&Deepspace Starry"
+    },
+    "appearance": "light",
+    "chrome": "glass",
+    "seeds": {
+      "accent": "#8f7fe8",
+      "secondary": "#f097c8",
+      "surface": "#f6f2fb",
+      "text": "#4a4668"
+    },
+    "order": 80
+  },
+  {
+    "id": "deepspace-dark",
+    "name": {
+      "zh": "恋与深空·星际",
+      "en": "Love&Deepspace Cosmos"
+    },
+    "appearance": "dark",
+    "chrome": "neon",
+    "seeds": {
+      "accent": "#9d8bff",
+      "secondary": "#f097c8",
+      "surface": "#201a40",
+      "text": "#e8e2ff"
+    },
+    "order": 90
+  },
+  {
+    "id": "naruto-naruto",
+    "name": {
+      "zh": "火影·鸣人",
+      "en": "Naruto Orange"
+    },
+    "appearance": "dark",
+    "chrome": "glass",
+    "seeds": {
+      "accent": "#f2801e",
+      "secondary": "#ffd166",
+      "surface": "#17110b",
+      "text": "#ffe3c2"
+    },
+    "order": 100
+  },
+  {
+    "id": "naruto-sasuke",
+    "name": {
+      "zh": "火影·佐助",
+      "en": "Naruto Sasuke"
+    },
+    "appearance": "dark",
+    "chrome": "neon",
+    "seeds": {
+      "accent": "#d8443c",
+      "secondary": "#7fb3ff",
+      "surface": "#171019",
+      "text": "#ffd9d2"
+    },
+    "order": 110
+  },
+  {
+    "id": "waves-1",
+    "name": {
+      "zh": "鸣潮·黑青",
+      "en": "Waves Dark Teal"
+    },
+    "appearance": "dark",
+    "chrome": "neon",
+    "seeds": {
+      "accent": "#3fd6d0",
+      "secondary": "#9aa8b0",
+      "surface": "#0d1418",
+      "text": "#d8eef0"
+    },
+    "order": 120
+  },
+  {
+    "id": "waves-2",
+    "name": {
+      "zh": "鸣潮·深紫",
+      "en": "Waves Deep Purple"
+    },
+    "appearance": "dark",
+    "chrome": "glass",
+    "seeds": {
+      "accent": "#56e0d8",
+      "secondary": "#a98fe8",
+      "surface": "#16121f",
+      "text": "#e4def2"
+    },
+    "order": 130
+  },
+  {
+    "id": "dragonball-nimbus",
+    "name": {
+      "zh": "龙珠·筋斗云",
+      "en": "Dragon Ball Nimbus"
+    },
+    "appearance": "light",
+    "chrome": "glass",
+    "seeds": {
+      "accent": "#4fc3f7",
+      "secondary": "#f6c445",
+      "surface": "#f3f7ff",
+      "text": "#14213d"
+    },
+    "order": 140
+  },
+  {
+    "id": "dragonball-saiyan",
+    "name": {
+      "zh": "龙珠·超赛",
+      "en": "Dragon Ball Saiyan"
+    },
+    "appearance": "light",
+    "chrome": "neon",
+    "seeds": {
+      "accent": "#f5c451",
+      "secondary": "#52c7f2",
+      "surface": "#fff8e8",
+      "text": "#282033"
+    },
+    "order": 150
+  },
+  {
+    "id": "dalao",
+    "name": {
+      "zh": "大佬·烟灰",
+      "en": "Dalao Ash"
+    },
+    "appearance": "dark",
+    "chrome": "glass",
+    "seeds": {
+      "accent": "#e09a52",
+      "secondary": "#9aa3b0",
+      "surface": "#111111",
+      "text": "#f2e8da"
+    },
+    "order": 160
+  },
+  {
+    "id": "deepseek-nv",
+    "name": {
+      "zh": "DeepSeek 娘·深海",
+      "en": "DeepSeek-tan Abyss"
+    },
+    "appearance": "dark",
+    "chrome": "neon",
+    "seeds": {
+      "accent": "#5bbdf7",
+      "secondary": "#7fa3cf",
+      "surface": "#0c1c3e",
+      "text": "#dfeaf8"
+    },
+    "order": 170
+  },
+  {
+    "id": "deepseek-nv-q",
+    "name": {
+      "zh": "DeepSeek 娘·Q 版",
+      "en": "DeepSeek-tan Chibi"
+    },
+    "appearance": "light",
+    "chrome": "glass",
+    "seeds": {
+      "accent": "#5b8fe8",
+      "secondary": "#8fa8c6",
+      "surface": "#f4f7fc",
+      "text": "#1b2b45"
+    },
+    "order": 180
+  },
+  {
+    "id": "deepseek-qingchun",
+    "name": {
+      "zh": "DeepSeek 青春版",
+      "en": "DeepSeek Youth"
+    },
+    "appearance": "light",
+    "chrome": "glass",
+    "seeds": {
+      "accent": "#2f92ea",
+      "secondary": "#8bb0cd",
+      "surface": "#f8fbfd",
+      "text": "#12293f"
+    },
+    "order": 190
+  },
+  {
+    "id": "neice-dalao",
+    "name": {
+      "zh": "内测大佬",
+      "en": "Beta Legends"
+    },
+    "appearance": "dark",
+    "chrome": "neon",
+    "seeds": {
+      "accent": "#4aa8ff",
+      "secondary": "#6f7d99",
+      "surface": "#040f2b",
+      "text": "#d5e4fb"
+    },
+    "order": 200
+  },
+  {
+    "id": "bie-agi",
+    "name": {
+      "zh": "别影响 AGI",
+      "en": "Don't Disturb AGI"
+    },
+    "appearance": "light",
+    "chrome": "glass",
+    "seeds": {
+      "accent": "#3f6fe0",
+      "secondary": "#8296bd",
+      "surface": "#eaf0fd",
+      "text": "#141f3a"
+    },
+    "order": 210
+  },
+  {
+    "id": "fengge",
+    "name": {
+      "zh": "峰哥骑鲸",
+      "en": "Feng Ge"
+    },
+    "appearance": "light",
+    "chrome": "flat",
+    "seeds": {
+      "accent": "#2f6af2",
+      "secondary": "#8b9ab5",
+      "surface": "#f8f9fc",
+      "text": "#151b2b"
+    },
+    "order": 220
+  },
+  {
+    "id": "liangsheng",
+    "name": {
+      "zh": "梁圣·静音",
+      "en": "Liang Sheng"
+    },
+    "appearance": "light",
+    "chrome": "glass",
+    "seeds": {
+      "accent": "#12459f",
+      "secondary": "#8397b5",
+      "surface": "#f3f7fc",
+      "text": "#0d1c33"
+    },
+    "order": 230
+  }
+]

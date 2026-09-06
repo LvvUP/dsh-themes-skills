@@ -1,0 +1,14 @@
+{
+  "sourceRepository": "ben7am1n/dsh-webhook-bridge",
+  "sourceRevision": "2f9b730fb03b2356a1b88629d43a518a96bb4cb4",
+  "files": {
+    "pnpm-lock.yaml": "e70949e75a65b8409f477341faf486242c42859312a8bc0fbe3183268dac1154",
+    "cordis.patch.yml": "df262dd57cea4fa3d7b1e5deb0d807d1817deccda3016881f59f9ba24a52196b",
+    "README.md": "399f88007663d24c56411c92a0eb384d548b92ff92dabeb9eb095c611d9e335c",
+    ".gitignore": "e705177ea6b027d5597049234e91940011be308ecc5bca3239319b4e98634d59",
+    "package.json": "15250606d1563dfe22b30a8e5b6977dcab65a6729b96b76eb0b82490eab69d2c",
+    "tsconfig.json": "0cdce88272557fd92bfcc09829e1406194691529974fae9455ebf5ad34e7d8b3",
+    "tests/webhook.test.ts": "1f1e6ea71b449417ce268437b5f28ed171f5f7f4527f936ee13e456bd15899c0",
+    "src/index.ts": "bd024a3ba77f47c76d4a600168f786a6b1905ceff885951057eef240846efa55"
+  }
+}

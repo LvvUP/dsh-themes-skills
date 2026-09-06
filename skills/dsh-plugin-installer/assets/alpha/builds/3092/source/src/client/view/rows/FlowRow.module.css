@@ -1,0 +1,81 @@
+.assistant {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  /* The message-body tier: the Settings font-size axis rides the body
+     variable (the markdown base reading). */
+  font-size: var(--dsh-content-font-size, 14px);
+  line-height: calc(24px + var(--dsh-content-font-delta, 0px));
+  color: var(--dsw-alias-label-primary);
+}
+
+/* Interrupted-turn terminal marker: quiet inline tag, no animation (the chat
+   assistant's stopped chip). */
+.stopped {
+  align-self: flex-start;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: var(--dsw-alias-interactive-bg-hover);
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 11px;
+  line-height: 18px;
+}
+
+/* Think disclosure (the reasoning row): the chat view's running sweep. */
+
+/* Persistent, turn-positioned feedback for a terminal failure (the chat
+   TurnErrorItem chrome). */
+.turnErrorRow {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: start;
+  padding: 2px 0;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.turnErrorDot {
+  margin-top: 5px;
+}
+
+.turnErrorCopy {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.turnErrorTitle {
+  margin-right: 6px;
+  color: var(--dsw-alias-state-error-primary);
+  font-weight: 600;
+}
+
+.turnErrorMessage {
+  color: var(--dsw-alias-label-secondary);
+}
+
+.turnErrorCode {
+  color: var(--dsw-alias-label-tertiary);
+  font: var(--dsw-font-markdown-code-block-small);
+}
+
+/* The unknown-surface fallback row keeps the flow's breathing room. */
+.contextRow {
+  margin: 4px 0;
+}
+
+/* Wide markdown tables (the renderer's >=4-column md-table-wide hook) span
+   the whole transcript width instead of clipping at the 748px message
+   column, while the table content keeps starting at its normal x (the lead
+   padding compensates the negative margin) — the chat view's breakout. */
+.assistant :global(.md-table-wide) {
+  --dsh-table-spare: max(0px, calc((100cqw - var(--dsh-chat-content-width)) / 2));
+  --dsh-table-lead: calc(var(--dsh-table-spare) + min(var(--dsh-chat-content-width), 100cqw) - 100%);
+  box-sizing: border-box;
+  width: calc(100% + var(--dsh-table-lead) + var(--dsh-table-spare));
+  /* The base .tableScroll caps at the column (max-width: 100%); the breakout
+     is exactly the case that must exceed it. */
+  max-width: none;
+  margin-left: calc(-1 * var(--dsh-table-lead));
+  padding-left: var(--dsh-table-lead);
+}

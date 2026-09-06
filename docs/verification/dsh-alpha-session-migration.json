@@ -1,0 +1,601 @@
+{
+  "schemaVersion": 1,
+  "verification": "dsh-alpha-session-copy-migration",
+  "status": "passed",
+  "startedAt": "2026-09-05T22:50:58.569Z",
+  "completedAt": "2026-09-05T22:50:58.736Z",
+  "scope": {
+    "input": "copied upstream fixture and synthetic test-only JSONL",
+    "compression": "none",
+    "currentFormat": 2,
+    "realUserSessions": false,
+    "modelOrApiCalls": false,
+    "officialSourceModified": false
+  },
+  "runtime": {
+    "version": "0.1.3-alpha.1",
+    "commit": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+    "node": "v24.15.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "osRelease": "24.6.0",
+    "lockfileSha256": "2c903ab870f821ee2db62fa9417d11b1c2b9c65fbeec30e851ddc53c4cc8c383"
+  },
+  "script": {
+    "path": "scripts/verify-dsh-alpha-session-migration.mjs",
+    "sha256": "729807972a8079a865107d7b6d5d729749bc6020397ac9d6a4dcb015cbc6b94a"
+  },
+  "fixture": {
+    "path": "packages/session/session-persistence-jsonl/tests/fixtures/released-v0-real-shapes.jsonl",
+    "before": {
+      "sha256": "79f44919a664f867c22d91eb42f97b3de1c88df1a66bd79c0aa3945926873668",
+      "bytes": 4143,
+      "device": "16777230",
+      "inode": "158216072",
+      "modifiedNs": "1788642652913160079"
+    },
+    "after": {
+      "sha256": "79f44919a664f867c22d91eb42f97b3de1c88df1a66bd79c0aa3945926873668",
+      "bytes": 4143,
+      "device": "16777230",
+      "inode": "158216072",
+      "modifiedNs": "1788642652913160079"
+    }
+  },
+  "compiledEntryFiles": [
+    {
+      "packageName": "@deepseek-ai/cordis",
+      "path": "vendor/cordis/lib/index.js",
+      "sha256": "1729cdbf8ee40b17c8839e06bf96491490548559e11ef7e411271e0754e751c5",
+      "bytes": 60378,
+      "device": "16777230",
+      "inode": "158339528",
+      "modifiedNs": "1788643810103094618"
+    },
+    {
+      "packageName": "@deepseek-ai/dsh-session-persistence-jsonl",
+      "path": "packages/session/session-persistence-jsonl/lib/index.js",
+      "sha256": "27dc562911c13f22a5556931c52fb74699c21db1c5668841bffae2143bbcb7e1",
+      "bytes": 176993,
+      "device": "16777230",
+      "inode": "158339762",
+      "modifiedNs": "1788643815932028800"
+    },
+    {
+      "packageName": "@deepseek-ai/dsh-session",
+      "path": "packages/core/session/lib/index.js",
+      "sha256": "a41fc0fc9697b513fe1fe85e31877421ce1bc91e6b0d7725460fc5252db61f84",
+      "bytes": 70261,
+      "device": "16777230",
+      "inode": "158339663",
+      "modifiedNs": "1788643832088933226"
+    },
+    {
+      "packageName": "@deepseek-ai/dsh-session-format-v0-to-v1",
+      "path": "packages/session/session-format-v0-to-v1/lib/index.js",
+      "sha256": "045751c23b21abb7941a58f184927201036221dc395d52f66bb240d8d38f5e56",
+      "bytes": 104266,
+      "device": "16777230",
+      "inode": "158339679",
+      "modifiedNs": "1788643832100353624"
+    },
+    {
+      "packageName": "@deepseek-ai/dsh-session-format-v1-to-v2",
+      "path": "packages/session/session-format-v1-to-v2/lib/index.js",
+      "sha256": "5d95ce8d08cf1418f20a207a0b50dbb56a4055fe5c1de32d0353749dc3c13538",
+      "bytes": 28235,
+      "device": "16777230",
+      "inode": "158339682",
+      "modifiedNs": "1788643832100389122"
+    },
+    {
+      "packageName": "@deepseek-ai/dsh-session-format-catalog",
+      "path": "packages/session/session-format-catalog/lib/index.js",
+      "sha256": "d461339740eb96ff8bc18e0ca5b3c3b67b2e88340ff9c437ddb99be37c948543",
+      "bytes": 2804,
+      "device": "16777230",
+      "inode": "158339740",
+      "modifiedNs": "1788643832112880831"
+    },
+    {
+      "packageName": "@deepseek-ai/dsh-session-persistence",
+      "path": "packages/session/session-persistence/lib/index.js",
+      "sha256": "bd39fad5eaa838db76c54f5c65ffc61f4697c9d74ad567499e0141bf9b3b3d87",
+      "bytes": 12756,
+      "device": "16777230",
+      "inode": "158339684",
+      "modifiedNs": "1788643815842137986"
+    }
+  ],
+  "checks": [
+    "official fixture bytes/inode/mtime unchanged",
+    "official tracked source remained clean",
+    "selected compiled module identities unchanged"
+  ],
+  "caseCount": 11,
+  "passed": 11,
+  "failed": 0,
+  "results": [
+    {
+      "name": "v0-released-real-shapes",
+      "status": "passed",
+      "source": {
+        "path": "v0-released-real-shapes/--work--/released-v0-real-shapes/session.jsonl",
+        "before": {
+          "sha256": "79f44919a664f867c22d91eb42f97b3de1c88df1a66bd79c0aa3945926873668",
+          "bytes": 4143,
+          "device": "16777230",
+          "inode": "158560982",
+          "modifiedNs": "1788648658569650915"
+        },
+        "after": {
+          "sha256": "79f44919a664f867c22d91eb42f97b3de1c88df1a66bd79c0aa3945926873668",
+          "bytes": 4143,
+          "device": "16777230",
+          "inode": "158560982",
+          "modifiedNs": "1788648658569650915"
+        }
+      },
+      "current": {
+        "path": "v0-released-real-shapes/--work--/released-v0-real-shapes/session.v2.jsonl",
+        "sha256": "d0671d2f5455cc5d4816d50ee7268170a9f23068b56d1a88cffe1adaafd3757b",
+        "bytes": 3895,
+        "device": "16777230",
+        "inode": "158560983",
+        "modifiedNs": "1788648658592996223"
+      },
+      "eventCount": 19,
+      "messageIds": [
+        "checkpoint-2",
+        "assistant-1",
+        "late-user"
+      ],
+      "header": {
+        "version": 2,
+        "id": "released-v0-real-shapes",
+        "createdAt": 1,
+        "cwd": "/work",
+        "isSeeded": false,
+        "delegationDepth": 0
+      },
+      "eventTypes": [
+        "turn/start",
+        "user/message",
+        "user/message",
+        "user/message",
+        "user/message",
+        "step/start",
+        "request/header",
+        "llm/retry",
+        "llm/retry-started",
+        "assistant/message",
+        "step/end",
+        "user/message",
+        "compaction/start",
+        "compaction/summary",
+        "user/message",
+        "compaction/end",
+        "user/message",
+        "session/title-llm-request",
+        "turn/end"
+      ],
+      "reopenedWithoutRewrite": true,
+      "metadataLookupWithoutMigration": true
+    },
+    {
+      "name": "v0-tool-semantics",
+      "status": "passed",
+      "source": {
+        "path": "v0-tool-semantics/_no-cwd/tools-v0/session.jsonl",
+        "before": {
+          "sha256": "46b6ed3c913c7ee02d984726ff6b5a31ce1d5344052edec49600211375137bab",
+          "bytes": 1719,
+          "device": "16777230",
+          "inode": "158560989",
+          "modifiedNs": "1788648658617532834"
+        },
+        "after": {
+          "sha256": "46b6ed3c913c7ee02d984726ff6b5a31ce1d5344052edec49600211375137bab",
+          "bytes": 1719,
+          "device": "16777230",
+          "inode": "158560989",
+          "modifiedNs": "1788648658617532834"
+        }
+      },
+      "current": {
+        "path": "v0-tool-semantics/_no-cwd/tools-v0/session.v2.jsonl",
+        "sha256": "b66aea3cd4c210c46f2f42d391926d01b1dbcdb6bf4b1c5bf8e3e72408147b07",
+        "bytes": 1550,
+        "device": "16777230",
+        "inode": "158560990",
+        "modifiedNs": "1788648658622856306"
+      },
+      "eventCount": 8,
+      "messageIds": [
+        "human",
+        "assistant",
+        "result"
+      ],
+      "header": {
+        "version": 2,
+        "id": "tools-v0",
+        "createdAt": 1,
+        "isSeeded": false,
+        "delegationDepth": 0
+      },
+      "eventTypes": [
+        "turn/start",
+        "user/message",
+        "step/start",
+        "assistant/message",
+        "tool/call",
+        "tool/result",
+        "step/end",
+        "turn/end"
+      ],
+      "reopenedWithoutRewrite": true,
+      "metadataLookupWithoutMigration": true
+    },
+    {
+      "name": "v1-tool-semantics",
+      "status": "passed",
+      "source": {
+        "path": "v1-tool-semantics/_no-cwd/tools-v1/session.v1.jsonl",
+        "before": {
+          "sha256": "91c82908458a40a5f3737b089978e1583d616a32e4902db09ccbb9747d6105e1",
+          "bytes": 1719,
+          "device": "16777230",
+          "inode": "158560996",
+          "modifiedNs": "1788648658637817534"
+        },
+        "after": {
+          "sha256": "91c82908458a40a5f3737b089978e1583d616a32e4902db09ccbb9747d6105e1",
+          "bytes": 1719,
+          "device": "16777230",
+          "inode": "158560996",
+          "modifiedNs": "1788648658637817534"
+        }
+      },
+      "current": {
+        "path": "v1-tool-semantics/_no-cwd/tools-v1/session.v2.jsonl",
+        "sha256": "4437e244c0e417191a3be756a05855915812320f0869da86dc3710e6ff375c7e",
+        "bytes": 1550,
+        "device": "16777230",
+        "inode": "158560997",
+        "modifiedNs": "1788648658642806318"
+      },
+      "eventCount": 8,
+      "messageIds": [
+        "human",
+        "assistant",
+        "result"
+      ],
+      "header": {
+        "version": 2,
+        "id": "tools-v1",
+        "createdAt": 1,
+        "isSeeded": false,
+        "delegationDepth": 0
+      },
+      "eventTypes": [
+        "turn/start",
+        "user/message",
+        "step/start",
+        "assistant/message",
+        "tool/call",
+        "tool/result",
+        "step/end",
+        "turn/end"
+      ],
+      "reopenedWithoutRewrite": true,
+      "metadataLookupWithoutMigration": true
+    },
+    {
+      "name": "v1-packed-and-write-resume",
+      "status": "passed",
+      "source": {
+        "path": "v1-packed-and-write-resume/_no-cwd/packed-v1/session.v1.jsonl",
+        "before": {
+          "sha256": "8a94d8fd17207d0fe360448db1b427410b93ab22505df04acf0ec2c0ed48d2fb",
+          "bytes": 1712,
+          "device": "16777230",
+          "inode": "158561003",
+          "modifiedNs": "1788648658656139642"
+        },
+        "after": {
+          "sha256": "8a94d8fd17207d0fe360448db1b427410b93ab22505df04acf0ec2c0ed48d2fb",
+          "bytes": 1712,
+          "device": "16777230",
+          "inode": "158561003",
+          "modifiedNs": "1788648658656139642"
+        }
+      },
+      "current": {
+        "path": "v1-packed-and-write-resume/_no-cwd/packed-v1/session.v2.jsonl",
+        "sha256": "81b70965872c2834c6a14baf80b3d18a42e935162fc1074fb1e22a4d454fa80c",
+        "bytes": 1562,
+        "device": "16777230",
+        "inode": "158561005",
+        "modifiedNs": "1788648658662999481"
+      },
+      "eventCount": 8,
+      "messageIds": [
+        "human",
+        "assistant",
+        "result"
+      ],
+      "header": {
+        "version": 2,
+        "id": "packed-v1",
+        "createdAt": 1,
+        "isSeeded": false,
+        "delegationDepth": 0
+      },
+      "eventTypes": [
+        "turn/start",
+        "user/message",
+        "step/start",
+        "assistant/message",
+        "tool/call",
+        "tool/result",
+        "step/end",
+        "turn/end"
+      ],
+      "reopenedWithoutRewrite": true,
+      "metadataLookupWithoutMigration": true,
+      "retainedLowerGeneration": {
+        "sha256": "4f436a025375e8a32228c7c3cdaf26923418ca17fc975771986c44d88ff9ec44",
+        "bytes": 82,
+        "device": "16777230",
+        "inode": "158561004",
+        "modifiedNs": "1788648658656367254"
+      },
+      "writeAppendFlushReopen": true,
+      "currentAfterAppend": {
+        "sha256": "22deb9141fc280d87a55ff9bfe72f1df5983a043a2b8635f19b0fc941b014f26",
+        "bytes": 1706,
+        "device": "16777230",
+        "inode": "158561005",
+        "modifiedNs": "1788648658685262520"
+      }
+    },
+    {
+      "name": "v2-ignorable-unknown",
+      "status": "passed",
+      "identity": {
+        "sha256": "062efb43fdc347de60d8fab60cd98cec80c6b3abacf2d75d2e7ad44f53e13004",
+        "bytes": 193,
+        "device": "16777230",
+        "inode": "158561012",
+        "modifiedNs": "1788648658692602121"
+      },
+      "eventRetained": true,
+      "reopenedWithoutRewrite": true
+    },
+    {
+      "name": "v0-unknown-refusal",
+      "status": "passed",
+      "refusedWith": {
+        "name": "SessionFormatUnsupportedError",
+        "message": "format v0 contains unknown historical event type \"foreign/telemetry\" at seq 0; migration refuses unknown historical events even when ignorable; source v0 artifact remains unchanged (raw log: <fixture-run>/v0-unknown-refusal/_no-cwd/unknown-v0/session.jsonl)"
+      },
+      "source": {
+        "path": "v0-unknown-refusal/_no-cwd/unknown-v0/session.jsonl",
+        "before": {
+          "sha256": "71a87f33d3df98cd4d4c45857dcea2e1997e20742790e1defba06ef221ca47bb",
+          "bytes": 174,
+          "device": "16777230",
+          "inode": "158561016",
+          "modifiedNs": "1788648658696785662"
+        },
+        "after": {
+          "sha256": "71a87f33d3df98cd4d4c45857dcea2e1997e20742790e1defba06ef221ca47bb",
+          "bytes": 174,
+          "device": "16777230",
+          "inode": "158561016",
+          "modifiedNs": "1788648658696785662"
+        }
+      },
+      "unchangedGenerations": {
+        "session.jsonl": {
+          "sha256": "71a87f33d3df98cd4d4c45857dcea2e1997e20742790e1defba06ef221ca47bb",
+          "bytes": 174,
+          "device": "16777230",
+          "inode": "158561016",
+          "modifiedNs": "1788648658696785662"
+        }
+      }
+    },
+    {
+      "name": "v1-unknown-refusal",
+      "status": "passed",
+      "refusedWith": {
+        "name": "SessionFormatUnsupportedError",
+        "message": "format v1 contains unknown event type \"foreign/telemetry\" at seq 0; source v1 artifact remains unchanged (raw log: <fixture-run>/v1-unknown-refusal/_no-cwd/unknown-v1/session.v1.jsonl)"
+      },
+      "source": {
+        "path": "v1-unknown-refusal/_no-cwd/unknown-v1/session.v1.jsonl",
+        "before": {
+          "sha256": "249f4d57e520b7a13cd86b7f204c7aec18e64a6e3fc9e861a68a037b9a89f5f2",
+          "bytes": 174,
+          "device": "16777230",
+          "inode": "158561020",
+          "modifiedNs": "1788648658699754109"
+        },
+        "after": {
+          "sha256": "249f4d57e520b7a13cd86b7f204c7aec18e64a6e3fc9e861a68a037b9a89f5f2",
+          "bytes": 174,
+          "device": "16777230",
+          "inode": "158561020",
+          "modifiedNs": "1788648658699754109"
+        }
+      },
+      "unchangedGenerations": {
+        "session.v1.jsonl": {
+          "sha256": "249f4d57e520b7a13cd86b7f204c7aec18e64a6e3fc9e861a68a037b9a89f5f2",
+          "bytes": 174,
+          "device": "16777230",
+          "inode": "158561020",
+          "modifiedNs": "1788648658699754109"
+        }
+      }
+    },
+    {
+      "name": "future-highest-refusal",
+      "status": "passed",
+      "refusedWith": {
+        "name": "SessionFormatUnsupportedError",
+        "message": "session \"future-wins\" uses log format v42, but this harness reads only v2: the log was written by a newer harness — upgrade the harness to open it (raw log: <fixture-run>/future-highest-refusal/_no-cwd/future-wins/session.v42.jsonl)"
+      },
+      "source": {
+        "path": "future-highest-refusal/_no-cwd/future-wins/session.v42.jsonl",
+        "before": {
+          "sha256": "3578e1cae2b70eb431d79e472db772ad415594d8ac3ec04f80abde3e33fbea3f",
+          "bytes": 89,
+          "device": "16777230",
+          "inode": "158561026",
+          "modifiedNs": "1788648658704186260"
+        },
+        "after": {
+          "sha256": "3578e1cae2b70eb431d79e472db772ad415594d8ac3ec04f80abde3e33fbea3f",
+          "bytes": 89,
+          "device": "16777230",
+          "inode": "158561026",
+          "modifiedNs": "1788648658704186260"
+        }
+      },
+      "unchangedGenerations": {
+        "session.jsonl": {
+          "sha256": "8b884a737effa531bb731dddf72bcb001b886e0cd6f641f7a6a3db386b21737f",
+          "bytes": 84,
+          "device": "16777230",
+          "inode": "158561024",
+          "modifiedNs": "1788648658703640501"
+        },
+        "session.v2.jsonl": {
+          "sha256": "e224bb374249d13d5287a41bcf8a9d0a6483c5d9b4f5cff7800b3b341ec45ad6",
+          "bytes": 101,
+          "device": "16777230",
+          "inode": "158561025",
+          "modifiedNs": "1788648658703982563"
+        },
+        "session.v42.jsonl": {
+          "sha256": "3578e1cae2b70eb431d79e472db772ad415594d8ac3ec04f80abde3e33fbea3f",
+          "bytes": 89,
+          "device": "16777230",
+          "inode": "158561026",
+          "modifiedNs": "1788648658704186260"
+        }
+      }
+    },
+    {
+      "name": "malformed-v0-refusal",
+      "status": "passed",
+      "refusedWith": {
+        "name": "SessionPersistenceCorruptionError",
+        "message": "session \"malformed-v0\": stored log is corrupt: SessionFormatError: released v0 physical header lacks required member \"type\" (raw log: <fixture-run>/malformed-v0-refusal/_no-cwd/malformed-v0/session.jsonl)"
+      },
+      "source": {
+        "path": "malformed-v0-refusal/_no-cwd/malformed-v0/session.jsonl",
+        "before": {
+          "sha256": "1413e26ec7c6a5eda9f38b8f888700a49f77e7b4afa2de1d1641196b7a97124a",
+          "bytes": 34,
+          "device": "16777230",
+          "inode": "158561030",
+          "modifiedNs": "1788648658707134666"
+        },
+        "after": {
+          "sha256": "1413e26ec7c6a5eda9f38b8f888700a49f77e7b4afa2de1d1641196b7a97124a",
+          "bytes": 34,
+          "device": "16777230",
+          "inode": "158561030",
+          "modifiedNs": "1788648658707134666"
+        }
+      },
+      "unchangedGenerations": {
+        "session.jsonl": {
+          "sha256": "1413e26ec7c6a5eda9f38b8f888700a49f77e7b4afa2de1d1641196b7a97124a",
+          "bytes": 34,
+          "device": "16777230",
+          "inode": "158561030",
+          "modifiedNs": "1788648658707134666"
+        }
+      }
+    },
+    {
+      "name": "invalid-v1-body-refusal",
+      "status": "passed",
+      "refusedWith": {
+        "name": "SessionFormatUnsupportedError",
+        "message": "@deepseek-ai/dsh-session-format-v1-to-v2 refuses this format v1 Session: turn/start 0 turn must be a non-negative safe integer; source v1 artifact remains unchanged (raw log: <fixture-run>/invalid-v1-body-refusal/_no-cwd/invalid-v1/session.v1.jsonl)"
+      },
+      "source": {
+        "path": "invalid-v1-body-refusal/_no-cwd/invalid-v1/session.v1.jsonl",
+        "before": {
+          "sha256": "43ef3c772a51474872bf33db50f907e4d99ab10b34c5a8ca763c2817f7e62827",
+          "bytes": 148,
+          "device": "16777230",
+          "inode": "158561034",
+          "modifiedNs": "1788648658710405512"
+        },
+        "after": {
+          "sha256": "43ef3c772a51474872bf33db50f907e4d99ab10b34c5a8ca763c2817f7e62827",
+          "bytes": 148,
+          "device": "16777230",
+          "inode": "158561034",
+          "modifiedNs": "1788648658710405512"
+        }
+      },
+      "unchangedGenerations": {
+        "session.v1.jsonl": {
+          "sha256": "43ef3c772a51474872bf33db50f907e4d99ab10b34c5a8ca763c2817f7e62827",
+          "bytes": 148,
+          "device": "16777230",
+          "inode": "158561034",
+          "modifiedNs": "1788648658710405512"
+        }
+      }
+    },
+    {
+      "name": "v2-nonignorable-refusal",
+      "status": "passed",
+      "refusedWith": {
+        "name": "SessionFormatUnsupportedError",
+        "message": "session \"required-unknown-v2\" contains event type \"foreign/telemetry\" (seq 0) unknown to this harness and not marked ignorable; refusing to interpret the log — it was likely written by a newer harness (raw log: <fixture-run>/v2-nonignorable-refusal/_no-cwd/required-unknown-v2/session.v2.jsonl)"
+      },
+      "source": {
+        "path": "v2-nonignorable-refusal/_no-cwd/required-unknown-v2/session.v2.jsonl",
+        "before": {
+          "sha256": "a403508a7b8c1364df3833ddb8465ab3a7bdd66bccc5e78499273a8a351d6457",
+          "bytes": 201,
+          "device": "16777230",
+          "inode": "158561038",
+          "modifiedNs": "1788648658715137477"
+        },
+        "after": {
+          "sha256": "a403508a7b8c1364df3833ddb8465ab3a7bdd66bccc5e78499273a8a351d6457",
+          "bytes": 201,
+          "device": "16777230",
+          "inode": "158561038",
+          "modifiedNs": "1788648658715137477"
+        }
+      },
+      "unchangedGenerations": {
+        "session.v2.jsonl": {
+          "sha256": "a403508a7b8c1364df3833ddb8465ab3a7bdd66bccc5e78499273a8a351d6457",
+          "bytes": 201,
+          "device": "16777230",
+          "inode": "158561038",
+          "modifiedNs": "1788648658715137477"
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Local OS/architecture and Node version only; no cross-platform certification.",
+    "Uncompressed JSONL only; no Zstandard, torn-frame, crash, disk-full, or concurrent-writer fault injection.",
+    "Persistence and Session.fromRestore/deriveMessages are exercised; no model turn, agent-loop live resume, UI, or external tool execution.",
+    "No fork-seed boundary migration or extension-specific third-party payload suite.",
+    "Selected compiled entry files are fingerprinted here; this is not a complete dependency-closure attestation."
+  ]
+}

@@ -1,0 +1,42 @@
+/* The remote turn reuses the window fold's chrome wholesale: the shared
+   TurnFoldRow classes (the fold button, the expanded body) keep the two
+   surfaces pixel-identical. Only the loading/error states are remote-owned. */
+
+.remoteTurnHint {
+  padding: 8px 0;
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.remoteTurnError {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.remoteTurnErrorText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.remoteTurnRetry {
+  flex: none;
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--dsw-alias-label-secondary);
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.remoteTurnRetry:hover {
+  color: var(--dsw-alias-label-primary);
+}

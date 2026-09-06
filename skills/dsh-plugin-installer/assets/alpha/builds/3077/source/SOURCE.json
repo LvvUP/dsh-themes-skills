@@ -1,0 +1,22 @@
+{
+  "sourceRepository": "pandashere/dsh-self-control-guard",
+  "sourceRevision": "652800ef31c7e352021c6d6683b6ba5204c8ac5a",
+  "files": {
+    "LICENSE": "4b793e11b0a258e9d4c56117d81080e6b7be848b189dc60e88ca03b72407ff0e",
+    "README.md": "a9eb9c387031852d5e25db5e9a205130c23fe31571e51db4188e9d84d1b5d436",
+    "cordis.patch.yml": "53e541a2e84313535fd295e46a0982b6c427d4ade9598ec7f2ed128fd5d59129",
+    "package.json": "b6bfc7e115346d9921551a1ea79d539b2e42861e6a9d802dc511d9fcf7fcef19",
+    "src/confirmation.ts": "71fe91118e1a2e4cdb488a095646e292f67e5140179ed4bdd9876de553b864a9",
+    "src/index.ts": "673a05a88382479918ec7c500235a13dc1021766c608a364410356e2dccc7e47",
+    "src/invariant.ts": "9b0f0e6ec40b4cc0d858dcbe3e81d4e0cea1d227ae000925392b8d82bd8c46e3",
+    "src/matcher.ts": "d4c384dc4002fab755228f231105a50beb427e9eee0fbdb7c90f003a515bc8bf",
+    "src/recovery.ts": "88398a130cea9bd6ffea5cc62f246e112e7e5abd98a33861fa58db47a4b5370b",
+    "src/types.ts": "d9e0c3b7ca2042fb209c3c193872df6985dbd56b5eff86f3db38c5cafa50c82f",
+    "src/types/dsh-agent.d.ts": "a4bd077f69f406a4bce3eb59670b9b1b2031f1530c8cd3a4d3658caa3f3281d4",
+    "src/types/dsh-invariants.d.ts": "8030844ee490bbb5941861f2355c151b97f432bf1fb0a87a87594b5c8cf91a72",
+    "src/types/dsh-llm.d.ts": "108c6a6060922e98f5a61a77f0c93c2327497b28b6ac039a9fcde490c5528682",
+    "src/types/dsh-session-telemetry.d.ts": "e680f6d5426cbd35e20cf6b5c0a10fe6022c15602a226804ab636b9888647166",
+    "src/types/dsh-session.d.ts": "bee6e3f4d73b3540c6233d8198ccf477e468e1a3fb55f1c4633826357a48d1a3",
+    "src/types/dsh-tools.d.ts": "b44e92ac5fbf86171fe07bd55feff47ee6ed3b7bfc0330be84e31c79e05a991e"
+  }
+}

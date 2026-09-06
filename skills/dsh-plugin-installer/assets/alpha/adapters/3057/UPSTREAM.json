@@ -1,0 +1,86 @@
+{
+  "sourceRepository": "Proton1917/dsh-live-stats",
+  "sourceRevision": "ebd44aa89c40d8de2519c932c2237ce474f8558e",
+  "files": {
+    "LICENSE": {
+      "sha256": "7c92789c1c124f9c051dec5285269ae38678708cef00cf408a2fdae5fbcde2b2",
+      "bytes": 1520
+    },
+    "README.md": {
+      "sha256": "2ed3239e50ae2d7906ccb9561bd95a3a3ed0a4f32493e8600572c21fce5ae7ed",
+      "bytes": 3462
+    },
+    "THIRD_PARTY_NOTICES.md": {
+      "sha256": "5f05f196847165bbcd8859bfeae594785bc5a503d3503774da0c49f114923699",
+      "bytes": 1130
+    },
+    "assets/deepseek-v3/tokenizer.json": {
+      "sha256": "ecb6f9fc369894346f0511f4074ca75cee5cd5f3b06d02f1ba35fcd39f8e121d",
+      "bytes": 7847602
+    },
+    "assets/deepseek-v3/tokenizer_config.json": {
+      "sha256": "144a6d92b6012baeb4f2ac41d48ed3458e758f977a0fb5caf75ff07698fc844c",
+      "bytes": 3585
+    },
+    "cordis.patch.yml": {
+      "sha256": "04c5a1d3722e89ca849f5482dcf16fed706778e225986c43b2c1db0b440ac0a2",
+      "bytes": 72
+    },
+    "package.json": {
+      "sha256": "f96342edafe5eb9948e5ff69c6ed2cde9e0b71f828165078970e44a5dcf89221",
+      "bytes": 2897
+    },
+    "pnpm-lock.yaml": {
+      "sha256": "97003eb86b6e108032f0c09bceb0d9e8c9174b5bae860c5f0ebd305a8c356d38",
+      "bytes": 200809
+    },
+    "src/client/LiveStatsLine.tsx": {
+      "sha256": "5851c755433dd1ef6fe26d176b7a9f9d90c87378e2a657a4f6e7f77173ca061a",
+      "bytes": 4345
+    },
+    "src/client/TpsLine.tsx": {
+      "sha256": "8433fe07b03da13143fa6145abd9c1c7b5a9abc6d3215010c9519368448dfe39",
+      "bytes": 1347
+    },
+    "src/client/index.ts": {
+      "sha256": "e6af7f0cce1a2ba85e767663a0782f2d936d70836ce511f22c17cfb8a0ff54d8",
+      "bytes": 1368
+    },
+    "src/client/locales.ts": {
+      "sha256": "76aadae18cfd8be1b6f5e2176a9bc0d3f421b72560a9cf61a93579068b76c804",
+      "bytes": 1250
+    },
+    "src/index.ts": {
+      "sha256": "30d88b89b651b4fccde08ef8d09949d1ca34a3fc7b792219fb1ecc1cbf202341",
+      "bytes": 1062
+    },
+    "src/projection.ts": {
+      "sha256": "71c09f2502764090d8a2c272a058abb580887278e3aa846575ed31dbd429813b",
+      "bytes": 11668
+    },
+    "src/tokenizer.ts": {
+      "sha256": "820e031a3c76a2131b1b2de55643d443a32668ef555203778527ba1257961b9c",
+      "bytes": 4306
+    },
+    "src/types.ts": {
+      "sha256": "3390bb6642ec830754ca06c2f1637ee0c89f934bf7d0e76f79021e09702ec0a2",
+      "bytes": 693
+    },
+    "tests/projection.spec.ts": {
+      "sha256": "174a455b301a63fc19f34f4e1455db37f513fb2067f16ba81bd5a8b75ebd4040",
+      "bytes": 6232
+    },
+    "tests/tps-line.spec.tsx": {
+      "sha256": "0d33a14bfc04de5052a2b1e67f82fe3247986741fc5151167a7ac94b5f5ec318",
+      "bytes": 4422
+    },
+    "tsconfig.json": {
+      "sha256": "2f37792c3d3d356a54c919958db628257050bec4bfcf834d955b642557e31f40",
+      "bytes": 518
+    },
+    "tsdown.config.ts": {
+      "sha256": "d24709cdc89b5d54807352926783cb6e88238dde39225ef4cb95dbb7b778ffab",
+      "bytes": 1057
+    }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "repository": "zhijun-dai/Catppuccin-dsh-theme",
+  "sourceCommit": "9885d3e7ee93ad4c972e92be4b6f301105e73eb4",
+  "archiveSha256": "3691cd812bfdccf3f2b62a94f64b6163d8557e2d6d84ac84341b9144c36af974",
+  "omitted": "Binary previews and media are not used by the palette adaptation.",
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "2f1c5d65071df5240acd46a4c1dab2b007332b881aeda21b2e13478aa771b645",
+      "sizeBytes": 39
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "f1d4f376f8518ee35931893ccb65434f90a64b229745ce6911d474fb2140e3a9",
+      "sizeBytes": 1111
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "50ad9437b1428ac9713c8b95b33f1a3d7558601792791509985d785ffb997f1a",
+      "sizeBytes": 1238
+    },
+    {
+      "path": "README.i18n.yaml",
+      "sha256": "97b19b9bc98a90e8cc8d9a6fa69cb3d1c3568a6d3b7fe21d99730f3aee4c2b8b",
+      "sizeBytes": 391
+    },
+    {
+      "path": "README.md",
+      "sha256": "d52389fb098913785008a9d48a912cb46bb641d8ee71d7194b75d2eaeaa1a37c",
+      "sizeBytes": 5171
+    },
+    {
+      "path": "README.zh.md",
+      "sha256": "6f365dc0da6c3e16057c9abd801c49afbc457b49af0cf5a20ddadc38ab87dfbc",
+      "sizeBytes": 4886
+    },
+    {
+      "path": "cordis.patch.yml",
+      "sha256": "88275b5f514b7e5feab309d84d2e64b0c40e7a6bf8722e18d52a4593dbbee6a8",
+      "sizeBytes": 356
+    },
+    {
+      "path": "lib/client.js",
+      "sha256": "686538b644757a9931a54cb2e865d6023fc6075fc32994319426007f95bdde27",
+      "sizeBytes": 69363
+    },
+    {
+      "path": "lib/client.tpl.js",
+      "sha256": "439c494821decf82d03b072a580972b9753ffdd8743b823bf8ba171a0e6e7766",
+      "sizeBytes": 24401
+    },
+    {
+      "path": "lib/index.js",
+      "sha256": "6d87b1abd9ec4128ade3193af890ed52a74afab92d4b1be6fa326797b0535882",
+      "sizeBytes": 563
+    },
+    {
+      "path": "package.json",
+      "sha256": "53c93b0b6428459582baf6a13c767a5015a9a06f89aef6f9224dc714df061d9e",
+      "sizeBytes": 1470
+    },
+    {
+      "path": "palette/palette.json",
+      "sha256": "4bc114bb6b3c9a9c9e156564aa84625aef32c5da514d9dd431cf1fcad433a05f",
+      "sizeBytes": 83516
+    },
+    {
+      "path": "scripts/gen-themes.mjs",
+      "sha256": "55753dc762f6214840349d82e4c09121ab5a7b5de345ad79f8af07add2e041f3",
+      "sizeBytes": 19933
+    },
+    {
+      "path": "themes/catppuccin-frappe.json",
+      "sha256": "6caf7709213ffb9c2482a2d205a78ed25bf4ffaf60aa86f78b4febf7e6695d63",
+      "sizeBytes": 10858
+    },
+    {
+      "path": "themes/catppuccin-latte.json",
+      "sha256": "1be2571d361cc74c7ce583789c9ebe900300a349cdaa2b9e52627694da11326f",
+      "sizeBytes": 10783
+    },
+    {
+      "path": "themes/catppuccin-macchiato.json",
+      "sha256": "079ff15bac334f09b02fd3a32d2d13cd0611c78804b6be31e2d1796b959c3756",
+      "sizeBytes": 10863
+    },
+    {
+      "path": "themes/catppuccin-mocha.json",
+      "sha256": "f84a85388139d85dea8b0466cb415b924574dbd9a69d5825070bb7984ad0be99",
+      "sizeBytes": 10853
+    }
+  ]
+}

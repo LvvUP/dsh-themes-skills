@@ -1,0 +1,21 @@
+# Bundle patch applied over the selected DSH profile when this package is listed
+# in `dsh.profile.bundles`. The row id is deployment-local; the package name
+# must match package.json.
+
+- insert:
+    - id: code-check
+      name: '@a179-sanae/dsh-code-check'
+      config:
+        enabled: true
+        debounceMs: 800
+        triggerTools: [edit, write]
+        includeExtensions: ['.ts', '.tsx', '.mts', '.cts']
+        maxDiagnostics: 120
+        tscTimeoutMs: 60000
+        extraArgs: ['--incremental']
+        cacheCap: 200
+
+    # The invariant companion (@a179-sanae/dsh-code-check/invariant) is not
+    # auto-enabled: the `invariants` service only exists in profiles that mount
+    # it (e.g. web). Add the row below in your profile's cordis.patch.yml when
+    # the service is present.

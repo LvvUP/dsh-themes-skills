@@ -1,0 +1,105 @@
+.messageActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: calc(28px + var(--dsh-content-font-delta, 0px));
+}
+
+/* Clock paddings (the chat MessageIconActions rule): the start clock pads
+   right 12px; the end clock sits after the stat pills and needs no pad of
+   its own — the row's 8px flex gap spaces it. */
+.messageActions[data-clock='start'] .messageClock {
+  padding-right: 12px;
+}
+
+/* The turn-tail footer's optical offset (the chat turn-tail rule). */
+.messageActions[data-clock='end'] {
+  margin-left: -6px;
+}
+
+.messageClock {
+  /* The official icon-actions clock tier: the Settings font-size axis,
+     secondary tier (the tail's stat pills read the same). */
+  font-size: var(--dsh-content-font-size-secondary, 13px);
+  line-height: calc(24px + var(--dsh-content-font-delta, 0px));
+  color: var(--dsw-alias-label-tertiary);
+  white-space: nowrap;
+}
+
+/* Message containers opt in with data-time-hover-root: the time label fades
+   in on message hover (or keyboard focus within). Opacity keeps the layout
+   stable, and devices without hover keep the label always visible. */
+@media (hover: hover) {
+  [data-time-hover-root] .messageClock {
+    opacity: 0;
+    transition: opacity 80ms ease;
+  }
+
+  [data-time-hover-root]:hover .messageClock,
+  [data-time-hover-root]:focus-within .messageClock {
+    opacity: 1;
+  }
+}
+
+/* The alpha.5 recency gate, CSS-only off the flow-kind seat: every user or
+   steering flow row that has ANY later user/steering row hides its whole
+   actions row until hover/focus-within; the latest one stays visible. The
+   marker lives on the focus view's flow-item wrapper (data-chat-flow-kind);
+   transient pending bubbles carry none and stay visible. */
+@media (hover: hover) {
+  :is([data-chat-flow-kind='user'], [data-chat-flow-kind='steering']):has(
+    ~ :is([data-chat-flow-kind='user'], [data-chat-flow-kind='steering'])
+  ) .messageActions {
+    opacity: 0;
+    transition: opacity 80ms ease;
+  }
+
+  :is([data-chat-flow-kind='user'], [data-chat-flow-kind='steering']):has(
+    ~ :is([data-chat-flow-kind='user'], [data-chat-flow-kind='steering'])
+  ):hover .messageActions,
+  :is([data-chat-flow-kind='user'], [data-chat-flow-kind='steering']):has(
+    ~ :is([data-chat-flow-kind='user'], [data-chat-flow-kind='steering'])
+  ):focus-within .messageActions {
+    opacity: 1;
+  }
+}
+
+.messageAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(28px + var(--dsh-content-font-delta, 0px));
+  height: calc(28px + var(--dsh-content-font-delta, 0px));
+  padding: 6px;
+  border: none;
+  border-radius: 28px;
+  background: transparent;
+  color: var(--dsw-alias-label-tertiary);
+  cursor: pointer;
+}
+
+/* The 15px action glyphs follow the same px delta as the text they serve;
+   the CSS edge overrides each svg's own width/height attributes. */
+.messageAction svg {
+  width: calc(15px + var(--dsh-content-font-delta, 0px));
+  height: calc(15px + var(--dsh-content-font-delta, 0px));
+}
+
+.messageAction:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+  color: var(--dsw-alias-label-secondary);
+}
+
+.messageAction[data-unavailable] {
+  cursor: default;
+  opacity: 0.4;
+}
+
+.messageAction[data-unavailable]:hover {
+  background: transparent;
+  color: var(--dsw-alias-label-tertiary);
+}
+
+/* Turn tail: the produced-files row and the actions footer a finished turn
+   ends with (the chat turn-tail chrome: 16px root gap, produced row sits
+   off the tail's own 16px top margin). */

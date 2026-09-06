@@ -1,0 +1,4 @@
+interface:
+  display_name: "DSH Plugin Installer"
+  short_description: "Install curated DSH plugins by catalog number"
+  default_prompt: "Use $dsh-plugin-installer to install the selected DSH Themes catalog numbers or the Top 10 collection and report each result."

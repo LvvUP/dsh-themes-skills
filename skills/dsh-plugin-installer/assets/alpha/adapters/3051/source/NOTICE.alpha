@@ -1,0 +1,7 @@
+Alpha adaptation by DSH Themes contributors.
+
+Default memory storage now resolves through the official dshHomePath helper under the active DSH_HOME; an explicitly configured dataDir remains unchanged. Existing global TDAI data is not automatically copied or deleted.
+Debug diagnostics report whether a key is configured without disclosing any key characters.
+Alpha peer coordinates replace old release candidates. All extraction, recall, conversation capture, embedding backends, tools, UI, and production dependencies are retained.
+
+Upstream MIT license retained. Installation/lifecycle verification is separate from configured model and embedding functionality.

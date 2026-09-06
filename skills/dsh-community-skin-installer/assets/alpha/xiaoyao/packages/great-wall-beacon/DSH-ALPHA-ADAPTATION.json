@@ -1,0 +1,13 @@
+{
+  "catalogId": 2310,
+  "sourceRepository": "147228/dsh-xiaoyao-skins",
+  "sourceRevision": "174f65d9135e932383a8f3a19fa522f16875a139",
+  "upstreamArtifact": {
+    "url": "https://github.com/147228/dsh-xiaoyao-skins/releases/download/v0.1.3/xiaoyao-skin-great-wall-beacon.tgz",
+    "sha256": "562b1d0332d5e6f21a08d5fefe3c61bda8d6c9bc4986c3759c54e34f889af766"
+  },
+  "adaptation": "DSH Themes Alpha CSS specificity and current sidebar/conversation/details layout selectors. Sky Lab adds a dark reading surface. Original code/art attribution and licenses retained.",
+  "licenseExpression": "MIT AND CC-BY-NC-4.0",
+  "alphaButtonAdaptation": "Bind Alpha button-elevated-fill to the skin floating surface so fixed dark palettes keep legible new-session controls in host light mode.",
+  "alphaBadgeAdaptation": "Use the palette primary label and active surface for Alpha preview badges rather than inherited host-mode blue."
+}

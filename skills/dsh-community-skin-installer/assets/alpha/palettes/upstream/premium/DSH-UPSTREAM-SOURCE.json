@@ -1,0 +1,158 @@
+{
+  "repository": "xiaoyanzi191/dsh-premium-themes",
+  "sourceCommit": "7e485999e45711396ba08806a40c9bfe3c650103",
+  "archiveSha256": "daf18eb7d4bcc6eea27b5fda4f1f2af0e5b61e8caf0640435f44ae312fa34411",
+  "omitted": "Binary previews and media are not used by the palette adaptation.",
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "e604eb0309a2cb70b251529cfb1bbc66ee0c1c6a05425749df548feb9d082fdd",
+      "sizeBytes": 43
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "f29ae1dd3a10404e16c0260861e7fea676d9bb293b2c58491f6cbcc838a3b46e",
+      "sizeBytes": 1069
+    },
+    {
+      "path": "README.md",
+      "sha256": "727b28f4306c7e203f161c3b538ab2d13ba9386c4033409984da21efad22fb7f",
+      "sizeBytes": 4747
+    },
+    {
+      "path": "README.zh.md",
+      "sha256": "2712fed68dc1144e78623a6b6190eeedef856447620fc818ddd98bc245644664",
+      "sizeBytes": 4332
+    },
+    {
+      "path": "cordis.patch.yml",
+      "sha256": "6046a2446e447c5dff9e8167401e437e7c12337111a920341be2050ea8009d06",
+      "sizeBytes": 431
+    },
+    {
+      "path": "package.json",
+      "sha256": "1a11cdc2e3071173320868d381c69cc301ab091683f915269970584d477d2ad8",
+      "sizeBytes": 3134
+    },
+    {
+      "path": "src/boot.ts",
+      "sha256": "994c9d08862224cb4da3ffccbf15ed83e06d826f2140a1aa455b021d3c3d0431",
+      "sizeBytes": 2888
+    },
+    {
+      "path": "src/client/ImportPaletteDialog.module.css",
+      "sha256": "423fd312cf3de27dd71ddeb5afc0ddd6faaa786416657e56ed6c8463a8ea7a28",
+      "sizeBytes": 4260
+    },
+    {
+      "path": "src/client/ImportPaletteDialog.tsx",
+      "sha256": "223936bde6a524e45d79e9531926d5c295df7a6d0b787673da8e396805ebdbdb",
+      "sizeBytes": 6984
+    },
+    {
+      "path": "src/client/PaletteRow.module.css",
+      "sha256": "a805fa38b2841f3d1978f7064b9d42330ec39d02bd027117c2e941ac9a4eeb34",
+      "sizeBytes": 1903
+    },
+    {
+      "path": "src/client/PaletteRow.tsx",
+      "sha256": "73e8493bad25f4eaa5a9ba449c8ad5562a49dcfef81051bb192d7086f02b6c99",
+      "sizeBytes": 4221
+    },
+    {
+      "path": "src/client/index.ts",
+      "sha256": "62a6e930537fcea666ffcbd1f340599a16c32662a8c3872b293d1eb5b5a7ebd5",
+      "sizeBytes": 14644
+    },
+    {
+      "path": "src/client/locales.ts",
+      "sha256": "23583973bfcc58b4238fa00414d49031bb5a703830689a8fe6e78e6f441f9d17",
+      "sizeBytes": 2337
+    },
+    {
+      "path": "src/client/settings-store.ts",
+      "sha256": "1d5233315190b4d0a9f13cb51abb1330f0811d41bb930e4927228be6444eb9f6",
+      "sizeBytes": 1949
+    },
+    {
+      "path": "src/css-modules.d.ts",
+      "sha256": "e28410d74a0d763364c04fa690c2ca2202ad3019c74f8f5205e8dc6cba69c02f",
+      "sizeBytes": 123
+    },
+    {
+      "path": "src/derive.ts",
+      "sha256": "d633a520e6e1d11e21d9c2ceca45997ff0683d28c221750045096e598c2712ec",
+      "sizeBytes": 7923
+    },
+    {
+      "path": "src/index.ts",
+      "sha256": "8bda7136b288f7ad898c9f923f6551281d95cdbc0cb8d7ad029920673e29c4a0",
+      "sizeBytes": 11498
+    },
+    {
+      "path": "src/invariant.ts",
+      "sha256": "2c968ed42e6bc51ae9b51e3ebd2a2c810771af160cf898e7a1e0312381c94877",
+      "sizeBytes": 1178
+    },
+    {
+      "path": "src/palettes.ts",
+      "sha256": "1bf3289509beeb7630e5698bc2f78d7cb048b9cc1e94f43740e43276c478494b",
+      "sizeBytes": 33976
+    },
+    {
+      "path": "src/theme-settings.ts",
+      "sha256": "67a6fc6dc597cdde944de301d430b136e4bbbac4aab0e350e8a7ddbf10d637b4",
+      "sizeBytes": 7067
+    },
+    {
+      "path": "tests/apply.client.spec.ts",
+      "sha256": "dffc0c44b246469040a8af1f49a8faa02b6b5da6c94f7f537947514681f03307",
+      "sizeBytes": 13937
+    },
+    {
+      "path": "tests/boot.client.spec.ts",
+      "sha256": "ee60108fa70061f16971d4e6e4e384ce735bcb4f721fe607a3481293114c0c21",
+      "sizeBytes": 3630
+    },
+    {
+      "path": "tests/derive.client.spec.ts",
+      "sha256": "31cafd88467689abfb22414aa18098e152e8b3963bf2aea709a88a2a02c32091",
+      "sizeBytes": 3621
+    },
+    {
+      "path": "tests/host.client.spec.ts",
+      "sha256": "05594685bc19b256505b654d1564602ff5e49d3092453d5aaecfc5487ca834b9",
+      "sizeBytes": 11833
+    },
+    {
+      "path": "tests/invariant.client.spec.ts",
+      "sha256": "6dc2b6d6aad0072e959ece1e1597fa71ead564d09c02eb5e19dd0bb6e2576b57",
+      "sizeBytes": 830
+    },
+    {
+      "path": "tests/palette-row.client.spec.tsx",
+      "sha256": "41e5848eef6976670a972222255f7e348b20e31673bcd4460654996b4c0ab06b",
+      "sizeBytes": 7036
+    },
+    {
+      "path": "tests/theme-settings.client.spec.ts",
+      "sha256": "4de765a71e8babf3fd832635b21c7b0bf00891cf9ef714121f7dd8f921badebe",
+      "sizeBytes": 3321
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "617bf626ca0e525cc6078e113b80fc91c33ef6edac7dbb3e16b00025ef2fce3b",
+      "sizeBytes": 758
+    },
+    {
+      "path": "tsdown.config.ts",
+      "sha256": "4da8f6c323125e5d6eca1201b943e550b0ff02b581f91b886cb376489e3688d9",
+      "sizeBytes": 6271
+    },
+    {
+      "path": "vitest.config.ts",
+      "sha256": "6b7692159776ab757843c9b0687f191d980828613c097b3c421a123e166a909d",
+      "sizeBytes": 612
+    }
+  ]
+}

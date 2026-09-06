@@ -1,0 +1,23 @@
+{
+  "sourceRepository": "omdsh-dev/dsh-open-in-vscode",
+  "sourceRevision": "8aed144abdc158a332aa73bce42fc217d962f751",
+  "files": {
+    "LICENSE": "e9ee294ab00bf0616ad948fa66551d60958d34598eb8e4ea799c3c7d24fd9b5c",
+    "README.md": "ecc21f29b13cd09a543cefcc7addbc4bd374f91db39a9a9dd93f6285e39fecef",
+    "cordis.patch.yml": "a73e41919a729a2f7d3af046e138f41939727b27572922c44dd18e2a71a33180",
+    "package.json": "c75d1c81168a5698a297826fb4baac4be593e1cbd7228cd7211954d0b97b6c3d",
+    "src/client/index.ts": "d8302f0687ce5cf5aee85ac48621047e67dd06575f4f79b8b7ade51d30e28116",
+    "src/client/legacy-menu.tsx": "4c0541168b0ffb625a80dcfe3e41cc024d691adcded8cc9a01b360a0e950077d",
+    "src/client/locales.ts": "a66105f78fec8a60da82d873f241cd03caea1d6c86b09503ef88c66d4b41a5e2",
+    "src/client/remote.ts": "11e91e443c801b589a645acadcd3dbb5f8268be8fb38804ee60fa3bbf2badc55",
+    "src/client/row.tsx": "3985ad007129f1c9756349f5b4ce16fef1430c0376b07d11327b265befb58b89",
+    "src/client/styles.ts": "8aaa5b144d919cf0fa3b3190970772436bb06f64fdb3820953a7283c2d5e6892",
+    "src/contract.ts": "cbc3820cfbc381a763a7b6aec435860b302621dafd2a59e9c52851a36ef335e1",
+    "src/index.ts": "1a91a9259c30ecd82138dfdcb5408c18b0346c518cf01f4a05a548540094ff58",
+    "src/invariant.ts": "e7b3cc60c2d88d88f4433a664c98192f4c95d585b756aca36cffb1bc04532b25",
+    "src/resolve.ts": "a8ccf956c9b7875a9112b0777078c0ac6e354a59f9526dab0f19307b883a8e8c",
+    "src/runtime.ts": "9cf9f00d478b0df3fb099d9c5ed384fbdf72277b69e1bf692b1b0f9b30d62035",
+    "src/typert.ts": "6c45c7ac71ccc0fca89baf2372faa89d667d60f12fa2f25bae59ac34b9ca104b",
+    "src/types.ts": "1eb01c19debace3c0aa680be92b9c84502e7bf9fa5b38d5473423b3aad48c2e9"
+  }
+}

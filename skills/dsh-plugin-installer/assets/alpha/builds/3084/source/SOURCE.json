@@ -1,0 +1,17 @@
+{
+  "sourceRepository": "a179-sanae/dsh-code-check",
+  "sourceRevision": "bb7c76fbbb6ecfc665cccc0c1df7e9b698ea327a",
+  "files": {
+    "LICENSE": "f98bf4faa0b3465166d26911ce01670a850187b4d3b195df58a333ceb6c2894f",
+    "README.md": "85772cc941a602c2becb9a7b6c32b6dd424fbd9e279952df5da4cca18d6f30ee",
+    "cordis.patch.yml": "793ccde18f5ab80a4e8f0351bb07bf65c4507d504b43ef1d89d9a9592bb1bb30",
+    "package.json": "c5ef99d805d48598efa9378a8a9c8958796a73ad21ea2e77522edf6749e9aae9",
+    "src/README.md": "358a65838740ffaca21768676c45691624803a1c4155ee616e9e7d20db9102d3",
+    "src/config.ts": "b7733682e183e0ae8daee077123cdcb391da6c4539d25370db6ebccb179fec30",
+    "src/diagnostics.ts": "35c8b04f884477e6ca3d1242c06c80901ecaef2114d32e9d6f58f27720367bd1",
+    "src/index.ts": "0e15b2aa4149cf2d047a64cc6d4f0a2c1ede8ea61b3ab754ee894a8451339372",
+    "src/invariant.ts": "f5a5b6bba50f48a393c8b62a60f83bec6cfe0d0cb3fc8e7bda2ab27bdac62f23",
+    "src/runtime.ts": "943b9bb834bff2c106b5ac3560d1e5c11f8f1e2d5edadc7225c9e2fde4f4cd0a",
+    "tsdown.config.ts": "4f3673a804d9c2af4755ae906036c8deea8fc61b934f898a792338b6b7158b07"
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "catalogId": 3057,
+  "sourceRepository": "Proton1917/dsh-live-stats",
+  "sourceRevision": "ebd44aa89c40d8de2519c932c2237ce474f8558e",
+  "sourceLicense": "BSD-3-Clause",
+  "targetDshVersion": "0.1.3-alpha.1",
+  "targetDshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "upstreamInventory": {
+    "sha256": "b500c28945a565955a03d12fc9d9793d51facf27a2369d5203503c0c9d53dfed",
+    "bytes": 2933
+  },
+  "patch": {
+    "sha256": "a3c31fa5ccfa1310eaec83b5c1e9715d9abf70c7b4048b70a7ccb55f037931a2",
+    "bytes": 11300
+  },
+  "dependencyInventory": {
+    "sha256": "b40d7165c963951927e9a0848e497ac0052e70c36619a496dfde62aa6d72e2fd",
+    "bytes": 141084
+  },
+  "compiler": {
+    "name": "esbuild",
+    "version": "0.28.2"
+  },
+  "adaptedFiles": {
+    "ADAPTATION.md": {
+      "sha256": "f1513c69d4a312945b17cd7770b6b9dd991768898e0456a79ee6b157a1b1db2d",
+      "bytes": 1425
+    },
+    "LICENSE": {
+      "sha256": "7c92789c1c124f9c051dec5285269ae38678708cef00cf408a2fdae5fbcde2b2",
+      "bytes": 1520
+    },
+    "README.md": {
+      "sha256": "2ed3239e50ae2d7906ccb9561bd95a3a3ed0a4f32493e8600572c21fce5ae7ed",
+      "bytes": 3462
+    },
+    "THIRD_PARTY_NOTICES.md": {
+      "sha256": "a886a95a6473230931d24c04d46706f2b00fbe5a168576d09ea232de67e54a35",
+      "bytes": 2036
+    },
+    "assets/deepseek-v3/tokenizer.json": {
+      "sha256": "ecb6f9fc369894346f0511f4074ca75cee5cd5f3b06d02f1ba35fcd39f8e121d",
+      "bytes": 7847602
+    },
+    "assets/deepseek-v3/tokenizer_config.json": {
+      "sha256": "144a6d92b6012baeb4f2ac41d48ed3458e758f977a0fb5caf75ff07698fc844c",
+      "bytes": 3585
+    },
+    "cordis.patch.yml": {
+      "sha256": "04c5a1d3722e89ca849f5482dcf16fed706778e225986c43b2c1db0b440ac0a2",
+      "bytes": 72
+    },
+    "lib/client.js": {
+      "sha256": "340ebd03d1a90d1e935544fe58a0105673acc4ec6800e12edb32f977f8d7c60b",
+      "bytes": 4088
+    },
+    "lib/index.js": {
+      "sha256": "9ef5fe73a1766640c25c846e79055d272b2ecdf4568d2847c87994f5321f3b0c",
+      "bytes": 334374
+    },
+    "licenses/@huggingface-tokenizers-LICENSE": {
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "bytes": 11357
+    },
+    "licenses/@standard-schema-spec-LICENSE": {
+      "sha256": "653b779005a3a4d64a7288c940f7b9a0e8f0b1e0375f6aa6af9473caf131e564",
+      "bytes": 1071
+    },
+    "licenses/DeepSeek-LICENSE-CODE": {
+      "sha256": "1c8f573e830ca9b3ebfeb7ace1823146e22b66f99ee223840e7637c9e745e1c7",
+      "bytes": 1064
+    },
+    "licenses/DeepSeek-LICENSE-MODEL": {
+      "sha256": "ccfee4895df06bcab524151c278e8dde88bbe76165a24ecbcbcf9fafd71fd2b3",
+      "bytes": 13759
+    },
+    "licenses/cosmokit-LICENSE": {
+      "sha256": "034fb52b1d57360ecbae6cb1632a88f86fd7c3d3f5631a5f082710203dda0be7",
+      "bytes": 1071
+    },
+    "licenses/schemastery-LICENSE": {
+      "sha256": "034fb52b1d57360ecbae6cb1632a88f86fd7c3d3f5631a5f082710203dda0be7",
+      "bytes": 1071
+    },
+    "licenses/zod-LICENSE": {
+      "sha256": "3f1189b28e3866e0d979968d466b78f813f76827cfdca1fbb124cc0a5c8841f8",
+      "bytes": 1072
+    },
+    "package.json": {
+      "sha256": "a286dc2a79a0ab6ac48a2661a6498d26f456946a51086db13c0121e2711c32e7",
+      "bytes": 991
+    },
+    "src/client/LiveStatsLine.tsx": {
+      "sha256": "beabc24676e5832fdf8227729ff340c6fb38b531bf4a4ce8d57282c7bb092f77",
+      "bytes": 4339
+    },
+    "src/client/TpsLine.tsx": {
+      "sha256": "2650df948d79a362ab46cf8df79bdbaeca15cb65da11f5c5d1f48ece71cd97d6",
+      "bytes": 1355
+    },
+    "src/client/index.ts": {
+      "sha256": "656704bf142cef6862998d06fb7427152946a7a3ef7e03533305c772eeb287fe",
+      "bytes": 1445
+    },
+    "src/client/locales.ts": {
+      "sha256": "76aadae18cfd8be1b6f5e2176a9bc0d3f421b72560a9cf61a93579068b76c804",
+      "bytes": 1250
+    },
+    "src/index.ts": {
+      "sha256": "e3913b78aa82197fdc2112dfe7a612c587eda140dc4f81a5aa44c35dc8775a19",
+      "bytes": 1089
+    },
+    "src/projection.ts": {
+      "sha256": "4a93fd486e9f92c24c90147dc179e778e0473af6141fe64f79a7ec4201fdb38c",
+      "bytes": 13374
+    },
+    "src/tokenizer.ts": {
+      "sha256": "820e031a3c76a2131b1b2de55643d443a32668ef555203778527ba1257961b9c",
+      "bytes": 4306
+    },
+    "src/types.ts": {
+      "sha256": "cd499d91d7447bf8a94e97edde9967ec17beef8ee1faa0c23a27667c18b33d30",
+      "bytes": 686
+    }
+  },
+  "changes": [
+    "Alpha projection stateSchema and wire view contract; persisted state version 3.",
+    "JSON-safe sparse stream blocks; preserve streaming and provider-correction logic.",
+    "Existing Alpha UI renderer/locale/session services and deferred dock registration.",
+    "Complete tokenizer assets retained without modification; fixed runtime dependencies bundled."
+  ],
+  "validationBoundary": "Four offline projection/client fixtures passed. No DSH server, browser, model call, install, restart, or removal performed by this build."
+}

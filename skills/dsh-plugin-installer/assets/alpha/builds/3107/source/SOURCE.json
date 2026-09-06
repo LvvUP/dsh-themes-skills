@@ -1,0 +1,20 @@
+{
+  "sourceRepository": "omdsh-dev/dsh-gomoku",
+  "sourceRevision": "5b27af9808f5bd8f2d753dfdf6157d86a54a4947",
+  "files": {
+    "LICENSE": "f4d265194e0824721af0592462a71fe750c04db3565c23c5d6c65fdee25fb4b0",
+    "README.md": "89baf985829c0b400411891a11e5f081c6fee85474505d0cf344af42603a2661",
+    "cordis.patch.yml": "d57d72e190766156ba1fe6cd2a0e1eaa7a0e2849681c8ed5ff4e8d1b9d322364",
+    "package.json": "9bed3126aa38ef7a5bd2d6dbe799ba41539343901631aa977e488c28e2c6ed7e",
+    "src/client/Gomoku.module.css": "e26c4dafad28325eca28620904a54a9eff45d450622fab011c9d790fd2ef0be0",
+    "src/client/GomokuView.tsx": "6c1009ff43449ff935899bb0a5a7b9b6b80ac0d562d8333fe3030a33e704d09a",
+    "src/client/game.ts": "72b4e6f98a0361febb0e7b270397a26c78d4224a07eb0bc69f9a535b215af061",
+    "src/client/index.ts": "f6fd159451922af7b6fffd7721555bbe080a6913e09e0bc05b70cf2b98f11e4e",
+    "src/client/locales.ts": "79d4e75e6052e850e679a7c79196e5e9d3c7394eabd5d052ab6c1ad78e5e560f",
+    "src/client/store.ts": "1c65bb78c5fefe97663734610e351b9543066e1bc89d592bded0fb6c75b6a362",
+    "src/css-modules.d.ts": "e28410d74a0d763364c04fa690c2ca2202ad3019c74f8f5205e8dc6cba69c02f",
+    "src/index.ts": "76c61d7cf1af5a8b978752fe9c9f3b452e4135f8dc527c068998d3bd124cb137",
+    "src/invariant.ts": "607a5837390eb1d2bc3a272d123d57a13faed8cac055267e748e1852b914873f",
+    "tsdown.config.ts": "9a73cb6e077b9622c6b2c561b69bc24013aa91518c934f69c40ace66808a5249"
+  }
+}
