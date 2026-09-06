@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "status": "materialized-exact-actual-evidence",
+  "runtimeReceiptSha256": "f063ff121650f9ae4ea723844890bed7b6f649d597298c398ab2425e865b0294",
+  "files": [
+    {
+      "role": "runtime-observations",
+      "path": "references/alpha-palettes-security-20260906/runtime-observations-a4f89a33e878b2d89020cf73126e73d016f0bfbdaa74fb8b77cbe7f6da86873e.json",
+      "sha256": "a4f89a33e878b2d89020cf73126e73d016f0bfbdaa74fb8b77cbe7f6da86873e",
+      "sizeBytes": 19169,
+      "originalWorkspacePath": "output/playwright/community-palettes-alpha-security/attempt-1/verified-selections.json"
+    },
+    {
+      "role": "authentication-receipt",
+      "path": "references/alpha-palettes-security-20260906/authentication-receipt-a2298e4f357091f8ca620ff0ad36a58526b9f58ab6966010743fe81e73cf0557.json",
+      "sha256": "a2298e4f357091f8ca620ff0ad36a58526b9f58ab6966010743fe81e73cf0557",
+      "sizeBytes": 111809,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/http-check-1788698392798-cdbb1d7c-f0db-4a17-af7b-5d0c6a3e2af6/receipt.json"
+    },
+    {
+      "role": "http-facts",
+      "path": "references/alpha-palettes-security-20260906/http-facts-646a762fb995eb09aedffbdae73f3ca11949ad05aa8bbbf119a54911a411e1e8.ndjson",
+      "sha256": "646a762fb995eb09aedffbdae73f3ca11949ad05aa8bbbf119a54911a411e1e8",
+      "sizeBytes": 191045,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/http-check-1788698392798-cdbb1d7c-f0db-4a17-af7b-5d0c6a3e2af6/http-facts.ndjson"
+    },
+    {
+      "role": "installed-package-files",
+      "path": "references/alpha-palettes-security-20260906/installed-package-files-8c6277e30796b5f48a6f3514b792d2dc4057ec5ec6224f570273cb991ccc17f1.json",
+      "sha256": "8c6277e30796b5f48a6f3514b792d2dc4057ec5ec6224f570273cb991ccc17f1",
+      "sizeBytes": 6050,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/attempt-1-installed-packages.json"
+    },
+    {
+      "role": "http-owner-chain",
+      "path": "references/alpha-palettes-security-20260906/http-owner-chain-c1e404923a5968a3185dcfee91fa17c60dce4362b53e0d328fa19b1e37de3082.json",
+      "sha256": "c1e404923a5968a3185dcfee91fa17c60dce4362b53e0d328fa19b1e37de3082",
+      "sizeBytes": 1188,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/attempt-1-owned-port.json"
+    },
+    {
+      "role": "initial-owner",
+      "path": "references/alpha-palettes-security-20260906/initial-owner-12e1923f59765ba20e70476181e33738b9d09a55b3aadd8e761b327083d31f31.json",
+      "sha256": "12e1923f59765ba20e70476181e33738b9d09a55b3aadd8e761b327083d31f31",
+      "sizeBytes": 441,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/attempt-1-runtime-owner.json"
+    },
+    {
+      "role": "initial-host-stopped",
+      "path": "references/alpha-palettes-security-20260906/initial-host-stopped-ccf2419dd83b9e549fbab68771ea0154d93bc180630623c9aa5edc8d312799a6.json",
+      "sha256": "ccf2419dd83b9e549fbab68771ea0154d93bc180630623c9aa5edc8d312799a6",
+      "sizeBytes": 247,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/attempt-1-initial-server-stopped.json"
+    },
+    {
+      "role": "custom-owner",
+      "path": "references/alpha-palettes-security-20260906/custom-owner-36eea3604047189abc20ec35b4ce01b90f68049120a02536f4f375e9794e2ef6.json",
+      "sha256": "36eea3604047189abc20ec35b4ce01b90f68049120a02536f4f375e9794e2ef6",
+      "sizeBytes": 411,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/attempt-1-custom-owner.json"
+    },
+    {
+      "role": "recovery-owner",
+      "path": "references/alpha-palettes-security-20260906/recovery-owner-972e5669cf3cdeef836b50bc0d8a63931551ffb688e3c66e7d03d55da7a96f47.json",
+      "sha256": "972e5669cf3cdeef836b50bc0d8a63931551ffb688e3c66e7d03d55da7a96f47",
+      "sizeBytes": 412,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/attempt-1-recovery-owner.json"
+    },
+    {
+      "role": "completion-readonly",
+      "path": "references/alpha-palettes-security-20260906/completion-readonly-2dd50ed7a89ccd389269825b9cf1d8f983ae1b741ce243314e84a6022ff1a771.json",
+      "sha256": "2dd50ed7a89ccd389269825b9cf1d8f983ae1b741ce243314e84a6022ff1a771",
+      "sizeBytes": 2422,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/completion-readonly.json"
+    },
+    {
+      "role": "build-reproducibility",
+      "path": "references/alpha-palettes-security-20260906/build-reproducibility-eaef65dc67a44481de46d7ca5a8124dcd36a9886fd7ab92bcee7868f5e45305a.json",
+      "sha256": "eaef65dc67a44481de46d7ca5a8124dcd36a9886fd7ab92bcee7868f5e45305a",
+      "sizeBytes": 2247,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/build-reproducibility.json"
+    },
+    {
+      "role": "executed-build-catalog",
+      "path": "references/alpha-palettes-security-20260906/executed-build-catalog-3406b1cda80e9ba6f984a567750dc935be3f52128dd4b28c5f1f3881760b4b14.json",
+      "sha256": "3406b1cda80e9ba6f984a567750dc935be3f52128dd4b28c5f1f3881760b4b14",
+      "sizeBytes": 9828,
+      "originalWorkspacePath": "themes/community-alpha/catalog.json"
+    },
+    {
+      "role": "visual-review",
+      "path": "references/alpha-palettes-security-20260906/visual-review-9824f8875a17d4415b908b986bd715bc742ec278d9072151e75391933872d4b6.json",
+      "sha256": "9824f8875a17d4415b908b986bd715bc742ec278d9072151e75391933872d4b6",
+      "sizeBytes": 1618,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/visual-review.json"
+    },
+    {
+      "role": "independent-http-review",
+      "path": "references/alpha-palettes-security-20260906/independent-http-review-17dac9a62c5f9468cbd05afa68ea415def94dfba733a5e20ee4dbe8aacaaae42.json",
+      "sha256": "17dac9a62c5f9468cbd05afa68ea415def94dfba733a5e20ee4dbe8aacaaae42",
+      "sizeBytes": 36775,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/attempt-1-http-independent-review.json"
+    },
+    {
+      "role": "guard-source-independent-review",
+      "path": "references/alpha-palettes-security-20260906/guard-source-independent-review-d8bc165ca3c76af0cc913396ec65eadf3a47d8406da712c45c47fd8fe29c1e74.json",
+      "sha256": "d8bc165ca3c76af0cc913396ec65eadf3a47d8406da712c45c47fd8fe29c1e74",
+      "sizeBytes": 3472,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/helper-and-fixture-independent-review.json"
+    },
+    {
+      "role": "install-cli",
+      "path": "references/alpha-palettes-security-20260906/install-cli-ed15cdea8f80dd49bf6189bf8fae6025129651382160e08043334c073f1afcd8.txt",
+      "sha256": "ed15cdea8f80dd49bf6189bf8fae6025129651382160e08043334c073f1afcd8",
+      "sizeBytes": 1167,
+      "originalWorkspacePath": "output/playwright/community-palettes-alpha-security/attempt-1/install.log"
+    },
+    {
+      "role": "uninstall-cli",
+      "path": "references/alpha-palettes-security-20260906/uninstall-cli-8ed6dd8b3cc3aaaf4279412d84517a7d2aa470c0be3491145de93a0f3e205cd5.txt",
+      "sha256": "8ed6dd8b3cc3aaaf4279412d84517a7d2aa470c0be3491145de93a0f3e205cd5",
+      "sizeBytes": 782,
+      "originalWorkspacePath": "output/playwright/community-palettes-alpha-security/attempt-1/final-uninstall.log"
+    },
+    {
+      "role": "builtin-dark-observed",
+      "path": "references/alpha-palettes-security-20260906/builtin-dark-observed-f413fb13ff5218708a447b2920f13a860af0b1c3a26944d45ca09773d2970b5c.txt",
+      "sha256": "f413fb13ff5218708a447b2920f13a860af0b1c3a26944d45ca09773d2970b5c",
+      "sizeBytes": 1204,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/builtin-dark-observed.log"
+    },
+    {
+      "role": "builtin-light-observed",
+      "path": "references/alpha-palettes-security-20260906/builtin-light-observed-05a8d452f26c0de11ff852e91fe2f063de5112704e12e0a7d7acf8dda754ae82.txt",
+      "sha256": "05a8d452f26c0de11ff852e91fe2f063de5112704e12e0a7d7acf8dda754ae82",
+      "sizeBytes": 1208,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/builtin-light-observed.log"
+    },
+    {
+      "role": "healthy-console",
+      "path": "references/alpha-palettes-security-20260906/healthy-console-fb785f6bc4cae59945e35ea989a740211f390fe8442ef7334e1f416bf65f6d7a.txt",
+      "sha256": "fb785f6bc4cae59945e35ea989a740211f390fe8442ef7334e1f416bf65f6d7a",
+      "sizeBytes": 745,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/healthy-console-before-recovery.log"
+    },
+    {
+      "role": "recovery-driver-output",
+      "path": "references/alpha-palettes-security-20260906/recovery-driver-output-10010e5c67ad4d9daf0f6fb427f68ab7ecac4a1c928bf5e008897706b02735b5.txt",
+      "sha256": "10010e5c67ad4d9daf0f6fb427f68ab7ecac4a1c928bf5e008897706b02735b5",
+      "sizeBytes": 3330,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/browser-uninstall-recovery-1.log"
+    },
+    {
+      "role": "executed-http-source",
+      "path": "references/alpha-palettes-security-20260906/executed-http-source-df6895729e2e4143261f5e5da7e7560ad4c4882f5aa95f2e8239b2f5be1c01ec.mjs",
+      "sha256": "df6895729e2e4143261f5e5da7e7560ad4c4882f5aa95f2e8239b2f5be1c01ec",
+      "sizeBytes": 21487,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/check-runtime-requests.mjs"
+    },
+    {
+      "role": "executed-selection-custom-source",
+      "path": "references/alpha-palettes-security-20260906/executed-selection-custom-source-b6e486a4b087605274b45bafb74aeeee499026796c13bbe46c5a07b761b2dbf2.mjs",
+      "sha256": "b6e486a4b087605274b45bafb74aeeee499026796c13bbe46c5a07b761b2dbf2",
+      "sizeBytes": 13117,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/verify-runtime.before-recovery-checks.b6e486a4b087605274b45bafb74aeeee499026796c13bbe46c5a07b761b2dbf2.mjs"
+    },
+    {
+      "role": "executed-recovery-source",
+      "path": "references/alpha-palettes-security-20260906/executed-recovery-source-3613636418dbd9524872450c67ef694b861aebcfe31d1fe5c14ec0f96d24cbcc.mjs",
+      "sha256": "3613636418dbd9524872450c67ef694b861aebcfe31d1fe5c14ec0f96d24cbcc",
+      "sizeBytes": 13179,
+      "originalWorkspacePath": ".cache/alpha-palette-api-security/verify-runtime.executed-recovery.3613636418dbd9524872450c67ef694b861aebcfe31d1fe5c14ec0f96d24cbcc.mjs"
+    },
+    {
+      "role": "screenshot-light",
+      "path": "references/alpha-palettes-security-20260906/screenshot-light-821e30c17df999bf15eb1b941d8d6aba3c1c6254531eea7d1d0263c30385a193.png",
+      "sha256": "821e30c17df999bf15eb1b941d8d6aba3c1c6254531eea7d1d0263c30385a193",
+      "sizeBytes": 85180,
+      "originalWorkspacePath": "output/playwright/community-palettes-alpha-security/attempt-1/premium-light.png"
+    },
+    {
+      "role": "screenshot-dark",
+      "path": "references/alpha-palettes-security-20260906/screenshot-dark-80bb63b488635909cc08bceba92d66be2361857dc07939d0cdd516efb54b084f.png",
+      "sha256": "80bb63b488635909cc08bceba92d66be2361857dc07939d0cdd516efb54b084f",
+      "sizeBytes": 79034,
+      "originalWorkspacePath": "output/playwright/community-palettes-alpha-security/attempt-1/premium-dark.png"
+    }
+  ]
+}

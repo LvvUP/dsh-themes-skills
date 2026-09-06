@@ -17,19 +17,19 @@ src/routeTree.gen.ts
 npm-debug.log*
 
 # BEGIN verified Alpha artifact allowlist
-!/skills/dsh-community-skin-installer/assets/alpha/artifacts/1ade7da6d33025d8fc141b89940c122c35af611e2f0708778b64842fa9e2eeb7.tgz
-!/skills/dsh-community-skin-installer/assets/alpha/artifacts/2fa67a45ddb273e2c52ad02988d4f0251ad5f6ff7304d28e16a24be2a44174a7.tgz
-!/skills/dsh-community-skin-installer/assets/alpha/artifacts/4cd4f8f04902e836a3596238984426e604b1878334a382a4e3079fdea4b29159.tgz
+!/skills/dsh-community-skin-installer/assets/alpha/artifacts/20ed1b2b8dc7bf18670e9e1a7768bebbcf7cbfdfa00434b01433e388209bbb16.tgz
+!/skills/dsh-community-skin-installer/assets/alpha/artifacts/44f1ae4e9a7d36022d19097ef83f2e287271d4ead02178d5f426ad1de7439f62.tgz
 !/skills/dsh-community-skin-installer/assets/alpha/artifacts/75df9ec54b89c1b99567f818183fafd57c48c3bf3a9b172a2f9ffff934851fcc.tgz
 !/skills/dsh-community-skin-installer/assets/alpha/artifacts/7747676f742580e2ca09925631bacf7ab778c43e2071f8521bef3f20cbbb8efe.tgz
+!/skills/dsh-community-skin-installer/assets/alpha/artifacts/7bf71d12f605bb6d0a320b5b754fca84256484a2da3d8f5d83b84aec4acbae50.tgz
 !/skills/dsh-community-skin-installer/assets/alpha/artifacts/828f9e4f2de142b29bc009a2edc8f8a7d2ffe1162628b7e98dca735cb36f193c.tgz
 !/skills/dsh-community-skin-installer/assets/alpha/artifacts/82b020c16ac1c21434131b12897d4504fc91076b16ad71391c7817696725c751.tgz
+!/skills/dsh-community-skin-installer/assets/alpha/artifacts/ab01b5d157aa437413620a0bcbd2fd29b828a025644bf6169f2254c9e70cf08d.tgz
 !/skills/dsh-community-skin-installer/assets/alpha/artifacts/ab289379fdc126e6b8748ff75b2c5de9ec547ba8ddbccf412c563b8abc3fc218.tgz
 !/skills/dsh-community-skin-installer/assets/alpha/artifacts/abc28e4ced1560efa79b2ba741ebc5c829ac497baf84024201efb2aae93a3859.tgz
 !/skills/dsh-community-skin-installer/assets/alpha/artifacts/b3bd1fb03f096d33e0929c69c99e1766ac5e061a886f6ce340cb3fe017f446d5.tgz
 !/skills/dsh-community-skin-installer/assets/alpha/artifacts/bb6ca0d2b0ed0ff1f627c1c584c271b42d65fbfd6a816885a8e8483ddccb2768.tgz
 !/skills/dsh-community-skin-installer/assets/alpha/artifacts/c91c03c39d1a8284db88cba0810cbfca39df6adc83bbe82901189faae6b3c053.tgz
-!/skills/dsh-community-skin-installer/assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz
 !/skills/dsh-community-skin-installer/assets/alpha/artifacts/d26d61bde5b93f8b7e4f72d04b438413081312dbc63c0d1d10dafe2ce640a23f.tgz
 !/skills/dsh-community-skin-installer/assets/alpha/artifacts/d8c9f33b000ee6e28d5589f5179879a5d9e3984b1bbc23bc3dbb074e3a62520d.tgz
 !/skills/dsh-community-skin-installer/assets/alpha/artifacts/f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924.tgz

@@ -1,0 +1,35 @@
+{
+  "name": "@dsh-themes-community/theme-pack-alpha",
+  "version": "1.0.0-alpha.1",
+  "type": "module",
+  "main": "./index.js",
+  "license": "MIT",
+  "description": "DSH Themes Alpha adaptation of math-lrz/dsh-theme-pack",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "LICENSE",
+    "PROVENANCE.json",
+    "cordis.patch.yml"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-theme",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-slots"
+      ],
+      "platform": "web",
+      "immediately": true
+    }
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "status": "materialized-actual-passed-runs",
+  "catalogSha256": "8e048e66f5c9a6193027cefca150af90c193f8229ce6a18a7b281a03b26a76b4",
+  "files": [
+    {
+      "role": "three-id-receipt",
+      "path": "three-id-receipt.a487dd27baa23aa50185a0f6ffd157de42e7e7eee30127a31ebfa32118c9c4b6.json",
+      "sha256": "a487dd27baa23aa50185a0f6ffd157de42e7e7eee30127a31ebfa32118c9c4b6",
+      "bytes": 23421,
+      "originalWorkspacePath": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/receipt.json"
+    },
+    {
+      "role": "upgrade-receipt",
+      "path": "upgrade-receipt.8bcb406721ea138befa468b7003d67c2de2f2c6d98d82471ba474c61a52e99f8.json",
+      "sha256": "8bcb406721ea138befa468b7003d67c2de2f2c6d98d82471ba474c61a52e99f8",
+      "bytes": 87966,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/receipt.json"
+    },
+    {
+      "role": "three-id-execution",
+      "path": "three-id-execution.0cefd8c7bf994f4ff8f3141de18587f70a434c7151ca78bc741c9c626edb0dde.json",
+      "sha256": "0cefd8c7bf994f4ff8f3141de18587f70a434c7151ca78bc741c9c626edb0dde",
+      "bytes": 3288,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/execution.json"
+    },
+    {
+      "role": "three-id-installed-lock",
+      "path": "three-id-installed-lock.c506a07726d2ba10b8a68ce365058f1ed0262c74b117581cf6df6a7f0476384e.yaml",
+      "sha256": "c506a07726d2ba10b8a68ce365058f1ed0262c74b117581cf6df6a7f0476384e",
+      "bytes": 6832,
+      "originalWorkspacePath": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/installed-pnpm-lock.yaml"
+    },
+    {
+      "role": "three-id-snapshot-0",
+      "path": "three-id-snapshot-0.8e048e66f5c9a6193027cefca150af90c193f8229ce6a18a7b281a03b26a76b4.json",
+      "sha256": "8e048e66f5c9a6193027cefca150af90c193f8229ce6a18a7b281a03b26a76b4",
+      "bytes": 95244,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/0-community-recipes.json"
+    },
+    {
+      "role": "three-id-snapshot-1",
+      "path": "three-id-snapshot-1.36e5d72237851aab572b96a5a96866d28f3d7027bf158310ad367ae16486909d.mjs",
+      "sha256": "36e5d72237851aab572b96a5a96866d28f3d7027bf158310ad367ae16486909d",
+      "bytes": 8259,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/1-companion-files.mjs"
+    },
+    {
+      "role": "three-id-snapshot-2",
+      "path": "three-id-snapshot-2.14c92f0b26b734bc73d098579e58f1f962ae81741078b726eda80c06307926f4.mjs",
+      "sha256": "14c92f0b26b734bc73d098579e58f1f962ae81741078b726eda80c06307926f4",
+      "bytes": 10150,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/2-install-alpha.mjs"
+    },
+    {
+      "role": "three-id-snapshot-3",
+      "path": "three-id-snapshot-3.3f791ce0c81c5bf0e5dae8e0bc496a43e5ff1d910384d7c6e4e5596a4ae11321.mjs",
+      "sha256": "3f791ce0c81c5bf0e5dae8e0bc496a43e5ff1d910384d7c6e4e5596a4ae11321",
+      "bytes": 19296,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/3-install-plugins.mjs"
+    },
+    {
+      "role": "three-id-snapshot-4",
+      "path": "three-id-snapshot-4.d7664679a96517ef8068a7dd4a6b33f640d18980f81f79223a75a7c8468cb6ff.mjs",
+      "sha256": "d7664679a96517ef8068a7dd4a6b33f640d18980f81f79223a75a7c8468cb6ff",
+      "bytes": 7330,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/4-dsh-alpha.mjs"
+    },
+    {
+      "role": "three-id-snapshot-5",
+      "path": "three-id-snapshot-5.e178507eb9f85359e6b9091f45afb19bd860c72ef9e1cc927139bf7377ce70a7.mjs",
+      "sha256": "e178507eb9f85359e6b9091f45afb19bd860c72ef9e1cc927139bf7377ce70a7",
+      "bytes": 17331,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/5-verify-public-installation.mjs"
+    },
+    {
+      "role": "upgrade-snapshot-0",
+      "path": "upgrade-snapshot-0.5272dbb16fac552b70327e0fd9081ed9c966da54c36224f9adaf04bcacd7c58a.mjs",
+      "sha256": "5272dbb16fac552b70327e0fd9081ed9c966da54c36224f9adaf04bcacd7c58a",
+      "bytes": 18480,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/snapshots/0-verify-real-upgrade.mjs"
+    },
+    {
+      "role": "upgrade-snapshot-1",
+      "path": "upgrade-snapshot-1.849df1eec029f241fb92853ec0d2b8712099496d923b3c18cea8803307be8c3f.json",
+      "sha256": "849df1eec029f241fb92853ec0d2b8712099496d923b3c18cea8803307be8c3f",
+      "bytes": 12722,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/snapshots/1-upgrade-inputs.json"
+    },
+    {
+      "role": "upgrade-snapshot-2",
+      "path": "upgrade-snapshot-2.8e048e66f5c9a6193027cefca150af90c193f8229ce6a18a7b281a03b26a76b4.json",
+      "sha256": "8e048e66f5c9a6193027cefca150af90c193f8229ce6a18a7b281a03b26a76b4",
+      "bytes": 95244,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/snapshots/2-community-recipes.json"
+    },
+    {
+      "role": "upgrade-snapshot-3",
+      "path": "upgrade-snapshot-3.36e5d72237851aab572b96a5a96866d28f3d7027bf158310ad367ae16486909d.mjs",
+      "sha256": "36e5d72237851aab572b96a5a96866d28f3d7027bf158310ad367ae16486909d",
+      "bytes": 8259,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/snapshots/3-companion-files.mjs"
+    },
+    {
+      "role": "upgrade-snapshot-4",
+      "path": "upgrade-snapshot-4.14c92f0b26b734bc73d098579e58f1f962ae81741078b726eda80c06307926f4.mjs",
+      "sha256": "14c92f0b26b734bc73d098579e58f1f962ae81741078b726eda80c06307926f4",
+      "bytes": 10150,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/snapshots/4-install-alpha.mjs"
+    },
+    {
+      "role": "upgrade-snapshot-5",
+      "path": "upgrade-snapshot-5.3f791ce0c81c5bf0e5dae8e0bc496a43e5ff1d910384d7c6e4e5596a4ae11321.mjs",
+      "sha256": "3f791ce0c81c5bf0e5dae8e0bc496a43e5ff1d910384d7c6e4e5596a4ae11321",
+      "bytes": 19296,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/snapshots/5-install-plugins.mjs"
+    },
+    {
+      "role": "upgrade-snapshot-6",
+      "path": "upgrade-snapshot-6.d7664679a96517ef8068a7dd4a6b33f640d18980f81f79223a75a7c8468cb6ff.mjs",
+      "sha256": "d7664679a96517ef8068a7dd4a6b33f640d18980f81f79223a75a7c8468cb6ff",
+      "bytes": 7330,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/snapshots/6-dsh-alpha.mjs"
+    },
+    {
+      "role": "upgrade-snapshot-7",
+      "path": "upgrade-snapshot-7.f063ff121650f9ae4ea723844890bed7b6f649d597298c398ab2425e865b0294.json",
+      "sha256": "f063ff121650f9ae4ea723844890bed7b6f649d597298c398ab2425e865b0294",
+      "bytes": 42048,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/snapshots/7-alpha-palettes-runtime.json"
+    },
+    {
+      "role": "independent-actual-runs-review",
+      "path": "independent-actual-runs-review.a1aac333d9127662fda2bd9954ee6e6a4b2fed1e711bb5d828d9e826056d6027.json",
+      "sha256": "a1aac333d9127662fda2bd9954ee6e6a4b2fed1e711bb5d828d9e826056d6027",
+      "bytes": 99578,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/actual-public-runs-independent-review.json"
+    },
+    {
+      "role": "independent-actual-runs-review-source",
+      "path": "independent-actual-runs-review-source.5d73747a416629d567fb9e36c402ff37ff9cf34d711b1e7a68e64dad398e36ec.mjs",
+      "sha256": "5d73747a416629d567fb9e36c402ff37ff9cf34d711b1e7a68e64dad398e36ec",
+      "bytes": 19999,
+      "originalWorkspacePath": ".cache/alpha-community-security-public-sync/review-actual-public-runs.mjs"
+    }
+  ],
+  "scope": [
+    "The original reports and executed snapshots are retained byte-for-byte. Original workspace paths are historical labels; the files in this manifest resolve within this directory.",
+    "Three ID run: two actual adds, three authenticated selections, two actual removals, controlled companion edit conflict and retry, twelve original fixture files restored, four routes absent.",
+    "Upgrade: old four packages were installed without starting their Web host. The public installer upgraded all fifteen IDs with four new adds and eleven within-call skips; fifteen authenticated selections and one cold restart of the final four-route state passed. Four actual removals, no repeated remove calls and four absent routes passed."
+  ],
+  "interpretation": [
+    "The three-ID raw dependencies.reusedStore flag means Boolean(custom store environment), not a verified warm cache. This run used a new, previously nonexistent isolated store. Initial adds permitted network; the subsequent lifecycle explicitly observed PNPM_CONFIG_OFFLINE=true.",
+    "The execution wrapper status remains its original command-passed-output-review-pending. The later independent actual-runs review supplies the completed output review without rewriting the wrapper.",
+    "The earlier alpha-community-public-repeatability.json is the historical alpha.1 three-warm/one-cold protocol; it is not four repeats of this alpha.2 run.",
+    "No server logs, CLI stdout/stderr, settings files, cookie values or token values are distributed here. CLI log hashes in the independent review identify private originals, not public paths.",
+    "These two API/CLI runs do not independently certify browser appearance, alpha.1 preference migration or fifteen separate cold restarts. Current palette rendering and fifteen independent restarts are documented by alpha-palettes-runtime.json."
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "status": "completion-state-observed-readonly",
+  "checkedAt": "2026-09-06T13:13:58.689Z",
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "cwd": "/Users/vvmacair/.dsh-themes/runtimes/0.1.3-alpha.1",
+      "result": {
+        "chunk_id": "2295e9",
+        "wall_time_seconds": 0.055256041,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    },
+    {
+      "argv": [
+        "lsof",
+        "-nP",
+        "-iTCP:3427",
+        "-sTCP:LISTEN"
+      ],
+      "result": {
+        "chunk_id": "a62db4",
+        "wall_time_seconds": 0.000001292,
+        "exit_code": 1,
+        "original_token_count": 0,
+        "output": ""
+      }
+    },
+    {
+      "argv": [
+        "node",
+        "--version"
+      ],
+      "result": {
+        "chunk_id": "bc7ff4",
+        "wall_time_seconds": 0.000001792,
+        "exit_code": 0,
+        "original_token_count": 3,
+        "output": "v24.15.0\n"
+      }
+    },
+    {
+      "argv": [
+        "node_modules/.bin/playwright-cli",
+        "list"
+      ],
+      "result": {
+        "chunk_id": "f98dba",
+        "wall_time_seconds": 1.137802,
+        "exit_code": 0,
+        "original_token_count": 167,
+        "output": "\n╔════════════════════════════════════════════════════════════════════╗\n║ Update available for @playwright/cli: 0.1.18 → 0.1.19              ║\n║ Run `npm install -g @playwright/cli@latest` (global) or            ║\n║ `npm install --save-dev @playwright/cli@latest` (local) to update. ║\n╚════════════════════════════════════════════════════════════════════╝\n\n  (no browsers)\n"
+      }
+    }
+  ],
+  "preliminaryFailedRead": {
+    "argv": [
+      "playwright-cli",
+      "list"
+    ],
+    "result": {
+      "chunk_id": "803bd1",
+      "wall_time_seconds": 0.000004792,
+      "exit_code": 127,
+      "original_token_count": 11,
+      "output": "zsh:1: command not found: playwright-cli\n"
+    },
+    "scope": "PATH lookup failed; rerun used the existing project-local executable and returned no browsers."
+  },
+  "noRuntimeStarted": true
+}

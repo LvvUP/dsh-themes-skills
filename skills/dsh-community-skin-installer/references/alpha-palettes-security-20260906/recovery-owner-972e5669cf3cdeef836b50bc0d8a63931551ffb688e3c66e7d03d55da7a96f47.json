@@ -1,0 +1,12 @@
+{
+  "pid": 4636,
+  "phase": "recovery",
+  "cwd": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes",
+  "dshHome": "/Users/vvmacair/.dsh-themes/testing/community-palettes-alpha-api-security-20260906",
+  "port": 3427,
+  "status": "stopped",
+  "startedAt": "2026-09-06T13:01:12.210879+00:00",
+  "processStart": "Sun Sep  6 21:01:12 2026",
+  "stoppedAt": "2026-09-06T13:03:46.842192+00:00",
+  "portClosed": true
+}

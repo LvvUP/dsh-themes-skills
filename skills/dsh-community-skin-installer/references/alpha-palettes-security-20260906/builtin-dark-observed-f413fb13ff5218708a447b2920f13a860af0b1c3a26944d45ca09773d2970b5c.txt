@@ -1,0 +1,22 @@
+
+╔════════════════════════════════════════════════════════════════════╗
+║ Update available for @playwright/cli: 0.1.18 → 0.1.19              ║
+║ Run `npm install -g @playwright/cli@latest` (global) or            ║
+║ `npm install --save-dev @playwright/cli@latest` (local) to update. ║
+╚════════════════════════════════════════════════════════════════════╝
+
+### Result
+{
+  "background": "rgb(21, 21, 23)",
+  "scheme": "dark",
+  "premium": {
+    "palette": "off",
+    "base": "system",
+    "customPalettes": {}
+  },
+  "themePackStyles": 1
+}
+### Ran Playwright code
+```js
+await page.evaluate('async () => ({background:getComputedStyle(document.body).backgroundColor,scheme:document.documentElement.style.colorScheme,premium:await(await fetch("/api/dsh-community-palettes/premium/palette")).json(),themePackStyles:document.querySelectorAll("style[data-plugin-css=\\"dsh-theme-pack/picker.css\\"]").length})');
+```

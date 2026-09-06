@@ -1,0 +1,936 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-09-06T12:45:13.268Z",
+  "status": "accepted-with-stated-scope",
+  "scope": "Independent offline review of the already executed official-host HTTP verification, installed archive equality and recorded ownership chain; no HTTP or browser performed by this review.",
+  "evidence": [
+    {
+      "path": ".cache/alpha-palette-api-security/http-check-1788698392798-cdbb1d7c-f0db-4a17-af7b-5d0c6a3e2af6/receipt.json",
+      "sha256": "a2298e4f357091f8ca620ff0ad36a58526b9f58ab6966010743fe81e73cf0557",
+      "sizeBytes": 111809
+    },
+    {
+      "path": ".cache/alpha-palette-api-security/attempt-1-installed-packages.json",
+      "sha256": "8c6277e30796b5f48a6f3514b792d2dc4057ec5ec6224f570273cb991ccc17f1",
+      "sizeBytes": 6050
+    },
+    {
+      "path": ".cache/alpha-palette-api-security/attempt-1-owned-port.json",
+      "sha256": "c1e404923a5968a3185dcfee91fa17c60dce4362b53e0d328fa19b1e37de3082",
+      "sizeBytes": 1188
+    },
+    {
+      "path": ".cache/alpha-palette-api-security/http-check-1788698392798-cdbb1d7c-f0db-4a17-af7b-5d0c6a3e2af6/http-facts.ndjson",
+      "sha256": "646a762fb995eb09aedffbdae73f3ca11949ad05aa8bbbf119a54911a411e1e8",
+      "sizeBytes": 191045
+    },
+    {
+      "path": ".cache/alpha-palette-api-security/check-runtime-requests.mjs",
+      "sha256": "df6895729e2e4143261f5e5da7e7560ad4c4882f5aa95f2e8239b2f5be1c01ec",
+      "sizeBytes": 21487
+    },
+    {
+      "path": ".cache/alpha-palette-api-security/attempt-1-settings.json",
+      "sha256": "2f16660d1e20bfb2f3444b96d7ee1e8ea8ed13267228756d38acd544a6792c6b",
+      "sizeBytes": 621
+    },
+    {
+      "path": "themes/community-alpha/catalog.json",
+      "sha256": "3406b1cda80e9ba6f984a567750dc935be3f52128dd4b28c5f1f3881760b4b14",
+      "sizeBytes": 9828
+    },
+    {
+      "path": "themes/community-alpha/artifacts/theme-pack-alpha-1.0.0-alpha.2.tgz",
+      "sha256": "20ed1b2b8dc7bf18670e9e1a7768bebbcf7cbfdfa00434b01433e388209bbb16",
+      "sizeBytes": 25622
+    },
+    {
+      "path": "themes/community-alpha/palette-api-security.mjs",
+      "sha256": "2e1a4ee5865b5c54f562ab684c7fc19c0261e0dbe4546c9423923c3c66e420d7",
+      "sizeBytes": 4715
+    },
+    {
+      "path": "themes/community-alpha/artifacts/catppuccin-alpha-1.0.0-alpha.2.tgz",
+      "sha256": "ab01b5d157aa437413620a0bcbd2fd29b828a025644bf6169f2254c9e70cf08d",
+      "sizeBytes": 25676
+    },
+    {
+      "path": "themes/community-alpha/artifacts/solarized-alpha-1.0.0-alpha.2.tgz",
+      "sha256": "44f1ae4e9a7d36022d19097ef83f2e287271d4ead02178d5f426ad1de7439f62",
+      "sizeBytes": 21144
+    },
+    {
+      "path": "themes/community-alpha/artifacts/premium-alpha-1.0.0-alpha.2.tgz",
+      "sha256": "7bf71d12f605bb6d0a320b5b754fca84256484a2da3d8f5d83b84aec4acbae50",
+      "sizeBytes": 36956
+    },
+    {
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-theme-manager/scripts/dsh-alpha.mjs",
+      "sha256": "d7664679a96517ef8068a7dd4a6b33f640d18980f81f79223a75a7c8468cb6ff",
+      "sizeBytes": 7330
+    },
+    {
+      "path": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-theme-manager/references/runtime-source.alpha.json",
+      "sha256": "067b4df55df75bc8eecc115c201237b67ce348d3ac5854d5f5f0d573feda7992",
+      "sizeBytes": 508
+    },
+    {
+      "path": "/Users/vvmacair/.dsh-themes/runtimes/0.1.3-alpha.1/pnpm-lock.yaml",
+      "sha256": "2c903ab870f821ee2db62fa9417d11b1c2b9c65fbeec30e851ddc53c4cc8c383",
+      "sizeBytes": 768436
+    },
+    {
+      "path": "/Users/vvmacair/.dsh-themes/runtimes/0.1.3-alpha.1/packages/client/connection/src/browser-auth.ts",
+      "sha256": "90f6a4220979bd98d9d71f009a457a0d8af9d9608496dd5fa78dd7045871ea98",
+      "sizeBytes": 12036
+    },
+    {
+      "path": "/Users/vvmacair/.dsh-themes/runtimes/0.1.3-alpha.1/packages/client/connection/src/api-request-trust.ts",
+      "sha256": "8085ac726be6b597ee61a0da1318ab956004d4d44325c941f7784feec93c0748",
+      "sizeBytes": 6221
+    },
+    {
+      "path": "/Users/vvmacair/.dsh-themes/runtimes/0.1.3-alpha.1/packages/client/connection/src/rpc-host.ts",
+      "sha256": "b1068051bcd1176866a792b62db4c12042907470a50da8ed98dfb7b1976c78fa",
+      "sizeBytes": 10619
+    }
+  ],
+  "runtime": {
+    "sourceCommit": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+    "sourceTrackedBytesClean": true,
+    "recordedOwnership": {
+      "checkedAt": "2026-09-06T12:39:32.864246+00:00",
+      "port": 3427,
+      "ownerRecord": {
+        "schemaVersion": 1,
+        "createdAt": "2026-09-06T12:38:14.533722+00:00",
+        "pid": 77144,
+        "cwd": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes",
+        "dshHome": "/Users/vvmacair/.dsh-themes/testing/community-palettes-alpha-api-security-20260906",
+        "port": 3427,
+        "log": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/output/playwright/community-palettes-alpha-security/attempt-1/server.log",
+        "status": "owned-runtime-ready"
+      },
+      "chain": [
+        {
+          "pid": 77195,
+          "ppid": 77165,
+          "command": "node --import tsx/esm apps/cli/src/bin.ts web --host 127.0.0.1 --port 3427 --no-open"
+        },
+        {
+          "pid": 77165,
+          "ppid": 77144,
+          "command": "node /Users/vvmacair/.nvm/versions/node/v24.15.0/bin/corepack pnpm --silent dsh web --host 127.0.0.1 --port 3427 --no-open"
+        },
+        {
+          "pid": 77144,
+          "ppid": 1,
+          "command": "/Users/vvmacair/.nvm/versions/node/v24.15.0/bin/node /Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-theme-manager/scripts/dsh-alpha.mjs web --host 127.0.0.1 --port 3427 --no-open"
+        }
+      ]
+    },
+    "installedAt": "2026-09-06T12:39:52.708087+00:00"
+  },
+  "execution": {
+    "startedAt": "2026-09-06T12:39:52.796Z",
+    "completedAt": "2026-09-06T12:39:53.365Z",
+    "elapsedMs": 569,
+    "httpRequestCount": 809,
+    "statusCounts": {
+      "200": 738,
+      "303": 1,
+      "400": 9,
+      "401": 11,
+      "403": 44,
+      "413": 3,
+      "415": 3
+    },
+    "fullOrderedRequestMatrixMatched": true
+  },
+  "cases": {
+    "expected": 75,
+    "actual": 75,
+    "unique": 75,
+    "authorization": 55,
+    "bodyValidation": 15,
+    "selections": 4,
+    "customLifecycle": 1,
+    "completeCaseIds": [
+      {
+        "caseId": "guard:/api/dsh-community-palettes/theme-pack:GET:no-cookie",
+        "route": "/api/dsh-community-palettes/theme-pack",
+        "method": "GET",
+        "expectedStatus": 401,
+        "actualStatus": 401
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/theme-pack:GET:foreign-origin",
+        "route": "/api/dsh-community-palettes/theme-pack",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/theme-pack:GET:null-origin",
+        "route": "/api/dsh-community-palettes/theme-pack",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/theme-pack:GET:untrusted-host",
+        "route": "/api/dsh-community-palettes/theme-pack",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/theme-pack:GET:cross-site",
+        "route": "/api/dsh-community-palettes/theme-pack",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/theme-pack:POST:no-cookie",
+        "route": "/api/dsh-community-palettes/theme-pack",
+        "method": "POST",
+        "expectedStatus": 401,
+        "actualStatus": 401
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/theme-pack:POST:foreign-origin",
+        "route": "/api/dsh-community-palettes/theme-pack",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/theme-pack:POST:null-origin",
+        "route": "/api/dsh-community-palettes/theme-pack",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/theme-pack:POST:untrusted-host",
+        "route": "/api/dsh-community-palettes/theme-pack",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/theme-pack:POST:cross-site",
+        "route": "/api/dsh-community-palettes/theme-pack",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/catppuccin:GET:no-cookie",
+        "route": "/api/dsh-community-palettes/catppuccin",
+        "method": "GET",
+        "expectedStatus": 401,
+        "actualStatus": 401
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/catppuccin:GET:foreign-origin",
+        "route": "/api/dsh-community-palettes/catppuccin",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/catppuccin:GET:null-origin",
+        "route": "/api/dsh-community-palettes/catppuccin",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/catppuccin:GET:untrusted-host",
+        "route": "/api/dsh-community-palettes/catppuccin",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/catppuccin:GET:cross-site",
+        "route": "/api/dsh-community-palettes/catppuccin",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/catppuccin:POST:no-cookie",
+        "route": "/api/dsh-community-palettes/catppuccin",
+        "method": "POST",
+        "expectedStatus": 401,
+        "actualStatus": 401
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/catppuccin:POST:foreign-origin",
+        "route": "/api/dsh-community-palettes/catppuccin",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/catppuccin:POST:null-origin",
+        "route": "/api/dsh-community-palettes/catppuccin",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/catppuccin:POST:untrusted-host",
+        "route": "/api/dsh-community-palettes/catppuccin",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/catppuccin:POST:cross-site",
+        "route": "/api/dsh-community-palettes/catppuccin",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/solarized:GET:no-cookie",
+        "route": "/api/dsh-community-palettes/solarized",
+        "method": "GET",
+        "expectedStatus": 401,
+        "actualStatus": 401
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/solarized:GET:foreign-origin",
+        "route": "/api/dsh-community-palettes/solarized",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/solarized:GET:null-origin",
+        "route": "/api/dsh-community-palettes/solarized",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/solarized:GET:untrusted-host",
+        "route": "/api/dsh-community-palettes/solarized",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/solarized:GET:cross-site",
+        "route": "/api/dsh-community-palettes/solarized",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/solarized:POST:no-cookie",
+        "route": "/api/dsh-community-palettes/solarized",
+        "method": "POST",
+        "expectedStatus": 401,
+        "actualStatus": 401
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/solarized:POST:foreign-origin",
+        "route": "/api/dsh-community-palettes/solarized",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/solarized:POST:null-origin",
+        "route": "/api/dsh-community-palettes/solarized",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/solarized:POST:untrusted-host",
+        "route": "/api/dsh-community-palettes/solarized",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/solarized:POST:cross-site",
+        "route": "/api/dsh-community-palettes/solarized",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/palette:GET:no-cookie",
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "method": "GET",
+        "expectedStatus": 401,
+        "actualStatus": 401
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/palette:GET:foreign-origin",
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/palette:GET:null-origin",
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/palette:GET:untrusted-host",
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/palette:GET:cross-site",
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/palette:POST:no-cookie",
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "method": "POST",
+        "expectedStatus": 401,
+        "actualStatus": 401
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/palette:POST:foreign-origin",
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/palette:POST:null-origin",
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/palette:POST:untrusted-host",
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/palette:POST:cross-site",
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/custom:GET:no-cookie",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "GET",
+        "expectedStatus": 401,
+        "actualStatus": 401
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/custom:GET:foreign-origin",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/custom:GET:null-origin",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/custom:GET:untrusted-host",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/custom:GET:cross-site",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "GET",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/custom:POST:no-cookie",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "POST",
+        "expectedStatus": 401,
+        "actualStatus": 401
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/custom:POST:foreign-origin",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/custom:POST:null-origin",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/custom:POST:untrusted-host",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/custom:POST:cross-site",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "POST",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/custom:DELETE:no-cookie",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "DELETE",
+        "expectedStatus": 401,
+        "actualStatus": 401
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/custom:DELETE:foreign-origin",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "DELETE",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/custom:DELETE:null-origin",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "DELETE",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/custom:DELETE:untrusted-host",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "DELETE",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "guard:/api/dsh-community-palettes/premium/custom:DELETE:cross-site",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "DELETE",
+        "expectedStatus": 403,
+        "actualStatus": 403
+      },
+      {
+        "caseId": "body:/api/dsh-community-palettes/premium/palette:POST:text-plain",
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "method": "POST",
+        "expectedStatus": 415,
+        "actualStatus": 415
+      },
+      {
+        "caseId": "body:/api/dsh-community-palettes/premium/palette:POST:malformed",
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "method": "POST",
+        "expectedStatus": 400,
+        "actualStatus": 400
+      },
+      {
+        "caseId": "body:/api/dsh-community-palettes/premium/palette:POST:null",
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "method": "POST",
+        "expectedStatus": 400,
+        "actualStatus": 400
+      },
+      {
+        "caseId": "body:/api/dsh-community-palettes/premium/palette:POST:array",
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "method": "POST",
+        "expectedStatus": 400,
+        "actualStatus": 400
+      },
+      {
+        "caseId": "body:/api/dsh-community-palettes/premium/palette:POST:over-64-kib",
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "method": "POST",
+        "expectedStatus": 413,
+        "actualStatus": 413
+      },
+      {
+        "caseId": "body:/api/dsh-community-palettes/premium/custom:POST:text-plain",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "POST",
+        "expectedStatus": 415,
+        "actualStatus": 415
+      },
+      {
+        "caseId": "body:/api/dsh-community-palettes/premium/custom:POST:malformed",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "POST",
+        "expectedStatus": 400,
+        "actualStatus": 400
+      },
+      {
+        "caseId": "body:/api/dsh-community-palettes/premium/custom:POST:null",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "POST",
+        "expectedStatus": 400,
+        "actualStatus": 400
+      },
+      {
+        "caseId": "body:/api/dsh-community-palettes/premium/custom:POST:array",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "POST",
+        "expectedStatus": 400,
+        "actualStatus": 400
+      },
+      {
+        "caseId": "body:/api/dsh-community-palettes/premium/custom:POST:over-64-kib",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "POST",
+        "expectedStatus": 413,
+        "actualStatus": 413
+      },
+      {
+        "caseId": "body:/api/dsh-community-palettes/premium/custom:DELETE:text-plain",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "DELETE",
+        "expectedStatus": 415,
+        "actualStatus": 415
+      },
+      {
+        "caseId": "body:/api/dsh-community-palettes/premium/custom:DELETE:malformed",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "DELETE",
+        "expectedStatus": 400,
+        "actualStatus": 400
+      },
+      {
+        "caseId": "body:/api/dsh-community-palettes/premium/custom:DELETE:null",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "DELETE",
+        "expectedStatus": 400,
+        "actualStatus": 400
+      },
+      {
+        "caseId": "body:/api/dsh-community-palettes/premium/custom:DELETE:array",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "DELETE",
+        "expectedStatus": 400,
+        "actualStatus": 400
+      },
+      {
+        "caseId": "body:/api/dsh-community-palettes/premium/custom:DELETE:over-64-kib",
+        "route": "/api/dsh-community-palettes/premium/custom",
+        "method": "DELETE",
+        "expectedStatus": 413,
+        "actualStatus": 413
+      },
+      {
+        "caseId": "valid:theme-pack:select-and-readback",
+        "actualStatus": 200
+      },
+      {
+        "caseId": "valid:catppuccin:select-and-readback",
+        "actualStatus": 200
+      },
+      {
+        "caseId": "valid:solarized:select-and-readback",
+        "actualStatus": 200
+      },
+      {
+        "caseId": "valid:premium:select-and-readback",
+        "actualStatus": 200
+      },
+      {
+        "caseId": "valid:custom:import-select-delete-readback",
+        "actualStatus": 200
+      }
+    ]
+  },
+  "state": {
+    "negativeCasesWithFiveResponsesEachBeforeAndAfter": 70,
+    "allBeforeAfterDigestsEqualInitial": true,
+    "initialSha256": {
+      "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+      "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+      "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+      "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+      "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    "finalSha256": {
+      "/api/dsh-community-palettes/theme-pack": "a965feeda1d9ea2a630556910e706ebcbf3a8517580b4ad5327a330fa6507731",
+      "/api/dsh-community-palettes/catppuccin": "681a75ffcea59cf98dd8a9ce1f91c8c827ea4976cd0255305214ead35e7d41d4",
+      "/api/dsh-community-palettes/solarized": "92b01aa39c0e446f2376d5357bc14c6e6a1bbb5036d7b6802ea62fbb81bc28c4",
+      "/api/dsh-community-palettes/premium/palette": "911f1007c0a6cd4a3170cd1e02aae11e2c6481b082f620bfcaa221dcf89323a5",
+      "/api/dsh-community-palettes/premium/custom": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    "restoredInitialOffAndBase": true,
+    "premiumCustomMapEmpty": true,
+    "equalityScope": "GET response bytes, enforced in the fixed actual-run script; response bodies intentionally not retained"
+  },
+  "installedPackages": [
+    {
+      "group": "theme-pack",
+      "packageName": "@dsh-themes-community/theme-pack-alpha",
+      "version": "1.0.0-alpha.2",
+      "file": "themes/community-alpha/artifacts/theme-pack-alpha-1.0.0-alpha.2.tgz",
+      "sha256": "20ed1b2b8dc7bf18670e9e1a7768bebbcf7cbfdfa00434b01433e388209bbb16",
+      "sizeBytes": 25622,
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "ef6d36a9ea7adcab9f0c27c95df7bb0de953fb7482e29aebb1be98738a006ca9",
+          "sizeBytes": 1064,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "a2c96ac0bb49d2b83199638438a08ffc6f59f69e20f09cd6db183bd607a5c44a",
+          "sizeBytes": 7224,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "client.js",
+          "sha256": "03b65a4eb74152672b2870a8868d75d772ebd5cdb0955b02f64c8eecd10f481f",
+          "sizeBytes": 82479,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "cordis.patch.yml",
+          "sha256": "83569db14080347e2a033b39ec30a3dd796ee15fc78b150e7d849617eba02e49",
+          "sizeBytes": 98,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "index.js",
+          "sha256": "15bc1f723b8b4bc9d895c2ca50539c1bf3ca19200275d3b5c1a5a993fb77c88c",
+          "sizeBytes": 36507,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "package.json",
+          "sha256": "96ae795a3da9792fcd7db89016bcd17c1e3637b78c1dd5e56bfcc1838c2eb077",
+          "sizeBytes": 800,
+          "currentInstalledBytesEqualArchive": true
+        }
+      ],
+      "securityAdaptation": {
+        "revision": "palette-api-auth-20260906",
+        "officialGuard": "ctx.connection.requestRejection(req)",
+        "beforeAnyRouteReadOrWrite": true,
+        "helper": {
+          "path": "themes/community-alpha/palette-api-security.mjs",
+          "sha256": "2e1a4ee5865b5c54f562ab684c7fc19c0261e0dbe4546c9423923c3c66e420d7"
+        },
+        "buildImplementationSha256": "e7c8c10278cdb8e75795f3a1856e0b70b57585e9796dd5cbf2777068f91f1ae6",
+        "hostTemplateSha256": "3ad44b9cd08387a2ccd7ece77316d8666aee5e60e5cdc42596262bc0a1d7e11e"
+      }
+    },
+    {
+      "group": "catppuccin",
+      "packageName": "@dsh-themes-community/catppuccin-alpha",
+      "version": "1.0.0-alpha.2",
+      "file": "themes/community-alpha/artifacts/catppuccin-alpha-1.0.0-alpha.2.tgz",
+      "sha256": "ab01b5d157aa437413620a0bcbd2fd29b828a025644bf6169f2254c9e70cf08d",
+      "sizeBytes": 25676,
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "50ad9437b1428ac9713c8b95b33f1a3d7558601792791509985d785ffb997f1a",
+          "sizeBytes": 1238,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "dd0ae75187527de60c2a7c51595aab950200defda3878704b04b2856e90ef792",
+          "sizeBytes": 4351,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "client.js",
+          "sha256": "d736c00748803e63300c6f2d8296f79f46ab3fd28e3c39066e7e78949b3b08e7",
+          "sizeBytes": 65183,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "cordis.patch.yml",
+          "sha256": "a82996566bc3359142e2c3f3e70431d16ee7762975886dc6ceefff4534a4d38a",
+          "sizeBytes": 98,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "index.js",
+          "sha256": "64eb99ea25b2495fe3986913a5c4b89ad538c95be591b03db9c24cd27e63e086",
+          "sizeBytes": 34412,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "package.json",
+          "sha256": "4f9ce94d663217e3ba7974e27bfac95436b7ce62b5bc944e81fa72f6734b3e28",
+          "sizeBytes": 808,
+          "currentInstalledBytesEqualArchive": true
+        }
+      ],
+      "securityAdaptation": {
+        "revision": "palette-api-auth-20260906",
+        "officialGuard": "ctx.connection.requestRejection(req)",
+        "beforeAnyRouteReadOrWrite": true,
+        "helper": {
+          "path": "themes/community-alpha/palette-api-security.mjs",
+          "sha256": "2e1a4ee5865b5c54f562ab684c7fc19c0261e0dbe4546c9423923c3c66e420d7"
+        },
+        "buildImplementationSha256": "e7c8c10278cdb8e75795f3a1856e0b70b57585e9796dd5cbf2777068f91f1ae6",
+        "hostTemplateSha256": "3ad44b9cd08387a2ccd7ece77316d8666aee5e60e5cdc42596262bc0a1d7e11e"
+      }
+    },
+    {
+      "group": "solarized",
+      "packageName": "@dsh-themes-community/solarized-alpha",
+      "version": "1.0.0-alpha.2",
+      "file": "themes/community-alpha/artifacts/solarized-alpha-1.0.0-alpha.2.tgz",
+      "sha256": "44f1ae4e9a7d36022d19097ef83f2e287271d4ead02178d5f426ad1de7439f62",
+      "sizeBytes": 21144,
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "4611653ee184c14eea36d59299fbc9c559784b744147baa429f99b8a0248e8d7",
+          "sizeBytes": 1244,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "6ccf1a253e80afb5bc957a0b9f6d52e72e0239fc0967c3949ea87e96153451de",
+          "sizeBytes": 3474,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "client.js",
+          "sha256": "cb770486548a1ce2f5a4cb7f73bede8b9bc6b098f2df5b87ea3c3466276eef81",
+          "sizeBytes": 40547,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "cordis.patch.yml",
+          "sha256": "32600a9161605169e82cd9b097cf83187f9dee0d74c42e0b242adc055be8f9b9",
+          "sizeBytes": 96,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "index.js",
+          "sha256": "dfcb566db916253f84ee980f39567c4b86495f026d0969623686238c7afd1278",
+          "sizeBytes": 34416,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "package.json",
+          "sha256": "ebcc23f6b0c8742c63d534bfb53350d0f81d2d41646bb315469bdd3d7009b11b",
+          "sizeBytes": 806,
+          "currentInstalledBytesEqualArchive": true
+        }
+      ],
+      "securityAdaptation": {
+        "revision": "palette-api-auth-20260906",
+        "officialGuard": "ctx.connection.requestRejection(req)",
+        "beforeAnyRouteReadOrWrite": true,
+        "helper": {
+          "path": "themes/community-alpha/palette-api-security.mjs",
+          "sha256": "2e1a4ee5865b5c54f562ab684c7fc19c0261e0dbe4546c9423923c3c66e420d7"
+        },
+        "buildImplementationSha256": "e7c8c10278cdb8e75795f3a1856e0b70b57585e9796dd5cbf2777068f91f1ae6",
+        "hostTemplateSha256": "3ad44b9cd08387a2ccd7ece77316d8666aee5e60e5cdc42596262bc0a1d7e11e"
+      }
+    },
+    {
+      "group": "premium",
+      "packageName": "@dsh-themes-community/premium-alpha",
+      "version": "1.0.0-alpha.2",
+      "file": "themes/community-alpha/artifacts/premium-alpha-1.0.0-alpha.2.tgz",
+      "sha256": "7bf71d12f605bb6d0a320b5b754fca84256484a2da3d8f5d83b84aec4acbae50",
+      "sizeBytes": 36956,
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "f29ae1dd3a10404e16c0260861e7fea676d9bb293b2c58491f6cbcc838a3b46e",
+          "sizeBytes": 1069,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "454a0f36130b1baa9a450d2247106c91be2bb07fd4cdc483cb9c1728bed1d20c",
+          "sizeBytes": 6471,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "client.js",
+          "sha256": "ad2d6ef2e9d14419d8fcf60069ed0c962119a2b23a412ea1fa75e46d78eada05",
+          "sizeBytes": 103302,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "cordis.patch.yml",
+          "sha256": "83e980953ae0fb39a02b87e91641aa67526bd547d8676c7f65e6d87fbb74470e",
+          "sizeBytes": 92,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "index.js",
+          "sha256": "655cfc531a90dc2e17de24a0c805f92929ad624dd2d23b06e6f50bf42009fc7b",
+          "sizeBytes": 50102,
+          "currentInstalledBytesEqualArchive": true
+        },
+        {
+          "path": "package.json",
+          "sha256": "3d1161ffae8f81c523a41456a2c2f93e7655e458ccaad0a932ce442d94edd7b6",
+          "sizeBytes": 805,
+          "currentInstalledBytesEqualArchive": true
+        }
+      ],
+      "securityAdaptation": {
+        "revision": "palette-api-auth-20260906",
+        "officialGuard": "ctx.connection.requestRejection(req)",
+        "beforeAnyRouteReadOrWrite": true,
+        "premiumJsonBodyLimitBytes": 65536,
+        "helper": {
+          "path": "themes/community-alpha/palette-api-security.mjs",
+          "sha256": "2e1a4ee5865b5c54f562ab684c7fc19c0261e0dbe4546c9423923c3c66e420d7"
+        },
+        "buildImplementationSha256": "e7c8c10278cdb8e75795f3a1856e0b70b57585e9796dd5cbf2777068f91f1ae6"
+      }
+    }
+  ],
+  "manualReadScope": [
+    "All 75 case IDs and statuses read in compact full output; complete matrix and ordered 809 raw HTTP fact rows independently reconstructed and compared field-by-field offline.",
+    "Full receipt/input and installed file ledgers and full recorded process chain read. All 24 current installed files reread and compared directly to the four fixed archives, without extraction to disk or execution.",
+    "Actual verifier was written and reviewed before the run; its SHA is unchanged. Complete launcher reread: verifies fixed source/lock/tracked clean state, then launches source CLI with shell:false in the selected source directory.",
+    "Official BrowserAuth, request-trust predicate and requestRejection implementation were previously actually read; current exact source SHA independently rechecked. Server log, cookie/header values and credentials were not accessed."
+  ],
+  "findings": [],
+  "limitations": [
+    "HTTP headers were constructed with node:http against a real official server. No browser-generated cross-site request, CORS/preflight, SameSite behavior or cookie-expiry simulation was performed.",
+    "No cold restart, screenshot, layout, color-rendering, selection-UI, model/account/provider or external-service conclusion comes from these 75 cases.",
+    "Process ownership is a contemporaneous root-recorded chain from 20 seconds before the HTTP run, not a new live process capture by this review. Installed bytes were recorded immediately before the run and independently reread afterward.",
+    "No additional disk settings-file audit; byte equality uses five real authorized JSON GET responses. Raw response bodies and credentials are deliberately absent from the preserved facts.",
+    "Only the stated finite supported-method/header/body matrix is covered; unsupported methods, chunked transfer and every possible malformed nested body are not claimed by this particular runtime check."
+  ]
+}

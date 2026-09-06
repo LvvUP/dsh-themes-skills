@@ -1,0 +1,16 @@
+dsh: initialized profile web at /Users/vvmacair/.dsh-themes/testing/community-palettes-alpha-api-security-20260906/profiles/web
+Progress: resolved 0, reused 0, downloaded 1, added 0
+
+dependencies:
++ @dsh-themes-community/catppuccin-alpha file:/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/themes/community-alpha/artifacts/catppuccin-alpha-1.0.0-alpha.2.tgz
++ @dsh-themes-community/premium-alpha file:/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/themes/community-alpha/artifacts/premium-alpha-1.0.0-alpha.2.tgz
++ @dsh-themes-community/solarized-alpha file:/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/themes/community-alpha/artifacts/solarized-alpha-1.0.0-alpha.2.tgz
++ @dsh-themes-community/theme-pack-alpha file:/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/themes/community-alpha/artifacts/theme-pack-alpha-1.0.0-alpha.2.tgz
+
+Packages: +4
+++++
+Packages are cloned from the content-addressable store to the virtual store.
+  Content-addressable store is at: /Users/vvmacair/Library/pnpm/store/v11
+  Virtual store is at:             node_modules/.pnpm
+Progress: resolved 4, reused 0, downloaded 4, added 4, done
+Done in 507ms using pnpm v11.24.0

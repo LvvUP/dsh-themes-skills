@@ -1,0 +1,642 @@
+{
+  "schemaVersion": 1,
+  "dshVersion": "0.1.3-alpha.1",
+  "sourceCommit": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "checkedAt": "2026-09-06",
+  "implementations": [
+    {
+      "path": "skills/dsh-community-skin-installer/scripts/install-alpha.mjs",
+      "sha256": "14c92f0b26b734bc73d098579e58f1f962ae81741078b726eda80c06307926f4"
+    },
+    {
+      "path": "skills/dsh-community-skin-installer/scripts/companion-files.mjs",
+      "sha256": "36e5d72237851aab572b96a5a96866d28f3d7027bf158310ad367ae16486909d"
+    },
+    {
+      "path": "skills/dsh-plugin-installer/scripts/install-plugins.mjs",
+      "sha256": "3f791ce0c81c5bf0e5dae8e0bc496a43e5ff1d910384d7c6e4e5596a4ae11321"
+    }
+  ],
+  "catalogSha256": "5b835555c36511b43139a803baa85d00f571e12cba95deb42c435b3b65463d28",
+  "catalogIds": [1101, 2206, 2207],
+  "artifacts": [
+    {
+      "catalogId": 1101,
+      "packageName": "@dsh-themes-community/theme-pack-alpha",
+      "packageVersion": "1.0.0-alpha.1",
+      "path": "assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+      "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160"
+    },
+    {
+      "catalogId": 2206,
+      "packageName": "@dsh-themes-community/skin-center-alpha",
+      "packageVersion": "0.2.5-alpha.2",
+      "path": "assets/alpha/artifacts/f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924.tgz",
+      "sha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+      "bytes": 59023874
+    },
+    {
+      "catalogId": 2207,
+      "packageName": "@dsh-themes-community/skin-center-alpha",
+      "packageVersion": "0.2.5-alpha.2",
+      "path": "assets/alpha/artifacts/f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924.tgz",
+      "sha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+      "bytes": 59023874
+    }
+  ],
+  "commands": [
+    {
+      "args": ["plugin", "--profile", "web", "list", "--depth", "0", "--json"],
+      "code": 0,
+      "stdoutSha256": "7459b2863ec3e04a0d74c09bc0f8901857db3df884e1096cacbca4eea481ce76",
+      "stderrSha256": "7686baa8536ed510c6716501f4feacb250ce565ba707fcc96b50f7eec2be3344"
+    },
+    {
+      "args": ["--version"],
+      "code": 0,
+      "stdoutSha256": "9b36e5e64cab6d4da25e7646821d8836de0db92541a494199dfeb37b998a3b0c",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "plugin",
+        "--profile",
+        "web",
+        "add",
+        "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-community-skin-installer/assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+        "--save-exact"
+      ],
+      "code": 0,
+      "stdoutSha256": "877169b68c54ae91e68dacfe74f56980caa37d066d4cd30bd185fb06b64d6abd",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["plugin", "--profile", "web", "list", "--depth", "0", "--json"],
+      "code": 0,
+      "stdoutSha256": "be9672b85f1fcdb072d6065a49e9d9e84a64311869482c7d89bd713d34972f8d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["--profile", "web", "--dump-config"],
+      "code": 0,
+      "stdoutSha256": "6377a384c7ae30484b03190f17034e9aa514522b42e6c91349e039b5ec32cda3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "plugin",
+        "--profile",
+        "web",
+        "add",
+        "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-community-skin-installer/assets/alpha/artifacts/f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924.tgz",
+        "--save-exact"
+      ],
+      "code": 0,
+      "stdoutSha256": "95a8a3cbbaa9e58a7a6b1967c4e545f9b919ecb2b2a72dace80b1e81a6cc76ac",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["plugin", "--profile", "web", "list", "--depth", "0", "--json"],
+      "code": 0,
+      "stdoutSha256": "0e223f7bc30454ca60d462f877fb18d882a9f5a99c369d1e7521cb40a596d0c8",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["--profile", "web", "--dump-config"],
+      "code": 0,
+      "stdoutSha256": "55254fd9dba68e486384ac081111f88539eca99a1ef28d4a567e7aebe7cb3171",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["plugin", "--profile", "web", "list", "--depth", "0", "--json"],
+      "code": 0,
+      "stdoutSha256": "0e223f7bc30454ca60d462f877fb18d882a9f5a99c369d1e7521cb40a596d0c8",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["--profile", "web", "--dump-config"],
+      "code": 0,
+      "stdoutSha256": "55254fd9dba68e486384ac081111f88539eca99a1ef28d4a567e7aebe7cb3171",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["--version"],
+      "code": 0,
+      "stdoutSha256": "9b36e5e64cab6d4da25e7646821d8836de0db92541a494199dfeb37b998a3b0c",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["plugin", "--profile", "web", "list", "--depth", "0", "--json"],
+      "code": 0,
+      "stdoutSha256": "0e223f7bc30454ca60d462f877fb18d882a9f5a99c369d1e7521cb40a596d0c8",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "plugin",
+        "--profile",
+        "web",
+        "remove",
+        "@dsh-themes-community/theme-pack-alpha"
+      ],
+      "code": 0,
+      "stdoutSha256": "ece8703ef01cea5d9d3fe9d9049a52411a7fda06bf759eefc56201c1210d67dc",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["plugin", "--profile", "web", "list", "--depth", "0", "--json"],
+      "code": 0,
+      "stdoutSha256": "705b97a8b4fc5f466b2c29291ec02b472ccf4a6bf0e8c3da283f35a3e90383a8",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["--profile", "web", "--dump-config"],
+      "code": 0,
+      "stdoutSha256": "be7420504ff2e9d4b38b2441b8b485e9d13696ea5c310b1c9398d34dd88e1be0",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["plugin", "--profile", "web", "list", "--depth", "0", "--json"],
+      "code": 0,
+      "stdoutSha256": "705b97a8b4fc5f466b2c29291ec02b472ccf4a6bf0e8c3da283f35a3e90383a8",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "plugin",
+        "--profile",
+        "web",
+        "remove",
+        "@dsh-themes-community/skin-center-alpha"
+      ],
+      "code": 0,
+      "stdoutSha256": "800a3f01fc9ba7e2503216f7f5094959ccd01fb93feaba07c6c035c6521271ba",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["plugin", "--profile", "web", "list", "--depth", "0", "--json"],
+      "code": 0,
+      "stdoutSha256": "7459b2863ec3e04a0d74c09bc0f8901857db3df884e1096cacbca4eea481ce76",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["plugin", "--profile", "web", "list", "--depth", "0", "--json"],
+      "code": 0,
+      "stdoutSha256": "7459b2863ec3e04a0d74c09bc0f8901857db3df884e1096cacbca4eea481ce76",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["plugin", "--profile", "web", "list", "--depth", "0", "--json"],
+      "code": 0,
+      "stdoutSha256": "7459b2863ec3e04a0d74c09bc0f8901857db3df884e1096cacbca4eea481ce76",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["plugin", "--profile", "web", "list", "--depth", "0", "--json"],
+      "code": 0,
+      "stdoutSha256": "7459b2863ec3e04a0d74c09bc0f8901857db3df884e1096cacbca4eea481ce76",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["--version"],
+      "code": 0,
+      "stdoutSha256": "9b36e5e64cab6d4da25e7646821d8836de0db92541a494199dfeb37b998a3b0c",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["plugin", "--profile", "web", "list", "--depth", "0", "--json"],
+      "code": 0,
+      "stdoutSha256": "7459b2863ec3e04a0d74c09bc0f8901857db3df884e1096cacbca4eea481ce76",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["plugin", "--profile", "web", "list", "--depth", "0", "--json"],
+      "code": 0,
+      "stdoutSha256": "7459b2863ec3e04a0d74c09bc0f8901857db3df884e1096cacbca4eea481ce76",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["--profile", "web", "--dump-config"],
+      "code": 0,
+      "stdoutSha256": "2a24baa18ac28660cdd3a9cdc01f58ba0115c7f1e56e4d87ef74d957494af50b",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["plugin", "--profile", "web", "list", "--depth", "0", "--json"],
+      "code": 0,
+      "stdoutSha256": "7459b2863ec3e04a0d74c09bc0f8901857db3df884e1096cacbca4eea481ce76",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["plugin", "--profile", "web", "list", "--depth", "0", "--json"],
+      "code": 0,
+      "stdoutSha256": "7459b2863ec3e04a0d74c09bc0f8901857db3df884e1096cacbca4eea481ce76",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": ["--profile", "web", "--dump-config"],
+      "code": 0,
+      "stdoutSha256": "2a24baa18ac28660cdd3a9cdc01f58ba0115c7f1e56e4d87ef74d957494af50b",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "freeBeforeMiB": 836,
+  "dependencies": {
+    "lightningcss": "1.32.0",
+    "detectLibcOverride": "2.1.2",
+    "os": "darwin",
+    "cpu": "arm64",
+    "offline": false,
+    "storeDirectory": ".cache/dsh-skin-center-alpha/public-installation-1788665131128/pnpm-store",
+    "reusedStore": false,
+    "lifecycleOffline": true,
+    "lifecycleOfflineObserved": "true",
+    "lifecycleOfflinePolicy": "PNPM_CONFIG_OFFLINE=true; configuration observed, not a packet-capture claim"
+  },
+  "status": "passed",
+  "installation": {
+    "dshVersion": "0.1.3-alpha.1",
+    "status": "installed",
+    "items": [
+      {
+        "catalogId": 1101,
+        "status": "installed",
+        "packageName": "@dsh-themes-community/theme-pack-alpha",
+        "profile": "web",
+        "companion": null,
+        "activation": {
+          "kind": "http",
+          "themeId": "dsh-alpha-theme-pack-catppuccin-mocha",
+          "deselectRequests": [
+            {
+              "method": "POST",
+              "path": "/api/dsh-community-palettes/catppuccin",
+              "body": { "selection": "off", "base": "system" },
+              "allowMissing": true
+            },
+            {
+              "method": "POST",
+              "path": "/api/dsh-community-palettes/solarized",
+              "body": { "selection": "off", "base": "system" },
+              "allowMissing": true
+            },
+            {
+              "method": "POST",
+              "path": "/api/dsh-community-palettes/premium/palette",
+              "body": { "palette": "off", "base": "system" },
+              "allowMissing": true
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "path": "/api/dsh-community-palettes/theme-pack",
+            "body": { "catalogId": 1101, "base": "system" }
+          },
+          "restartRequired": true,
+          "description": "Save the exact palette in the authenticated local session, then reload the client."
+        },
+        "activationRequired": true
+      },
+      {
+        "catalogId": 2206,
+        "status": "installed",
+        "packageName": "@dsh-themes-community/skin-center-alpha",
+        "profile": "web",
+        "companion": {
+          "skinId": "qq98",
+          "status": "installed",
+          "backupCreated": true
+        },
+        "activation": {
+          "kind": "http",
+          "themeId": "qq98",
+          "request": {
+            "method": "POST",
+            "path": "/api/skin-center/v2/active",
+            "body": { "active": "qq98" }
+          },
+          "restartRequired": true,
+          "description": "Save the exact skin ID in the authenticated local session, then reload the client.",
+          "deselectRequests": [
+            {
+              "path": "/api/dsh-community-palettes/theme-pack",
+              "body": { "selection": "off", "base": "system" },
+              "method": "POST",
+              "allowMissing": true
+            },
+            {
+              "path": "/api/dsh-community-palettes/catppuccin",
+              "body": { "selection": "off", "base": "system" },
+              "method": "POST",
+              "allowMissing": true
+            },
+            {
+              "path": "/api/dsh-community-palettes/solarized",
+              "body": { "selection": "off", "base": "system" },
+              "method": "POST",
+              "allowMissing": true
+            },
+            {
+              "path": "/api/dsh-community-palettes/premium/palette",
+              "body": { "palette": "off", "base": "system" },
+              "method": "POST",
+              "allowMissing": true
+            }
+          ]
+        },
+        "activationRequired": true
+      },
+      {
+        "catalogId": 2207,
+        "status": "already-installed",
+        "packageName": "@dsh-themes-community/skin-center-alpha",
+        "profile": "web",
+        "companion": {
+          "skinId": "ths",
+          "status": "installed",
+          "backupCreated": true
+        },
+        "activation": {
+          "kind": "http",
+          "themeId": "ths",
+          "request": {
+            "method": "POST",
+            "path": "/api/skin-center/v2/active",
+            "body": { "active": "ths" }
+          },
+          "restartRequired": true,
+          "description": "Save the exact skin ID in the authenticated local session, then reload the client.",
+          "deselectRequests": [
+            {
+              "path": "/api/dsh-community-palettes/theme-pack",
+              "body": { "selection": "off", "base": "system" },
+              "method": "POST",
+              "allowMissing": true
+            },
+            {
+              "path": "/api/dsh-community-palettes/catppuccin",
+              "body": { "selection": "off", "base": "system" },
+              "method": "POST",
+              "allowMissing": true
+            },
+            {
+              "path": "/api/dsh-community-palettes/solarized",
+              "body": { "selection": "off", "base": "system" },
+              "method": "POST",
+              "allowMissing": true
+            },
+            {
+              "path": "/api/dsh-community-palettes/premium/palette",
+              "body": { "palette": "off", "base": "system" },
+              "method": "POST",
+              "allowMissing": true
+            }
+          ]
+        },
+        "activationRequired": true
+      }
+    ]
+  },
+  "installedLockSha256": "c40fe823eae4dd8cd85c587876067e7369424c74608235442fc6a9cbd297dd09",
+  "installedCompanions": [
+    {
+      "catalogId": 2206,
+      "skinId": "qq98",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "bytes": 1521
+        },
+        {
+          "path": "NOTICE",
+          "sha256": "ad78fd2e39dc3be9e2d9eb0ee8a4f5c1c02385633c1a4e3e7ad35e21c184a350",
+          "bytes": 975
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "000613dbdcdc99f0ef2f6ef8012a15ec445a6173d319d654704449a213eff684",
+          "bytes": 764
+        },
+        {
+          "path": "patches.css",
+          "sha256": "d62653ea7b5061e9f91c70069eb5edf93ba92e179fd8ba3a50dda75a51097833",
+          "bytes": 34823
+        },
+        {
+          "path": "skin.css",
+          "sha256": "6e414c9f689dbfa978001f8d332237e64b22fedd51da16e2b20a48f3550937a2",
+          "bytes": 506
+        },
+        {
+          "path": "skin.json",
+          "sha256": "53e20c335d0fef3e802281e2636e35719a2c39c19433bb42363480ba24103140",
+          "bytes": 1327
+        }
+      ]
+    },
+    {
+      "catalogId": 2207,
+      "skinId": "ths",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "bytes": 1521
+        },
+        {
+          "path": "NOTICE",
+          "sha256": "a02b7b8074d87aa8ba6e1a606fc7dd841773729dc66349fd688016bc19615850",
+          "bytes": 974
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "68ebcc6bbfb3c8daf2973491fede2d85719d788703037b2510f71ffab7d4c917",
+          "bytes": 762
+        },
+        {
+          "path": "patches.css",
+          "sha256": "5bec645eac154a86a8439b44df7301e55990937562e1a8715667a8392334f664",
+          "bytes": 31056
+        },
+        {
+          "path": "skin.css",
+          "sha256": "b5cb4887e98ada90f28b2c90fccd23a2c7416a8cae0acca71a3d8268b08af7e2",
+          "bytes": 506
+        },
+        {
+          "path": "skin.json",
+          "sha256": "54cf95283d617e0f853a56db99182c38b34e83173af79ba8540772d3bf15c08b",
+          "bytes": 1355
+        }
+      ]
+    }
+  ],
+  "activations": [
+    {
+      "catalogId": 1101,
+      "status": "selected",
+      "observedSelection": "dsh-alpha-theme-pack-catppuccin-mocha",
+      "themePackSelection": "dsh-alpha-theme-pack-catppuccin-mocha"
+    },
+    {
+      "catalogId": 2206,
+      "status": "selected",
+      "observedSelection": "qq98",
+      "themePackSelection": "off"
+    },
+    {
+      "catalogId": 2207,
+      "status": "selected",
+      "observedSelection": "ths",
+      "themePackSelection": "off"
+    }
+  ],
+  "recoveryConflict": {
+    "fixtureOnly": true,
+    "catalogId": 2206,
+    "managedFileSha256": "d62653ea7b5061e9f91c70069eb5edf93ba92e179fd8ba3a50dda75a51097833",
+    "editedFileSha256": "26b8a1b2180964585cef9a6819bf91dbb2915fa81a384a0460121436ce853b6c",
+    "firstAttempt": {
+      "dshVersion": "0.1.3-alpha.1",
+      "status": "incomplete",
+      "items": [
+        {
+          "catalogId": 1101,
+          "status": "removed",
+          "packageName": "@dsh-themes-community/theme-pack-alpha",
+          "profile": "web",
+          "companions": []
+        },
+        {
+          "catalogId": 2206,
+          "status": "failed",
+          "error": "Companion bytes differ: patches.css"
+        },
+        {
+          "catalogId": 2207,
+          "status": "failed",
+          "error": "Companion bytes differ: patches.css"
+        }
+      ]
+    },
+    "packageAbsentAfterFirstAttempt": true,
+    "editedFilePreserved": true,
+    "editResolvedToReviewedBytes": true,
+    "publicEntryRetrySucceeded": true
+  },
+  "removal": {
+    "dshVersion": "0.1.3-alpha.1",
+    "status": "removed",
+    "items": [
+      {
+        "catalogId": 1101,
+        "status": "removed",
+        "packageName": "@dsh-themes-community/theme-pack-alpha",
+        "profile": "web",
+        "companions": []
+      },
+      {
+        "catalogId": 2206,
+        "status": "removed",
+        "packageName": "@dsh-themes-community/skin-center-alpha",
+        "profile": "web",
+        "companions": [
+          { "skinId": "qq98", "status": "restored" },
+          { "skinId": "ths", "status": "restored" }
+        ]
+      },
+      {
+        "catalogId": 2207,
+        "status": "already-removed",
+        "packageName": "@dsh-themes-community/skin-center-alpha",
+        "profile": "web",
+        "sharedPackage": true,
+        "companions": [
+          { "skinId": "qq98", "status": "restored" },
+          { "skinId": "ths", "status": "restored" }
+        ]
+      }
+    ]
+  },
+  "restoredCompanions": [
+    {
+      "skinId": "qq98",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "bytes": 1521
+        },
+        {
+          "path": "NOTICE",
+          "sha256": "e8c4a8a30ae46f0fffbb076b0bed62a30b5ee8b51ff353c59cbf4862823768c7",
+          "bytes": 752
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "000613dbdcdc99f0ef2f6ef8012a15ec445a6173d319d654704449a213eff684",
+          "bytes": 764
+        },
+        {
+          "path": "patches.css",
+          "sha256": "33a7670fc6188f7b06f19d3a18d8cd00f5839168808587f700cfa00195fe4bd6",
+          "bytes": 34823
+        },
+        {
+          "path": "skin.css",
+          "sha256": "6e414c9f689dbfa978001f8d332237e64b22fedd51da16e2b20a48f3550937a2",
+          "bytes": 506
+        },
+        {
+          "path": "skin.json",
+          "sha256": "426ac9c8b5517577db3486df465304171ea3533ed50591f6b1b19d78a5dbd423",
+          "bytes": 1173
+        }
+      ]
+    },
+    {
+      "skinId": "ths",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "bytes": 1521
+        },
+        {
+          "path": "NOTICE",
+          "sha256": "331121edcd6e0d7fd740db20b3e393d195e7393c6237b8f267eea66794a0cfe8",
+          "bytes": 751
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "68ebcc6bbfb3c8daf2973491fede2d85719d788703037b2510f71ffab7d4c917",
+          "bytes": 762
+        },
+        {
+          "path": "patches.css",
+          "sha256": "648fd39a7168a71cc79fbfc4a6dcdb99587362cd2e58604f6c743f045e3a714e",
+          "bytes": 31056
+        },
+        {
+          "path": "skin.css",
+          "sha256": "b5cb4887e98ada90f28b2c90fccd23a2c7416a8cae0acca71a3d8268b08af7e2",
+          "bytes": 506
+        },
+        {
+          "path": "skin.json",
+          "sha256": "5af025c011797aa34d2a0d2dbf6edfafb30a4e199f9fe2a6075b28a183c76c17",
+          "bytes": 1201
+        }
+      ]
+    }
+  ],
+  "removedRoutes": [
+    { "path": "/api/dsh-community-palettes/theme-pack", "status": 404 },
+    { "path": "/api/skin-center/v2/active", "status": 404 },
+    { "path": "/api/skin-center/v2/skins/qq98/stylesheet", "status": 404 },
+    { "path": "/api/skin-center/v2/skins/ths/stylesheet", "status": 404 }
+  ],
+  "freeAfterMiB": 772,
+  "scope": "Actual public installCommunityItems and activateCommunityItem calls using official CLI and authenticated local HTTP. Exact bundled archives and the declared pinned native dependency policy use an isolated package store; the installed lockfile is retained by SHA. Shared package add/remove are deduplicated. A controlled edit in an isolated fixture blocks restoration after package removal; resolving that edit and retrying the public entry restores both original companion directories byte-for-byte without repeating package removal. No browser or feature coverage is claimed beyond earlier frozen runtime receipts."
+}

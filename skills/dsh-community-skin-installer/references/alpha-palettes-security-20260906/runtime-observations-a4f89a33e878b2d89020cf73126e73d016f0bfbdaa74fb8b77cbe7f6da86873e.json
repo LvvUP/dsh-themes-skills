@@ -1,0 +1,689 @@
+{
+  "choices": [
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-catppuccin-mocha",
+      "originalId": "catppuccin-mocha",
+      "catalogId": 1101,
+      "name": "Catppuccin Mocha",
+      "colorScheme": "dark",
+      "baseColor": "rgb(30, 30, 46)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-catppuccin-mocha",
+        "background": "rgb(30, 30, 46)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-gruvbox-dark",
+      "originalId": "gruvbox-dark",
+      "catalogId": 1102,
+      "name": "Gruvbox Dark",
+      "colorScheme": "dark",
+      "baseColor": "rgb(40, 40, 40)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-gruvbox-dark",
+        "background": "rgb(40, 40, 40)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-everforest",
+      "originalId": "everforest",
+      "catalogId": 1103,
+      "name": "Everforest",
+      "colorScheme": "dark",
+      "baseColor": "rgb(45, 53, 59)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-everforest",
+        "background": "rgb(45, 53, 59)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-rose-pine",
+      "originalId": "rose-pine",
+      "catalogId": 1104,
+      "name": "Rosé Pine",
+      "colorScheme": "dark",
+      "baseColor": "rgb(25, 23, 36)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-rose-pine",
+        "background": "rgb(25, 23, 36)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-solarized-dark",
+      "originalId": "solarized-dark",
+      "catalogId": 1105,
+      "name": "Solarized Dark",
+      "colorScheme": "dark",
+      "baseColor": "rgb(0, 43, 54)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-solarized-dark",
+        "background": "rgb(0, 43, 54)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-kanagawa",
+      "originalId": "kanagawa",
+      "catalogId": 1106,
+      "name": "Kanagawa Wave",
+      "colorScheme": "dark",
+      "baseColor": "rgb(31, 31, 40)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-kanagawa",
+        "background": "rgb(31, 31, 40)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-tokyo-night",
+      "originalId": "tokyo-night",
+      "catalogId": 1107,
+      "name": "Tokyo Night",
+      "colorScheme": "dark",
+      "baseColor": "rgb(26, 27, 38)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-tokyo-night",
+        "background": "rgb(26, 27, 38)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-tokyo-storm",
+      "originalId": "tokyo-storm",
+      "catalogId": 1108,
+      "name": "Tokyo Night Storm",
+      "colorScheme": "dark",
+      "baseColor": "rgb(36, 40, 59)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-tokyo-storm",
+        "background": "rgb(36, 40, 59)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-night-owl",
+      "originalId": "night-owl",
+      "catalogId": 1109,
+      "name": "Night Owl",
+      "colorScheme": "dark",
+      "baseColor": "rgb(1, 22, 39)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-night-owl",
+        "background": "rgb(1, 22, 39)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-nord",
+      "originalId": "nord",
+      "catalogId": 1110,
+      "name": "Nord",
+      "colorScheme": "dark",
+      "baseColor": "rgb(46, 52, 64)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-nord",
+        "background": "rgb(46, 52, 64)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-dracula",
+      "originalId": "dracula",
+      "catalogId": 1111,
+      "name": "Dracula",
+      "colorScheme": "dark",
+      "baseColor": "rgb(40, 42, 54)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-dracula",
+        "background": "rgb(40, 42, 54)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-one-dark",
+      "originalId": "one-dark",
+      "catalogId": 1112,
+      "name": "One Dark",
+      "colorScheme": "dark",
+      "baseColor": "rgb(40, 44, 52)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-one-dark",
+        "background": "rgb(40, 44, 52)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-catppuccin-latte",
+      "originalId": "catppuccin-latte",
+      "name": "Catppuccin Latte",
+      "colorScheme": "light",
+      "baseColor": "rgb(239, 241, 245)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-catppuccin-latte",
+        "background": "rgb(239, 241, 245)",
+        "scheme": "light",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-gruvbox-light",
+      "originalId": "gruvbox-light",
+      "name": "Gruvbox Light",
+      "colorScheme": "light",
+      "baseColor": "rgb(251, 241, 199)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-gruvbox-light",
+        "background": "rgb(251, 241, 199)",
+        "scheme": "light",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-solarized-light",
+      "originalId": "solarized-light",
+      "name": "Solarized Light",
+      "colorScheme": "light",
+      "baseColor": "rgb(253, 246, 227)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-solarized-light",
+        "background": "rgb(253, 246, 227)",
+        "scheme": "light",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "id": "dsh-alpha-theme-pack-rose-pine-dawn",
+      "originalId": "rose-pine-dawn",
+      "name": "Rosé Pine Dawn",
+      "colorScheme": "light",
+      "baseColor": "rgb(250, 244, 237)",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-rose-pine-dawn",
+        "background": "rgb(250, 244, 237)",
+        "scheme": "light",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "catppuccin",
+      "id": "dsh-alpha-catppuccin-catppuccin-latte",
+      "originalId": "catppuccin-latte",
+      "name": "Latte",
+      "colorScheme": "light",
+      "baseColor": "#eff1f5",
+      "observed": {
+        "selection": "dsh-alpha-catppuccin-catppuccin-latte",
+        "background": "rgb(239, 241, 245)",
+        "scheme": "light",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "catppuccin",
+      "id": "dsh-alpha-catppuccin-catppuccin-frappe",
+      "originalId": "catppuccin-frappe",
+      "name": "Frappé",
+      "colorScheme": "dark",
+      "baseColor": "#303446",
+      "observed": {
+        "selection": "dsh-alpha-catppuccin-catppuccin-frappe",
+        "background": "rgb(48, 52, 70)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "catppuccin",
+      "id": "dsh-alpha-catppuccin-catppuccin-macchiato",
+      "originalId": "catppuccin-macchiato",
+      "name": "Macchiato",
+      "colorScheme": "dark",
+      "baseColor": "#24273a",
+      "observed": {
+        "selection": "dsh-alpha-catppuccin-catppuccin-macchiato",
+        "background": "rgb(36, 39, 58)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "catppuccin",
+      "id": "dsh-alpha-catppuccin-catppuccin-mocha",
+      "originalId": "catppuccin-mocha",
+      "name": "Mocha",
+      "colorScheme": "dark",
+      "baseColor": "#1e1e2e",
+      "observed": {
+        "selection": "dsh-alpha-catppuccin-catppuccin-mocha",
+        "background": "rgb(30, 30, 46)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "solarized",
+      "id": "dsh-alpha-solarized-solarized-dark",
+      "originalId": "solarized-dark",
+      "name": "solarized-dark",
+      "colorScheme": "dark",
+      "baseColor": "#002b36",
+      "observed": {
+        "selection": "dsh-alpha-solarized-solarized-dark",
+        "background": "rgb(0, 43, 54)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "solarized",
+      "id": "dsh-alpha-solarized-solarized-light",
+      "originalId": "solarized-light",
+      "name": "solarized-light",
+      "colorScheme": "light",
+      "baseColor": "#fdf6e3",
+      "observed": {
+        "selection": "dsh-alpha-solarized-solarized-light",
+        "background": "rgb(253, 246, 227)",
+        "scheme": "light",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "solarized",
+      "id": "dsh-alpha-solarized-selenized-dark",
+      "originalId": "selenized-dark",
+      "name": "selenized-dark",
+      "colorScheme": "dark",
+      "baseColor": "#103c48",
+      "observed": {
+        "selection": "dsh-alpha-solarized-selenized-dark",
+        "background": "rgb(16, 60, 72)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "solarized",
+      "id": "dsh-alpha-solarized-selenized-light",
+      "originalId": "selenized-light",
+      "name": "selenized-light",
+      "colorScheme": "light",
+      "baseColor": "#fbf3db",
+      "observed": {
+        "selection": "dsh-alpha-solarized-selenized-light",
+        "background": "rgb(251, 243, 219)",
+        "scheme": "light",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "premium",
+      "id": "dsh-alpha-premium-tokyo-night",
+      "originalId": "tokyo-night",
+      "name": "tokyo-night",
+      "colorScheme": "dark",
+      "baseColor": "#16161e",
+      "observed": {
+        "selection": "dsh-alpha-premium-tokyo-night",
+        "background": "rgb(22, 22, 30)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "premium",
+      "id": "dsh-alpha-premium-nord",
+      "originalId": "nord",
+      "name": "nord",
+      "colorScheme": "dark",
+      "baseColor": "#2e3440",
+      "observed": {
+        "selection": "dsh-alpha-premium-nord",
+        "background": "rgb(46, 52, 64)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "premium",
+      "id": "dsh-alpha-premium-catppuccin-mocha",
+      "originalId": "catppuccin-mocha",
+      "name": "catppuccin-mocha",
+      "colorScheme": "dark",
+      "baseColor": "#1e1e2e",
+      "observed": {
+        "selection": "dsh-alpha-premium-catppuccin-mocha",
+        "background": "rgb(30, 30, 46)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "premium",
+      "id": "dsh-alpha-premium-everforest",
+      "originalId": "everforest",
+      "name": "everforest",
+      "colorScheme": "dark",
+      "baseColor": "#2d353b",
+      "observed": {
+        "selection": "dsh-alpha-premium-everforest",
+        "background": "rgb(45, 53, 59)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "premium",
+      "id": "dsh-alpha-premium-rose-pine",
+      "originalId": "rose-pine",
+      "name": "rose-pine",
+      "colorScheme": "dark",
+      "baseColor": "#191724",
+      "observed": {
+        "selection": "dsh-alpha-premium-rose-pine",
+        "background": "rgb(25, 23, 36)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "premium",
+      "id": "dsh-alpha-premium-ayu-mirage",
+      "originalId": "ayu-mirage",
+      "name": "ayu-mirage",
+      "colorScheme": "dark",
+      "baseColor": "#1f2430",
+      "observed": {
+        "selection": "dsh-alpha-premium-ayu-mirage",
+        "background": "rgb(31, 36, 48)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "premium",
+      "id": "dsh-alpha-premium-catppuccin-latte",
+      "originalId": "catppuccin-latte",
+      "name": "catppuccin-latte",
+      "colorScheme": "light",
+      "baseColor": "#eff1f5",
+      "observed": {
+        "selection": "dsh-alpha-premium-catppuccin-latte",
+        "background": "rgb(239, 241, 245)",
+        "scheme": "light",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "premium",
+      "id": "dsh-alpha-premium-paper-gold",
+      "originalId": "paper-gold",
+      "name": "paper-gold",
+      "colorScheme": "light",
+      "baseColor": "#f6f3ec",
+      "observed": {
+        "selection": "dsh-alpha-premium-paper-gold",
+        "background": "rgb(246, 243, 236)",
+        "scheme": "light",
+        "invalidToken": false
+      }
+    }
+  ],
+  "restarts": [
+    {
+      "group": "theme-pack",
+      "catalogId": 1101,
+      "id": "dsh-alpha-theme-pack-catppuccin-mocha",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-catppuccin-mocha",
+        "background": "rgb(30, 30, 46)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "catalogId": 1102,
+      "id": "dsh-alpha-theme-pack-gruvbox-dark",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-gruvbox-dark",
+        "background": "rgb(40, 40, 40)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "catalogId": 1103,
+      "id": "dsh-alpha-theme-pack-everforest",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-everforest",
+        "background": "rgb(45, 53, 59)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "catalogId": 1104,
+      "id": "dsh-alpha-theme-pack-rose-pine",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-rose-pine",
+        "background": "rgb(25, 23, 36)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "catalogId": 1105,
+      "id": "dsh-alpha-theme-pack-solarized-dark",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-solarized-dark",
+        "background": "rgb(0, 43, 54)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "catalogId": 1106,
+      "id": "dsh-alpha-theme-pack-kanagawa",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-kanagawa",
+        "background": "rgb(31, 31, 40)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "catalogId": 1107,
+      "id": "dsh-alpha-theme-pack-tokyo-night",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-tokyo-night",
+        "background": "rgb(26, 27, 38)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "catalogId": 1108,
+      "id": "dsh-alpha-theme-pack-tokyo-storm",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-tokyo-storm",
+        "background": "rgb(36, 40, 59)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "catalogId": 1109,
+      "id": "dsh-alpha-theme-pack-night-owl",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-night-owl",
+        "background": "rgb(1, 22, 39)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "catalogId": 1110,
+      "id": "dsh-alpha-theme-pack-nord",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-nord",
+        "background": "rgb(46, 52, 64)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "catalogId": 1111,
+      "id": "dsh-alpha-theme-pack-dracula",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-dracula",
+        "background": "rgb(40, 42, 54)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "theme-pack",
+      "catalogId": 1112,
+      "id": "dsh-alpha-theme-pack-one-dark",
+      "observed": {
+        "selection": "dsh-alpha-theme-pack-one-dark",
+        "background": "rgb(40, 44, 52)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "catppuccin",
+      "catalogId": 1201,
+      "id": "dsh-alpha-catppuccin-catppuccin-latte",
+      "observed": {
+        "selection": "dsh-alpha-catppuccin-catppuccin-latte",
+        "background": "rgb(239, 241, 245)",
+        "scheme": "light",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "solarized",
+      "catalogId": 1202,
+      "id": "dsh-alpha-solarized-solarized-dark",
+      "observed": {
+        "selection": "dsh-alpha-solarized-solarized-dark",
+        "background": "rgb(0, 43, 54)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    },
+    {
+      "group": "premium",
+      "catalogId": 1203,
+      "id": "dsh-alpha-premium-tokyo-night",
+      "observed": {
+        "selection": "dsh-alpha-premium-tokyo-night",
+        "background": "rgb(22, 22, 30)",
+        "scheme": "dark",
+        "invalidToken": false
+      }
+    }
+  ],
+  "customImport": {
+    "name": "DSH Alpha QA",
+    "colors": {
+      "base": "#112233",
+      "accent": "#df9b6b",
+      "text": "",
+      "surface": ""
+    },
+    "themeId": "dsh-alpha-premium-custom-dsh-alpha-qa",
+    "fontChangePreserved": true,
+    "coldRestart": {
+      "selection": "dsh-alpha-premium-custom-dsh-alpha-qa",
+      "background": "rgb(17, 34, 51)",
+      "scheme": "dark",
+      "invalidToken": false
+    }
+  },
+  "recovery": {
+    "before": {
+      "background": "rgb(255, 255, 255)",
+      "ownedStyleCount": 1,
+      "custom": {
+        "palette": "off",
+        "base": "system",
+        "customPalettes": {}
+      },
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+    },
+    "after": {
+      "background": "rgb(255, 255, 255)",
+      "inlineBase": "",
+      "paletteCards": 0,
+      "ownedStyles": 0,
+      "routes": [
+        {
+          "route": "/api/dsh-community-palettes/theme-pack",
+          "status": 404
+        },
+        {
+          "route": "/api/dsh-community-palettes/catppuccin",
+          "status": 404
+        },
+        {
+          "route": "/api/dsh-community-palettes/solarized",
+          "status": 404
+        },
+        {
+          "route": "/api/dsh-community-palettes/premium/palette",
+          "status": 404
+        },
+        {
+          "route": "/api/dsh-community-palettes/premium/custom",
+          "status": 404
+        }
+      ]
+    },
+    "customFixtureDeleted": true
+  }
+}

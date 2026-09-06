@@ -811,6 +811,21 @@ defineMethod("transform", [
   "preserve"
 ], ({ inner }, isInner) => inner.toString(isInner));
 
+// themes/community-alpha/palette-api-security.mjs
+function authorizePaletteRequest(connection, req, res) {
+  if (typeof connection?.requestRejection !== "function") {
+    res.writeHead(503);
+    res.end();
+    return false;
+  }
+  const rejection = connection.requestRejection(req);
+  if (rejection === void 0) return true;
+  res.writeHead(rejection === 401 ? 401 : 403);
+  res.end(rejection === 401 ? "unauthorized" : "forbidden");
+  return false;
+}
+var PREMIUM_BODY_LIMIT_BYTES = 64 * 1024;
+
 // themes/community-alpha/palette-host.mjs
 var config = { "group": "theme-pack", "themes": [{ "id": "dsh-alpha-theme-pack-catppuccin-mocha", "originalId": "catppuccin-mocha", "catalogId": 1101, "name": "Catppuccin Mocha", "colorScheme": "dark", "baseColor": "rgb(30, 30, 46)" }, { "id": "dsh-alpha-theme-pack-gruvbox-dark", "originalId": "gruvbox-dark", "catalogId": 1102, "name": "Gruvbox Dark", "colorScheme": "dark", "baseColor": "rgb(40, 40, 40)" }, { "id": "dsh-alpha-theme-pack-everforest", "originalId": "everforest", "catalogId": 1103, "name": "Everforest", "colorScheme": "dark", "baseColor": "rgb(45, 53, 59)" }, { "id": "dsh-alpha-theme-pack-rose-pine", "originalId": "rose-pine", "catalogId": 1104, "name": "Ros\xE9 Pine", "colorScheme": "dark", "baseColor": "rgb(25, 23, 36)" }, { "id": "dsh-alpha-theme-pack-solarized-dark", "originalId": "solarized-dark", "catalogId": 1105, "name": "Solarized Dark", "colorScheme": "dark", "baseColor": "rgb(0, 43, 54)" }, { "id": "dsh-alpha-theme-pack-kanagawa", "originalId": "kanagawa", "catalogId": 1106, "name": "Kanagawa Wave", "colorScheme": "dark", "baseColor": "rgb(31, 31, 40)" }, { "id": "dsh-alpha-theme-pack-tokyo-night", "originalId": "tokyo-night", "catalogId": 1107, "name": "Tokyo Night", "colorScheme": "dark", "baseColor": "rgb(26, 27, 38)" }, { "id": "dsh-alpha-theme-pack-tokyo-storm", "originalId": "tokyo-storm", "catalogId": 1108, "name": "Tokyo Night Storm", "colorScheme": "dark", "baseColor": "rgb(36, 40, 59)" }, { "id": "dsh-alpha-theme-pack-night-owl", "originalId": "night-owl", "catalogId": 1109, "name": "Night Owl", "colorScheme": "dark", "baseColor": "rgb(1, 22, 39)" }, { "id": "dsh-alpha-theme-pack-nord", "originalId": "nord", "catalogId": 1110, "name": "Nord", "colorScheme": "dark", "baseColor": "rgb(46, 52, 64)" }, { "id": "dsh-alpha-theme-pack-dracula", "originalId": "dracula", "catalogId": 1111, "name": "Dracula", "colorScheme": "dark", "baseColor": "rgb(40, 42, 54)" }, { "id": "dsh-alpha-theme-pack-one-dark", "originalId": "one-dark", "catalogId": 1112, "name": "One Dark", "colorScheme": "dark", "baseColor": "rgb(40, 44, 52)" }, { "id": "dsh-alpha-theme-pack-catppuccin-latte", "originalId": "catppuccin-latte", "name": "Catppuccin Latte", "colorScheme": "light", "baseColor": "rgb(239, 241, 245)" }, { "id": "dsh-alpha-theme-pack-gruvbox-light", "originalId": "gruvbox-light", "name": "Gruvbox Light", "colorScheme": "light", "baseColor": "rgb(251, 241, 199)" }, { "id": "dsh-alpha-theme-pack-solarized-light", "originalId": "solarized-light", "name": "Solarized Light", "colorScheme": "light", "baseColor": "rgb(253, 246, 227)" }, { "id": "dsh-alpha-theme-pack-rose-pine-dawn", "originalId": "rose-pine-dawn", "name": "Ros\xE9 Pine Dawn", "colorScheme": "light", "baseColor": "rgb(250, 244, 237)" }] };
 var namespace = `dsh-community-${config.group}`;
@@ -828,7 +843,7 @@ function json(res, status, body) {
   res.end(JSON.stringify(body));
 }
 var name = `dsh-community-${config.group}`;
-var inject = ["settings", "webServer"];
+var inject = ["settings", "webServer", "connection"];
 function apply(ctx) {
   ctx.settings.register(namespace, schema);
   ctx.effect(
@@ -836,6 +851,7 @@ function apply(ctx) {
       kind: "exact",
       path: route,
       async handler(req, res) {
+        if (!authorizePaletteRequest(ctx.connection, req, res)) return;
         const current = () => ({
           ...ctx.settings.get(namespace),
           themes: config.themes

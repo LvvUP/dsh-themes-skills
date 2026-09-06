@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "status": "immutable-alpha.1-history",
+  "sourceCommit": "7126b817615f71854bb98142c302cbeb7b797799",
+  "originalCatalogSha256": "5b835555c36511b43139a803baa85d00f571e12cba95deb42c435b3b65463d28",
+  "sourcePurpose": "Historical reconstruction of the replaced Alpha palette source and original raw observations. Not current runtime authority for alpha.2.",
+  "files": [
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/build.mjs",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/c920406bd2938f9614365e8391d96b16c9d5b7f883f5a230c427305e12e77457/build.mjs",
+      "sha256": "c920406bd2938f9614365e8391d96b16c9d5b7f883f5a230c427305e12e77457",
+      "bytes": 21385
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/palette-host.mjs",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/ef3a242ef02845200f4765de50409adc6bea3a47934510e5d98085fe509837aa/palette-host.mjs",
+      "sha256": "ef3a242ef02845200f4765de50409adc6bea3a47934510e5d98085fe509837aa",
+      "bytes": 2724
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/catalog.json",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/678c22a7747c8868d4cf6099ed53bf663524e35b72e9e8c5917282bc7cd7e8f9/catalog.json",
+      "sha256": "678c22a7747c8868d4cf6099ed53bf663524e35b72e9e8c5917282bc7cd7e8f9",
+      "bytes": 9828
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/packages/theme-pack/index.js",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/7a5dd7cf8e4b5c2f1a95c035463a28d8b8dede1eddb200c9a3f8d9dd6da6c7cc/packages/theme-pack/index.js",
+      "sha256": "7a5dd7cf8e4b5c2f1a95c035463a28d8b8dede1eddb200c9a3f8d9dd6da6c7cc",
+      "bytes": 35927
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/packages/theme-pack/package.json",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/9b9b1ebce9bd27a6aa8efecf840435dea7f9e7d6073ac4ccc19a5d80ecb08743/packages/theme-pack/package.json",
+      "sha256": "9b9b1ebce9bd27a6aa8efecf840435dea7f9e7d6073ac4ccc19a5d80ecb08743",
+      "bytes": 800
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/packages/theme-pack/PROVENANCE.json",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/539f56aa907660bf88e3a51948604cc2536432d80d868c521f7c406476676869/packages/theme-pack/PROVENANCE.json",
+      "sha256": "539f56aa907660bf88e3a51948604cc2536432d80d868c521f7c406476676869",
+      "bytes": 6683
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/packages/catppuccin/index.js",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/28affa73c53b9501aa9a954d9d24da597d7c8d31f4270aef32acaced8213f8c8/packages/catppuccin/index.js",
+      "sha256": "28affa73c53b9501aa9a954d9d24da597d7c8d31f4270aef32acaced8213f8c8",
+      "bytes": 33832
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/packages/catppuccin/package.json",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/13dc15c38a9ececc19883271854eddd0a640d1984640978294a168c2dec8cc09/packages/catppuccin/package.json",
+      "sha256": "13dc15c38a9ececc19883271854eddd0a640d1984640978294a168c2dec8cc09",
+      "bytes": 808
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/packages/catppuccin/PROVENANCE.json",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/ccc0c520ab3d66b79a09ab4f9f3088c212e3eb5754949ba9339df60a85da828f/packages/catppuccin/PROVENANCE.json",
+      "sha256": "ccc0c520ab3d66b79a09ab4f9f3088c212e3eb5754949ba9339df60a85da828f",
+      "bytes": 3810
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/packages/solarized/index.js",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/d69061213e00d366230421e0050e0d84b9e3a119a9421e6ce6cd249cdc6ad74b/packages/solarized/index.js",
+      "sha256": "d69061213e00d366230421e0050e0d84b9e3a119a9421e6ce6cd249cdc6ad74b",
+      "bytes": 33836
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/packages/solarized/package.json",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/1dbd25384b748b266558bf5519bee86d4e71af42d78c5c5dd4fa1a92c7e3c7b8/packages/solarized/package.json",
+      "sha256": "1dbd25384b748b266558bf5519bee86d4e71af42d78c5c5dd4fa1a92c7e3c7b8",
+      "bytes": 806
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/packages/solarized/PROVENANCE.json",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/55a76f75ef936ba2f0f3c71a112796899597c4c508dd35bcab983b0a55b86460/packages/solarized/PROVENANCE.json",
+      "sha256": "55a76f75ef936ba2f0f3c71a112796899597c4c508dd35bcab983b0a55b86460",
+      "bytes": 2933
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/packages/premium/index.js",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/ff49727dfcbcf4c11fe3969aa46255ef2679d72b5da27c9c8ef38afaae527d2b/packages/premium/index.js",
+      "sha256": "ff49727dfcbcf4c11fe3969aa46255ef2679d72b5da27c9c8ef38afaae527d2b",
+      "bytes": 47637
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/packages/premium/package.json",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/a98ae31158dff356f5a27ae0ca77e6be46bfd9bc06ac8a9b94b4eb04b950238f/packages/premium/package.json",
+      "sha256": "a98ae31158dff356f5a27ae0ca77e6be46bfd9bc06ac8a9b94b4eb04b950238f",
+      "bytes": 805
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/packages/premium/PROVENANCE.json",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/1daf7f52ad42bc67178d09217161e72dea86011841b9c86d09417dac358e92a9/packages/premium/PROVENANCE.json",
+      "sha256": "1daf7f52ad42bc67178d09217161e72dea86011841b9c86d09417dac358e92a9",
+      "bytes": 5984
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/assets/alpha/palettes/README.md",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/source/4ca703deb973ad22baa2ad0641e6d0d6e80182a134df2504c3aefb764f09c817/README.md",
+      "sha256": "4ca703deb973ad22baa2ad0641e6d0d6e80182a134df2504c3aefb764f09c817",
+      "bytes": 1354
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/references/community-recipes.json",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/community-recipes.5b835555c36511b43139a803baa85d00f571e12cba95deb42c435b3b65463d28.json",
+      "sha256": "5b835555c36511b43139a803baa85d00f571e12cba95deb42c435b3b65463d28",
+      "bytes": 94914
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/references/alpha-palettes-runtime.json",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/alpha-palettes-runtime.cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353.json",
+      "sha256": "cee16106d631533069878a1b2fffb025b2052407ceb3c49fdf5dab9b6c3a1353",
+      "bytes": 22906
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/references/alpha-community-public-installation.json",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/alpha-community-public-installation.16f03bfa840501cc7b03ad85c94da97ce5098e06e659fcfe10c8505c40cbe84a.json",
+      "sha256": "16f03bfa840501cc7b03ad85c94da97ce5098e06e659fcfe10c8505c40cbe84a",
+      "bytes": 23427
+    },
+    {
+      "originalPath": "skills/dsh-community-skin-installer/references/alpha-community-public-repeatability.json",
+      "historyPath": "skills/dsh-community-skin-installer/references/history/palette-api-security/alpha-community-public-repeatability.cb232b69115a4f7eab9b6ede849393e7a1a4b097065c41233520a11ebc20c6fe.json",
+      "sha256": "cb232b69115a4f7eab9b6ede849393e7a1a4b097065c41233520a11ebc20c6fe",
+      "bytes": 124803
+    }
+  ],
+  "retainedOriginalArchives": [
+    {
+      "path": "skills/dsh-community-skin-installer/assets/alpha/artifacts/cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160.tgz",
+      "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160",
+      "bytes": 25170
+    },
+    {
+      "path": "skills/dsh-community-skin-installer/assets/alpha/artifacts/4cd4f8f04902e836a3596238984426e604b1878334a382a4e3079fdea4b29159.tgz",
+      "sha256": "4cd4f8f04902e836a3596238984426e604b1878334a382a4e3079fdea4b29159",
+      "bytes": 25283
+    },
+    {
+      "path": "skills/dsh-community-skin-installer/assets/alpha/artifacts/1ade7da6d33025d8fc141b89940c122c35af611e2f0708778b64842fa9e2eeb7.tgz",
+      "sha256": "1ade7da6d33025d8fc141b89940c122c35af611e2f0708778b64842fa9e2eeb7",
+      "bytes": 20686
+    },
+    {
+      "path": "skills/dsh-community-skin-installer/assets/alpha/artifacts/2fa67a45ddb273e2c52ad02988d4f0251ad5f6ff7304d28e16a24be2a44174a7.tgz",
+      "sha256": "2fa67a45ddb273e2c52ad02988d4f0251ad5f6ff7304d28e16a24be2a44174a7",
+      "bytes": 36047
+    }
+  ]
+}

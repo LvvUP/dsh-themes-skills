@@ -811,6 +811,21 @@ defineMethod("transform", [
   "preserve"
 ], ({ inner }, isInner) => inner.toString(isInner));
 
+// themes/community-alpha/palette-api-security.mjs
+function authorizePaletteRequest(connection, req, res) {
+  if (typeof connection?.requestRejection !== "function") {
+    res.writeHead(503);
+    res.end();
+    return false;
+  }
+  const rejection = connection.requestRejection(req);
+  if (rejection === void 0) return true;
+  res.writeHead(rejection === 401 ? 401 : 403);
+  res.end(rejection === 401 ? "unauthorized" : "forbidden");
+  return false;
+}
+var PREMIUM_BODY_LIMIT_BYTES = 64 * 1024;
+
 // themes/community-alpha/palette-host.mjs
 var config = { "group": "catppuccin", "themes": [{ "id": "dsh-alpha-catppuccin-catppuccin-latte", "originalId": "catppuccin-latte", "name": "Latte", "colorScheme": "light", "baseColor": "#eff1f5" }, { "id": "dsh-alpha-catppuccin-catppuccin-frappe", "originalId": "catppuccin-frappe", "name": "Frapp\xE9", "colorScheme": "dark", "baseColor": "#303446" }, { "id": "dsh-alpha-catppuccin-catppuccin-macchiato", "originalId": "catppuccin-macchiato", "name": "Macchiato", "colorScheme": "dark", "baseColor": "#24273a" }, { "id": "dsh-alpha-catppuccin-catppuccin-mocha", "originalId": "catppuccin-mocha", "name": "Mocha", "colorScheme": "dark", "baseColor": "#1e1e2e" }] };
 var namespace = `dsh-community-${config.group}`;
@@ -828,7 +843,7 @@ function json(res, status, body) {
   res.end(JSON.stringify(body));
 }
 var name = `dsh-community-${config.group}`;
-var inject = ["settings", "webServer"];
+var inject = ["settings", "webServer", "connection"];
 function apply(ctx) {
   ctx.settings.register(namespace, schema);
   ctx.effect(
@@ -836,6 +851,7 @@ function apply(ctx) {
       kind: "exact",
       path: route,
       async handler(req, res) {
+        if (!authorizePaletteRequest(ctx.connection, req, res)) return;
         const current = () => ({
           ...ctx.settings.get(namespace),
           themes: config.themes

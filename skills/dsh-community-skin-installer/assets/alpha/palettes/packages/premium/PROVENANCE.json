@@ -162,11 +162,22 @@
   },
   "license": "MIT",
   "packageName": "@dsh-themes-community/premium-alpha",
-  "packageVersion": "1.0.0-alpha.1",
+  "packageVersion": "1.0.0-alpha.2",
   "changes": [
     "Build original TypeScript and import dialog against Alpha shared modules",
     "Bundle schemastery and clsx without installing obsolete RC.6 peer packages",
     "Prefix theme IDs and custom IDs to prevent palette registry collisions",
     "Preserve eight palettes, seed-color derivation, import, deletion, and Host-backed selection"
-  ]
+  ],
+  "securityAdaptation": {
+    "revision": "palette-api-auth-20260906",
+    "officialGuard": "ctx.connection.requestRejection(req)",
+    "beforeAnyRouteReadOrWrite": true,
+    "premiumJsonBodyLimitBytes": 65536,
+    "helper": {
+      "path": "themes/community-alpha/palette-api-security.mjs",
+      "sha256": "2e1a4ee5865b5c54f562ab684c7fc19c0261e0dbe4546c9423923c3c66e420d7"
+    },
+    "buildImplementationSha256": "e7c8c10278cdb8e75795f3a1856e0b70b57585e9796dd5cbf2777068f91f1ae6"
+  }
 }

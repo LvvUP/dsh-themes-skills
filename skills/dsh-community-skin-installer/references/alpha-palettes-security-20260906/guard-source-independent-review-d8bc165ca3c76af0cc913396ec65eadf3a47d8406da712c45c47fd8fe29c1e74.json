@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-09-06T13:02:14.335Z",
+  "reviewer": "upstream_docs_plan",
+  "status": "no-new-confirmed-security-finding",
+  "scope": "Independent read-only source and fixture review; no tests, requests, service, browser or source changes.",
+  "files": [
+    {
+      "path": "themes/community-alpha/palette-api-security.mjs",
+      "sha256": "2e1a4ee5865b5c54f562ab684c7fc19c0261e0dbe4546c9423923c3c66e420d7",
+      "readScope": "Full file: official authorization delegation; media type and byte limit; all stream callbacks and listener cleanup; fail-closed exact Premium source transformation."
+    },
+    {
+      "path": "tests/community-palette-api-security.test.mjs",
+      "sha256": "f294f41db3d17f3fb37cdd561107be4a75a2b276733a047d97b864d27fb10c21",
+      "readScope": "Full file: vendored-schema extraction, allowlisted vm module loader, loopback HTTP fixture and cleanup, all five test bodies and their assertions."
+    }
+  ],
+  "conclusions": [
+    "Official connection.requestRejection is invoked before settings lookup or body handler; unavailable connection returns 503 and explicit rejections never proceed to reads/writes.",
+    "JSON media type is normalized and restricted to application/json; complete JSON must be a non-null, non-array object. Byte count includes UTF-8 Buffer lengths, accepts 65536 and rejects greater sizes before parsing or mutation.",
+    "Overflow clears buffered chunks and retains a flowing data listener that discards later chunks. end/error/close remove listeners; aborted resolves failure and subsequent close removes listeners. The settled flag prevents a second parse/resolve or a second error response.",
+    "Premium replacement anchors are exact-one and ordering is checked; helper import specifier is JSON string escaped. Fixed upstream identity is enforced by its builder, rather than supplied by an HTTP client.",
+    "Fixtures open only an ephemeral 127.0.0.1 HTTP server, use in-memory settings, controlled module resolution and synthetic session marker, and destroy their own sockets/server. They do not install packages, access real user profiles or contact external services.",
+    "The real 75-case official-server run independently verifies actual 303/cookie session and authorization responses; it is kept separate from the controlled stub guard used by unit fixtures."
+  ],
+  "findings": [],
+  "coverageLimits": [
+    "The keep-alive-named fixture proves a successful GET after overflow using one keep-alive agent; it does not assert reuse of the identical TCP socket, so connection-identity preservation is not separately certified.",
+    "Premature aborted/error/close behavior is source-reviewed, not covered by an explicit interruption fixture in these five tests. No such test was run or inferred here.",
+    "The positive fixture uses one synthetic choice per generic group plus one Premium custom palette, not every real shipped choice. Actual full-choice visual/restart work belongs to the separate root lifecycle verification.",
+    "The fixture guard implements the service response contract; it does not implement or validate official cookie cryptography. Official real-runtime evidence covers that exchange separately."
+  ],
+  "actualRuntimeReference": {
+    "path": ".cache/alpha-palette-api-security/attempt-1-http-independent-review.json",
+    "sha256": "17dac9a62c5f9468cbd05afa68ea415def94dfba733a5e20ee4dbe8aacaaae42",
+    "cases": 75,
+    "requests": 809
+  }
+}

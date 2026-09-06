@@ -1,0 +1,2480 @@
+{
+  "schemaVersion": 1,
+  "status": "independent-review-of-actual-public-runs-complete",
+  "reviewedAt": "2026-09-06T13:28:16.556Z",
+  "reviewer": "/root/upstream_docs_plan",
+  "reviewScript": {
+    "path": ".cache/alpha-community-security-public-sync/review-actual-public-runs.mjs",
+    "sha256": "5d73747a416629d567fb9e36c402ff37ff9cf34d711b1e7a68e64dad398e36ec"
+  },
+  "receipts": {
+    "threeId": {
+      "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/receipt.json",
+      "sha256": "a487dd27baa23aa50185a0f6ffd157de42e7e7eee30127a31ebfa32118c9c4b6"
+    },
+    "upgrade": {
+      "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/receipt.json",
+      "sha256": "8bcb406721ea138befa468b7003d67c2de2f2c6d98d82471ba474c61a52e99f8"
+    },
+    "threeIdExecution": {
+      "path": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/execution.json",
+      "sha256": "0cefd8c7bf994f4ff8f3141de18587f70a434c7151ca78bc741c9c626edb0dde"
+    }
+  },
+  "sourceBindings": {
+    "catalogSha256": "8e048e66f5c9a6193027cefca150af90c193f8229ce6a18a7b281a03b26a76b4",
+    "threeIdDriverSha256": "e178507eb9f85359e6b9091f45afb19bd860c72ef9e1cc927139bf7377ce70a7",
+    "upgradeDriverSha256": "5272dbb16fac552b70327e0fd9081ed9c966da54c36224f9adaf04bcacd7c58a",
+    "threeIdSnapshots": [
+      {
+        "sourcePath": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-community-skin-installer/references/community-recipes.json",
+        "path": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/0-community-recipes.json",
+        "sha256": "8e048e66f5c9a6193027cefca150af90c193f8229ce6a18a7b281a03b26a76b4",
+        "snapshotVerified": true,
+        "currentSourceStillExact": true
+      },
+      {
+        "sourcePath": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-community-skin-installer/scripts/companion-files.mjs",
+        "path": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/1-companion-files.mjs",
+        "sha256": "36e5d72237851aab572b96a5a96866d28f3d7027bf158310ad367ae16486909d",
+        "snapshotVerified": true,
+        "currentSourceStillExact": true
+      },
+      {
+        "sourcePath": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-community-skin-installer/scripts/install-alpha.mjs",
+        "path": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/2-install-alpha.mjs",
+        "sha256": "14c92f0b26b734bc73d098579e58f1f962ae81741078b726eda80c06307926f4",
+        "snapshotVerified": true,
+        "currentSourceStillExact": true
+      },
+      {
+        "sourcePath": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-plugin-installer/scripts/install-plugins.mjs",
+        "path": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/3-install-plugins.mjs",
+        "sha256": "3f791ce0c81c5bf0e5dae8e0bc496a43e5ff1d910384d7c6e4e5596a4ae11321",
+        "snapshotVerified": true,
+        "currentSourceStillExact": true
+      },
+      {
+        "sourcePath": "/Users/vvmacair/Documents/vv_AI_Project/dsh-themes-skills/skills/dsh-theme-manager/scripts/dsh-alpha.mjs",
+        "path": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/4-dsh-alpha.mjs",
+        "sha256": "d7664679a96517ef8068a7dd4a6b33f640d18980f81f79223a75a7c8468cb6ff",
+        "snapshotVerified": true,
+        "currentSourceStillExact": true
+      },
+      {
+        "sourcePath": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/themes/community-alpha/skin-center/verify-public-installation.mjs",
+        "path": ".cache/alpha-community-security-public-sync/3id-execution-1788700824293852000/snapshots/5-verify-public-installation.mjs",
+        "sha256": "e178507eb9f85359e6b9091f45afb19bd860c72ef9e1cc927139bf7377ce70a7",
+        "snapshotVerified": true,
+        "currentSourceStillExact": true
+      }
+    ],
+    "upgradeSnapshots": [
+      {
+        "sourcePath": ".cache/alpha-community-security-public-sync/verify-real-upgrade.mjs",
+        "path": "snapshots/0-verify-real-upgrade.mjs",
+        "sha256": "5272dbb16fac552b70327e0fd9081ed9c966da54c36224f9adaf04bcacd7c58a",
+        "snapshotVerified": true,
+        "currentSourceStillExact": true
+      },
+      {
+        "sourcePath": ".cache/alpha-community-security-public-sync/upgrade-inputs.json",
+        "path": "snapshots/1-upgrade-inputs.json",
+        "sha256": "849df1eec029f241fb92853ec0d2b8712099496d923b3c18cea8803307be8c3f",
+        "snapshotVerified": true,
+        "currentSourceStillExact": true
+      },
+      {
+        "sourcePath": "../dsh-themes-skills/skills/dsh-community-skin-installer/references/community-recipes.json",
+        "path": "snapshots/2-community-recipes.json",
+        "sha256": "8e048e66f5c9a6193027cefca150af90c193f8229ce6a18a7b281a03b26a76b4",
+        "snapshotVerified": true,
+        "currentSourceStillExact": true
+      },
+      {
+        "sourcePath": "../dsh-themes-skills/skills/dsh-community-skin-installer/scripts/companion-files.mjs",
+        "path": "snapshots/3-companion-files.mjs",
+        "sha256": "36e5d72237851aab572b96a5a96866d28f3d7027bf158310ad367ae16486909d",
+        "snapshotVerified": true,
+        "currentSourceStillExact": true
+      },
+      {
+        "sourcePath": "../dsh-themes-skills/skills/dsh-community-skin-installer/scripts/install-alpha.mjs",
+        "path": "snapshots/4-install-alpha.mjs",
+        "sha256": "14c92f0b26b734bc73d098579e58f1f962ae81741078b726eda80c06307926f4",
+        "snapshotVerified": true,
+        "currentSourceStillExact": true
+      },
+      {
+        "sourcePath": "../dsh-themes-skills/skills/dsh-plugin-installer/scripts/install-plugins.mjs",
+        "path": "snapshots/5-install-plugins.mjs",
+        "sha256": "3f791ce0c81c5bf0e5dae8e0bc496a43e5ff1d910384d7c6e4e5596a4ae11321",
+        "snapshotVerified": true,
+        "currentSourceStillExact": true
+      },
+      {
+        "sourcePath": "../dsh-themes-skills/skills/dsh-theme-manager/scripts/dsh-alpha.mjs",
+        "path": "snapshots/6-dsh-alpha.mjs",
+        "sha256": "d7664679a96517ef8068a7dd4a6b33f640d18980f81f79223a75a7c8468cb6ff",
+        "snapshotVerified": true,
+        "currentSourceStillExact": true
+      },
+      {
+        "sourcePath": "../dsh-themes-skills/skills/dsh-community-skin-installer/references/alpha-palettes-runtime.json",
+        "path": "snapshots/7-alpha-palettes-runtime.json",
+        "sha256": "f063ff121650f9ae4ea723844890bed7b6f649d597298c398ab2425e865b0294",
+        "snapshotVerified": true,
+        "currentSourceStillExact": true
+      }
+    ],
+    "threeIdLaunchWrapper": {
+      "path": ".cache/alpha-community-security-public-sync/run-reviewed-3id.py",
+      "sha256": "88c0babd29e26d5b726eadd179dbd2750512f53cf291e3e20151c6a8ff26fce3"
+    }
+  },
+  "sourceCommit": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "dshVersion": "0.1.3-alpha.1",
+  "threeId": {
+    "catalogIds": [
+      1101,
+      2206,
+      2207
+    ],
+    "commands": [
+      {
+        "ordinal": 1,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/001.stdout.log",
+            "sha256": "a30fe5b48e524df7a874797ef221cc9b31743323d0c2f97f697a81c0086198d4",
+            "bytes": 213,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/001.stderr.log",
+            "sha256": "003ccc9e579fe338622a0c8a066984cc893e20712894be8e6d1f33c7f9ade2e5",
+            "bytes": 167,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "kind": "--version",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/002.stdout.log",
+            "sha256": "9b36e5e64cab6d4da25e7646821d8836de0db92541a494199dfeb37b998a3b0c",
+            "bytes": 14,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/002.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "kind": "add",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/003.stdout.log",
+            "sha256": "d5dd6d3abeaebd1d59e8dc750827fa5efa92420ece0284b43d8c6e7463228342",
+            "bytes": 410,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/003.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/004.stdout.log",
+            "sha256": "3fee0f1a6af8efc0c5ebd8e4731e49d06345f266882a863eee67e16f7e3619eb",
+            "bytes": 934,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/004.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/005.stdout.log",
+            "sha256": "6377a384c7ae30484b03190f17034e9aa514522b42e6c91349e039b5ec32cda3",
+            "bytes": 16735,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/005.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "kind": "add",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/006.stdout.log",
+            "sha256": "38ce9727f56a410ee718c1a849868cc5a72ccb023093014b7ae868ad7846c189",
+            "bytes": 583,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/006.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/007.stdout.log",
+            "sha256": "183a69c4a15015a8d3db6c5395c0817327ac4fd1f1d1edf4f1b2392dfa16a508",
+            "bytes": 2519,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/007.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/008.stdout.log",
+            "sha256": "55254fd9dba68e486384ac081111f88539eca99a1ef28d4a567e7aebe7cb3171",
+            "bytes": 16851,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/008.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/009.stdout.log",
+            "sha256": "183a69c4a15015a8d3db6c5395c0817327ac4fd1f1d1edf4f1b2392dfa16a508",
+            "bytes": 2519,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/009.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/010.stdout.log",
+            "sha256": "55254fd9dba68e486384ac081111f88539eca99a1ef28d4a567e7aebe7cb3171",
+            "bytes": 16851,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/010.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "kind": "--version",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/011.stdout.log",
+            "sha256": "9b36e5e64cab6d4da25e7646821d8836de0db92541a494199dfeb37b998a3b0c",
+            "bytes": 14,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/011.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/012.stdout.log",
+            "sha256": "183a69c4a15015a8d3db6c5395c0817327ac4fd1f1d1edf4f1b2392dfa16a508",
+            "bytes": 2519,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/012.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "kind": "remove",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/013.stdout.log",
+            "sha256": "30f8cc4b0e8dbaa5b397c5b33945753ef5a5587e5e674d63ef2d8ee830eeb33e",
+            "bytes": 475,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/013.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/014.stdout.log",
+            "sha256": "bd3d18cbf0c1bd7c8b8421a3ab371a0e4dc607b7f175c316809a2f47fc2bb8ab",
+            "bytes": 1826,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/014.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/015.stdout.log",
+            "sha256": "be7420504ff2e9d4b38b2441b8b485e9d13696ea5c310b1c9398d34dd88e1be0",
+            "bytes": 16727,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/015.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/016.stdout.log",
+            "sha256": "2df4d360f026a58bad499c4ca7103a41f1ac4c6022c0ee5b819a18c1770f51d6",
+            "bytes": 1826,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/016.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "kind": "remove",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/017.stdout.log",
+            "sha256": "e4994024a7018d1cea4a73016870d04acf3246fb7de997af371ae391786411d1",
+            "bytes": 361,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/017.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 18,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/018.stdout.log",
+            "sha256": "a30fe5b48e524df7a874797ef221cc9b31743323d0c2f97f697a81c0086198d4",
+            "bytes": 213,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/018.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 19,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/019.stdout.log",
+            "sha256": "a30fe5b48e524df7a874797ef221cc9b31743323d0c2f97f697a81c0086198d4",
+            "bytes": 213,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/019.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 20,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/020.stdout.log",
+            "sha256": "a30fe5b48e524df7a874797ef221cc9b31743323d0c2f97f697a81c0086198d4",
+            "bytes": 213,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/020.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 21,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/021.stdout.log",
+            "sha256": "a30fe5b48e524df7a874797ef221cc9b31743323d0c2f97f697a81c0086198d4",
+            "bytes": 213,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/021.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 22,
+        "kind": "--version",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/022.stdout.log",
+            "sha256": "9b36e5e64cab6d4da25e7646821d8836de0db92541a494199dfeb37b998a3b0c",
+            "bytes": 14,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/022.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 23,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/023.stdout.log",
+            "sha256": "a30fe5b48e524df7a874797ef221cc9b31743323d0c2f97f697a81c0086198d4",
+            "bytes": 213,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/023.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 24,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/024.stdout.log",
+            "sha256": "a30fe5b48e524df7a874797ef221cc9b31743323d0c2f97f697a81c0086198d4",
+            "bytes": 213,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/024.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 25,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/025.stdout.log",
+            "sha256": "2a24baa18ac28660cdd3a9cdc01f58ba0115c7f1e56e4d87ef74d957494af50b",
+            "bytes": 16611,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/025.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 26,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/026.stdout.log",
+            "sha256": "a30fe5b48e524df7a874797ef221cc9b31743323d0c2f97f697a81c0086198d4",
+            "bytes": 213,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/026.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 27,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/027.stdout.log",
+            "sha256": "a30fe5b48e524df7a874797ef221cc9b31743323d0c2f97f697a81c0086198d4",
+            "bytes": 213,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/027.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 28,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/028.stdout.log",
+            "sha256": "2a24baa18ac28660cdd3a9cdc01f58ba0115c7f1e56e4d87ef74d957494af50b",
+            "bytes": 16611,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/commands/028.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      }
+    ],
+    "commandCount": 28,
+    "rawStreamsVerified": 56,
+    "actualAddCalls": 2,
+    "actualRemoveCalls": 2,
+    "activations": [
+      {
+        "catalogId": 1101,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-theme-pack-catppuccin-mocha",
+        "themePackSelection": "dsh-alpha-theme-pack-catppuccin-mocha"
+      },
+      {
+        "catalogId": 2206,
+        "status": "selected",
+        "observedSelection": "qq98",
+        "themePackSelection": "off"
+      },
+      {
+        "catalogId": 2207,
+        "status": "selected",
+        "observedSelection": "ths",
+        "themePackSelection": "off"
+      }
+    ],
+    "recoveryConflict": {
+      "fixtureOnly": true,
+      "catalogId": 2206,
+      "managedFileSha256": "d62653ea7b5061e9f91c70069eb5edf93ba92e179fd8ba3a50dda75a51097833",
+      "editedFileSha256": "26b8a1b2180964585cef9a6819bf91dbb2915fa81a384a0460121436ce853b6c",
+      "firstAttempt": {
+        "dshVersion": "0.1.3-alpha.1",
+        "status": "incomplete",
+        "items": [
+          {
+            "catalogId": 1101,
+            "status": "removed",
+            "packageName": "@dsh-themes-community/theme-pack-alpha",
+            "profile": "web",
+            "companions": []
+          },
+          {
+            "catalogId": 2206,
+            "status": "failed",
+            "error": "Companion bytes differ: patches.css"
+          },
+          {
+            "catalogId": 2207,
+            "status": "failed",
+            "error": "Companion bytes differ: patches.css"
+          }
+        ]
+      },
+      "packageAbsentAfterFirstAttempt": true,
+      "editedFilePreserved": true,
+      "editResolvedToReviewedBytes": true,
+      "publicEntryRetrySucceeded": true
+    },
+    "restoredCompanionChecks": [
+      {
+        "catalogId": 2206,
+        "skinId": "qq98",
+        "installedFixtureFiles": 6,
+        "finalRestoredFiles": 6,
+        "finalBytesEqualOriginalPublicFixtures": true
+      },
+      {
+        "catalogId": 2207,
+        "skinId": "ths",
+        "installedFixtureFiles": 6,
+        "finalRestoredFiles": 6,
+        "finalBytesEqualOriginalPublicFixtures": true
+      }
+    ],
+    "removedRoutes": [
+      {
+        "path": "/api/dsh-community-palettes/theme-pack",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/active",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/qq98/stylesheet",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/ths/stylesheet",
+        "status": 404
+      }
+    ],
+    "installedLock": {
+      "path": ".cache/dsh-skin-center-alpha/public-installation-1788700824531/installed-pnpm-lock.yaml",
+      "sha256": "c506a07726d2ba10b8a68ce365058f1ed0262c74b117581cf6df6a7f0476384e"
+    },
+    "storeInterpretation": {
+      "rawReusedStore": true,
+      "meaning": "The raw driver computes Boolean(DSH_PUBLIC_INSTALL_STORE_DIR), not whether cache content already existed.",
+      "actualRun": "Fresh task-owned custom store; not a warm-store reuse run.",
+      "basis": "Root confirms the prelaunch nonexistence assertion was executed; read-only inspection of run-reviewed-3id.py shows assert not store.exists() before the recorded native command, and execution.json records the exact unique store path. The wrapper itself was not snapshotted in execution.json.",
+      "initialInstallNetworkPolicy": "Offline=false; fixed native dependency install could use registry. Subsequent lifecycle switches to PNPM_CONFIG_OFFLINE=true and records true from pnpm config get. Not packet-capture evidence."
+    }
+  },
+  "upgrade": {
+    "catalogIds": [
+      1101,
+      1102,
+      1103,
+      1104,
+      1105,
+      1106,
+      1107,
+      1108,
+      1109,
+      1110,
+      1111,
+      1112,
+      1201,
+      1202,
+      1203
+    ],
+    "commands": [
+      {
+        "ordinal": 1,
+        "kind": "--check-build",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/001.stdout.log",
+            "sha256": "b6356eb442646be37aa6b17e24cb84654b87fdee7c922a4919aec5c22af301cb",
+            "bytes": 194,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/001.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "kind": "--version",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/002.stdout.log",
+            "sha256": "9b36e5e64cab6d4da25e7646821d8836de0db92541a494199dfeb37b998a3b0c",
+            "bytes": 14,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/002.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/003.stdout.log",
+            "sha256": "a7debdd3dcbc5ade56413c4c0f8a9e7068e65c35235e508b0b7647dee0fbb7b3",
+            "bytes": 266,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/003.stderr.log",
+            "sha256": "a0cfc84829be83e32443f5b1dc1ef01f5824b8e3e0aa9e436a437574e469a44b",
+            "bytes": 220,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "kind": "add",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/004.stdout.log",
+            "sha256": "7fd664c587a54aa4c029e5fc778ef414ede7fb015621af825a0c8dfc75ce8fb9",
+            "bytes": 410,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/004.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "kind": "add",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/005.stdout.log",
+            "sha256": "fbea8a38382daea559286e032b5cdf8388a6aeed8a2bb6c7ca8f65f4344bc494",
+            "bytes": 473,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/005.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "kind": "add",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/006.stdout.log",
+            "sha256": "6b772758e94a979bc830db147aabecee977f03cb08b618d4b8cb5edfe13299a0",
+            "bytes": 472,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/006.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "kind": "add",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/007.stdout.log",
+            "sha256": "85f7f3ef829dc4705bd9f2a050be4f9c48713627c75a6ccea62e204d08f8c4b5",
+            "bytes": 470,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/007.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/008.stdout.log",
+            "sha256": "0f8b5f0026e8332b469fcc0092529dd61c3d5c39f70a86051ee7babf64fc98fb",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/008.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "kind": "--version",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/009.stdout.log",
+            "sha256": "9b36e5e64cab6d4da25e7646821d8836de0db92541a494199dfeb37b998a3b0c",
+            "bytes": 14,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/009.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "kind": "add",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/010.stdout.log",
+            "sha256": "05fd2e2584d1a7d2167e63cfddd427902688c92a9251c23d8faebbc70f621c0b",
+            "bytes": 223,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/010.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/011.stdout.log",
+            "sha256": "88a33c3d3e9e451014307f985191c36478f939c5814a164dfbd64189e6877904",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/011.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/012.stdout.log",
+            "sha256": "88aaba923c8b6057cc7554162126809aad14e8a9371ed9faca529ed381712a71",
+            "bytes": 17095,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/012.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/013.stdout.log",
+            "sha256": "88a33c3d3e9e451014307f985191c36478f939c5814a164dfbd64189e6877904",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/013.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/014.stdout.log",
+            "sha256": "88aaba923c8b6057cc7554162126809aad14e8a9371ed9faca529ed381712a71",
+            "bytes": 17095,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/014.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/015.stdout.log",
+            "sha256": "88a33c3d3e9e451014307f985191c36478f939c5814a164dfbd64189e6877904",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/015.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/016.stdout.log",
+            "sha256": "88aaba923c8b6057cc7554162126809aad14e8a9371ed9faca529ed381712a71",
+            "bytes": 17095,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/016.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/017.stdout.log",
+            "sha256": "88a33c3d3e9e451014307f985191c36478f939c5814a164dfbd64189e6877904",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/017.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 18,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/018.stdout.log",
+            "sha256": "88aaba923c8b6057cc7554162126809aad14e8a9371ed9faca529ed381712a71",
+            "bytes": 17095,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/018.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 19,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/019.stdout.log",
+            "sha256": "88a33c3d3e9e451014307f985191c36478f939c5814a164dfbd64189e6877904",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/019.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 20,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/020.stdout.log",
+            "sha256": "88aaba923c8b6057cc7554162126809aad14e8a9371ed9faca529ed381712a71",
+            "bytes": 17095,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/020.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 21,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/021.stdout.log",
+            "sha256": "88a33c3d3e9e451014307f985191c36478f939c5814a164dfbd64189e6877904",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/021.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 22,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/022.stdout.log",
+            "sha256": "88aaba923c8b6057cc7554162126809aad14e8a9371ed9faca529ed381712a71",
+            "bytes": 17095,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/022.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 23,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/023.stdout.log",
+            "sha256": "88a33c3d3e9e451014307f985191c36478f939c5814a164dfbd64189e6877904",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/023.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 24,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/024.stdout.log",
+            "sha256": "88aaba923c8b6057cc7554162126809aad14e8a9371ed9faca529ed381712a71",
+            "bytes": 17095,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/024.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 25,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/025.stdout.log",
+            "sha256": "88a33c3d3e9e451014307f985191c36478f939c5814a164dfbd64189e6877904",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/025.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 26,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/026.stdout.log",
+            "sha256": "88aaba923c8b6057cc7554162126809aad14e8a9371ed9faca529ed381712a71",
+            "bytes": 17095,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/026.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 27,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/027.stdout.log",
+            "sha256": "88a33c3d3e9e451014307f985191c36478f939c5814a164dfbd64189e6877904",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/027.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 28,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/028.stdout.log",
+            "sha256": "88aaba923c8b6057cc7554162126809aad14e8a9371ed9faca529ed381712a71",
+            "bytes": 17095,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/028.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 29,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/029.stdout.log",
+            "sha256": "88a33c3d3e9e451014307f985191c36478f939c5814a164dfbd64189e6877904",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/029.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 30,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/030.stdout.log",
+            "sha256": "88aaba923c8b6057cc7554162126809aad14e8a9371ed9faca529ed381712a71",
+            "bytes": 17095,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/030.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 31,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/031.stdout.log",
+            "sha256": "88a33c3d3e9e451014307f985191c36478f939c5814a164dfbd64189e6877904",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/031.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 32,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/032.stdout.log",
+            "sha256": "88aaba923c8b6057cc7554162126809aad14e8a9371ed9faca529ed381712a71",
+            "bytes": 17095,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/032.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 33,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/033.stdout.log",
+            "sha256": "88a33c3d3e9e451014307f985191c36478f939c5814a164dfbd64189e6877904",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/033.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 34,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/034.stdout.log",
+            "sha256": "88aaba923c8b6057cc7554162126809aad14e8a9371ed9faca529ed381712a71",
+            "bytes": 17095,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/034.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 35,
+        "kind": "add",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/035.stdout.log",
+            "sha256": "bd9fd96d39866ca1dc6b8e622a2ce6c4836808170e34df4110e9948437e21ffe",
+            "bytes": 224,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/035.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 36,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/036.stdout.log",
+            "sha256": "5ef5597e881ec27db4da88992e90b500897bdaa7244a8c46be33c0be2154a497",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/036.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 37,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/037.stdout.log",
+            "sha256": "88aaba923c8b6057cc7554162126809aad14e8a9371ed9faca529ed381712a71",
+            "bytes": 17095,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/037.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 38,
+        "kind": "add",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/038.stdout.log",
+            "sha256": "024a5f66b6f4af4041a36f96cb2d678e5b2e1ccc13cbe0393c9c58f86fecf79d",
+            "bytes": 223,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/038.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 39,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/039.stdout.log",
+            "sha256": "8231b9b6a92f58c760d1618cf9eb5ba7b17f0aeb2e1decd4c6e2e8a5ad0a2c7b",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/039.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 40,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/040.stdout.log",
+            "sha256": "88aaba923c8b6057cc7554162126809aad14e8a9371ed9faca529ed381712a71",
+            "bytes": 17095,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/040.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 41,
+        "kind": "add",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/041.stdout.log",
+            "sha256": "702ed7a7e7333bb8274eaeb05ddd2b86cf3a831cacbd8834b730c014c01a052d",
+            "bytes": 223,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/041.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 42,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/042.stdout.log",
+            "sha256": "305ab7912ae8038a9680f3116feefead3e44996bb90fcbfbce530b68467dddf1",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/042.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 43,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/043.stdout.log",
+            "sha256": "88aaba923c8b6057cc7554162126809aad14e8a9371ed9faca529ed381712a71",
+            "bytes": 17095,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/043.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 44,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/044.stdout.log",
+            "sha256": "305ab7912ae8038a9680f3116feefead3e44996bb90fcbfbce530b68467dddf1",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/044.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 45,
+        "kind": "--version",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/045.stdout.log",
+            "sha256": "9b36e5e64cab6d4da25e7646821d8836de0db92541a494199dfeb37b998a3b0c",
+            "bytes": 14,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/045.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 46,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/046.stdout.log",
+            "sha256": "305ab7912ae8038a9680f3116feefead3e44996bb90fcbfbce530b68467dddf1",
+            "bytes": 3278,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/046.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 47,
+        "kind": "remove",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/047.stdout.log",
+            "sha256": "7466cc817bdd777493ccf5e6f15c400d0b999fe107a550fe18e04632d00e1bbf",
+            "bytes": 474,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/047.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 48,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/048.stdout.log",
+            "sha256": "1cef91bb2ed5c35e904ae1a03e8035fa130e194cf761fca2af1f49abbf311349",
+            "bytes": 2529,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/048.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 49,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/049.stdout.log",
+            "sha256": "6efbe9a980c1d06d3c303a27234b9af22f59b608b19d06c3c69b50d549d5a575",
+            "bytes": 16971,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/049.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 50,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/050.stdout.log",
+            "sha256": "1cef91bb2ed5c35e904ae1a03e8035fa130e194cf761fca2af1f49abbf311349",
+            "bytes": 2529,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/050.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 51,
+        "kind": "remove",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/051.stdout.log",
+            "sha256": "6ece0f0d4e96f552d0a8168cd51b8759c07294c09230551b6fbffd39326bddfe",
+            "bytes": 474,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/051.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 52,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/052.stdout.log",
+            "sha256": "71ac4151e19576c8c4e5d720ada230c20a2094e812b339da73893fa9c1de7949",
+            "bytes": 1780,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/052.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 53,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/053.stdout.log",
+            "sha256": "1495d68475b03cc0823719685e494213397dfd324b2ace2ba94e956e7107e41d",
+            "bytes": 16847,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/053.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 54,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/054.stdout.log",
+            "sha256": "71ac4151e19576c8c4e5d720ada230c20a2094e812b339da73893fa9c1de7949",
+            "bytes": 1780,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/054.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 55,
+        "kind": "remove",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/055.stdout.log",
+            "sha256": "082541e963c096137160793fb1d45a4fb79df2b9ae12f7033f9636216145ba54",
+            "bytes": 473,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/055.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 56,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/056.stdout.log",
+            "sha256": "65a9cadd6297b6c12ee5deab034c66aa50d414565c7e0917db0f6a1806301315",
+            "bytes": 1034,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/056.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 57,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/057.stdout.log",
+            "sha256": "23e58b3cbf176b3927c09240d442947758ca408b8745cd27828707cd6b798ece",
+            "bytes": 16726,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/057.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 58,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/058.stdout.log",
+            "sha256": "65a9cadd6297b6c12ee5deab034c66aa50d414565c7e0917db0f6a1806301315",
+            "bytes": 1034,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/058.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 59,
+        "kind": "remove",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/059.stdout.log",
+            "sha256": "f9f6bd5bda51b1b8edb1dab3a67f885e1d4ff81a06c8cc7909082dd247252123",
+            "bytes": 357,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/059.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 60,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/060.stdout.log",
+            "sha256": "a7debdd3dcbc5ade56413c4c0f8a9e7068e65c35235e508b0b7647dee0fbb7b3",
+            "bytes": 266,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/060.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 61,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/061.stdout.log",
+            "sha256": "2a24baa18ac28660cdd3a9cdc01f58ba0115c7f1e56e4d87ef74d957494af50b",
+            "bytes": 16611,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/061.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 62,
+        "kind": "--version",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/062.stdout.log",
+            "sha256": "9b36e5e64cab6d4da25e7646821d8836de0db92541a494199dfeb37b998a3b0c",
+            "bytes": 14,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/062.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 63,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/063.stdout.log",
+            "sha256": "a7debdd3dcbc5ade56413c4c0f8a9e7068e65c35235e508b0b7647dee0fbb7b3",
+            "bytes": 266,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/063.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 64,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/064.stdout.log",
+            "sha256": "a7debdd3dcbc5ade56413c4c0f8a9e7068e65c35235e508b0b7647dee0fbb7b3",
+            "bytes": 266,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/064.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 65,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/065.stdout.log",
+            "sha256": "2a24baa18ac28660cdd3a9cdc01f58ba0115c7f1e56e4d87ef74d957494af50b",
+            "bytes": 16611,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/065.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 66,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/066.stdout.log",
+            "sha256": "a7debdd3dcbc5ade56413c4c0f8a9e7068e65c35235e508b0b7647dee0fbb7b3",
+            "bytes": 266,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/066.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 67,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/067.stdout.log",
+            "sha256": "a7debdd3dcbc5ade56413c4c0f8a9e7068e65c35235e508b0b7647dee0fbb7b3",
+            "bytes": 266,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/067.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 68,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/068.stdout.log",
+            "sha256": "2a24baa18ac28660cdd3a9cdc01f58ba0115c7f1e56e4d87ef74d957494af50b",
+            "bytes": 16611,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/068.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 69,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/069.stdout.log",
+            "sha256": "a7debdd3dcbc5ade56413c4c0f8a9e7068e65c35235e508b0b7647dee0fbb7b3",
+            "bytes": 266,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/069.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 70,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/070.stdout.log",
+            "sha256": "a7debdd3dcbc5ade56413c4c0f8a9e7068e65c35235e508b0b7647dee0fbb7b3",
+            "bytes": 266,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/070.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 71,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/071.stdout.log",
+            "sha256": "2a24baa18ac28660cdd3a9cdc01f58ba0115c7f1e56e4d87ef74d957494af50b",
+            "bytes": 16611,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/071.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 72,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/072.stdout.log",
+            "sha256": "a7debdd3dcbc5ade56413c4c0f8a9e7068e65c35235e508b0b7647dee0fbb7b3",
+            "bytes": 266,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/072.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 73,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/073.stdout.log",
+            "sha256": "a7debdd3dcbc5ade56413c4c0f8a9e7068e65c35235e508b0b7647dee0fbb7b3",
+            "bytes": 266,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/073.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 74,
+        "kind": "compose",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/074.stdout.log",
+            "sha256": "2a24baa18ac28660cdd3a9cdc01f58ba0115c7f1e56e4d87ef74d957494af50b",
+            "bytes": 16611,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/074.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      },
+      {
+        "ordinal": 75,
+        "kind": "list",
+        "code": 0,
+        "streams": {
+          "stdout": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/075.stdout.log",
+            "sha256": "a7debdd3dcbc5ade56413c4c0f8a9e7068e65c35235e508b0b7647dee0fbb7b3",
+            "bytes": 266,
+            "mode": "600"
+          },
+          "stderr": {
+            "path": ".cache/alpha-community-security-public-sync/upgrade-runs/attempt-1788700880065-45343960-df51-485c-808d-f3e316828254/commands/075.stderr.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0,
+            "mode": "600"
+          }
+        }
+      }
+    ],
+    "commandCount": 75,
+    "rawStreamsVerified": 150,
+    "archiveChecks": [
+      {
+        "packageName": "@dsh-themes-community/theme-pack-alpha",
+        "stage": "old",
+        "version": "1.0.0-alpha.1",
+        "sha256": "cefde71db159f9a47e423c863254f05cf5413a24652081c51332abe7e27d4160",
+        "fileCount": 6,
+        "archiveFilesAndRecordedInstalledFilesMatch": true,
+        "rawOfficialListVersionObserved": true
+      },
+      {
+        "packageName": "@dsh-themes-community/theme-pack-alpha",
+        "stage": "new",
+        "version": "1.0.0-alpha.2",
+        "sha256": "20ed1b2b8dc7bf18670e9e1a7768bebbcf7cbfdfa00434b01433e388209bbb16",
+        "fileCount": 6,
+        "archiveFilesAndRecordedInstalledFilesMatch": true,
+        "rawOfficialListVersionObserved": true
+      },
+      {
+        "packageName": "@dsh-themes-community/catppuccin-alpha",
+        "stage": "old",
+        "version": "1.0.0-alpha.1",
+        "sha256": "4cd4f8f04902e836a3596238984426e604b1878334a382a4e3079fdea4b29159",
+        "fileCount": 6,
+        "archiveFilesAndRecordedInstalledFilesMatch": true,
+        "rawOfficialListVersionObserved": true
+      },
+      {
+        "packageName": "@dsh-themes-community/catppuccin-alpha",
+        "stage": "new",
+        "version": "1.0.0-alpha.2",
+        "sha256": "ab01b5d157aa437413620a0bcbd2fd29b828a025644bf6169f2254c9e70cf08d",
+        "fileCount": 6,
+        "archiveFilesAndRecordedInstalledFilesMatch": true,
+        "rawOfficialListVersionObserved": true
+      },
+      {
+        "packageName": "@dsh-themes-community/solarized-alpha",
+        "stage": "old",
+        "version": "1.0.0-alpha.1",
+        "sha256": "1ade7da6d33025d8fc141b89940c122c35af611e2f0708778b64842fa9e2eeb7",
+        "fileCount": 6,
+        "archiveFilesAndRecordedInstalledFilesMatch": true,
+        "rawOfficialListVersionObserved": true
+      },
+      {
+        "packageName": "@dsh-themes-community/solarized-alpha",
+        "stage": "new",
+        "version": "1.0.0-alpha.2",
+        "sha256": "44f1ae4e9a7d36022d19097ef83f2e287271d4ead02178d5f426ad1de7439f62",
+        "fileCount": 6,
+        "archiveFilesAndRecordedInstalledFilesMatch": true,
+        "rawOfficialListVersionObserved": true
+      },
+      {
+        "packageName": "@dsh-themes-community/premium-alpha",
+        "stage": "old",
+        "version": "1.0.0-alpha.1",
+        "sha256": "2fa67a45ddb273e2c52ad02988d4f0251ad5f6ff7304d28e16a24be2a44174a7",
+        "fileCount": 6,
+        "archiveFilesAndRecordedInstalledFilesMatch": true,
+        "rawOfficialListVersionObserved": true
+      },
+      {
+        "packageName": "@dsh-themes-community/premium-alpha",
+        "stage": "new",
+        "version": "1.0.0-alpha.2",
+        "sha256": "7bf71d12f605bb6d0a320b5b754fca84256484a2da3d8f5d83b84aec4acbae50",
+        "fileCount": 6,
+        "archiveFilesAndRecordedInstalledFilesMatch": true,
+        "rawOfficialListVersionObserved": true
+      }
+    ],
+    "recordedInstalledFileChecks": 48,
+    "oldAddCalls": 4,
+    "newAddCalls": 4,
+    "batchDedupStatuses": {
+      "installed": 4,
+      "alreadyInstalled": 11
+    },
+    "activations": [
+      {
+        "catalogId": 1101,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-theme-pack-catppuccin-mocha"
+      },
+      {
+        "catalogId": 1102,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-theme-pack-gruvbox-dark"
+      },
+      {
+        "catalogId": 1103,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-theme-pack-everforest"
+      },
+      {
+        "catalogId": 1104,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-theme-pack-rose-pine"
+      },
+      {
+        "catalogId": 1105,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-theme-pack-solarized-dark"
+      },
+      {
+        "catalogId": 1106,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-theme-pack-kanagawa"
+      },
+      {
+        "catalogId": 1107,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-theme-pack-tokyo-night"
+      },
+      {
+        "catalogId": 1108,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-theme-pack-tokyo-storm"
+      },
+      {
+        "catalogId": 1109,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-theme-pack-night-owl"
+      },
+      {
+        "catalogId": 1110,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-theme-pack-nord"
+      },
+      {
+        "catalogId": 1111,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-theme-pack-dracula"
+      },
+      {
+        "catalogId": 1112,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-theme-pack-one-dark"
+      },
+      {
+        "catalogId": 1201,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-catppuccin-catppuccin-latte"
+      },
+      {
+        "catalogId": 1202,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-solarized-solarized-dark"
+      },
+      {
+        "catalogId": 1203,
+        "status": "selected",
+        "observedSelection": "dsh-alpha-premium-tokyo-night"
+      }
+    ],
+    "coldRestart": {
+      "status": "passed",
+      "beforeSelections": {
+        "/api/dsh-community-palettes/theme-pack": "off",
+        "/api/dsh-community-palettes/catppuccin": "off",
+        "/api/dsh-community-palettes/solarized": "off",
+        "/api/dsh-community-palettes/premium/palette": "dsh-alpha-premium-tokyo-night"
+      },
+      "afterSelections": {
+        "/api/dsh-community-palettes/theme-pack": "off",
+        "/api/dsh-community-palettes/catppuccin": "off",
+        "/api/dsh-community-palettes/solarized": "off",
+        "/api/dsh-community-palettes/premium/palette": "dsh-alpha-premium-tokyo-night"
+      },
+      "scope": "One actual cold restart of the last selected #1203 state across all four palette APIs."
+    },
+    "actualRemoveCalls": 4,
+    "repeatedRemoveCalls": 0,
+    "removedRoutes": [
+      {
+        "route": "/api/dsh-community-palettes/theme-pack",
+        "status": 404
+      },
+      {
+        "route": "/api/dsh-community-palettes/catppuccin",
+        "status": 404
+      },
+      {
+        "route": "/api/dsh-community-palettes/solarized",
+        "status": 404
+      },
+      {
+        "route": "/api/dsh-community-palettes/premium/palette",
+        "status": 404
+      }
+    ],
+    "hostOwnershipRecords": [
+      {
+        "phase": "upgraded",
+        "launcherPid": 28681,
+        "listenerPid": 28868,
+        "parentChain": [
+          28868,
+          28719,
+          28681
+        ]
+      },
+      {
+        "phase": "upgraded-cold-restart",
+        "launcherPid": 29025,
+        "listenerPid": 29064,
+        "parentChain": [
+          29064,
+          29045,
+          29025
+        ]
+      },
+      {
+        "phase": "removed-cold-restart",
+        "launcherPid": 30803,
+        "listenerPid": 30852,
+        "parentChain": [
+          30852,
+          30835,
+          30803
+        ]
+      }
+    ],
+    "cleanup": {
+      "officialPackageRemoval": true,
+      "repeatedRemoveCalls": 0,
+      "port3428Closed": true
+    },
+    "startedAt": "2026-09-06T13:21:20.079Z",
+    "completedAt": "2026-09-06T13:22:18.860Z"
+  },
+  "confirmedFindings": [],
+  "claimableScope": [
+    "3 ID public installer API/official CLI run on a fresh custom store: two actual archive adds, three authenticated selections, companion edit conflict preserved after package removal, resolving that controlled edit followed by successful high-level retry, two actual removals total, and twelve original fixture files restored byte-for-byte.",
+    "Real four-package alpha.1 to alpha.2 CLI upgrade in a separate empty profile; the old Web host was never started. All eight archive digests and 48 fixed package-file values agree with the recorded installed-byte checks and official raw list versions. Fifteen IDs cause four new add calls and eleven within-batch skips.",
+    "Fifteen actual authenticated palette selections, then one cold restart preserving the last four-route selection state. Four removals, zero repeated removal calls, and four routes return 404 after the removed profile starts."
+  ],
+  "limits": [
+    "This reviewer performed offline evidence/source/file reads only, not a new run, installation, HTTP request, browser or process probe.",
+    "All 206 command stdout/stderr files were read only for SHA/size and, for list stdout, isolated profile/version/absence checks. No raw command values are emitted. Server logs were not read, hashed or copied.",
+    "The 48 installed package-file hashes are driver observations made before successful uninstall; their input archive bytes and raw version listings were independently rechecked, but those removed installed trees cannot now be reread.",
+    "Intermediate HTTP responses and the conflict-time edited file were not separately snapshotted; receipt values are supported by exact executed source assertions. The edited digest was independently reconstructed; the twelve final restored files still exist and were independently reread.",
+    "No fifteen independent cold restarts, alpha.1 preference migration, browser rendering/visual proof, custom import/delete, cross-site browser or credentialed model functionality is certified by these two runs.",
+    "3 ID host cleanup was checked by its existing lsof-based driver; this review does not upgrade that evidence to the upgraded driver’s separate TCP/owner-chain protocol.",
+    "Source snapshots remain authoritative even if a current working file later changes; currentSourceStillExact is recorded individually. Raw original reports remain unchanged."
+  ],
+  "noServerLogRead": true,
+  "noRawCredentialOutput": true,
+  "runtimeRerun": false,
+  "trackedSourceModified": false
+}

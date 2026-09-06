@@ -1,0 +1,7 @@
+{
+  "pid": 77144,
+  "signal": "SIGTERM",
+  "portClosed": true,
+  "checkedAt": "2026-09-06T12:44:52.112058+00:00",
+  "purpose": "Give restart verifier ownership of its own next server process; isolated profile/browser and all evidence retained."
+}

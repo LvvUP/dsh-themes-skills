@@ -1,6 +1,7 @@
 import z from '@deepseek-ai/schemastery';
 
 import config from './adapter-config.json' with { type: 'json' };
+import { authorizePaletteRequest } from './palette-api-security.mjs';
 
 const namespace = `dsh-community-${config.group}`;
 const route = `/api/dsh-community-palettes/${config.group}`;
@@ -19,7 +20,7 @@ function json(res, status, body) {
 }
 
 export const name = `dsh-community-${config.group}`;
-export const inject = ['settings', 'webServer'];
+export const inject = ['settings', 'webServer', 'connection'];
 export function apply(ctx) {
   ctx.settings.register(namespace, schema);
   ctx.effect(
@@ -28,6 +29,7 @@ export function apply(ctx) {
         kind: 'exact',
         path: route,
         async handler(req, res) {
+          if (!authorizePaletteRequest(ctx.connection, req, res)) return;
           const current = () => ({
             ...ctx.settings.get(namespace),
             themes: config.themes,

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-09-06T12:45:32.325914+00:00",
+  "status": "two-current-runtime-screenshots-reviewed",
+  "packageVersion": "1.0.0-alpha.2",
+  "screenshots": [
+    {
+      "path": "output/playwright/community-palettes-alpha-security/attempt-1/premium-light.png",
+      "sha256": "821e30c17df999bf15eb1b941d8d6aba3c1c6254531eea7d1d0263c30385a193",
+      "bytes": 85180,
+      "width": 1280,
+      "height": 720,
+      "mode": "light",
+      "actualReviewer": "Codex /root",
+      "review": "Viewed actual screenshot. Palette controls and labels are readable in this captured settings region, including Catppuccin, Premium and Solarized rows; no visual change was made. This is not a full-page or mobile audit."
+    },
+    {
+      "path": "output/playwright/community-palettes-alpha-security/attempt-1/premium-dark.png",
+      "sha256": "80bb63b488635909cc08bceba92d66be2361857dc07939d0cdd516efb54b084f",
+      "bytes": 79034,
+      "width": 1280,
+      "height": 720,
+      "mode": "dark",
+      "actualReviewer": "Codex /root",
+      "review": "Viewed actual screenshot. Palette controls and labels are readable in this captured settings region, including Catppuccin, Premium and Solarized rows; no visual change was made. This is not a full-page or mobile audit."
+    }
+  ],
+  "noArtworkOrCssChanges": true,
+  "limits": [
+    "Images are actual current installed Chrome-channel runtime snapshots, independent of the final website 336 sample.",
+    "Authentication and 32-choice behavior are separate actual checks; these images do not by themselves certify all choices or restarts."
+  ]
+}
