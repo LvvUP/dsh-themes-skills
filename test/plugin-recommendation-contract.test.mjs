@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import {
   assertRecommendationOnlyTransition,
   loadRecommendationTransition,
@@ -38,7 +39,7 @@ test("current Web-only recommendation preserves all 100 original recipes and ind
     100,
   );
   const result = await loadRecommendationTransition(
-    new URL("..", import.meta.url).pathname,
+    fileURLToPath(new URL("..", import.meta.url)),
   );
   assert.equal(result.status, "verified-recommendation-only");
   assert.equal(result.currentTop10[9], 3004);
