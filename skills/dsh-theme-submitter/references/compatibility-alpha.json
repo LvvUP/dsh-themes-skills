@@ -1,0 +1,57 @@
+{
+  "dshPackageVersion": "0.1.3-alpha.1",
+  "officialRelease": {
+    "tag": "dsh-v0.1.3-alpha.1",
+    "sourceCommit": "d347e703908d0406b7a7ef80e3a0e594d86b2215"
+  },
+  "npmArtifacts": null,
+  "sourceBuild": {
+    "repository": "https://github.com/deepseek-ai/deepseek-harness.git",
+    "lockfileSha256": "2c903ab870f821ee2db62fa9417d11b1c2b9c65fbeec30e851ddc53c4cc8c383",
+    "packageManager": "pnpm@11.7.0",
+    "nodeVersion": "24.15.0",
+    "buildScript": "build:official",
+    "cliEntry": {
+      "path": "apps/cli/lib/bin.js",
+      "sha256": "50aab35c14fc0e7fceaa39b9a0b9a72a52e4e24618661a9a05cca0777471f762"
+    },
+    "clientModuleSet": {
+      "algorithm": "sorted-path-tab-size-tab-sha256-lf",
+      "scope": "packages/client/**/lib/client.js",
+      "fileCount": 41,
+      "sha256": "187fb91fb8427b7b3e5c327750f079d69da6724e11ea298536dbda1a3af06a60"
+    }
+  },
+  "tokenCatalogSha256": "fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926",
+  "uiThemeClientBundleSha256": "355af931047db81aed07e48333202cd14ffd1edf9c0314d71c432c2bae1a74ad",
+  "webEntrypoints": {
+    "indexHtml": {
+      "path": "dist/index.html",
+      "sha256": "e7df1e2c492b03a707ce909889f48a1f324aedcb7d6ec2bd51601acae01af1af"
+    },
+    "mainJavaScript": {
+      "path": "dist/assets/index-eaoyilRb.js",
+      "sha256": "4425ba9be27595f9fd9736740e1bfdbb25d03b6a90ac04cc536ff07a01ae2769"
+    },
+    "mainStylesheet": {
+      "path": "dist/assets/index-C3Rc1vHc.css",
+      "sha256": "25bc8a608c0268db90e2ffc5dbd2ffc1e62744cbb814ed463bb8b5ab6fed3e68"
+    },
+    "vendorJavaScript": {
+      "path": "dist/assets/vendor-CCJJTK99.js",
+      "sha256": "38f95ea3ff85b49dc4d8f237db208bbaedd2cb8c31611215c246dde41786ff21"
+    },
+    "vendorStylesheet": {
+      "path": "dist/assets/vendor-BNsW4eBh.css",
+      "sha256": "9860041e810431da5a6b83e63f883ab8ff4fc49b4af3fc76681b46f778783a9f"
+    }
+  },
+  "webAssetSet": {
+    "algorithm": "sorted-path-tab-size-tab-sha256-lf",
+    "scope": "dist/assets/**",
+    "fileCount": 111,
+    "sha256": "5082812433d0e7b5c9ff075c0d0f66dcac112b19ec7918d1211e6e049ab89986"
+  },
+  "selectorCatalogSha256": "663aa5927591ac99076f924ee9cd6f9bd09e6a8a9ee1e6b8b1b0d9e3093df807",
+  "runtimeAttestationSha256": "bdf642512562483aa052224698416a3c216060df54f0ff07f43c50298beb5f81"
+}

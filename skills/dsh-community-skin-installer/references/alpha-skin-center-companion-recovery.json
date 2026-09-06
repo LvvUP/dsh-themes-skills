@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "dshVersion": "0.1.3-alpha.1",
+  "sourceCommit": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "packageName": "@dsh-themes-community/skin-center-alpha",
+  "packageVersion": "0.2.5-alpha.2",
+  "artifactSha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+  "previousRuntimeReceiptSha256": "15398fbf2ab593446f7ae593e1d28194f36155f992cbed9797a1f10f8fa13e7a",
+  "publicImplementation": "skills/dsh-community-skin-installer/scripts/companion-files.mjs",
+  "publicImplementationSha256": "36e5d72237851aab572b96a5a96866d28f3d7027bf158310ad367ae16486909d",
+  "checkedAt": "2026-09-06",
+  "scope": "Supplemental real filesystem regression of the current public companion helper: exact installation, original-directory backup and byte-exact recovery for QQ98 and THS. Package installation, activation and browser lifecycle remain bound to the unchanged earlier runtime receipt. No replacement package or browser certification is claimed.",
+  "reason": "The helper now retains an old temporary backup if cleanup fails after the new receipt is committed, instead of rolling back files while leaving the new receipt. The normal backup/restore path was re-exercised against the current implementation bytes.",
+  "results": [
+    {
+      "catalogId": 2206,
+      "skinId": "qq98",
+      "installStatus": "installed",
+      "backupCreated": true,
+      "installedFiles": [
+        {
+          "path": "LICENSE",
+          "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "bytes": 1521
+        },
+        {
+          "path": "NOTICE",
+          "sha256": "ad78fd2e39dc3be9e2d9eb0ee8a4f5c1c02385633c1a4e3e7ad35e21c184a350",
+          "bytes": 975
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "000613dbdcdc99f0ef2f6ef8012a15ec445a6173d319d654704449a213eff684",
+          "bytes": 764
+        },
+        {
+          "path": "patches.css",
+          "sha256": "d62653ea7b5061e9f91c70069eb5edf93ba92e179fd8ba3a50dda75a51097833",
+          "bytes": 34823
+        },
+        {
+          "path": "skin.css",
+          "sha256": "6e414c9f689dbfa978001f8d332237e64b22fedd51da16e2b20a48f3550937a2",
+          "bytes": 506
+        },
+        {
+          "path": "skin.json",
+          "sha256": "53e20c335d0fef3e802281e2636e35719a2c39c19433bb42363480ba24103140",
+          "bytes": 1327
+        }
+      ],
+      "originalFiles": [
+        {
+          "path": "LICENSE",
+          "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "bytes": 1521
+        },
+        {
+          "path": "NOTICE",
+          "sha256": "e8c4a8a30ae46f0fffbb076b0bed62a30b5ee8b51ff353c59cbf4862823768c7",
+          "bytes": 752
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "000613dbdcdc99f0ef2f6ef8012a15ec445a6173d319d654704449a213eff684",
+          "bytes": 764
+        },
+        {
+          "path": "patches.css",
+          "sha256": "33a7670fc6188f7b06f19d3a18d8cd00f5839168808587f700cfa00195fe4bd6",
+          "bytes": 34823
+        },
+        {
+          "path": "skin.css",
+          "sha256": "6e414c9f689dbfa978001f8d332237e64b22fedd51da16e2b20a48f3550937a2",
+          "bytes": 506
+        },
+        {
+          "path": "skin.json",
+          "sha256": "426ac9c8b5517577db3486df465304171ea3533ed50591f6b1b19d78a5dbd423",
+          "bytes": 1173
+        }
+      ],
+      "restoreStatus": "restored",
+      "restoredFiles": [
+        {
+          "path": "LICENSE",
+          "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "bytes": 1521
+        },
+        {
+          "path": "NOTICE",
+          "sha256": "e8c4a8a30ae46f0fffbb076b0bed62a30b5ee8b51ff353c59cbf4862823768c7",
+          "bytes": 752
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "000613dbdcdc99f0ef2f6ef8012a15ec445a6173d319d654704449a213eff684",
+          "bytes": 764
+        },
+        {
+          "path": "patches.css",
+          "sha256": "33a7670fc6188f7b06f19d3a18d8cd00f5839168808587f700cfa00195fe4bd6",
+          "bytes": 34823
+        },
+        {
+          "path": "skin.css",
+          "sha256": "6e414c9f689dbfa978001f8d332237e64b22fedd51da16e2b20a48f3550937a2",
+          "bytes": 506
+        },
+        {
+          "path": "skin.json",
+          "sha256": "426ac9c8b5517577db3486df465304171ea3533ed50591f6b1b19d78a5dbd423",
+          "bytes": 1173
+        }
+      ]
+    },
+    {
+      "catalogId": 2207,
+      "skinId": "ths",
+      "installStatus": "installed",
+      "backupCreated": true,
+      "installedFiles": [
+        {
+          "path": "LICENSE",
+          "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "bytes": 1521
+        },
+        {
+          "path": "NOTICE",
+          "sha256": "a02b7b8074d87aa8ba6e1a606fc7dd841773729dc66349fd688016bc19615850",
+          "bytes": 974
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "68ebcc6bbfb3c8daf2973491fede2d85719d788703037b2510f71ffab7d4c917",
+          "bytes": 762
+        },
+        {
+          "path": "patches.css",
+          "sha256": "5bec645eac154a86a8439b44df7301e55990937562e1a8715667a8392334f664",
+          "bytes": 31056
+        },
+        {
+          "path": "skin.css",
+          "sha256": "b5cb4887e98ada90f28b2c90fccd23a2c7416a8cae0acca71a3d8268b08af7e2",
+          "bytes": 506
+        },
+        {
+          "path": "skin.json",
+          "sha256": "54cf95283d617e0f853a56db99182c38b34e83173af79ba8540772d3bf15c08b",
+          "bytes": 1355
+        }
+      ],
+      "originalFiles": [
+        {
+          "path": "LICENSE",
+          "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "bytes": 1521
+        },
+        {
+          "path": "NOTICE",
+          "sha256": "331121edcd6e0d7fd740db20b3e393d195e7393c6237b8f267eea66794a0cfe8",
+          "bytes": 751
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "68ebcc6bbfb3c8daf2973491fede2d85719d788703037b2510f71ffab7d4c917",
+          "bytes": 762
+        },
+        {
+          "path": "patches.css",
+          "sha256": "648fd39a7168a71cc79fbfc4a6dcdb99587362cd2e58604f6c743f045e3a714e",
+          "bytes": 31056
+        },
+        {
+          "path": "skin.css",
+          "sha256": "b5cb4887e98ada90f28b2c90fccd23a2c7416a8cae0acca71a3d8268b08af7e2",
+          "bytes": 506
+        },
+        {
+          "path": "skin.json",
+          "sha256": "5af025c011797aa34d2a0d2dbf6edfafb30a4e199f9fe2a6075b28a183c76c17",
+          "bytes": 1201
+        }
+      ],
+      "restoreStatus": "restored",
+      "restoredFiles": [
+        {
+          "path": "LICENSE",
+          "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "bytes": 1521
+        },
+        {
+          "path": "NOTICE",
+          "sha256": "331121edcd6e0d7fd740db20b3e393d195e7393c6237b8f267eea66794a0cfe8",
+          "bytes": 751
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sha256": "68ebcc6bbfb3c8daf2973491fede2d85719d788703037b2510f71ffab7d4c917",
+          "bytes": 762
+        },
+        {
+          "path": "patches.css",
+          "sha256": "648fd39a7168a71cc79fbfc4a6dcdb99587362cd2e58604f6c743f045e3a714e",
+          "bytes": 31056
+        },
+        {
+          "path": "skin.css",
+          "sha256": "b5cb4887e98ada90f28b2c90fccd23a2c7416a8cae0acca71a3d8268b08af7e2",
+          "bytes": 506
+        },
+        {
+          "path": "skin.json",
+          "sha256": "5af025c011797aa34d2a0d2dbf6edfafb30a4e199f9fe2a6075b28a183c76c17",
+          "bytes": 1201
+        }
+      ]
+    }
+  ],
+  "managedReceiptDirectoryEmpty": true,
+  "temporaryBackupDirectoryEmpty": true,
+  "status": "passed"
+}

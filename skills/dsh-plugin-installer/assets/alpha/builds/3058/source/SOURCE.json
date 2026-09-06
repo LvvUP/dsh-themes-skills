@@ -1,0 +1,16 @@
+{
+  "sourceRepository": "humblebanana/dsh-record-replay",
+  "sourceRevision": "32d06f7db906914e278d1552728d1d63f191d6ad",
+  "files": {
+    "LICENSE": "a884ca224630c6e7baff04bbb64f739ce5362eb29bcb9726111eb79a886df639",
+    "README.md": "109007ecf7a3a4d9c6cb5d6e63e5752fd419c1c2963ec54fb1592417d86da2b2",
+    "cordis.patch.yml": "812690d2879009c23dfc09a88d482a59122425db2c01e4694f937925a329e630",
+    "package.json": "4df18e2492d42eb08829138743b35ca7aaeeb448a571c8d9c8a670373aa5efbb",
+    "src/config.ts": "615011d41264550e293ca467c19576d5c5e3d720b430b99d6cf15088568a8143",
+    "src/index.ts": "2b190c8f05caf266db83133b7cd8bf8608048519945ecd2aa4e001d85832bfa4",
+    "src/runner.ts": "b19ef5c8e337e4a13c53a2fe9951d85de6a5e6f6be563c125068a424ad1c603f",
+    "src/skill.ts": "f3fdabcdd2ebfa3e54cb97fb28ba7b5206158b28334869d8fa6b22695c9b52dd",
+    "src/skillCreate.ts": "6b9e03fcb6f5b0e502564b407a1ef152c565286153b6843a0fa48989e826bac0",
+    "src/tools.ts": "a21203c4845079538065575718f950f495881fc066a61478b315bc0c5750227c"
+  }
+}

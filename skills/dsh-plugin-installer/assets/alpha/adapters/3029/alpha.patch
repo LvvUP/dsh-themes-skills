@@ -1,0 +1,178 @@
+--- a/package.json
++++ b/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "dsh-session-tree",
+-  "version": "0.2.0-beta.1",
++  "version": "0.2.0-beta.1-dsh.alpha.1",
+   "description": "Lightweight read-only session lineage navigation for DeepSeek Harness",
+   "keywords": [
+     "dsh-plugin",
+@@ -30,74 +30,39 @@
+   ],
+   "type": "module",
+   "main": "lib/index.js",
+-  "types": "lib/types/index.d.ts",
+   "exports": {
+-    ".": {
+-      "types": "./lib/types/index.d.ts",
+-      "default": "./lib/index.js"
+-    },
+-    "./cordis.patch.yml": "./cordis.patch.yml",
+-    "./client": {
+-      "types": "./lib/types/client/index.d.ts",
+-      "default": "./lib/client.js"
+-    },
+-    "./package.json": "./package.json"
++    ".": "./lib/index.js",
++    "./client": "./lib/client.js",
++    "./package.json": "./package.json",
++    "./cordis.patch.yml": "./cordis.patch.yml"
+   },
+   "files": [
+-    "lib/index.js",
+-    "lib/client.js",
+-    "lib/types/index.d.ts",
+-    "lib/types/client/index.d.ts",
+-    "lib/types/client/locales.d.ts",
+-    "cordis.patch.yml",
++    "lib",
++    "src",
++    "LICENSE",
+     "README.md",
+     "README.en.md",
+-    "LICENSE",
+-    "CHANGELOG.md"
++    "ADAPTATION.md",
++    "cordis.patch.yml"
+   ],
+   "license": "MIT",
+-  "publishConfig": {
+-    "access": "public",
+-    "provenance": true,
+-    "tag": "next"
++  "engines": {
++    "node": ">=24"
+   },
+-  "engines": {
+-    "node": "^22.19.0 || >=24.0.0"
+-  },
+-  "packageManager": "pnpm@11.7.0",
+   "dsh": {
+     "bundle": {
+       "patch": "./cordis.patch.yml"
+     },
+     "client": {
+       "inject": [
++        "@deepseek-ai/dsh-api-session-controller",
++        "@deepseek-ai/dsh-client-ui-renderer",
+         "@deepseek-ai/dsh-client-locale",
+-        "@deepseek-ai/dsh-client-runtime",
++        "@deepseek-ai/dsh-client-ui-session",
+         "@deepseek-ai/dsh-client-ui-conversation"
+       ],
+       "platform": "web"
+     }
+-  },
+-  "scripts": {
+-    "build": "pnpm run clean && tsc -p tsconfig.json && tsdown",
+-    "bundle": "tsdown",
+-    "check:bundle": "node scripts/check-bundle.mjs",
+-    "check:reproducible": "node scripts/check-reproducible-build.mjs",
+-    "clean": "node scripts/clean.mjs",
+-    "pack:check": "pnpm pack --dry-run",
+-    "prepare": "pnpm run build",
+-    "release:check": "node scripts/check-release.mjs",
+-    "test": "vitest run",
+-    "verify": "pnpm run typecheck && pnpm run test && pnpm run build && pnpm run check:bundle && pnpm run check:reproducible && pnpm run release:check",
+-    "typecheck": "tsc -p tsconfig.json --noEmit"
+-  },
+-  "peerDependencies": {
+-    "@deepseek-ai/cordis": "^4.0.1",
+-    "@deepseek-ai/dsh-client-locale": "0.1.0-rc.7",
+-    "@deepseek-ai/dsh-client-runtime": "0.1.0-rc.7",
+-    "@deepseek-ai/dsh-client-ui-conversation": "0.1.0-rc.7",
+-    "@deepseek-ai/dsh-client-ui-slots": "0.1.0-rc.7",
+-    "react": "^18.2.0"
+   },
+   "peerDependenciesMeta": {
+     "@deepseek-ai/cordis": {
+@@ -118,21 +83,5 @@
+     "react": {
+       "optional": true
+     }
+-  },
+-  "devDependencies": {
+-    "@deepseek-ai/cordis": "4.0.1",
+-    "@deepseek-ai/dsh-client-locale": "0.1.0-rc.7",
+-    "@deepseek-ai/dsh-client-runtime": "0.1.0-rc.7",
+-    "@deepseek-ai/dsh-client-ui-conversation": "0.1.0-rc.7",
+-    "@deepseek-ai/dsh-client-ui-slots": "0.1.0-rc.7",
+-    "@types/react": "~18.3.1",
+-    "@types/react-dom": "~18.3.0",
+-    "jsdom": "29.1.1",
+-    "lightningcss": "1.32.0",
+-    "react": "^18.2.0",
+-    "react-dom": "^18.2.0",
+-    "tsdown": "0.22.2",
+-    "typescript": "6.0.3",
+-    "vitest": "4.1.8"
+   }
+ }
+--- a/src/client/BranchesView.tsx
++++ b/src/client/BranchesView.tsx
+@@ -1,7 +1,8 @@
+ import { useEffect, useMemo, useState, type CSSProperties } from 'react'
+ import type {
+-  SessionId, SessionListState, SessionSummary,
+-} from '@deepseek-ai/dsh-client-runtime/client'
++  SessionListState, SessionSummary,
++} from '@deepseek-ai/dsh-api-session-controller/client'
++import type { SessionId } from '@deepseek-ai/dsh-session/types'
+ import type { ConvViewProps } from '@deepseek-ai/dsh-client-ui-conversation/client'
+ import type {
+   InjectFace, PropsLocale, TranslateNS,
+@@ -43,7 +44,7 @@
+   }
+ }
+ 
+-/** Preserve Host order, then append rc.7's breadcrumb-only subagent route. */
++/** Preserve Host order, then append the breadcrumb-only subagent route. */
+ function orderedSummaries(sessions: SessionListState): BranchSummary[] {
+   const rows: BranchSummary[] = []
+   const seen = new Set<SessionId>()
+--- a/src/client/index.ts
++++ b/src/client/index.ts
+@@ -1,5 +1,8 @@
+ /** Browser entry: a read-only view over DSH's native Session lineage. */
+-import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client'
++import type { Context as ClientContext } from '@deepseek-ai/cordis'
++import type {} from '@deepseek-ai/dsh-api-session-controller/client'
++import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
++import { mountStyle } from './style.ts'
+ import type {} from '@deepseek-ai/dsh-client-locale/client'
+ import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
+ import { BranchesView, type BranchesViewInjected } from './BranchesView.tsx'
+@@ -20,6 +23,7 @@
+  * creation; this plugin only projects and navigates the resulting lineage.
+  */
+ export function apply(ctx: ClientContext): void {
++  ctx.effect(mountStyle, 'dsh-session-tree: styles')
+   ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'dsh-session-tree: dictionaries')
+   const t = ctx.locale.bind(NS)
+ 
+--- /dev/null
++++ b/src/client/style.ts
+@@ -0,0 +1,12 @@
++// Replaced at build time with the exact CSS Modules output.
++declare const __DSH_SESSION_TREE_CSS__: string
++
++/** Own one stylesheet for this plugin lifecycle, including hot removal. */
++export function mountStyle(): () => void {
++  const style = document.createElement('style')
++  style.dataset.plugin = 'dsh-session-tree'
++  style.dataset.pluginCss = 'dsh-session-tree/BranchesView.module.css'
++  style.textContent = __DSH_SESSION_TREE_CSS__
++  document.head.appendChild(style)
++  return () => style.remove()
++}

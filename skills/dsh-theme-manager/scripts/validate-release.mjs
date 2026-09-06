@@ -12,6 +12,7 @@ import {
 } from './hosted-artifact-authority.mjs';
 import { validateRollbackRecord } from './theme-state.mjs';
 import { loadCertifiedAuthority } from './baseline-authority.mjs';
+import { validateAlphaRelease } from './alpha-authority.mjs';
 
 const HISTORICAL_V2 = Object.freeze({
   dshPackageVersion: '0.1.0-rc.6',
@@ -343,6 +344,10 @@ export async function validateReleaseRecord(
   const record = object(rawRecord, 'release record');
   const manifest = object(record.manifest, 'manifest');
   const origin = trustedOrigin(rawOrigin);
+  if (manifest.compatibility?.dshPackageVersion === '0.1.3-alpha.1') {
+    if (authority !== 'current') throw new Error('Alpha recovery uses exact current source artifacts, not historical runtime packages.');
+    return validateAlphaRelease(record, origin);
+  }
   const result = manifest.schemaVersion === '2.0'
     ? validateV2(record, manifest, origin)
     : manifest.schemaVersion === '3.0'

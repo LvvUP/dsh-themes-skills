@@ -1,0 +1,4 @@
+# @dsh-themes/community-dsh-scenery-background bundle patch: insert this plugin's client row.
+- insert:
+    - id: '@dsh-themes/community-dsh-scenery-background'
+      name: '@dsh-themes/community-dsh-scenery-background'

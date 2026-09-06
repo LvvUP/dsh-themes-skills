@@ -1,0 +1,55 @@
+{
+  "name": "@shoplineos/shopline-developer-mcp",
+  "version": "1.1.0",
+  "description": "",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "shopline-developer-mcp": "./dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "files": [
+    "dist/*",
+    "!dist/__test__/*",
+    "!dist/**/__test__/*",
+    "!node_modules"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.2",
+    "@readme/oas-to-snippet": "^29.0.3",
+    "@types/node": "^24.2.1",
+    "bottleneck": "^2.19.5",
+    "conf": "^15.0.2",
+    "flexsearch": "^0.8.212",
+    "fs-extra": "^11.3.1",
+    "fuzzball": "^2.2.3",
+    "graphql": "^16.11.0",
+    "lru-cache": "^11.2.4",
+    "mustache": "^4.2.0",
+    "oas": "^28.3.0",
+    "tiktoken": "^1.0.17",
+    "typescript": "^5.9.2",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/inspector": "^0.17.0",
+    "@types/flexsearch": "^0.7.42",
+    "@types/fs-extra": "^11.0.4",
+    "@types/mustache": "^4.2.6"
+  },
+  "scripts": {
+    "ts-check": "smart-tsc --noEmit --project tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "coverage:ui": "vitest --coverage --ui",
+    "dev": "tsup --watch",
+    "build": "tsup"
+  }
+}

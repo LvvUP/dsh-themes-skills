@@ -1,0 +1,24 @@
+{
+  "catalogId": 3012,
+  "sourceRepository": "GitHubJiKe/dsh-markdown-preview",
+  "sourceRevision": "06fe5ace32e028484e321a6fd0fe42adb76faaca",
+  "originalSpecifier": "dsh-markdown-preview@0.3.0",
+  "registryIntegrity": "sha512-MdY8v/FwwxoHgJlMbTM2DnTTn0cH2fYnQt3QCoW+ZEk/5BcI7jFxph2CfRBIhLi/C8nPObGcjXcl+fCpyzrt5w==",
+  "originalArchiveSha256": "3b83e24dea1c967fd628daf6b99681ed10c7c8318323f6dfada996e7824c5ddf",
+  "license": "MIT",
+  "adaptedBy": "DSH Themes contributors",
+  "targetDshVersion": "0.1.3-alpha.1",
+  "changes": [
+    "Bundle the small append-surface-event predicate from the fixed Alpha session API; remove the unavailable runtime/client import.",
+    "Remove the obsolete client-runtime injector declaration after migrating its APIs."
+  ],
+  "files": {
+    "LICENSE": "e8540d76237bb7b074a8ec2a377f8f887d3e9d90a05c50d4c9955c3d261baaa9",
+    "README.md": "988f03c0b694120b7086a7c4f38642314c46eb21c64dde28b2ac08271fb9c7a3",
+    "README.zh-CN.md": "fa4b952227cd0665a7df59f1a26cb775a7acec96b6643e9d6f674b6af3a6e8b2",
+    "cordis.patch.yml": "69ff9ec67c4cd4ad664eee43b9f155595b91fb2dda13b2178ad2db014e132804",
+    "lib/client.js": "fe4996bc27b46f7c65458f3a5467f1df7957e07a511391e6f4a1640538035deb",
+    "lib/index.js": "e837669ca302d50e510d5ba58f0a915be5de95e01a4f118c830011d4e119b2a4",
+    "package.json": "cf413c542805e052c13ba71b9426e7986c5d6b07453ac4ad14688cbe8f89f57a"
+  }
+}

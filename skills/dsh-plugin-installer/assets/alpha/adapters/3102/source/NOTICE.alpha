@@ -1,0 +1,8 @@
+Alpha adaptation by DSH Themes contributors.
+
+The native plugin and all original bundled skills are retained. The official SHOPLINE Developer MCP 1.1.0 executable source is included with its own MIT license.
+The bundle invokes the fixed local Node entry with structured arguments instead of running an unversioned npx command at every startup. All eleven dependencies actually imported by the complete single-file backend are retained; four unused manifest-only packages are omitted, with the original manifest preserved.
+The MCP config and cache use the explicitly supplied DSH_HOME data directory. Missing or non-absolute data paths fail before any backend initialization.
+The official Alpha MCP client must complete the initial connection and tool discovery; startup failure cannot be reported as successful MCP activation.
+
+The server fetches public registry configuration at startup. Store API calls require the user's own authorization; installation does not exercise those calls.

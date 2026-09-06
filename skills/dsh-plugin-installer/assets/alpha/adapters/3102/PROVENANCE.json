@@ -1,0 +1,250 @@
+{
+  "schemaVersion": 1,
+  "catalogId": 3102,
+  "sourceRepository": "lunw/shopline-ai-toolkit-dsh",
+  "sourceRevision": "daac3ba5af0499ef7a04e3110a2abd0ac67aac65",
+  "sourceArchive": {
+    "url": "https://codeload.github.com/lunw/shopline-ai-toolkit-dsh/tar.gz/daac3ba5af0499ef7a04e3110a2abd0ac67aac65",
+    "sha256": "ab4564803a6481fa3df2050c298728caa267e7817e813f2f31484b5c0b6410f0",
+    "bytes": 29684
+  },
+  "backendArchive": {
+    "url": "https://registry.npmjs.org/@shoplineos/shopline-developer-mcp/-/shopline-developer-mcp-1.1.0.tgz",
+    "sha256": "30c46377d913af679033bd87a7aa68ab80193bd325cd7973d3cadef29cfc2968",
+    "bytes": 17552,
+    "registryIntegrity": "sha512-4AqLyjFKpbbIU+X4Tlzu2SBhAo+fPGB1l0tSeTShEXB3EFj6AF9bX2JiM81hASeGfLHlN45acHAmfXNyXMA4iA=="
+  },
+  "adaptedBy": "DSH Themes contributors",
+  "license": "MIT",
+  "changes": [
+    "The native plugin and all original bundled skills are retained. The official SHOPLINE Developer MCP 1.1.0 executable source is included with its own MIT license.",
+    "The bundle invokes the fixed local Node entry with structured arguments instead of running an unversioned npx command at every startup. All eleven dependencies actually imported by the complete single-file backend are retained; four unused manifest-only packages are omitted, with the original manifest preserved.",
+    "The MCP config and cache use the explicitly supplied DSH_HOME data directory. Missing or non-absolute data paths fail before any backend initialization.",
+    "The official Alpha MCP client must complete the initial connection and tool discovery; startup failure cannot be reported as successful MCP activation."
+  ],
+  "runtimeDependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.2",
+    "bottleneck": "^2.19.5",
+    "conf": "^15.0.2",
+    "flexsearch": "^0.8.212",
+    "fs-extra": "^11.3.1",
+    "fuzzball": "^2.2.3",
+    "graphql": "^16.11.0",
+    "lru-cache": "^11.2.4",
+    "mustache": "^4.2.0",
+    "tiktoken": "^1.0.17",
+    "zod": "^3.22.4"
+  },
+  "omittedUnusedManifestDependencies": {
+    "@readme/oas-to-snippet": "^29.0.3",
+    "@types/node": "^24.2.1",
+    "oas": "^28.3.0",
+    "typescript": "^5.9.2"
+  },
+  "backendImports": [
+    "@modelcontextprotocol/sdk/server/mcp.js",
+    "@modelcontextprotocol/sdk/server/stdio.js",
+    "bottleneck",
+    "conf",
+    "crypto",
+    "flexsearch",
+    "fs",
+    "fs-extra",
+    "fuzzball",
+    "graphql",
+    "lru-cache",
+    "mustache",
+    "os",
+    "path",
+    "tiktoken",
+    "util",
+    "zlib",
+    "zod"
+  ],
+  "originalFiles": {
+    "LICENSE": {
+      "bytes": 1093,
+      "sha256": "8b9a13d970da18818a4006438535bdd4901362c2a9f9bfb79b29dc2c8e047209"
+    },
+    "README.md": {
+      "bytes": 7107,
+      "sha256": "94b4192b3fc655e5e44388a56752229d5da058a8b9e3bb2dd63d8eb2f0b04d67"
+    },
+    "cordis.patch.yml": {
+      "bytes": 1993,
+      "sha256": "2b15f8c14b692a1dc44c649abfe9a30e0e0de4b8779ea2a9b563de564f3ab7d2"
+    },
+    "docs/architecture.md": {
+      "bytes": 8374,
+      "sha256": "5ddead8eaa7672eb4b9e486c8e28f8560f7bccee2d0e1124d9d559a508b8a5b4"
+    },
+    "docs/install.md": {
+      "bytes": 3335,
+      "sha256": "26af4c9f4b902642b01e7901e4da98e6d27bec5854bdd1cc7a48f3c87fd7aeb8"
+    },
+    "examples/prompts.md": {
+      "bytes": 4161,
+      "sha256": "996d05968a95b0d3d2c00ca80e440307ab93c5b21cd355cdb398bbb46619b1db"
+    },
+    "lib/index.js": {
+      "bytes": 6154,
+      "sha256": "771d22dc9a9e79ba24b5362d695a3ff59f43beae2491e194448b2d402139700b"
+    },
+    "mcp/mcp.shopline.json": {
+      "bytes": 1013,
+      "sha256": "fb0aa6fe95c6fb2b0ed923ece4ed1fb91c466c57268b58381ff4f3d15b03b20a"
+    },
+    "package.json": {
+      "bytes": 1405,
+      "sha256": "babd51a32f972bdceb65dee838f6c5bbb23c28c0a85f20e964362a4718c2aac8"
+    },
+    "skills/shopline-admin-rest/SKILL.md": {
+      "bytes": 3891,
+      "sha256": "f76fa44f8876b44cdf9e85e4e8604a227b60b510155ed44368dd14a43adc1658"
+    },
+    "skills/shopline-app-dev-doc-gaps/SKILL.md": {
+      "bytes": 20142,
+      "sha256": "d138ce68469acd8bb63fb2e2e66513c4d5844ebc42da4e5e075e8cefd6d4905f"
+    },
+    "skills/shopline-dev-mcp/SKILL.md": {
+      "bytes": 3846,
+      "sha256": "35a396e384bb768031b4b7a513b47273a4b23e7c022f505519d85d95d55be34e"
+    },
+    "skills/shopline-graphql/SKILL.md": {
+      "bytes": 3753,
+      "sha256": "af6d891b5f40c6448470a44820f418d266230edfed2186eb709a92f7d992d8ba"
+    },
+    "skills/shopline-oauth/SKILL.md": {
+      "bytes": 4721,
+      "sha256": "539b4e8d11a9a55d2037c0f68b0c5b03ae40c07f9598ca3ff823dba61d872d89"
+    },
+    "skills/shopline-onboarding-dev/SKILL.md": {
+      "bytes": 4102,
+      "sha256": "1c3fedcfd20b4d5b4e11e0f4d79d244c9fcd36322abd916dffab2c2c7af9f487"
+    },
+    "skills/shopline-sline/SKILL.md": {
+      "bytes": 2520,
+      "sha256": "1225bf00793f6e9fc7080702046dfdcb0c3654bdf567930432cac5074b354b1b"
+    },
+    "skills/shopline-webhook/SKILL.md": {
+      "bytes": 3305,
+      "sha256": "f86f980d88b79bc3bdf4af0a9a64cb008db234306c01d4e06831e7ad3d210188"
+    }
+  },
+  "originalBackendFiles": {
+    "LICENSE": {
+      "bytes": 1093,
+      "sha256": "84227f3b6d8cb3511f6206111682b6067c8bcd5c21d877e60b684fb1a6355652"
+    },
+    "README.md": {
+      "bytes": 4529,
+      "sha256": "9c782e31906f1517182205ea91afdcfabb3e7ee545f0ad0a61f3467a4711eec0"
+    },
+    "dist/index.d.ts": {
+      "bytes": 20,
+      "sha256": "a59c47872b71f12589942892464e764c0db350c20b72228645615cc36e0a0725"
+    },
+    "dist/index.js": {
+      "bytes": 51758,
+      "sha256": "e907c287cb81f2af49069762d72dabcc6eadc0a4f2b59efab5c13389bfc96a8b"
+    },
+    "package.json": {
+      "bytes": 1347,
+      "sha256": "a7837521d9721ccabf5f068bb6e5f078828115c939fdc845304bbc19381449c6"
+    }
+  },
+  "adaptedFiles": {
+    "LICENSE": {
+      "bytes": 1093,
+      "sha256": "8b9a13d970da18818a4006438535bdd4901362c2a9f9bfb79b29dc2c8e047209"
+    },
+    "NOTICE.alpha": {
+      "bytes": 987,
+      "sha256": "080376ed3743dc7de5334a96691ac2f73279efe2eeee8d6a5b6b220875a9e4d2"
+    },
+    "README.md": {
+      "bytes": 7107,
+      "sha256": "94b4192b3fc655e5e44388a56752229d5da058a8b9e3bb2dd63d8eb2f0b04d67"
+    },
+    "backend/LICENSE": {
+      "bytes": 1093,
+      "sha256": "84227f3b6d8cb3511f6206111682b6067c8bcd5c21d877e60b684fb1a6355652"
+    },
+    "backend/README.md": {
+      "bytes": 4529,
+      "sha256": "9c782e31906f1517182205ea91afdcfabb3e7ee545f0ad0a61f3467a4711eec0"
+    },
+    "backend/dist/index.d.ts": {
+      "bytes": 20,
+      "sha256": "a59c47872b71f12589942892464e764c0db350c20b72228645615cc36e0a0725"
+    },
+    "backend/dist/index.js": {
+      "bytes": 51997,
+      "sha256": "edba20638f0c42093149e80c322d9570618ede5d7edaa3ea13d200144d694df4"
+    },
+    "backend/package.json": {
+      "bytes": 1347,
+      "sha256": "a7837521d9721ccabf5f068bb6e5f078828115c939fdc845304bbc19381449c6"
+    },
+    "cordis.patch.yml": {
+      "bytes": 640,
+      "sha256": "a378c66693487fa1bb007a0e93ad25d01f56a0253a3c7d5744037265c6cded6d"
+    },
+    "docs/architecture.md": {
+      "bytes": 8374,
+      "sha256": "5ddead8eaa7672eb4b9e486c8e28f8560f7bccee2d0e1124d9d559a508b8a5b4"
+    },
+    "docs/install.md": {
+      "bytes": 3335,
+      "sha256": "26af4c9f4b902642b01e7901e4da98e6d27bec5854bdd1cc7a48f3c87fd7aeb8"
+    },
+    "examples/prompts.md": {
+      "bytes": 4161,
+      "sha256": "996d05968a95b0d3d2c00ca80e440307ab93c5b21cd355cdb398bbb46619b1db"
+    },
+    "lib/index.js": {
+      "bytes": 6154,
+      "sha256": "771d22dc9a9e79ba24b5362d695a3ff59f43beae2491e194448b2d402139700b"
+    },
+    "mcp/mcp.shopline.json": {
+      "bytes": 1013,
+      "sha256": "fb0aa6fe95c6fb2b0ed923ece4ed1fb91c466c57268b58381ff4f3d15b03b20a"
+    },
+    "package.json": {
+      "bytes": 1788,
+      "sha256": "14bdcd42c9cca56ab4bc84c77cfb139cab7ee76e74440bb9163887005181c2d4"
+    },
+    "skills/shopline-admin-rest/SKILL.md": {
+      "bytes": 3891,
+      "sha256": "f76fa44f8876b44cdf9e85e4e8604a227b60b510155ed44368dd14a43adc1658"
+    },
+    "skills/shopline-app-dev-doc-gaps/SKILL.md": {
+      "bytes": 20142,
+      "sha256": "d138ce68469acd8bb63fb2e2e66513c4d5844ebc42da4e5e075e8cefd6d4905f"
+    },
+    "skills/shopline-dev-mcp/SKILL.md": {
+      "bytes": 3846,
+      "sha256": "35a396e384bb768031b4b7a513b47273a4b23e7c022f505519d85d95d55be34e"
+    },
+    "skills/shopline-graphql/SKILL.md": {
+      "bytes": 3753,
+      "sha256": "af6d891b5f40c6448470a44820f418d266230edfed2186eb709a92f7d992d8ba"
+    },
+    "skills/shopline-oauth/SKILL.md": {
+      "bytes": 4721,
+      "sha256": "539b4e8d11a9a55d2037c0f68b0c5b03ae40c07f9598ca3ff823dba61d872d89"
+    },
+    "skills/shopline-onboarding-dev/SKILL.md": {
+      "bytes": 4102,
+      "sha256": "1c3fedcfd20b4d5b4e11e0f4d79d244c9fcd36322abd916dffab2c2c7af9f487"
+    },
+    "skills/shopline-sline/SKILL.md": {
+      "bytes": 2520,
+      "sha256": "1225bf00793f6e9fc7080702046dfdcb0c3654bdf567930432cac5074b354b1b"
+    },
+    "skills/shopline-webhook/SKILL.md": {
+      "bytes": 3305,
+      "sha256": "f86f980d88b79bc3bdf4af0a9a64cb008db234306c01d4e06831e7ad3d210188"
+    }
+  }
+}

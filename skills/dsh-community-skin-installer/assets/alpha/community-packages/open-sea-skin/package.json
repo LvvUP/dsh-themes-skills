@@ -1,0 +1,55 @@
+{
+  "name": "@dsh-themes/community-open-sea-skin",
+  "version": "1.2.1-dsh-alpha.1",
+  "private": true,
+  "type": "module",
+  "description": "Realtime WebGPU ocean skin for DeepSeek Harness on Chrome and Edge",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/d-dev0101/open-sea-skin.git"
+  },
+  "homepage": "https://d-dev0101.github.io/open-sea-skin/",
+  "bugs": "https://github.com/d-dev0101/open-sea-skin/issues",
+  "keywords": [
+    "deepseek-harness",
+    "dsh-plugin",
+    "theme",
+    "skin",
+    "webgpu",
+    "ocean"
+  ],
+  "main": "plugin/index.js",
+  "exports": {
+    ".": "./plugin/index.js",
+    "./client": "./plugin/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "plugin/index.js",
+    "plugin/client.js",
+    "cordis.patch.yml",
+    "native-dist/loader.js",
+    "native-dist/ocean.js",
+    "native-dist/skin.html",
+    "native-dist/styles.css",
+    "native-dist/vendor/**/*",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "THIRD_PARTY_NOTICES.md",
+    "DSH-ALPHA-ADAPTATION.json"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [],
+      "platform": "web"
+    }
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

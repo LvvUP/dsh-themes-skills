@@ -1,0 +1,233 @@
+--- original/lib/client.js
++++ source/lib/client.js
+@@ -6,7 +6,7 @@
+ 		Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+ 		let react_jsx_runtime = require("react/jsx-runtime");
+ 		let react = require("react");
+-		let _deepseek_ai_dsh_client_runtime_client = require("@deepseek-ai/dsh-client-runtime/client");
++		let _deepseek_ai_dsh_client_runtime_client = require("@deepseek-ai/dsh-client-store");
+ 		//#region src/client/MilestoneOverlay.tsx
+ 		/**
+ 		* @param props - runtime share (root kit) + the narrowed renderSlot and the
+@@ -15,7 +15,7 @@
+ 		function MilestoneOverlay({ SessionProvider, renderSlot }) {
+ 			return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(SessionProvider, {
+ 				empty: () => null,
+-				children: () => renderSlot("milestone.rail", {})
++				children: renderSlot("milestone.rail", {})
+ 			});
+ 		}
+ 		//#endregion
+@@ -2500,7 +2500,7 @@
+ 		*/
+ 		/** Host-version lines this plugin declares support for (npm official latest
+ 		* line; bump it as the peer/dependency ranges move). */
+-		const SUPPORTED_HOST_LINES = ["0.1.1-rc.2"];
++		const SUPPORTED_HOST_LINES = ["0.1.3-alpha.1"];
+ 		/** Internal per-request timeout for the network attempts. */
+ 		const REQUEST_TIMEOUT_MS = 8e3;
+ 		/** npmmirror dist-tags endpoint: lean JSON (`{"latest":"0.6.0", ...}`),
+@@ -2779,7 +2779,7 @@
+ 		* Installed plugin version. Injected at build time as
+ 		* `__DSH_MILESTONE_VERSION__`; falls back to `0.0.0-dev` when unbuilt.
+ 		*/
+-		const PLUGIN_VERSION = "0.6.6";
++		const PLUGIN_VERSION = "0.6.6-dsh.alpha.1";
+ 		//#endregion
+ 		//#region src/client/MilestoneRail.tsx
+ 		/**
+@@ -3103,15 +3103,15 @@
+ 		* `locale: 'dsh-milestone'`; defaults to a key-pass fallback for renders
+ 		* outside the slot machinery).
+ 		*/
+-		function MilestoneRail({ useSession, loadOlder, forkAt, useStore, actions, searchSessions = async () => ({
++		function MilestoneRail({ useChat, useTrajectory, useSessionPendingInteraction, sessionId, useSession, loadOlder, forkAt, useStore, actions, searchSessions = async () => ({
+ 			items: [],
+ 			hasMore: false
+ 		}), openSession = () => {}, t: frameworkT = (key) => key }) {
+-			const order = useSession((s) => s.chat.order);
+-			const nodes = useSession((s) => s.chat.nodes);
+-			const locations = useSession((s) => s.chat.locations);
+-			const timeline = useSession((s) => s.chat.timeline);
+-			const trajectoryRequests = useSession((s) => s.views.get("trajectory")?.requests);
++			const order = useChat((s) => s.order);
++			const nodes = useChat((s) => s.nodes);
++			const locations = useChat((s) => s.locations);
++			const timeline = useChat((s) => s.timeline);
++			const trajectoryRequests = useTrajectory((s) => s.requests);
+ 			const hasMore = useSession((s) => s.hasMore);
+ 			const loadingOlder = useSession((s) => s.loadingOlder);
+ 			const bookmarkedKeys = useStore?.((s) => s.keys) ?? NO_BOOKMARKS;
+@@ -3148,7 +3148,7 @@
+ 				return result;
+ 			}, [order, nodes]);
+ 			const running = useSession((s) => s.running);
+-			const awaitingInput = useSession((s) => s.pending).length > 0;
++			const awaitingInput = useSessionPendingInteraction((s) => s.has(sessionId));
+ 			const [railBox, setRailBox] = (0, react.useState)(null);
+ 			const [hover, setHover] = (0, react.useState)(null);
+ 			const [search, setSearch] = (0, react.useState)({
+--- original/package.json
++++ source/package.json
+@@ -1,7 +1,7 @@
+ {
+   "name": "dsh-milestone",
+-  "version": "0.6.6",
+-  "description": "Git-style milestone timeline for DeepSeek Harness: hover for metadata, click to jump to any message. 会话里程碑导航条：圆点时间线，定位并跳转到每条提问。",
++  "version": "0.6.6-dsh.alpha.1",
++  "description": "Git-style milestone timeline for DeepSeek Harness: hover for metadata, click to jump to any message. \u4f1a\u8bdd\u91cc\u7a0b\u7891\u5bfc\u822a\u6761\uff1a\u5706\u70b9\u65f6\u95f4\u7ebf\uff0c\u5b9a\u4f4d\u5e76\u8df3\u8f6c\u5230\u6bcf\u6761\u63d0\u95ee\u3002",
+   "type": "module",
+   "main": "lib/index.js",
+   "exports": {
+@@ -15,21 +15,15 @@
+     },
+     "client": {
+       "inject": [
+-        "@deepseek-ai/dsh-client-runtime",
+-        "@deepseek-ai/dsh-client-ui-conversation",
+-        "@deepseek-ai/dsh-client-ui-layout"
++        "@deepseek-ai/dsh-client-ui-renderer",
++        "@deepseek-ai/dsh-client-ui-session",
++        "@deepseek-ai/dsh-client-ui-chat",
++        "@deepseek-ai/dsh-client-ui-trajectory",
++        "@deepseek-ai/dsh-client-locale",
++        "@deepseek-ai/dsh-api-session-controller"
+       ],
+       "platform": "web"
+     }
+-  },
+-  "scripts": {
+-    "build": "tsdown",
+-    "watch": "tsdown --watch",
+-    "typecheck": "tsc --noEmit",
+-    "test": "vitest run",
+-    "test:watch": "vitest",
+-    "test:surface": "playwright test --config=qa/playwright.config.ts",
+-    "prepublishOnly": "pnpm run build"
+   },
+   "license": "MIT",
+   "keywords": [
+@@ -48,27 +42,6 @@
+   ],
+   "peerDependencies": {
+     "@deepseek-ai/cordis": "^4.0.1",
+-    "@deepseek-ai/dsh-client-locale": "^0.1.1-rc.2",
+-    "@deepseek-ai/dsh-client-runtime": "^0.1.1-rc.2",
+-    "@deepseek-ai/dsh-client-ui-slots": "^0.1.1-rc.2",
+     "react": "^18.2.0"
+-  },
+-  "devDependencies": {
+-    "@deepseek-ai/cordis": "^4.0.1",
+-    "@deepseek-ai/dsh-client-locale": "^0.1.1-rc.2",
+-    "@deepseek-ai/dsh-client-runtime": "^0.1.1-rc.2",
+-    "@deepseek-ai/dsh-client-ui-layout": "^0.1.1-rc.2",
+-    "@deepseek-ai/dsh-client-ui-slots": "^0.1.1-rc.2",
+-    "@playwright/test": "^1.62.1",
+-    "@testing-library/jest-dom": "^7.0.1",
+-    "@testing-library/react": "^16.3.2",
+-    "@testing-library/user-event": "^14.6.4",
+-    "@types/node": "^26.2.0",
+-    "@types/react": "~18.3.1",
+-    "jsdom": "^30.0.1",
+-    "react": "^18.2.0",
+-    "tsdown": "0.22.2",
+-    "typescript": "^6.0.3",
+-    "vitest": "^4.1.10"
+   }
+ }
+--- original/src/client/MilestoneOverlay.tsx
++++ source/src/client/MilestoneOverlay.tsx
+@@ -15,7 +15,7 @@
+ export function MilestoneOverlay({ SessionProvider, renderSlot }: MilestoneOverlayProps) {
+   return (
+     <SessionProvider empty={() => null}>
+-      {() => renderSlot('milestone.rail', {})}
++      {renderSlot('milestone.rail', {})}
+     </SessionProvider>
+   )
+ }
+--- original/src/client/MilestoneRail.tsx
++++ source/src/client/MilestoneRail.tsx
+@@ -1,3 +1,6 @@
++import type {} from '@deepseek-ai/dsh-client-ui-chat/client'
++import type {} from '@deepseek-ai/dsh-client-ui-trajectory/client'
++import type {} from '@deepseek-ai/dsh-client-ui-session/client'
+ /**
+  * MilestoneRail: the milestone.rail entry (session scope). Renders a fixed
+  * side vertical scrubber as a **fixed-pitch dot list** (like a git commit
+@@ -516,6 +519,10 @@
+  * outside the slot machinery).
+  */
+ export function MilestoneRail({
++  useChat,
++  useTrajectory,
++  useSessionPendingInteraction,
++  sessionId,
+   useSession,
+   loadOlder,
+   forkAt,
+@@ -527,17 +534,15 @@
+   openSession = () => {},
+   t: frameworkT = (key) => key,
+ }: MilestoneRailProps) {
+-  const order = useSession(s => s.chat.order)
+-  const nodes = useSession(s => s.chat.nodes)
+-  const locations = useSession(s => s.chat.locations)
+-  const timeline = useSession(s => s.chat.timeline)
++  const order = useChat(s => s.order)
++  const nodes = useChat(s => s.nodes)
++  const locations = useChat(s => s.locations)
++  const timeline = useChat(s => s.timeline)
+   // C2: the ui-trajectory request stream, the fallback source for the hover
+   // model/purpose/token metadata. The harness merges the 'trajectory' key
+   // into ConversationViewSnapshotMap (not shipped with this plugin), so the
+   // view store is decoded structurally at the boundary.
+-  const trajectoryRequests = useSession(
+-    (s) => (s.views as { get(key: string): TrajectoryViewLike | undefined }).get('trajectory')?.requests,
+-  )
++  const trajectoryRequests = useTrajectory(s => s.requests)
+   // F3: the conversation paging window. `hasMore` is boolean (no absolute
+   // count available), `loadingOlder` gates the button while a page loads.
+   const hasMore = useSession(s => s.hasMore)
+@@ -596,7 +601,7 @@
+   // producing tokens (running) or waiting on a pending interaction
+   // (awaitingInput: a non-empty `pending` snapshot).
+   const running = useSession(s => s.running)
+-  const awaitingInput = (useSession(s => s.pending) as unknown[]).length > 0
++  const awaitingInput = useSessionPendingInteraction(s => s.has(sessionId))
+ 
+   const [railBox, setRailBox] = useState<RailBox | null>(null)
+   const [hover, setHover] = useState<HoverInfo | null>(null)
+--- original/src/client/bookmarkStore.ts
++++ source/src/client/bookmarkStore.ts
+@@ -8,7 +8,7 @@
+  * FACTORY (never a module-level handle — module-cache identity is a disguised
+  * singleton across plugin reloads).
+  */
+-import { defineStore } from '@deepseek-ai/dsh-client-runtime/client'
++import { defineStore } from '@deepseek-ai/dsh-client-store'
+ import { toggleKey } from './bookmark-logic'
+ 
+ /** Store state: the bookmark key list, in toggle order. */
+--- original/src/client/index.ts
++++ source/src/client/index.ts
+@@ -10,7 +10,7 @@
+  * our own overlay entry, so both registrations go through `ctx.slots.inject`
+  * and follow their declaration lifetimes.
+  */
+-import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client'
++import type { ClientContext } from '@deepseek-ai/dsh-client-store'
+ // Type-only: pulls the locale plugin's Context merge (ctx.locale.register).
+ import type {} from '@deepseek-ai/dsh-client-locale/client'
+ // Establishes the module reference the SlotMap declaration merge below extends.
+--- original/src/client/version-logic.ts
++++ source/src/client/version-logic.ts
+@@ -22,7 +22,7 @@
+ 
+ /** Host-version lines this plugin declares support for (npm official latest
+  * line; bump it as the peer/dependency ranges move). */
+-export const SUPPORTED_HOST_LINES: readonly string[] = ['0.1.1-rc.2']
++export const SUPPORTED_HOST_LINES: readonly string[] = ['0.1.3-alpha.1']
+ 
+ /** Internal per-request timeout for the network attempts. */
+ const REQUEST_TIMEOUT_MS = 8000

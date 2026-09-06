@@ -1,0 +1,175 @@
+[
+  {
+    "catalogId": 3071,
+    "packageName": "@fakechris/dsh-track",
+    "sourceRepository": "fakechris/dsh-track",
+    "sourceRevision": "fd000f69da4ab79973a1ffe6e168da74fca6355e",
+    "baseArtifact": {
+      "path": "assets/alpha/artifacts/942c04f2c9840bb1176ac281d7e1b1f069a67c0a9b674bed828719d7ebc1fe88.tgz",
+      "sha256": "942c04f2c9840bb1176ac281d7e1b1f069a67c0a9b674bed828719d7ebc1fe88"
+    },
+    "changes": [
+      "Replace the removed client-runtime conversationContextKey with the identical pure Alpha function, retaining its collision-free encoding."
+    ]
+  },
+  {
+    "catalogId": 3073,
+    "packageName": "@huanlin/dsh-plugin-yet-another-subagent",
+    "sourceRepository": "HuanLinOTO/dsh-plugin-yet-another-subagent",
+    "sourceRevision": "30f39804dfdbef434887169958019f186be5b8d2",
+    "baseArtifact": {
+      "path": "assets/alpha/artifacts/45c2512a967de8932b48af538ebe31b5932cf1d6b1e662b35cffedc7ec4969fe.tgz",
+      "sha256": "45c2512a967de8932b48af538ebe31b5932cf1d6b1e662b35cffedc7ec4969fe"
+    },
+    "changes": [
+      "Resolve schemastery through the installed Alpha @deepseek-ai/schemastery module.",
+      "Retain the original persisted settings namespace as a string under the Alpha settings API.",
+      "Wait for the tool.call.toolview declaration using the official slots.inject lifecycle before registering the existing subagent card."
+    ]
+  },
+  {
+    "catalogId": 3083,
+    "packageName": "dsh-plugin-rag",
+    "sourceRepository": "YYTbit/dsh-plugin-rag",
+    "sourceRevision": "28f9b84ecd662df19291d7c0333ff0905e32b673",
+    "baseArtifact": {
+      "path": "assets/alpha/artifacts/cf6ec49367c02850084107467e8200838275ee875fae6dbedee8edd21e3721d5.tgz",
+      "sha256": "cf6ec49367c02850084107467e8200838275ee875fae6dbedee8edd21e3721d5"
+    },
+    "changes": [
+      "Declare the shellEnv service that the existing RAG environment registration reads."
+    ]
+  },
+  {
+    "catalogId": 3094,
+    "packageName": "dsh-tiered-approval",
+    "sourceRepository": "Elaina-real/dsh-tiered-approval",
+    "sourceRevision": "2f12f2e3d4b39bc04cb9909d04d24aa2a5ca3a18",
+    "baseArtifact": {
+      "path": "assets/alpha/artifacts/08b947162988dda3268130534abfe0067ecedb8d07582e4db8cfb28e794fe226.tgz",
+      "sha256": "08b947162988dda3268130534abfe0067ecedb8d07582e4db8cfb28e794fe226"
+    },
+    "changes": [
+      "Import deepFreeze from its current Alpha dsh-util-values module; preserve approval and immutability behavior."
+    ]
+  },
+  {
+    "catalogId": 3095,
+    "packageName": "dsh-sentinel",
+    "sourceRepository": "fuhefei/dsh-sentinel",
+    "sourceRevision": "0a63241ba0370f516fc951e9d32cc94e874190b0",
+    "baseArtifact": {
+      "path": "assets/alpha/artifacts/957579c118ddecf4a300f49f5df3a02895259ed52507c9229813815f16a56a7c.tgz",
+      "sha256": "957579c118ddecf4a300f49f5df3a02895259ed52507c9229813815f16a56a7c"
+    },
+    "changes": [
+      "Remove the obsolete dsh-client-runtime client injector; use the current host client modules.",
+      "Register the client factory under the actual package name dsh-sentinel, matching the Alpha module graph."
+    ]
+  },
+  {
+    "catalogId": 3098,
+    "packageName": "@huanlin/dsh-plugin-interpreters",
+    "sourceRepository": "HuanLinOTO/dsh-plugin-interpreters",
+    "sourceRevision": "acac7323588844b1af81789a1963dfd356b91102",
+    "baseArtifact": {
+      "path": "assets/alpha/artifacts/66c52f7c294c73a78bd66e8b009189c9b19eb87a89a3bef291f753c0e32087e4.tgz",
+      "sha256": "66c52f7c294c73a78bd66e8b009189c9b19eb87a89a3bef291f753c0e32087e4"
+    },
+    "changes": [
+      "Resolve schemastery through the installed Alpha module and createSnapshotStore through dsh-client-store.",
+      "Retain the original persisted settings namespace as a string under the Alpha settings API."
+    ]
+  },
+  {
+    "catalogId": 3115,
+    "packageName": "@vlln/dsh-loop",
+    "sourceRepository": "vlln/dsh-loop",
+    "sourceRevision": "488b574c1603320cc078024ea5ee2aea9a3ceff6",
+    "baseArtifact": {
+      "path": "assets/alpha/artifacts/183ad3fa90b494edc0269ab1bf64d8233609183322c700c8fb27631e3037030c.tgz",
+      "sha256": "183ad3fa90b494edc0269ab1bf64d8233609183322c700c8fb27631e3037030c"
+    },
+    "changes": [
+      "Replace settingsNamespace(dsh-loop) with its unchanged namespace string."
+    ]
+  },
+  {
+    "catalogId": 3117,
+    "packageName": "@xilin3/dsh-prompt-persona",
+    "sourceRepository": "Xilin3/dsh-prompt-persona",
+    "sourceRevision": "1946101995e86dacdd1fb6c2ee0d118ecace0a57",
+    "baseArtifact": {
+      "path": "assets/alpha/artifacts/8249d16bfef84cd4f2f570835470ad1f0da4720c81d02799adda745af2b164cb.tgz",
+      "sha256": "8249d16bfef84cd4f2f570835470ad1f0da4720c81d02799adda745af2b164cb"
+    },
+    "changes": [
+      "Resolve schemastery through the installed Alpha @deepseek-ai/schemastery module."
+    ]
+  },
+  {
+    "catalogId": 3119,
+    "packageName": "dsh-plugin-meta-memory",
+    "sourceRepository": "YYTbit/dsh-plugin-meta-memory",
+    "sourceRevision": "b64b13816745f81d6f33a3b5e525d36d02931545",
+    "baseArtifact": {
+      "path": "assets/alpha/artifacts/a8073f31c31cdbd19aefad2937af9ca7dfbc6b7e3854f12e7d6b0a61d91cdfb6.tgz",
+      "sha256": "a8073f31c31cdbd19aefad2937af9ca7dfbc6b7e3854f12e7d6b0a61d91cdfb6"
+    },
+    "changes": [
+      "Declare the shellEnv service that the existing memory environment registration reads."
+    ]
+  },
+  {
+    "catalogId": 3021,
+    "packageName": "dsh-mcp-panel",
+    "sourceRepository": "PerryLink/dsh-mcp-panel",
+    "sourceRevision": "ec8a2fa6854f91fdeb19beb6d3d452ec354175f3",
+    "baseArtifact": {
+      "path": "assets/alpha/artifacts/939c936e4d94ae7cbdb110b6a3c433fe9fe3f14e74a08ea7f90307fbcc1de30a.tgz",
+      "sha256": "939c936e4d94ae7cbdb110b6a3c433fe9fe3f14e74a08ea7f90307fbcc1de30a"
+    },
+    "changes": [
+      "Use the original complete compiled distribution. Remove tsdown and TypeScript build dependencies; zod is already bundled in the published JavaScript. Resolve the sole DSH subprocess runtime import from the fixed Alpha host."
+    ]
+  },
+  {
+    "catalogId": 3004,
+    "packageName": "@0xsline/dsh-spotlight",
+    "sourceRepository": "0xsline/dsh-spotlight",
+    "sourceRevision": "dd7ef5ed160aa1a624559de16eafd4ea9406d7ed",
+    "baseArtifact": {
+      "path": "assets/alpha/artifacts/d68ef1ec060b2b6a2eeac1430d5c9748abc01fb3d8a008412bac841f8d4a165e.tgz",
+      "sha256": "d68ef1ec060b2b6a2eeac1430d5c9748abc01fb3d8a008412bac841f8d4a165e"
+    },
+    "changes": [
+      "Resolve schemastery through the installed Alpha @deepseek-ai/schemastery module."
+    ]
+  },
+  {
+    "catalogId": 3018,
+    "packageName": "dsh-builtin-toggles",
+    "sourceRepository": "Starfie1d1272/dsh-builtin-toggles",
+    "sourceRevision": "d1d7205970aa7e77d69d423acb7ab0fd1fb1db7b",
+    "baseArtifact": {
+      "path": "assets/alpha/artifacts/bf98d0f6a4f872d2bc4201adefe797d1f21fd5f507da31649695221d3df6e203.tgz",
+      "sha256": "bf98d0f6a4f872d2bc4201adefe797d1f21fd5f507da31649695221d3df6e203"
+    },
+    "changes": [
+      "Use the Alpha-provided atomic-write module as a host peer instead of installing the old RC.6 dependency. File locking and atomic writes remain unchanged."
+    ]
+  },
+  {
+    "catalogId": 3076,
+    "packageName": "@nanmicoder/dsh-agent-teams",
+    "sourceRepository": "NanmiCoder/dsh-agent-teams",
+    "sourceRevision": "1caff61f4c0909711b515ebc56187055556186cd",
+    "baseArtifact": {
+      "path": "assets/alpha/artifacts/624bece6eabcac162d0570d487b947b93f81785ed592464ce2601f5a371d1f26.tgz",
+      "sha256": "624bece6eabcac162d0570d487b947b93f81785ed592464ce2601f5a371d1f26"
+    },
+    "changes": [
+      "Use the Alpha dsh.subagent.deliverPrompt symbol and explicit queue delivery mode. Preserve the complete retired-member guard on both host queue/steer and public sendMessage, forwarding the sixth mode argument unchanged and retaining disposal ownership checks."
+    ]
+  }
+]

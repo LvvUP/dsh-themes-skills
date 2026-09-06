@@ -13,19 +13,19 @@ const creator = resolve('skills/dsh-theme-creator/scripts/create-manifest.mjs');
 const hasher = resolve('skills/dsh-theme-creator/scripts/hash-file.mjs');
 const redlineAttribution = 'Clean-room original artwork generated for DSH-Themes; experimental full-skin concept inspired by the general idea of dsh-ui, without copying its code or protected media.';
 const certifiedCompatibility = JSON.parse(await readFile(
-  resolve('skills/dsh-theme-creator/references/compatibility-v3.json'),
+  resolve('skills/dsh-theme-creator/references/compatibility-alpha.json'),
   'utf8',
 ));
 
 async function writeAuthoring(directory, overrides = {}) {
   return writeLegacyAuthoring(directory, {
     schemaVersion: '3.0',
-    compatibility: { dshPackageVersion: '0.1.0-rc.8' },
+    compatibility: { dshPackageVersion: '0.1.3-alpha.1' },
     ...overrides,
   });
 }
 
-test('schema generator is deterministic and pins the exact final RC.8 V3 contract', async () => {
+test('schema generator is deterministic and pins the exact Alpha source V3 contract', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'dsh-creator-'));
   const input = await writeAuthoring(directory);
   const first = join(directory, 'first.json');
@@ -38,12 +38,12 @@ test('schema generator is deterministic and pins the exact final RC.8 V3 contrac
   const manifest = JSON.parse(await readFile(first, 'utf8'));
   assert.equal(manifest.schemaVersion, '3.0');
   assert.deepEqual(manifest.compatibility, certifiedCompatibility);
-  assert.equal(manifest.compatibility.dshPackageVersion, '0.1.0-rc.8');
-  assert.equal(manifest.compatibility.officialRelease.sourceCommit, '141eb6fef83422698aef7a981029e843e8161534');
+  assert.equal(manifest.compatibility.dshPackageVersion, '0.1.3-alpha.1');
+  assert.equal(manifest.compatibility.officialRelease.sourceCommit, 'd347e703908d0406b7a7ef80e3a0e594d86b2215');
   assert.equal(manifest.compatibility.tokenCatalogSha256, 'fe38fdb18dae76f3cc93e3ca3a37bb1916f207180781b1aa8321ee2ddadcb926');
   assert.equal(manifest.compatibility.selectorCatalogSha256, '663aa5927591ac99076f924ee9cd6f9bd09e6a8a9ee1e6b8b1b0d9e3093df807');
-  assert.equal(manifest.compatibility.webAssetSet.sha256, 'b225f316eacc754b41ffdc1402f4de92c742cf5d9b7e460923092aad65800f06');
-  assert.equal(manifest.compatibility.runtimeAttestationSha256, '1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae');
+  assert.equal(manifest.compatibility.webAssetSet.sha256, '5082812433d0e7b5c9ff075c0d0f66dcac112b19ec7918d1211e6e049ab89986');
+  assert.equal(manifest.compatibility.runtimeAttestationSha256, 'bdf642512562483aa052224698416a3c216060df54f0ff07f43c50298beb5f81');
   assert.equal(Object.hasOwn(manifest, 'artifact'), false);
   assert.equal(Object.hasOwn(manifest, 'payload'), false);
   assert.deepEqual(manifest.licensePolicy, {
@@ -242,14 +242,14 @@ test('schema rejects missing tokens, dangerous CSS, and incompatible DSH', async
     });
     const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);
     assert.notEqual(result.code, 0);
-    assert.match(result.stderr, /certified DSH 0\.1\.0-rc\.8 V3 baseline/);
+    assert.match(result.stderr, /selected DSH 0\.1\.3-alpha\.1 V3 baseline/);
   });
   await t.test('author-supplied final evidence', async () => {
     const directory = await mkdtemp(join(tmpdir(), 'dsh-schema-attestation-'));
     const input = await writeAuthoring(directory, {
       compatibility: {
-        dshPackageVersion: '0.1.0-rc.8',
-        runtimeAttestationSha256: '1cd9a0b4a6b9d215f0a1f70a97b4d43eae7bf4f846ae7009b7ddb812823ca0ae',
+        dshPackageVersion: '0.1.3-alpha.1',
+        runtimeAttestationSha256: 'bdf642512562483aa052224698416a3c216060df54f0ff07f43c50298beb5f81',
       },
     });
     const result = await run(creator, ['--input', input, '--output', join(directory, 'out.json')]);

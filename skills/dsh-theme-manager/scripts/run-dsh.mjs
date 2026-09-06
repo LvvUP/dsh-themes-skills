@@ -131,6 +131,11 @@ export async function prepareAllowedAddArtifact(
 }
 
 async function main(argv) {
+  if (argv[0] === '--source') {
+    const { runAlphaManaged } = await import('./run-alpha-managed.mjs');
+    process.exitCode = await runAlphaManaged(argv.slice(1));
+    return;
+  }
   let parsed;
   try {
     parsed = splitRollbackAuthorization(argv);

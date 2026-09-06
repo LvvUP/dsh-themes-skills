@@ -1,0 +1,3 @@
+- insert:
+    - id: live-stats
+      name: '@proton1917/dsh-live-stats'

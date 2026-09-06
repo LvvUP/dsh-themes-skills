@@ -1,6 +1,8 @@
-# Verified compatibility baseline
+# Historical RC.8 compatibility baseline
 
-Treat every value below as exact. The current **item installation** contract is RC.8/V3 plus the final runtime attestation; version strings and runtime-baseline certification alone are never item authority.
+Treat every value below as exact. This retained **RC.8 item installation** contract is RC.8/V3 plus the final runtime attestation; version strings and runtime-baseline certification alone are never item authority.
+
+For current Alpha `0.1.3-alpha.1`, use [runtime-alpha.json](runtime-alpha.json), [alpha-hosted-artifacts.json](alpha-hosted-artifacts.json), and the Alpha workflow in [SKILL.md](../SKILL.md). Its fixed source/build and item evidence are independent. All release lanes and current/legacy labels below describe the retained RC.8 workflow; they do not replace or authorize Alpha.
 
 ## Release lanes
 

@@ -1,0 +1,51 @@
+{
+  "catalogId": 3065,
+  "sourceRepository": "Anionex/dsh-turn-rewind",
+  "sourceRevision": "9a2acfc44a6f5c94fd81e8cd217a1f54c75750f4",
+  "sourceArchive": {
+    "url": "https://codeload.github.com/Anionex/dsh-turn-rewind/tar.gz/9a2acfc44a6f5c94fd81e8cd217a1f54c75750f4",
+    "sha256": "9681f12c47a9027726d54e7f925d77e154bd0e98989c6f9209168bb3516bbc1f"
+  },
+  "adaptedBy": "DSH Themes contributors",
+  "licenseExpression": "BSD-3-Clause",
+  "changes": [
+    "Replace removed settingsNamespace factory with the same namespace string and register through the Alpha settings provider instance.",
+    "Remove the obsolete client-runtime injector declaration; preserve the upstream conversation UI and settings registrations.",
+    "Keep the original BSD-3-Clause license and source files. Package the reviewed compiled modules without running upstream lifecycle scripts."
+  ],
+  "files": {
+    "LICENSE": "9d9a838ebad09d4a986e0cb962c064c4d1ff308eb728169e040a0295917e2cba",
+    "README.md": "debcb386af99497802d794a40bc637a79697df0b8cb9445cd7a39c0319d3669b",
+    "cordis.patch.yml": "81f9f6a91c1144101fed653c0b24d01795225d9ce23a3054c02e3a2c8fbda80c",
+    "lib/client.js": "dfc3c3c3274bafa9dc6a0dc8176a78e0f315317fce2d91e91cb82ba591e6ba75",
+    "lib/client.js.map": "ec52fa92f8cd8d4ffba7047518b05653cd445965dd2b9e3ab6b99ab665bded5e",
+    "lib/deadline.js": "cdead64bd6997b3b3e2006c3ba3fe154e5cd48826669bc676d8b0dd4e34c0292",
+    "lib/engine.js": "771fc5bbf4671558798da9349643e15533a0fbb2ba775d9ac4a877368f1278ba",
+    "lib/errors.js": "d7886ff9e3f7f05eb3105ed42ad7655128d7ca3e7cd2b72e2cf43f91b0dca702",
+    "lib/git-checkpoint.js": "e9c82e92f5f8c8d80a5eea2a5375363e458f76d13829f1c1840b01c5a67f0ad6",
+    "lib/git.js": "0657626bece640d092728634489d8645099d9ecb88b6c35221fdcf2be10d7b42",
+    "lib/index.js": "3956ce4b70ddf6716135cbd4d2032c11582953b44f5f67c207b94fbb0d9466ad",
+    "lib/path-utils.js": "882ccb1bfbb597ff8dba0358aec8f22620cb0923986de3018e9eb99cce26a7d4",
+    "lib/rewind-host.js": "dadf54b90cd2a1415dbdaef251bf6d2cd80fb082264a2a3698fe15cade0685d0",
+    "lib/settings.js": "765ace4b14e6ad959d2377cbb3740b922d8decb48c26fefa98573beef87cc333",
+    "lib/snapshot.js": "df836d39ceca85eebd5bd9e8b4e9f3dae0b821bc5600f341337f5cca29b627a8",
+    "lib/store.js": "368d13f935e829ccd7115c239bede89462c69f257bbeebb3f11caa35193dc134",
+    "lib/types.js": "c442648915a1d809297025eb22261705295f20a71babc47c9334f44ac2d17e2e",
+    "lib/types/client/index.d.ts": "254151bac9926d24e443546a35c444dcd5f505ae72c40d8d2ec5f5b5cab4401b",
+    "lib/types/deadline.d.ts": "63529d52905ec27deded9f4629457c58c602fec020733e40bbf737e646a7664c",
+    "lib/types/engine.d.ts": "4087f4742ba6c85325a1dd80e0da08fa421bd43fe99316563dee59afbb0cd7a1",
+    "lib/types/errors.d.ts": "a98db43c0962c5b7ac155ca143cc28a78de2dccea50c66b6092a15c16794ba52",
+    "lib/types/git-checkpoint.d.ts": "241a899a8832ba605303fd4ce2a06b2b0b14b1f0fdb7ebe47b3c16b561f11ccf",
+    "lib/types/git.d.ts": "f428a8528e8eb9c150e4af8b6ed21a99d36cf62fbaea8cba5def7c51050d1a93",
+    "lib/types/index.d.ts": "e4d30b72f47e800548b822900a9203a6eb793a829408b03dd6358251e958efb8",
+    "lib/types/path-utils.d.ts": "944dd6a81a8a012280c70b022e93d2a57bd85e37b5af189e5f5d2486085126de",
+    "lib/types/rewind-host.d.ts": "3bed9b4182daab18a64725d08d53192b2c63da9d2f8e3d7fddccf118953dfe5e",
+    "lib/types/settings.d.ts": "c0f3e36c59f469c29f68040c77053152686323c6758284a1548866934823b214",
+    "lib/types/snapshot.d.ts": "7c1827fe1102740a9b83f061709618956cc4c09a7a2902bdf4dca3ae51fb89f5",
+    "lib/types/store.d.ts": "5c038bdca4ba04dade3c7944c7e4b67126ed92aea8dd90876a56884d46e62fca",
+    "lib/types/types.d.ts": "8dc97c33b173d53418491d017b08d2dca26e61ebd02655efc71f18d0f3fba653",
+    "lib/types/validate.d.ts": "0b84f518463dd0d45bf302afc5d702b22cb96a46817f251ba7f5f928c9a4053f",
+    "lib/validate.js": "7ac4dd0bd667c01e756953845eea595b210e687766ecbc072b3e6687b3338c61",
+    "package.json": "691c181e937ed8a9f2b24b99e8f22d56e515eb725569478258eb81115722ba8b"
+  }
+}

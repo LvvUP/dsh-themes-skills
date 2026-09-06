@@ -1,0 +1,29 @@
+{
+  "sourceRepository": "zhaoscsc/dsh-wikilink",
+  "sourceRevision": "c42ba65260ac56b3422aea99fe5ab084251d9ae6",
+  "files": {
+    "LICENSE": "639f7efb39948110960b8051295e809ac83ae8f6f049d5db521c23a03dbf8dc6",
+    "README.md": "c09eaaa3ea0cf63cb6acd7ca6dfde16db7a2e9609bf9f30ab0dffaeead54d04b",
+    "cordis.patch.yml": "9664ac1fd8670defe1063fd1a9be4927066ec1bdab276c591b6b88f600478d01",
+    "package.json": "b352e73da75da53d3f2e6e411643d2dd8a0c959e51ecf8f7c52f6e2979e9da72",
+    "src/client/IndexStatusBar.tsx": "4581fce6b586a04083e52167c05c0ab4dc818ee0af275ba7d245bbc0e4753d53",
+    "src/client/Overlay.tsx": "2318350c89dfaff1f2ad2324bcf9a28f0dac5893184b08057c9a584e82573cd6",
+    "src/client/SettingsSection.tsx": "99edec4a67ac805b34095759f759c34409e06c09135fd862cc664716936487be",
+    "src/client/detect.ts": "375dad8a63335881931cda2754b1a83b154a5987f66149830840c144f442338c",
+    "src/client/index-manager.ts": "7190c5ac1306c7e1ad077bf19354558c99d3f52c206555f6a3e2482e0ae4228c",
+    "src/client/index.ts": "79050f4d65a83f975cbca51ed31b2f098f940e9200f653338cba11dea896c5b7",
+    "src/client/locales.ts": "866b08d54634a2bbcda268fa367c5e16798cf3d76e0f66c7795b9456afe4b1a4",
+    "src/client/model.ts": "4d0d38b4ca564b94cde92cf71bc357725f62fa9272b169f3bd08f919809d4b05",
+    "src/client/remote.ts": "379567540eef54c4d9711c56bf89824e6d3c8f5ecccdd93fe197c6716b5eea0f",
+    "src/client/search.ts": "b6caf0db6b8f831cfe6f6b270ea059fb0d8eb212768eb93693cf678e71a7b613",
+    "src/client/styles.ts": "7a54b73386151f7b275eaedf9614ca64dd136aa06a23761cbb479aa2fd762ae4",
+    "src/contract.ts": "e3327197892e8dfca19c48dbf90cdfaf28855e8670819aca897c78b346e3bd9a",
+    "src/files.ts": "9af0369cd020bc84a2b9f5dc698ac8f0c40da5a63cd636bab6788c10cd1f1044",
+    "src/index.ts": "6a73b4b10c118d5e43b083776337b723b83c959c21cff9660dd452608a233560",
+    "src/mention.ts": "fa08bbaee7735b75e7dc5b42bf1d54a9d1bfe1fd5daec32551e772d950eab93e",
+    "src/runtime.ts": "233f6a53b0c285f881a4702cec01ccc31334218745613478752ee8918d984193",
+    "src/settings.ts": "98f1e1bc9324705fdfb93ba58a4372b26ab182e56a0604f98cb023a3e9fcc695",
+    "src/typert.ts": "bab6188f984f5785af9572a2efa3888b4571159c979cb55543a9c36b5f02df82",
+    "src/types.ts": "d89aca261ec8ace69e5c53fbfafaaaa6ba3c5fa5d7afe8d33284770efdd33f5c"
+  }
+}

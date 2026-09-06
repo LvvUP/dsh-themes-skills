@@ -1,0 +1,3 @@
+- insert:
+    - id: dsh-community-solarized
+      name: '@dsh-themes-community/solarized-alpha'

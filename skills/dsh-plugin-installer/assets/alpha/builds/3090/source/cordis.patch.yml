@@ -1,0 +1,16 @@
+# The dsh-lens-lite bundle patch: one row inserted over whatever layers came
+# before it. A patch replaces the targeted row's whole `config`, so a profile
+# overriding `checkers` below must restate every key it wants to keep.
+#
+# `checkers` ships empty on purpose: the commands a deployment can run are a
+# property of its toolchain, not of this package. Override this row in your
+# profile's cordis.patch.yml with the checkers you actually have — see the
+# package README for copy-paste examples.
+
+- insert:
+    - id: lens-lite
+      name: dsh-lens-lite
+      config:
+        tools: [write, edit, str_replace_editor]
+        checkers: []
+        maxDiagnosticChars: 4000

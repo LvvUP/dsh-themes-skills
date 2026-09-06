@@ -1,0 +1,44 @@
+{
+  "name": "@proton1917/dsh-live-stats",
+  "version": "0.1.0-dsh.alpha.1",
+  "description": "Live token estimates and generation throughput for DSH Web",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-session",
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ],
+      "platform": "web"
+    }
+  },
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Proton1917/dsh-live-stats.git"
+  },
+  "files": [
+    "assets",
+    "cordis.patch.yml",
+    "lib",
+    "src",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+    "licenses",
+    "ADAPTATION.md"
+  ],
+  "engines": {
+    "node": ">=24"
+  }
+}

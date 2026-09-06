@@ -1,0 +1,25 @@
+{
+  "sourceRepository": "omdsh-dev/dsh-notification",
+  "sourceRevision": "675aab9b43d5011738feb6185281596c0365ccba",
+  "files": {
+    "LICENSE": "ebb4f09972aee8608be255debaf78451a68e95c290f55c240dec2ecfa16ea6be",
+    "README.md": "5f3e17a916c10ae706be88cb112d2a12e30e8f12e6ba49abac7fb93e5efd8094",
+    "cordis.patch.yml": "acd491dd3c321a0de6841922d7ca77cc14be192f6bb3ecf6080fed735a3a9ee7",
+    "package.json": "ffc70f827e695024f1a9ee70cbfea7382395736d5e29777715037c621f7859c1",
+    "src/client/SettingsSection.tsx": "4804d4c542f5e0a67a184063f425ce5d1e9d6832bd60c83233b5b08d41b4795b",
+    "src/client/decision.ts": "36d1eae21ebeab7a38ac595c87cad0d2a5f036cbbb6de44cdf0f3e1e02ab3f66",
+    "src/client/index.ts": "39052816248fa76589b47d7b7ffe61c6b9a33b28458208a6b7f34c7e992d55ca",
+    "src/client/locales.ts": "ff3b1d6ddf3348662a9b732080b41631dfdccf9d6bb3dd783df878cb4380b332",
+    "src/client/notifier.ts": "1e2d556556715b7ccfe2efbd5139f9bbf4ea50665201de1157c160b0b18401cb",
+    "src/client/rules.ts": "1d9ba064a5a18be57b3e0d2defd3e5d35a56bd8da8475e3b0f9ff655e7307811",
+    "src/client/runner.ts": "e062de73c6af2fae035bd48eb6b526673030e4faf9cd77b500bd64dc43e97b80",
+    "src/client/snapshot-store.ts": "51c43b5c6aaad17ad900592348eac54171cb68e021c18fadf9a50ad0f2f12cef",
+    "src/client/store.ts": "68e9c01447fa7ca1f2719ff0edc45840ed08ef142f899155d330c419639f90d4",
+    "src/client/styles.ts": "40f8f7c8db205d2ee20be3770dfcc4ccf720a1e75fb545089c26aab0c7e159fb",
+    "src/contract.ts": "6b424425b36e2702a774c1967f67970cef64494051c0029a31f6e0958a024fc9",
+    "src/index.ts": "090281c6be9056d0f2604cbc75516f5f58ac06f7e377b716f22ba75835707d37",
+    "src/invariant.ts": "6611028d2756bec83c22bacae14c1e1ea753b4c2a26892749af412a19ac5d19f",
+    "src/projection.ts": "9b47cbd899d7565de4e0072e6dcc20bed55a376e049227cdc73e3fb6cafa667a",
+    "src/types.ts": "a501364a3ad3e2cb1fed7b13b27e98331ccf7bf8edf992b201e6888838745a63"
+  }
+}

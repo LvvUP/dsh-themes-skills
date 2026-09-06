@@ -1,0 +1,4534 @@
+{
+  "schemaVersion": 1,
+  "dshVersion": "0.1.3-alpha.1",
+  "sourceCommit": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "packageName": "@dsh-themes-community/skin-center-alpha",
+  "packageVersion": "0.2.5-alpha.2",
+  "artifactSha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+  "source": {
+    "repository": "zhu1090093659/dsh-web-ui",
+    "revision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+    "upstreamArtifactSha256": "5b0c06426320a011a54cc8ddbe921e7b3f2d8d11a3d18bf0b92ad186ffb39499"
+  },
+  "entries": [
+    {
+      "catalogId": 2201,
+      "slug": "dsh-web-ui-blue-fantasy",
+      "skinId": "blue-fantasy",
+      "artifactSha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/blue-fantasy",
+      "freeBeforeMiB": 566,
+      "selected": {
+        "initial": {
+          "active": "blue-fantasy",
+          "controller": {
+            "active": "blue-fantasy",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#10162a80",
+            "--dsw-alias-bg-layer-1": "#1a22388c",
+            "--dsw-alias-bg-layer-2": "#202a4499",
+            "--dsw-alias-bg-overlay": "#1a2238eb",
+            "--dsw-alias-border-l1": "#a0b4e61f",
+            "--dsw-alias-border-l2": "#a0b4e62e",
+            "--dsw-alias-brand-primary": "#7f96d2",
+            "--dsw-alias-label-primary": "#dbe2f2",
+            "--dsw-alias-label-secondary": "#a9b7d0",
+            "--dsw-alias-state-error-primary": "#e05c5c",
+            "--dsw-alias-state-success-primary": "#58b058",
+            "--dsw-alias-state-warn-primary": "#d9a94f",
+            "--dsw-specific-sidebar-fill": "#1d25398c"
+          },
+          "backgroundImage": "linear-gradient(rgba(10, 14, 28, 0.35) 0%, rgba(13, 18, 34, 0.45) 60%, rgba(16, 22, 42, 0.5) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/blue-fantasy/assets/whale-art.jpg\")",
+          "links": [
+            "/api/skin-center/v2/skins/blue-fantasy/stylesheet",
+            "/api/skin-center/v2/skins/blue-fantasy/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "active": "blue-fantasy",
+            "controller": {
+              "active": "blue-fantasy",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": false,
+            "tokens": {
+              "--dsw-alias-bg-base": "#ffffff73",
+              "--dsw-alias-bg-layer-1": "#f3f5fb80",
+              "--dsw-alias-bg-layer-2": "#e9edf78c",
+              "--dsw-alias-bg-overlay": "#eef1f9eb",
+              "--dsw-alias-border-l1": "#2c3a7326",
+              "--dsw-alias-border-l2": "#2c3a7338",
+              "--dsw-alias-brand-primary": "#4a5fa8",
+              "--dsw-alias-label-primary": "#1d2539",
+              "--dsw-alias-label-secondary": "#3e4b6d",
+              "--dsw-alias-state-error-primary": "#c00000",
+              "--dsw-alias-state-success-primary": "#2e8e52",
+              "--dsw-alias-state-warn-primary": "#c08a33",
+              "--dsw-specific-sidebar-fill": "#f2f5fa80"
+            },
+            "backgroundImage": "linear-gradient(rgba(10, 14, 28, 0.35) 0%, rgba(13, 18, 34, 0.45) 60%, rgba(16, 22, 42, 0.5) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/blue-fantasy/assets/whale-art.jpg\")",
+            "links": [
+              "/api/skin-center/v2/skins/blue-fantasy/stylesheet",
+              "/api/skin-center/v2/skins/blue-fantasy/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2201-selected-light.png",
+            "screenshotSha256": "f8e0ce2570869e490ba286b888c25c1dff73764fd44011b921cf57cd3ee5fb60",
+            "screenshotSizeBytes": 756244
+          },
+          {
+            "mode": "dark",
+            "active": "blue-fantasy",
+            "controller": {
+              "active": "blue-fantasy",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": true,
+            "tokens": {
+              "--dsw-alias-bg-base": "#10162a80",
+              "--dsw-alias-bg-layer-1": "#1a22388c",
+              "--dsw-alias-bg-layer-2": "#202a4499",
+              "--dsw-alias-bg-overlay": "#1a2238eb",
+              "--dsw-alias-border-l1": "#a0b4e61f",
+              "--dsw-alias-border-l2": "#a0b4e62e",
+              "--dsw-alias-brand-primary": "#7f96d2",
+              "--dsw-alias-label-primary": "#dbe2f2",
+              "--dsw-alias-label-secondary": "#a9b7d0",
+              "--dsw-alias-state-error-primary": "#e05c5c",
+              "--dsw-alias-state-success-primary": "#58b058",
+              "--dsw-alias-state-warn-primary": "#d9a94f",
+              "--dsw-specific-sidebar-fill": "#1d25398c"
+            },
+            "backgroundImage": "linear-gradient(rgba(10, 14, 28, 0.35) 0%, rgba(13, 18, 34, 0.45) 60%, rgba(16, 22, 42, 0.5) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/blue-fantasy/assets/whale-art.jpg\")",
+            "links": [
+              "/api/skin-center/v2/skins/blue-fantasy/stylesheet",
+              "/api/skin-center/v2/skins/blue-fantasy/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2201-selected-dark.png",
+            "screenshotSha256": "f0c8a465518d547ed920239c468742550140e4781de07d34db77e8ed490a3e47",
+            "screenshotSizeBytes": 671153
+          }
+        ],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "011ca4d1f89b6a5dfbc5c1c43b7303beee2687868cd4c2a3b7ca91dc2321b093",
+            "status": 200,
+            "sha256": "011ca4d1f89b6a5dfbc5c1c43b7303beee2687868cd4c2a3b7ca91dc2321b093",
+            "sizeBytes": 16816
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "d416347cf3a9ee31765af7e63892c16960f7d59819ec4599c7048d16dc45d11f",
+            "status": 200,
+            "sha256": "d416347cf3a9ee31765af7e63892c16960f7d59819ec4599c7048d16dc45d11f",
+            "sizeBytes": 10797
+          },
+          {
+            "route": "assets/whale-art.jpg",
+            "expectedSha256": "1bec59fd53652555e727e529046422db25b977624e9c291bb8b78e0caf952303",
+            "status": 200,
+            "sha256": "1bec59fd53652555e727e529046422db25b977624e9c291bb8b78e0caf952303",
+            "sizeBytes": 214984
+          },
+          {
+            "route": "assets/whale-icon.png",
+            "expectedSha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe",
+            "status": 200,
+            "sha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe",
+            "sizeBytes": 8803
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "21ac2ad4d4423acf31e3391bfba18ce2d9eec7b192f7a0ba47e8a0c843ff15a5",
+            "status": 200,
+            "sha256": "21ac2ad4d4423acf31e3391bfba18ce2d9eec7b192f7a0ba47e8a0c843ff15a5",
+            "sizeBytes": 1102
+          }
+        ],
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "cold": {
+        "initial": {
+          "active": "blue-fantasy",
+          "controller": {
+            "active": "blue-fantasy",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#10162a80",
+            "--dsw-alias-bg-layer-1": "#1a22388c",
+            "--dsw-alias-bg-layer-2": "#202a4499",
+            "--dsw-alias-bg-overlay": "#1a2238eb",
+            "--dsw-alias-border-l1": "#a0b4e61f",
+            "--dsw-alias-border-l2": "#a0b4e62e",
+            "--dsw-alias-brand-primary": "#7f96d2",
+            "--dsw-alias-label-primary": "#dbe2f2",
+            "--dsw-alias-label-secondary": "#a9b7d0",
+            "--dsw-alias-state-error-primary": "#e05c5c",
+            "--dsw-alias-state-success-primary": "#58b058",
+            "--dsw-alias-state-warn-primary": "#d9a94f",
+            "--dsw-specific-sidebar-fill": "#1d25398c"
+          },
+          "backgroundImage": "linear-gradient(rgba(10, 14, 28, 0.35) 0%, rgba(13, 18, 34, 0.45) 60%, rgba(16, 22, 42, 0.5) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/blue-fantasy/assets/whale-art.jpg\")",
+          "links": [
+            "/api/skin-center/v2/skins/blue-fantasy/stylesheet",
+            "/api/skin-center/v2/skins/blue-fantasy/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "modes": [],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "011ca4d1f89b6a5dfbc5c1c43b7303beee2687868cd4c2a3b7ca91dc2321b093",
+            "status": 200,
+            "sha256": "011ca4d1f89b6a5dfbc5c1c43b7303beee2687868cd4c2a3b7ca91dc2321b093",
+            "sizeBytes": 16816
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "d416347cf3a9ee31765af7e63892c16960f7d59819ec4599c7048d16dc45d11f",
+            "status": 200,
+            "sha256": "d416347cf3a9ee31765af7e63892c16960f7d59819ec4599c7048d16dc45d11f",
+            "sizeBytes": 10797
+          },
+          {
+            "route": "assets/whale-art.jpg",
+            "expectedSha256": "1bec59fd53652555e727e529046422db25b977624e9c291bb8b78e0caf952303",
+            "status": 200,
+            "sha256": "1bec59fd53652555e727e529046422db25b977624e9c291bb8b78e0caf952303",
+            "sizeBytes": 214984
+          },
+          {
+            "route": "assets/whale-icon.png",
+            "expectedSha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe",
+            "status": 200,
+            "sha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe",
+            "sizeBytes": 8803
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "21ac2ad4d4423acf31e3391bfba18ce2d9eec7b192f7a0ba47e8a0c843ff15a5",
+            "status": 200,
+            "sha256": "21ac2ad4d4423acf31e3391bfba18ce2d9eec7b192f7a0ba47e8a0c843ff15a5",
+            "sizeBytes": 1102
+          }
+        ],
+        "deselected": {
+          "active": null,
+          "controller": { "active": null, "trying": null, "previewing": false },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          },
+          "backgroundImage": "none",
+          "links": [],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "coldProcess": {
+        "first": 96028,
+        "cold": 96358,
+        "portConfirmedClosed": true
+      },
+      "status": "passed",
+      "freeAfterMiB": 562
+    },
+    {
+      "catalogId": 2101,
+      "slug": "dsh-deep-whale-maid-atelier",
+      "skinId": "maid-atelier",
+      "artifactSha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+      "sourceRepository": "Small-tailqwq/dsh-deep-whale",
+      "sourceRevision": "0a3d03251d1e88a08de79e27fb884ed9200913ad",
+      "sourceSubdir": "maid-atelier",
+      "freeBeforeMiB": 561,
+      "selected": {
+        "initial": {
+          "active": "maid-atelier",
+          "controller": {
+            "active": "maid-atelier",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "transparent",
+            "--dsw-alias-bg-layer-1": "#121f43e6",
+            "--dsw-alias-bg-layer-2": "#182850eb",
+            "--dsw-alias-bg-overlay": "#0d193bf7",
+            "--dsw-alias-border-l1": "#97a9d833",
+            "--dsw-alias-border-l2": "#97a9d857",
+            "--dsw-alias-brand-primary": "#9bb0e1",
+            "--dsw-alias-label-primary": "#e7ecf7",
+            "--dsw-alias-label-secondary": "#bdc9e3",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#050d28e6"
+          },
+          "backgroundImage": "url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-palace-night-v4.webp\")",
+          "links": [
+            "/api/skin-center/v2/skins/maid-atelier/stylesheet",
+            "/api/skin-center/v2/skins/maid-atelier/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": [
+            {
+              "src": "/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-maid-left-v5.webp",
+              "width": 1122,
+              "height": 2019,
+              "complete": true
+            },
+            {
+              "src": "/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-maid-right-v6.webp",
+              "width": 1394,
+              "height": 2649,
+              "complete": true
+            },
+            {
+              "src": "/api/skin-center/v2/skins/maid-atelier/assets/maid-chibi-v1.webp",
+              "width": 620,
+              "height": 553,
+              "complete": true
+            }
+          ]
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "active": "maid-atelier",
+            "controller": {
+              "active": "maid-atelier",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": false,
+            "tokens": {
+              "--dsw-alias-bg-base": "transparent",
+              "--dsw-alias-bg-layer-1": "#f8faffb8",
+              "--dsw-alias-bg-layer-2": "#ebf0fad6",
+              "--dsw-alias-bg-overlay": "#f8fafff5",
+              "--dsw-alias-border-l1": "#475b912e",
+              "--dsw-alias-border-l2": "#475b914d",
+              "--dsw-alias-brand-primary": "#526aa8",
+              "--dsw-alias-label-primary": "#172347",
+              "--dsw-alias-label-secondary": "#4d5d7f",
+              "--dsw-alias-state-error-primary": "#ec1313",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#0b1942e0"
+            },
+            "backgroundImage": "url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-palace-day-v4.webp\")",
+            "links": [
+              "/api/skin-center/v2/skins/maid-atelier/stylesheet",
+              "/api/skin-center/v2/skins/maid-atelier/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "images": [
+              {
+                "src": "/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-maid-left-v5.webp",
+                "width": 1122,
+                "height": 2019,
+                "complete": true
+              },
+              {
+                "src": "/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-maid-right-v6.webp",
+                "width": 1394,
+                "height": 2649,
+                "complete": true
+              },
+              {
+                "src": "/api/skin-center/v2/skins/maid-atelier/assets/maid-chibi-v1.webp",
+                "width": 620,
+                "height": 553,
+                "complete": true
+              }
+            ],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2101-selected-light.png",
+            "screenshotSha256": "f5ca4a274049260b30cc453cdd64b7a48400f06ece59c1c61ea3b9491d740433",
+            "screenshotSizeBytes": 1508178
+          },
+          {
+            "mode": "dark",
+            "active": "maid-atelier",
+            "controller": {
+              "active": "maid-atelier",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": true,
+            "tokens": {
+              "--dsw-alias-bg-base": "transparent",
+              "--dsw-alias-bg-layer-1": "#121f43e6",
+              "--dsw-alias-bg-layer-2": "#182850eb",
+              "--dsw-alias-bg-overlay": "#0d193bf7",
+              "--dsw-alias-border-l1": "#97a9d833",
+              "--dsw-alias-border-l2": "#97a9d857",
+              "--dsw-alias-brand-primary": "#9bb0e1",
+              "--dsw-alias-label-primary": "#e7ecf7",
+              "--dsw-alias-label-secondary": "#bdc9e3",
+              "--dsw-alias-state-error-primary": "#f25a5a",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#050d28e6"
+            },
+            "backgroundImage": "url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-palace-night-v4.webp\")",
+            "links": [
+              "/api/skin-center/v2/skins/maid-atelier/stylesheet",
+              "/api/skin-center/v2/skins/maid-atelier/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "images": [
+              {
+                "src": "/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-maid-left-v5.webp",
+                "width": 1122,
+                "height": 2019,
+                "complete": true
+              },
+              {
+                "src": "/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-maid-right-v6.webp",
+                "width": 1394,
+                "height": 2649,
+                "complete": true
+              },
+              {
+                "src": "/api/skin-center/v2/skins/maid-atelier/assets/maid-chibi-v1.webp",
+                "width": 620,
+                "height": 553,
+                "complete": true
+              }
+            ],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2101-selected-dark.png",
+            "screenshotSha256": "267355de3bdd5426666c6132ac47c3c3f4f6b2f37749ea938edafefa73e56b47",
+            "screenshotSizeBytes": 1472521
+          }
+        ],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "83f314bf08641f9d18b28c564d4c1d375c500d582128300535e2a0e955cad99b",
+            "status": 200,
+            "sha256": "83f314bf08641f9d18b28c564d4c1d375c500d582128300535e2a0e955cad99b",
+            "sizeBytes": 6319
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "f267b03779a9fd096e386b44ee575fba1114db7584cd07fdf1d055004816f7da",
+            "status": 200,
+            "sha256": "f267b03779a9fd096e386b44ee575fba1114db7584cd07fdf1d055004816f7da",
+            "sizeBytes": 80795
+          },
+          {
+            "route": "assets/maid-atelier-icon.webp",
+            "expectedSha256": "be7ea360355b13213250b5920c69d2036f10db003c4bcc8756366f409656b6b0",
+            "status": 200,
+            "sha256": "be7ea360355b13213250b5920c69d2036f10db003c4bcc8756366f409656b6b0",
+            "sizeBytes": 10348
+          },
+          {
+            "route": "assets/maid-atelier-maid-left-v5.webp",
+            "expectedSha256": "af7bfd2e18505fc9d6f94cefd9febc92b31c1b2b66c756982d91fc7b93fb184c",
+            "status": 200,
+            "sha256": "af7bfd2e18505fc9d6f94cefd9febc92b31c1b2b66c756982d91fc7b93fb184c",
+            "sizeBytes": 286224
+          },
+          {
+            "route": "assets/maid-atelier-maid-right-v6.webp",
+            "expectedSha256": "34b55580ada4af5b9d519f5ae09e8656164197a3cbadceace73d98f3da278ca7",
+            "status": 200,
+            "sha256": "34b55580ada4af5b9d519f5ae09e8656164197a3cbadceace73d98f3da278ca7",
+            "sizeBytes": 520206
+          },
+          {
+            "route": "assets/maid-atelier-palace-day-v4.webp",
+            "expectedSha256": "52e7dce6993e3f955c3fbb2875885e7ab60fb38ca89adb15d977c7a85d58c073",
+            "status": 200,
+            "sha256": "52e7dce6993e3f955c3fbb2875885e7ab60fb38ca89adb15d977c7a85d58c073",
+            "sizeBytes": 279480
+          },
+          {
+            "route": "assets/maid-atelier-palace-night-v4.webp",
+            "expectedSha256": "ae6917bb1aafa71e6a10cfcaa1289f13e265aa7f32d3fb7c1988004bf50f8983",
+            "status": 200,
+            "sha256": "ae6917bb1aafa71e6a10cfcaa1289f13e265aa7f32d3fb7c1988004bf50f8983",
+            "sizeBytes": 270544
+          },
+          {
+            "route": "assets/maid-bottom-crest-v1.webp",
+            "expectedSha256": "24f2fb04ce2d38574a3817f6d675b8c1ee5d9322588eec651271f67aabfcb48d",
+            "status": 200,
+            "sha256": "24f2fb04ce2d38574a3817f6d675b8c1ee5d9322588eec651271f67aabfcb48d",
+            "sizeBytes": 45398
+          },
+          {
+            "route": "assets/maid-bottom-trim-tile-v1.webp",
+            "expectedSha256": "47072d2d652f09e857dbc8555ff5c1917c926ef5d4581641f7018b1607c42fda",
+            "status": 200,
+            "sha256": "47072d2d652f09e857dbc8555ff5c1917c926ef5d4581641f7018b1607c42fda",
+            "sizeBytes": 972
+          },
+          {
+            "route": "assets/maid-bow-v1.webp",
+            "expectedSha256": "dcf64a43ad6b9e71c24c91fb9b1d7fe8af534497fd421213472bea96e6bc04b5",
+            "status": 200,
+            "sha256": "dcf64a43ad6b9e71c24c91fb9b1d7fe8af534497fd421213472bea96e6bc04b5",
+            "sizeBytes": 10910
+          },
+          {
+            "route": "assets/maid-chibi-v1.webp",
+            "expectedSha256": "405917afdb68d725624bbf7e4f1619a35fc4004039b7d553c5528ca5f65308d3",
+            "status": 200,
+            "sha256": "405917afdb68d725624bbf7e4f1619a35fc4004039b7d553c5528ca5f65308d3",
+            "sizeBytes": 91476
+          },
+          {
+            "route": "assets/maid-composer-frame-v4.webp",
+            "expectedSha256": "3135deb5d14d3ea44940edcf296ba2ffa14e242d5342a1a94618df0c57979482",
+            "status": 200,
+            "sha256": "3135deb5d14d3ea44940edcf296ba2ffa14e242d5342a1a94618df0c57979482",
+            "sizeBytes": 95486
+          },
+          {
+            "route": "assets/maid-new-session-v1.webp",
+            "expectedSha256": "fa6d49a717c04651fd7d1afb30b853f63cbaa5bf483e58cb4bfe5ef69fc6ff50",
+            "status": 200,
+            "sha256": "fa6d49a717c04651fd7d1afb30b853f63cbaa5bf483e58cb4bfe5ef69fc6ff50",
+            "sizeBytes": 73142
+          },
+          {
+            "route": "assets/maid-settings-frame-v1.webp",
+            "expectedSha256": "3d2b126caf0549c2e86684dcbc0ff4443b887e5e1684190710d2df7940466d98",
+            "status": 200,
+            "sha256": "3d2b126caf0549c2e86684dcbc0ff4443b887e5e1684190710d2df7940466d98",
+            "sizeBytes": 32358
+          },
+          {
+            "route": "assets/maid-sidebar-corner-v1.webp",
+            "expectedSha256": "707f05bf4abed25405ca45c5c32bcf95ab7cb3a6dae3e53da29f814a8495665c",
+            "status": 200,
+            "sha256": "707f05bf4abed25405ca45c5c32bcf95ab7cb3a6dae3e53da29f814a8495665c",
+            "sizeBytes": 31196
+          },
+          {
+            "route": "assets/maid-sidebar-swag-v1.webp",
+            "expectedSha256": "cd728ce5c1794ec4958ef75c4cdd60a3d513b871bea99e3b526656f14089fd74",
+            "status": 200,
+            "sha256": "cd728ce5c1794ec4958ef75c4cdd60a3d513b871bea99e3b526656f14089fd74",
+            "sizeBytes": 111004
+          },
+          {
+            "route": "assets/maid-top-trim-tile-v1.webp",
+            "expectedSha256": "e49115f3942ea5c5034c81016c61944b5261c8ea410318cb0419b445c990b063",
+            "status": 200,
+            "sha256": "e49115f3942ea5c5034c81016c61944b5261c8ea410318cb0419b445c990b063",
+            "sizeBytes": 39106
+          },
+          {
+            "route": "assets/maid-workspace-ribbon-v2.webp",
+            "expectedSha256": "e2b04c3eca1871c5e73417674582a09b13de60119ca9bb9c112317232c5049fa",
+            "status": 200,
+            "sha256": "e2b04c3eca1871c5e73417674582a09b13de60119ca9bb9c112317232c5049fa",
+            "sizeBytes": 44178
+          },
+          {
+            "route": "assets/maid-workspace-shield-v2.webp",
+            "expectedSha256": "b59aa9d4ecfbbae6e62d872c964bce8ec870ed500e7cbc7a7f02bbdd0b93e87e",
+            "status": 200,
+            "sha256": "b59aa9d4ecfbbae6e62d872c964bce8ec870ed500e7cbc7a7f02bbdd0b93e87e",
+            "sizeBytes": 22220
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "54394436db0a9dfd51972adbc31c567b1871632cb599e1a8440b87b98401a2d4",
+            "status": 200,
+            "sha256": "54394436db0a9dfd51972adbc31c567b1871632cb599e1a8440b87b98401a2d4",
+            "sizeBytes": 35137
+          }
+        ],
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "cold": {
+        "initial": {
+          "active": "maid-atelier",
+          "controller": {
+            "active": "maid-atelier",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "transparent",
+            "--dsw-alias-bg-layer-1": "#121f43e6",
+            "--dsw-alias-bg-layer-2": "#182850eb",
+            "--dsw-alias-bg-overlay": "#0d193bf7",
+            "--dsw-alias-border-l1": "#97a9d833",
+            "--dsw-alias-border-l2": "#97a9d857",
+            "--dsw-alias-brand-primary": "#9bb0e1",
+            "--dsw-alias-label-primary": "#e7ecf7",
+            "--dsw-alias-label-secondary": "#bdc9e3",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#050d28e6"
+          },
+          "backgroundImage": "url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-palace-night-v4.webp\")",
+          "links": [
+            "/api/skin-center/v2/skins/maid-atelier/stylesheet",
+            "/api/skin-center/v2/skins/maid-atelier/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": [
+            {
+              "src": "/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-maid-left-v5.webp",
+              "width": 1122,
+              "height": 2019,
+              "complete": true
+            },
+            {
+              "src": "/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-maid-right-v6.webp",
+              "width": 1394,
+              "height": 2649,
+              "complete": true
+            },
+            {
+              "src": "/api/skin-center/v2/skins/maid-atelier/assets/maid-chibi-v1.webp",
+              "width": 620,
+              "height": 553,
+              "complete": true
+            }
+          ]
+        },
+        "modes": [],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "83f314bf08641f9d18b28c564d4c1d375c500d582128300535e2a0e955cad99b",
+            "status": 200,
+            "sha256": "83f314bf08641f9d18b28c564d4c1d375c500d582128300535e2a0e955cad99b",
+            "sizeBytes": 6319
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "f267b03779a9fd096e386b44ee575fba1114db7584cd07fdf1d055004816f7da",
+            "status": 200,
+            "sha256": "f267b03779a9fd096e386b44ee575fba1114db7584cd07fdf1d055004816f7da",
+            "sizeBytes": 80795
+          },
+          {
+            "route": "assets/maid-atelier-icon.webp",
+            "expectedSha256": "be7ea360355b13213250b5920c69d2036f10db003c4bcc8756366f409656b6b0",
+            "status": 200,
+            "sha256": "be7ea360355b13213250b5920c69d2036f10db003c4bcc8756366f409656b6b0",
+            "sizeBytes": 10348
+          },
+          {
+            "route": "assets/maid-atelier-maid-left-v5.webp",
+            "expectedSha256": "af7bfd2e18505fc9d6f94cefd9febc92b31c1b2b66c756982d91fc7b93fb184c",
+            "status": 200,
+            "sha256": "af7bfd2e18505fc9d6f94cefd9febc92b31c1b2b66c756982d91fc7b93fb184c",
+            "sizeBytes": 286224
+          },
+          {
+            "route": "assets/maid-atelier-maid-right-v6.webp",
+            "expectedSha256": "34b55580ada4af5b9d519f5ae09e8656164197a3cbadceace73d98f3da278ca7",
+            "status": 200,
+            "sha256": "34b55580ada4af5b9d519f5ae09e8656164197a3cbadceace73d98f3da278ca7",
+            "sizeBytes": 520206
+          },
+          {
+            "route": "assets/maid-atelier-palace-day-v4.webp",
+            "expectedSha256": "52e7dce6993e3f955c3fbb2875885e7ab60fb38ca89adb15d977c7a85d58c073",
+            "status": 200,
+            "sha256": "52e7dce6993e3f955c3fbb2875885e7ab60fb38ca89adb15d977c7a85d58c073",
+            "sizeBytes": 279480
+          },
+          {
+            "route": "assets/maid-atelier-palace-night-v4.webp",
+            "expectedSha256": "ae6917bb1aafa71e6a10cfcaa1289f13e265aa7f32d3fb7c1988004bf50f8983",
+            "status": 200,
+            "sha256": "ae6917bb1aafa71e6a10cfcaa1289f13e265aa7f32d3fb7c1988004bf50f8983",
+            "sizeBytes": 270544
+          },
+          {
+            "route": "assets/maid-bottom-crest-v1.webp",
+            "expectedSha256": "24f2fb04ce2d38574a3817f6d675b8c1ee5d9322588eec651271f67aabfcb48d",
+            "status": 200,
+            "sha256": "24f2fb04ce2d38574a3817f6d675b8c1ee5d9322588eec651271f67aabfcb48d",
+            "sizeBytes": 45398
+          },
+          {
+            "route": "assets/maid-bottom-trim-tile-v1.webp",
+            "expectedSha256": "47072d2d652f09e857dbc8555ff5c1917c926ef5d4581641f7018b1607c42fda",
+            "status": 200,
+            "sha256": "47072d2d652f09e857dbc8555ff5c1917c926ef5d4581641f7018b1607c42fda",
+            "sizeBytes": 972
+          },
+          {
+            "route": "assets/maid-bow-v1.webp",
+            "expectedSha256": "dcf64a43ad6b9e71c24c91fb9b1d7fe8af534497fd421213472bea96e6bc04b5",
+            "status": 200,
+            "sha256": "dcf64a43ad6b9e71c24c91fb9b1d7fe8af534497fd421213472bea96e6bc04b5",
+            "sizeBytes": 10910
+          },
+          {
+            "route": "assets/maid-chibi-v1.webp",
+            "expectedSha256": "405917afdb68d725624bbf7e4f1619a35fc4004039b7d553c5528ca5f65308d3",
+            "status": 200,
+            "sha256": "405917afdb68d725624bbf7e4f1619a35fc4004039b7d553c5528ca5f65308d3",
+            "sizeBytes": 91476
+          },
+          {
+            "route": "assets/maid-composer-frame-v4.webp",
+            "expectedSha256": "3135deb5d14d3ea44940edcf296ba2ffa14e242d5342a1a94618df0c57979482",
+            "status": 200,
+            "sha256": "3135deb5d14d3ea44940edcf296ba2ffa14e242d5342a1a94618df0c57979482",
+            "sizeBytes": 95486
+          },
+          {
+            "route": "assets/maid-new-session-v1.webp",
+            "expectedSha256": "fa6d49a717c04651fd7d1afb30b853f63cbaa5bf483e58cb4bfe5ef69fc6ff50",
+            "status": 200,
+            "sha256": "fa6d49a717c04651fd7d1afb30b853f63cbaa5bf483e58cb4bfe5ef69fc6ff50",
+            "sizeBytes": 73142
+          },
+          {
+            "route": "assets/maid-settings-frame-v1.webp",
+            "expectedSha256": "3d2b126caf0549c2e86684dcbc0ff4443b887e5e1684190710d2df7940466d98",
+            "status": 200,
+            "sha256": "3d2b126caf0549c2e86684dcbc0ff4443b887e5e1684190710d2df7940466d98",
+            "sizeBytes": 32358
+          },
+          {
+            "route": "assets/maid-sidebar-corner-v1.webp",
+            "expectedSha256": "707f05bf4abed25405ca45c5c32bcf95ab7cb3a6dae3e53da29f814a8495665c",
+            "status": 200,
+            "sha256": "707f05bf4abed25405ca45c5c32bcf95ab7cb3a6dae3e53da29f814a8495665c",
+            "sizeBytes": 31196
+          },
+          {
+            "route": "assets/maid-sidebar-swag-v1.webp",
+            "expectedSha256": "cd728ce5c1794ec4958ef75c4cdd60a3d513b871bea99e3b526656f14089fd74",
+            "status": 200,
+            "sha256": "cd728ce5c1794ec4958ef75c4cdd60a3d513b871bea99e3b526656f14089fd74",
+            "sizeBytes": 111004
+          },
+          {
+            "route": "assets/maid-top-trim-tile-v1.webp",
+            "expectedSha256": "e49115f3942ea5c5034c81016c61944b5261c8ea410318cb0419b445c990b063",
+            "status": 200,
+            "sha256": "e49115f3942ea5c5034c81016c61944b5261c8ea410318cb0419b445c990b063",
+            "sizeBytes": 39106
+          },
+          {
+            "route": "assets/maid-workspace-ribbon-v2.webp",
+            "expectedSha256": "e2b04c3eca1871c5e73417674582a09b13de60119ca9bb9c112317232c5049fa",
+            "status": 200,
+            "sha256": "e2b04c3eca1871c5e73417674582a09b13de60119ca9bb9c112317232c5049fa",
+            "sizeBytes": 44178
+          },
+          {
+            "route": "assets/maid-workspace-shield-v2.webp",
+            "expectedSha256": "b59aa9d4ecfbbae6e62d872c964bce8ec870ed500e7cbc7a7f02bbdd0b93e87e",
+            "status": 200,
+            "sha256": "b59aa9d4ecfbbae6e62d872c964bce8ec870ed500e7cbc7a7f02bbdd0b93e87e",
+            "sizeBytes": 22220
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "54394436db0a9dfd51972adbc31c567b1871632cb599e1a8440b87b98401a2d4",
+            "status": 200,
+            "sha256": "54394436db0a9dfd51972adbc31c567b1871632cb599e1a8440b87b98401a2d4",
+            "sizeBytes": 35137
+          }
+        ],
+        "deselected": {
+          "active": null,
+          "controller": { "active": null, "trying": null, "previewing": false },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          },
+          "backgroundImage": "none",
+          "links": [],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "coldProcess": {
+        "first": 97578,
+        "cold": 97883,
+        "portConfirmedClosed": true
+      },
+      "status": "passed",
+      "freeAfterMiB": 555
+    },
+    {
+      "catalogId": 2202,
+      "slug": "dsh-web-ui-dragon-heir",
+      "skinId": "dragon-heir",
+      "artifactSha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/dragon-heir",
+      "freeBeforeMiB": 555,
+      "selected": {
+        "initial": {
+          "active": "dragon-heir",
+          "controller": {
+            "active": "dragon-heir",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#12161f57",
+            "--dsw-alias-bg-layer-1": "#1a213066",
+            "--dsw-alias-bg-layer-2": "#21293c75",
+            "--dsw-alias-bg-overlay": "#181e2ce0",
+            "--dsw-alias-border-l1": "#93a8c51f",
+            "--dsw-alias-border-l2": "#93a8c52e",
+            "--dsw-alias-brand-primary": "#c8a24a",
+            "--dsw-alias-label-primary": "#eef1f6",
+            "--dsw-alias-label-secondary": "#d2dae6",
+            "--dsw-alias-state-error-primary": "#e07070",
+            "--dsw-alias-state-success-primary": "#58b058",
+            "--dsw-alias-state-warn-primary": "#d9a94f",
+            "--dsw-specific-sidebar-fill": "#161c295c"
+          },
+          "backgroundImage": "linear-gradient(rgba(10, 6, 6, 0.14) 0%, rgba(14, 8, 7, 0.2) 60%, rgba(9, 5, 5, 0.24) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/dragon-heir/assets/dark-art.webp\")",
+          "links": [
+            "/api/skin-center/v2/skins/dragon-heir/stylesheet",
+            "/api/skin-center/v2/skins/dragon-heir/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "active": "dragon-heir",
+            "controller": {
+              "active": "dragon-heir",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": false,
+            "tokens": {
+              "--dsw-alias-bg-base": "#faf7f057",
+              "--dsw-alias-bg-layer-1": "#f4efe461",
+              "--dsw-alias-bg-layer-2": "#ede5d56e",
+              "--dsw-alias-bg-overlay": "#f8f3e8e0",
+              "--dsw-alias-border-l1": "#544c3c26",
+              "--dsw-alias-border-l2": "#544c3c38",
+              "--dsw-alias-brand-primary": "#c3272b",
+              "--dsw-alias-label-primary": "#262319",
+              "--dsw-alias-label-secondary": "#544c3c",
+              "--dsw-alias-state-error-primary": "#c00000",
+              "--dsw-alias-state-success-primary": "#2e8e52",
+              "--dsw-alias-state-warn-primary": "#c8912f",
+              "--dsw-specific-sidebar-fill": "#f6f1e652"
+            },
+            "backgroundImage": "linear-gradient(rgba(10, 6, 6, 0.14) 0%, rgba(14, 8, 7, 0.2) 60%, rgba(9, 5, 5, 0.24) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/dragon-heir/assets/dark-art.webp\")",
+            "links": [
+              "/api/skin-center/v2/skins/dragon-heir/stylesheet",
+              "/api/skin-center/v2/skins/dragon-heir/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2202-selected-light.png",
+            "screenshotSha256": "29b94da5fd64d4afb535e0c51b511eee4a05f11eb0620a0e94e6b6f2b17c22fe",
+            "screenshotSizeBytes": 1004820
+          },
+          {
+            "mode": "dark",
+            "active": "dragon-heir",
+            "controller": {
+              "active": "dragon-heir",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": true,
+            "tokens": {
+              "--dsw-alias-bg-base": "#12161f57",
+              "--dsw-alias-bg-layer-1": "#1a213066",
+              "--dsw-alias-bg-layer-2": "#21293c75",
+              "--dsw-alias-bg-overlay": "#181e2ce0",
+              "--dsw-alias-border-l1": "#93a8c51f",
+              "--dsw-alias-border-l2": "#93a8c52e",
+              "--dsw-alias-brand-primary": "#c8a24a",
+              "--dsw-alias-label-primary": "#eef1f6",
+              "--dsw-alias-label-secondary": "#d2dae6",
+              "--dsw-alias-state-error-primary": "#e07070",
+              "--dsw-alias-state-success-primary": "#58b058",
+              "--dsw-alias-state-warn-primary": "#d9a94f",
+              "--dsw-specific-sidebar-fill": "#161c295c"
+            },
+            "backgroundImage": "linear-gradient(rgba(10, 6, 6, 0.14) 0%, rgba(14, 8, 7, 0.2) 60%, rgba(9, 5, 5, 0.24) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/dragon-heir/assets/dark-art.webp\")",
+            "links": [
+              "/api/skin-center/v2/skins/dragon-heir/stylesheet",
+              "/api/skin-center/v2/skins/dragon-heir/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2202-selected-dark.png",
+            "screenshotSha256": "f845f77d5176424ee93fa0d1561a45f681fc389a59e0e33575888ccb805449de",
+            "screenshotSizeBytes": 990277
+          }
+        ],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "9ba26096937ac5ff264f2b25d0cd7d8834df13f4fa024d0268f08e058a6de822",
+            "status": 200,
+            "sha256": "9ba26096937ac5ff264f2b25d0cd7d8834df13f4fa024d0268f08e058a6de822",
+            "sizeBytes": 17156
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "18fd7fdd8aecff79fb4ccb8e70d7d2466b8c3443c6585b188df7a08ac59eae40",
+            "status": 200,
+            "sha256": "18fd7fdd8aecff79fb4ccb8e70d7d2466b8c3443c6585b188df7a08ac59eae40",
+            "sizeBytes": 10722
+          },
+          {
+            "route": "assets/dark-art.webp",
+            "expectedSha256": "1c3b334a4bce1d5be2b103cd8edb24a1e19a8b65fca6133082b2b05ee446b9e2",
+            "status": 200,
+            "sha256": "1c3b334a4bce1d5be2b103cd8edb24a1e19a8b65fca6133082b2b05ee446b9e2",
+            "sizeBytes": 79384
+          },
+          {
+            "route": "assets/light-art.webp",
+            "expectedSha256": "f78831a369daab14d2c36ef7bf2cdd33600aed5bf11d15d7d4f2b79e2499f9af",
+            "status": 200,
+            "sha256": "f78831a369daab14d2c36ef7bf2cdd33600aed5bf11d15d7d4f2b79e2499f9af",
+            "sizeBytes": 82350
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "ccc644148fd71cc32723891e97ed586b86fe2f86e0f36362133de7d66d08f5bd",
+            "status": 200,
+            "sha256": "ccc644148fd71cc32723891e97ed586b86fe2f86e0f36362133de7d66d08f5bd",
+            "sizeBytes": 4525
+          }
+        ],
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "cold": {
+        "initial": {
+          "active": "dragon-heir",
+          "controller": {
+            "active": "dragon-heir",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#12161f57",
+            "--dsw-alias-bg-layer-1": "#1a213066",
+            "--dsw-alias-bg-layer-2": "#21293c75",
+            "--dsw-alias-bg-overlay": "#181e2ce0",
+            "--dsw-alias-border-l1": "#93a8c51f",
+            "--dsw-alias-border-l2": "#93a8c52e",
+            "--dsw-alias-brand-primary": "#c8a24a",
+            "--dsw-alias-label-primary": "#eef1f6",
+            "--dsw-alias-label-secondary": "#d2dae6",
+            "--dsw-alias-state-error-primary": "#e07070",
+            "--dsw-alias-state-success-primary": "#58b058",
+            "--dsw-alias-state-warn-primary": "#d9a94f",
+            "--dsw-specific-sidebar-fill": "#161c295c"
+          },
+          "backgroundImage": "linear-gradient(rgba(10, 6, 6, 0.14) 0%, rgba(14, 8, 7, 0.2) 60%, rgba(9, 5, 5, 0.24) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/dragon-heir/assets/dark-art.webp\")",
+          "links": [
+            "/api/skin-center/v2/skins/dragon-heir/stylesheet",
+            "/api/skin-center/v2/skins/dragon-heir/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "modes": [],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "9ba26096937ac5ff264f2b25d0cd7d8834df13f4fa024d0268f08e058a6de822",
+            "status": 200,
+            "sha256": "9ba26096937ac5ff264f2b25d0cd7d8834df13f4fa024d0268f08e058a6de822",
+            "sizeBytes": 17156
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "18fd7fdd8aecff79fb4ccb8e70d7d2466b8c3443c6585b188df7a08ac59eae40",
+            "status": 200,
+            "sha256": "18fd7fdd8aecff79fb4ccb8e70d7d2466b8c3443c6585b188df7a08ac59eae40",
+            "sizeBytes": 10722
+          },
+          {
+            "route": "assets/dark-art.webp",
+            "expectedSha256": "1c3b334a4bce1d5be2b103cd8edb24a1e19a8b65fca6133082b2b05ee446b9e2",
+            "status": 200,
+            "sha256": "1c3b334a4bce1d5be2b103cd8edb24a1e19a8b65fca6133082b2b05ee446b9e2",
+            "sizeBytes": 79384
+          },
+          {
+            "route": "assets/light-art.webp",
+            "expectedSha256": "f78831a369daab14d2c36ef7bf2cdd33600aed5bf11d15d7d4f2b79e2499f9af",
+            "status": 200,
+            "sha256": "f78831a369daab14d2c36ef7bf2cdd33600aed5bf11d15d7d4f2b79e2499f9af",
+            "sizeBytes": 82350
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "ccc644148fd71cc32723891e97ed586b86fe2f86e0f36362133de7d66d08f5bd",
+            "status": 200,
+            "sha256": "ccc644148fd71cc32723891e97ed586b86fe2f86e0f36362133de7d66d08f5bd",
+            "sizeBytes": 4525
+          }
+        ],
+        "deselected": {
+          "active": null,
+          "controller": { "active": null, "trying": null, "previewing": false },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          },
+          "backgroundImage": "none",
+          "links": [],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "coldProcess": {
+        "first": 98120,
+        "cold": 98402,
+        "portConfirmedClosed": true
+      },
+      "status": "passed",
+      "freeAfterMiB": 551
+    },
+    {
+      "catalogId": 2203,
+      "slug": "dsh-web-ui-harbor",
+      "skinId": "harbor",
+      "artifactSha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/harbor",
+      "freeBeforeMiB": 551,
+      "selected": {
+        "initial": {
+          "active": "harbor",
+          "controller": {
+            "active": "harbor",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#141a2eb3",
+            "--dsw-alias-bg-layer-1": "#181f36b3",
+            "--dsw-alias-bg-layer-2": "#1d2540b8",
+            "--dsw-alias-bg-overlay": "#2a3357d1",
+            "--dsw-alias-border-l1": "#ffffff12",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#ff9d5c",
+            "--dsw-alias-label-primary": "#fff5ec",
+            "--dsw-alias-label-secondary": "#d6c7b8",
+            "--dsw-alias-state-error-primary": "#ff7a8a",
+            "--dsw-alias-state-success-primary": "#7fd6a4",
+            "--dsw-alias-state-warn-primary": "#f6c177",
+            "--dsw-specific-sidebar-fill": "#0c0f1ce6"
+          },
+          "backgroundImage": "linear-gradient(rgba(11, 14, 26, 0.42) 0%, rgba(12, 16, 30, 0.52) 60%, rgba(14, 18, 34, 0.6) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/harbor/assets/harbor-art.webp\")",
+          "links": [
+            "/api/skin-center/v2/skins/harbor/stylesheet",
+            "/api/skin-center/v2/skins/harbor/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "active": "harbor",
+            "controller": {
+              "active": "harbor",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": false,
+            "tokens": {
+              "--dsw-alias-bg-base": "#141a2eb3",
+              "--dsw-alias-bg-layer-1": "#181f36b3",
+              "--dsw-alias-bg-layer-2": "#1d2540b8",
+              "--dsw-alias-bg-overlay": "#2a3357d1",
+              "--dsw-alias-border-l1": "#ffffff12",
+              "--dsw-alias-border-l2": "#ffffff1f",
+              "--dsw-alias-brand-primary": "#ff9d5c",
+              "--dsw-alias-label-primary": "#fff5ec",
+              "--dsw-alias-label-secondary": "#d6c7b8",
+              "--dsw-alias-state-error-primary": "#ff7a8a",
+              "--dsw-alias-state-success-primary": "#7fd6a4",
+              "--dsw-alias-state-warn-primary": "#f6c177",
+              "--dsw-specific-sidebar-fill": "#0c0f1ce6"
+            },
+            "backgroundImage": "linear-gradient(rgba(11, 14, 26, 0.42) 0%, rgba(12, 16, 30, 0.52) 60%, rgba(14, 18, 34, 0.6) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/harbor/assets/harbor-art.webp\")",
+            "links": [
+              "/api/skin-center/v2/skins/harbor/stylesheet",
+              "/api/skin-center/v2/skins/harbor/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2203-selected-light.png",
+            "screenshotSha256": "df5c258ea0294426f1c61a68cb4ce473fc8a06b107ac5ebbe81486c2033c2436",
+            "screenshotSizeBytes": 312572
+          },
+          {
+            "mode": "dark",
+            "active": "harbor",
+            "controller": {
+              "active": "harbor",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": true,
+            "tokens": {
+              "--dsw-alias-bg-base": "#141a2eb3",
+              "--dsw-alias-bg-layer-1": "#181f36b3",
+              "--dsw-alias-bg-layer-2": "#1d2540b8",
+              "--dsw-alias-bg-overlay": "#2a3357d1",
+              "--dsw-alias-border-l1": "#ffffff12",
+              "--dsw-alias-border-l2": "#ffffff1f",
+              "--dsw-alias-brand-primary": "#ff9d5c",
+              "--dsw-alias-label-primary": "#fff5ec",
+              "--dsw-alias-label-secondary": "#d6c7b8",
+              "--dsw-alias-state-error-primary": "#ff7a8a",
+              "--dsw-alias-state-success-primary": "#7fd6a4",
+              "--dsw-alias-state-warn-primary": "#f6c177",
+              "--dsw-specific-sidebar-fill": "#0c0f1ce6"
+            },
+            "backgroundImage": "linear-gradient(rgba(11, 14, 26, 0.42) 0%, rgba(12, 16, 30, 0.52) 60%, rgba(14, 18, 34, 0.6) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/harbor/assets/harbor-art.webp\")",
+            "links": [
+              "/api/skin-center/v2/skins/harbor/stylesheet",
+              "/api/skin-center/v2/skins/harbor/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2203-selected-dark.png",
+            "screenshotSha256": "df5c258ea0294426f1c61a68cb4ce473fc8a06b107ac5ebbe81486c2033c2436",
+            "screenshotSizeBytes": 312572
+          }
+        ],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "8cb44a9f8b0db7753b65c0745cd601d5ac04c58233579ab3988d3b5d320d49b2",
+            "status": 200,
+            "sha256": "8cb44a9f8b0db7753b65c0745cd601d5ac04c58233579ab3988d3b5d320d49b2",
+            "sizeBytes": 7728
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "24f006b96f4ebeceeb1df6334f64a07ed854f4c173acff5258970e783e7c2957",
+            "status": 200,
+            "sha256": "24f006b96f4ebeceeb1df6334f64a07ed854f4c173acff5258970e783e7c2957",
+            "sizeBytes": 136
+          },
+          {
+            "route": "assets/harbor-art.webp",
+            "expectedSha256": "8b580f05bf017027d0c8b3d1d0d321a84d89af1efbc43c89cc0705e62557fda2",
+            "status": 200,
+            "sha256": "8b580f05bf017027d0c8b3d1d0d321a84d89af1efbc43c89cc0705e62557fda2",
+            "sizeBytes": 85294
+          },
+          {
+            "route": "assets/harbor-icon.svg",
+            "expectedSha256": "fc9f82e5fa4998cb3e48a85662bcb719c7ecbd305acc7b544e181605192dbf45",
+            "status": 200,
+            "sha256": "fc9f82e5fa4998cb3e48a85662bcb719c7ecbd305acc7b544e181605192dbf45",
+            "sizeBytes": 344
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "7981a2f98d1ade2815f7e33e2d79672c280334001a00406bb11b5362ce8182bf",
+            "status": 200,
+            "sha256": "7981a2f98d1ade2815f7e33e2d79672c280334001a00406bb11b5362ce8182bf",
+            "sizeBytes": 1084
+          }
+        ],
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "cold": {
+        "initial": {
+          "active": "harbor",
+          "controller": {
+            "active": "harbor",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#141a2eb3",
+            "--dsw-alias-bg-layer-1": "#181f36b3",
+            "--dsw-alias-bg-layer-2": "#1d2540b8",
+            "--dsw-alias-bg-overlay": "#2a3357d1",
+            "--dsw-alias-border-l1": "#ffffff12",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#ff9d5c",
+            "--dsw-alias-label-primary": "#fff5ec",
+            "--dsw-alias-label-secondary": "#d6c7b8",
+            "--dsw-alias-state-error-primary": "#ff7a8a",
+            "--dsw-alias-state-success-primary": "#7fd6a4",
+            "--dsw-alias-state-warn-primary": "#f6c177",
+            "--dsw-specific-sidebar-fill": "#0c0f1ce6"
+          },
+          "backgroundImage": "linear-gradient(rgba(11, 14, 26, 0.42) 0%, rgba(12, 16, 30, 0.52) 60%, rgba(14, 18, 34, 0.6) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/harbor/assets/harbor-art.webp\")",
+          "links": [
+            "/api/skin-center/v2/skins/harbor/stylesheet",
+            "/api/skin-center/v2/skins/harbor/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "modes": [],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "8cb44a9f8b0db7753b65c0745cd601d5ac04c58233579ab3988d3b5d320d49b2",
+            "status": 200,
+            "sha256": "8cb44a9f8b0db7753b65c0745cd601d5ac04c58233579ab3988d3b5d320d49b2",
+            "sizeBytes": 7728
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "24f006b96f4ebeceeb1df6334f64a07ed854f4c173acff5258970e783e7c2957",
+            "status": 200,
+            "sha256": "24f006b96f4ebeceeb1df6334f64a07ed854f4c173acff5258970e783e7c2957",
+            "sizeBytes": 136
+          },
+          {
+            "route": "assets/harbor-art.webp",
+            "expectedSha256": "8b580f05bf017027d0c8b3d1d0d321a84d89af1efbc43c89cc0705e62557fda2",
+            "status": 200,
+            "sha256": "8b580f05bf017027d0c8b3d1d0d321a84d89af1efbc43c89cc0705e62557fda2",
+            "sizeBytes": 85294
+          },
+          {
+            "route": "assets/harbor-icon.svg",
+            "expectedSha256": "fc9f82e5fa4998cb3e48a85662bcb719c7ecbd305acc7b544e181605192dbf45",
+            "status": 200,
+            "sha256": "fc9f82e5fa4998cb3e48a85662bcb719c7ecbd305acc7b544e181605192dbf45",
+            "sizeBytes": 344
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "7981a2f98d1ade2815f7e33e2d79672c280334001a00406bb11b5362ce8182bf",
+            "status": 200,
+            "sha256": "7981a2f98d1ade2815f7e33e2d79672c280334001a00406bb11b5362ce8182bf",
+            "sizeBytes": 1084
+          }
+        ],
+        "deselected": {
+          "active": null,
+          "controller": { "active": null, "trying": null, "previewing": false },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          },
+          "backgroundImage": "none",
+          "links": [],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "coldProcess": {
+        "first": 98635,
+        "cold": 98887,
+        "portConfirmedClosed": true
+      },
+      "status": "passed",
+      "freeAfterMiB": 549
+    },
+    {
+      "catalogId": 2204,
+      "slug": "dsh-web-ui-miku",
+      "skinId": "miku",
+      "artifactSha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/miku",
+      "freeBeforeMiB": 549,
+      "selected": {
+        "initial": {
+          "active": "miku",
+          "controller": {
+            "active": "miku",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#0d1a3a",
+            "--dsw-alias-bg-layer-1": "#12244a",
+            "--dsw-alias-bg-layer-2": "#182e5c",
+            "--dsw-alias-bg-overlay": "#12244a",
+            "--dsw-alias-border-l1": "#96beff1f",
+            "--dsw-alias-border-l2": "#96beff2e",
+            "--dsw-alias-brand-primary": "#58a9ff",
+            "--dsw-alias-label-primary": "#d6f1ec",
+            "--dsw-alias-label-secondary": "#b8cae8",
+            "--dsw-alias-state-error-primary": "#e06060",
+            "--dsw-alias-state-success-primary": "#4fb86f",
+            "--dsw-alias-state-warn-primary": "#e5b94f",
+            "--dsw-specific-sidebar-fill": "#1e4f9e"
+          },
+          "backgroundImage": "linear-gradient(rgba(4, 10, 28, 0.12) 0%, rgba(6, 14, 36, 0.16) 60%, rgba(8, 18, 42, 0.18) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/miku/assets/miku-art.webp\")",
+          "links": [
+            "/api/skin-center/v2/skins/miku/stylesheet",
+            "/api/skin-center/v2/skins/miku/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "active": "miku",
+            "controller": {
+              "active": "miku",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": false,
+            "tokens": {
+              "--dsw-alias-bg-base": "#ffffff29",
+              "--dsw-alias-bg-layer-1": "#f3f8ff2e",
+              "--dsw-alias-bg-layer-2": "#e4f0ff33",
+              "--dsw-alias-bg-overlay": "#eefaf766",
+              "--dsw-alias-border-l1": "#14376e26",
+              "--dsw-alias-border-l2": "#14376e38",
+              "--dsw-alias-brand-primary": "#2e9bff",
+              "--dsw-alias-label-primary": "#14263f",
+              "--dsw-alias-label-secondary": "#3a5070",
+              "--dsw-alias-state-error-primary": "#c22626",
+              "--dsw-alias-state-success-primary": "#24924a",
+              "--dsw-alias-state-warn-primary": "#c99a2e",
+              "--dsw-specific-sidebar-fill": "#2e9bff"
+            },
+            "backgroundImage": "linear-gradient(rgba(4, 10, 28, 0.12) 0%, rgba(6, 14, 36, 0.16) 60%, rgba(8, 18, 42, 0.18) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/miku/assets/miku-art.webp\")",
+            "links": [
+              "/api/skin-center/v2/skins/miku/stylesheet",
+              "/api/skin-center/v2/skins/miku/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2204-selected-light.png",
+            "screenshotSha256": "624b8481ad1bfc8352dfcd775cd9deaf3fe1e474a288cb1cf250b426659b101c",
+            "screenshotSizeBytes": 1012610
+          },
+          {
+            "mode": "dark",
+            "active": "miku",
+            "controller": {
+              "active": "miku",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": true,
+            "tokens": {
+              "--dsw-alias-bg-base": "#0d1a3a",
+              "--dsw-alias-bg-layer-1": "#12244a",
+              "--dsw-alias-bg-layer-2": "#182e5c",
+              "--dsw-alias-bg-overlay": "#12244a",
+              "--dsw-alias-border-l1": "#96beff1f",
+              "--dsw-alias-border-l2": "#96beff2e",
+              "--dsw-alias-brand-primary": "#58a9ff",
+              "--dsw-alias-label-primary": "#d6f1ec",
+              "--dsw-alias-label-secondary": "#b8cae8",
+              "--dsw-alias-state-error-primary": "#e06060",
+              "--dsw-alias-state-success-primary": "#4fb86f",
+              "--dsw-alias-state-warn-primary": "#e5b94f",
+              "--dsw-specific-sidebar-fill": "#1e4f9e"
+            },
+            "backgroundImage": "linear-gradient(rgba(4, 10, 28, 0.12) 0%, rgba(6, 14, 36, 0.16) 60%, rgba(8, 18, 42, 0.18) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/miku/assets/miku-art.webp\")",
+            "links": [
+              "/api/skin-center/v2/skins/miku/stylesheet",
+              "/api/skin-center/v2/skins/miku/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2204-selected-dark.png",
+            "screenshotSha256": "b07f7fb4071cd889a985b3e56a1cf139e264c76a61863cab06cf5fb017359721",
+            "screenshotSizeBytes": 1264611
+          }
+        ],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "05a303cd6fae5ed3a448cbed65ca45f00f2905953a25ccfa28bc5270fbe2a42f",
+            "status": 200,
+            "sha256": "05a303cd6fae5ed3a448cbed65ca45f00f2905953a25ccfa28bc5270fbe2a42f",
+            "sizeBytes": 18644
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "d7f9b33a939b2661f2071f88390a9035024004466ad921cfe0c942f1ea94a821",
+            "status": 200,
+            "sha256": "d7f9b33a939b2661f2071f88390a9035024004466ad921cfe0c942f1ea94a821",
+            "sizeBytes": 59502
+          },
+          {
+            "route": "assets/miku-art-light.jpg",
+            "expectedSha256": "fcdec57ca0fef16fd775ac598908d24ffcbb7f04dc6a9bb18ed3d8ba4625e61e",
+            "status": 200,
+            "sha256": "fcdec57ca0fef16fd775ac598908d24ffcbb7f04dc6a9bb18ed3d8ba4625e61e",
+            "sizeBytes": 1227459
+          },
+          {
+            "route": "assets/miku-art.webp",
+            "expectedSha256": "baa346f68e8aa8b8e5471781d9fc1a56463bd3da4dd261cc5dba34884e2fcfa8",
+            "status": 200,
+            "sha256": "baa346f68e8aa8b8e5471781d9fc1a56463bd3da4dd261cc5dba34884e2fcfa8",
+            "sizeBytes": 63552
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "34d12bbc572de39aa2e281b1b035128637e14ff59fc0b2c1122687f10d364b5a",
+            "status": 200,
+            "sha256": "34d12bbc572de39aa2e281b1b035128637e14ff59fc0b2c1122687f10d364b5a",
+            "sizeBytes": 27085
+          }
+        ],
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "cold": {
+        "initial": {
+          "active": "miku",
+          "controller": {
+            "active": "miku",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#0d1a3a",
+            "--dsw-alias-bg-layer-1": "#12244a",
+            "--dsw-alias-bg-layer-2": "#182e5c",
+            "--dsw-alias-bg-overlay": "#12244a",
+            "--dsw-alias-border-l1": "#96beff1f",
+            "--dsw-alias-border-l2": "#96beff2e",
+            "--dsw-alias-brand-primary": "#58a9ff",
+            "--dsw-alias-label-primary": "#d6f1ec",
+            "--dsw-alias-label-secondary": "#b8cae8",
+            "--dsw-alias-state-error-primary": "#e06060",
+            "--dsw-alias-state-success-primary": "#4fb86f",
+            "--dsw-alias-state-warn-primary": "#e5b94f",
+            "--dsw-specific-sidebar-fill": "#1e4f9e"
+          },
+          "backgroundImage": "linear-gradient(rgba(4, 10, 28, 0.12) 0%, rgba(6, 14, 36, 0.16) 60%, rgba(8, 18, 42, 0.18) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/miku/assets/miku-art.webp\")",
+          "links": [
+            "/api/skin-center/v2/skins/miku/stylesheet",
+            "/api/skin-center/v2/skins/miku/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "modes": [],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "05a303cd6fae5ed3a448cbed65ca45f00f2905953a25ccfa28bc5270fbe2a42f",
+            "status": 200,
+            "sha256": "05a303cd6fae5ed3a448cbed65ca45f00f2905953a25ccfa28bc5270fbe2a42f",
+            "sizeBytes": 18644
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "d7f9b33a939b2661f2071f88390a9035024004466ad921cfe0c942f1ea94a821",
+            "status": 200,
+            "sha256": "d7f9b33a939b2661f2071f88390a9035024004466ad921cfe0c942f1ea94a821",
+            "sizeBytes": 59502
+          },
+          {
+            "route": "assets/miku-art-light.jpg",
+            "expectedSha256": "fcdec57ca0fef16fd775ac598908d24ffcbb7f04dc6a9bb18ed3d8ba4625e61e",
+            "status": 200,
+            "sha256": "fcdec57ca0fef16fd775ac598908d24ffcbb7f04dc6a9bb18ed3d8ba4625e61e",
+            "sizeBytes": 1227459
+          },
+          {
+            "route": "assets/miku-art.webp",
+            "expectedSha256": "baa346f68e8aa8b8e5471781d9fc1a56463bd3da4dd261cc5dba34884e2fcfa8",
+            "status": 200,
+            "sha256": "baa346f68e8aa8b8e5471781d9fc1a56463bd3da4dd261cc5dba34884e2fcfa8",
+            "sizeBytes": 63552
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "34d12bbc572de39aa2e281b1b035128637e14ff59fc0b2c1122687f10d364b5a",
+            "status": 200,
+            "sha256": "34d12bbc572de39aa2e281b1b035128637e14ff59fc0b2c1122687f10d364b5a",
+            "sizeBytes": 27085
+          }
+        ],
+        "deselected": {
+          "active": null,
+          "controller": { "active": null, "trying": null, "previewing": false },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          },
+          "backgroundImage": "none",
+          "links": [],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "coldProcess": {
+        "first": 99108,
+        "cold": 99375,
+        "portConfirmedClosed": true
+      },
+      "status": "passed",
+      "freeAfterMiB": 542
+    },
+    {
+      "catalogId": 2205,
+      "slug": "dsh-web-ui-minecraft",
+      "skinId": "minecraft",
+      "artifactSha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/minecraft",
+      "freeBeforeMiB": 542,
+      "selected": {
+        "initial": {
+          "active": "minecraft",
+          "controller": {
+            "active": "minecraft",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#18221b",
+            "--dsw-alias-bg-layer-1": "#1a251d",
+            "--dsw-alias-bg-layer-2": "#1d2920",
+            "--dsw-alias-bg-overlay": "#060907b8",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#83c94e",
+            "--dsw-alias-label-primary": "#e7ead7",
+            "--dsw-alias-label-secondary": "#b3bda3",
+            "--dsw-alias-state-error-primary": "#d45a5a",
+            "--dsw-alias-state-success-primary": "#4f8a33",
+            "--dsw-alias-state-warn-primary": "#d9a53c",
+            "--dsw-specific-sidebar-fill": "#0c160f8c"
+          },
+          "backgroundImage": "none",
+          "links": [
+            "/api/skin-center/v2/skins/minecraft/stylesheet",
+            "/api/skin-center/v2/skins/minecraft/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "active": "minecraft",
+            "controller": {
+              "active": "minecraft",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": false,
+            "tokens": {
+              "--dsw-alias-bg-base": "#18221b",
+              "--dsw-alias-bg-layer-1": "#1a251d",
+              "--dsw-alias-bg-layer-2": "#1d2920",
+              "--dsw-alias-bg-overlay": "#060907b8",
+              "--dsw-alias-border-l1": "#ffffff0f",
+              "--dsw-alias-border-l2": "#ffffff1f",
+              "--dsw-alias-brand-primary": "#83c94e",
+              "--dsw-alias-label-primary": "#e7ead7",
+              "--dsw-alias-label-secondary": "#b3bda3",
+              "--dsw-alias-state-error-primary": "#d45a5a",
+              "--dsw-alias-state-success-primary": "#4f8a33",
+              "--dsw-alias-state-warn-primary": "#d9a53c",
+              "--dsw-specific-sidebar-fill": "#0c160f8c"
+            },
+            "backgroundImage": "none",
+            "links": [
+              "/api/skin-center/v2/skins/minecraft/stylesheet",
+              "/api/skin-center/v2/skins/minecraft/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2205-selected-light.png",
+            "screenshotSha256": "ebb86d6f3dec68dcd42c2116ba691b09ee797e40cae386efedc56b9778410960",
+            "screenshotSizeBytes": 36724
+          },
+          {
+            "mode": "dark",
+            "active": "minecraft",
+            "controller": {
+              "active": "minecraft",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": true,
+            "tokens": {
+              "--dsw-alias-bg-base": "#18221b",
+              "--dsw-alias-bg-layer-1": "#1a251d",
+              "--dsw-alias-bg-layer-2": "#1d2920",
+              "--dsw-alias-bg-overlay": "#060907b8",
+              "--dsw-alias-border-l1": "#ffffff0f",
+              "--dsw-alias-border-l2": "#ffffff1f",
+              "--dsw-alias-brand-primary": "#83c94e",
+              "--dsw-alias-label-primary": "#e7ead7",
+              "--dsw-alias-label-secondary": "#b3bda3",
+              "--dsw-alias-state-error-primary": "#d45a5a",
+              "--dsw-alias-state-success-primary": "#4f8a33",
+              "--dsw-alias-state-warn-primary": "#d9a53c",
+              "--dsw-specific-sidebar-fill": "#0c160f8c"
+            },
+            "backgroundImage": "none",
+            "links": [
+              "/api/skin-center/v2/skins/minecraft/stylesheet",
+              "/api/skin-center/v2/skins/minecraft/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2205-selected-dark.png",
+            "screenshotSha256": "ebb86d6f3dec68dcd42c2116ba691b09ee797e40cae386efedc56b9778410960",
+            "screenshotSizeBytes": 36724
+          }
+        ],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "79a8af22f1112bb4ea01d95f6e98a311e0858cbcfd0c808431c86c4f05ff3844",
+            "status": 200,
+            "sha256": "79a8af22f1112bb4ea01d95f6e98a311e0858cbcfd0c808431c86c4f05ff3844",
+            "sizeBytes": 10449
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "b8912e7fb7b2c8e01026b6891f5290f1e5fd39c976fbb74f2de979acac94a218",
+            "status": 200,
+            "sha256": "b8912e7fb7b2c8e01026b6891f5290f1e5fd39c976fbb74f2de979acac94a218",
+            "sizeBytes": 20523
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "deb4abe5e9dc64b075cb6ab1cfbdb153534a6cf837e3558cc0daee7b1bc6eb1a",
+            "status": 200,
+            "sha256": "deb4abe5e9dc64b075cb6ab1cfbdb153534a6cf837e3558cc0daee7b1bc6eb1a",
+            "sizeBytes": 13813
+          }
+        ],
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "cold": {
+        "initial": {
+          "active": "minecraft",
+          "controller": {
+            "active": "minecraft",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#18221b",
+            "--dsw-alias-bg-layer-1": "#1a251d",
+            "--dsw-alias-bg-layer-2": "#1d2920",
+            "--dsw-alias-bg-overlay": "#060907b8",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#83c94e",
+            "--dsw-alias-label-primary": "#e7ead7",
+            "--dsw-alias-label-secondary": "#b3bda3",
+            "--dsw-alias-state-error-primary": "#d45a5a",
+            "--dsw-alias-state-success-primary": "#4f8a33",
+            "--dsw-alias-state-warn-primary": "#d9a53c",
+            "--dsw-specific-sidebar-fill": "#0c160f8c"
+          },
+          "backgroundImage": "none",
+          "links": [
+            "/api/skin-center/v2/skins/minecraft/stylesheet",
+            "/api/skin-center/v2/skins/minecraft/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "modes": [],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "79a8af22f1112bb4ea01d95f6e98a311e0858cbcfd0c808431c86c4f05ff3844",
+            "status": 200,
+            "sha256": "79a8af22f1112bb4ea01d95f6e98a311e0858cbcfd0c808431c86c4f05ff3844",
+            "sizeBytes": 10449
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "b8912e7fb7b2c8e01026b6891f5290f1e5fd39c976fbb74f2de979acac94a218",
+            "status": 200,
+            "sha256": "b8912e7fb7b2c8e01026b6891f5290f1e5fd39c976fbb74f2de979acac94a218",
+            "sizeBytes": 20523
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "deb4abe5e9dc64b075cb6ab1cfbdb153534a6cf837e3558cc0daee7b1bc6eb1a",
+            "status": 200,
+            "sha256": "deb4abe5e9dc64b075cb6ab1cfbdb153534a6cf837e3558cc0daee7b1bc6eb1a",
+            "sizeBytes": 13813
+          }
+        ],
+        "deselected": {
+          "active": null,
+          "controller": { "active": null, "trying": null, "previewing": false },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          },
+          "backgroundImage": "none",
+          "links": [],
+          "width": { "viewport": 1440, "document": 1440 },
+          "images": []
+        },
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "coldProcess": {
+        "first": 99635,
+        "cold": 99908,
+        "portConfirmedClosed": true
+      },
+      "status": "passed",
+      "freeAfterMiB": 535
+    },
+    {
+      "catalogId": 2208,
+      "slug": "dsh-web-ui-trading",
+      "skinId": "trading",
+      "artifactSha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/trading",
+      "freeBeforeMiB": 859,
+      "selected": {
+        "initial": {
+          "active": "trading",
+          "controller": {
+            "active": "trading",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#10151d",
+            "--dsw-alias-bg-layer-1": "#151b25",
+            "--dsw-alias-bg-layer-2": "#1a222e",
+            "--dsw-alias-bg-overlay": "#161d27",
+            "--dsw-alias-border-l1": "#ffffff12",
+            "--dsw-alias-border-l2": "#ffffff24",
+            "--dsw-alias-brand-primary": "#f23645",
+            "--dsw-alias-label-primary": "#dbe2ec",
+            "--dsw-alias-label-secondary": "#a7b1bf",
+            "--dsw-alias-state-error-primary": "#f23645",
+            "--dsw-alias-state-success-primary": "#089981",
+            "--dsw-alias-state-warn-primary": "#d69a3a",
+            "--dsw-specific-sidebar-fill": "#10151d"
+          },
+          "backgroundImage": "none",
+          "links": [
+            "/api/skin-center/v2/skins/trading/stylesheet",
+            "/api/skin-center/v2/skins/trading/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "skinChrome": [
+            { "role": "titlebar", "visible": true },
+            { "role": "tape", "visible": true },
+            { "role": "statusbar", "visible": true }
+          ],
+          "images": []
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "active": "trading",
+            "controller": {
+              "active": "trading",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": false,
+            "tokens": {
+              "--dsw-alias-bg-base": "#fff",
+              "--dsw-alias-bg-layer-1": "#f5f7fa",
+              "--dsw-alias-bg-layer-2": "#eef1f5",
+              "--dsw-alias-bg-overlay": "#fff",
+              "--dsw-alias-border-l1": "#10182414",
+              "--dsw-alias-border-l2": "#10182424",
+              "--dsw-alias-brand-primary": "#e02e3d",
+              "--dsw-alias-label-primary": "#1b2431",
+              "--dsw-alias-label-secondary": "#445160",
+              "--dsw-alias-state-error-primary": "#e02e3d",
+              "--dsw-alias-state-success-primary": "#089981",
+              "--dsw-alias-state-warn-primary": "#b07600",
+              "--dsw-specific-sidebar-fill": "#f6f8fa"
+            },
+            "backgroundImage": "none",
+            "links": [
+              "/api/skin-center/v2/skins/trading/stylesheet",
+              "/api/skin-center/v2/skins/trading/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "skinChrome": [
+              { "role": "titlebar", "visible": true },
+              { "role": "tape", "visible": true },
+              { "role": "statusbar", "visible": true }
+            ],
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2208-selected-light.png",
+            "screenshotSha256": "6529c21691da01c6b61d1a3e07b4437b42b88aff2a58b8308aeaec4ae4054514",
+            "screenshotSizeBytes": 88669
+          },
+          {
+            "mode": "dark",
+            "active": "trading",
+            "controller": {
+              "active": "trading",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": true,
+            "tokens": {
+              "--dsw-alias-bg-base": "#10151d",
+              "--dsw-alias-bg-layer-1": "#151b25",
+              "--dsw-alias-bg-layer-2": "#1a222e",
+              "--dsw-alias-bg-overlay": "#161d27",
+              "--dsw-alias-border-l1": "#ffffff12",
+              "--dsw-alias-border-l2": "#ffffff24",
+              "--dsw-alias-brand-primary": "#f23645",
+              "--dsw-alias-label-primary": "#dbe2ec",
+              "--dsw-alias-label-secondary": "#a7b1bf",
+              "--dsw-alias-state-error-primary": "#f23645",
+              "--dsw-alias-state-success-primary": "#089981",
+              "--dsw-alias-state-warn-primary": "#d69a3a",
+              "--dsw-specific-sidebar-fill": "#10151d"
+            },
+            "backgroundImage": "none",
+            "links": [
+              "/api/skin-center/v2/skins/trading/stylesheet",
+              "/api/skin-center/v2/skins/trading/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "skinChrome": [
+              { "role": "titlebar", "visible": true },
+              { "role": "tape", "visible": true },
+              { "role": "statusbar", "visible": true }
+            ],
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2208-selected-dark.png",
+            "screenshotSha256": "e77d1d6997f7b2a02f3ee02d0aa0ca9c412cd1c5dd33e38dcc89a7468f3e30f1",
+            "screenshotSizeBytes": 86060
+          }
+        ],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "7c7d3490556b5c8fc76a7680692bc7c48c04089c71440657a3569332b052b63d",
+            "status": 200,
+            "sha256": "7c7d3490556b5c8fc76a7680692bc7c48c04089c71440657a3569332b052b63d",
+            "sizeBytes": 12670
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "d8ce0bac8ea0d95be501a1a81d90ad297a198a632de021fd8720a9354883d2fd",
+            "status": 200,
+            "sha256": "d8ce0bac8ea0d95be501a1a81d90ad297a198a632de021fd8720a9354883d2fd",
+            "sizeBytes": 7381
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "ccdb09baf852656bdd654cd30d5bba0a19c22fab0f3a9f6917a144f53251cec1",
+            "status": 200,
+            "sha256": "ccdb09baf852656bdd654cd30d5bba0a19c22fab0f3a9f6917a144f53251cec1",
+            "sizeBytes": 32236
+          }
+        ],
+        "errors": [
+          {
+            "type": "error",
+            "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+            "location": "http://127.0.0.1:4015/plugins/dsh-ticker/api/settings"
+          },
+          {
+            "type": "error",
+            "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+            "location": "http://127.0.0.1:4015/plugins/dsh-ticker/api/settings"
+          }
+        ],
+        "httpErrors": [
+          { "path": "/plugins/dsh-ticker/api/settings", "status": 404 },
+          { "path": "/plugins/dsh-ticker/api/settings", "status": 404 }
+        ],
+        "externalRequests": [
+          {
+            "origin": "https://qt.gtimg.cn",
+            "path": "/q=hkHSI,hkHSTECH,usDJI,usINX,usIXIC&_t=1788655849840"
+          },
+          {
+            "origin": "https://qt.gtimg.cn",
+            "path": "/q=sh000001,sz399001,sz399006,hkHSI,hk00700,hk09988,usIXIC,usDJI,usNVDA,usAAPL,usTSLA&_t=1788655849849"
+          },
+          {
+            "origin": "https://api.binance.com",
+            "path": "/api/v3/ticker/24hr"
+          },
+          { "origin": "https://api.frankfurter.dev", "path": "/v1/latest" },
+          { "origin": "https://api.frankfurter.dev", "path": "/v1/2026-09-05" },
+          {
+            "origin": "https://qt.gtimg.cn",
+            "path": "/q=hkHSI,hkHSTECH,usDJI,usINX,usIXIC&_t=1788655850589"
+          },
+          {
+            "origin": "https://qt.gtimg.cn",
+            "path": "/q=sh000001,sz399001,sz399006,hkHSI,hk00700,hk09988,usIXIC,usDJI,usNVDA,usAAPL,usTSLA&_t=1788655850591"
+          },
+          {
+            "origin": "https://api.binance.com",
+            "path": "/api/v3/ticker/24hr"
+          },
+          { "origin": "https://api.frankfurter.dev", "path": "/v1/latest" },
+          { "origin": "https://api.frankfurter.dev", "path": "/v1/2026-09-05" }
+        ],
+        "optionalIntegration": {
+          "plugin": "dsh-ticker",
+          "absent": true,
+          "httpErrors": [
+            { "path": "/plugins/dsh-ticker/api/settings", "status": 404 },
+            { "path": "/plugins/dsh-ticker/api/settings", "status": 404 }
+          ],
+          "consoleErrors": [
+            {
+              "type": "error",
+              "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+              "location": "http://127.0.0.1:4015/plugins/dsh-ticker/api/settings"
+            },
+            {
+              "type": "error",
+              "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+              "location": "http://127.0.0.1:4015/plugins/dsh-ticker/api/settings"
+            }
+          ],
+          "skinControlsVisible": true,
+          "quoteAccuracyVerified": false
+        }
+      },
+      "cold": {
+        "initial": {
+          "active": "trading",
+          "controller": {
+            "active": "trading",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#10151d",
+            "--dsw-alias-bg-layer-1": "#151b25",
+            "--dsw-alias-bg-layer-2": "#1a222e",
+            "--dsw-alias-bg-overlay": "#161d27",
+            "--dsw-alias-border-l1": "#ffffff12",
+            "--dsw-alias-border-l2": "#ffffff24",
+            "--dsw-alias-brand-primary": "#f23645",
+            "--dsw-alias-label-primary": "#dbe2ec",
+            "--dsw-alias-label-secondary": "#a7b1bf",
+            "--dsw-alias-state-error-primary": "#f23645",
+            "--dsw-alias-state-success-primary": "#089981",
+            "--dsw-alias-state-warn-primary": "#d69a3a",
+            "--dsw-specific-sidebar-fill": "#10151d"
+          },
+          "backgroundImage": "none",
+          "links": [
+            "/api/skin-center/v2/skins/trading/stylesheet",
+            "/api/skin-center/v2/skins/trading/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "skinChrome": [
+            { "role": "titlebar", "visible": true },
+            { "role": "tape", "visible": true },
+            { "role": "statusbar", "visible": true }
+          ],
+          "images": []
+        },
+        "modes": [],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "7c7d3490556b5c8fc76a7680692bc7c48c04089c71440657a3569332b052b63d",
+            "status": 200,
+            "sha256": "7c7d3490556b5c8fc76a7680692bc7c48c04089c71440657a3569332b052b63d",
+            "sizeBytes": 12670
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "d8ce0bac8ea0d95be501a1a81d90ad297a198a632de021fd8720a9354883d2fd",
+            "status": 200,
+            "sha256": "d8ce0bac8ea0d95be501a1a81d90ad297a198a632de021fd8720a9354883d2fd",
+            "sizeBytes": 7381
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "ccdb09baf852656bdd654cd30d5bba0a19c22fab0f3a9f6917a144f53251cec1",
+            "status": 200,
+            "sha256": "ccdb09baf852656bdd654cd30d5bba0a19c22fab0f3a9f6917a144f53251cec1",
+            "sizeBytes": 32236
+          }
+        ],
+        "deselected": {
+          "active": null,
+          "controller": { "active": null, "trying": null, "previewing": false },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          },
+          "backgroundImage": "none",
+          "links": [],
+          "width": { "viewport": 1440, "document": 1440 },
+          "skinChrome": [],
+          "images": []
+        },
+        "errors": [
+          {
+            "type": "error",
+            "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+            "location": "http://127.0.0.1:4015/plugins/dsh-ticker/api/settings"
+          }
+        ],
+        "httpErrors": [
+          { "path": "/plugins/dsh-ticker/api/settings", "status": 404 }
+        ],
+        "externalRequests": [
+          {
+            "origin": "https://qt.gtimg.cn",
+            "path": "/q=hkHSI,hkHSTECH,usDJI,usINX,usIXIC&_t=1788655858559"
+          },
+          {
+            "origin": "https://qt.gtimg.cn",
+            "path": "/q=sh000001,sz399001,sz399006,hkHSI,hk00700,hk09988,usIXIC,usDJI,usNVDA,usAAPL,usTSLA&_t=1788655858564"
+          },
+          {
+            "origin": "https://api.binance.com",
+            "path": "/api/v3/ticker/24hr"
+          },
+          { "origin": "https://api.frankfurter.dev", "path": "/v1/latest" },
+          { "origin": "https://api.frankfurter.dev", "path": "/v1/2026-09-05" }
+        ],
+        "optionalIntegration": {
+          "plugin": "dsh-ticker",
+          "absent": true,
+          "httpErrors": [
+            { "path": "/plugins/dsh-ticker/api/settings", "status": 404 }
+          ],
+          "consoleErrors": [
+            {
+              "type": "error",
+              "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+              "location": "http://127.0.0.1:4015/plugins/dsh-ticker/api/settings"
+            }
+          ],
+          "skinControlsVisible": true,
+          "quoteAccuracyVerified": false
+        }
+      },
+      "coldProcess": {
+        "first": 4885,
+        "cold": 5163,
+        "portConfirmedClosed": true
+      },
+      "status": "passed",
+      "freeAfterMiB": 858
+    },
+    {
+      "catalogId": 2209,
+      "slug": "dsh-web-ui-whale-song",
+      "skinId": "whale-song",
+      "artifactSha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/whale-song",
+      "freeBeforeMiB": 858,
+      "selected": {
+        "initial": {
+          "active": "whale-song",
+          "controller": {
+            "active": "whale-song",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#08143480",
+            "--dsw-alias-bg-layer-1": "#12244c8c",
+            "--dsw-alias-bg-layer-2": "#172c5899",
+            "--dsw-alias-bg-overlay": "#12244ceb",
+            "--dsw-alias-border-l1": "#a8c8e81f",
+            "--dsw-alias-border-l2": "#a8c8e82e",
+            "--dsw-alias-brand-primary": "#8ab4de",
+            "--dsw-alias-label-primary": "#d8e5f5",
+            "--dsw-alias-label-secondary": "#a5b3da",
+            "--dsw-alias-state-error-primary": "#e05c5c",
+            "--dsw-alias-state-success-primary": "#58b058",
+            "--dsw-alias-state-warn-primary": "#d9b45b",
+            "--dsw-specific-sidebar-fill": "#0e1e40b8"
+          },
+          "backgroundImage": "linear-gradient(rgba(6, 14, 36, 0.38) 0%, rgba(9, 19, 45, 0.48) 60%, rgba(13, 26, 58, 0.55) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/whale-song/assets/whale-art.webp\")",
+          "links": [
+            "/api/skin-center/v2/skins/whale-song/stylesheet",
+            "/api/skin-center/v2/skins/whale-song/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "skinChrome": [],
+          "images": []
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "active": "whale-song",
+            "controller": {
+              "active": "whale-song",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": false,
+            "tokens": {
+              "--dsw-alias-bg-base": "#ffffff6b",
+              "--dsw-alias-bg-layer-1": "#f4f8fd7a",
+              "--dsw-alias-bg-layer-2": "#ebf2fa85",
+              "--dsw-alias-bg-overlay": "#f0f6fceb",
+              "--dsw-alias-border-l1": "#1a3a7a26",
+              "--dsw-alias-border-l2": "#1a3a7a38",
+              "--dsw-alias-brand-primary": "#4d8fd4",
+              "--dsw-alias-label-primary": "#0a1e4a",
+              "--dsw-alias-label-secondary": "#16315f",
+              "--dsw-alias-state-error-primary": "#c00000",
+              "--dsw-alias-state-success-primary": "#2e8e52",
+              "--dsw-alias-state-warn-primary": "#d9b45b",
+              "--dsw-specific-sidebar-fill": "#f2f7fc8f"
+            },
+            "backgroundImage": "linear-gradient(rgba(6, 14, 36, 0.38) 0%, rgba(9, 19, 45, 0.48) 60%, rgba(13, 26, 58, 0.55) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/whale-song/assets/whale-art.webp\")",
+            "links": [
+              "/api/skin-center/v2/skins/whale-song/stylesheet",
+              "/api/skin-center/v2/skins/whale-song/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "skinChrome": [],
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2209-selected-light.png",
+            "screenshotSha256": "a2db731bd30edd27b38263938b1be544b783ac151e496fec7c8f2551f0f0567f",
+            "screenshotSizeBytes": 765325
+          },
+          {
+            "mode": "dark",
+            "active": "whale-song",
+            "controller": {
+              "active": "whale-song",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": true,
+            "tokens": {
+              "--dsw-alias-bg-base": "#08143480",
+              "--dsw-alias-bg-layer-1": "#12244c8c",
+              "--dsw-alias-bg-layer-2": "#172c5899",
+              "--dsw-alias-bg-overlay": "#12244ceb",
+              "--dsw-alias-border-l1": "#a8c8e81f",
+              "--dsw-alias-border-l2": "#a8c8e82e",
+              "--dsw-alias-brand-primary": "#8ab4de",
+              "--dsw-alias-label-primary": "#d8e5f5",
+              "--dsw-alias-label-secondary": "#a5b3da",
+              "--dsw-alias-state-error-primary": "#e05c5c",
+              "--dsw-alias-state-success-primary": "#58b058",
+              "--dsw-alias-state-warn-primary": "#d9b45b",
+              "--dsw-specific-sidebar-fill": "#0e1e40b8"
+            },
+            "backgroundImage": "linear-gradient(rgba(6, 14, 36, 0.38) 0%, rgba(9, 19, 45, 0.48) 60%, rgba(13, 26, 58, 0.55) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/whale-song/assets/whale-art.webp\")",
+            "links": [
+              "/api/skin-center/v2/skins/whale-song/stylesheet",
+              "/api/skin-center/v2/skins/whale-song/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "skinChrome": [],
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2209-selected-dark.png",
+            "screenshotSha256": "187d6c3244acc972d7258aaf23ed00ed4c91f27deb3733b828ea1aeafcb1f7ff",
+            "screenshotSizeBytes": 612276
+          }
+        ],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "fe61ce48061a093f4cb947ff5d8353fa02469d0ac5728543b53bbea271751228",
+            "status": 200,
+            "sha256": "fe61ce48061a093f4cb947ff5d8353fa02469d0ac5728543b53bbea271751228",
+            "sizeBytes": 16770
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "091409bb23331b4b07e6fd749aa32311739f3e5334012fae7ec910dddbcf472b",
+            "status": 200,
+            "sha256": "091409bb23331b4b07e6fd749aa32311739f3e5334012fae7ec910dddbcf472b",
+            "sizeBytes": 10429
+          },
+          {
+            "route": "assets/whale-art.webp",
+            "expectedSha256": "9b74076df6da331a69875b9dcee6233193f1ac6254694fd429e179cefaf5d95d",
+            "status": 200,
+            "sha256": "9b74076df6da331a69875b9dcee6233193f1ac6254694fd429e179cefaf5d95d",
+            "sizeBytes": 153526
+          },
+          {
+            "route": "assets/whale-icon.png",
+            "expectedSha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe",
+            "status": 200,
+            "sha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe",
+            "sizeBytes": 8803
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "beb0f140dab1abb40bda52ad2ae1970feb761e2184e64e1d5810fab7c32dfff3",
+            "status": 200,
+            "sha256": "beb0f140dab1abb40bda52ad2ae1970feb761e2184e64e1d5810fab7c32dfff3",
+            "sizeBytes": 1096
+          }
+        ],
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "cold": {
+        "initial": {
+          "active": "whale-song",
+          "controller": {
+            "active": "whale-song",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#08143480",
+            "--dsw-alias-bg-layer-1": "#12244c8c",
+            "--dsw-alias-bg-layer-2": "#172c5899",
+            "--dsw-alias-bg-overlay": "#12244ceb",
+            "--dsw-alias-border-l1": "#a8c8e81f",
+            "--dsw-alias-border-l2": "#a8c8e82e",
+            "--dsw-alias-brand-primary": "#8ab4de",
+            "--dsw-alias-label-primary": "#d8e5f5",
+            "--dsw-alias-label-secondary": "#a5b3da",
+            "--dsw-alias-state-error-primary": "#e05c5c",
+            "--dsw-alias-state-success-primary": "#58b058",
+            "--dsw-alias-state-warn-primary": "#d9b45b",
+            "--dsw-specific-sidebar-fill": "#0e1e40b8"
+          },
+          "backgroundImage": "linear-gradient(rgba(6, 14, 36, 0.38) 0%, rgba(9, 19, 45, 0.48) 60%, rgba(13, 26, 58, 0.55) 100%), url(\"http://127.0.0.1:4015/api/skin-center/v2/skins/whale-song/assets/whale-art.webp\")",
+          "links": [
+            "/api/skin-center/v2/skins/whale-song/stylesheet",
+            "/api/skin-center/v2/skins/whale-song/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "skinChrome": [],
+          "images": []
+        },
+        "modes": [],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "fe61ce48061a093f4cb947ff5d8353fa02469d0ac5728543b53bbea271751228",
+            "status": 200,
+            "sha256": "fe61ce48061a093f4cb947ff5d8353fa02469d0ac5728543b53bbea271751228",
+            "sizeBytes": 16770
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "091409bb23331b4b07e6fd749aa32311739f3e5334012fae7ec910dddbcf472b",
+            "status": 200,
+            "sha256": "091409bb23331b4b07e6fd749aa32311739f3e5334012fae7ec910dddbcf472b",
+            "sizeBytes": 10429
+          },
+          {
+            "route": "assets/whale-art.webp",
+            "expectedSha256": "9b74076df6da331a69875b9dcee6233193f1ac6254694fd429e179cefaf5d95d",
+            "status": 200,
+            "sha256": "9b74076df6da331a69875b9dcee6233193f1ac6254694fd429e179cefaf5d95d",
+            "sizeBytes": 153526
+          },
+          {
+            "route": "assets/whale-icon.png",
+            "expectedSha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe",
+            "status": 200,
+            "sha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe",
+            "sizeBytes": 8803
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "beb0f140dab1abb40bda52ad2ae1970feb761e2184e64e1d5810fab7c32dfff3",
+            "status": 200,
+            "sha256": "beb0f140dab1abb40bda52ad2ae1970feb761e2184e64e1d5810fab7c32dfff3",
+            "sizeBytes": 1096
+          }
+        ],
+        "deselected": {
+          "active": null,
+          "controller": { "active": null, "trying": null, "previewing": false },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          },
+          "backgroundImage": "none",
+          "links": [],
+          "width": { "viewport": 1440, "document": 1440 },
+          "skinChrome": [],
+          "images": []
+        },
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "coldProcess": {
+        "first": 5395,
+        "cold": 5692,
+        "portConfirmedClosed": true
+      },
+      "status": "passed",
+      "freeAfterMiB": 858
+    },
+    {
+      "catalogId": 2210,
+      "slug": "dsh-web-ui-xp",
+      "skinId": "xp",
+      "artifactSha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "dda2780bd6467de92ad7533f9f1c28a7a5a04118",
+      "sourceSubdir": "packages/skins/skin-center/skins/xp",
+      "freeBeforeMiB": 858,
+      "selected": {
+        "initial": {
+          "active": "xp",
+          "controller": { "active": "xp", "trying": null, "previewing": false },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#0d0f12",
+            "--dsw-alias-bg-layer-1": "#15171b",
+            "--dsw-alias-bg-layer-2": "#1b1d21",
+            "--dsw-alias-bg-overlay": "#1b1d21",
+            "--dsw-alias-border-l1": "#ffffff14",
+            "--dsw-alias-border-l2": "#ffffff29",
+            "--dsw-alias-brand-primary": "#6da8e8",
+            "--dsw-alias-label-primary": "#e8eaed",
+            "--dsw-alias-label-secondary": "#c8ccd2",
+            "--dsw-alias-state-error-primary": "#ff5252",
+            "--dsw-alias-state-success-primary": "#2fbf71",
+            "--dsw-alias-state-warn-primary": "#d69a3a",
+            "--dsw-specific-sidebar-fill": "#17191d"
+          },
+          "backgroundImage": "linear-gradient(rgb(23, 35, 58) 0%, rgb(13, 21, 38) 55%, rgb(7, 12, 22) 100%)",
+          "links": [
+            "/api/skin-center/v2/skins/xp/stylesheet",
+            "/api/skin-center/v2/skins/xp/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "skinChrome": [
+            { "role": "titlebar", "visible": true },
+            { "role": "statusbar", "visible": true }
+          ],
+          "images": []
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "active": "xp",
+            "controller": {
+              "active": "xp",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": false,
+            "tokens": {
+              "--dsw-alias-bg-base": "#fff",
+              "--dsw-alias-bg-layer-1": "#f6f4ec",
+              "--dsw-alias-bg-layer-2": "#ece9d8",
+              "--dsw-alias-bg-overlay": "#ece9d8",
+              "--dsw-alias-border-l1": "#0000000f",
+              "--dsw-alias-border-l2": "#0000001f",
+              "--dsw-alias-brand-primary": "#316ac5",
+              "--dsw-alias-label-primary": "#000",
+              "--dsw-alias-label-secondary": "#3d4a5c",
+              "--dsw-alias-state-error-primary": "#e33e2b",
+              "--dsw-alias-state-success-primary": "#3d9f43",
+              "--dsw-alias-state-warn-primary": "#b07600",
+              "--dsw-specific-sidebar-fill": "#ece9d8"
+            },
+            "backgroundImage": "radial-gradient(130% 90% at 50% 120%, rgb(79, 158, 70) 0%, rgb(46, 107, 52) 38%, rgba(46, 107, 52, 0) 70%), linear-gradient(rgb(143, 195, 242) 0%, rgb(93, 155, 224) 45%, rgb(44, 102, 184) 78%, rgb(30, 79, 150) 100%)",
+            "links": [
+              "/api/skin-center/v2/skins/xp/stylesheet",
+              "/api/skin-center/v2/skins/xp/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "skinChrome": [
+              { "role": "titlebar", "visible": true },
+              { "role": "statusbar", "visible": true }
+            ],
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2210-selected-light.png",
+            "screenshotSha256": "cff1db4b6a1f4c20a8548ab14eb8045343af074f7535faa0551123b9aa8c535e",
+            "screenshotSizeBytes": 56478
+          },
+          {
+            "mode": "dark",
+            "active": "xp",
+            "controller": {
+              "active": "xp",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": true,
+            "tokens": {
+              "--dsw-alias-bg-base": "#0d0f12",
+              "--dsw-alias-bg-layer-1": "#15171b",
+              "--dsw-alias-bg-layer-2": "#1b1d21",
+              "--dsw-alias-bg-overlay": "#1b1d21",
+              "--dsw-alias-border-l1": "#ffffff14",
+              "--dsw-alias-border-l2": "#ffffff29",
+              "--dsw-alias-brand-primary": "#6da8e8",
+              "--dsw-alias-label-primary": "#e8eaed",
+              "--dsw-alias-label-secondary": "#c8ccd2",
+              "--dsw-alias-state-error-primary": "#ff5252",
+              "--dsw-alias-state-success-primary": "#2fbf71",
+              "--dsw-alias-state-warn-primary": "#d69a3a",
+              "--dsw-specific-sidebar-fill": "#17191d"
+            },
+            "backgroundImage": "linear-gradient(rgb(23, 35, 58) 0%, rgb(13, 21, 38) 55%, rgb(7, 12, 22) 100%)",
+            "links": [
+              "/api/skin-center/v2/skins/xp/stylesheet",
+              "/api/skin-center/v2/skins/xp/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "skinChrome": [
+              { "role": "titlebar", "visible": true },
+              { "role": "statusbar", "visible": true }
+            ],
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2210-selected-dark.png",
+            "screenshotSha256": "c46d394800303dba7065bcfbf80b03367546afe9620eb5124f5e215d0593b905",
+            "screenshotSizeBytes": 54681
+          }
+        ],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "3939fabd9baf7dca219000614c8ad9b5b91f6bd1da613bd540d51c5f335f9440",
+            "status": 200,
+            "sha256": "3939fabd9baf7dca219000614c8ad9b5b91f6bd1da613bd540d51c5f335f9440",
+            "sizeBytes": 14732
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "5dfe1a4d1fc3f6eba6ffb57a5f3eb45d4d9397bc40556f85579fa6b3f4055484",
+            "status": 200,
+            "sha256": "5dfe1a4d1fc3f6eba6ffb57a5f3eb45d4d9397bc40556f85579fa6b3f4055484",
+            "sizeBytes": 28741
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "823f25fd5f969feb8e51d8ff1577c1cbecbad847b2abac6e5020fc9ef543663f",
+            "status": 200,
+            "sha256": "823f25fd5f969feb8e51d8ff1577c1cbecbad847b2abac6e5020fc9ef543663f",
+            "sizeBytes": 7895
+          }
+        ],
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "cold": {
+        "initial": {
+          "active": "xp",
+          "controller": { "active": "xp", "trying": null, "previewing": false },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#0d0f12",
+            "--dsw-alias-bg-layer-1": "#15171b",
+            "--dsw-alias-bg-layer-2": "#1b1d21",
+            "--dsw-alias-bg-overlay": "#1b1d21",
+            "--dsw-alias-border-l1": "#ffffff14",
+            "--dsw-alias-border-l2": "#ffffff29",
+            "--dsw-alias-brand-primary": "#6da8e8",
+            "--dsw-alias-label-primary": "#e8eaed",
+            "--dsw-alias-label-secondary": "#c8ccd2",
+            "--dsw-alias-state-error-primary": "#ff5252",
+            "--dsw-alias-state-success-primary": "#2fbf71",
+            "--dsw-alias-state-warn-primary": "#d69a3a",
+            "--dsw-specific-sidebar-fill": "#17191d"
+          },
+          "backgroundImage": "linear-gradient(rgb(23, 35, 58) 0%, rgb(13, 21, 38) 55%, rgb(7, 12, 22) 100%)",
+          "links": [
+            "/api/skin-center/v2/skins/xp/stylesheet",
+            "/api/skin-center/v2/skins/xp/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "skinChrome": [
+            { "role": "titlebar", "visible": true },
+            { "role": "statusbar", "visible": true }
+          ],
+          "images": []
+        },
+        "modes": [],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "3939fabd9baf7dca219000614c8ad9b5b91f6bd1da613bd540d51c5f335f9440",
+            "status": 200,
+            "sha256": "3939fabd9baf7dca219000614c8ad9b5b91f6bd1da613bd540d51c5f335f9440",
+            "sizeBytes": 14732
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "5dfe1a4d1fc3f6eba6ffb57a5f3eb45d4d9397bc40556f85579fa6b3f4055484",
+            "status": 200,
+            "sha256": "5dfe1a4d1fc3f6eba6ffb57a5f3eb45d4d9397bc40556f85579fa6b3f4055484",
+            "sizeBytes": 28741
+          },
+          {
+            "route": "hooks.mjs",
+            "expectedSha256": "823f25fd5f969feb8e51d8ff1577c1cbecbad847b2abac6e5020fc9ef543663f",
+            "status": 200,
+            "sha256": "823f25fd5f969feb8e51d8ff1577c1cbecbad847b2abac6e5020fc9ef543663f",
+            "sizeBytes": 7895
+          }
+        ],
+        "deselected": {
+          "active": null,
+          "controller": { "active": null, "trying": null, "previewing": false },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          },
+          "backgroundImage": "none",
+          "links": [],
+          "width": { "viewport": 1440, "document": 1440 },
+          "skinChrome": [],
+          "images": []
+        },
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "coldProcess": {
+        "first": 5915,
+        "cold": 6175,
+        "portConfirmedClosed": true
+      },
+      "status": "passed",
+      "freeAfterMiB": 856
+    },
+    {
+      "catalogId": 2206,
+      "slug": "dsh-web-ui-qq98",
+      "skinId": "qq98",
+      "artifactSha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "a9b915cee0f12f2fd13a6575bc8feaa9ee09d6ed",
+      "sourceSubdir": "packages/skins/qq98",
+      "companion": {
+        "kind": "bundled-user-skin",
+        "skinId": "qq98",
+        "sourcePath": "assets/alpha/skin-center/user-skins/qq98",
+        "version": "0.2.5-dsh-themes.2-alpha.1",
+        "files": [
+          {
+            "path": "LICENSE",
+            "sourceSha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+            "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+            "bytes": 1521
+          },
+          {
+            "path": "NOTICE",
+            "sourceSha256": "e8c4a8a30ae46f0fffbb076b0bed62a30b5ee8b51ff353c59cbf4862823768c7",
+            "sha256": "ad78fd2e39dc3be9e2d9eb0ee8a4f5c1c02385633c1a4e3e7ad35e21c184a350",
+            "bytes": 975
+          },
+          {
+            "path": "PROVENANCE.json",
+            "sourceSha256": "000613dbdcdc99f0ef2f6ef8012a15ec445a6173d319d654704449a213eff684",
+            "sha256": "000613dbdcdc99f0ef2f6ef8012a15ec445a6173d319d654704449a213eff684",
+            "bytes": 764
+          },
+          {
+            "path": "patches.css",
+            "sourceSha256": "33a7670fc6188f7b06f19d3a18d8cd00f5839168808587f700cfa00195fe4bd6",
+            "sha256": "d62653ea7b5061e9f91c70069eb5edf93ba92e179fd8ba3a50dda75a51097833",
+            "bytes": 34823
+          },
+          {
+            "path": "skin.css",
+            "sourceSha256": "6e414c9f689dbfa978001f8d332237e64b22fedd51da16e2b20a48f3550937a2",
+            "sha256": "6e414c9f689dbfa978001f8d332237e64b22fedd51da16e2b20a48f3550937a2",
+            "bytes": 506
+          },
+          {
+            "path": "skin.json",
+            "sourceSha256": "426ac9c8b5517577db3486df465304171ea3533ed50591f6b1b19d78a5dbd423",
+            "sha256": "53e20c335d0fef3e802281e2636e35719a2c39c19433bb42363480ba24103140",
+            "bytes": 1327
+          }
+        ]
+      },
+      "freeBeforeMiB": 845,
+      "selected": {
+        "initial": {
+          "active": "qq98",
+          "controller": {
+            "active": "qq98",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#101c2b",
+            "--dsw-alias-bg-layer-1": "#15233a",
+            "--dsw-alias-bg-layer-2": "#1a2a42",
+            "--dsw-alias-bg-overlay": "#15233a",
+            "--dsw-alias-border-l1": "#a0c8f01f",
+            "--dsw-alias-border-l2": "#a0c8f02e",
+            "--dsw-alias-brand-primary": "#6aa8f0",
+            "--dsw-alias-label-primary": "#d8e6f4",
+            "--dsw-alias-label-secondary": "#a9c0d8",
+            "--dsw-alias-state-error-primary": "#e05c5c",
+            "--dsw-alias-state-success-primary": "#58b058",
+            "--dsw-alias-state-warn-primary": "#d69a3a",
+            "--dsw-specific-sidebar-fill": "#1e4f8f"
+          },
+          "backgroundImage": "radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0) 42%), radial-gradient(circle at 82% 24%, rgba(90, 150, 230, 0.1), rgba(0, 0, 0, 0) 38%), radial-gradient(circle at 55% 92%, rgba(40, 100, 200, 0.14), rgba(0, 0, 0, 0) 45%), linear-gradient(165deg, rgb(5, 15, 31) 0%, rgb(10, 31, 61) 48%, rgb(13, 47, 92) 100%)",
+          "links": [
+            "/api/skin-center/v2/skins/qq98/stylesheet",
+            "/api/skin-center/v2/skins/qq98/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "skinChrome": [],
+          "sidebar": {
+            "present": true,
+            "background": "linear-gradient(rgb(21, 35, 58) 0%, rgb(18, 36, 62) 45%, rgb(16, 28, 43) 100%)",
+            "settingsColor": "rgb(216, 230, 244)"
+          },
+          "images": []
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "active": "qq98",
+            "controller": {
+              "active": "qq98",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": false,
+            "tokens": {
+              "--dsw-alias-bg-base": "#fff",
+              "--dsw-alias-bg-layer-1": "#f2f7fc",
+              "--dsw-alias-bg-layer-2": "#e8f1fa",
+              "--dsw-alias-bg-overlay": "#eef4fa",
+              "--dsw-alias-border-l1": "#143c6e26",
+              "--dsw-alias-border-l2": "#143c6e38",
+              "--dsw-alias-brand-primary": "#2b7cd9",
+              "--dsw-alias-label-primary": "#17293c",
+              "--dsw-alias-label-secondary": "#3d566e",
+              "--dsw-alias-state-error-primary": "#c00000",
+              "--dsw-alias-state-success-primary": "#2e8b2e",
+              "--dsw-alias-state-warn-primary": "#b07600",
+              "--dsw-specific-sidebar-fill": "#2b7cd9"
+            },
+            "backgroundImage": "radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0) 42%), radial-gradient(circle at 82% 24%, rgba(120, 180, 255, 0.14), rgba(0, 0, 0, 0) 38%), radial-gradient(circle at 55% 92%, rgba(60, 130, 240, 0.18), rgba(0, 0, 0, 0) 45%), linear-gradient(165deg, rgb(10, 36, 71) 0%, rgb(18, 61, 118) 48%, rgb(26, 91, 184) 100%)",
+            "links": [
+              "/api/skin-center/v2/skins/qq98/stylesheet",
+              "/api/skin-center/v2/skins/qq98/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "skinChrome": [],
+            "sidebar": {
+              "present": true,
+              "background": "linear-gradient(rgb(234, 244, 253) 0%, rgb(244, 249, 254) 40%, rgb(255, 255, 255) 100%)",
+              "settingsColor": "rgb(23, 41, 60)"
+            },
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2206-selected-light.png",
+            "screenshotSha256": "7e1d3700cbf7ab2fbdb3d2c4f5c6e403811cc3d1af799a2c51e2fd7ae85c7775",
+            "screenshotSizeBytes": 96548
+          },
+          {
+            "mode": "dark",
+            "active": "qq98",
+            "controller": {
+              "active": "qq98",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": true,
+            "tokens": {
+              "--dsw-alias-bg-base": "#101c2b",
+              "--dsw-alias-bg-layer-1": "#15233a",
+              "--dsw-alias-bg-layer-2": "#1a2a42",
+              "--dsw-alias-bg-overlay": "#15233a",
+              "--dsw-alias-border-l1": "#a0c8f01f",
+              "--dsw-alias-border-l2": "#a0c8f02e",
+              "--dsw-alias-brand-primary": "#6aa8f0",
+              "--dsw-alias-label-primary": "#d8e6f4",
+              "--dsw-alias-label-secondary": "#a9c0d8",
+              "--dsw-alias-state-error-primary": "#e05c5c",
+              "--dsw-alias-state-success-primary": "#58b058",
+              "--dsw-alias-state-warn-primary": "#d69a3a",
+              "--dsw-specific-sidebar-fill": "#1e4f8f"
+            },
+            "backgroundImage": "radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0) 42%), radial-gradient(circle at 82% 24%, rgba(90, 150, 230, 0.1), rgba(0, 0, 0, 0) 38%), radial-gradient(circle at 55% 92%, rgba(40, 100, 200, 0.14), rgba(0, 0, 0, 0) 45%), linear-gradient(165deg, rgb(5, 15, 31) 0%, rgb(10, 31, 61) 48%, rgb(13, 47, 92) 100%)",
+            "links": [
+              "/api/skin-center/v2/skins/qq98/stylesheet",
+              "/api/skin-center/v2/skins/qq98/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "skinChrome": [],
+            "sidebar": {
+              "present": true,
+              "background": "linear-gradient(rgb(21, 35, 58) 0%, rgb(18, 36, 62) 45%, rgb(16, 28, 43) 100%)",
+              "settingsColor": "rgb(216, 230, 244)"
+            },
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2206-selected-dark.png",
+            "screenshotSha256": "0ef53426e8173697155542a706cbe77afd585af89f1bc8c787eb2a5cefdecf12",
+            "screenshotSizeBytes": 90429
+          }
+        ],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "d65b84c4ddbfd72cc6faddf128a14e76019ac5fe34129ba2a0f13cbfe9ca1623",
+            "status": 200,
+            "sha256": "d65b84c4ddbfd72cc6faddf128a14e76019ac5fe34129ba2a0f13cbfe9ca1623",
+            "sizeBytes": 864
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "f7b1cce7b8089ff63e1e37c34b41675d5e6423889ec828689cba6f147e2d1787",
+            "status": 200,
+            "sha256": "f7b1cce7b8089ff63e1e37c34b41675d5e6423889ec828689cba6f147e2d1787",
+            "sizeBytes": 40994
+          }
+        ],
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "cold": {
+        "initial": {
+          "active": "qq98",
+          "controller": {
+            "active": "qq98",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#101c2b",
+            "--dsw-alias-bg-layer-1": "#15233a",
+            "--dsw-alias-bg-layer-2": "#1a2a42",
+            "--dsw-alias-bg-overlay": "#15233a",
+            "--dsw-alias-border-l1": "#a0c8f01f",
+            "--dsw-alias-border-l2": "#a0c8f02e",
+            "--dsw-alias-brand-primary": "#6aa8f0",
+            "--dsw-alias-label-primary": "#d8e6f4",
+            "--dsw-alias-label-secondary": "#a9c0d8",
+            "--dsw-alias-state-error-primary": "#e05c5c",
+            "--dsw-alias-state-success-primary": "#58b058",
+            "--dsw-alias-state-warn-primary": "#d69a3a",
+            "--dsw-specific-sidebar-fill": "#1e4f8f"
+          },
+          "backgroundImage": "radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0) 42%), radial-gradient(circle at 82% 24%, rgba(90, 150, 230, 0.1), rgba(0, 0, 0, 0) 38%), radial-gradient(circle at 55% 92%, rgba(40, 100, 200, 0.14), rgba(0, 0, 0, 0) 45%), linear-gradient(165deg, rgb(5, 15, 31) 0%, rgb(10, 31, 61) 48%, rgb(13, 47, 92) 100%)",
+          "links": [
+            "/api/skin-center/v2/skins/qq98/stylesheet",
+            "/api/skin-center/v2/skins/qq98/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "skinChrome": [],
+          "sidebar": {
+            "present": true,
+            "background": "linear-gradient(rgb(21, 35, 58) 0%, rgb(18, 36, 62) 45%, rgb(16, 28, 43) 100%)",
+            "settingsColor": "rgb(216, 230, 244)"
+          },
+          "images": []
+        },
+        "modes": [],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "d65b84c4ddbfd72cc6faddf128a14e76019ac5fe34129ba2a0f13cbfe9ca1623",
+            "status": 200,
+            "sha256": "d65b84c4ddbfd72cc6faddf128a14e76019ac5fe34129ba2a0f13cbfe9ca1623",
+            "sizeBytes": 864
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "f7b1cce7b8089ff63e1e37c34b41675d5e6423889ec828689cba6f147e2d1787",
+            "status": 200,
+            "sha256": "f7b1cce7b8089ff63e1e37c34b41675d5e6423889ec828689cba6f147e2d1787",
+            "sizeBytes": 40994
+          }
+        ],
+        "deselected": {
+          "active": null,
+          "controller": { "active": null, "trying": null, "previewing": false },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          },
+          "backgroundImage": "none",
+          "links": [],
+          "width": { "viewport": 1440, "document": 1440 },
+          "skinChrome": [],
+          "sidebar": {
+            "present": true,
+            "background": "none",
+            "settingsColor": "rgb(249, 250, 251)"
+          },
+          "images": []
+        },
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "coldProcess": {
+        "first": 9552,
+        "cold": 9817,
+        "portConfirmedClosed": true
+      },
+      "status": "passed",
+      "freeAfterMiB": 844
+    },
+    {
+      "catalogId": 2207,
+      "slug": "dsh-web-ui-ths",
+      "skinId": "ths",
+      "artifactSha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+      "sourceRepository": "zhu1090093659/dsh-web-ui",
+      "sourceRevision": "a9b915cee0f12f2fd13a6575bc8feaa9ee09d6ed",
+      "sourceSubdir": "packages/skins/ths",
+      "companion": {
+        "kind": "bundled-user-skin",
+        "skinId": "ths",
+        "sourcePath": "assets/alpha/skin-center/user-skins/ths",
+        "version": "0.2.5-dsh-themes.2-alpha.1",
+        "files": [
+          {
+            "path": "LICENSE",
+            "sourceSha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+            "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+            "bytes": 1521
+          },
+          {
+            "path": "NOTICE",
+            "sourceSha256": "331121edcd6e0d7fd740db20b3e393d195e7393c6237b8f267eea66794a0cfe8",
+            "sha256": "a02b7b8074d87aa8ba6e1a606fc7dd841773729dc66349fd688016bc19615850",
+            "bytes": 974
+          },
+          {
+            "path": "PROVENANCE.json",
+            "sourceSha256": "68ebcc6bbfb3c8daf2973491fede2d85719d788703037b2510f71ffab7d4c917",
+            "sha256": "68ebcc6bbfb3c8daf2973491fede2d85719d788703037b2510f71ffab7d4c917",
+            "bytes": 762
+          },
+          {
+            "path": "patches.css",
+            "sourceSha256": "648fd39a7168a71cc79fbfc4a6dcdb99587362cd2e58604f6c743f045e3a714e",
+            "sha256": "5bec645eac154a86a8439b44df7301e55990937562e1a8715667a8392334f664",
+            "bytes": 31056
+          },
+          {
+            "path": "skin.css",
+            "sourceSha256": "b5cb4887e98ada90f28b2c90fccd23a2c7416a8cae0acca71a3d8268b08af7e2",
+            "sha256": "b5cb4887e98ada90f28b2c90fccd23a2c7416a8cae0acca71a3d8268b08af7e2",
+            "bytes": 506
+          },
+          {
+            "path": "skin.json",
+            "sourceSha256": "5af025c011797aa34d2a0d2dbf6edfafb30a4e199f9fe2a6075b28a183c76c17",
+            "sha256": "54cf95283d617e0f853a56db99182c38b34e83173af79ba8540772d3bf15c08b",
+            "bytes": 1355
+          }
+        ]
+      },
+      "freeBeforeMiB": 844,
+      "selected": {
+        "initial": {
+          "active": "ths",
+          "controller": {
+            "active": "ths",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#141a22",
+            "--dsw-alias-bg-layer-1": "#1a222d",
+            "--dsw-alias-bg-layer-2": "#1f2834",
+            "--dsw-alias-bg-overlay": "#1d2631",
+            "--dsw-alias-border-l1": "#ffffff14",
+            "--dsw-alias-border-l2": "#ffffff29",
+            "--dsw-alias-brand-primary": "#ff5a5a",
+            "--dsw-alias-label-primary": "#e2e9f2",
+            "--dsw-alias-label-secondary": "#b3c0d0",
+            "--dsw-alias-state-error-primary": "#ff5a5a",
+            "--dsw-alias-state-success-primary": "#2fbf71",
+            "--dsw-alias-state-warn-primary": "#d69a3a",
+            "--dsw-specific-sidebar-fill": "#0f141c"
+          },
+          "backgroundImage": "none",
+          "links": [
+            "/api/skin-center/v2/skins/ths/stylesheet",
+            "/api/skin-center/v2/skins/ths/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "skinChrome": [],
+          "sidebar": {
+            "present": true,
+            "background": "linear-gradient(rgb(24, 32, 41) 0%, rgb(20, 27, 36) 100%)",
+            "settingsColor": "rgb(226, 233, 242)"
+          },
+          "images": []
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "active": "ths",
+            "controller": {
+              "active": "ths",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": false,
+            "tokens": {
+              "--dsw-alias-bg-base": "#fff",
+              "--dsw-alias-bg-layer-1": "#f5f7f9",
+              "--dsw-alias-bg-layer-2": "#eef1f5",
+              "--dsw-alias-bg-overlay": "#eef1f5",
+              "--dsw-alias-border-l1": "#1018241a",
+              "--dsw-alias-border-l2": "#10182429",
+              "--dsw-alias-brand-primary": "#e60012",
+              "--dsw-alias-label-primary": "#1f2733",
+              "--dsw-alias-label-secondary": "#4a5564",
+              "--dsw-alias-state-error-primary": "#e60012",
+              "--dsw-alias-state-success-primary": "#0d9b4f",
+              "--dsw-alias-state-warn-primary": "#b07600",
+              "--dsw-specific-sidebar-fill": "#1b2636"
+            },
+            "backgroundImage": "none",
+            "links": [
+              "/api/skin-center/v2/skins/ths/stylesheet",
+              "/api/skin-center/v2/skins/ths/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "skinChrome": [],
+            "sidebar": {
+              "present": true,
+              "background": "linear-gradient(rgb(244, 247, 250) 0%, rgb(233, 238, 244) 100%)",
+              "settingsColor": "rgb(31, 39, 51)"
+            },
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2207-selected-light.png",
+            "screenshotSha256": "98f05b93e5effdc424f43b1910276b63472b7c33419dec87189de3196ed07037",
+            "screenshotSizeBytes": 41770
+          },
+          {
+            "mode": "dark",
+            "active": "ths",
+            "controller": {
+              "active": "ths",
+              "trying": null,
+              "previewing": false
+            },
+            "dark": true,
+            "tokens": {
+              "--dsw-alias-bg-base": "#141a22",
+              "--dsw-alias-bg-layer-1": "#1a222d",
+              "--dsw-alias-bg-layer-2": "#1f2834",
+              "--dsw-alias-bg-overlay": "#1d2631",
+              "--dsw-alias-border-l1": "#ffffff14",
+              "--dsw-alias-border-l2": "#ffffff29",
+              "--dsw-alias-brand-primary": "#ff5a5a",
+              "--dsw-alias-label-primary": "#e2e9f2",
+              "--dsw-alias-label-secondary": "#b3c0d0",
+              "--dsw-alias-state-error-primary": "#ff5a5a",
+              "--dsw-alias-state-success-primary": "#2fbf71",
+              "--dsw-alias-state-warn-primary": "#d69a3a",
+              "--dsw-specific-sidebar-fill": "#0f141c"
+            },
+            "backgroundImage": "none",
+            "links": [
+              "/api/skin-center/v2/skins/ths/stylesheet",
+              "/api/skin-center/v2/skins/ths/patches"
+            ],
+            "width": { "viewport": 1440, "document": 1440 },
+            "skinChrome": [],
+            "sidebar": {
+              "present": true,
+              "background": "linear-gradient(rgb(24, 32, 41) 0%, rgb(20, 27, 36) 100%)",
+              "settingsColor": "rgb(226, 233, 242)"
+            },
+            "images": [],
+            "screenshot": ".cache/dsh-skin-center-alpha/runtime/2207-selected-dark.png",
+            "screenshotSha256": "04c468dc055182edfe79d22fd9f64e20f0fa14a3645ed2d9e399e82cd41c5f67",
+            "screenshotSizeBytes": 37970
+          }
+        ],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "aef049f0d6fdb400d4a09db2d1bb97cab080f3b2814b1898d1aaeba93eddd083",
+            "status": 200,
+            "sha256": "aef049f0d6fdb400d4a09db2d1bb97cab080f3b2814b1898d1aaeba93eddd083",
+            "sizeBytes": 860
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "26baebd9d6c27ac9927eee2404f7dda42595a013f942987c55ce1b49074eb907",
+            "status": 200,
+            "sha256": "26baebd9d6c27ac9927eee2404f7dda42595a013f942987c55ce1b49074eb907",
+            "sizeBytes": 37052
+          }
+        ],
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "cold": {
+        "initial": {
+          "active": "ths",
+          "controller": {
+            "active": "ths",
+            "trying": null,
+            "previewing": false
+          },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#141a22",
+            "--dsw-alias-bg-layer-1": "#1a222d",
+            "--dsw-alias-bg-layer-2": "#1f2834",
+            "--dsw-alias-bg-overlay": "#1d2631",
+            "--dsw-alias-border-l1": "#ffffff14",
+            "--dsw-alias-border-l2": "#ffffff29",
+            "--dsw-alias-brand-primary": "#ff5a5a",
+            "--dsw-alias-label-primary": "#e2e9f2",
+            "--dsw-alias-label-secondary": "#b3c0d0",
+            "--dsw-alias-state-error-primary": "#ff5a5a",
+            "--dsw-alias-state-success-primary": "#2fbf71",
+            "--dsw-alias-state-warn-primary": "#d69a3a",
+            "--dsw-specific-sidebar-fill": "#0f141c"
+          },
+          "backgroundImage": "none",
+          "links": [
+            "/api/skin-center/v2/skins/ths/stylesheet",
+            "/api/skin-center/v2/skins/ths/patches"
+          ],
+          "width": { "viewport": 1440, "document": 1440 },
+          "skinChrome": [],
+          "sidebar": {
+            "present": true,
+            "background": "linear-gradient(rgb(24, 32, 41) 0%, rgb(20, 27, 36) 100%)",
+            "settingsColor": "rgb(226, 233, 242)"
+          },
+          "images": []
+        },
+        "modes": [],
+        "resources": [
+          {
+            "route": "stylesheet",
+            "expectedSha256": "aef049f0d6fdb400d4a09db2d1bb97cab080f3b2814b1898d1aaeba93eddd083",
+            "status": 200,
+            "sha256": "aef049f0d6fdb400d4a09db2d1bb97cab080f3b2814b1898d1aaeba93eddd083",
+            "sizeBytes": 860
+          },
+          {
+            "route": "patches",
+            "expectedSha256": "26baebd9d6c27ac9927eee2404f7dda42595a013f942987c55ce1b49074eb907",
+            "status": 200,
+            "sha256": "26baebd9d6c27ac9927eee2404f7dda42595a013f942987c55ce1b49074eb907",
+            "sizeBytes": 37052
+          }
+        ],
+        "deselected": {
+          "active": null,
+          "controller": { "active": null, "trying": null, "previewing": false },
+          "dark": true,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          },
+          "backgroundImage": "none",
+          "links": [],
+          "width": { "viewport": 1440, "document": 1440 },
+          "skinChrome": [],
+          "sidebar": {
+            "present": true,
+            "background": "none",
+            "settingsColor": "rgb(249, 250, 251)"
+          },
+          "images": []
+        },
+        "errors": [],
+        "httpErrors": [],
+        "externalRequests": []
+      },
+      "coldProcess": {
+        "first": 10050,
+        "cold": 10324,
+        "portConfirmedClosed": true
+      },
+      "status": "passed",
+      "freeAfterMiB": 843
+    }
+  ],
+  "baseline": {
+    "initial": {
+      "active": null,
+      "controller": null,
+      "dark": false,
+      "tokens": {
+        "--dsw-alias-bg-base": "#fff",
+        "--dsw-alias-bg-layer-1": "#fff",
+        "--dsw-alias-bg-layer-2": "#fff",
+        "--dsw-alias-bg-overlay": "#e9ecf2",
+        "--dsw-alias-border-l1": "#0000000a",
+        "--dsw-alias-border-l2": "#0000001a",
+        "--dsw-alias-brand-primary": "#0f1115",
+        "--dsw-alias-label-primary": "#0f1115",
+        "--dsw-alias-label-secondary": "#61666b",
+        "--dsw-alias-state-error-primary": "#ec1313",
+        "--dsw-alias-state-success-primary": "#22c55e",
+        "--dsw-alias-state-warn-primary": "#f59e0b",
+        "--dsw-specific-sidebar-fill": "#f9fafb"
+      },
+      "backgroundImage": "none",
+      "links": [],
+      "width": { "viewport": 1440, "document": 1440 },
+      "images": []
+    },
+    "modes": [
+      {
+        "mode": "light",
+        "active": null,
+        "controller": null,
+        "dark": false,
+        "tokens": {
+          "--dsw-alias-bg-base": "#fff",
+          "--dsw-alias-bg-layer-1": "#fff",
+          "--dsw-alias-bg-layer-2": "#fff",
+          "--dsw-alias-bg-overlay": "#e9ecf2",
+          "--dsw-alias-border-l1": "#0000000a",
+          "--dsw-alias-border-l2": "#0000001a",
+          "--dsw-alias-brand-primary": "#0f1115",
+          "--dsw-alias-label-primary": "#0f1115",
+          "--dsw-alias-label-secondary": "#61666b",
+          "--dsw-alias-state-error-primary": "#ec1313",
+          "--dsw-alias-state-success-primary": "#22c55e",
+          "--dsw-alias-state-warn-primary": "#f59e0b",
+          "--dsw-specific-sidebar-fill": "#f9fafb"
+        },
+        "backgroundImage": "none",
+        "links": [],
+        "width": { "viewport": 1440, "document": 1440 },
+        "images": [],
+        "screenshot": ".cache/dsh-skin-center-alpha/runtime/baseline-light.png",
+        "screenshotSha256": "8a663c27864462f34a9f910685ab16551375c6f2113ae2b3ae007a1d981a34d3",
+        "screenshotSizeBytes": 32004
+      },
+      {
+        "mode": "dark",
+        "active": null,
+        "controller": null,
+        "dark": true,
+        "tokens": {
+          "--dsw-alias-bg-base": "#151517",
+          "--dsw-alias-bg-layer-1": "#232324",
+          "--dsw-alias-bg-layer-2": "#2c2c2e",
+          "--dsw-alias-bg-overlay": "#61666b",
+          "--dsw-alias-border-l1": "#ffffff0f",
+          "--dsw-alias-border-l2": "#ffffff1f",
+          "--dsw-alias-brand-primary": "#f9fafb",
+          "--dsw-alias-label-primary": "#f9fafb",
+          "--dsw-alias-label-secondary": "#cfd3d6",
+          "--dsw-alias-state-error-primary": "#f25a5a",
+          "--dsw-alias-state-success-primary": "#22c55e",
+          "--dsw-alias-state-warn-primary": "#f59e0b",
+          "--dsw-specific-sidebar-fill": "#1b1b1c"
+        },
+        "backgroundImage": "none",
+        "links": [],
+        "width": { "viewport": 1440, "document": 1440 },
+        "images": [],
+        "screenshot": ".cache/dsh-skin-center-alpha/runtime/baseline-dark.png",
+        "screenshotSha256": "8c829069a4cf14912f21c88c561a647998ccfe829b90b6c84b3cc163889f14ce",
+        "screenshotSizeBytes": 31054
+      }
+    ],
+    "resources": [],
+    "errors": [],
+    "httpErrors": [],
+    "externalRequests": []
+  },
+  "installation": {
+    "officialCliAdd": true,
+    "cliLogSha256": "5b6d5cca4cd6343402776efe72bf0fadf25d1d8eeb9c76869851af1559b48032",
+    "resolution": {
+      "mode": "fixed-native-online-recovery",
+      "exitCode": 0,
+      "artifactSha256": "f8d8aadcd767cf80dab3f9bf010fda098ea9b23a00c2c2713288a1d49d337924",
+      "profile": "web",
+      "officialCli": true,
+      "ignoreScripts": true,
+      "cliLogSha256": "5b6d5cca4cd6343402776efe72bf0fadf25d1d8eeb9c76869851af1559b48032",
+      "dependencies": [
+        {
+          "name": "lightningcss",
+          "version": "1.32.0",
+          "manifestSha256": "1b7fbd47a660ecb37d1fa8304a14b726aa44a31bb3d3338f417593f6276b762f"
+        },
+        {
+          "name": "lightningcss-darwin-arm64",
+          "version": "1.32.0",
+          "manifestSha256": "339b80a4fdb2b8d9dc8e85ceda4b43bebdb45c50bdbd10704095131cbd88d0bd"
+        },
+        {
+          "name": "detect-libc",
+          "version": "2.1.2",
+          "manifestSha256": "ee88e5b954fdf3a8480b1d01ef767d68d8ca2c6da269f58c5cf1c5550e9aa2a7"
+        }
+      ],
+      "pnpmWorkspaceSha256": "2f5335f2ec9a98d5adcfb5236c836465546cc5aff49128c961f7d8d01b178a04"
+    },
+    "installedPackage": {
+      "name": "@dsh-themes-community/skin-center-alpha",
+      "version": "0.2.5-alpha.2",
+      "manifestSha256": "f12ae0516e336f2c81ccd9c74f17effcc2f6828226e04458b0e34fdbea99431a"
+    },
+    "installedFilesVerified": [
+      {
+        "path": "LICENSE",
+        "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d"
+      },
+      {
+        "path": "README.i18n.yaml",
+        "sha256": "18e75c66a620d21163f6a3ae5f3c8a697720a1e1b6d4221aac733682863bfa11"
+      },
+      {
+        "path": "README.md",
+        "sha256": "07523687587858d4347358c7f1332d8a4ec8d3abfae106c28517b6587f7efafe"
+      },
+      {
+        "path": "README.zh.md",
+        "sha256": "b7580f26f04b3fc30147f0f484eeb64af275312d6b3b2306ba65114d93fa3eb8"
+      },
+      {
+        "path": "contracts/README.md",
+        "sha256": "d905f11e5f8800e3a8acabc82f7547481f9098c6e2b80f11dd078112df508253"
+      },
+      {
+        "path": "contracts/hooks-api.d.ts",
+        "sha256": "788701725fc21534a13cd113024e0fc1d91d054e6bd589eed55c7f8257d319c5"
+      },
+      {
+        "path": "contracts/official-tokens-v1.json",
+        "sha256": "8c41132ac435dba25d0d64ba3552fc4b290b128f2e296699c31e7537585ec4a2"
+      },
+      {
+        "path": "contracts/semantic-attrs-v1.md",
+        "sha256": "ec554cf880a041dc8dd73680eedfb3996940a40e6b3cdab4b0faf34ed8239ef0"
+      },
+      {
+        "path": "contracts/skin-manifest-v2.schema.json",
+        "sha256": "97f364ff1f753b16950798ed5a039a18c22a4a9b2ded026fc1ab28b61738cc22"
+      },
+      {
+        "path": "cordis.patch.yml",
+        "sha256": "6889dcc6702136514446b8c19908800dd23112ce5ec6e4728d8565d27a6b7749"
+      },
+      {
+        "path": "lib/client.js",
+        "sha256": "e0c8267f01980eb09c5dcf1a5c44b376010a041f3939b4772fb731a41b9b971b"
+      },
+      {
+        "path": "lib/client.js.map",
+        "sha256": "68a83ea0ceb8233c5f406fc97a2e91f6b1cafe5579b48c80ec2e61670af01d16"
+      },
+      {
+        "path": "lib/index.js",
+        "sha256": "0c109408ebee1f70aa4a3ad62bca7daa0a06e37ba221c9bd1f2af80804c94745"
+      },
+      {
+        "path": "package.json",
+        "sha256": "f12ae0516e336f2c81ccd9c74f17effcc2f6828226e04458b0e34fdbea99431a"
+      },
+      {
+        "path": "skins/blue-fantasy/assets/whale-art.jpg",
+        "sha256": "1bec59fd53652555e727e529046422db25b977624e9c291bb8b78e0caf952303"
+      },
+      {
+        "path": "skins/blue-fantasy/assets/whale-icon.png",
+        "sha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe"
+      },
+      {
+        "path": "skins/blue-fantasy/hooks.mjs",
+        "sha256": "21ac2ad4d4423acf31e3391bfba18ce2d9eec7b192f7a0ba47e8a0c843ff15a5"
+      },
+      {
+        "path": "skins/blue-fantasy/patches.css",
+        "sha256": "0f4d48904763b1928c36ed109df5bd8f6666824e0313a650ab9a4adbaad9927d"
+      },
+      {
+        "path": "skins/blue-fantasy/preview/dark.png",
+        "sha256": "2db1d964ca8b61b45097b8d6022e4a2e3cc3830f8b9d3abf997cbb186b642f33"
+      },
+      {
+        "path": "skins/blue-fantasy/preview/light.png",
+        "sha256": "100b14a00d65990371f25a122e8e840e187bd526581c868858d203e1764243d7"
+      },
+      {
+        "path": "skins/blue-fantasy/skin.css",
+        "sha256": "5ba64c7d6d09c88fdf53dd6fb48ecd99567673685aef21a3a3498302c110de78"
+      },
+      {
+        "path": "skins/blue-fantasy/skin.json",
+        "sha256": "61ec24dfb0ff9434c74e92d882b9d5e254d83535688e854da108b18ea959bc39"
+      },
+      {
+        "path": "skins/cyber-night/README.md",
+        "sha256": "8cc9087bbe45a361e9d23b80de5d52ab95359c271d8df03bd0f78c97b2d454df"
+      },
+      {
+        "path": "skins/cyber-night/README.zh.md",
+        "sha256": "85f4569c7b4655adb276bad8fe61b9330a8c488354079323fde30e6fa80bb20c"
+      },
+      {
+        "path": "skins/cyber-night/assets/cyber-night-art.webp",
+        "sha256": "166f2d1431778be44d99c25738adb21c6c287df812ad96e39399e62a2d2206b3"
+      },
+      {
+        "path": "skins/cyber-night/assets/cyber-night-icon.svg",
+        "sha256": "cb313f828b2a67342c454aba9ea4beea172a12c8f4a94132403f8efef4429321"
+      },
+      {
+        "path": "skins/cyber-night/hooks.mjs",
+        "sha256": "199f37fe6969e3dfae4891708604b6b639f011068c10356f774145512fd3be69"
+      },
+      {
+        "path": "skins/cyber-night/patches.css",
+        "sha256": "35a8744495f6f1bf78b9e40581d8a93d399141bf008c255a54811326e96c582e"
+      },
+      {
+        "path": "skins/cyber-night/preview/dark.png",
+        "sha256": "66db15c9b02bdd66923583d287ada76847d67ebd5a07f7280e18ff7f0b8ed305"
+      },
+      {
+        "path": "skins/cyber-night/preview/light.png",
+        "sha256": "c419e590b98b51bb5c879ec6f1b918a84197f14f5add7b539e188346345b2ad2"
+      },
+      {
+        "path": "skins/cyber-night/skin.css",
+        "sha256": "1e646b3c16adb2f779737c3bbf443b2b53bda00766283c838b3a371d54cd5193"
+      },
+      {
+        "path": "skins/cyber-night/skin.json",
+        "sha256": "9e6de744a9978df55bd01c25280c85c38e4d3d5c0fa85b8eaa2f0d7d86edf45b"
+      },
+      {
+        "path": "skins/dragon-heir/assets/dark-art.webp",
+        "sha256": "1c3b334a4bce1d5be2b103cd8edb24a1e19a8b65fca6133082b2b05ee446b9e2"
+      },
+      {
+        "path": "skins/dragon-heir/assets/light-art.webp",
+        "sha256": "f78831a369daab14d2c36ef7bf2cdd33600aed5bf11d15d7d4f2b79e2499f9af"
+      },
+      {
+        "path": "skins/dragon-heir/hooks.mjs",
+        "sha256": "ccc644148fd71cc32723891e97ed586b86fe2f86e0f36362133de7d66d08f5bd"
+      },
+      {
+        "path": "skins/dragon-heir/patches.css",
+        "sha256": "90e01cc5e098f90c02d74b3cbccce37df636804dab3cd316ebc9569e8161e43b"
+      },
+      {
+        "path": "skins/dragon-heir/preview/dark.png",
+        "sha256": "2f9278f8198dad08e792c2487178b25da9e405d36301b9e77fd85fe5b36e039c"
+      },
+      {
+        "path": "skins/dragon-heir/preview/light.png",
+        "sha256": "d202a391aee65c17dd58950b4201606e3ecad6ab9a0e6a869392474c370816f4"
+      },
+      {
+        "path": "skins/dragon-heir/skin.css",
+        "sha256": "7a50c1b55227f897722430f99c910d02c359a5ce31f8d380893301c27690f4ed"
+      },
+      {
+        "path": "skins/dragon-heir/skin.json",
+        "sha256": "6d261d9c0311ee6bda8ddedb981d37a2e942af7366919993d9e455ce899c9a52"
+      },
+      {
+        "path": "skins/furina/LICENSE",
+        "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d"
+      },
+      {
+        "path": "skins/furina/README.md",
+        "sha256": "10d1c419631da3d42b6df208c0e9175e7c0678566efc31886ec8af41fd01afea"
+      },
+      {
+        "path": "skins/furina/README.zh.md",
+        "sha256": "77d3f6939f68813a134528ff75e92e280bff988a1e4d629c8d8649669c79dee7"
+      },
+      {
+        "path": "skins/furina/assets/furina-art.jpg",
+        "sha256": "5d73357c5ee028fa67e3615379a89f67d4543dc902f89ee4535bfedcfd77a659"
+      },
+      {
+        "path": "skins/furina/assets/furina-icon.png",
+        "sha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe"
+      },
+      {
+        "path": "skins/furina/hooks.mjs",
+        "sha256": "713668d3a50da8878337feb4553f953eea781734934610af37a58dea37112ec9"
+      },
+      {
+        "path": "skins/furina/patches.css",
+        "sha256": "0f4d48904763b1928c36ed109df5bd8f6666824e0313a650ab9a4adbaad9927d"
+      },
+      {
+        "path": "skins/furina/preview/dark.png",
+        "sha256": "8c22c92ac4afeab2dc9edfb898facaf9f909abfbb73905590addbf75f9c1b31e"
+      },
+      {
+        "path": "skins/furina/preview/light.png",
+        "sha256": "84b5b7dc9696d32f1451006204538a2678b40516c302df2ae671c920aab996eb"
+      },
+      {
+        "path": "skins/furina/skin.css",
+        "sha256": "3325709c7c7ad7433bbaa3685d7b6bbf24c6099ec86b26839a698a25ba7925f6"
+      },
+      {
+        "path": "skins/furina/skin.json",
+        "sha256": "2eb7afbf5256186882b9b89f5611e899249dd4dad8a9f618df5107a246c31d7d"
+      },
+      {
+        "path": "skins/harbor/assets/harbor-art.webp",
+        "sha256": "8b580f05bf017027d0c8b3d1d0d321a84d89af1efbc43c89cc0705e62557fda2"
+      },
+      {
+        "path": "skins/harbor/assets/harbor-icon.svg",
+        "sha256": "fc9f82e5fa4998cb3e48a85662bcb719c7ecbd305acc7b544e181605192dbf45"
+      },
+      {
+        "path": "skins/harbor/hooks.mjs",
+        "sha256": "7981a2f98d1ade2815f7e33e2d79672c280334001a00406bb11b5362ce8182bf"
+      },
+      {
+        "path": "skins/harbor/patches.css",
+        "sha256": "2683af321f8cc80987550e93768c290a244c0e7f6c321e333550c9bb6927829a"
+      },
+      {
+        "path": "skins/harbor/preview/dark.png",
+        "sha256": "f0290197f1d8a236704bf5307405aafa9670cb2166a1dd0f18cebe95568fe8da"
+      },
+      {
+        "path": "skins/harbor/preview/light.png",
+        "sha256": "0dba1a82df8b940ec6c96dbd66f2eca29f3140dfa02e8a53b445a71972537da7"
+      },
+      {
+        "path": "skins/harbor/skin.css",
+        "sha256": "ab942b183c21bb3fda441770feced0548915b3d7827fe73be7473094216ff7f0"
+      },
+      {
+        "path": "skins/harbor/skin.json",
+        "sha256": "14873330c16c059dc1076badf09d852ecce6352d4f9dafe7174a56db9bd670ea"
+      },
+      {
+        "path": "skins/maid-atelier/LICENSE",
+        "sha256": "1349a4b6148492b44f629e64eed676612e234fe9a839e4f3b277c1482c8849f1"
+      },
+      {
+        "path": "skins/maid-atelier/NOTICE",
+        "sha256": "ca42fd8e4b877137d965afa51ee108d833fa0d6b8f5c7397d7dfcebdddcf5ef6"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-atelier-icon.webp",
+        "sha256": "be7ea360355b13213250b5920c69d2036f10db003c4bcc8756366f409656b6b0"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-atelier-maid-left-v5.webp",
+        "sha256": "af7bfd2e18505fc9d6f94cefd9febc92b31c1b2b66c756982d91fc7b93fb184c"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-atelier-maid-right-v6.webp",
+        "sha256": "34b55580ada4af5b9d519f5ae09e8656164197a3cbadceace73d98f3da278ca7"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-atelier-palace-day-v4.webp",
+        "sha256": "52e7dce6993e3f955c3fbb2875885e7ab60fb38ca89adb15d977c7a85d58c073"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-atelier-palace-night-v4.webp",
+        "sha256": "ae6917bb1aafa71e6a10cfcaa1289f13e265aa7f32d3fb7c1988004bf50f8983"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-bottom-crest-v1.webp",
+        "sha256": "24f2fb04ce2d38574a3817f6d675b8c1ee5d9322588eec651271f67aabfcb48d"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-bottom-trim-tile-v1.webp",
+        "sha256": "47072d2d652f09e857dbc8555ff5c1917c926ef5d4581641f7018b1607c42fda"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-bow-v1.webp",
+        "sha256": "dcf64a43ad6b9e71c24c91fb9b1d7fe8af534497fd421213472bea96e6bc04b5"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-chibi-v1.webp",
+        "sha256": "405917afdb68d725624bbf7e4f1619a35fc4004039b7d553c5528ca5f65308d3"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-composer-frame-v4.webp",
+        "sha256": "3135deb5d14d3ea44940edcf296ba2ffa14e242d5342a1a94618df0c57979482"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-new-session-v1.webp",
+        "sha256": "fa6d49a717c04651fd7d1afb30b853f63cbaa5bf483e58cb4bfe5ef69fc6ff50"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-settings-frame-v1.webp",
+        "sha256": "3d2b126caf0549c2e86684dcbc0ff4443b887e5e1684190710d2df7940466d98"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-sidebar-corner-v1.webp",
+        "sha256": "707f05bf4abed25405ca45c5c32bcf95ab7cb3a6dae3e53da29f814a8495665c"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-sidebar-swag-v1.webp",
+        "sha256": "cd728ce5c1794ec4958ef75c4cdd60a3d513b871bea99e3b526656f14089fd74"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-top-trim-tile-v1.webp",
+        "sha256": "e49115f3942ea5c5034c81016c61944b5261c8ea410318cb0419b445c990b063"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-workspace-ribbon-v2.webp",
+        "sha256": "e2b04c3eca1871c5e73417674582a09b13de60119ca9bb9c112317232c5049fa"
+      },
+      {
+        "path": "skins/maid-atelier/assets/maid-workspace-shield-v2.webp",
+        "sha256": "b59aa9d4ecfbbae6e62d872c964bce8ec870ed500e7cbc7a7f02bbdd0b93e87e"
+      },
+      {
+        "path": "skins/maid-atelier/hooks.mjs",
+        "sha256": "54394436db0a9dfd51972adbc31c567b1871632cb599e1a8440b87b98401a2d4"
+      },
+      {
+        "path": "skins/maid-atelier/patches.css",
+        "sha256": "27b0da69ac0f62206b9f19487b9538b1a5ad6814b71139a9399b2d1f6d3460e5"
+      },
+      {
+        "path": "skins/maid-atelier/preview/dark.png",
+        "sha256": "eeb0be8f8f743f1fea87ad4e12cde6e1de151b6063c21306d56944dc71dc535a"
+      },
+      {
+        "path": "skins/maid-atelier/preview/light.png",
+        "sha256": "90fd9dcf47e6efff8b672c154dc17f72561dc3e04c704ae2e3de32fdebc39765"
+      },
+      {
+        "path": "skins/maid-atelier/skin.css",
+        "sha256": "cc4530cb981e0aae73ab3bdf785135379dc065ea28ab374204b19e14e2fbb4d9"
+      },
+      {
+        "path": "skins/maid-atelier/skin.json",
+        "sha256": "53d2fa5bb7f6d1bfe8e9753bf0c6e05ed01ddf76d4a66d69de7fac64d9e4f7b7"
+      },
+      {
+        "path": "skins/matrix/hooks.mjs",
+        "sha256": "2e13e495adabe900df797cdbe930b8cb7fdb2ce721c1ba021e6eb2e74326e551"
+      },
+      {
+        "path": "skins/matrix/patches.css",
+        "sha256": "d416957ea4a7761409b2cf945e5235aed941cd8e74948e0806cc7c5f9c8f7bab"
+      },
+      {
+        "path": "skins/matrix/preview/dark.png",
+        "sha256": "d85eee4d75f777f354ae6aac86cfa1663f676fe568af3b9a5bfbdbe96950246e"
+      },
+      {
+        "path": "skins/matrix/preview/light.png",
+        "sha256": "d85eee4d75f777f354ae6aac86cfa1663f676fe568af3b9a5bfbdbe96950246e"
+      },
+      {
+        "path": "skins/matrix/skin.css",
+        "sha256": "08b317825085f5e2803ced8a76cfdb6d1d429af9ecf5276ae6379ebc69b36032"
+      },
+      {
+        "path": "skins/matrix/skin.json",
+        "sha256": "007ff2822caae57fb001801347452957e6a81b28b664dde0d3921b8361681117"
+      },
+      {
+        "path": "skins/miku/assets/miku-art-light.jpg",
+        "sha256": "fcdec57ca0fef16fd775ac598908d24ffcbb7f04dc6a9bb18ed3d8ba4625e61e"
+      },
+      {
+        "path": "skins/miku/assets/miku-art.webp",
+        "sha256": "baa346f68e8aa8b8e5471781d9fc1a56463bd3da4dd261cc5dba34884e2fcfa8"
+      },
+      {
+        "path": "skins/miku/hooks.mjs",
+        "sha256": "34d12bbc572de39aa2e281b1b035128637e14ff59fc0b2c1122687f10d364b5a"
+      },
+      {
+        "path": "skins/miku/patches.css",
+        "sha256": "8afa80ae43371cfd3e4a1f6fdf08b6993f1ed7daf5aac59bbcc3a332411fe353"
+      },
+      {
+        "path": "skins/miku/preview/dark.png",
+        "sha256": "dcfb6107123351f23ea21c2c579df229a41fe7e3242dace5870e861c7d9865db"
+      },
+      {
+        "path": "skins/miku/preview/light.png",
+        "sha256": "3e5d964aaf49c106b0be6c2c23325d847f7e5c8856c04158faf26497d8739a99"
+      },
+      {
+        "path": "skins/miku/skin.css",
+        "sha256": "054a33cac5bc7baa3828f513c59f027b0fa1800903ce00a93b5d47ac3927646f"
+      },
+      {
+        "path": "skins/miku/skin.json",
+        "sha256": "b7051188bf34dc9bfdf2909ee4d90c351eca1e71a75c059bf094bc6f0b20560a"
+      },
+      {
+        "path": "skins/minecraft/hooks.mjs",
+        "sha256": "deb4abe5e9dc64b075cb6ab1cfbdb153534a6cf837e3558cc0daee7b1bc6eb1a"
+      },
+      {
+        "path": "skins/minecraft/patches.css",
+        "sha256": "610d7aa2b7f0dbf7ae55b23c39f6ac7494e74ab736a821e4e03927a9e3a03435"
+      },
+      {
+        "path": "skins/minecraft/preview/dark.png",
+        "sha256": "99827797621c7120f5f018ff0fd35101327b64e5ce8da984372a99add03477a7"
+      },
+      {
+        "path": "skins/minecraft/preview/light.png",
+        "sha256": "04001a4694d2a069985d3c4d6ee34f4be22858664b1a1553772be69c2a6ae28c"
+      },
+      {
+        "path": "skins/minecraft/skin.css",
+        "sha256": "bc976480c58bbf7662d53448d6e1c2b245cb002088bbca670ef8dd3bf739bcbd"
+      },
+      {
+        "path": "skins/minecraft/skin.json",
+        "sha256": "30b5dbc662302e3b2eff1498bba57a4c4d36aa70bf3933f099db8bba96fd8550"
+      },
+      {
+        "path": "skins/mint/preview/dark.png",
+        "sha256": "39bf28383c7b92bacc5831e7eef97632e7ceb437a3a1f471536f3d3f8cbcc734"
+      },
+      {
+        "path": "skins/mint/preview/light.png",
+        "sha256": "36542170c803d7a754d62594b7deb8bd5d0f258d13c1489dcfcd3ae43ba7f06d"
+      },
+      {
+        "path": "skins/mint/skin.css",
+        "sha256": "ee49e1ef04ab70d3ac12ccad5e6214d165ff18a8659baeb4f7b9a085c1b33622"
+      },
+      {
+        "path": "skins/mint/skin.json",
+        "sha256": "e33eaa5b0340f299a6b801c95df031e7f08aa5ac27cfba06a53c864b17ec8cb7"
+      },
+      {
+        "path": "skins/summer-liquid-glass/README.md",
+        "sha256": "42b1cb8bca14c1cb6f929162a0a42000d0f1465c63ef9f0a90ec5a113ee6a68a"
+      },
+      {
+        "path": "skins/summer-liquid-glass/README.zh.md",
+        "sha256": "2f9b489cbe580af2cf93c81d427edfde8371a2445857ac7735e7d235c4b2968f"
+      },
+      {
+        "path": "skins/summer-liquid-glass/assets/summer-liquid-glass-art.jpg",
+        "sha256": "4d6548db1996b79f6f0f3e3f608e099c5d06d54af7f1bcbdb59d82dea1f1b531"
+      },
+      {
+        "path": "skins/summer-liquid-glass/patches.css",
+        "sha256": "33290aa22a16737efb42d441f1d87a03ee8412083b3e11cfd7dfe033c6ab5743"
+      },
+      {
+        "path": "skins/summer-liquid-glass/preview/dark.png",
+        "sha256": "7a230ebd10bbef83ea1621e9287f0a4aae8598d1cea7485850c4b4aa384be392"
+      },
+      {
+        "path": "skins/summer-liquid-glass/preview/light.png",
+        "sha256": "31d94185128722314b594893b05432140d38543cc9de350afeb761b69529c1d2"
+      },
+      {
+        "path": "skins/summer-liquid-glass/skin.css",
+        "sha256": "0d80e3d8b022231afb139e897d13192f0a7933c782f00a6da4e6046f499d6a14"
+      },
+      {
+        "path": "skins/summer-liquid-glass/skin.json",
+        "sha256": "36f98977957f4c6091e10ca593a60dc0cd5733e41993b854d97c074a620f80fd"
+      },
+      {
+        "path": "skins/trading/hooks.mjs",
+        "sha256": "ccdb09baf852656bdd654cd30d5bba0a19c22fab0f3a9f6917a144f53251cec1"
+      },
+      {
+        "path": "skins/trading/patches.css",
+        "sha256": "05fcc37240efb14e87e1ce3417a651b64b597d3ea22da42efccf95d3ab765c02"
+      },
+      {
+        "path": "skins/trading/preview/dark.png",
+        "sha256": "36ce4a96d2c92588c654815798da30ab104a4a2b9b926b696de34f0056752be6"
+      },
+      {
+        "path": "skins/trading/preview/light.png",
+        "sha256": "5d39809cd6d923f043b9ff57b41f90ea7e0288fe626d318acb794b280cea6f60"
+      },
+      {
+        "path": "skins/trading/skin.css",
+        "sha256": "3413531a54f1b7762d5cbd995f23fed2fd7e68aa59d9691e673066a846332c39"
+      },
+      {
+        "path": "skins/trading/skin.json",
+        "sha256": "486bab0ccee7b627c3a8c9787bde883774b57778593301aeca7c99cade49ef90"
+      },
+      {
+        "path": "skins/whale-mom/assets/whale-icon.svg",
+        "sha256": "868ad60bce433f097c5ce4844a46b80c00fd4e68f6a925499d36aaa2fdea8e35"
+      },
+      {
+        "path": "skins/whale-mom/assets/whale-mom-art.jpg",
+        "sha256": "358d1913f4c535ca1903f2a16bc3fc57abc5362a8cbf29d38cba24ad4d6e32ef"
+      },
+      {
+        "path": "skins/whale-mom/hooks.mjs",
+        "sha256": "be8921f66e7ef6d73a0c12686f9b0134fb1f4d47e38d1dedc09f4a74c1533b83"
+      },
+      {
+        "path": "skins/whale-mom/patches.css",
+        "sha256": "64787e7cf34ec876a5c9e7513ed53114ce102d171702d8a0360e7f64c1d3121a"
+      },
+      {
+        "path": "skins/whale-mom/preview/dark.png",
+        "sha256": "4c392a62e140062cbdad3166799752ea62218bdceef6c11862b802d288b36ffc"
+      },
+      {
+        "path": "skins/whale-mom/preview/light.png",
+        "sha256": "73bd728ff2b9fbe2205e899974303ed69112fb169debfb3115daff2c8cd149c7"
+      },
+      {
+        "path": "skins/whale-mom/skin.css",
+        "sha256": "4b341bab3d52e725e67e913867fe93b72425df54d008b77520064eb8e919d2a8"
+      },
+      {
+        "path": "skins/whale-mom/skin.json",
+        "sha256": "597ed1e8924ef04211f7facb340d593b3430b6091624adc17570b0c6797aca66"
+      },
+      {
+        "path": "skins/whale-song/assets/whale-art.webp",
+        "sha256": "9b74076df6da331a69875b9dcee6233193f1ac6254694fd429e179cefaf5d95d"
+      },
+      {
+        "path": "skins/whale-song/assets/whale-icon.png",
+        "sha256": "d1e6058d19b04817a623dc6e3a99405c70defaf412e9296edf7dbe2032ff7cbe"
+      },
+      {
+        "path": "skins/whale-song/hooks.mjs",
+        "sha256": "beb0f140dab1abb40bda52ad2ae1970feb761e2184e64e1d5810fab7c32dfff3"
+      },
+      {
+        "path": "skins/whale-song/patches.css",
+        "sha256": "ef9f430bc7ec045e7aa7e19ae0dc6fa9c8178d28878966dee0044f0bb38b8f45"
+      },
+      {
+        "path": "skins/whale-song/preview/dark.png",
+        "sha256": "4bb6efd96420b2ad2a24305131ec93ba491e3d5a8948373b8979703769572a07"
+      },
+      {
+        "path": "skins/whale-song/preview/light.png",
+        "sha256": "b7b5733f209a2e4c1d380a0a8ec88ecc29d5140f90d1469451a58dffe72f0bad"
+      },
+      {
+        "path": "skins/whale-song/skin.css",
+        "sha256": "3a7bb95a121858937dd077b2f3b93f89a639b81ff81c165acefc41e6c47e6992"
+      },
+      {
+        "path": "skins/whale-song/skin.json",
+        "sha256": "0064dc3e004fee30d8290f57f9e90abff4e661cc955fb53067a4b0a89e2718c8"
+      },
+      {
+        "path": "skins/xp/hooks.mjs",
+        "sha256": "823f25fd5f969feb8e51d8ff1577c1cbecbad847b2abac6e5020fc9ef543663f"
+      },
+      {
+        "path": "skins/xp/patches.css",
+        "sha256": "b0ddb4e0671e5ec19866429bdb0d9b1dd5c8bdbef8d7dd3f719bdd33bc91cd00"
+      },
+      {
+        "path": "skins/xp/preview/dark.png",
+        "sha256": "26f856e19a03153f4276794ba549a6193bfc012a14deb1efc5b4dd83ff8aba41"
+      },
+      {
+        "path": "skins/xp/preview/light.png",
+        "sha256": "fe6c40241a76af4b00a5adbb2688c117b6e4930d592242d5d40f359f80cf946e"
+      },
+      {
+        "path": "skins/xp/skin.css",
+        "sha256": "e9230ac95016aca20f482b578d9be4c36556c45d1f61f8a6ab679467c91369e3"
+      },
+      {
+        "path": "skins/xp/skin.json",
+        "sha256": "45df73f14c1ed8b8d3e4dd267f1ab879a7d2c4e99c748048c3d0d99f646b682c"
+      }
+    ]
+  },
+  "companions": [
+    {
+      "kind": "bundled-user-skin",
+      "skinId": "qq98",
+      "sourcePath": "assets/alpha/skin-center/user-skins/qq98",
+      "version": "0.2.5-dsh-themes.2-alpha.1",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sourceSha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "bytes": 1521
+        },
+        {
+          "path": "NOTICE",
+          "sourceSha256": "e8c4a8a30ae46f0fffbb076b0bed62a30b5ee8b51ff353c59cbf4862823768c7",
+          "sha256": "ad78fd2e39dc3be9e2d9eb0ee8a4f5c1c02385633c1a4e3e7ad35e21c184a350",
+          "bytes": 975
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sourceSha256": "000613dbdcdc99f0ef2f6ef8012a15ec445a6173d319d654704449a213eff684",
+          "sha256": "000613dbdcdc99f0ef2f6ef8012a15ec445a6173d319d654704449a213eff684",
+          "bytes": 764
+        },
+        {
+          "path": "patches.css",
+          "sourceSha256": "33a7670fc6188f7b06f19d3a18d8cd00f5839168808587f700cfa00195fe4bd6",
+          "sha256": "d62653ea7b5061e9f91c70069eb5edf93ba92e179fd8ba3a50dda75a51097833",
+          "bytes": 34823
+        },
+        {
+          "path": "skin.css",
+          "sourceSha256": "6e414c9f689dbfa978001f8d332237e64b22fedd51da16e2b20a48f3550937a2",
+          "sha256": "6e414c9f689dbfa978001f8d332237e64b22fedd51da16e2b20a48f3550937a2",
+          "bytes": 506
+        },
+        {
+          "path": "skin.json",
+          "sourceSha256": "426ac9c8b5517577db3486df465304171ea3533ed50591f6b1b19d78a5dbd423",
+          "sha256": "53e20c335d0fef3e802281e2636e35719a2c39c19433bb42363480ba24103140",
+          "bytes": 1327
+        }
+      ]
+    },
+    {
+      "kind": "bundled-user-skin",
+      "skinId": "ths",
+      "sourcePath": "assets/alpha/skin-center/user-skins/ths",
+      "version": "0.2.5-dsh-themes.2-alpha.1",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sourceSha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+          "bytes": 1521
+        },
+        {
+          "path": "NOTICE",
+          "sourceSha256": "331121edcd6e0d7fd740db20b3e393d195e7393c6237b8f267eea66794a0cfe8",
+          "sha256": "a02b7b8074d87aa8ba6e1a606fc7dd841773729dc66349fd688016bc19615850",
+          "bytes": 974
+        },
+        {
+          "path": "PROVENANCE.json",
+          "sourceSha256": "68ebcc6bbfb3c8daf2973491fede2d85719d788703037b2510f71ffab7d4c917",
+          "sha256": "68ebcc6bbfb3c8daf2973491fede2d85719d788703037b2510f71ffab7d4c917",
+          "bytes": 762
+        },
+        {
+          "path": "patches.css",
+          "sourceSha256": "648fd39a7168a71cc79fbfc4a6dcdb99587362cd2e58604f6c743f045e3a714e",
+          "sha256": "5bec645eac154a86a8439b44df7301e55990937562e1a8715667a8392334f664",
+          "bytes": 31056
+        },
+        {
+          "path": "skin.css",
+          "sourceSha256": "b5cb4887e98ada90f28b2c90fccd23a2c7416a8cae0acca71a3d8268b08af7e2",
+          "sha256": "b5cb4887e98ada90f28b2c90fccd23a2c7416a8cae0acca71a3d8268b08af7e2",
+          "bytes": 506
+        },
+        {
+          "path": "skin.json",
+          "sourceSha256": "5af025c011797aa34d2a0d2dbf6edfafb30a4e199f9fe2a6075b28a183c76c17",
+          "sha256": "54cf95283d617e0f853a56db99182c38b34e83173af79ba8540772d3bf15c08b",
+          "bytes": 1355
+        }
+      ]
+    }
+  ],
+  "companionInstallation": {
+    "publicImplementation": "skills/dsh-community-skin-installer/scripts/companion-files.mjs",
+    "publicImplementationSha256": "6cbe44d5c9bf9c8d9e2a11d061cb0ad154c8ae4db537fe133aab07c63ad6761f",
+    "results": [
+      { "skinId": "qq98", "status": "installed", "backupCreated": true },
+      { "skinId": "ths", "status": "installed", "backupCreated": true }
+    ]
+  },
+  "removed": {
+    "initial": {
+      "active": null,
+      "controller": null,
+      "dark": true,
+      "tokens": {
+        "--dsw-alias-bg-base": "#151517",
+        "--dsw-alias-bg-layer-1": "#232324",
+        "--dsw-alias-bg-layer-2": "#2c2c2e",
+        "--dsw-alias-bg-overlay": "#61666b",
+        "--dsw-alias-border-l1": "#ffffff0f",
+        "--dsw-alias-border-l2": "#ffffff1f",
+        "--dsw-alias-brand-primary": "#f9fafb",
+        "--dsw-alias-label-primary": "#f9fafb",
+        "--dsw-alias-label-secondary": "#cfd3d6",
+        "--dsw-alias-state-error-primary": "#f25a5a",
+        "--dsw-alias-state-success-primary": "#22c55e",
+        "--dsw-alias-state-warn-primary": "#f59e0b",
+        "--dsw-specific-sidebar-fill": "#1b1b1c"
+      },
+      "backgroundImage": "none",
+      "links": [],
+      "width": { "viewport": 1440, "document": 1440 },
+      "skinChrome": [],
+      "sidebar": {
+        "present": true,
+        "background": "none",
+        "settingsColor": "rgb(249, 250, 251)"
+      },
+      "images": []
+    },
+    "modes": [
+      {
+        "mode": "light",
+        "active": null,
+        "controller": null,
+        "dark": false,
+        "tokens": {
+          "--dsw-alias-bg-base": "#fff",
+          "--dsw-alias-bg-layer-1": "#fff",
+          "--dsw-alias-bg-layer-2": "#fff",
+          "--dsw-alias-bg-overlay": "#e9ecf2",
+          "--dsw-alias-border-l1": "#0000000a",
+          "--dsw-alias-border-l2": "#0000001a",
+          "--dsw-alias-brand-primary": "#0f1115",
+          "--dsw-alias-label-primary": "#0f1115",
+          "--dsw-alias-label-secondary": "#61666b",
+          "--dsw-alias-state-error-primary": "#ec1313",
+          "--dsw-alias-state-success-primary": "#22c55e",
+          "--dsw-alias-state-warn-primary": "#f59e0b",
+          "--dsw-specific-sidebar-fill": "#f9fafb"
+        },
+        "backgroundImage": "none",
+        "links": [],
+        "width": { "viewport": 1440, "document": 1440 },
+        "skinChrome": [],
+        "sidebar": {
+          "present": true,
+          "background": "none",
+          "settingsColor": "rgb(15, 17, 21)"
+        },
+        "images": [],
+        "screenshot": ".cache/dsh-skin-center-alpha/runtime/removed-light.png",
+        "screenshotSha256": "8a663c27864462f34a9f910685ab16551375c6f2113ae2b3ae007a1d981a34d3",
+        "screenshotSizeBytes": 32004
+      },
+      {
+        "mode": "dark",
+        "active": null,
+        "controller": null,
+        "dark": true,
+        "tokens": {
+          "--dsw-alias-bg-base": "#151517",
+          "--dsw-alias-bg-layer-1": "#232324",
+          "--dsw-alias-bg-layer-2": "#2c2c2e",
+          "--dsw-alias-bg-overlay": "#61666b",
+          "--dsw-alias-border-l1": "#ffffff0f",
+          "--dsw-alias-border-l2": "#ffffff1f",
+          "--dsw-alias-brand-primary": "#f9fafb",
+          "--dsw-alias-label-primary": "#f9fafb",
+          "--dsw-alias-label-secondary": "#cfd3d6",
+          "--dsw-alias-state-error-primary": "#f25a5a",
+          "--dsw-alias-state-success-primary": "#22c55e",
+          "--dsw-alias-state-warn-primary": "#f59e0b",
+          "--dsw-specific-sidebar-fill": "#1b1b1c"
+        },
+        "backgroundImage": "none",
+        "links": [],
+        "width": { "viewport": 1440, "document": 1440 },
+        "skinChrome": [],
+        "sidebar": {
+          "present": true,
+          "background": "none",
+          "settingsColor": "rgb(249, 250, 251)"
+        },
+        "images": [],
+        "screenshot": ".cache/dsh-skin-center-alpha/runtime/removed-dark.png",
+        "screenshotSha256": "8c829069a4cf14912f21c88c561a647998ccfe829b90b6c84b3cc163889f14ce",
+        "screenshotSizeBytes": 31054
+      }
+    ],
+    "resources": [],
+    "errors": [],
+    "httpErrors": [],
+    "externalRequests": []
+  },
+  "removal": {
+    "officialCliRemove": true,
+    "cliLogSha256": "d4e8098dac0852c2239a2aea80ea872b4ce272aba95511df8db175c5c8f9af72",
+    "packageAbsent": true,
+    "companionRecovery": [
+      {
+        "skinId": "qq98",
+        "status": "restored",
+        "files": [
+          {
+            "path": "LICENSE",
+            "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+            "bytes": 1521
+          },
+          {
+            "path": "NOTICE",
+            "sha256": "e8c4a8a30ae46f0fffbb076b0bed62a30b5ee8b51ff353c59cbf4862823768c7",
+            "bytes": 752
+          },
+          {
+            "path": "PROVENANCE.json",
+            "sha256": "000613dbdcdc99f0ef2f6ef8012a15ec445a6173d319d654704449a213eff684",
+            "bytes": 764
+          },
+          {
+            "path": "patches.css",
+            "sha256": "33a7670fc6188f7b06f19d3a18d8cd00f5839168808587f700cfa00195fe4bd6",
+            "bytes": 34823
+          },
+          {
+            "path": "skin.css",
+            "sha256": "6e414c9f689dbfa978001f8d332237e64b22fedd51da16e2b20a48f3550937a2",
+            "bytes": 506
+          },
+          {
+            "path": "skin.json",
+            "sha256": "426ac9c8b5517577db3486df465304171ea3533ed50591f6b1b19d78a5dbd423",
+            "bytes": 1173
+          }
+        ]
+      },
+      {
+        "skinId": "ths",
+        "status": "restored",
+        "files": [
+          {
+            "path": "LICENSE",
+            "sha256": "02e1e3ebf73df5c1840c842a8e93b40942bf6e53a66acbe6c5643fc8664ff97d",
+            "bytes": 1521
+          },
+          {
+            "path": "NOTICE",
+            "sha256": "331121edcd6e0d7fd740db20b3e393d195e7393c6237b8f267eea66794a0cfe8",
+            "bytes": 751
+          },
+          {
+            "path": "PROVENANCE.json",
+            "sha256": "68ebcc6bbfb3c8daf2973491fede2d85719d788703037b2510f71ffab7d4c917",
+            "bytes": 762
+          },
+          {
+            "path": "patches.css",
+            "sha256": "648fd39a7168a71cc79fbfc4a6dcdb99587362cd2e58604f6c743f045e3a714e",
+            "bytes": 31056
+          },
+          {
+            "path": "skin.css",
+            "sha256": "b5cb4887e98ada90f28b2c90fccd23a2c7416a8cae0acca71a3d8268b08af7e2",
+            "bytes": 506
+          },
+          {
+            "path": "skin.json",
+            "sha256": "5af025c011797aa34d2a0d2dbf6edfafb30a4e199f9fe2a6075b28a183c76c17",
+            "bytes": 1201
+          }
+        ]
+      }
+    ],
+    "resourceStatuses": [
+      {
+        "path": "/api/skin-center/v2/skins/blue-fantasy/stylesheet",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/blue-fantasy/patches",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/blue-fantasy/assets/whale-art.jpg",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/blue-fantasy/assets/whale-icon.png",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/blue-fantasy/hooks.mjs",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/stylesheet",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/patches",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-icon.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-maid-left-v5.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-maid-right-v6.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-palace-day-v4.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-atelier-palace-night-v4.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-bottom-crest-v1.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-bottom-trim-tile-v1.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-bow-v1.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-chibi-v1.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-composer-frame-v4.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-new-session-v1.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-settings-frame-v1.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-sidebar-corner-v1.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-sidebar-swag-v1.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-top-trim-tile-v1.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-workspace-ribbon-v2.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/assets/maid-workspace-shield-v2.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/maid-atelier/hooks.mjs",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/dragon-heir/stylesheet",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/dragon-heir/patches",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/dragon-heir/assets/dark-art.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/dragon-heir/assets/light-art.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/dragon-heir/hooks.mjs",
+        "status": 404
+      },
+      { "path": "/api/skin-center/v2/skins/harbor/stylesheet", "status": 404 },
+      { "path": "/api/skin-center/v2/skins/harbor/patches", "status": 404 },
+      {
+        "path": "/api/skin-center/v2/skins/harbor/assets/harbor-art.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/harbor/assets/harbor-icon.svg",
+        "status": 404
+      },
+      { "path": "/api/skin-center/v2/skins/harbor/hooks.mjs", "status": 404 },
+      { "path": "/api/skin-center/v2/skins/miku/stylesheet", "status": 404 },
+      { "path": "/api/skin-center/v2/skins/miku/patches", "status": 404 },
+      {
+        "path": "/api/skin-center/v2/skins/miku/assets/miku-art-light.jpg",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/miku/assets/miku-art.webp",
+        "status": 404
+      },
+      { "path": "/api/skin-center/v2/skins/miku/hooks.mjs", "status": 404 },
+      {
+        "path": "/api/skin-center/v2/skins/minecraft/stylesheet",
+        "status": 404
+      },
+      { "path": "/api/skin-center/v2/skins/minecraft/patches", "status": 404 },
+      {
+        "path": "/api/skin-center/v2/skins/minecraft/hooks.mjs",
+        "status": 404
+      },
+      { "path": "/api/skin-center/v2/skins/trading/stylesheet", "status": 404 },
+      { "path": "/api/skin-center/v2/skins/trading/patches", "status": 404 },
+      { "path": "/api/skin-center/v2/skins/trading/hooks.mjs", "status": 404 },
+      {
+        "path": "/api/skin-center/v2/skins/whale-song/stylesheet",
+        "status": 404
+      },
+      { "path": "/api/skin-center/v2/skins/whale-song/patches", "status": 404 },
+      {
+        "path": "/api/skin-center/v2/skins/whale-song/assets/whale-art.webp",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/whale-song/assets/whale-icon.png",
+        "status": 404
+      },
+      {
+        "path": "/api/skin-center/v2/skins/whale-song/hooks.mjs",
+        "status": 404
+      },
+      { "path": "/api/skin-center/v2/skins/xp/stylesheet", "status": 404 },
+      { "path": "/api/skin-center/v2/skins/xp/patches", "status": 404 },
+      { "path": "/api/skin-center/v2/skins/xp/hooks.mjs", "status": 404 },
+      { "path": "/api/skin-center/v2/skins/qq98/stylesheet", "status": 404 },
+      { "path": "/api/skin-center/v2/skins/qq98/patches", "status": 404 },
+      { "path": "/api/skin-center/v2/skins/ths/stylesheet", "status": 404 },
+      { "path": "/api/skin-center/v2/skins/ths/patches", "status": 404 }
+    ]
+  },
+  "status": "passed",
+  "checkedAt": "2026-09-06",
+  "rawEvidence": {
+    "path": ".cache/dsh-skin-center-alpha/runtime/summary.json",
+    "sha256": "7bc367f48a6ce690f3e8aee495016e22afdd009989da57bc7859a9fc3493cce5"
+  },
+  "audit": {
+    "status": "passed",
+    "catalogEntries": 11,
+    "installedArchiveFiles": 144,
+    "bytePreservedUpstreamFiles": 140,
+    "selectedModeScreenshots": 22,
+    "baselineAndRemovedScreenshots": 4,
+    "coldRestarts": 11,
+    "servedResourceHashChecks": 116,
+    "removedResource404Checks": 58,
+    "restoredOriginalCompanionFiles": 12,
+    "unclassifiedHealthyRuntimeErrors": 0,
+    "disclosedOptionalTickerConsoleErrors": 3,
+    "formal336CampaignSamplesAssigned": false
+  },
+  "limitations": {
+    "fixedDarkAppearanceCatalogIds": [2203, 2205],
+    "appearanceNote": "Harbor and Minecraft retain their upstream fixed dark appearance while the official light/dark preference changes. The other nine use mode-dependent palettes.",
+    "trading": {
+      "catalogId": 2208,
+      "optionalMissingPlugin": "dsh-ticker",
+      "path": "/plugins/dsh-ticker/api/settings",
+      "status": 404,
+      "observedExternalOrigins": [
+        "https://qt.gtimg.cn",
+        "https://api.binance.com",
+        "https://api.frankfurter.dev"
+      ],
+      "unobservedDeclaredFallbacks": [
+        "https://data-api.binance.vision",
+        "https://api.frankfurter.app"
+      ],
+      "quoteAccuracyVerified": false,
+      "titlebarTapeStatusbarVisible": true,
+      "chromeRemovedOnSwitchAway": true
+    },
+    "scope": "Desktop 1440x900 installation, actual appearance, activation identity, official light/dark preference, resource bytes, fresh process restoration and uninstall recovery. This does not certify every plugin feature, mobile layout, market data accuracy or WCAG compliance.",
+    "companions": "The public installCompanion and restoreCompanions functions were exercised with the real installed package and official CLI removal. The higher-level installCommunityItems aggregation is covered separately by public installer tests; it was not the browser harness entry point."
+  },
+  "successfulCliLogs": [
+    {
+      "path": ".cache/dsh-skin-center-alpha/runtime/install-fixed-native-online.log",
+      "sha256": "5b6d5cca4cd6343402776efe72bf0fadf25d1d8eeb9c76869851af1559b48032"
+    },
+    {
+      "path": ".cache/dsh-skin-center-alpha/runtime/install-fixed-native-online-result.json",
+      "sha256": "25b9ebe1716e51e93270e0ad6c4e6edb54675fb59f9809c1bbd86317a4695aa6"
+    },
+    {
+      "path": ".cache/dsh-skin-center-alpha/runtime/install-offline.log",
+      "sha256": "79099387ed1027b6f0f0d016684d09c39bf6216e4dd4281a2d388ad86a40663c"
+    },
+    {
+      "path": ".cache/dsh-skin-center-alpha/runtime/remove.log",
+      "sha256": "d4e8098dac0852c2239a2aea80ea872b4ce272aba95511df8db175c5c8f9af72"
+    }
+  ],
+  "historicalAttempts": {
+    "files": [
+      {
+        "path": ".cache/dsh-skin-center-alpha/runtime/install-offline-missing-native-metadata.log",
+        "sha256": "36906e0c0094cad6686624ca2ed4d47806f6fa659a23108cd8d99e70d80f06cd"
+      },
+      {
+        "path": ".cache/dsh-skin-center-alpha/runtime/remove-offline.log",
+        "sha256": "79ca4fa0dbd49711c1dfd63deecfe003666970cb9223b19df5f74a1d13e87b74"
+      },
+      {
+        "path": ".cache/dsh-skin-center-alpha/runtime/remove-pnpm-exit-hang.log",
+        "sha256": "e952d0fdc984d2662723a8d8dabea608cff5e28b8219c839aa2a57010b1ac5be"
+      },
+      {
+        "path": ".cache/dsh-skin-center-alpha/runtime/2208-selected-optional-api-first-observation.json",
+        "sha256": "80b4f2928fbcb2bb24f54de5d9ab7c480660bc5162d830ccaededd952e13555c"
+      },
+      {
+        "path": ".cache/dsh-skin-center-alpha/runtime/summary-before-user-adaptation.json",
+        "sha256": "642590a275bfbd063f287dcf292d9eb1705149c1abea9fa7a4ce812e6fb91201"
+      }
+    ],
+    "staleLastFailureInRawSummary": "✓ Lockfile passes supply-chain policies (verified 13m ago)\n\ndependencies:\n- @dsh-themes-community/skin-center-alpha file:/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-skin-center-alpha/skin-center-alpha-0.2.5-alpha.2.tgz\n\nAlready up to date\nDone in 331ms using pnpm v11.7.0\ndsh: pnpm failed in profile directory /Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/dsh-skin-center-alpha/profile/profiles/web\n\n\n1 !== 0\n",
+    "note": "These earlier setup, optional-integration classification, visual-fix and pnpm-exit failures are retained. The final status comes from the successful later installation/removal and current per-entry resource evidence."
+  }
+}

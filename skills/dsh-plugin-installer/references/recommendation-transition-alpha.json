@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "kind": "recommendation-only-change",
+  "changedAt": "2026-09-06T06:16:07.588Z",
+  "publicationState": "worktree-candidate",
+  "previousCatalog": {
+    "path": "history/plugins-before-spotlight.json",
+    "sha256": "d74a519032ba74716ef9d4fa03fb56f28a44005d07a1999c2e034645d06a7a81"
+  },
+  "currentCatalogSha256": "9707f2379e772a2ef5390b0620ffe2caa523261032b8cabc39796df6af4da54f",
+  "unchangedCatalogFieldsSha256": "2233fecfdab7b794cb03a15713cb139a6b6cf4adcbe69ef467ba29de6be78107",
+  "previousTop10": [
+    3092,
+    3052,
+    3032,
+    3033,
+    3040,
+    3044,
+    3036,
+    3010,
+    3041,
+    3045
+  ],
+  "currentTop10": [
+    3092,
+    3052,
+    3032,
+    3033,
+    3040,
+    3044,
+    3036,
+    3010,
+    3041,
+    3004
+  ],
+  "individualReceipt": {
+    "path": "runtime-installation-alpha.json",
+    "sha256": "ab3d2b31e167e4b0e55719f01538c46b1ed138441ae97fb519edc1a0105aa851"
+  },
+  "previousCombination": {
+    "path": "history/top10-before-spotlight-alpha.json",
+    "sha256": "248099e898a0744ed26ca1717958ac248ea4a5ee4bea7fc6b6741d3a523322ad"
+  },
+  "addedToTop10": [
+    3004
+  ],
+  "removedFromTop10": [
+    3045
+  ],
+  "itemsChanged": 0,
+  "reason": "Replace the terminal recommendation with an existing verified Web command, session and plugin-settings search utility. DSH TUI remains in the same 100 recipes. Scores, identities, packages, sources, setup and individual lifecycle evidence are unchanged.",
+  "sourceReview": {
+    "catalogId": 3004,
+    "sourceRevision": "dd7ef5ed160aa1a624559de16eafd4ea9406d7ed",
+    "artifactSha256": "c37667331ed43b2cf75af5585fd9fd5b9e7b43637008765fded2647787a72b92",
+    "corePurpose": "Search existing commands, recent sessions and plugin settings in the Web client.",
+    "appearanceBoundary": "No skin, palette, wallpaper or global layout implementation. CSS targets only owned Spotlight nodes and reads host DSW variables; disposal removes its listener, overlay and owned stylesheet. Storage contains only the chosen shortcut. Generic action discovery may navigate to existing host controls.",
+    "documentationUrl": "https://github.com/0xsline/dsh-spotlight/blob/dd7ef5ed160aa1a624559de16eafd4ea9406d7ed/README.md"
+  }
+}

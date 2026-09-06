@@ -122,6 +122,7 @@ const DIRECTORY_LOCALES = new Set([
   'ko',
   'fr',
   'de',
+  'es',
 ]);
 const CERTIFIED_COMPATIBILITY = BASELINE_POLICY.certified.compatibility;
 const TOKEN_HASH = CERTIFIED_COMPATIBILITY.tokenCatalogSha256;
@@ -340,7 +341,7 @@ function parseArgs(argv) {
   }
   values.locale ??= values.selection?.locale ?? 'en';
   if (!DIRECTORY_LOCALES.has(values.locale)) {
-    throw new Error('--locale must be en, zh, zh-Hant, ja, ko, fr, or de');
+    throw new Error('--locale must be en, zh, zh-Hant, ja, ko, fr, de, or es');
   }
   if (!values.catalog) {
     if (!values.selection) {
@@ -352,7 +353,7 @@ function parseArgs(argv) {
   values['dsh-version'] ??= CERTIFIED_DSH_VERSION;
   values.availability ??= 'all';
   values.limit ??= '10';
-  if (!new Set([HISTORICAL_V2_VERSION, CERTIFIED_DSH_VERSION, RUNTIME_BASELINE_DSH_VERSION]).has(values['dsh-version'])) {
+  if (!new Set([HISTORICAL_V2_VERSION, CERTIFIED_DSH_VERSION, RUNTIME_BASELINE_DSH_VERSION, '0.1.3-alpha.1']).has(values['dsh-version'])) {
     throw new Error('DSH version must be one exact version listed by baseline-policy.json');
   }
   if (values.kind && !['theme', 'skin', 'full-skin', 'plugin', 'ui-extension'].includes(values.kind)) {
@@ -1642,6 +1643,10 @@ function accepted(item, args, catalogOrigin) {
 
 export async function runFinder(argv, { fetchImpl = fetch } = {}) {
   const args = parseArgs(argv);
+  if (args['dsh-version'] === '0.1.3-alpha.1') {
+    const { findAlphaItems } = await import('./find-alpha-items.mjs');
+    return findAlphaItems(args);
+  }
   if (args['dsh-version'] === RUNTIME_BASELINE_DSH_VERSION) {
     return {
       dshVersion: RUNTIME_BASELINE_DSH_VERSION,

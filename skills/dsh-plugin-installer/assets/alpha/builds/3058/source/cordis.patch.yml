@@ -1,0 +1,22 @@
+# dsh-record-replay bundle patch. One aggregate row mounts the plugin, which
+# registers the `open-record-replay` Skill and the `orr_*` model-facing tools.
+#
+# The plugin wraps the Open Record/Replay CLI (bin/orr.js) of an
+# open-record-replay checkout. Point it at that checkout by overlaying this row
+# from your profile's cordis.patch.yml (a patch replaces the WHOLE config, so
+# restate the fields you keep):
+#
+#   - id: record-replay
+#     config:
+#       repoRoot: '/absolute/path/to/open-record-replay'
+#       runsOut: 'runs'
+#       skillInputsOut: 'skill-inputs'
+#
+# `cliPath` (an explicit path to bin/orr.js) overrides `repoRoot`; the
+# ORR_CLI_PATH / ORR_REPO_ROOT environment variables are a final fallback.
+- insert:
+    - id: record-replay
+      name: 'dsh-record-replay'
+      config:
+        runsOut: 'runs'
+        skillInputsOut: 'skill-inputs'

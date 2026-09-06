@@ -1,0 +1,65 @@
+{
+  "name": "@dsh-themes/community-dsh-dream-skin",
+  "version": "0.4.1-dsh-alpha.1",
+  "description": "DeepSeek Harness 换肤插件（Dream Skin for DSH）：8 套 iOS / Linear 式清透冷调的高质感主题 + 弥散光壁纸 + 每皮肤智能背景 + 强调色 + 主题包分享，把换肤做成材质与配色克制的高级感工艺，而非贴图 — in the spirit of Codex Dream Skin, elevated.",
+  "license": "MIT",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "LICENSE",
+    "README.md",
+    "DSH-ALPHA-ADAPTATION.json"
+  ],
+  "author": "dsh-dream-skin contributors",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RevolutionLA/dsh-dream-skin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RevolutionLA/dsh-dream-skin/issues"
+  },
+  "homepage": "https://github.com/RevolutionLA/dsh-dream-skin#readme",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "plugin",
+    "theme",
+    "skin",
+    "wallpaper",
+    "web-ui",
+    "换肤"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-theme",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-settings-general"
+      ],
+      "platform": "web",
+      "immediately": true
+    }
+  }
+}

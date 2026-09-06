@@ -1,6 +1,6 @@
 # Authoring V3
 
-The normalized output matches the website's RC.8 `FullSkinManifestV3` or `SimpleThemeManifestV3` declaration contract. Creator input selects only `dshPackageVersion`; the generator supplies the exact final compatibility evidence from [compatibility-v3.json](compatibility-v3.json). Authors cannot provide or override attestation evidence, `artifact`, or `payload`. RC.2 runtime-baseline certification does not supply an authoring sidecar, so RC.2 authoring remains disabled even though the runtime baseline is production-ready.
+The normalized output matches the website's Alpha source `FullSkinManifestV3` or `SimpleThemeManifestV3` declaration contract. Creator input selects only `dshPackageVersion`; the generator supplies the exact final compatibility evidence from [compatibility-alpha.json](compatibility-alpha.json). Authors cannot provide or override attestation evidence, `artifact`, or `payload`. RC.2 runtime-baseline certification does not supply an authoring sidecar, so RC.2 authoring remains disabled even though the runtime baseline is production-ready.
 
 Use this full-skin authoring shape:
 
@@ -22,7 +22,7 @@ Use this full-skin authoring shape:
   },
   "author": { "name": "Example Author", "url": "https://example.com" },
   "copyright": { "source": "original", "aiGenerated": false },
-  "compatibility": { "dshPackageVersion": "0.1.0-rc.8" },
+  "compatibility": { "dshPackageVersion": "0.1.3-alpha.1" },
   "tokens": {
     "--dsw-alias-bg-base": { "light": "#f8fbff", "dark": "#101827" }
   },
@@ -62,6 +62,8 @@ The example abbreviates `tokens`; real input must include all 13 names below, ea
 
 Full skins require five distinct, local WebP files: `background`, `sidebar`, `card`, `preview-light`, and `preview-dark`. All input paths must remain under the adjacent `assets/` directory. `visual.focus.x/y` are canonical integer CSS-position percentages from 0 through 100. Creator output uses content-addressed paths and provisional `/api/theme-studio/import/*` URLs, and labels previews `simulated`; the website re-decodes imported files, replaces provisional URLs, and captures real `runtime` screenshots before publication.
 
+For mobile composition, `visual.mobileWelcomeSurface` is an optional boolean that places a readable surface behind the welcome content. `visual.mobileWelcomeOffset` is an optional integer from **-120 through 120**, inclusive: positive values move the mobile welcome group down, negative values move it up, and zero or omission retains its default vertical position. For example, `"mobileWelcomeOffset": -100` raises the group to leave more of the lower artwork visible. Creator preserves the signed value exactly; strings, fractions, and out-of-range numbers are rejected. These declarations still require real mobile screenshots and readability review; they do not certify a package.
+
 `license` is the concise SPDX or `LicenseRef` identifier. `licensePolicy` is mandatory and records the fixed HTTPS license text plus `commercialUse` (`allowed`, `prohibited`, or `rights-clearance-required`) and explicit attribution/share-alike booleans. A `-NC-` identifier must say `prohibited`; `-BY-` and `-SA-` identifiers must declare their matching duties.
 
 For licensed third-party art, use a fixed source rather than a mutable repository root:
@@ -83,6 +85,8 @@ Attribution-required licensed art entering hosted review needs both `attribution
 
 For a palette-only `theme`, omit `copyright`, `assets`, and `visual`, and provide `preview: { "light": "...", "dark": "...", "surface": "optional" }`. Preview values may be reviewed same-origin paths or credential-free HTTPS URLs; they are display media, never runtime dependencies.
 
-The generator emits `schemaVersion: "3.0"` with the entire exact RC.8 final compatibility object. That evidence distinguishes the official Git release mapping from registry-digest-only npm provenance and binds the certified runtime attestation. Do not copy a partial candidate object, change a digest, add fields, or rewrite an RC.6 V2 manifest's version string. Historical V2 is preserved only in [authoring-v2.md](authoring-v2.md).
+The generator emits `schemaVersion: "3.0"` with the entire exact Alpha source compatibility object. It binds the official Git tag/commit, lockfile, source build files, token and selector fingerprints, and runtime attestation. `npmArtifacts` is `null` because this selected version has no npm distribution. Do not copy a partial candidate object, change a digest, add fields, or rewrite an RC.6 V2 manifest's version string. Historical V2 is preserved only in [authoring-v2.md](authoring-v2.md).
 
 Authoring input and Creator output must contain neither `artifact` nor `payload`. Only the trusted website publisher may build the canonical payload and complete `.tgz`, record their digests in a release sidecar, and mark runtime previews as verified.
+
+The unchanged [compatibility-v3.json](compatibility-v3.json) is retained for explicit `--baseline historical-rc8` reproduction only. Do not relabel its npm evidence or manifest version as Alpha.

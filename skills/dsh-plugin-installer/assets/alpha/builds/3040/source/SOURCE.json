@@ -1,0 +1,17 @@
+{
+  "sourceRepository": "Ericwong5021/dsh-kanban",
+  "sourceRevision": "f7fa24c14db47ee4827cad5c827ad7aa3fd13434",
+  "files": {
+    "LICENSE": "cbc550d2e5a273ed1ad52ea1f4a9dbc991032bed8bc3203e8f81f6f72cd9b6f2",
+    "README.md": "3824fbe8c273b5b2b290e7a6fb39b9f4ca95677a2a1d3888e537fd06a4507668",
+    "cordis.patch.yml": "929ab1a18725d614ecc83c2a54d2f7303c900ba582413eba2e70efc822c338e8",
+    "package.json": "e2a91d09eb4978e2ac75e9e742044e57f39e37015b08a4867114e2f19171dbf8",
+    "src/client/Kanban.module.css": "276a932237cef7166a3fc3a17eb4e37dc6c2ceb25bf13e0ad17625c584b6af0f",
+    "src/client/Kanban.tsx": "871a37d663af144372339c5290f1a55322eeb26a0171d4b096de6f77a4577b3e",
+    "src/client/index.ts": "de0f59602b32f6f02083d39ad95aefe3bf3049390943dc878126880f4d55aea0",
+    "src/client/types.ts": "481a8dc5c484b80ba01a5aa333efbabb5bf57028601d4de8d7a8d46a553c8a10",
+    "src/css-modules.d.ts": "d4395f8ef04ea16601b9b84979df7de5af4ccfeb7b094c510f1442f3d8d5785a",
+    "src/index.ts": "88e6c394e8980a82a76acb0a22c26b8b846336ab83fce23d7fdf03eac9ee727b",
+    "tsdown.config.ts": "cab3d23e4e1a3a688856cfabc6e91fe17a7340382dbdbe8ffff551c4d58c1d93"
+  }
+}

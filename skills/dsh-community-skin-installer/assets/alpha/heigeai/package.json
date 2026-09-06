@@ -1,0 +1,14 @@
+{
+  "name": "@dsh-themes/community-heigeai-skin-center",
+  "version": "0.1.0-alpha.1",
+  "type": "module",
+  "license": "MIT",
+  "author": "DSH Themes; original palettes and derivation by HeiGeAi",
+  "description": "Independent Alpha adaptation of HeiGeAi's 21 palette presets, with seed colors and user-supplied local backgrounds.",
+  "main": "index.mjs",
+  "exports": { ".": "./index.mjs", "./client": "./lib/client.js", "./package.json": "./package.json" },
+  "files": ["index.mjs", "state.mjs", "lib", "presets.json", "cordis.patch.yml", "LICENSE", "NOTICE.md", "PROVENANCE.json", "upstream"],
+  "dsh": { "bundle": { "patch": "./cordis.patch.yml" }, "client": { "inject": ["@deepseek-ai/dsh-client-ui-theme"], "platform": "web" } },
+  "scripts": { "build": "node build.mjs", "test": "node --test test.mjs" },
+  "devDependencies": { "esbuild": "0.28.1" }
+}

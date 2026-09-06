@@ -1,0 +1,673 @@
+/**
+ * dsh-tool-vision — external vision model for DeepSeek Harness.
+ *
+ * Two capabilities:
+ *
+ * 1. `inspect_image` tool — sends an image (local file, or http(s) URL) to
+ *    any OpenAI-compatible chat/completions endpoint that supports
+ *    `image_url` content parts, and returns the vision model's text answer.
+ *
+ * 2. Image bridge — pasted images are bridged to text hints before they
+ *    enter a text-only model's request:
+ *
+ *    - New images are bridged on the `agent/pre-step` waterfall (the only
+ *      seam where the harness lets a plugin replace the messages that enter
+ *      a step — they become the durable `user/message` log, so the
+ *      `llm/stream` request-reconstruction invariant stays satisfied).
+ *    - Images already logged before the plugin was installed (or before a
+ *      server restart) are repaired lazily with a surface `replace`, one
+ *      event at a time, on the first pre-step of the session.
+ *
+ *    The bridged hint points at an exported local copy of the image, which
+ *    the agent hands to `inspect_image`. Models listed in
+ *    `multimodalModels` (or whose resolved `inputModalities` include
+ *    "image") receive image blocks directly and are never bridged.
+ *
+ * 3. Bridge image preview (v0.4.0, contributed by xing666173 from
+ *    dsh-bridge-preview, MIT © 2026 xing666173) — the browser half renders
+ *    inline thumbnails for bridged pasted images:
+ *
+ *    - `bridgeMessages` stamps every bridged hint with an invisible marker
+ *      (`BRIDGE_MARKER`), so the client can identify bridge text blocks
+ *      precisely instead of pattern-matching free text.
+ *    - A loopback route (`/plugins/dsh-tool-vision/image`) serves the
+ *      exported images to the same-origin page; the client inserts a
+ *      thumbnail above the hint text and opens a lightbox on click.
+ *    - Pure display layer: persisted messages, the transcript, the
+ *      model-facing text and the `inspect_image` chain are untouched.
+ */
+import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
+import { extname, isAbsolute, join, resolve as resolvePath, sep } from "node:path";
+import os from "node:os";
+import z from "@deepseek-ai/schemastery";
+import { defineTool } from "@deepseek-ai/dsh-tools";
+import { registerVisionTools, CONTENT_FILTER_RE } from "./lib/vision-tools.js";
+import { sessionHeaders } from "./lib/session-header.js";
+
+/** Cordis plugin name. */
+const name = "tool-vision";
+/** The tool registry, the llm seam (model capability lookup), the attachment store, and the host web server. */
+const inject = ["tools", "llm", "attachments", "webServer"];
+/** Settings namespace owned by this plugin (Web UI settings section). */
+const NS = "tool-vision";
+
+/**
+ * Invisible prefix stamped onto every bridged hint text block. The browser
+ * half uses it to recognize bridge text precisely (no free-text regex over
+ * user messages), and the model-facing hint stays intact otherwise.
+ */
+const BRIDGE_MARKER = "\u200b[bridge]";
+
+/** Loopback route serving bridged images to the same-origin page. */
+const BRIDGE_PREVIEW_ROUTE = "/plugins/dsh-tool-vision/image";
+/** Hard cap for a single served image (defense in depth; export is bounded). */
+const BRIDGE_PREVIEW_MAX_BYTES = 20 * 1024 * 1024;
+/** Extensions the preview route serves (svg/ico intentionally excluded). */
+const BRIDGE_PREVIEW_MEDIA = {
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".webp": "image/webp",
+  ".gif": "image/gif",
+  ".avif": "image/avif",
+  ".bmp": "image/bmp",
+};
+
+const DEFAULT_DESCRIPTION =
+  "Analyze an image using an external vision-capable model through an OpenAI-compatible API. " +
+  "Provide the path to a local image file (absolute, or relative to the current workspace) or an http(s) URL, " +
+  "optionally with a specific question. Returns the vision model's textual description or answer. " +
+  "Use this whenever you need to read, describe, or extract information from image content, " +
+  "since the main model is text-only.";
+
+/** Runtime schema for the tool-vision row. */
+const Config = z.object({
+  /** Base URL of an OpenAI-compatible API, e.g. https://api.openai.com/v1 or https://dashscope.aliyuncs.com/compatible-mode/v1 */
+  baseURL: z.string().default("https://api.openai.com/v1"),
+  /** API key; takes precedence over apiKeyEnv. Rendered as a write-only secret in the Web UI. */
+  apiKey: z.string().default("").role("secret"),
+  /** Environment variable holding the API key. */
+  apiKeyEnv: z.string().default("VISION_API_KEY"),
+  /** Vision model id served by the endpoint. */
+  model: z.string().default("gpt-4o-mini"),
+  /** Max output tokens for the vision call. */
+  maxTokens: z.number().default(4096),
+  /** Per-request timeout in milliseconds. */
+  timeoutMs: z.number().default(60000),
+  /** Largest local image accepted, in bytes. */
+  maxImageBytes: z.number().default(10 * 1024 * 1024),
+  /** Tool description shown to the model; overrides the default. */
+  description: z.string().default(DEFAULT_DESCRIPTION),
+  /** Bridge pasted images to text hints on models that cannot see images. */
+  bridgeTextOnly: z.boolean().default(true),
+  /** Export directory for bridged images; empty = system temp. */
+  bridgeExportDir: z.string().default(""),
+  /** Model ids that receive image blocks directly (never bridged). */
+  multimodalModels: z.array(z.string()).default([]),
+  /** Inline preview for bridged images: thumbnail above the hint text in the user bubble (click to zoom). */
+  bridgePreview: z.boolean().default(true),
+  /** Fallback scan interval for the preview scanner in ms; 0 disables the periodic fallback. */
+  bridgePreviewScanIntervalMs: z.number().default(2000),
+  /** Hide the bridged hint text once the preview image has loaded (kept on failure — never "no image AND no text"). */
+  bridgePreviewHideHint: z.boolean().default(true),
+  /** Privacy gate for vision_screenshot: desktop capture is only registered when explicitly enabled. */
+  desktopScreenshot: z.boolean().default(false),
+  /**
+   * Advertise image input capability for every model while the bridge is on.
+   * The host admission gate (host-apiproxy `prompt`/`selectModel`) refuses
+   * pasted images unless the current model declares `image` in its
+   * `inputModalities`. The bridge handles those images anyway (they become
+   * text hints the agent inspects through `inspect_image`), so this wraps the
+   * llm service's `resolveModelInfo` to report image support for text-only
+   * models too — users can paste images on any model without hand-editing
+   * provider model configs.
+   */
+  bridgeAutoImage: z.boolean().default(true),
+  /** Send a stable per-conversation id header (`x-opencode-session`) on vision
+   * requests. OpenCode Go (and similar OpenAI-compatible gateways) require it
+   * on every request; requests without the header may error. The value is the
+   * current dsh session id when the call runs inside one, else `sessionId`
+   * below, else a stable per-process random id. Set false to disable. */
+  sendSessionHeader: z.boolean().default(true),
+  /** Header name carrying the session id. */
+  sessionHeaderName: z.string().default("x-opencode-session"),
+  /** Fixed session id override for callers without a dsh session context.
+   * Empty = auto (per-process stable id). */
+  sessionId: z.string().default(""),
+});
+
+const MIME_BY_EXT = {
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".gif": "image/gif",
+  ".webp": "image/webp",
+  ".bmp": "image/bmp",
+  ".avif": "image/avif",
+  ".svg": "image/svg+xml",
+  ".ico": "image/x-icon",
+};
+
+const EXT_BY_MEDIA = {
+  "image/png": ".png",
+  "image/jpeg": ".jpg",
+  "image/webp": ".webp",
+  "image/gif": ".gif",
+};
+
+/** True when any message carries an image content block. */
+function hasImageBlock(messages) {
+  return (messages ?? []).some((m) =>
+    Array.isArray(m?.content) && m.content.some((b) => b?.type === "image"),
+  );
+}
+
+/** Deep-freeze an acyclic JSON-safe value in place (the harness freezes every durable message). */
+function deepFreeze(value) {
+  if (value === null || typeof value !== "object" || Object.isFrozen(value)) return value;
+  if (Array.isArray(value)) {
+    for (const item of value) deepFreeze(item);
+    return Object.freeze(value);
+  }
+  for (const key of Object.keys(value)) deepFreeze(value[key]);
+  return Object.freeze(value);
+}
+
+/** Export one attachment to disk; returns the file path (cached per process). */
+const exportedPaths = new Map();
+async function exportImage(attachment, ctx, dir) {
+  const cached = exportedPaths.get(attachment.attachmentId);
+  if (cached) return cached;
+  const { data } = await ctx.attachments.readImage(attachment);
+  const ext = EXT_BY_MEDIA[attachment.mediaType] ?? ".img";
+  const safeName = attachment.name
+    ? attachment.name
+        .replace(/\.[^.]+$/, "")
+        .replace(/[^\w\-]+/g, "_")
+        .replace(/^_+|_+$/g, "")
+        .slice(0, 40)
+    : "";
+  const base = (safeName ? `${safeName}_` : "") + attachment.attachmentId.slice(0, 12);
+  const path = join(dir, `${base}${ext}`);
+  await writeFile(path, data);
+  exportedPaths.set(attachment.attachmentId, path);
+  return path;
+}
+
+/**
+ * Replace image content blocks with text hints pointing at exported files.
+ * Non-image messages are returned as-is (same reference); bridged messages
+ * are fresh, deep-frozen objects with the original identity and source.
+ * Each bridged hint is stamped with the invisible {@link BRIDGE_MARKER}
+ * prefix so the browser half can recognize it precisely.
+ * Exported for unit testing; `ctx` only needs `attachments`.
+ */
+async function bridgeMessages(messages, ctx, dir) {
+  const next = [];
+  for (const message of messages) {
+    const content = message?.content;
+    if (!Array.isArray(content) || !content.some((b) => b?.type === "image")) {
+      next.push(message);
+      continue;
+    }
+    const blocks = [];
+    for (const block of content) {
+      if (block?.type !== "image") {
+        blocks.push(block);
+        continue;
+      }
+      const path = await exportImage(block.attachment, ctx, dir);
+      const name = block.attachment.name ? ` (${block.attachment.name})` : "";
+      blocks.push({
+        type: "text",
+        text:
+          `${BRIDGE_MARKER}[User sent an image${name}, exported to: ${path}. ` +
+          `Inspect it with the inspect_image tool to see its content.]`,
+      });
+    }
+    next.push(deepFreeze({ ...message, content: blocks }));
+  }
+  return next;
+}
+
+/** Parse `?a=b&c=d` from a raw request URL (percent-decoded). */
+function parseQuery(rawUrl) {
+  const query = {};
+  const at = rawUrl.indexOf("?");
+  if (at === -1) return query;
+  for (const pair of rawUrl.slice(at + 1).split("&")) {
+    const eq = pair.indexOf("=");
+    if (eq === -1) continue;
+    try {
+      query[pair.slice(0, eq)] = decodeURIComponent(pair.slice(eq + 1).replace(/\+/g, " "));
+    } catch {
+      /* skip malformed pairs */
+    }
+  }
+  return query;
+}
+
+/**
+ * Advertise `image` in the `inputModalities` reported by the llm service for
+ * every model, so the host admission gate lets pasted images through on
+ * text-only models. The bridge turns those images into text hints anyway, so
+ * this is pure admission: it never changes what the adapter actually streams
+ * (the adapter's own stream validation reads the model's real `input` from
+ * the provider config, untouched here).
+ *
+ * The wrap is installed on the shared llm service instance, so it must be
+ * idempotent across HMR re-applies and restored on dispose. `marker` is a
+ * per-instance record proving this plugin already owns the wrap; the
+ * `installed` flag distinguishes "we wrapped it" from "the original was
+ * replaced by something else" so dispose only restores what we replaced.
+ *
+ * Exported for unit testing; the test passes a fake llm service.
+ */
+const LLM_RESOLVE_WRAP_MARK = Symbol("dsh-tool-vision.resolveModelInfo.wrapped");
+function installAutoImageAdmission(llm, logger) {
+  if (llm === undefined || llm === null || typeof llm.resolveModelInfo !== "function") {
+    logger?.warn?.("[tool-vision] llm service unavailable; automatic image admission not installed");
+    return () => {};
+  }
+  if (llm[LLM_RESOLVE_WRAP_MARK]) return () => {}; // already wrapped by us (HMR re-apply)
+  const original = llm.resolveModelInfo.bind(llm);
+  const wrapped = async (provider, model, signal) => {
+    const info = await original(provider, model, signal);
+    if (!info) return info;
+    const mods = info.inputModalities;
+    if (Array.isArray(mods) && mods.includes("image")) return info;
+    return { ...info, inputModalities: [...(mods ?? []), "image"] };
+  };
+  let installed = false;
+  llm[LLM_RESOLVE_WRAP_MARK] = true;
+  llm.resolveModelInfo = wrapped;
+  installed = true;
+  logger?.debug?.("[tool-vision] automatic image admission installed (resolveModelInfo wrapped)");
+  return () => {
+    if (installed) {
+      if (llm.resolveModelInfo === wrapped) llm.resolveModelInfo = original;
+      installed = false;
+    }
+    delete llm[LLM_RESOLVE_WRAP_MARK];
+  };
+}
+
+/**
+ * Register the loopback route that serves bridged images to the same-origin
+ * page (the preview thumbnails). Read-only and tightly scoped:
+ *  - only files inside the bridge export directory (no traversal);
+ *  - only image extensions from {@link BRIDGE_PREVIEW_MEDIA};
+ *  - Host restricted to the local machine;
+ *  - hard 20MB cap per file.
+ */
+function registerBridgePreviewRoute(ctx, exportDir, logger) {
+  const webServer = ctx.get("webServer");
+  if (webServer === undefined) {
+    logger?.warn?.("[tool-vision] webServer unavailable; bridge preview route not registered");
+    return;
+  }
+  const bridgeDir = resolvePath(exportDir);
+  ctx.effect(() => webServer.register({
+    kind: "exact",
+    path: BRIDGE_PREVIEW_ROUTE,
+    async handler(req, res) {
+      try {
+        const raw = String(req.url ?? "");
+        const query = parseQuery(raw);
+        const p = query.p;
+        if (typeof p !== "string" || p.length === 0) {
+          res.writeHead(400);
+          res.end("bad request");
+          return;
+        }
+        const lower = p.toLowerCase();
+        const mediaType = BRIDGE_PREVIEW_MEDIA[extname(lower)];
+        if (mediaType === undefined) {
+          res.writeHead(400);
+          res.end("not an image path");
+          return;
+        }
+        const host = String(req.headers?.host ?? "");
+        if (host !== "" && !/^(127\.0\.0\.1|localhost|\[::1\])(:\d+)?$/.test(host)) {
+          res.writeHead(403);
+          res.end("forbidden");
+          return;
+        }
+        const target = resolvePath(p);
+        if (target !== bridgeDir && !target.startsWith(bridgeDir + sep)) {
+          res.writeHead(403);
+          res.end("forbidden");
+          return;
+        }
+        const info = await stat(target);
+        if (!info.isFile() || info.size > BRIDGE_PREVIEW_MAX_BYTES) {
+          res.writeHead(404);
+          res.end("not found");
+          return;
+        }
+        const bytes = await readFile(target);
+        res.writeHead(200, {
+          "Content-Type": mediaType,
+          "Cache-Control": "private, max-age=60",
+        });
+        res.end(bytes);
+      } catch {
+        try {
+          res.writeHead(404);
+          res.end("not found");
+        } catch {
+          /* response already sent */
+        }
+      }
+    },
+  }), "dsh-tool-vision: bridge preview route");
+}
+
+/**
+ * Whether the session's current model may receive image blocks directly.
+ * Uses the last logged request header first, then the agent's own options,
+ * and consults ONLY the `multimodalModels` whitelist — never the model's
+ * declared `inputModalities`, because profiles routinely declare
+ * `input: [text, image]` on text-only models to pass the harness's prompt
+ * admission check (that declaration says nothing about whether the upstream
+ * endpoint really accepts `image_url` parts).
+ * Returns true when bridging is disabled (nothing would be bridged anyway).
+ */
+async function currentModelAcceptsImage(agent, config) {
+  if (!config.bridgeTextOnly) return true;
+  const header = agent?.session?.requestHeader?.();
+  const model = header?.config?.model ?? agent?.options?.model;
+  if (!model) return false;
+  return config.multimodalModels.includes(model);
+}
+
+/**
+ * Lazily bridge image blocks that are already part of the session log
+ * (pasted before the plugin was active, or before a restart). Each affected
+ * event is rewritten once with a surface `replace`, which swaps the durable
+ * derivation (and the transcript) to the text hint. Events that are no
+ * longer on the surface (already shadowed) are skipped and remembered.
+ * `repaired` tracks per-session state: a `Set` of handled seqs plus a
+ * monotonic scan cursor.
+ */
+async function repairLoggedImages(ctx, session, exportDir, repaired) {
+  const events = session.events;
+  for (let index = repaired.cursor; index < events.length; index += 1) {
+    const event = events[index];
+    if (event.type !== "user/message" || repaired.set.has(event.seq)) {
+      repaired.set.add(event.seq);
+      continue;
+    }
+    const content = event.data?.content;
+    if (!Array.isArray(content) || !content.some((b) => b?.type === "image")) {
+      repaired.set.add(event.seq);
+      continue;
+    }
+    const [bridged] = await bridgeMessages([event.data], ctx, exportDir);
+    try {
+      session.append("user/message", bridged, {
+        surfaceOp: { op: "replace", start: event.seq, end: event.seq },
+        sourceEventSeqs: [event.seq],
+      });
+      ctx.logger.info(`[tool-vision] bridged logged image at seq ${event.seq} (${session.id})`);
+    } catch (error) {
+      ctx.logger.debug(`[tool-vision] skip repair of seq ${event.seq}: ${String(error)}`);
+    }
+    repaired.set.add(event.seq);
+  }
+  repaired.cursor = events.length;
+}
+
+/**
+ * Install the pre-step bridge at the root level. Agent-scoped waterfalls
+ * admit untagged (root) listeners, so one listener serves every agent —
+ * including sessions resumed after a server restart, which never re-fire
+ * `session/created` for per-agent attachments. Runs before every proposed
+ * step: new pasted images are bridged into the durable log, and stuck
+ * logged images are repaired, before the model request is derived from it.
+ */
+function attachPreStepBridge(ctx, getConfig, exportDir) {
+  const repairedBySession = new Map();
+  ctx.on("agent/pre-step", async (payload, next) => {
+    const decision = await next();
+    if (!decision || decision.kind !== "enter") return decision;
+    const agent = payload?.agent;
+    if (!agent?.session) return decision;
+    try {
+      const acceptsImage = await currentModelAcceptsImage(agent, getConfig());
+      if (!acceptsImage) {
+        let repaired = repairedBySession.get(agent.session.id);
+        if (!repaired) {
+          repaired = { set: new Set(), cursor: 0 };
+          repairedBySession.set(agent.session.id, repaired);
+        }
+        await repairLoggedImages(ctx, agent.session, exportDir, repaired).catch((error) => {
+          ctx.logger.warn(`[tool-vision] logged-image repair failed: ${String(error)}`);
+        });
+      }
+      if (acceptsImage) return decision;
+      const messages = await bridgeMessages(decision.messages, ctx, exportDir);
+      if (messages.every((message, index) => message === decision.messages[index])) return decision;
+      return { ...decision, messages };
+    } catch (error) {
+      ctx.logger.warn(`[tool-vision] pre-step bridge failed: ${String(error)}`);
+      return decision;
+    }
+  });
+}
+
+function resolveApiKey(config) {
+  if (config.apiKey) return config.apiKey;
+  if (config.apiKeyEnv) {
+    const fromEnv = process.env[config.apiKeyEnv];
+    if (fromEnv) return fromEnv;
+  }
+  return process.env.OPENAI_API_KEY ?? "";
+}
+
+/** Turn a tool argument into an image_url payload: local file -> data URL, http(s) -> as-is. */
+async function toImageUrl(target, cwd, config) {
+  if (/^https?:\/\//i.test(target)) return { url: target, note: target };
+  const abs = isAbsolute(target) ? target : resolvePath(cwd, target);
+  const info = await stat(abs).catch(() => null);
+  if (!info) throw new Error(`image not found: ${abs}`);
+  if (info.size > config.maxImageBytes) {
+    throw new Error(
+      `image too large: ${abs} (${info.size} bytes, limit ${config.maxImageBytes})`,
+    );
+  }
+  const mime = MIME_BY_EXT[extname(abs).toLowerCase()];
+  if (!mime) {
+    throw new Error(
+      `unsupported image extension: ${abs} (supported: ${Object.keys(MIME_BY_EXT).join(", ")})`,
+    );
+  }
+  const data = await readFile(abs);
+  return { url: `data:${mime};base64,${data.toString("base64")}`, note: abs };
+}
+
+/** One OpenAI-compatible chat/completions call with an image_url content part. */
+async function callVision(config, imageUrl, question, detail, signal, exec) {
+  const key = resolveApiKey(config);
+  if (!key) {
+    throw new Error(
+      `vision API key missing: set the plugin config (apiKey / apiKeyEnv) or the OPENAI_API_KEY environment variable`,
+    );
+  }
+  const base = config.baseURL.endsWith("/") ? config.baseURL : `${config.baseURL}/`;
+  const endpoint = new URL("chat/completions", base);
+  const sessionHeader = sessionHeaders(config, exec);
+  const controller = new AbortController();
+  const timer = setTimeout(
+    () => controller.abort(new Error(`vision request timed out after ${config.timeoutMs}ms`)),
+    config.timeoutMs,
+  );
+  const onSignalAbort = () => controller.abort(signal?.reason);
+  if (signal) {
+    if (signal.aborted) controller.abort();
+    else signal.addEventListener("abort", onSignalAbort, { once: true });
+  }
+  const content = [
+    { type: "text", text: question || "Describe this image in detail, including all key visual elements, text, and context you can see." },
+    { type: "image_url", image_url: detail ? { url: imageUrl, detail } : { url: imageUrl } },
+  ];
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${key}`,
+        ...sessionHeader,
+      },
+      body: JSON.stringify({
+        model: config.model,
+        messages: [{ role: "user", content }],
+        max_tokens: config.maxTokens,
+      }),
+      signal: controller.signal,
+    });
+    const body = await response.json().catch(() => null);
+    if (!response.ok) {
+      const detailText = body?.error?.message ?? response.statusText;
+      throw new Error(
+        `vision endpoint returned ${response.status}: ${detailText} (endpoint ${endpoint})`,
+      );
+    }
+    // Reasoning models (mimo-v2.5, deepseek-r1, ...) spend the token budget on
+    // `reasoning_content` first; when the final `content` is empty or was cut
+    // off by max_tokens, fall back to the reasoning text so the answer is
+    // still useful.
+    const message = body?.choices?.[0]?.message;
+    let answer = message?.content ?? "";
+    if (!answer.trim()) answer = message?.reasoning_content ?? "";
+    if (typeof answer !== "string" || !answer.trim()) {
+      throw new Error("vision endpoint returned an empty response");
+    }
+    return answer.trim();
+  } finally {
+    clearTimeout(timer);
+    signal?.removeEventListener("abort", onSignalAbort);
+  }
+}
+
+function apply(ctx, config) {
+  // ── settings-backed configuration ─────────────────────────────────────────
+  // The composition entry stays the `base` layer; a registered `tool-vision`
+  // settings section (Web UI section, settings.yaml) overlays it live, so
+  // edits hot-apply without a restart. `sourceGetter` is a GETTER
+  // (`() => scope.get()`), not the config object — keep it and call it at use
+  // time, or `getConfig()` would return a function and every `cfg.*` read
+  // would be undefined (apiKey included).
+  let current = config;
+  let sourceGetter = null;
+  const getConfig = () => (sourceGetter ? sourceGetter() : current);
+  // Compat shim: dsh-settings 0.1.2-rc.1 removed the module-level
+  // `installSettingsSection` export (the provider now lives at ctx.settings).
+  // Inline the same logic via ctx.inject(["settings"]) — works on both
+  // 0.1.1 (module export wrapper) and 0.1.2 (ctx.settings) hosts.
+  ctx.inject(["settings"], (sctx) => {
+    const scope = sctx.settings.register(NS, Config, { base: config });
+    sourceGetter = () => scope.get();
+    sctx.effect(() => () => {
+      sourceGetter = null;
+    });
+    scope.watch(() => {});
+  });
+
+  // ── image bridge: pasted images become inspect_image hints on text-only models ──
+  if (getConfig().bridgeTextOnly) {
+    const exportDir = getConfig().bridgeExportDir || join(os.tmpdir(), "dsh-vision-bridge");
+    mkdir(exportDir, { recursive: true }).catch(() => {});
+    // Root-level listener: agent-scoped waterfalls admit untagged listeners,
+    // so one registration serves every agent (new and resumed alike) and the
+    // agent is read from the fused payload.
+    attachPreStepBridge(ctx, getConfig, exportDir);
+
+    // ── automatic image admission: let pasted images through on text-only models ──
+    // The host gate refuses images unless the model declares `image` input;
+    // the bridge handles them anyway, so report image support for all models.
+    // The wrap is installed on the shared llm service instance (idempotent,
+    // restored on dispose/HMR).
+    if (getConfig().bridgeAutoImage) {
+      const unwrap = installAutoImageAdmission(ctx.get("llm"), ctx.logger);
+      ctx.effect(() => unwrap, "dsh-tool-vision: automatic image admission");
+    }
+
+    // ── bridge image preview: same-origin thumbnails for bridged images ──
+    if (getConfig().bridgePreview) {
+      registerBridgePreviewRoute(ctx, exportDir, ctx.logger);
+    }
+  }
+
+  ctx.tools.register(defineTool({
+    name: "inspect_image",
+    description: getConfig().description,
+    parameters: {
+      path: {
+        type: "string",
+        required: true,
+        description: "Path to the image file (absolute, or relative to the current workspace) or an http(s) URL.",
+      },
+      question: {
+        type: "string",
+        description: "Optional specific question about the image. Omit for a general detailed description.",
+      },
+      detail: {
+        type: "string",
+        enum: ["auto", "low", "high"],
+        description: "Optional image resolution hint for the vision API (auto by default).",
+      },
+    },
+    output: {
+      schema: { type: "string" },
+      render: (_args, value) => [{ type: "text", text: value }],
+    },
+    async execute(args, exec) {
+      const cfg = getConfig();
+      const cwd = exec.agent?.session?.header?.cwd ?? process.cwd();
+      const { url, note } = await toImageUrl(args.path, cwd, cfg);
+      try {
+        const answer = await callVision(cfg, url, args.question, args.detail, exec.signal, exec);
+        return note === url ? answer : `${answer}\n\n(image: ${note})`;
+      } catch (error) {
+        const raw = error && error.message ? String(error.message) : String(error);
+        if (CONTENT_FILTER_RE.test(raw)) {
+          throw new Error(
+            "inspect_image: 图片被视觉端点的内容安全策略拒绝(检测到敏感或不安全内容)。" +
+              "这不是网络或配置问题,请换一张图片或调整图片内容后再试。",
+          );
+        }
+        throw error;
+      }
+    },
+  }));
+
+  // ── pixel-level vision tools (ported from dsh-vision-router) ─────────────
+  // 14 vision_* tools driven by the SAME configured endpoint as inspect_image
+  // (baseURL/apiKey/model). No provider chain, no local models, no extra
+  // settings: everything comes from the existing tool-vision configuration.
+  registerVisionTools(ctx, getConfig);
+}
+
+export {
+  BRIDGE_MARKER,
+  BRIDGE_PREVIEW_MAX_BYTES,
+  BRIDGE_PREVIEW_MEDIA,
+  BRIDGE_PREVIEW_ROUTE,
+  Config,
+  DEFAULT_DESCRIPTION,
+  EXT_BY_MEDIA,
+  apply,
+  attachPreStepBridge,
+  bridgeMessages,
+  currentModelAcceptsImage,
+  deepFreeze,
+  exportImage,
+  hasImageBlock,
+  inject,
+  installAutoImageAdmission,
+  name,
+  parseQuery,
+  registerBridgePreviewRoute,
+  repairLoggedImages,
+};

@@ -1,0 +1,14 @@
+{
+  "sourceRepository": "Scorp1o117/dsh-tool-vision",
+  "sourceRevision": "8e681839084e15a12fa727afc2ce3b3a0d188851",
+  "files": {
+    "LICENSE": "8d7cc1e06529ecf9d97d1f53b1bfc50679fd1428f017db08460bf2a87e634f48",
+    "README.md": "9eda6e749bcc31744668996c4ba8b4c276ab275bc30b6540d6b1715355048d45",
+    "client.js": "d8b61f37b3ad6920f80c026cc86e09dfa71bf770d898ea57c6725eff3ad41eea",
+    "cordis.patch.yml": "f324df713df8c1c512bc93b3ac1da0cc226906f12d3cc8d9edb08af9fe233fc9",
+    "index.js": "6cfa0ce2eb10e0fea5e5543d79ac27900abeb05f732afb9f9bbae2a80a5230e1",
+    "package.json": "1aaf893431c6356d5159ba0eaafce0a92e738b70f25b672014257b81dd93f7d3",
+    "lib/session-header.js": "df3b8d35f600d9b2338d9cf5da226ae014591f7e1d8f593a7622d866bb5300e0",
+    "lib/vision-tools.js": "350bcdfc6d868f8b9a0cdd04d6f5fe49f1ae48e2c6555a902cff5d7496708634"
+  }
+}

@@ -1,0 +1,340 @@
+{
+  "schemaVersion": 1,
+  "catalogId": 3025,
+  "sourceRepository": "SnowCrescenter-tech/dsh-milestone",
+  "sourceRevision": "3bc2a648f9f9771a978513697dbaebf8a0d7188b",
+  "sourceLicense": "MIT",
+  "targetDshVersion": "0.1.3-alpha.1",
+  "targetDshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "npm": {
+    "version": "0.6.6",
+    "gitHead": "e3f62116c180858bca561e96c575f4f22f9ddbb6",
+    "integrity": "sha512-YgyQCwcMIkX6lhzbE29wLdoVeVjznv+h6ZUjgAby4ZxijHdx285c+iHUlQmPj7mkGUwQpBByafL1Ze9pPenWPQ==",
+    "archiveSha256": "24ebb7da7ab2744ada445210db9add1c57cbb87a57fd686a8c0075f34f91c558"
+  },
+  "sourceArchiveSha256": "16561108047fe23ce194ab458e9971351161841fecfcc7a5f8edf15ff6ed04ca",
+  "sourceComparison": {
+    "base": "e3f62116c180858bca561e96c575f4f22f9ddbb6",
+    "head": "3bc2a648f9f9771a978513697dbaebf8a0d7188b",
+    "runtimeSourceChanged": false,
+    "changedFiles": [
+      ".github/workflows/ci.yml",
+      "README.md",
+      "package.json",
+      "src/test/setup.ts",
+      "vitest.config.ts"
+    ]
+  },
+  "originalFiles": {
+    "LICENSE": {
+      "sha256": "e712208487fde5937a24b1c7968bcb43be9d231449d62356a7c8b7b35938c40a",
+      "bytes": 1104
+    },
+    "README.md": {
+      "sha256": "2a557617f80446d3c293f5a13f6d802883cff346f0863047e7e386057bcbda44",
+      "bytes": 8658
+    },
+    "assets/demo.svg": {
+      "sha256": "966e363d83797034f3e4ced0d0508e5b4e6d15dadfe7930156c7b7db805ff6eb",
+      "bytes": 2086
+    },
+    "assets/logo.svg": {
+      "sha256": "38e8093fbe3772a5200a4f5c08f5c9b6490e9af11e87ca24179e23be5016284e",
+      "bytes": 975
+    },
+    "cordis.patch.yml": {
+      "sha256": "27a35e5582d16bc5b33a1d47ddf4223de08d6f8fb8bedd76a69056764a574c18",
+      "bytes": 270
+    },
+    "lib/client.js": {
+      "sha256": "27e918b0d229ce54868ca19fbe04897dafb073c0b4a0274ca0365f0f4cfa9c5f",
+      "bytes": 213506
+    },
+    "lib/index.js": {
+      "sha256": "81fa243b3f06925ef6ca0875ed365cecb0ee95aff1f06010600ac7d1676d6f1e",
+      "bytes": 353
+    },
+    "package.json": {
+      "sha256": "ee49348925d6d8018216a75676da5abe677feb14af965aec0636409516b1c9ef",
+      "bytes": 2175
+    },
+    "src/client/MilestoneListPanel.tsx": {
+      "sha256": "2978f4b988127f9dc801017a0d2bdf76eec1bc26ebe97f63a0949e70dc94f88a",
+      "bytes": 6059
+    },
+    "src/client/MilestoneOverlay.tsx": {
+      "sha256": "ad0a5242b5a1e05d51cfcacab56e5f457e6f2f20892f1e2201bcdf1f386559fd",
+      "bytes": 872
+    },
+    "src/client/MilestoneRail.tsx": {
+      "sha256": "5c4c0ac39689eaaa865fa36a6d45ef8c0f7932086d99d69d5661bd842854a28a",
+      "bytes": 120216
+    },
+    "src/client/MilestoneRailSearch.tsx": {
+      "sha256": "21d8837401591f0f3574b13f7f8a29fade7255aaa9b122d986afe4153033690e",
+      "bytes": 6388
+    },
+    "src/client/MilestoneRailTooltip.tsx": {
+      "sha256": "a9979633b7625f22204adf507c893f92a763364cf30bb1ce46d3e72110be983d",
+      "bytes": 9417
+    },
+    "src/client/MilestoneSessionSearch.tsx": {
+      "sha256": "14628d014e68fea77aeaeeaed3abe011aee2c6240ca85ef72b3a5992f850b325",
+      "bytes": 8587
+    },
+    "src/client/MilestoneTour.tsx": {
+      "sha256": "bdf29859546d6e6e21237fa6f889880014f7e67e0876c186612c3d03da32ec60",
+      "bytes": 16358
+    },
+    "src/client/accent-utils.ts": {
+      "sha256": "e79898df4d4a1a41027917c302f5a4ade3d31205661a41386920a713011e9cb1",
+      "bytes": 3993
+    },
+    "src/client/badge-logic.ts": {
+      "sha256": "566414a0e52fdc121b174af343e74176e39cbca09fe2f8045696c907e6daff2e",
+      "bytes": 4701
+    },
+    "src/client/bookmark-logic.ts": {
+      "sha256": "39026e6060233378bfca2684917197255a89f525fb808e0f4b2e90402ac98cbb",
+      "bytes": 2159
+    },
+    "src/client/bookmarkStore.ts": {
+      "sha256": "d646ce6056275c12958de815ba21377acb17ca553a160e086f09273ef6d34a59",
+      "bytes": 1202
+    },
+    "src/client/clipboard-logic.ts": {
+      "sha256": "3f89dea759c9343f836526dfbbca4ee76da0bcacd122ded692f8a3cdd980cbe3",
+      "bytes": 775
+    },
+    "src/client/deep-link-logic.ts": {
+      "sha256": "f3c44e1527feff7c11059cbb49e12e45b5ad3d70f18e4a4c03473f4afa16bd20",
+      "bytes": 2589
+    },
+    "src/client/index.ts": {
+      "sha256": "92759917142a43ce3b7e74359a643364256b055a182ee8258f72783245419195",
+      "bytes": 4075
+    },
+    "src/client/label-logic.ts": {
+      "sha256": "8ecc31cf0a3205a0b652d91d85ce1ecaa5e921466d1f5da90c29096b9f13b8a4",
+      "bytes": 2078
+    },
+    "src/client/locales.ts": {
+      "sha256": "d8724f0fa0467375dad5bf5a8ff3c1d341ac39eb906df5b61bb2d2cb63da127c",
+      "bytes": 20692
+    },
+    "src/client/modal-tokens.ts": {
+      "sha256": "31a6b9477f002c8d1a835731c927e3de309c62cffcc33902b3191ecb23f47671",
+      "bytes": 1083
+    },
+    "src/client/onboarding-store.ts": {
+      "sha256": "ac209983be808f5c81f99f22a22811d26bf12e2db479a15981f6037a0da5c9a9",
+      "bytes": 1552
+    },
+    "src/client/rail-keyboard.ts": {
+      "sha256": "12e3145979f231e9aab878c928e3e1c9b354b7acdb8a7c93febef569aa72e39a",
+      "bytes": 931
+    },
+    "src/client/rail-logic.ts": {
+      "sha256": "4e8b41c3db21db8293ddbfff333a3c8dbbd601275b07bcafa341a2b6aeedf30f",
+      "bytes": 5631
+    },
+    "src/client/railInject.ts": {
+      "sha256": "e828920a029aa83a8de8bb8fd276d51ec675d303f13f89cd87e54c5d80c84dea",
+      "bytes": 5127
+    },
+    "src/client/raw-imports.d.ts": {
+      "sha256": "e24a5de6766f2d74998947f4187dc8c08aa581f52f880dd3d5beb7748913a902",
+      "bytes": 353
+    },
+    "src/client/toolbar-prefs.ts": {
+      "sha256": "d9f57c57edfa49356b56aab282cd1dff361b222f2aa5de394a48728b5b17e543",
+      "bytes": 10903
+    },
+    "src/client/tooltip-logic.ts": {
+      "sha256": "6fb33c8e3809fbce86c89eedb3b76947755c1a3076afa62bc3110e0934036d23",
+      "bytes": 4854
+    },
+    "src/client/turn-group-logic.ts": {
+      "sha256": "aac80e0a8fce2ca5e0f71c8e9d3abe0390a65e6ff019691a1defaebb8ad44e84",
+      "bytes": 4584
+    },
+    "src/client/useCurrentAnchor.ts": {
+      "sha256": "34de97de23eb74f2aac537e76cba19526980956c10cbd0bbf18d394b9510d903",
+      "bytes": 2569
+    },
+    "src/client/useOutsideDismiss.ts": {
+      "sha256": "9d0c118b509860afabb01b53abef1ae513bc8f06c4fb606d2ed2276a3d7c9104",
+      "bytes": 4740
+    },
+    "src/client/version-logic.ts": {
+      "sha256": "212e59f3da05091b27868c9947a2a625403ec04dd32331a99c5521eb6f6c37c7",
+      "bytes": 15255
+    },
+    "src/client/version-meta.ts": {
+      "sha256": "aeb138ef53e4ff911c15985fdb7d27c4100c63631013b8b9df221967c280ef2c",
+      "bytes": 1371
+    },
+    "src/index.ts": {
+      "sha256": "aa1bf6cdc241fc61b44052bb0d89255bef7877466c54549d7d794b020606b4ff",
+      "bytes": 317
+    }
+  },
+  "adaptedFiles": {
+    "DSH-ALPHA-NOTICE.md": {
+      "sha256": "def3a6472da8bc3f26703399e65f59070e89f408e77a6437704e074e19f49f80",
+      "bytes": 657
+    },
+    "LICENSE": {
+      "sha256": "e712208487fde5937a24b1c7968bcb43be9d231449d62356a7c8b7b35938c40a",
+      "bytes": 1104
+    },
+    "README.md": {
+      "sha256": "2a557617f80446d3c293f5a13f6d802883cff346f0863047e7e386057bcbda44",
+      "bytes": 8658
+    },
+    "assets/demo.svg": {
+      "sha256": "966e363d83797034f3e4ced0d0508e5b4e6d15dadfe7930156c7b7db805ff6eb",
+      "bytes": 2086
+    },
+    "assets/logo.svg": {
+      "sha256": "38e8093fbe3772a5200a4f5c08f5c9b6490e9af11e87ca24179e23be5016284e",
+      "bytes": 975
+    },
+    "cordis.patch.yml": {
+      "sha256": "27a35e5582d16bc5b33a1d47ddf4223de08d6f8fb8bedd76a69056764a574c18",
+      "bytes": 270
+    },
+    "lib/client.js": {
+      "sha256": "41677645affeccd68fdb5770a7f2764c7fe2ba013a3271240d3f3857149aa77b",
+      "bytes": 213531
+    },
+    "lib/index.js": {
+      "sha256": "81fa243b3f06925ef6ca0875ed365cecb0ee95aff1f06010600ac7d1676d6f1e",
+      "bytes": 353
+    },
+    "package.json": {
+      "sha256": "f9437dffd67b36d14cbe8ebfef51bebfa7912262bcd3b5070eca94a710fb7b79",
+      "bytes": 1263
+    },
+    "src/client/MilestoneListPanel.tsx": {
+      "sha256": "2978f4b988127f9dc801017a0d2bdf76eec1bc26ebe97f63a0949e70dc94f88a",
+      "bytes": 6059
+    },
+    "src/client/MilestoneOverlay.tsx": {
+      "sha256": "0e4f15c0f067740a231f7dd6f86b500705c4c544e1f90b1d5acdc7ab0e42dbc4",
+      "bytes": 866
+    },
+    "src/client/MilestoneRail.tsx": {
+      "sha256": "dc439b28160446d286de2782260028f54dc0b14019db2501abd2247d69693d31",
+      "bytes": 120357
+    },
+    "src/client/MilestoneRailSearch.tsx": {
+      "sha256": "21d8837401591f0f3574b13f7f8a29fade7255aaa9b122d986afe4153033690e",
+      "bytes": 6388
+    },
+    "src/client/MilestoneRailTooltip.tsx": {
+      "sha256": "a9979633b7625f22204adf507c893f92a763364cf30bb1ce46d3e72110be983d",
+      "bytes": 9417
+    },
+    "src/client/MilestoneSessionSearch.tsx": {
+      "sha256": "14628d014e68fea77aeaeeaed3abe011aee2c6240ca85ef72b3a5992f850b325",
+      "bytes": 8587
+    },
+    "src/client/MilestoneTour.tsx": {
+      "sha256": "bdf29859546d6e6e21237fa6f889880014f7e67e0876c186612c3d03da32ec60",
+      "bytes": 16358
+    },
+    "src/client/accent-utils.ts": {
+      "sha256": "e79898df4d4a1a41027917c302f5a4ade3d31205661a41386920a713011e9cb1",
+      "bytes": 3993
+    },
+    "src/client/badge-logic.ts": {
+      "sha256": "566414a0e52fdc121b174af343e74176e39cbca09fe2f8045696c907e6daff2e",
+      "bytes": 4701
+    },
+    "src/client/bookmark-logic.ts": {
+      "sha256": "39026e6060233378bfca2684917197255a89f525fb808e0f4b2e90402ac98cbb",
+      "bytes": 2159
+    },
+    "src/client/bookmarkStore.ts": {
+      "sha256": "ed1f74caf7656d366bdfe2c40f07d4c22418e5e1a0fa7f49a80bab81b5bfba4a",
+      "bytes": 1193
+    },
+    "src/client/clipboard-logic.ts": {
+      "sha256": "3f89dea759c9343f836526dfbbca4ee76da0bcacd122ded692f8a3cdd980cbe3",
+      "bytes": 775
+    },
+    "src/client/deep-link-logic.ts": {
+      "sha256": "f3c44e1527feff7c11059cbb49e12e45b5ad3d70f18e4a4c03473f4afa16bd20",
+      "bytes": 2589
+    },
+    "src/client/index.ts": {
+      "sha256": "41c991fdec03c8efcabf7c768cb994e7969c22c7aa4e40bc525571053aa8549b",
+      "bytes": 4066
+    },
+    "src/client/label-logic.ts": {
+      "sha256": "8ecc31cf0a3205a0b652d91d85ce1ecaa5e921466d1f5da90c29096b9f13b8a4",
+      "bytes": 2078
+    },
+    "src/client/locales.ts": {
+      "sha256": "d8724f0fa0467375dad5bf5a8ff3c1d341ac39eb906df5b61bb2d2cb63da127c",
+      "bytes": 20692
+    },
+    "src/client/modal-tokens.ts": {
+      "sha256": "31a6b9477f002c8d1a835731c927e3de309c62cffcc33902b3191ecb23f47671",
+      "bytes": 1083
+    },
+    "src/client/onboarding-store.ts": {
+      "sha256": "ac209983be808f5c81f99f22a22811d26bf12e2db479a15981f6037a0da5c9a9",
+      "bytes": 1552
+    },
+    "src/client/rail-keyboard.ts": {
+      "sha256": "12e3145979f231e9aab878c928e3e1c9b354b7acdb8a7c93febef569aa72e39a",
+      "bytes": 931
+    },
+    "src/client/rail-logic.ts": {
+      "sha256": "4e8b41c3db21db8293ddbfff333a3c8dbbd601275b07bcafa341a2b6aeedf30f",
+      "bytes": 5631
+    },
+    "src/client/railInject.ts": {
+      "sha256": "e828920a029aa83a8de8bb8fd276d51ec675d303f13f89cd87e54c5d80c84dea",
+      "bytes": 5127
+    },
+    "src/client/raw-imports.d.ts": {
+      "sha256": "e24a5de6766f2d74998947f4187dc8c08aa581f52f880dd3d5beb7748913a902",
+      "bytes": 353
+    },
+    "src/client/toolbar-prefs.ts": {
+      "sha256": "d9f57c57edfa49356b56aab282cd1dff361b222f2aa5de394a48728b5b17e543",
+      "bytes": 10903
+    },
+    "src/client/tooltip-logic.ts": {
+      "sha256": "6fb33c8e3809fbce86c89eedb3b76947755c1a3076afa62bc3110e0934036d23",
+      "bytes": 4854
+    },
+    "src/client/turn-group-logic.ts": {
+      "sha256": "aac80e0a8fce2ca5e0f71c8e9d3abe0390a65e6ff019691a1defaebb8ad44e84",
+      "bytes": 4584
+    },
+    "src/client/useCurrentAnchor.ts": {
+      "sha256": "34de97de23eb74f2aac537e76cba19526980956c10cbd0bbf18d394b9510d903",
+      "bytes": 2569
+    },
+    "src/client/useOutsideDismiss.ts": {
+      "sha256": "9d0c118b509860afabb01b53abef1ae513bc8f06c4fb606d2ed2276a3d7c9104",
+      "bytes": 4740
+    },
+    "src/client/version-logic.ts": {
+      "sha256": "d2a3e5afc7d78aa6cfa48c162407cd51bb5e9d6fb9b832d0667cb454e301eae3",
+      "bytes": 15258
+    },
+    "src/client/version-meta.ts": {
+      "sha256": "aeb138ef53e4ff911c15985fdb7d27c4100c63631013b8b9df221967c280ef2c",
+      "bytes": 1371
+    },
+    "src/index.ts": {
+      "sha256": "aa1bf6cdc241fc61b44052bb0d89255bef7877466c54549d7d794b020606b4ff",
+      "bytes": 317
+    }
+  }
+}

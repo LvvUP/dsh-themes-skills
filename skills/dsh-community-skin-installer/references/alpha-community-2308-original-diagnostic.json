@@ -1,0 +1,548 @@
+{
+  "schemaVersion": 1,
+  "catalogId": 2308,
+  "verifiedAt": "2026-09-05T23:11:32.031Z",
+  "dshVersion": "0.1.3-alpha.1",
+  "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "packageName": "@xiaoyao-ai/dsh-client-ui-skin-black-whale",
+  "packageVersion": "0.1.4",
+  "artifactSha256": "5c3e131bdfe8c848e80ce94379ac140137b05498f3b45390be70fef3538c2acb",
+  "installation": {
+    "officialCliAdd": true,
+    "exactPackagePresent": true,
+    "profile": "web"
+  },
+  "boot": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-ds-dark-theme": "",
+        "data-dsh-black-whale": ""
+      },
+      "base": "#151517",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\nBLACK WHALE LAB\nXIAOYAO / DSH · 02\n专注模式\nBLACK WHALE\nSKIN 02\nLOCAL ONLY",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        },
+        {
+          "text": "专注模式",
+          "aria": null
+        }
+      ],
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0
+    },
+    "modes": [
+      {
+        "mode": "light",
+        "title": "DeepSeek Harness",
+        "attrs": {
+          "data-dsh-black-whale": ""
+        },
+        "base": "#04040514",
+        "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\nBLACK WHALE LAB\nXIAOYAO / DSH · 02\n专注模式\nBLACK WHALE\nSKIN 02\nLOCAL ONLY",
+        "buttons": [
+          {
+            "text": "",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "收起侧边栏"
+          },
+          {
+            "text": "新会话",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "搜索会话"
+          },
+          {
+            "text": "",
+            "aria": "视图选项"
+          },
+          {
+            "text": "",
+            "aria": "添加工作区"
+          },
+          {
+            "text": "设置",
+            "aria": null
+          },
+          {
+            "text": "选择工作区",
+            "aria": "选择工作区"
+          },
+          {
+            "text": "标准模式",
+            "aria": null
+          },
+          {
+            "text": "",
+            "aria": "指令"
+          },
+          {
+            "text": "",
+            "aria": "添加附件"
+          },
+          {
+            "text": "",
+            "aria": "发送消息"
+          },
+          {
+            "text": "专注模式",
+            "aria": null
+          }
+        ],
+        "width": {
+          "viewport": 1280,
+          "scroll": 1280
+        },
+        "brokenImages": 0
+      },
+      {
+        "mode": "dark",
+        "title": "DeepSeek Harness",
+        "attrs": {
+          "data-dsh-black-whale": "",
+          "data-ds-dark-theme": ""
+        },
+        "base": "#151517",
+        "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\nBLACK WHALE LAB\nXIAOYAO / DSH · 02\n专注模式\nBLACK WHALE\nSKIN 02\nLOCAL ONLY",
+        "buttons": [
+          {
+            "text": "",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "收起侧边栏"
+          },
+          {
+            "text": "新会话",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "搜索会话"
+          },
+          {
+            "text": "",
+            "aria": "视图选项"
+          },
+          {
+            "text": "",
+            "aria": "添加工作区"
+          },
+          {
+            "text": "设置",
+            "aria": null
+          },
+          {
+            "text": "选择工作区",
+            "aria": "选择工作区"
+          },
+          {
+            "text": "标准模式",
+            "aria": null
+          },
+          {
+            "text": "",
+            "aria": "指令"
+          },
+          {
+            "text": "",
+            "aria": "添加附件"
+          },
+          {
+            "text": "",
+            "aria": "发送消息"
+          },
+          {
+            "text": "专注模式",
+            "aria": null
+          }
+        ],
+        "width": {
+          "viewport": 1280,
+          "scroll": 1280
+        },
+        "brokenImages": 0
+      }
+    ],
+    "controls": [
+      {
+        "action": "focus-on",
+        "pressed": "true",
+        "attributes": {
+          "data-dsh-black-whale": "",
+          "data-ds-dark-theme": "",
+          "data-dsh-black-whale-focus": ""
+        }
+      },
+      {
+        "action": "focus-off",
+        "pressed": "false"
+      }
+    ],
+    "narrow": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-dsh-black-whale": "",
+        "data-ds-dark-theme": ""
+      },
+      "base": "#151517",
+      "text": "探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n专注模式",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "打开侧边栏"
+        },
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        },
+        {
+          "text": "专注模式",
+          "aria": null
+        }
+      ],
+      "width": {
+        "viewport": 390,
+        "scroll": 390
+      },
+      "brokenImages": 0
+    },
+    "geometry": [
+      {
+        "className": "Xakt6q_sidebarCol",
+        "left": 8,
+        "width": 56,
+        "right": 64
+      },
+      {
+        "className": "Xakt6q_centerCol",
+        "left": 64,
+        "width": 318,
+        "right": 382
+      }
+    ],
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": []
+  },
+  "cold": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-ds-dark-theme": "",
+        "data-dsh-black-whale": ""
+      },
+      "base": "#151517",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\nBLACK WHALE LAB\nXIAOYAO / DSH · 02\n专注模式\nBLACK WHALE\nSKIN 02\nLOCAL ONLY",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        },
+        {
+          "text": "专注模式",
+          "aria": null
+        }
+      ],
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0
+    },
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": []
+  },
+  "coldProcessRestart": {
+    "before": {
+      "wrapper": 54588,
+      "listener": 54637,
+      "startedAt": "2026-09-05T23:11:34.376Z"
+    },
+    "after": {
+      "wrapper": 55070,
+      "listener": 55094,
+      "startedAt": "2026-09-05T23:11:47.918Z"
+    },
+    "portConfirmedClosed": true
+  },
+  "removed": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-ds-dark-theme": ""
+      },
+      "base": "#151517",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        }
+      ],
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0
+    },
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": []
+  },
+  "removal": {
+    "officialCliRemove": true,
+    "packageAbsent": true,
+    "skinAttributesAbsent": true,
+    "base": "#151517",
+    "process": {
+      "wrapper": 55512,
+      "listener": 55536,
+      "startedAt": "2026-09-05T23:11:57.903Z"
+    }
+  },
+  "status": "superseded-diagnostic",
+  "sourceRepository": "147228/dsh-xiaoyao-skins",
+  "sourceRevision": "174f65d9135e932383a8f3a19fa522f16875a139",
+  "licenseExpression": "MIT AND CC-BY-NC-4.0",
+  "environment": {
+    "os": "macOS",
+    "architecture": "arm64",
+    "node": "24.15.0",
+    "browser": "Google Chrome 152.0.7977.76",
+    "installationPnpm": "11.7.0"
+  },
+  "limitations": [
+    "Executed on this macOS arm64 host with an isolated web profile and no model credentials. No Linux, Windows, other-browser, user-session or model-call coverage is claimed.",
+    "Light/dark checks use the browser system color-scheme setting. The skin artwork intentionally keeps its own visual character.",
+    "On a 390px screen, the built-in sidebar was collapsed before checking the main view and skin controls.",
+    "Focus/guide state resets according to the original plugin behavior; only skin activation and rendering are required to survive a process restart."
+  ],
+  "evidence": [
+    {
+      "path": "output/playwright/community-alpha/2308/cold.png",
+      "sha256": "f5e70f97ba82c67301d19e846b7a49bbe9dc1da7500907e16c76f9c8c7e3ef06",
+      "bytes": 122730,
+      "fileRetained": false,
+      "availabilityNote": "Preliminary screenshot path was reused during the adaptation probe; its original digest is retained as diagnostic metadata only."
+    },
+    {
+      "path": "output/playwright/community-alpha/2308/dark.png",
+      "sha256": "f5e70f97ba82c67301d19e846b7a49bbe9dc1da7500907e16c76f9c8c7e3ef06",
+      "bytes": 122730,
+      "fileRetained": false,
+      "availabilityNote": "Preliminary screenshot path was reused during the adaptation probe; its original digest is retained as diagnostic metadata only."
+    },
+    {
+      "path": "output/playwright/community-alpha/2308/focus.png",
+      "sha256": "abedda450059cef6e01e9e51edc05171f08928d7183d0cf99cbac5ff4bac035a",
+      "bytes": 102528,
+      "fileRetained": false,
+      "availabilityNote": "Preliminary screenshot path was reused during the adaptation probe; its original digest is retained as diagnostic metadata only."
+    },
+    {
+      "path": "output/playwright/community-alpha/2308/light.png",
+      "sha256": "44051e373d66ffcee763e687529013c2ac7a0f30b00e129ed4d2408561c14d5d",
+      "bytes": 749362,
+      "fileRetained": false,
+      "availabilityNote": "Preliminary screenshot path was reused during the adaptation probe; its original digest is retained as diagnostic metadata only."
+    },
+    {
+      "path": "output/playwright/community-alpha/2308/narrow-final.png",
+      "sha256": "6cc244b673eb142ff71ce5b6d0c58dec9c9986d53c00f679c0ab1d83f22e93eb",
+      "bytes": 54448,
+      "fileRetained": false,
+      "availabilityNote": "Preliminary screenshot path was reused during the adaptation probe; its original digest is retained as diagnostic metadata only."
+    },
+    {
+      "path": "output/playwright/community-alpha/2308/original-candidate/removed.png",
+      "sha256": "55808054eb754e42f701eec53fe2e8984eb043e2a1b7c6d93d0e7d45ac6cbc07",
+      "bytes": 30163,
+      "fileRetained": true
+    }
+  ],
+  "supersededReason": "Original package loaded without runtime errors, but visual review found Alpha theme CSS overrode the intended palette and obscured the background. It is not the installation authority."
+}

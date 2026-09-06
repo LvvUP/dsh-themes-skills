@@ -1,0 +1,8 @@
+Alpha adaptation by DSH Themes contributors. Upstream MIT license and attribution retained.
+Source: https://github.com/Luaphes/dsh-web-attention-badge/tree/8b2ede6ccda65da20d57e5e1af995aa9e089dc04
+
+Use Alpha root-scope useSessionPendingInteraction separately from useSessions, counting only session IDs still in the session list and updating on pending-only changes.
+Replace removed client-runtime injection with the official ui-renderer and ui-session prerequisites; use Cordis Context in the public type declaration.
+Replace hand-written JSX-runtime calls with React.createElement so both count pills and their numeric text are actual children.
+Dispose title and favicon mutations plus the hidden theme-color probe, suppress late fetch writes after unmount, and preserve existing favicon elements including those without an href.
+Preserve the upstream MIT license, source identity, click-through display, and local-only favicon request. No runtime dependencies or package lifecycle scripts are added.

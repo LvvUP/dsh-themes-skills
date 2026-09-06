@@ -1,0 +1,79 @@
+{
+  "name": "self-control-guard",
+  "version": "0.1.0",
+  "description": "Self-control guard for DeepSeek Harness: intercept host-kill attempts from bash, teach the controlled exit/restart tools, run token-confirmed graceful exit/restart, and write the restart recovery roster.",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json",
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    }
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "cordis.patch.yml",
+    "lib",
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "dsh web --patch ./cordis.patch.yml",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "node scripts/test.mjs",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm test && node scripts/validate.mjs",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "dsh",
+    "plugin",
+    "cordis",
+    "tool"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pandashere/dsh-self-control-guard.git"
+  },
+  "homepage": "https://github.com/pandashere/dsh-self-control-guard#readme",
+  "bugs": {
+    "url": "https://github.com/pandashere/dsh-self-control-guard/issues"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-tools": "^0.1.0-rc.6"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-tools": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@types/node": "^22.10.0",
+    "schemastery": "^3.18.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "yaml": "^2.6.1"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

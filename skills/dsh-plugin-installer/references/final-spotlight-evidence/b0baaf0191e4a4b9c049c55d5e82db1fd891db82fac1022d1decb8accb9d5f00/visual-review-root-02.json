@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "Codex /root",
+  "recordedAt": "2026-09-06T10:28:11.653520+00:00",
+  "status": "passed",
+  "scope": "Four actual source screenshots viewed before context compaction. Removing Spotlight retains the active skin; native Settings remains readable and closing returns to the same skin. Removing the skin returns to the native white interface.",
+  "files": [
+    {
+      "path": ".cache/dsh-top10-runtime/final-spotlight-1788690001757/spotlight-after-spotlight-removal-before.png",
+      "sha256": "7d8dee5e2cb432786f176c8d07685f820bd27828d739c5ea6926ffda7690448e"
+    },
+    {
+      "path": ".cache/dsh-top10-runtime/final-spotlight-1788690001757/spotlight-after-spotlight-removal-settings.png",
+      "sha256": "fd4cdf134864179e31e997e6d0afbe30652468918a467dbcfa7b252f42417336"
+    },
+    {
+      "path": ".cache/dsh-top10-runtime/final-spotlight-1788690001757/spotlight-after-spotlight-removal-closed.png",
+      "sha256": "fbcfac09bcf15987e4414affb72b48d5e6e0a7452eb0bd89b9fa9307c80129fd"
+    },
+    {
+      "path": ".cache/dsh-top10-runtime/final-spotlight-1788690001757/spotlight-after-skin-removal-before.png",
+      "sha256": "a8430a752d10e0ab895178ca0e07b7501542c09043193f53c96f5b42a99c5265"
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "catalogId": 3028,
+  "sourceRepository": "Luaphes/dsh-web-attention-badge",
+  "sourceRevision": "8b2ede6ccda65da20d57e5e1af995aa9e089dc04",
+  "sourceArchive": {
+    "url": "https://codeload.github.com/Luaphes/dsh-web-attention-badge/tar.gz/8b2ede6ccda65da20d57e5e1af995aa9e089dc04",
+    "sha256": "b504ec50d92605bb178ddbf6745a51eda3f3383235d0cf431d029a0160134050",
+    "bytes": 9267
+  },
+  "adaptedBy": "DSH Themes contributors",
+  "licenseExpression": "MIT",
+  "targetRuntime": {
+    "version": "0.1.3-alpha.1",
+    "sourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215"
+  },
+  "changes": [
+    "Use Alpha root-scope useSessionPendingInteraction separately from useSessions, counting only session IDs still in the session list and updating on pending-only changes.",
+    "Replace removed client-runtime injection with the official ui-renderer and ui-session prerequisites; use Cordis Context in the public type declaration.",
+    "Replace hand-written JSX-runtime calls with React.createElement so both count pills and their numeric text are actual children.",
+    "Dispose title and favicon mutations plus the hidden theme-color probe, suppress late fetch writes after unmount, and preserve existing favicon elements including those without an href.",
+    "Preserve the upstream MIT license, source identity, click-through display, and local-only favicon request. No runtime dependencies or package lifecycle scripts are added."
+  ],
+  "originalFiles": {
+    "LICENSE": {
+      "sha256": "e4da813a6668914932e4bfb9ef7c93c7bdfc61f384691e076370f701f45a706a",
+      "bytes": 1093
+    },
+    "README.md": {
+      "sha256": "7c098c815e2a4c82c36aaed9b39e54c6fbdd86da9b9fa6b2d4547739fe9f5629",
+      "bytes": 1537
+    },
+    "README.zh-CN.md": {
+      "sha256": "bf0a2ec4f8d75622b65e089ec48db0887a4ca163ffb01389fc818b71c93ea883",
+      "bytes": 1431
+    },
+    "cordis.patch.yml": {
+      "sha256": "ce15c2b731a8289bcfcb18731fd7737047beb4cdcebc237ffb6bf1b7c9a0462a",
+      "bytes": 413
+    },
+    "lib/client.js": {
+      "sha256": "d3fa7836972a5a6117e00c227b5087b9a86e4709df80345b8d295bcd4d6ba18f",
+      "bytes": 11692
+    },
+    "lib/index.js": {
+      "sha256": "513c86646da4b34f265667251472e32987017fb80aef6ffe2da7f6a951e2a9e2",
+      "bytes": 372
+    },
+    "lib/types/client/index.d.ts": {
+      "sha256": "079b4d58c378d4cfebe2a20a8b714f998c3e3b084c2a9565de79a18ffc1122c9",
+      "bytes": 401
+    },
+    "lib/types/index.d.ts": {
+      "sha256": "17d960257345d19d676141beceacabcca9a5c75c37673e1d95e5292ad40a9521",
+      "bytes": 210
+    },
+    "package.json": {
+      "sha256": "4ddb52ddfc135081931fd5fe813f115f083d6fe143c68c094dfbc7e9b960ef14",
+      "bytes": 1313
+    }
+  },
+  "adaptedFiles": {
+    "LICENSE": {
+      "sha256": "e4da813a6668914932e4bfb9ef7c93c7bdfc61f384691e076370f701f45a706a",
+      "bytes": 1093
+    },
+    "NOTICE": {
+      "sha256": "49abb97b380f5479264deac08b5efac0359cc399d33451d46890c52844d6c16e",
+      "bytes": 1003
+    },
+    "README.md": {
+      "sha256": "7c098c815e2a4c82c36aaed9b39e54c6fbdd86da9b9fa6b2d4547739fe9f5629",
+      "bytes": 1537
+    },
+    "README.zh-CN.md": {
+      "sha256": "bf0a2ec4f8d75622b65e089ec48db0887a4ca163ffb01389fc818b71c93ea883",
+      "bytes": 1431
+    },
+    "cordis.patch.yml": {
+      "sha256": "ce15c2b731a8289bcfcb18731fd7737047beb4cdcebc237ffb6bf1b7c9a0462a",
+      "bytes": 413
+    },
+    "lib/client.js": {
+      "sha256": "b498bad2a3a70a4eb1760515afa6885a0b0625b6aaa3ba00e87d7234f2ff97b6",
+      "bytes": 12371
+    },
+    "lib/index.js": {
+      "sha256": "513c86646da4b34f265667251472e32987017fb80aef6ffe2da7f6a951e2a9e2",
+      "bytes": 372
+    },
+    "lib/types/client/index.d.ts": {
+      "sha256": "3a5a647c95a44e293ac8002b0940867f6717315c6c09f1de268958f35db03993",
+      "bytes": 393
+    },
+    "lib/types/index.d.ts": {
+      "sha256": "17d960257345d19d676141beceacabcca9a5c75c37673e1d95e5292ad40a9521",
+      "bytes": 210
+    },
+    "package.json": {
+      "sha256": "6a45ab722c58393e85d82662f10925c045ed0aa901b78a9b20a55b76c65fc787",
+      "bytes": 1427
+    }
+  },
+  "validationScope": "Component fixture only; official DSH installation and session-event verification are separate required checks."
+}

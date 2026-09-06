@@ -1,0 +1,408 @@
+{
+  "schemaVersion": 1,
+  "withdrawnAt": "2026-09-06",
+  "policy": "These identities remain reserved. They are excluded from the current 100 and cannot be selected by the installer.",
+  "items": [
+    {
+      "catalogId": 3046,
+      "reason": "The reviewed TUI distribution depends on linked authentication and DSH standard workspace packages; the fixed source is not a complete independently installable Alpha bundle.",
+      "previousRecipe": {
+        "catalogId": 3046,
+        "slug": "dsh-cc-tui",
+        "title": "DSH CC TUI",
+        "summary": "Use a Claude Code-style terminal interface for Harness conversations and agent work.",
+        "primaryUseCase": "navigate-and-focus",
+        "capabilities": [
+          "navigation",
+          "layout"
+        ],
+        "sourceRepository": "ccch1mneyyy/dsh-TUI",
+        "sourceRevision": "8f1444a2627fab01682e679a0e44de8989b66f77",
+        "packageName": "@deepseek-harness-tui/dsh-tui",
+        "specifier": "@deepseek-harness-tui/dsh-tui@0.10.0-beta.5",
+        "profile": "dsh-tui",
+        "licenseExpression": "MIT",
+        "licensePath": "LICENSE",
+        "validation": {
+          "status": "source-reviewed",
+          "checkedAt": "2026-09-06",
+          "packageManifestUrl": "https://github.com/ccch1mneyyy/dsh-TUI/blob/8f1444a2627fab01682e679a0e44de8989b66f77/package.json",
+          "bundlePatchUrl": "https://github.com/ccch1mneyyy/dsh-TUI/blob/8f1444a2627fab01682e679a0e44de8989b66f77/cordis.patch.yml",
+          "registryVersionUrl": "https://registry.npmjs.org/%40deepseek-harness-tui%2Fdsh-tui/0.10.0-beta.5",
+          "packageManifestSha256": "0b783e6e0836bf4c01bbb4793a26eb3d465c25c26ae2dd4e55ca91d77dd60ece",
+          "bundlePatchSha256": "278eb66c772e958051afaf5e72631f15a60cd4373e3c53bd2b3d13863978b857",
+          "registryIntegrity": "sha512-ut1iT/2Bg8JCa/PXtsLK5jtURTYKZZ6FymD9goutSS/8n0SQ+beffP/cXDLHrsxc13N7/zKOlIRyvKbGwxXdcQ==",
+          "sourceRelationship": "npm-published-gitHead"
+        },
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "command",
+              "text": "/help"
+            }
+          ],
+          "requirements": [
+            "Start the declared terminal profile in an interactive terminal. Configure a model provider before sending a task."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/ccch1mneyyy/dsh-TUI/blob/8f1444a2627fab01682e679a0e44de8989b66f77/README.md",
+            "sha256": "f93add63f515927e39aa185d25d27b05a608334624ad2fa6915fddeab9593e59"
+          }
+        }
+      }
+    },
+    {
+      "catalogId": 3103,
+      "reason": "The fixed Research Workspace source requires five unpublished workspace packages and separate worker/UI builds; it is not a complete independently installable Alpha bundle.",
+      "previousRecipe": {
+        "catalogId": 3103,
+        "slug": "dsh-scholar",
+        "title": "Research Workspace",
+        "summary": "Organize scientific research from literature review and experiment planning to evidence tracking and manuscript preparation.",
+        "primaryUseCase": "research-the-web",
+        "capabilities": [
+          "authoring",
+          "navigation"
+        ],
+        "sourceRepository": "lzszq/dsh-scholar",
+        "sourceRevision": "4def972e2c0941fddab8d6e0ac27ec8b34c3fe9f",
+        "packageName": "@dsh-scholar/research-plugin",
+        "specifier": "github:lzszq/dsh-scholar#4def972e2c0941fddab8d6e0ac27ec8b34c3fe9f",
+        "profile": "web",
+        "allowBuilds": [
+          "@dsh-scholar/research-plugin"
+        ],
+        "licenseExpression": "BSD-3-Clause",
+        "licensePath": "LICENSE",
+        "validation": {
+          "status": "source-reviewed",
+          "checkedAt": "2026-09-06",
+          "packageManifestUrl": "https://github.com/lzszq/dsh-scholar/blob/4def972e2c0941fddab8d6e0ac27ec8b34c3fe9f/package.json",
+          "bundlePatchUrl": "https://github.com/lzszq/dsh-scholar/blob/4def972e2c0941fddab8d6e0ac27ec8b34c3fe9f/cordis.patch.yml",
+          "packageManifestSha256": "8050011a9c0d4953571676d69bf9cf0a16c4a5abfb85a8a59a32c357879041a2",
+          "bundlePatchSha256": "696cff10851d3d29f11b3e4eaa09847b2d318c98e2e45ae30837c980c1ae0b38",
+          "prebuiltArchive": {
+            "status": "unavailable",
+            "entryPoints": [
+              "lib/index.js",
+              "lib/client.js"
+            ],
+            "rootDirectoriesPresent": false,
+            "workspaceDependencies": [
+              "@dsh-scholar/research-client",
+              "@dsh-scholar/research-kernel",
+              "@dsh-scholar/research-orchestrator",
+              "@dsh-scholar/research-schemas",
+              "@dsh-scholar/scholar-connectors"
+            ],
+            "entries": [
+              {
+                "path": "lib/index.js",
+                "url": "https://github.com/lzszq/dsh-scholar/blob/4def972e2c0941fddab8d6e0ac27ec8b34c3fe9f/lib/index.js",
+                "error": "Entry missing"
+              },
+              {
+                "path": "lib/client.js",
+                "url": "https://github.com/lzszq/dsh-scholar/blob/4def972e2c0941fddab8d6e0ac27ec8b34c3fe9f/lib/client.js",
+                "error": "Entry missing"
+              }
+            ]
+          },
+          "installationBlocker": "Workspace dependencies require a separately built package."
+        },
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "ui",
+              "text": "Open Research Workspace settings, choose an execution environment, and inspect its readiness before creating a research job."
+            }
+          ],
+          "requirements": [
+            "The local execution workspace requires Linux, Node.js 24, pnpm, and Docker. Remote execution needs an explicitly configured runner and credentials."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/lzszq/dsh-scholar/blob/4def972e2c0941fddab8d6e0ac27ec8b34c3fe9f/README.md",
+            "sha256": "e6f7a0feaabc90de0f85b1889d69ea5418fcd7241e68137117abe77d0e042dce"
+          }
+        }
+      }
+    },
+    {
+      "catalogId": 3053,
+      "reason": "The plugin requires real external Lark application credentials during activation. This selection favors independently verifiable installation without external credentials; its identity and source remain reserved.",
+      "previousRecipe": {
+        "catalogId": 3053,
+        "slug": "dsh-lark-bridge",
+        "title": "DSH Lark Bridge",
+        "summary": "Bidirectional Lark/Feishu control bridge for DeepSeek Harness",
+        "primaryUseCase": "collaborate-and-notify",
+        "capabilities": [
+          "management-ui",
+          "navigation"
+        ],
+        "sourceRepository": "imetn/dsh-lark-bridge",
+        "sourceRevision": "f1e544cce5108873e238313bf7c5ccf092827e2a",
+        "packageName": "dsh-lark-bridge",
+        "specifier": "github:imetn/dsh-lark-bridge#f1e544cce5108873e238313bf7c5ccf092827e2a",
+        "profile": "web",
+        "licenseExpression": "MIT",
+        "licensePath": "LICENSE",
+        "validation": {
+          "status": "source-reviewed",
+          "checkedAt": "2026-09-06",
+          "packageManifestUrl": "https://github.com/imetn/dsh-lark-bridge/blob/f1e544cce5108873e238313bf7c5ccf092827e2a/package.json",
+          "bundlePatchUrl": "https://github.com/imetn/dsh-lark-bridge/blob/f1e544cce5108873e238313bf7c5ccf092827e2a/cordis.patch.yml",
+          "packageManifestSha256": "fd20466d769a6ba9e57dfdb49bd108583b4859e58fecd50a2ab8d3ef0b05a501",
+          "bundlePatchSha256": "23966b3617c178109e13a969bc9deb6315db0f49b407d6323b21a164d81fc9c9",
+          "sourceRelationship": "fixed-repository-source",
+          "rejectedRegistryRepository": "git+https://github.com/leo-lab-2026/dsh-lark-bridge.git",
+          "sourceCorrection": "The same-name registry package belongs to a different repository; install only the reviewed source.",
+          "prebuiltArchive": {
+            "status": "verified",
+            "entryPoints": [
+              "lib/index.js"
+            ],
+            "rootDirectoriesPresent": true,
+            "workspaceDependencies": [],
+            "entries": [
+              {
+                "path": "lib/index.js",
+                "url": "https://github.com/imetn/dsh-lark-bridge/blob/f1e544cce5108873e238313bf7c5ccf092827e2a/lib/index.js",
+                "bytes": 2491818,
+                "sha256": "3928a6a3ca462a38b540eaa3cbe3c2645247b13a040d4fd42c51ee96fd909b4a",
+                "obsoleteRuntimeImport": false
+              }
+            ],
+            "catalogId": 3053,
+            "archiveSha256": "c285f54a8dfbd545bb621768f9569b13493206641315ee12b4f3b44cef1b6ed2",
+            "archiveBytes": 581486,
+            "archiveUrl": "https://codeload.github.com/imetn/dsh-lark-bridge/tar.gz/f1e544cce5108873e238313bf7c5ccf092827e2a",
+            "runtimeDependencies": {}
+          }
+        },
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "prompt",
+              "text": "Send a short test message to the Feishu or Lark bot after binding its project and authorized user."
+            }
+          ],
+          "requirements": [
+            "Finish the upstream bot authorization/setup flow, configure its protected credentials, and bind a project before messaging the bot."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/imetn/dsh-lark-bridge/blob/f1e544cce5108873e238313bf7c5ccf092827e2a/README.md",
+            "sha256": "ac35e7562e3f8d0136983ed3e1a43403f39c09fbb885571ce97c6be9f23d9f38"
+          }
+        }
+      }
+    },
+    {
+      "catalogId": 3116,
+      "reason": "The plugin expects an independently running OpenBiliClaw backend on 127.0.0.1:8420. This selection favors self-contained installation; its identity and source remain reserved.",
+      "previousRecipe": {
+        "catalogId": 3116,
+        "slug": "dsh-openbiliclaw",
+        "title": "OpenBiliClaw",
+        "summary": "Explore OpenBiliClaw recommendations, saved content, and guided conversations from a Harness sidebar.",
+        "primaryUseCase": "plan-and-automate",
+        "capabilities": [
+          "management-ui",
+          "navigation"
+        ],
+        "sourceRepository": "whiteguo233/dsh-openbiliclaw",
+        "sourceRevision": "d06586195c21fb10714a32ca77e232aff8213ece",
+        "packageName": "@openbiliclaw/dsh-plugin",
+        "specifier": "github:whiteguo233/dsh-openbiliclaw#d06586195c21fb10714a32ca77e232aff8213ece",
+        "profile": "web",
+        "licenseExpression": "BSD-3-Clause",
+        "licensePath": "LICENSE",
+        "validation": {
+          "status": "source-reviewed",
+          "checkedAt": "2026-09-06",
+          "packageManifestUrl": "https://github.com/whiteguo233/dsh-openbiliclaw/blob/d06586195c21fb10714a32ca77e232aff8213ece/package.json",
+          "bundlePatchUrl": "https://github.com/whiteguo233/dsh-openbiliclaw/blob/d06586195c21fb10714a32ca77e232aff8213ece/cordis.patch.yml",
+          "packageManifestSha256": "eeeca0219a985a3b3d37043d1a1396af5827b5fa1d82d28ba6d20d91f3b9f4e6",
+          "bundlePatchSha256": "d92a955523d63119851b1f3145ad0d1c311ea99e5211192afe998b4214fe8d44",
+          "prebuiltArchive": {
+            "status": "verified",
+            "entryPoints": [
+              "lib/index.js",
+              "lib/client.js"
+            ],
+            "rootDirectoriesPresent": true,
+            "workspaceDependencies": [],
+            "entries": [
+              {
+                "path": "lib/index.js",
+                "url": "https://github.com/whiteguo233/dsh-openbiliclaw/blob/d06586195c21fb10714a32ca77e232aff8213ece/lib/index.js",
+                "bytes": 27259,
+                "sha256": "55690831342d2d7934b9a471dde73ea6641f6141cc30240ecbb2004f74d8485d",
+                "obsoleteRuntimeImport": false
+              },
+              {
+                "path": "lib/client.js",
+                "url": "https://github.com/whiteguo233/dsh-openbiliclaw/blob/d06586195c21fb10714a32ca77e232aff8213ece/lib/client.js",
+                "bytes": 403757,
+                "sha256": "7f22c044475a8180d5c0473aa81cd4f6061861bd73b8894a4c1cb6ff9fe0c161",
+                "obsoleteRuntimeImport": false
+              }
+            ],
+            "catalogId": 3116,
+            "archiveSha256": "753e2fc4ad8b7c74b514993e2e0a77d15f32bf745f9245c0211a05ed8033c612",
+            "archiveBytes": 2983107,
+            "archiveUrl": "https://codeload.github.com/whiteguo233/dsh-openbiliclaw/tar.gz/d06586195c21fb10714a32ca77e232aff8213ece",
+            "runtimeDependencies": {}
+          }
+        },
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "ui",
+              "text": "Open OpenBiliClaw from the sidebar, configure its backend connection, and inspect the content library."
+            }
+          ],
+          "requirements": [
+            "Run the OpenBiliClaw backend and configure the model and embedding services used by the chosen features."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/whiteguo233/dsh-openbiliclaw/blob/d06586195c21fb10714a32ca77e232aff8213ece/README.md",
+            "sha256": "7023806db8c13f97626a8800d3c9dce9e8e3d0d6f8cc22105f87347cca6f6c24"
+          }
+        }
+      }
+    },
+    {
+      "catalogId": 3104,
+      "reason": "The pinned implementation targets the retired PersistenceCoordinator and PersistenceBackend interfaces. Alpha uses the SessionHandle persistence contract, so a complete database migration is required before this plugin can be independently installed. Preserve its identity and source; this is an installation-compatibility selection decision.",
+      "previousRecipe": {
+        "catalogId": 3104,
+        "slug": "session-persistence-rdb",
+        "title": "RDB Session Storage",
+        "summary": "Store Harness sessions in an RDB backend for durable persistence.",
+        "primaryUseCase": "see-and-understand",
+        "capabilities": [
+          "visualization",
+          "authoring"
+        ],
+        "sourceRepository": "morlay/session-persistence-rdb",
+        "sourceRevision": "1e7b73899d5284d72ae53b2b450211adbd0b44a9",
+        "packageName": "@morlay/session-persistence-rdb",
+        "specifier": "github:morlay/session-persistence-rdb#1e7b73899d5284d72ae53b2b450211adbd0b44a9",
+        "profile": "web",
+        "allowBuilds": [
+          "@morlay/session-persistence-rdb"
+        ],
+        "licenseExpression": "MIT",
+        "licensePath": "LICENSE",
+        "validation": {
+          "status": "source-reviewed",
+          "checkedAt": "2026-09-06",
+          "packageManifestUrl": "https://github.com/morlay/session-persistence-rdb/blob/1e7b73899d5284d72ae53b2b450211adbd0b44a9/package.json",
+          "bundlePatchUrl": "https://github.com/morlay/session-persistence-rdb/blob/1e7b73899d5284d72ae53b2b450211adbd0b44a9/cordis.patch.yml",
+          "packageManifestSha256": "35ff15c1d963b6544b1e257490531d77bc0f73a067e8f73d47e7299b54514f9c",
+          "bundlePatchSha256": "4cd2233db390395590a1ac07c5247398d88e4ba44ee3fdd25291b5b34bd85750",
+          "prebuiltArchive": {
+            "status": "unavailable",
+            "entryPoints": [
+              "lib/index.mjs"
+            ],
+            "rootDirectoriesPresent": false,
+            "workspaceDependencies": [],
+            "entries": [
+              {
+                "path": "lib/index.mjs",
+                "url": "https://github.com/morlay/session-persistence-rdb/blob/1e7b73899d5284d72ae53b2b450211adbd0b44a9/lib/index.mjs",
+                "error": "Entry missing"
+              }
+            ]
+          },
+          "installationBlocker": "The fixed repository snapshot needs a build before installation."
+        },
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "ui",
+              "text": "Configure the session-persistence-rdb settings section and restart the profile before creating a test session."
+            }
+          ],
+          "requirements": [
+            "Use an absolute SQLite file path or the upstream documented database connection settings."
+          ],
+          "configurationExamples": [
+            {
+              "language": "yaml",
+              "code": "session-persistence-rdb:\n  type: sqlite\n  path: /absolute/path/to/sessions.sqlite\n  journalMode: wal\n  busyTimeout: 5000"
+            }
+          ],
+          "documentation": {
+            "url": "https://github.com/morlay/session-persistence-rdb/blob/1e7b73899d5284d72ae53b2b450211adbd0b44a9/README.md",
+            "sha256": "2b4162066202d03cf55180c08a9d923bb250b5e35f80c7dbd88d51349337d3a8"
+          }
+        }
+      }
+    },
+    {
+      "catalogId": 3114,
+      "reason": "The complete pinned SSH implementation registers its remote file system as the global fs service and conflicts with the Alpha fs-sandbox provider. Correct remote execution and path routing require a broader migration; do not disable the sandbox to make installation pass. Preserve this identity and source as an installation-compatibility selection decision.",
+      "previousRecipe": {
+        "catalogId": 3114,
+        "slug": "dsh-ssh",
+        "title": "DSH SSH",
+        "summary": "Run remote commands and manage files over SSH, including jump hosts and interactive terminals.",
+        "primaryUseCase": "discover-and-start",
+        "capabilities": [
+          "management-ui",
+          "navigation"
+        ],
+        "sourceRepository": "UynajGI/dsh-ssh",
+        "sourceRevision": "9c344efb9bef13ad942b4e9ea16c203fb0095632",
+        "packageName": "dsh-ssh",
+        "specifier": "dsh-ssh@0.3.0-pre",
+        "profile": "web",
+        "licenseExpression": "MIT",
+        "licensePath": "LICENSE",
+        "validation": {
+          "status": "source-reviewed",
+          "checkedAt": "2026-09-06",
+          "packageManifestUrl": "https://github.com/UynajGI/dsh-ssh/blob/9c344efb9bef13ad942b4e9ea16c203fb0095632/package.json",
+          "bundlePatchUrl": "https://github.com/UynajGI/dsh-ssh/blob/9c344efb9bef13ad942b4e9ea16c203fb0095632/cordis.patch.yml",
+          "registryVersionUrl": "https://registry.npmjs.org/dsh-ssh/0.3.0-pre",
+          "packageManifestSha256": "7a9bc3d276fec3932434def1b8890bd987923a0c531083a0228b8141046fda5a",
+          "bundlePatchSha256": "b7844e071d2127337f725832b7e4d7fde163f011c92d92ee0b8397e650c7f0db",
+          "registryIntegrity": "sha512-wjcsAYtrEqC+Sn1rof442r/ZAraWH/5n0Cun2K8vMf6gHJG42y5RPXjarXtHDkkQYXBG1EjClClMjI5zqzyShA==",
+          "sourceRelationship": "npm-published-gitHead",
+          "adaptation": "Alpha source adaptation by DSH Themes contributors; pinned upstream source and license declaration retained. Runtime verification remains required."
+        },
+        "setup": {
+          "usageExamples": [
+            {
+              "kind": "ui",
+              "text": "Choose a host from the SSH configuration section, complete any missing authentication, and browse its remote workspace."
+            }
+          ],
+          "requirements": [
+            "Configure the SSH host, username, identity or other authentication, and an absolute remote working directory."
+          ],
+          "configurationExamples": [],
+          "documentation": {
+            "url": "https://github.com/UynajGI/dsh-ssh/blob/9c344efb9bef13ad942b4e9ea16c203fb0095632/README.md",
+            "sha256": "43d208bfffded48348aee9a17f9c431bc318985cbd156270cda14bcd64f71232"
+          }
+        },
+        "artifact": {
+          "path": "assets/alpha/artifacts/98a452027780883804795bffc3235747c88e5ddecfa5d800f5c54d3afbab3ce6.tgz",
+          "sha256": "98a452027780883804795bffc3235747c88e5ddecfa5d800f5c54d3afbab3ce6",
+          "bytes": 489150,
+          "packageVersion": "0.3.0-pre-dsh.alpha.1",
+          "runtimeDependencies": {},
+          "sourcePath": "assets/alpha/adapters/compiled-bundles.json"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,565 @@
+{
+  "schemaVersion": 1,
+  "catalogId": 2307,
+  "verifiedAt": "2026-09-05T23:09:13.305Z",
+  "dshVersion": "0.1.3-alpha.1",
+  "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "packageName": "@xiaoyao-ai/dsh-client-ui-skin-xiaoyao",
+  "packageVersion": "0.1.1",
+  "artifactSha256": "5e1f231f194a9eb255d663170fba549d01c59c70d499cfad9c7688cb10d7ef92",
+  "installation": {
+    "officialCliAdd": true,
+    "exactPackagePresent": true,
+    "profile": "web"
+  },
+  "boot": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-ds-dark-theme": "",
+        "data-dsh-xiaoyao": ""
+      },
+      "base": "#030b1dc2",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n夕小瑶 · 探索之境\nDEEPSEEK HARNESS SKIN\nOCEAN ONLINE",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        },
+        {
+          "text": "",
+          "aria": "打开夕小瑶皮肤说明"
+        },
+        {
+          "text": "",
+          "aria": "关闭"
+        }
+      ],
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0
+    },
+    "modes": [
+      {
+        "mode": "light",
+        "title": "DeepSeek Harness",
+        "attrs": {
+          "data-dsh-xiaoyao": ""
+        },
+        "base": "#030b1d3d",
+        "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n夕小瑶 · 探索之境\nDEEPSEEK HARNESS SKIN\nOCEAN ONLINE",
+        "buttons": [
+          {
+            "text": "",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "收起侧边栏"
+          },
+          {
+            "text": "新会话",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "搜索会话"
+          },
+          {
+            "text": "",
+            "aria": "视图选项"
+          },
+          {
+            "text": "",
+            "aria": "添加工作区"
+          },
+          {
+            "text": "设置",
+            "aria": null
+          },
+          {
+            "text": "选择工作区",
+            "aria": "选择工作区"
+          },
+          {
+            "text": "标准模式",
+            "aria": null
+          },
+          {
+            "text": "",
+            "aria": "指令"
+          },
+          {
+            "text": "",
+            "aria": "添加附件"
+          },
+          {
+            "text": "",
+            "aria": "发送消息"
+          },
+          {
+            "text": "",
+            "aria": "打开夕小瑶皮肤说明"
+          },
+          {
+            "text": "",
+            "aria": "关闭"
+          }
+        ],
+        "width": {
+          "viewport": 1280,
+          "scroll": 1280
+        },
+        "brokenImages": 0
+      },
+      {
+        "mode": "dark",
+        "title": "DeepSeek Harness",
+        "attrs": {
+          "data-dsh-xiaoyao": "",
+          "data-ds-dark-theme": ""
+        },
+        "base": "#030b1dc2",
+        "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n夕小瑶 · 探索之境\nDEEPSEEK HARNESS SKIN\nOCEAN ONLINE",
+        "buttons": [
+          {
+            "text": "",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "收起侧边栏"
+          },
+          {
+            "text": "新会话",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "搜索会话"
+          },
+          {
+            "text": "",
+            "aria": "视图选项"
+          },
+          {
+            "text": "",
+            "aria": "添加工作区"
+          },
+          {
+            "text": "设置",
+            "aria": null
+          },
+          {
+            "text": "选择工作区",
+            "aria": "选择工作区"
+          },
+          {
+            "text": "标准模式",
+            "aria": null
+          },
+          {
+            "text": "",
+            "aria": "指令"
+          },
+          {
+            "text": "",
+            "aria": "添加附件"
+          },
+          {
+            "text": "",
+            "aria": "发送消息"
+          },
+          {
+            "text": "",
+            "aria": "打开夕小瑶皮肤说明"
+          },
+          {
+            "text": "",
+            "aria": "关闭"
+          }
+        ],
+        "width": {
+          "viewport": 1280,
+          "scroll": 1280
+        },
+        "brokenImages": 0
+      }
+    ],
+    "controls": [
+      {
+        "action": "open-guide",
+        "expanded": "true",
+        "text": "×\nXIAOYAO GUIDE\n今天想探索什么？\n\n皮肤只改变外观，不会读取会话，也不会发起模型请求。"
+      },
+      {
+        "action": "close-guide",
+        "expanded": "false"
+      }
+    ],
+    "narrow": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-dsh-xiaoyao": "",
+        "data-ds-dark-theme": ""
+      },
+      "base": "#030b1dc2",
+      "text": "探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n×\nXIAOYAO GUIDE\n今天想探索什么？\n\n皮肤只改变外观，不会读取会话，也不会发起模型请求。",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "打开侧边栏"
+        },
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        },
+        {
+          "text": "",
+          "aria": "打开夕小瑶皮肤说明"
+        },
+        {
+          "text": "×",
+          "aria": "关闭"
+        }
+      ],
+      "width": {
+        "viewport": 390,
+        "scroll": 390
+      },
+      "brokenImages": 0
+    },
+    "geometry": [
+      {
+        "className": "Xakt6q_sidebarCol",
+        "left": 9,
+        "width": 56,
+        "right": 65
+      },
+      {
+        "className": "Xakt6q_centerCol",
+        "left": 65,
+        "width": 316,
+        "right": 381
+      },
+      {
+        "className": "jXRXZG_guideCard",
+        "left": 14,
+        "width": 360,
+        "right": 374
+      },
+      {
+        "className": "",
+        "left": 41,
+        "width": 180,
+        "right": 221
+      }
+    ],
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": []
+  },
+  "cold": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-ds-dark-theme": "",
+        "data-dsh-xiaoyao": ""
+      },
+      "base": "#030b1dc2",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始\n夕小瑶 · 探索之境\nDEEPSEEK HARNESS SKIN\nOCEAN ONLINE",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        },
+        {
+          "text": "",
+          "aria": "打开夕小瑶皮肤说明"
+        },
+        {
+          "text": "",
+          "aria": "关闭"
+        }
+      ],
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0
+    },
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": []
+  },
+  "coldProcessRestart": {
+    "before": {
+      "wrapper": 49336,
+      "listener": 49378,
+      "startedAt": "2026-09-05T23:09:15.783Z"
+    },
+    "after": {
+      "wrapper": 49981,
+      "listener": 50028,
+      "startedAt": "2026-09-05T23:09:33.030Z"
+    },
+    "portConfirmedClosed": true
+  },
+  "removed": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-ds-dark-theme": ""
+      },
+      "base": "#151517",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        }
+      ],
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0
+    },
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": []
+  },
+  "removal": {
+    "officialCliRemove": true,
+    "packageAbsent": true,
+    "skinAttributesAbsent": true,
+    "base": "#151517",
+    "process": {
+      "wrapper": 50752,
+      "listener": 50784,
+      "startedAt": "2026-09-05T23:09:44.011Z"
+    }
+  },
+  "status": "passed",
+  "sourceRepository": "147228/dsh-xiaoyao-skins",
+  "sourceRevision": "174f65d9135e932383a8f3a19fa522f16875a139",
+  "licenseExpression": "MIT AND CC-BY-NC-4.0",
+  "environment": {
+    "os": "macOS",
+    "architecture": "arm64",
+    "node": "24.15.0",
+    "browser": "Google Chrome 152.0.7977.76",
+    "installationPnpm": "11.7.0"
+  },
+  "limitations": [
+    "Executed on this macOS arm64 host with an isolated web profile and no model credentials. No Linux, Windows, other-browser, user-session or model-call coverage is claimed.",
+    "Light/dark checks use the browser system color-scheme setting. The skin artwork intentionally keeps its own visual character.",
+    "On a 390px screen, the built-in sidebar was collapsed before checking the main view and skin controls.",
+    "Focus/guide state resets according to the original plugin behavior; only skin activation and rendering are required to survive a process restart."
+  ],
+  "visualReview": {
+    "desktopLight": true,
+    "desktopDark": true,
+    "narrowControls": true,
+    "removedBaseline": true
+  },
+  "evidence": [
+    {
+      "path": "output/playwright/community-alpha/2307/cold.png",
+      "sha256": "723a1f2c80453b4a9b56c0b376d8ea89fb2969e941087c0b3baf0fdd3cd10c19",
+      "bytes": 631957
+    },
+    {
+      "path": "output/playwright/community-alpha/2307/dark.png",
+      "sha256": "1e80d784aace8aeaeed21bc52151220c91ebcb85ddeb96284e9c26854bc677d7",
+      "bytes": 631936
+    },
+    {
+      "path": "output/playwright/community-alpha/2307/light.png",
+      "sha256": "63200cd887be8bf49242bea308a330d6f0a28bf59cb3c4bbc4fe301a3fc62c9a",
+      "bytes": 1027023
+    },
+    {
+      "path": "output/playwright/community-alpha/2307/narrow-final.png",
+      "sha256": "0ce940e2c9a17c31520fc8015963d81e1041892e1005bf42d9b631edb8cdc2d0",
+      "bytes": 304962
+    },
+    {
+      "path": "output/playwright/community-alpha/2307/removed.png",
+      "sha256": "55808054eb754e42f701eec53fe2e8984eb043e2a1b7c6d93d0e7d45ac6cbc07",
+      "bytes": 30163
+    }
+  ]
+}

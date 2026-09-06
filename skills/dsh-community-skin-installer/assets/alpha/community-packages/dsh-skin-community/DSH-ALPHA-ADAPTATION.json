@@ -1,0 +1,62 @@
+{
+  "sourceRepository": "KinGao294/dsh-skin",
+  "sourceRevision": "0a571a27adcc5f780b7b72386c9c294243eec5b3",
+  "files": [
+    {
+      "path": "LICENSE",
+      "gitBlob": "d31c00c43588c56b250279e7588e464a3f849391",
+      "sha256": "40a29ce8365c6e96e51fcfdbeeff2d87e6531b6d21f2a6a6c0c9814689540378",
+      "bytes": 1066
+    },
+    {
+      "path": "README.md",
+      "gitBlob": "488fdb9e5bc83bb46171dd3bb23c22240cabd439",
+      "sha256": "2cd676d8e7c07c5e7126c6e3be1a0b826abf519e496c2bc4bca8dabe662bd653",
+      "bytes": 8615
+    },
+    {
+      "path": "cordis.patch.yml",
+      "gitBlob": "b1fff2f65a32b73faa0fafb74a7d8fe5604f92de",
+      "sha256": "448e5382aa4e01b3a45964a748658be5b9a8623eb0df99fa5bb1be175542cec1",
+      "bytes": 338
+    },
+    {
+      "path": "lib/client.js",
+      "gitBlob": "6fb7cee943b437446d4bc9a4ae5fc0b8dcfe4463",
+      "sha256": "95e7b56ea87815a9ed405998ee7c65e3ee638fedfa42d26f37242e0d7f7ad022",
+      "bytes": 75067
+    },
+    {
+      "path": "lib/index.js",
+      "gitBlob": "7096fd21db5112a3affffae9a27e9a193e6f8b56",
+      "sha256": "334d6c90bbe1de3392f0dbf4f74ccd82b81dd57131498a69449a511766153656",
+      "bytes": 742
+    },
+    {
+      "path": "lib/types/client/index.d.ts",
+      "gitBlob": "28398e05438f44146e5cc6db8dbff99b3bab9385",
+      "sha256": "e9d1029c099594be901108eb62519a5feadd51acad6a00a840d745726e353da7",
+      "bytes": 801
+    },
+    {
+      "path": "lib/types/index.d.ts",
+      "gitBlob": "01a64740bdfad0cb68b97d3303d2827889fea224",
+      "sha256": "c456b6d723cfa240607d782082dce605da7bd47341353a158ed82bfa97b00f35",
+      "bytes": 225
+    },
+    {
+      "path": "package.json",
+      "gitBlob": "e64b5832414370eca75296aa7a7192b8db09e98e",
+      "sha256": "d6299142b3872305aeb8c24f66d4d37e7a55a87de48bab9cdd493e5223a7a519",
+      "bytes": 1664
+    }
+  ],
+  "adaptation": "DSH Themes Alpha module ID and profile metadata; legacy defineStore import now uses the official shared client-store module. Original feature implementation, source coordinate and license retained.",
+  "alphaPreferenceAdaptation": {
+    "reason": "The original 0ms/80ms one-shot restore can run before Alpha asynchronously adopts its durable built-in preference, resetting a saved custom palette on cold start.",
+    "change": "Reassert a saved registered custom palette after a built-in theme/change adoption with a disposed timer and bounded retry count. Save an explicit user choice before changing preference so Default is respected.",
+    "officialSource": "packages/client/ui-theme/src/client/index.ts@d347e703908d0406b7a7ef80e3a0e594d86b2215",
+    "verification": "Forest live and cold-restart base color and saved pet settings must match."
+  },
+  "viewportAdaptation": "Keep a saved dragged pet within the current viewport when resizing. Clamp rendered position without overwriting the saved desktop position; start dragging from the actual visible rectangle and clean up the resize listener."
+}

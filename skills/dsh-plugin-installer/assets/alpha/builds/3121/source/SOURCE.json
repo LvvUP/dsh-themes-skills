@@ -1,0 +1,11 @@
+{
+  "sourceRepository": "Electricitysheep/dsh-tool-turbo",
+  "sourceRevision": "d29e7d9d73032516e37797ea69592ce18e0fe05f",
+  "files": {
+    "README.md": "9bffc4d3ff565a64932a4047bc9bbfb19b72eb814957e8ec328c9afa82353483",
+    "cordis.patch.yml": "7f0a2285c19270810715c0140bd65e19248cf130cd4a61256d50b2d0319d9924",
+    "package.json": "ae88832d72ade7230005f8930ea0af679bcd08acfe29754913db85ab87ad8794",
+    "src/effort-decision.ts": "99f24aa1741b89762a5b2a8ee9a73be21e969e4e6cbf5a782d8677dbfe535354",
+    "src/index.ts": "c3ff46614f55f0f56a1034373049945acd211121126b0ea832be7e03901ede4f"
+  }
+}

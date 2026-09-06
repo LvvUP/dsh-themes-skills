@@ -1,0 +1,16 @@
+# Alpha bundle: fixed official SHOPLINE MCP 1.1.0 code and all original agent skills.
+- insert:
+    - id: mcp-shopline
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: shopline
+        transport: stdio
+        command: !!js process.execPath
+        args:
+          - !!js dshHomePath('profiles', 'web', 'node_modules', 'shopline-ai-toolkit-dsh', 'backend', 'dist', 'index.js')
+        env:
+          DSH_SHOPLINE_DATA_DIR: !!js dshHomePath('plugin-data', 'shopline-developer-mcp')
+        toolCallTimeoutMs: 120000
+        failOnStartupError: true
+    - id: shopline-toolkit
+      name: 'shopline-ai-toolkit-dsh'

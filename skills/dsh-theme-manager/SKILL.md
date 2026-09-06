@@ -5,6 +5,25 @@ description: Safely install, switch, remove, verify, or roll back verified DSH-T
 
 # DSH Theme Manager
 
+
+## Current source installation: 0.1.3-alpha.1
+
+Use official source commit `d347e703908d0406b7a7ef80e3a0e594d86b2215`. This Alpha has no matching npm release. Read `references/runtime-source.alpha.json`; `runtime-alpha.json` records the local source build and Session v2 verification, while `alpha-hosted-artifacts.json` independently lists the exact packages that completed final installation, cold restart and recovery checks. A runtime baseline alone never grants item installation.
+
+1. Resolve the user's exact `#NNNN` using Finder with `--dsh-version 0.1.3-alpha.1`. The validated handoff identifies a single package and controlled download route. Plugin and community-skin numbers use their respective installer Skills.
+2. Confirm that the user has built and started this exact source version. `node <skill-dir>/scripts/dsh-alpha.mjs --check-build` checks the source revision, lockfile and declared compiled files. The separate official setup recipe is in the repository README; do not silently replace an existing runtime or reuse its profile for a different version.
+3. Revalidate the handoff's release record with `validate-release.mjs`. Pending packages, unlisted hashes, and mismatched runtime evidence are refused. Fetch the controlled same-origin artifact with the existing `fetch-and-verify.mjs`, then keep the exact verified bytes for recovery.
+4. Run every managed Alpha command through `node <skill-dir>/scripts/run-dsh.mjs --source`. Its supported command grammar remains version, loopback Web, profile inspection, and exact web-profile theme add/remove. It validates the built source before execution. It does not substitute a PATH `dsh` or an npm version.
+5. Inspect the profile with `plugin --profile web list --json` and `theme-state.mjs inspect`. At most one direct `@dsh-themes/*` dependency may be active. Prepare the exact previous Alpha artifact before removing it. Create a permission-restricted JSON input with `previous` and `target` entries containing `packageName`, `version`, `artifactPath` (absolute), and `artifactSha256`; use explicit `null` for the built-in state or an uninstall target. Run `alpha-state.mjs record --input <change.json> --installed <plugin-list.json>` and save its output privately. It checks the current profile and saves durable verified snapshots for both entries. Keep unrelated plugins and configuration intact.
+6. Install with `plugin --profile web add <absolute-verified.tgz> --save-exact`, then verify the exact installed name and version. Stop the existing managed server and confirm its port has closed before starting `web [--port <port>]`. Check both modes and the selected skin after the cold restart.
+7. If the new selection fails, save a fresh profile list and run `alpha-state.mjs restore-plan --input <recovery-record.json> --installed <fresh-plugin-list.json>`. Execute its argument arrays through `run-dsh.mjs`. This removes only the recorded target and restores the saved previous Alpha artifact, accepts a failed add that left no theme, and safely skips an already restored state. It refuses an unrelated later theme change. Verify and cold-start again. RC.8 rollback records are historical and cannot authorize an Alpha artifact.
+
+Honor the user's existing authorization for the selected installation. Show a concise summary when needed, and ask only for missing permission or an unresolved target; do not request the same permission again. Never stop a server or change a profile unrelated to the user's requested operation.
+
+### Historical RC.8 and RC.2 reference
+
+The remainder documents the retained **pre-Alpha installation and recovery contracts**. All uses of “current”, “certified lane”, and commands without `--source` below refer to that historical RC.8 lane. They do not override the Alpha instructions above, and their receipts must not be relabeled as Alpha evidence.
+
 Manage at most one verified `@dsh-themes/*` Cordis plugin in the `web` profile. Theme changes require a DeepSeek Harness restart.
 
 Baseline selection is policy-driven. Read `references/baseline-policy.json`; derive exact versions only from the pinned sidecars it names, and reject mutable dist-tags such as `latest` or `next`, ranges, and mixed evidence. DeepSeek Harness `0.1.1-rc.2` now has a separately verified **runtime baseline**: run `32694257969` completed all six Linux/macOS/Windows × Node 22.19/24.15 jobs and its detached Sigstore provenance validates. That baseline deliberately grants no theme, skin, or plugin item authority. The retained RC.8 lane remains the only operational item-install lane. Inspect RC.2 with `scripts/validate-promoted-rc2-runtime-baseline.mjs`; it must report `baseline-certified`, `productionReady: true`, `installableItems: false`, and `itemInstallability: "separate-authority-required"`. Historical pending inputs remain immutable evidence, never alternate authority.

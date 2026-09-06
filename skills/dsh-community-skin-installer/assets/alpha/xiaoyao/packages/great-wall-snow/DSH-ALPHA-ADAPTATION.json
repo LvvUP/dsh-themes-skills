@@ -1,0 +1,13 @@
+{
+  "catalogId": 2312,
+  "sourceRepository": "147228/dsh-xiaoyao-skins",
+  "sourceRevision": "174f65d9135e932383a8f3a19fa522f16875a139",
+  "upstreamArtifact": {
+    "url": "https://github.com/147228/dsh-xiaoyao-skins/releases/download/v0.1.3/xiaoyao-skin-great-wall-snow.tgz",
+    "sha256": "8108c837a402bd5792b3c34c7d3ba359e4c4aac6687ad8f751c8cd254f0a5179"
+  },
+  "adaptation": "DSH Themes Alpha CSS specificity and current sidebar/conversation/details layout selectors. Sky Lab adds a dark reading surface. Original code/art attribution and licenses retained.",
+  "licenseExpression": "MIT AND CC-BY-NC-4.0",
+  "alphaButtonAdaptation": "Bind Alpha button-elevated-fill to the skin floating surface so fixed dark palettes keep legible new-session controls in host light mode.",
+  "alphaBadgeAdaptation": "Use the palette primary label and active surface for Alpha preview badges rather than inherited host-mode blue."
+}

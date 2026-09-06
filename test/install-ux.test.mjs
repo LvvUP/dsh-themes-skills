@@ -100,57 +100,57 @@ test('general and dedicated prompts share one public-ID contract across entrypoi
   assert.match(communityContract, /Technical coordinates remain internal checks/);
 });
 
-test('both README homepages explain general and dedicated installation', async () => {
-  const [english, chinese] = await Promise.all([
-    text(files.readme),
-    text(files.readmeZh),
-  ]);
-
-  assert.match(english, /### General installation/);
-  assert.match(english, /### Dedicated installation/);
-  assert.match(english, /unique four-digit public `#NNNN` in the top-left/);
-  assert.match(english, /`DSH-2206`, `DSH-FS-009`/);
-  assert.match(english, /not.*a second installation ID/s);
+test('both README homepages explain current Alpha installation and retain historical release context', async () => {
+  const [english, chinese] = await Promise.all([text(files.readme), text(files.readmeZh)]);
+  for (const contents of [english, chinese]) {
+    for (const skill of ['dsh-theme-finder', 'dsh-theme-manager', 'dsh-community-skin-installer', 'dsh-plugin-installer', 'dsh-theme-creator', 'dsh-theme-submitter']) {
+      assert.ok(contents.includes(`skills/${skill}/SKILL.md`), `Missing ${skill} handoff`);
+    }
+    assert.match(contents, /#2004/);
+    assert.match(contents, /0\.1\.3-alpha\.1/);
+    assert.match(contents, /d347e703908d0406b7a7ef80e3a0e594d86b2215/);
+    assert.match(contents, /dsh-alpha\.mjs --bootstrap/);
+    assert.match(contents, /dsh-alpha\.mjs web/);
+    assert.match(contents, /install-plugins\.mjs --ids '#3006' --dry-run/);
+    assert.match(contents, /install-plugins\.mjs --top10 --dry-run/);
+    assert.match(contents, /runtime-verified/);
+    assert.match(contents, /references\/alpha-hosted-artifacts\.json/);
+    assert.match(contents, /references\/community-recipes\.json/);
+    assert.match(contents, /references\/plugins\.json/);
+    assert.match(contents, /release-state\.json/);
+    assert.match(contents, /v0\.7\.2/);
+    assert.match(contents, /<summary>.*(?:Historical|历史).*v0\.7\.2/);
+    assert.doesNotMatch(contents, /(?:npx|npm install)[^\n]*@deepseek-ai\/dsh@0\.1\.3-alpha\.1/);
+    assert.doesNotMatch(contents, /@deepseek-ai\/dsh@(latest|next)/);
+  }
   assert.match(english, /Please install DSH Themes #2004\./);
-  assert.match(english, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.7\.2/);
-  assert.match(english, /--skill dsh-theme-finder[\s\\]+--skill dsh-theme-manager[\s\\]+--skill dsh-community-skin-installer/);
-  assert.match(english, /You do not need to prepare a package name/);
-  assert.match(english, /`catalogRead: false`/);
-  assert.match(english, /`installableResultsAllowed: false`/);
-  assert.match(english, /RC\.2 has no item-level authority/);
+  assert.match(english, /you do not need to assemble them yourself/);
+  assert.match(english, /service-backed features may still need your own account or API configuration/);
+  assert.match(english, /Alpha verification snapshot — 2026-09-06/);
+  assert.match(english, /full Git SHA is the immutable installation reference, so a new tag is not required/);
+  assert.match(english, /These local results do not announce a production deployment/);
+  assert.match(english, /2026-08-27 RC snapshot/);
+  assert.doesNotMatch(english, /has not completed final promotion or received a new immutable release reference/);
+  assert.match(english, /must not silently downgrade or replace/);
   assert.match(english, /https:\/\/dsh-themes\.com\/install/);
-  assert.match(english, /Harness setup and catalog installation are intentionally separate/);
-  assert.match(english, /<summary>Advanced: exact tested Harness setup boundary<\/summary>/);
-  assert.match(english, /npx @deepseek-ai\/dsh@0\.1\.1-rc\.2 web/);
-  assert.match(english, /b150a551b8d465e31e418e1b2eaf5e79bbb7d28e/);
-  assert.doesNotMatch(english, /@deepseek-ai\/dsh@(latest|next)/);
-  assert.match(english, /system-level installer requires a separate request and immediate explicit consent/);
-  assert.match(english, /configure your model provider and model/);
-  assert.match(english, /do not install Node\.js.*DeepSeek Harness.*never downgrade an existing DSH/s);
-  assert.match(english, /from the published, immutable `v0\.7\.2` tag/);
-  assert.doesNotMatch(english, /once the fixed .* tag is published/);
-
-  assert.match(chinese, /### 通用安装/);
-  assert.match(chinese, /### 专属安装/);
-  assert.match(chinese, /格式固定为 `#NNNN` 的唯一公开编号/);
-  assert.match(chinese, /`DSH-2206`、`DSH-FS-009`/);
-  assert.match(chinese, /不是.*第二套安装编号/s);
-  assert.match(chinese, /请帮我安装 DSH Themes 的 #2004。/);
-  assert.match(chinese, /npx --yes skills@1\.5\.23 add[\s\\]+https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/tree\/v0\.7\.2/);
-  assert.match(chinese, /--skill dsh-theme-finder[\s\\]+--skill dsh-theme-manager[\s\\]+--skill dsh-community-skin-installer/);
-  assert.match(chinese, /你不需要准备包名/);
-  assert.match(chinese, /`catalogRead: false`/);
-  assert.match(chinese, /`installableResultsAllowed: false`/);
-  assert.match(chinese, /RC\.2 还没有逐项安装权威/);
+  assert.match(chinese, /请安装 DSH Themes #2004。/);
+  assert.match(chinese, /不需要自行整理这些技术参数/);
+  assert.match(chinese, /配置你自己的账号或 API/);
+  assert.match(chinese, /Alpha 验证快照 — 2026-09-06/);
+  assert.match(chinese, /完整 Git SHA，作为不可变安装引用，无需另建标签/);
+  assert.match(chinese, /这些本地结果不代表网站已生产部署/);
+  assert.match(chinese, /2026-08-27 RC 快照/);
+  assert.doesNotMatch(chinese, /尚未固定新的不可变发布引用/);
+  assert.match(chinese, /不得静默降级或替换/);
   assert.match(chinese, /https:\/\/dsh-themes\.com\/zh\/install/);
-  assert.match(chinese, /Harness 安装与目录内容安装会始终分开/);
-  assert.match(chinese, /<summary>高级说明：精确的 Harness 测试边界<\/summary>/);
-  assert.match(chinese, /npx @deepseek-ai\/dsh@0\.1\.1-rc\.2 web/);
-  assert.match(chinese, /b150a551b8d465e31e418e1b2eaf5e79bbb7d28e/);
-  assert.doesNotMatch(chinese, /@deepseek-ai\/dsh@(latest|next)/);
-  assert.match(chinese, /运行系统级安装器需要单独请求，并在执行前取得即时明确同意/);
-  assert.match(chinese, /配置模型供应商和模型/);
-  assert.match(chinese, /不会在安装条目时顺带安装 Node\.js.*DeepSeek Harness.*不会在背后降级已有 DSH/s);
-  assert.match(chinese, /从已发布且不可变的 `v0\.7\.2` 标签安装/);
-  assert.doesNotMatch(chinese, /标签发布后/);
+});
+
+
+test('Finder separates the Alpha commit from the fixed historical setup reference', async () => {
+  const finder = await text(files.finder);
+  assert.match(finder, /exact public Skills commit selected by the website installation guide/);
+  assert.match(finder, /full Git SHA is an immutable reference and does not require a new release tag/);
+  assert.match(finder, /2026-08-27 RC snapshot/);
+  assert.match(finder, /https:\/\/github\.com\/LvvUP\/dsh-themes-skills\/blob\/v0\.7\.2\/README\.md/);
+  assert.doesNotMatch(finder, /repository README's fixed RC\.2 setup section/);
 });

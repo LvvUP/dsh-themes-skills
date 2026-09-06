@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 2,
+  "kind": "top10-public-entrypoint-lifecycle",
+  "status": "pending",
+  "catalogSha256": "9707f2379e772a2ef5390b0620ffe2caa523261032b8cabc39796df6af4da54f",
+  "recommendationTransitionSha256": "d76b6d661d947e46f37f931a2534fa3d8e3afe43dd12eba420b23787927368f7",
+  "catalogIds": [
+    3092,
+    3052,
+    3032,
+    3033,
+    3040,
+    3044,
+    3036,
+    3010,
+    3041,
+    3004
+  ],
+  "previousCombinationReceiptSha256": "248099e898a0744ed26ca1717958ac248ea4a5ee4bea7fc6b6741d3a523322ad",
+  "reason": "All ten Web plugins passed the complete numbered technical lifecycle, including repeat installation, controlled failure repair and repeat removal. Final visual coexistence remains pending a new Reasoning Tide artifact that fixes the native Settings dialog containment defect.",
+  "technicalStage": {
+    "status": "passed",
+    "path": "history/top10-spotlight-technical/receipt.json",
+    "sha256": "b53558b77feb6206e7791020713c34cfe54937dd2c3b8a3de39ec02793e276fb",
+    "scopePath": "history/top10-spotlight-technical/scope.json",
+    "scopeSha256": "92098eccf63d92a90eecf7bb3f171860677770b9d2beb68d5441f203148e5d13"
+  }
+}

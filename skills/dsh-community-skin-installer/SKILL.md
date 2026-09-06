@@ -1,9 +1,30 @@
 ---
 name: dsh-community-skin-installer
-description: Inspect pinned community-skin evidence and, only after certified baseline plus item-level runtime verification, install or recover allowlisted Skin Center entries. Use for the dsh-web-ui and DSH-Themes CSS-adaptation lane, not hosted @dsh-themes artifacts or arbitrary repositories.
+description: Install verified community themes and skins by exact DSH Themes catalog number, using their Alpha package recipes or the separate certified Skin Center lane.
 ---
 
 # DSH Community Skin Installer
+
+## Alpha community packages
+
+First look up the selected `#NNNN` in [references/community-recipes.json](references/community-recipes.json). This separate Alpha catalog covers native packages, checked release archives, and the disclosed DSH Themes adaptations. A matching number identifies the intended item; do not ask for its package name, source version, or digest again.
+
+```sh
+node <skill-dir>/scripts/install-alpha.mjs --ids '#2306' --inspect
+node <skill-dir>/scripts/install-alpha.mjs --ids '#2306'
+```
+
+The script accepts only items with their own `runtime-verified` status and exact Alpha version. A pending item can be inspected but cannot be installed. Install the companion `dsh-plugin-installer` and `dsh-theme-manager` Skills from the same pinned repository version. This script shares the Plugin Installer’s command executor and uses the Theme Manager Alpha launcher, checks archive bytes, installs through the official CLI, and verifies package identity and profile registration. These records do not use the historical Skin Center receipts below.
+
+After installation, follow the returned `activation` instructions and verify the selected appearance in the live local Harness UI. For the twelve Theme Pack numbers, install the shared package once, then select and persist the exact preset identified by the number. Never represent them as twelve different packages. For an `activation.kind: "http"` recipe, call the exported `activateCommunityItem` with a request adapter in the authenticated local DSH browser: it sends the listed same-origin POST bodies, clears the other palette groups (404 means absent), and selects the requested number. Skin Center recipes use their exact `/api/skin-center/v2/active` request and bundled companion files where declared. Do not export browser cookies or tokens. Reload the page and check the exact selected appearance; a successful POST alone is not the final visual check. A collection with its own appearance controls is installed when its controls load; claim a particular preset is active only after selecting and checking it.
+
+Use the bundled source and rights disclosures. The HeiGeAi Alpha adaptation includes 21 color presets and user-supplied local backgrounds; it does not bundle upstream character illustrations or overwrite Harness source files. Original Xiaoyao artwork remains subject to its separate non-commercial license.
+
+For removal, switch back to Official Default, run `node <skill-dir>/scripts/install-alpha.mjs --ids '#NNNN' --remove`, and verify the package and its appearance are absent. Removing a shared Skin Center package removes its installed appearance choices together. The script restores any user-skin directory it backed up when installing a `companion` recipe; never use a raw package removal as a substitute for that recovery. If a managed directory has been edited, recovery stops and preserves those edits and the backup. Preserve the user’s saved preferences for reinstallation. A request to install the selected number authorizes the described installation; do not add a second confirmation when that authorization is already present.
+
+## Historical Skin Center lane
+
+The remainder documents the retained RC.8/RC.2 workflow only. Its confirmation, version and runner rules do not override the Alpha workflow above.
 
 Inspect only records admitted by the bundled catalog. This is a separate trust lane from `dsh-theme-manager`: Manager handles hosted, declarative `@dsh-themes/*` artifacts, while this Skill handles exactly 11 runtime-verified community records: Maid Atelier plus ten dsh-web-ui appearances. Installation is available only when the bundled item, sanitized receipt, final Manager gate, explicit consent, and selected website record all validate together.
 

@@ -1,0 +1,14 @@
+{
+  "sourceRepository": "HuanLinOTO/dsh-plugin-sleep",
+  "sourceRevision": "daeeaeecd5b3fa46431f6eddb598aec22adfb84c",
+  "files": {
+    "LICENSE": "190fb3639a6bca891f9da4bcf2e983e3f48a6d7469e578a8870f47d130940c0d",
+    "README.md": "c5dc758c7a37a826475dff7b4a56c1037672125460216aaf4e07b1653a241599",
+    "cordis.patch.yml": "d084e63b7771c7b1bc875a5c369f9b59367ccf2c2b925e8f90a80c601f53000b",
+    "package.json": "a7f4d78a96a86c5d02c1815cdee9e0f20cf8c94afc3610abf749406c9299c077",
+    "src/index.ts": "f06a044e21c1956e38e7d2219b453b467838f91909390584b1c670ce6bedf9b2",
+    "src/tools.ts": "bddde29fb22ad51e280e50fe164e58417d434b9a4ba34756443f8515265bc5d4",
+    "src/types.d.ts": "33443d94a54bb17e597bf57955996cd838b165d3a30633d43332c3ec41a27317",
+    "tsdown.config.ts": "7bca55577e930fb3ef06c63f94e09f2a6e6f789b16ed7c6e1a282fefe203e3d6"
+  }
+}

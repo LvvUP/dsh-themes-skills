@@ -1,6 +1,6 @@
 {
   "name": "dsh-themes-skills",
-  "version": "0.7.2",
+  "version": "0.8.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "pretest": "node scripts/bootstrap-runner.mjs",
-    "test": "node --test",
+    "test": "node scripts/run-contract-tests.mjs",
     "test:rc2-final": "node --test test/rc2-final-certification-infrastructure.test.mjs",
     "rc2:final:contract": "node skills/dsh-theme-manager/scripts/validate-rc2-final-contract.mjs",
     "rc2:final:validate": "node skills/dsh-theme-manager/scripts/validate-rc2-final-certification.mjs",

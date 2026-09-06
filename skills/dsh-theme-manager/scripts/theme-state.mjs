@@ -126,7 +126,7 @@ function normalizedThemes(input) {
     .filter((entry) => entry.direct && typeof entry.name === 'string' && entry.name.startsWith('@dsh-themes/'));
 }
 
-function inspect(input) {
+export function inspect(input) {
   const themes = normalizedThemes(input);
   for (const theme of themes) {
     if (!PACKAGE.test(theme.name)) throw new Error(`Invalid DSH-Themes package name: ${theme.name}`);

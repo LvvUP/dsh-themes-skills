@@ -5,15 +5,15 @@ description: Create and validate deterministic declarative manifests for DSH-The
 
 # DSH Theme Creator
 
-Create data-only schema V3 themes for the exact certified baseline named by `references/baseline-policy.json`. Derive its version only from the pinned compatibility sidecar. Do not accept or generate author-supplied JavaScript, CSS, HTML, dependencies, lifecycle scripts, fonts, SVG, remote runtime assets, or hashed class selectors.
+Create data-only schema V3 drafts for the current Alpha source baseline in [references/compatibility-alpha.json](references/compatibility-alpha.json). The local sidecar is digest-pinned and must agree with the verified Manager source runtime and 54-package authority. Do not accept or generate author-supplied JavaScript, CSS, HTML, dependencies, lifecycle scripts, fonts, SVG, remote runtime assets, or hashed class selectors.
 
-The currently selected certified authoring sidecar is DeepSeek Harness `0.1.0-rc.8`; this sentence is descriptive, while the sidecar remains executable authority.
+The default is DeepSeek Harness `0.1.3-alpha.1`, source commit `d347e703908d0406b7a7ef80e3a0e594d86b2215`. Run `scripts/inspect-baseline.mjs` to inspect it. Its `npmArtifacts` value is `null`; do not invent an npm version or integrity. A generated manifest remains a draft and receives no installation authority.
 
 Public catalog identity is assigned by the website only after moderation. Creator and Submitter never mint, accept, or preserve a user-chosen public ID or legacy `DSH-*` label; published selections use the site's exact four-digit `#NNNN` contract, while the manifest slug remains discovery metadata rather than installation authority.
 
 `node <skill-dir>/scripts/inspect-baseline.mjs certifiedRuntimeBaseline` exposes the verified RC.2 runtime baseline. It must report `baseline-certified`, `productionReady: true`, and `enabled: false`: runtime certification does not grant an authoring sidecar. The immutable `candidate` view remains historical-at-capture evidence only. Do not author or publish RC.2 manifests until a separately reviewed authoring authority is added.
 
-The generator accepts only `schemaVersion: "3.0"` authoring input that selects the certified sidecar's exact version, then inserts the complete fixed compatibility evidence from [references/compatibility-v3.json](references/compatibility-v3.json). It never accepts author-supplied attestation fields and never emits `artifact` or `payload`. RC.6 V2 and RC.5 V1 remain historical, non-output formats.
+The generator accepts only `schemaVersion: "3.0"` authoring input that selects the Alpha sidecar's exact version, then inserts the complete fixed source-build compatibility evidence. It never accepts author-supplied attestation fields and never emits `artifact` or `payload`. RC.6 V2 and RC.5 V1 remain historical, non-output formats.
 
 ## Create
 
@@ -30,7 +30,7 @@ The generator accepts only `schemaVersion: "3.0"` authoring input that selects t
      --output <new-manifest.json>
    ```
 
-The generator rejects unknown fields, contradictory license policies, incomplete third-party provenance, unsafe color syntax, missing modes/tokens, non-V3 or non-RC.8 input, symlinks, path traversal, invalid raster signatures, duplicate content, oversized files, and output overwrites. It removes local filesystem paths, records deterministic SHA-256 values, binds the exact final RC.8 attestation and compatibility fingerprints, and marks imported full-skin URLs as provisional until the website replaces them.
+The generator rejects unknown fields, contradictory license policies, incomplete third-party provenance, unsafe color syntax, missing modes/tokens, non-V3 or mismatched Alpha input, symlinks, path traversal, invalid raster signatures, duplicate content, oversized files, and output overwrites. It removes local filesystem paths, records deterministic SHA-256 values, binds the exact Alpha runtime attestation and source/build fingerprints, and marks imported full-skin URLs as provisional until the website replaces them.
 
 ## Hash a release package
 
@@ -48,3 +48,9 @@ Record the returned `sha256` and `integrity` only in a trusted publisher's relea
 - Install a trusted generated package in an isolated `$DSH_HOME`, exercise light/dark/system, and capture real Harness screenshots before publication.
 - Verify readable labels, primary actions, errors, warnings, success states, sidebar, dialogs, code surfaces, keyboard focus, and 200% zoom.
 - Keep the original authoring file and licensed source evidence outside the install package when either contains private information.
+
+The companion `dsh-theme-manager` Skill must be present from the same reviewed repository revision; it supplies the independent Alpha source and hosted-evidence checks.
+
+## Historical verification
+
+The unchanged [RC.8 sidecar](references/compatibility-v3.json) and `baseline-policy.json` retain the earlier contract. Use `--baseline historical-rc8` explicitly with RC.8 authoring input to reproduce it. This does not upgrade the input or make it eligible for the current Alpha website. `inspect-baseline.mjs certified` inspects that retained lane; RC.2, RC.6 and RC.5 rules remain historical and cannot grant Alpha authority.

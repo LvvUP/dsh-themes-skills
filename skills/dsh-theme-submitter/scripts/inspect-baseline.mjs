@@ -7,15 +7,24 @@ function fail(message) {
   throw new Error(`submission baseline refused: ${message}`);
 }
 
-const laneName = process.argv[2] ?? 'certified';
+const laneName = process.argv[2] ?? 'alpha';
 if (
-  !['certified', 'certifiedRuntimeBaseline', 'candidate'].includes(laneName) ||
+  !['alpha', 'certified', 'certifiedRuntimeBaseline', 'candidate'].includes(laneName) ||
   process.argv.length > 3
 ) {
   fail(
-    'usage: inspect-baseline.mjs [certified|certifiedRuntimeBaseline|candidate]'
+    'usage: inspect-baseline.mjs [alpha|certified|certifiedRuntimeBaseline|candidate]'
   );
 }
+if (laneName === 'alpha') {
+  const { ALPHA_SOURCE, readAlphaRuntime } = await import('../../dsh-theme-manager/scripts/dsh-alpha.mjs');
+  const { loadAlphaHostedAuthority, stableAlphaJson } = await import('../../dsh-theme-manager/scripts/alpha-authority.mjs');
+  const bytes = await readFile(new URL('../references/compatibility-alpha.json', import.meta.url));
+  const sha256 = createHash('sha256').update(bytes).digest('hex');
+  const evidence = JSON.parse(bytes.toString('utf8'));
+  if (sha256 !== '1df3347e072b79d6c7607de2e7728f4b50e40c29591c1f307b4634ebb3d16032' || loadAlphaHostedAuthority().status !== 'runtime-verified' || stableAlphaJson(evidence) !== stableAlphaJson({ ...readAlphaRuntime().compatibility, runtimeAttestationSha256: ALPHA_SOURCE.verification.sha256 })) fail('Alpha compatibility evidence differs');
+  process.stdout.write(`${JSON.stringify({ lane: 'alpha', status: 'reviewed-alpha-submission', enabled: true, draftOnly: true, installableItems: false, dshVersion: ALPHA_SOURCE.version, sourceCommit: ALPHA_SOURCE.commit, evidenceSha256: sha256 })}\n`);
+} else {
 const policy = JSON.parse(
   await readFile(new URL('../references/baseline-policy.json', import.meta.url))
 );
@@ -71,3 +80,4 @@ process.stdout.write(`${JSON.stringify({
   evidenceSha256: lane.evidenceSha256,
   blockers: evidence.blockers ?? [],
 })}\n`);
+}

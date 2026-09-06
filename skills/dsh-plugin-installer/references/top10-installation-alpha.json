@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 3,
+  "kind": "top10-staged-acceptance",
+  "status": "passed",
+  "recordedAt": "2026-09-06T10:30:16.392Z",
+  "dshVersion": "0.1.3-alpha.1",
+  "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "catalogSha256": "9707f2379e772a2ef5390b0620ffe2caa523261032b8cabc39796df6af4da54f",
+  "recommendationTransitionSha256": "d76b6d661d947e46f37f931a2534fa3d8e3afe43dd12eba420b23787927368f7",
+  "catalogIds": [
+    3092,
+    3052,
+    3032,
+    3033,
+    3040,
+    3044,
+    3036,
+    3010,
+    3041,
+    3004
+  ],
+  "helperSha256": {
+    "install-plugins.mjs": "3f791ce0c81c5bf0e5dae8e0bc496a43e5ff1d910384d7c6e4e5596a4ae11321",
+    "uninstall-plugins.mjs": "ace37dc4a62a350ebc418834a1bcc460740e6393976667e9bb133dedeedf4706",
+    "dsh-alpha.mjs": "d7664679a96517ef8068a7dd4a6b33f640d18980f81f79223a75a7c8468cb6ff"
+  },
+  "technicalStage": {
+    "status": "passed",
+    "path": "history/top10-spotlight-technical/receipt.json",
+    "sha256": "b53558b77feb6206e7791020713c34cfe54937dd2c3b8a3de39ec02793e276fb",
+    "scopePath": "history/top10-spotlight-technical/scope.json",
+    "scopeSha256": "92098eccf63d92a90eecf7bb3f171860677770b9d2beb68d5441f203148e5d13",
+    "scope": "Immutable complete ten-plugin installation, loading, repeat installation, controlled partial failure repair, numbered removal and repeat removal."
+  },
+  "finalCoexistence": {
+    "status": "passed",
+    "path": "final-spotlight-coexistence-alpha.json",
+    "sha256": "b0baaf0191e4a4b9c049c55d5e82db1fd891db82fac1022d1decb8accb9d5f00",
+    "skin": {
+      "catalogId": 2002,
+      "slug": "reasoning-tide",
+      "packageName": "@dsh-themes/reasoning-tide",
+      "version": "1.1.1-alpha.2",
+      "artifactSha256": "3c92893022e77809c0f9fadce2edf0e368f47666b771e18c86bf1812ebc5fe73",
+      "cssSha256": "31576e5eb5ba35f725f7fd62de483b8925a513710c972a824a76324da044e7b6",
+      "manifestSha256": "ebb80acd55873c92c8f1f3df231d9cfa47222d92d83027f740d7e2684cd4afd2",
+      "payloadSha256": "e6578f9e18ad2f05a479356f58dd71a0631b17b8d9c81397d635233159842fcc"
+    },
+    "scope": "Separate actual Spotlight navigation, final Reasoning Tide coexistence, native Settings usability, individual removals and baseline restoration."
+  },
+  "visualReview": {
+    "status": "passed",
+    "finalReceiptSha256": "b0baaf0191e4a4b9c049c55d5e82db1fd891db82fac1022d1decb8accb9d5f00",
+    "reviewers": [
+      "Codex /root/plugin_installation_plan",
+      "Codex /root"
+    ],
+    "settingsScreenshots": [
+      "2621c6c14ae4242e33fcd17650d4bc09f1c73165612968835c99ea56b6046e41",
+      "0e938543c9462ea42ecafe496b98b0aaa501a7e18743226be410bffc64933cae",
+      "fd4cdf134864179e31e997e6d0afbe30652468918a467dbcfa7b252f42417336"
+    ],
+    "reviewedScreenshots": [
+      {
+        "name": "spotlight-before-skin-before.png",
+        "sha256": "a8430a752d10e0ab895178ca0e07b7501542c09043193f53c96f5b42a99c5265"
+      },
+      {
+        "name": "spotlight-before-skin-search.png",
+        "sha256": "6fd937841149b0b8a3cb83575544674e9f406430d185843480efa99bf395cab2"
+      },
+      {
+        "name": "spotlight-before-skin-settings.png",
+        "sha256": "2621c6c14ae4242e33fcd17650d4bc09f1c73165612968835c99ea56b6046e41"
+      },
+      {
+        "name": "spotlight-before-skin-closed.png",
+        "sha256": "7a9734a69dc65864ca342aa6ac63cfee2c67ca8197d790773a39202ce5b140f7"
+      },
+      {
+        "name": "spotlight-with-skin-before.png",
+        "sha256": "7d8dee5e2cb432786f176c8d07685f820bd27828d739c5ea6926ffda7690448e"
+      },
+      {
+        "name": "spotlight-with-skin-search.png",
+        "sha256": "b4446a7dc2a989c7f6dc97f005fcf0fd8694e86faac46f68da0e53081e42cb82"
+      },
+      {
+        "name": "spotlight-with-skin-settings.png",
+        "sha256": "0e938543c9462ea42ecafe496b98b0aaa501a7e18743226be410bffc64933cae"
+      },
+      {
+        "name": "spotlight-with-skin-closed.png",
+        "sha256": "8045027b9071549deab02d17b33564aa57a95ef6bdcb490b6d5f09478b2b8218"
+      },
+      {
+        "name": "spotlight-after-spotlight-removal-before.png",
+        "sha256": "7d8dee5e2cb432786f176c8d07685f820bd27828d739c5ea6926ffda7690448e"
+      },
+      {
+        "name": "spotlight-after-spotlight-removal-settings.png",
+        "sha256": "fd4cdf134864179e31e997e6d0afbe30652468918a467dbcfa7b252f42417336"
+      },
+      {
+        "name": "spotlight-after-spotlight-removal-closed.png",
+        "sha256": "fbcfac09bcf15987e4414affb72b48d5e6e0a7452eb0bd89b9fa9307c80129fd"
+      },
+      {
+        "name": "spotlight-after-skin-removal-before.png",
+        "sha256": "a8430a752d10e0ab895178ca0e07b7501542c09043193f53c96f5b42a99c5265"
+      }
+    ],
+    "reports": [
+      {
+        "path": "final-spotlight-evidence/b0baaf0191e4a4b9c049c55d5e82db1fd891db82fac1022d1decb8accb9d5f00/visual-review-root-01.json",
+        "sha256": "e93d72b7ff47dd14caa4e1f9e881e552b02bcec74427e76ae99ec113289a68c9"
+      },
+      {
+        "path": "final-spotlight-evidence/b0baaf0191e4a4b9c049c55d5e82db1fd891db82fac1022d1decb8accb9d5f00/visual-review-root-02.json",
+        "sha256": "7e45cc99e412ca1ee1d7df51a0ca9a43073af9a156a16d66229252edf0da1b62"
+      },
+      {
+        "path": "final-spotlight-evidence/b0baaf0191e4a4b9c049c55d5e82db1fd891db82fac1022d1decb8accb9d5f00/visual-review-root-03.json",
+        "sha256": "d6a094a3f707fa31667d45e0e008f1edc17f8e329d214d4dad3d67caee2a0b45"
+      }
+    ]
+  },
+  "history": {
+    "previousPending": {
+      "path": "history/top10-spotlight-pending-cff6f46ab625b7215c8e9cdfa725b343e8a9698c83bb095e7507aa6d017528fe.json",
+      "sha256": "cff6f46ab625b7215c8e9cdfa725b343e8a9698c83bb095e7507aa6d017528fe"
+    },
+    "failedOnboardingAttempt": {
+      "path": "history/top10-final-spotlight-onboarding-failed-d2562f1235051ca0ced352cdafc4303f93aa37c5ab0519c945651dbb2ca15a8f.json",
+      "sha256": "d2562f1235051ca0ced352cdafc4303f93aa37c5ab0519c945651dbb2ca15a8f"
+    }
+  },
+  "limitations": [
+    "The technical and final coexistence stages are separate executions bound by unchanged plugin recipes and installation helpers.",
+    "No model request, external account configuration or account-backed feature was exercised.",
+    "The final coexistence screenshots cover the 1280 by 800 desktop viewport; separate first-party receipts cover skin mobile acceptance.",
+    "Immutable release publication and production deployment are separate gates."
+  ]
+}

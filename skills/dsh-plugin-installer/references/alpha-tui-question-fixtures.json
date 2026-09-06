@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "catalogId": 3045,
+  "artifactSha256": "899bd9112a7ccf630b9dd7ed0c8e1d112c9821916d6dfd06b7d5d6f8bf56f5df",
+  "sourceSha256": "38ad12f333ae0e7676f35c8f2ba478d3b05899f772c07664ffd64ddfbec69e40",
+  "scope": "Actual adapted queue code in isolated unit fixtures with mocked GUI and Cordis dispatch; not a live Agent question or model task.",
+  "checkedAt": "2026-09-06T02:46:24.003Z",
+  "status": "passed",
+  "cases": [
+    "other-agent-delegates",
+    "fifo-answers-and-unregister",
+    "signal-abort-starts-next-and-escape-settles",
+    "dispose-settles-active-and-queued"
+  ]
+}

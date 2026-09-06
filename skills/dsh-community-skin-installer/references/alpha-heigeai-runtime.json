@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 1,
+  "catalogId": 2306,
+  "verifiedAt": "2026-09-05T22:25:40.824770+00:00",
+  "dshVersion": "0.1.3-alpha.1",
+  "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "environment": {
+    "os": "macOS",
+    "architecture": "arm64",
+    "node": "24.15.0",
+    "officialBuildPnpm": "11.7.0",
+    "installationPnpm": "11.7.0",
+    "browser": "Google Chrome 152"
+  },
+  "sourceRepository": "HeiGeAi/deepseek-harness-skin",
+  "sourceRevision": "238d114d1e5bf7358c4cb101b36ae129e70a55fe",
+  "packageName": "@dsh-themes/community-heigeai-skin-center",
+  "packageVersion": "0.1.0-alpha.1",
+  "artifactSha256": "d26d61bde5b93f8b7e4f72d04b438413081312dbc63c0d1d10dafe2ce640a23f",
+  "installation": {
+    "officialCliAdd": true,
+    "exactPackagePresent": true,
+    "profile": "web"
+  },
+  "paletteChecks": [
+    {
+      "id": "qq-2007",
+      "expected": "#c3d5e6",
+      "actual": "#c3d5e6",
+      "passed": true
+    },
+    {
+      "id": "qq-2008",
+      "expected": "#f6e2ec",
+      "actual": "#f6e2ec",
+      "passed": true
+    },
+    {
+      "id": "miku",
+      "expected": "#f5f6fc",
+      "actual": "#f5f6fc",
+      "passed": true
+    },
+    {
+      "id": "genshin-light",
+      "expected": "#f2f1fb",
+      "actual": "#f2f1fb",
+      "passed": true
+    },
+    {
+      "id": "genshin-dark",
+      "expected": "#171a2e",
+      "actual": "#171a2e",
+      "passed": true
+    },
+    {
+      "id": "deepspace-light",
+      "expected": "#f6f2fb",
+      "actual": "#f6f2fb",
+      "passed": true
+    },
+    {
+      "id": "deepspace-dark",
+      "expected": "#201a40",
+      "actual": "#201a40",
+      "passed": true
+    },
+    {
+      "id": "naruto-naruto",
+      "expected": "#17110b",
+      "actual": "#17110b",
+      "passed": true
+    },
+    {
+      "id": "naruto-sasuke",
+      "expected": "#171019",
+      "actual": "#171019",
+      "passed": true
+    },
+    {
+      "id": "waves-1",
+      "expected": "#0d1418",
+      "actual": "#0d1418",
+      "passed": true
+    },
+    {
+      "id": "waves-2",
+      "expected": "#16121f",
+      "actual": "#16121f",
+      "passed": true
+    },
+    {
+      "id": "dragonball-nimbus",
+      "expected": "#f3f7ff",
+      "actual": "#f3f7ff",
+      "passed": true
+    },
+    {
+      "id": "dragonball-saiyan",
+      "expected": "#fff8e8",
+      "actual": "#fff8e8",
+      "passed": true
+    },
+    {
+      "id": "dalao",
+      "expected": "#111111",
+      "actual": "#111111",
+      "passed": true
+    },
+    {
+      "id": "deepseek-nv",
+      "expected": "#0c1c3e",
+      "actual": "#0c1c3e",
+      "passed": true
+    },
+    {
+      "id": "deepseek-nv-q",
+      "expected": "#f4f7fc",
+      "actual": "#f4f7fc",
+      "passed": true
+    },
+    {
+      "id": "deepseek-qingchun",
+      "expected": "#f8fbfd",
+      "actual": "#f8fbfd",
+      "passed": true
+    },
+    {
+      "id": "neice-dalao",
+      "expected": "#040f2b",
+      "actual": "#040f2b",
+      "passed": true
+    },
+    {
+      "id": "bie-agi",
+      "expected": "#eaf0fd",
+      "actual": "#eaf0fd",
+      "passed": true
+    },
+    {
+      "id": "fengge",
+      "expected": "#f8f9fc",
+      "actual": "#f8f9fc",
+      "passed": true
+    },
+    {
+      "id": "liangsheng",
+      "expected": "#f3f7fc",
+      "actual": "#f3f7fc",
+      "passed": true
+    }
+  ],
+  "customSeedAndLocalImage": {
+    "id": "custom",
+    "appearance": "dark",
+    "seeds": {
+      "accent": "#8844cc",
+      "secondary": "#8397b5",
+      "surface": "#171c27",
+      "text": "#eef2f8"
+    },
+    "imageLength": 7279,
+    "opacity": 0.3,
+    "blur": 7,
+    "renderedBase": "#171c27",
+    "background": true,
+    "backgroundOpacity": "0.3",
+    "backgroundFilter": "blur(7px)"
+  },
+  "narrowViewport": {
+    "viewport": 390,
+    "scroll": 390,
+    "dialogWidth": 390
+  },
+  "coldProcessRestart": {
+    "samples": [
+      {
+        "id": "custom",
+        "appearance": "dark",
+        "seeds": {
+          "accent": "#8844cc",
+          "secondary": "#8397b5",
+          "surface": "#171c27",
+          "text": "#eef2f8"
+        },
+        "imageLength": 7279,
+        "renderedBase": "#171c27",
+        "opacity": "0.3",
+        "blur": "blur(7px)"
+      },
+      {
+        "id": "custom",
+        "appearance": "dark",
+        "seeds": {
+          "accent": "#8844cc",
+          "secondary": "#8397b5",
+          "surface": "#171c27",
+          "text": "#eef2f8"
+        },
+        "imageLength": 7279,
+        "renderedBase": "#171c27",
+        "opacity": "0.3",
+        "blur": "blur(7px)"
+      },
+      {
+        "id": "custom",
+        "appearance": "dark",
+        "seeds": {
+          "accent": "#8844cc",
+          "secondary": "#8397b5",
+          "surface": "#171c27",
+          "text": "#eef2f8"
+        },
+        "imageLength": 7279,
+        "renderedBase": "#171c27",
+        "opacity": "0.3",
+        "blur": "blur(7px)"
+      },
+      {
+        "id": "custom",
+        "appearance": "dark",
+        "seeds": {
+          "accent": "#8844cc",
+          "secondary": "#8397b5",
+          "surface": "#171c27",
+          "text": "#eef2f8"
+        },
+        "imageLength": 7279,
+        "renderedBase": "#171c27",
+        "opacity": "0.3",
+        "blur": "blur(7px)"
+      }
+    ],
+    "errors": []
+  },
+  "officialDefaultBeforeRemoval": {
+    "base": "#fff",
+    "selected": ""
+  },
+  "removal": {
+    "officialCliRemove": true,
+    "packageAbsent": true,
+    "controls": false,
+    "background": false,
+    "base": "#fff",
+    "savedPreferencesPreserved": true
+  },
+  "pageErrorsDuringChecks": [],
+  "evidence": [
+    {
+      "name": "feature-probe.json",
+      "sha256": "989a94bbce0dacebf06cc33d8be66f42bdc0acb71aa8b30448a229bbc034b8d8",
+      "bytes": 3028
+    },
+    {
+      "name": "cold-probe.json",
+      "sha256": "83495fe6a31a57020bc04f833a54ac16c238979d66f35c8749fb681eba028778",
+      "bytes": 1302
+    },
+    {
+      "name": "removal-probe.json",
+      "sha256": "e531bcd26842eee914ced2f4a67594d06c4b70ec228efe79fcd08cac419e4321",
+      "bytes": 52
+    },
+    {
+      "name": "final-dark.png",
+      "sha256": "c8fe8f385a6932c6665c32026a0c1a50cd73a5371f88bdb7cf0af6069f418773",
+      "bytes": 101984
+    },
+    {
+      "name": "mobile-controls.png",
+      "sha256": "1386d259fe1b6fbba2d1ab6457fdb2271c2cb041e18283fca32b82d953427bdb",
+      "bytes": 47606
+    },
+    {
+      "name": "cold-restart.png",
+      "sha256": "0d8d2821fe53e396a89caab772ea773b72fa66fe39fa85c1edfe60c390fac823",
+      "bytes": 53863
+    },
+    {
+      "name": "removed.png",
+      "sha256": "c93af95799e9c31e907e2aa28c831fb122c7a90c93b180c9d3b3e7ca7c4bac2c",
+      "bytes": 28478
+    }
+  ],
+  "limitations": [
+    "The adaptation contains original palette seeds and color derivation; upstream character illustrations and source-patching features are excluded.",
+    "The local wallpaper sample is a DSH Themes original image. No third-party image rights were inferred."
+  ]
+}

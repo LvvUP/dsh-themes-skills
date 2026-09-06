@@ -1,0 +1,660 @@
+{
+  "schemaVersion": 1,
+  "catalogId": 2305,
+  "verifiedAt": "2026-09-06T01:01:49.712Z",
+  "dshVersion": "0.1.3-alpha.1",
+  "dshSourceRevision": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "packageName": "@dsh-themes/community-dsh-homepage-skin",
+  "packageVersion": "0.1.12-dsh-alpha.1",
+  "artifactSha256": "abc28e4ced1560efa79b2ba741ebc5c829ac497baf84024201efb2aae93a3859",
+  "installation": {
+    "officialCliAdd": true,
+    "exactPackagePresent": true,
+    "profile": "web"
+  },
+  "boot": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-dsh-homepage-skin": ""
+      },
+      "base": "#fff",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        }
+      ],
+      "newSessionButton": {
+        "color": "rgb(15, 17, 21)",
+        "background": "rgb(255, 255, 255)"
+      },
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0,
+      "skinState": {
+        "persisted": {},
+        "nodes": [],
+        "composerBlur": "none",
+        "scenery": {
+          "overlay": null,
+          "activeSlides": 0
+        }
+      }
+    },
+    "modes": [
+      {
+        "mode": "light",
+        "title": "DeepSeek Harness",
+        "attrs": {
+          "data-dsh-homepage-skin": ""
+        },
+        "base": "#fff",
+        "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始",
+        "buttons": [
+          {
+            "text": "",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "收起侧边栏"
+          },
+          {
+            "text": "新会话",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "搜索会话"
+          },
+          {
+            "text": "",
+            "aria": "视图选项"
+          },
+          {
+            "text": "",
+            "aria": "添加工作区"
+          },
+          {
+            "text": "设置",
+            "aria": null
+          },
+          {
+            "text": "选择工作区",
+            "aria": "选择工作区"
+          },
+          {
+            "text": "标准模式",
+            "aria": null
+          },
+          {
+            "text": "",
+            "aria": "指令"
+          },
+          {
+            "text": "",
+            "aria": "添加附件"
+          },
+          {
+            "text": "",
+            "aria": "发送消息"
+          }
+        ],
+        "newSessionButton": {
+          "color": "rgb(15, 17, 21)",
+          "background": "rgb(255, 255, 255)"
+        },
+        "width": {
+          "viewport": 1280,
+          "scroll": 1280
+        },
+        "brokenImages": 0
+      },
+      {
+        "mode": "dark",
+        "title": "DeepSeek Harness",
+        "attrs": {
+          "data-dsh-homepage-skin": "",
+          "data-ds-dark-theme": ""
+        },
+        "base": "#151517",
+        "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始",
+        "buttons": [
+          {
+            "text": "",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "收起侧边栏"
+          },
+          {
+            "text": "新会话",
+            "aria": "新建会话"
+          },
+          {
+            "text": "",
+            "aria": "搜索会话"
+          },
+          {
+            "text": "",
+            "aria": "视图选项"
+          },
+          {
+            "text": "",
+            "aria": "添加工作区"
+          },
+          {
+            "text": "设置",
+            "aria": null
+          },
+          {
+            "text": "选择工作区",
+            "aria": "选择工作区"
+          },
+          {
+            "text": "标准模式",
+            "aria": null
+          },
+          {
+            "text": "",
+            "aria": "指令"
+          },
+          {
+            "text": "",
+            "aria": "添加附件"
+          },
+          {
+            "text": "",
+            "aria": "发送消息"
+          }
+        ],
+        "newSessionButton": {
+          "color": "rgb(249, 250, 251)",
+          "background": "rgb(67, 69, 74)"
+        },
+        "width": {
+          "viewport": 1280,
+          "scroll": 1280
+        },
+        "brokenImages": 0
+      }
+    ],
+    "controls": [
+      {
+        "action": "canvas-visible",
+        "state": "ok",
+        "active": true,
+        "canvases": [
+          {
+            "width": 1280,
+            "height": 900,
+            "dataLength": 34702
+          },
+          {
+            "width": 1280,
+            "height": 900,
+            "dataLength": 171974
+          },
+          {
+            "width": 1280,
+            "height": 900,
+            "dataLength": 69854
+          }
+        ],
+        "conversationBackground": "rgba(0, 0, 0, 0)",
+        "saved": null
+      },
+      {
+        "action": "homepage-disable",
+        "state": "stopped",
+        "active": false,
+        "canvases": [],
+        "conversationBackground": "rgb(255, 255, 255)",
+        "saved": "0"
+      },
+      {
+        "action": "homepage-enable",
+        "state": "ok",
+        "active": true,
+        "canvases": [
+          {
+            "width": 1280,
+            "height": 900,
+            "dataLength": 34702
+          },
+          {
+            "width": 1280,
+            "height": 900,
+            "dataLength": 157618
+          },
+          {
+            "width": 1280,
+            "height": 900,
+            "dataLength": 34702
+          }
+        ],
+        "conversationBackground": "rgba(0, 0, 0, 0)",
+        "saved": "1"
+      }
+    ],
+    "narrow": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-dsh-homepage-skin": "",
+        "data-ds-dark-theme": ""
+      },
+      "base": "#151517",
+      "text": "探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "打开侧边栏"
+        },
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        }
+      ],
+      "newSessionButton": {
+        "color": "rgb(249, 250, 251)",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "width": {
+        "viewport": 390,
+        "scroll": 390
+      },
+      "brokenImages": 0,
+      "skinState": {
+        "persisted": {
+          "dsh-homepage-skin:enabled": "1"
+        },
+        "nodes": [],
+        "composerBlur": "none",
+        "scenery": {
+          "overlay": null,
+          "activeSlides": 0
+        }
+      }
+    },
+    "geometry": [
+      {
+        "className": "Xakt6q_sidebarCol",
+        "left": 0,
+        "width": 56,
+        "right": 56
+      },
+      {
+        "className": "Xakt6q_centerCol",
+        "left": 56,
+        "width": 334,
+        "right": 390
+      }
+    ],
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": [],
+    "evidenceDirectory": "output/playwright/community-alpha/2305/abc28e4ced1560efa79b2ba741ebc5c829ac497baf84024201efb2aae93a3859"
+  },
+  "cold": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-ds-dark-theme": "",
+        "data-dsh-homepage-skin": ""
+      },
+      "base": "#151517",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        }
+      ],
+      "newSessionButton": {
+        "color": "rgb(249, 250, 251)",
+        "background": "rgb(67, 69, 74)"
+      },
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0,
+      "skinState": {
+        "persisted": {
+          "dsh-homepage-skin:enabled": "1"
+        },
+        "nodes": [],
+        "composerBlur": "none",
+        "scenery": {
+          "overlay": null,
+          "activeSlides": 0
+        }
+      }
+    },
+    "controls": [
+      {
+        "action": "canvas-visible",
+        "state": "ok",
+        "active": true,
+        "canvases": [
+          {
+            "width": 1280,
+            "height": 900,
+            "dataLength": 34702
+          },
+          {
+            "width": 1280,
+            "height": 900,
+            "dataLength": 176222
+          },
+          {
+            "width": 1280,
+            "height": 900,
+            "dataLength": 54438
+          }
+        ],
+        "conversationBackground": "rgba(0, 0, 0, 0)",
+        "saved": "1"
+      }
+    ],
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": [],
+    "evidenceDirectory": "output/playwright/community-alpha/2305/abc28e4ced1560efa79b2ba741ebc5c829ac497baf84024201efb2aae93a3859"
+  },
+  "coldProcessRestart": {
+    "before": {
+      "wrapper": 17083,
+      "listener": 17107,
+      "startedAt": "2026-09-06T01:01:51.969Z"
+    },
+    "after": {
+      "wrapper": 17404,
+      "listener": 17440,
+      "startedAt": "2026-09-06T01:02:07.281Z"
+    },
+    "portConfirmedClosed": true
+  },
+  "removed": {
+    "initial": {
+      "title": "DeepSeek Harness",
+      "attrs": {
+        "data-ds-dark-theme": ""
+      },
+      "base": "#151517",
+      "text": "新会话\n工作区\n暂无会话\n设置\n探索未至之境\n预览版\n选择工作区\n标准模式\n选择一个工作区开始",
+      "buttons": [
+        {
+          "text": "",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "收起侧边栏"
+        },
+        {
+          "text": "新会话",
+          "aria": "新建会话"
+        },
+        {
+          "text": "",
+          "aria": "搜索会话"
+        },
+        {
+          "text": "",
+          "aria": "视图选项"
+        },
+        {
+          "text": "",
+          "aria": "添加工作区"
+        },
+        {
+          "text": "设置",
+          "aria": null
+        },
+        {
+          "text": "选择工作区",
+          "aria": "选择工作区"
+        },
+        {
+          "text": "标准模式",
+          "aria": null
+        },
+        {
+          "text": "",
+          "aria": "指令"
+        },
+        {
+          "text": "",
+          "aria": "添加附件"
+        },
+        {
+          "text": "",
+          "aria": "发送消息"
+        }
+      ],
+      "newSessionButton": {
+        "color": "rgb(249, 250, 251)",
+        "background": "rgb(67, 69, 74)"
+      },
+      "width": {
+        "viewport": 1280,
+        "scroll": 1280
+      },
+      "brokenImages": 0,
+      "skinState": {
+        "persisted": {
+          "dsh-homepage-skin:enabled": "1"
+        },
+        "nodes": [],
+        "composerBlur": "none",
+        "scenery": {
+          "overlay": null,
+          "activeSlides": 0
+        }
+      }
+    },
+    "controls": [],
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "external": [],
+    "requestFailures": [],
+    "evidenceDirectory": "output/playwright/community-alpha/2305/abc28e4ced1560efa79b2ba741ebc5c829ac497baf84024201efb2aae93a3859"
+  },
+  "removal": {
+    "officialCliRemove": true,
+    "packageAbsent": true,
+    "skinAttributesAbsent": true,
+    "base": "#151517",
+    "process": {
+      "wrapper": 17728,
+      "listener": 17752,
+      "startedAt": "2026-09-06T01:02:18.254Z"
+    }
+  },
+  "status": "passed",
+  "sourceRepository": "yushi-xxh/dsh-homepage-skin",
+  "sourceRevision": "44933213da11f82caefd609ad1bdfe84ac95b3e0",
+  "licenseExpression": "MIT",
+  "environment": {
+    "os": "macOS",
+    "architecture": "arm64",
+    "node": "24.15.0",
+    "browser": "Google Chrome 152.0.7977.76",
+    "installationPnpm": "11.7.0"
+  },
+  "limitations": [
+    "Executed on this macOS arm64 host with an isolated web profile and no model credentials. No Linux, Windows, other-browser, user-session or model-call coverage is claimed.",
+    "Viewport checks used 1280×900 and 390×844 CSS pixels on this desktop browser. They do not establish a touch device or a different browser.",
+    "Canvas rendering, the transparent conversation surface, settings enable/disable, light/dark appearance, same-origin saved state, and lifecycle were exercised. Reduced-motion, coarse-pointer, GPU-context loss, and other GPU/browser combinations were not exercised."
+  ],
+  "visualReview": {
+    "desktopLight": true,
+    "desktopDark": true,
+    "narrowMainView": true,
+    "removedBaseline": true
+  },
+  "adaptation": {
+    "author": "DSH Themes contributors",
+    "sourcePath": "assets/alpha/community-packages/dsh-homepage-skin",
+    "license": "MIT",
+    "description": "DSH Themes Alpha module ID and profile metadata; legacy defineStore import now uses the official shared client-store module. Original feature implementation, source coordinate and license retained."
+  },
+  "evidence": [
+    {
+      "path": "output/playwright/community-alpha/2305/abc28e4ced1560efa79b2ba741ebc5c829ac497baf84024201efb2aae93a3859/cold.png",
+      "sha256": "e846bca2a07d689a4748fb287eff13956655c63d574eddca5ec13f8268e303a2",
+      "bytes": 252998
+    },
+    {
+      "path": "output/playwright/community-alpha/2305/abc28e4ced1560efa79b2ba741ebc5c829ac497baf84024201efb2aae93a3859/dark.png",
+      "sha256": "4a0e7dcf126bdd547b42182ab2a955c0cef2a5eb2547b240359d0a9d7a73ec75",
+      "bytes": 242159
+    },
+    {
+      "path": "output/playwright/community-alpha/2305/abc28e4ced1560efa79b2ba741ebc5c829ac497baf84024201efb2aae93a3859/light.png",
+      "sha256": "754442e3d01c4800ab3e6391f782ff3273c1e50936c7be6eae08f77586ba919b",
+      "bytes": 148897
+    },
+    {
+      "path": "output/playwright/community-alpha/2305/abc28e4ced1560efa79b2ba741ebc5c829ac497baf84024201efb2aae93a3859/narrow-final.png",
+      "sha256": "fc2a069195e0cd14daba6c2a1bcdc8b7d29d2c4f90031af53e91ae131acd3061",
+      "bytes": 89407
+    },
+    {
+      "path": "output/playwright/community-alpha/2305/abc28e4ced1560efa79b2ba741ebc5c829ac497baf84024201efb2aae93a3859/removed.png",
+      "sha256": "5ac55fed77ec1fb21c38255aaf52327b9c50650777a85674b58c9b9fe3947414",
+      "bytes": 30094
+    }
+  ]
+}
