@@ -11,9 +11,17 @@ const REFRESHED_ALPHA_AUTHORITY_SHA256 =
   "eb66299a36c2c3e1431bcdd92826fe98f7e32e53825b1fa005d51b30c5520c39";
 const LAYOUT_ALPHA_AUTHORITY_SHA256 =
   "cfda9bf95549ea7d6d9d80aa2828123281d0940bdf0c916d6919acce284c4c50";
-const SHIBA_WELCOME_RECEIPT_ID = "shiba-welcome-panel-20260907";
-const SHIBA_WELCOME_RECEIPT_FILE =
-  "alpha-hosted-runtime-shiba-welcome-panel-20260907.json";
+const WELCOME_LAYOUT_RECEIPT_ID = "welcome-layout-20260907-6";
+const WELCOME_LAYOUT_RECEIPT_FILE =
+  "alpha-hosted-runtime-welcome-layout-20260907.json";
+const WELCOME_LAYOUT_TARGETS = [
+  { catalogId: 2019, slug: "st-basils-avant", version: "1.0.1-alpha.3" },
+  { catalogId: 2020, slug: "savanna-horizon", version: "1.0.1-alpha.3" },
+  { catalogId: 2027, slug: "mono-bloom", version: "1.0.0-alpha.3" },
+  { catalogId: 2035, slug: "tropical-matchday", version: "1.0.1-alpha.3" },
+  { catalogId: 2043, slug: "shiba-morning-post", version: "1.0.1-alpha.3" },
+  { catalogId: 2047, slug: "alhambra-mosaic", version: "1.0.0-alpha.3" },
+];
 export function stableAlphaJson(value) {
   const stable = (entry) =>
     Array.isArray(entry)
@@ -190,7 +198,7 @@ function validateAlphaHostedEntry(entry, ids = new Set(), tuples = new Set()) {
 /** Compose exact old and new item receipts without claiming the retained items were rerun. */
 export function validateAlphaHostedAuthority(authority, readReceipt) {
   if (authority.schemaVersion === 4)
-    return validateShibaWelcomeAuthority(authority, readReceipt);
+    return validateWelcomeLayoutAuthority(authority, readReceipt);
   if (
     ![1, 2, 3].includes(authority.schemaVersion) ||
     authority.sourceCommit !== ALPHA_SOURCE.commit ||
@@ -490,8 +498,8 @@ export function validateAlphaHostedAuthority(authority, readReceipt) {
   return authority;
 }
 
-/** A single opt-in layout upgrade. Historical schema 1–3 validation stays intact. */
-function validateShibaWelcomeAuthority(authority, readReceipt) {
+/** Restore six normal desktop layouts. Historical schema 1–3 validation stays intact. */
+function validateWelcomeLayoutAuthority(authority, readReceipt) {
   const parentFile = "alpha-hosted-artifacts-layout-20260906.json";
   if (
     authority.status !== "runtime-verified" ||
@@ -502,20 +510,22 @@ function validateShibaWelcomeAuthority(authority, readReceipt) {
         file: parentFile,
         sha256: LAYOUT_ALPHA_AUTHORITY_SHA256,
       }) ||
-    authority.retainedPackageCount !== 53 ||
-    authority.refreshedPackageCount !== 1 ||
+    authority.retainedPackageCount !== 48 ||
+    authority.refreshedPackageCount !== 6 ||
     !Array.isArray(authority.entries) ||
     authority.entries.length !== 54
   )
     throw new Error(
-      "The Shiba upgrade must bind its exact schema 3 parent and retain 53 entries.",
+      "The welcome layout upgrade must bind its exact schema 3 parent and retain 48 entries.",
     );
   const parentBytes = readReceipt(parentFile);
   if (alphaSha256(parentBytes) !== LAYOUT_ALPHA_AUTHORITY_SHA256)
     throw new Error("The prior layout Alpha authority digest differs.");
   const parent = JSON.parse(parentBytes.toString("utf8"));
   if (parent.schemaVersion !== 3)
-    throw new Error("The Shiba upgrade requires the original schema 3 parent.");
+    throw new Error(
+      "The welcome layout upgrade requires the original schema 3 parent.",
+    );
   validateAlphaHostedAuthority(parent, readReceipt);
   const registrations = authority.receiptRegistry;
   if (
@@ -525,7 +535,7 @@ function validateShibaWelcomeAuthority(authority, readReceipt) {
       stableAlphaJson(parent.receiptRegistry)
   )
     throw new Error(
-      "The Shiba upgrade must preserve all four historical receipts.",
+      "The welcome layout upgrade must preserve all four historical receipts.",
     );
   const registration = registrations[4];
   if (
@@ -537,16 +547,18 @@ function validateShibaWelcomeAuthority(authority, readReceipt) {
         "sha256",
         "verifiedPackageCount",
       ]) ||
-    registration.id !== SHIBA_WELCOME_RECEIPT_ID ||
-    registration.file !== SHIBA_WELCOME_RECEIPT_FILE ||
-    registration.verifiedPackageCount !== 1 ||
+    registration.id !== WELCOME_LAYOUT_RECEIPT_ID ||
+    registration.file !== WELCOME_LAYOUT_RECEIPT_FILE ||
+    registration.verifiedPackageCount !== 6 ||
     !/^[a-f0-9]{64}$/.test(registration.sha256 ?? "") ||
     !/^[a-f0-9]{64}$/.test(registration.indexSha256 ?? "")
   )
-    throw new Error("Invalid single-item Shiba receipt path or identity.");
+    throw new Error(
+      "Invalid six-item welcome layout receipt path or identity.",
+    );
   const receiptBytes = readReceipt(registration.file);
   if (alphaSha256(receiptBytes) !== registration.sha256)
-    throw new Error("The Shiba lifecycle receipt digest differs.");
+    throw new Error("The welcome layout lifecycle receipt digest differs.");
   const receipt = JSON.parse(receiptBytes.toString("utf8"));
   if (
     receipt.schemaVersion !== 1 ||
@@ -556,21 +568,22 @@ function validateShibaWelcomeAuthority(authority, readReceipt) {
     receipt.dshVersion !== ALPHA_SOURCE.version ||
     receipt.sourceCommit !== ALPHA_SOURCE.commit ||
     stableAlphaJson(receipt.requestedSlugs) !==
-      stableAlphaJson(["shiba-morning-post"]) ||
+      stableAlphaJson(WELCOME_LAYOUT_TARGETS.map((target) => target.slug)) ||
     !Array.isArray(receipt.results) ||
-    receipt.results.length !== 1 ||
-    receipt.results[0].catalogId !== 2043
+    receipt.results.length !== 6 ||
+    stableAlphaJson(
+      receipt.results.map((row) => row.catalogId).sort((a, b) => a - b),
+    ) !==
+      stableAlphaJson(WELCOME_LAYOUT_TARGETS.map((target) => target.catalogId))
   )
-    throw new Error("The Shiba final receipt must cover exactly #2043.");
-  const previous = parent.entries.find((entry) => entry.catalogId === 2043);
-  const entry = authority.entries.find((entry) => entry.catalogId === 2043);
-  if (
-    !entry ||
-    authority.entries.filter((row) => row.catalogId === 2043).length !== 1
-  )
-    throw new Error("The Shiba upgrade cannot add or reassign catalog IDs.");
+    throw new Error(
+      "The welcome layout final receipt must cover exactly #2019, #2020, #2027, #2035, #2043 and #2047.",
+    );
+  const refreshedIds = new Set(
+    WELCOME_LAYOUT_TARGETS.map((target) => target.catalogId),
+  );
   for (const retained of parent.entries.filter(
-    (row) => row.catalogId !== 2043,
+    (row) => !refreshedIds.has(row.catalogId),
   )) {
     const rows = authority.entries.filter(
       (row) => row.catalogId === retained.catalogId,
@@ -583,7 +596,6 @@ function validateShibaWelcomeAuthority(authority, readReceipt) {
         `Retained Alpha artifact #${retained.catalogId} changed.`,
       );
   }
-  validateAlphaHostedEntry(entry);
   const entryIdentity = ({
     version,
     artifactSha256,
@@ -600,97 +612,120 @@ function validateShibaWelcomeAuthority(authority, readReceipt) {
       ),
     ),
   );
-  if (
-    stableAlphaJson(entryIdentity(entry)) !==
-      stableAlphaJson(entryIdentity(previous)) ||
-    previous.version !== "1.0.1-alpha.2" ||
-    entry.version !== "1.0.1-alpha.3" ||
-    entry.runtimeReceiptId !== SHIBA_WELCOME_RECEIPT_ID ||
-    oldArtifacts.has(entry.artifactSha256) ||
-    entry.payloadSha256 === previous.payloadSha256 ||
-    entry.manifestCanonicalSha256 === previous.manifestCanonicalSha256
-  )
-    throw new Error(
-      "The Shiba upgrade has a stale or reassigned artifact identity.",
+  for (const target of WELCOME_LAYOUT_TARGETS) {
+    const previous = parent.entries.find(
+      (row) => row.catalogId === target.catalogId,
     );
-  const manifest = entry.releaseRecord.manifest,
-    oldManifest = previous.releaseRecord.manifest;
-  const manifestIdentity = ({
-    version,
-    artifact,
-    payload,
-    visual,
-    preview,
-    assets,
-    ...identity
-  }) => identity;
-  const recordIdentity = ({
-    manifest,
-    artifactUrl,
-    artifactSha256,
-    ...identity
-  }) => identity;
-  if (
-    stableAlphaJson(manifestIdentity(manifest)) !==
-      stableAlphaJson(manifestIdentity(oldManifest)) ||
-    stableAlphaJson(recordIdentity(entry.releaseRecord)) !==
-      stableAlphaJson(recordIdentity(previous.releaseRecord)) ||
-    entry.releaseRecord.artifactUrl !==
-      `https://dsh-themes.com/api/themes/${entry.slug}/download/${entry.version}` ||
-    stableAlphaJson(manifest.visual) !==
-      stableAlphaJson({
-        ...oldManifest.visual,
-        mobileWelcomeOffset: -60,
-        welcomeSurfaceStyle: "panel",
-      }) ||
-    !Array.isArray(manifest.assets) ||
-    manifest.assets.length !== oldManifest.assets.length ||
-    stableAlphaJson(
-      manifest.assets.filter((asset) => !asset.role.startsWith("preview-")),
-    ) !==
-      stableAlphaJson(
-        oldManifest.assets.filter(
-          (asset) => !asset.role.startsWith("preview-"),
-        ),
-      )
-  )
-    throw new Error(
-      "The Shiba upgrade must preserve its artwork, tokens and existing design identity.",
+    const rows = authority.entries.filter(
+      (row) => row.catalogId === target.catalogId,
     );
-  for (const mode of ["light", "dark"]) {
-    const preview = manifest.preview?.[mode];
-    const assets = manifest.assets.filter(
-      (asset) => asset.role === `preview-${mode}`,
-    );
+    if (rows.length !== 1)
+      throw new Error(
+        "The welcome layout upgrade cannot add or reassign catalog IDs.",
+      );
+    const entry = rows[0];
+    validateAlphaHostedEntry(entry);
     if (
-      !preview ||
-      !/^[a-f0-9]{64}$/.test(preview.sha256 ?? "") ||
-      preview.sha256 === oldManifest.preview[mode].sha256 ||
-      preview.source !== "runtime" ||
-      assets.length !== 1 ||
-      assets[0].sha256 !== preview.sha256 ||
-      assets[0].url !== preview.url ||
-      assets[0].path !== `assets/${preview.sha256}.webp` ||
-      preview.url !==
-        `/__dsh-themes/${entry.slug}/assets/${preview.sha256}.webp` ||
-      assets[0].mimeType !== "image/webp" ||
-      !Number.isSafeInteger(assets[0].sizeBytes) ||
-      assets[0].sizeBytes <= 0 ||
-      ![preview.width, preview.height].every(
-        (value) => Number.isSafeInteger(value) && value > 0,
-      ) ||
-      assets[0].width !== preview.width ||
-      assets[0].height !== preview.height
+      stableAlphaJson(entryIdentity(entry)) !==
+        stableAlphaJson(entryIdentity(previous)) ||
+      previous.version !== target.version.replace(/alpha\.3$/, "alpha.2") ||
+      entry.version !== target.version ||
+      entry.slug !== target.slug ||
+      entry.runtimeReceiptId !== WELCOME_LAYOUT_RECEIPT_ID ||
+      oldArtifacts.has(entry.artifactSha256) ||
+      entry.payloadSha256 === previous.payloadSha256 ||
+      entry.manifestCanonicalSha256 === previous.manifestCanonicalSha256
     )
       throw new Error(
-        "The Shiba upgrade needs complete new runtime previews in both modes.",
+        "The welcome layout upgrade has a stale or reassigned artifact identity.",
       );
+    const manifest = entry.releaseRecord.manifest,
+      oldManifest = previous.releaseRecord.manifest;
+    const manifestIdentity = ({
+      version,
+      artifact,
+      payload,
+      visual,
+      preview,
+      assets,
+      ...identity
+    }) => identity;
+    const recordIdentity = ({
+      manifest,
+      artifactUrl,
+      artifactSha256,
+      ...identity
+    }) => identity;
+    if (
+      stableAlphaJson(manifestIdentity(manifest)) !==
+        stableAlphaJson(manifestIdentity(oldManifest)) ||
+      stableAlphaJson(recordIdentity(entry.releaseRecord)) !==
+        stableAlphaJson(recordIdentity(previous.releaseRecord)) ||
+      entry.releaseRecord.artifactUrl !==
+        `https://dsh-themes.com/api/themes/${entry.slug}/download/${entry.version}` ||
+      stableAlphaJson(manifest.visual) !==
+        stableAlphaJson(
+          Object.fromEntries(
+            Object.entries(oldManifest.visual).filter(
+              ([key]) =>
+                !["desktopWelcomeLayout", "desktopWelcomeSurface"].includes(
+                  key,
+                ),
+            ),
+          ),
+        ) ||
+      !Array.isArray(manifest.assets) ||
+      manifest.assets.length !== oldManifest.assets.length ||
+      stableAlphaJson(
+        manifest.assets.filter((asset) => !asset.role.startsWith("preview-")),
+      ) !==
+        stableAlphaJson(
+          oldManifest.assets.filter(
+            (asset) => !asset.role.startsWith("preview-"),
+          ),
+        )
+    )
+      throw new Error(
+        "The welcome layout upgrade must preserve its artwork, tokens and existing design identity.",
+      );
+    for (const mode of ["light", "dark"]) {
+      const preview = manifest.preview?.[mode];
+      const assets = manifest.assets.filter(
+        (asset) => asset.role === `preview-${mode}`,
+      );
+      if (
+        !preview ||
+        !/^[a-f0-9]{64}$/.test(preview.sha256 ?? "") ||
+        preview.sha256 === oldManifest.preview[mode].sha256 ||
+        preview.source !== "runtime" ||
+        assets.length !== 1 ||
+        assets[0].sha256 !== preview.sha256 ||
+        assets[0].url !== preview.url ||
+        assets[0].path !== `assets/${preview.sha256}.webp` ||
+        preview.url !==
+          `/__dsh-themes/${entry.slug}/assets/${preview.sha256}.webp` ||
+        assets[0].mimeType !== "image/webp" ||
+        !Number.isSafeInteger(assets[0].sizeBytes) ||
+        assets[0].sizeBytes <= 0 ||
+        ![preview.width, preview.height].every(
+          (value) => Number.isSafeInteger(value) && value > 0,
+        ) ||
+        assets[0].width !== preview.width ||
+        assets[0].height !== preview.height
+      )
+        throw new Error(
+          "The welcome layout upgrade needs complete new runtime previews in both modes.",
+        );
+    }
+    validateWelcomeLayoutLifecycle(
+      receipt.results.find((row) => row.catalogId === target.catalogId),
+      entry,
+    );
   }
-  validateShibaWelcomeLifecycle(receipt.results[0], entry);
   return authority;
 }
 
-function validateShibaWelcomeLifecycle(result, entry) {
+function validateWelcomeLayoutLifecycle(result, entry) {
   const phases = ["rendered", "coldRestart", "recovery"];
   if (
     result.slug !== entry.slug ||
@@ -707,7 +742,7 @@ function validateShibaWelcomeLifecycle(result, entry) {
     )
   )
     throw new Error(
-      "The Shiba lifecycle contains an invalid or failed package row.",
+      "The welcome layout lifecycle contains an invalid or failed package row.",
     );
   validateLayoutFixSettings(result, phases);
   const manifest = entry.releaseRecord.manifest;
@@ -715,7 +750,7 @@ function validateShibaWelcomeLifecycle(result, entry) {
     const modes = result[phase].modes;
     if (phase !== "coldRestart" && modes.length !== 2)
       throw new Error(
-        "The Shiba lifecycle requires both rendered and recovered modes.",
+        "The welcome layout lifecycle requires both rendered and recovered modes.",
       );
     for (const mode of modes) {
       if (
@@ -725,7 +760,7 @@ function validateShibaWelcomeLifecycle(result, entry) {
         mode.colorScheme !== mode.mode
       )
         throw new Error(
-          "The Shiba lifecycle has an unreadable or incorrect mode.",
+          "The welcome layout lifecycle has an unreadable or incorrect mode.",
         );
       if (phase === "recovery") {
         if (
@@ -734,7 +769,7 @@ function validateShibaWelcomeLifecycle(result, entry) {
           mode.backgroundImage !== "none"
         )
           throw new Error(
-            "Shiba removal did not recover the original interface.",
+            "Theme removal did not recover the original interface.",
           );
         continue;
       }
@@ -752,37 +787,11 @@ function validateShibaWelcomeLifecycle(result, entry) {
           ) ||
         mode.settingsLayout.closeClick !== "passed" ||
         mode.settingsLayout.escape !== "passed" ||
-        !Array.isArray(mode.welcomeSurfaces) ||
-        mode.welcomeSurfaces.length !== 2 ||
-        stableAlphaJson(
-          mode.welcomeSurfaces.map((surface) => surface.name).sort(),
-        ) !== stableAlphaJson(["headline", "workspace"])
+        Object.hasOwn(mode, "welcomeSurfaces")
       )
         throw new Error(
-          "The Shiba welcome panel lacks readable measured content or Settings interaction evidence.",
+          "The normal desktop welcome layout lacks Settings interactions or retains special surface evidence.",
         );
-      for (const surface of mode.welcomeSurfaces) {
-        const rect = surface.bounds,
-          viewport = mode.settingsLayout.geometry.viewport;
-        if (
-          !Number.isFinite(surface.contrast) ||
-          surface.contrast < 4.5 ||
-          surface.backgroundOpaque !== true ||
-          !Number.isFinite(surface.controlHeight) ||
-          surface.controlHeight < 24 ||
-          !rect ||
-          ![rect.x, rect.y, rect.width, rect.height].every(Number.isFinite) ||
-          rect.width <= 0 ||
-          rect.height <= 0 ||
-          rect.x < 0 ||
-          rect.y < 0 ||
-          rect.x + rect.width > viewport.width + 1 ||
-          rect.y + rect.height > viewport.height + 1
-        )
-          throw new Error(
-            "The Shiba welcome panel has clipped or low-contrast content.",
-          );
-      }
       const expectedResources = [
         { role: "skin-css", url: mode.stylesheet },
         ...manifest.assets,
@@ -791,7 +800,9 @@ function validateShibaWelcomeLifecycle(result, entry) {
         !Array.isArray(mode.resources) ||
         mode.resources.length !== expectedResources.length
       )
-        throw new Error("The Shiba runtime resource coverage is incomplete.");
+        throw new Error(
+          "The welcome layout runtime resource coverage is incomplete.",
+        );
       for (const expected of expectedResources) {
         const matches = mode.resources.filter(
           (resource) => resource.role === expected.role,
@@ -810,7 +821,7 @@ function validateShibaWelcomeLifecycle(result, entry) {
           resource.sizeBytes <= 0
         )
           throw new Error(
-            "The Shiba runtime loaded an incorrect artifact or preview resource.",
+            "The welcome layout runtime loaded an incorrect artifact or preview resource.",
           );
       }
     }
@@ -830,7 +841,9 @@ function validateShibaWelcomeLifecycle(result, entry) {
         ).length !== 1,
     )
   )
-    throw new Error("The Shiba removal has surviving artifact resources.");
+    throw new Error(
+      "The welcome layout removal has surviving artifact resources.",
+    );
 }
 
 export function validateAlphaRelease(record, rawOrigin) {

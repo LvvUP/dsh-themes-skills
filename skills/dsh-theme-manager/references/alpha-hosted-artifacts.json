@@ -7,8 +7,8 @@
     "file": "alpha-hosted-artifacts-layout-20260906.json",
     "sha256": "cfda9bf95549ea7d6d9d80aa2828123281d0940bdf0c916d6919acce284c4c50"
   },
-  "retainedPackageCount": 53,
-  "refreshedPackageCount": 1,
+  "retainedPackageCount": 48,
+  "refreshedPackageCount": 6,
   "receiptRegistry": [
     {
       "id": "initial-alpha-54",
@@ -39,11 +39,11 @@
       "verifiedPackageCount": 14
     },
     {
-      "id": "shiba-welcome-panel-20260907",
-      "file": "alpha-hosted-runtime-shiba-welcome-panel-20260907.json",
-      "sha256": "11e71360129f8455103b2db2a20643edb9ae0a49ca08e2f40bbc97c2aff74c1c",
-      "indexSha256": "02831f70c9faf3d9fc479877c57bdd7c58cdfad36cafe00fe4ee811ae01c557a",
-      "verifiedPackageCount": 1
+      "id": "welcome-layout-20260907-6",
+      "file": "alpha-hosted-runtime-welcome-layout-20260907.json",
+      "sha256": "125ab19f63711cc3877bd660b73a38ec705d0228692b9f8477584fc0d4b169a3",
+      "indexSha256": "51385305f819ca9446868f38b485cccae6ff2c9b5c38c012f2d8dc7d9ed09192",
+      "verifiedPackageCount": 6
     }
   ],
   "entries": [
@@ -5944,11 +5944,11 @@
       "kind": "full-skin",
       "name": "St. Basil's Avant",
       "packageName": "@dsh-themes/st-basils-avant",
-      "version": "1.0.1-alpha.2",
+      "version": "1.0.1-alpha.3",
       "status": "runtime-verified",
-      "artifactSha256": "de5d72479b4a358a9f0659555f5c96eae79226c48885f32198051c81d2ac449e",
-      "manifestCanonicalSha256": "8c53e0d4bfae5e4310754e8d7cf7d6ede467c276cb4a8274a82f5b06fbcaca50",
-      "payloadSha256": "b94e4f05908c29abd3cfd4f472426c7e13b6a55495ba84b57897bd2027c2ea42",
+      "artifactSha256": "7bd94d706d868257b849df1fb6c2089bad12588e4edce3fac581b9f1e853f5b9",
+      "manifestCanonicalSha256": "c55b605bd139249b75d978a15bb849ea6a074f13617b597a6242aa8c4a22d4cd",
+      "payloadSha256": "44246ed0b30d4474f880e97347cd306ac04f6c33498993b121347d72628e6871",
       "releaseRecord": {
         "manifest": {
           "schemaVersion": "3.0",
@@ -5961,7 +5961,7 @@
             "name": "DSH-Themes"
           },
           "license": "CC-BY-4.0",
-          "version": "1.0.1-alpha.2",
+          "version": "1.0.1-alpha.3",
           "copyright": {
             "source": "generated",
             "attribution": "Original clean-room artwork generated with OpenAI built-in image generation for DSH-Themes from public architecture and general geometric vocabulary. No coat of arms, flag, political propaganda, specific artwork, or artist style was copied.",
@@ -6087,8 +6087,7 @@
             "surfaceOpacity": 0.94,
             "overlayOpacity": 0.29,
             "borderStrength": 0.72,
-            "glowStrength": 0.05,
-            "desktopWelcomeSurface": true
+            "glowStrength": 0.05
           },
           "assets": [
             {
@@ -6123,21 +6122,21 @@
             },
             {
               "role": "preview-light",
-              "path": "assets/e6bb40e856f06228b904aa18221946f527376bf10d35ea68d39a0974f6a74758.webp",
-              "url": "/__dsh-themes/st-basils-avant/assets/e6bb40e856f06228b904aa18221946f527376bf10d35ea68d39a0974f6a74758.webp",
-              "sha256": "e6bb40e856f06228b904aa18221946f527376bf10d35ea68d39a0974f6a74758",
+              "path": "assets/e6bd4651c778de593dbd445a17f57fcb420229b55c3c760635207b4483e4b816.webp",
+              "url": "/__dsh-themes/st-basils-avant/assets/e6bd4651c778de593dbd445a17f57fcb420229b55c3c760635207b4483e4b816.webp",
+              "sha256": "e6bd4651c778de593dbd445a17f57fcb420229b55c3c760635207b4483e4b816",
               "mimeType": "image/webp",
-              "sizeBytes": 66792,
+              "sizeBytes": 72590,
               "width": 960,
               "height": 600
             },
             {
               "role": "preview-dark",
-              "path": "assets/4819bd4a51e0e785da2c59cb67f33f69ad5eeab03d0177462cdeeacc19caf8d8.webp",
-              "url": "/__dsh-themes/st-basils-avant/assets/4819bd4a51e0e785da2c59cb67f33f69ad5eeab03d0177462cdeeacc19caf8d8.webp",
-              "sha256": "4819bd4a51e0e785da2c59cb67f33f69ad5eeab03d0177462cdeeacc19caf8d8",
+              "path": "assets/394625b35f58c843e2d595c3c76b92e9b5617df6112da615d02061b258edfa5f.webp",
+              "url": "/__dsh-themes/st-basils-avant/assets/394625b35f58c843e2d595c3c76b92e9b5617df6112da615d02061b258edfa5f.webp",
+              "sha256": "394625b35f58c843e2d595c3c76b92e9b5617df6112da615d02061b258edfa5f",
               "mimeType": "image/webp",
-              "sizeBytes": 47548,
+              "sizeBytes": 51424,
               "width": 960,
               "height": 600
             }
@@ -6150,15 +6149,15 @@
           },
           "preview": {
             "light": {
-              "url": "/__dsh-themes/st-basils-avant/assets/e6bb40e856f06228b904aa18221946f527376bf10d35ea68d39a0974f6a74758.webp",
-              "sha256": "e6bb40e856f06228b904aa18221946f527376bf10d35ea68d39a0974f6a74758",
+              "url": "/__dsh-themes/st-basils-avant/assets/e6bd4651c778de593dbd445a17f57fcb420229b55c3c760635207b4483e4b816.webp",
+              "sha256": "e6bd4651c778de593dbd445a17f57fcb420229b55c3c760635207b4483e4b816",
               "width": 960,
               "height": 600,
               "source": "runtime"
             },
             "dark": {
-              "url": "/__dsh-themes/st-basils-avant/assets/4819bd4a51e0e785da2c59cb67f33f69ad5eeab03d0177462cdeeacc19caf8d8.webp",
-              "sha256": "4819bd4a51e0e785da2c59cb67f33f69ad5eeab03d0177462cdeeacc19caf8d8",
+              "url": "/__dsh-themes/st-basils-avant/assets/394625b35f58c843e2d595c3c76b92e9b5617df6112da615d02061b258edfa5f.webp",
+              "sha256": "394625b35f58c843e2d595c3c76b92e9b5617df6112da615d02061b258edfa5f",
               "width": 960,
               "height": 600,
               "source": "runtime"
@@ -6166,21 +6165,21 @@
           },
           "artifact": {
             "name": "@dsh-themes/st-basils-avant",
-            "version": "1.0.1-alpha.2",
-            "fileName": "st-basils-avant-1.0.1-alpha.2.tgz",
-            "sha256": "de5d72479b4a358a9f0659555f5c96eae79226c48885f32198051c81d2ac449e",
-            "integrity": "sha256-3l1yR5tKNYqfBllVX1yW6ueSJsSIhfMhmAUcgdKsRJ4=",
+            "version": "1.0.1-alpha.3",
+            "fileName": "st-basils-avant-1.0.1-alpha.3.tgz",
+            "sha256": "7bd94d706d868257b849df1fb6c2089bad12588e4edce3fac581b9f1e853f5b9",
+            "integrity": "sha256-e9lNcG2Ggle4Sd8ftsIIm60SWI5O3OP6xYG58ehT9bk=",
             "digestScope": "artifact-tgz"
           },
           "payload": {
-            "fileName": "st-basils-avant-1.0.1-alpha.2.payload.tar",
-            "sha256": "b94e4f05908c29abd3cfd4f472426c7e13b6a55495ba84b57897bd2027c2ea42",
-            "integrity": "sha256-uU5PBZCMKavTz9T0ckJsfhO2pVSVuoS1eJe9ICfC6kI=",
+            "fileName": "st-basils-avant-1.0.1-alpha.3.payload.tar",
+            "sha256": "44246ed0b30d4474f880e97347cd306ac04f6c33498993b121347d72628e6871",
+            "integrity": "sha256-RCRu0LMNRHT4gOlzR80wasBPbDNJiZOxITR9cmKOaHE=",
             "digestScope": "canonical-tar-payload-excluding-manifest"
           }
         },
-        "artifactUrl": "https://dsh-themes.com/api/themes/st-basils-avant/download/1.0.1-alpha.2",
-        "artifactSha256": "de5d72479b4a358a9f0659555f5c96eae79226c48885f32198051c81d2ac449e",
+        "artifactUrl": "https://dsh-themes.com/api/themes/st-basils-avant/download/1.0.1-alpha.3",
+        "artifactSha256": "7bd94d706d868257b849df1fb6c2089bad12588e4edce3fac581b9f1e853f5b9",
         "verified": true,
         "distribution": {
           "kind": "hosted-verified-artifact",
@@ -6200,7 +6199,7 @@
           "lifecycle": "managed-cold-restart"
         }
       },
-      "runtimeReceiptId": "layout-final-corrections-20260906"
+      "runtimeReceiptId": "welcome-layout-20260907-6"
     },
     {
       "catalogId": 2020,
@@ -6208,11 +6207,11 @@
       "kind": "full-skin",
       "name": "Savanna Horizon",
       "packageName": "@dsh-themes/savanna-horizon",
-      "version": "1.0.1-alpha.2",
+      "version": "1.0.1-alpha.3",
       "status": "runtime-verified",
-      "artifactSha256": "2fc781c97d5a36b18d7a24fed91e7dc3a58edcc59a0781f0ced1629d085f9612",
-      "manifestCanonicalSha256": "435535dc136faafc3cdf38d22cd420c2b528e66a2c306c3deaaecebcea94c033",
-      "payloadSha256": "b5718720b3e0f2d073ca3411ff24471b6b16e31b5ee8c31fd8385833fcd88d9a",
+      "artifactSha256": "64d80161f3e29cc49a503f62575c78624e4b450f7a7c7ea34f6a6cbe43628622",
+      "manifestCanonicalSha256": "465011d07e7e37e39c0a065bcefebee972317d0aaed515ff19dc264d7ee1a3e3",
+      "payloadSha256": "636bb410afd83e94b043eb648591ee002c1cf56dc4a1405b7e90203e3229e5f9",
       "releaseRecord": {
         "manifest": {
           "schemaVersion": "3.0",
@@ -6225,7 +6224,7 @@
             "name": "DSH-Themes"
           },
           "license": "CC-BY-4.0",
-          "version": "1.0.1-alpha.2",
+          "version": "1.0.1-alpha.3",
           "copyright": {
             "source": "generated",
             "attribution": "Original wildlife artwork generated with OpenAI built-in image generation for DSH-Themes; it uses no generalized tribal pattern, stereotyped person, tourism logo, reserve identity, photographer composition, or branded safari imagery.",
@@ -6351,8 +6350,7 @@
             "surfaceOpacity": 0.94,
             "overlayOpacity": 0.29,
             "borderStrength": 0.63,
-            "glowStrength": 0.05,
-            "desktopWelcomeSurface": true
+            "glowStrength": 0.05
           },
           "assets": [
             {
@@ -6387,21 +6385,21 @@
             },
             {
               "role": "preview-light",
-              "path": "assets/1df460fb24a735c1953258cfe104027bfc8fd025505978b0241c6b2c5e49fb1c.webp",
-              "url": "/__dsh-themes/savanna-horizon/assets/1df460fb24a735c1953258cfe104027bfc8fd025505978b0241c6b2c5e49fb1c.webp",
-              "sha256": "1df460fb24a735c1953258cfe104027bfc8fd025505978b0241c6b2c5e49fb1c",
+              "path": "assets/0637ffaf012fc65d0474987bf6cc7a3451dd025f98a79cfb9015cb61132c3020.webp",
+              "url": "/__dsh-themes/savanna-horizon/assets/0637ffaf012fc65d0474987bf6cc7a3451dd025f98a79cfb9015cb61132c3020.webp",
+              "sha256": "0637ffaf012fc65d0474987bf6cc7a3451dd025f98a79cfb9015cb61132c3020",
               "mimeType": "image/webp",
-              "sizeBytes": 80422,
+              "sizeBytes": 84124,
               "width": 960,
               "height": 600
             },
             {
               "role": "preview-dark",
-              "path": "assets/5645911b8f6add1fad95776c1e9fb3783dd8d077dea78abfd3d9ae2eddbc352c.webp",
-              "url": "/__dsh-themes/savanna-horizon/assets/5645911b8f6add1fad95776c1e9fb3783dd8d077dea78abfd3d9ae2eddbc352c.webp",
-              "sha256": "5645911b8f6add1fad95776c1e9fb3783dd8d077dea78abfd3d9ae2eddbc352c",
+              "path": "assets/40618f1b042f3b782e481f9711802ac8442dfc14b35b52a5dc368a890d199285.webp",
+              "url": "/__dsh-themes/savanna-horizon/assets/40618f1b042f3b782e481f9711802ac8442dfc14b35b52a5dc368a890d199285.webp",
+              "sha256": "40618f1b042f3b782e481f9711802ac8442dfc14b35b52a5dc368a890d199285",
               "mimeType": "image/webp",
-              "sizeBytes": 53596,
+              "sizeBytes": 54862,
               "width": 960,
               "height": 600
             }
@@ -6414,15 +6412,15 @@
           },
           "preview": {
             "light": {
-              "url": "/__dsh-themes/savanna-horizon/assets/1df460fb24a735c1953258cfe104027bfc8fd025505978b0241c6b2c5e49fb1c.webp",
-              "sha256": "1df460fb24a735c1953258cfe104027bfc8fd025505978b0241c6b2c5e49fb1c",
+              "url": "/__dsh-themes/savanna-horizon/assets/0637ffaf012fc65d0474987bf6cc7a3451dd025f98a79cfb9015cb61132c3020.webp",
+              "sha256": "0637ffaf012fc65d0474987bf6cc7a3451dd025f98a79cfb9015cb61132c3020",
               "width": 960,
               "height": 600,
               "source": "runtime"
             },
             "dark": {
-              "url": "/__dsh-themes/savanna-horizon/assets/5645911b8f6add1fad95776c1e9fb3783dd8d077dea78abfd3d9ae2eddbc352c.webp",
-              "sha256": "5645911b8f6add1fad95776c1e9fb3783dd8d077dea78abfd3d9ae2eddbc352c",
+              "url": "/__dsh-themes/savanna-horizon/assets/40618f1b042f3b782e481f9711802ac8442dfc14b35b52a5dc368a890d199285.webp",
+              "sha256": "40618f1b042f3b782e481f9711802ac8442dfc14b35b52a5dc368a890d199285",
               "width": 960,
               "height": 600,
               "source": "runtime"
@@ -6430,21 +6428,21 @@
           },
           "artifact": {
             "name": "@dsh-themes/savanna-horizon",
-            "version": "1.0.1-alpha.2",
-            "fileName": "savanna-horizon-1.0.1-alpha.2.tgz",
-            "sha256": "2fc781c97d5a36b18d7a24fed91e7dc3a58edcc59a0781f0ced1629d085f9612",
-            "integrity": "sha256-L8eByX1aNrGNeiT+2R59w6WO3MWaB4HwztFinQhflhI=",
+            "version": "1.0.1-alpha.3",
+            "fileName": "savanna-horizon-1.0.1-alpha.3.tgz",
+            "sha256": "64d80161f3e29cc49a503f62575c78624e4b450f7a7c7ea34f6a6cbe43628622",
+            "integrity": "sha256-ZNgBYfPinMSaUD9iV1x4Yk5LRQ96fH6jT2psvkNihiI=",
             "digestScope": "artifact-tgz"
           },
           "payload": {
-            "fileName": "savanna-horizon-1.0.1-alpha.2.payload.tar",
-            "sha256": "b5718720b3e0f2d073ca3411ff24471b6b16e31b5ee8c31fd8385833fcd88d9a",
-            "integrity": "sha256-tXGHILPg8tBzyjQR/yRHG2sW4xte6MMf2DhYM/zYjZo=",
+            "fileName": "savanna-horizon-1.0.1-alpha.3.payload.tar",
+            "sha256": "636bb410afd83e94b043eb648591ee002c1cf56dc4a1405b7e90203e3229e5f9",
+            "integrity": "sha256-Y2u0EK/YPpSwQ+tkhZHuACwc9W3EoUBbfpAgPjIp5fk=",
             "digestScope": "canonical-tar-payload-excluding-manifest"
           }
         },
-        "artifactUrl": "https://dsh-themes.com/api/themes/savanna-horizon/download/1.0.1-alpha.2",
-        "artifactSha256": "2fc781c97d5a36b18d7a24fed91e7dc3a58edcc59a0781f0ced1629d085f9612",
+        "artifactUrl": "https://dsh-themes.com/api/themes/savanna-horizon/download/1.0.1-alpha.3",
+        "artifactSha256": "64d80161f3e29cc49a503f62575c78624e4b450f7a7c7ea34f6a6cbe43628622",
         "verified": true,
         "distribution": {
           "kind": "hosted-verified-artifact",
@@ -6464,7 +6462,7 @@
           "lifecycle": "managed-cold-restart"
         }
       },
-      "runtimeReceiptId": "layout-final-corrections-20260906"
+      "runtimeReceiptId": "welcome-layout-20260907-6"
     },
     {
       "catalogId": 2021,
@@ -8053,11 +8051,11 @@
       "kind": "full-skin",
       "name": "Mono Bloom",
       "packageName": "@dsh-themes/mono-bloom",
-      "version": "1.0.0-alpha.2",
+      "version": "1.0.0-alpha.3",
       "status": "runtime-verified",
-      "artifactSha256": "b2f9f36ec80118f8ce40528d9b0891c7894547cd58968a131e742eb1d20611b6",
-      "manifestCanonicalSha256": "1c3646661f3e6ef9720a0ceb43a6094aec0a8e84a2bffe6b34b2bc0f69f2481b",
-      "payloadSha256": "66c2e508ebdcb5815fe9f841f3d20d49214858c2810b171b6417cb184a7c96e1",
+      "artifactSha256": "a8c21b06ec0b486fde337a3770310896292e15e6f6d5ef3aede53a12514b6d65",
+      "manifestCanonicalSha256": "a06c02ec3eaf316a2fde853485d8da1d8411933044d7128a49093b2b62a8bbaf",
+      "payloadSha256": "c0c96360712d8269cae0198ae9e0c44cb41e9c90e4d96273bfb5f74962031bfa",
       "releaseRecord": {
         "manifest": {
           "schemaVersion": "3.0",
@@ -8070,7 +8068,7 @@
             "name": "DSH Themes"
           },
           "license": "CC-BY-4.0",
-          "version": "1.0.0-alpha.2",
+          "version": "1.0.0-alpha.3",
           "copyright": {
             "source": "generated",
             "attribution": "Original artwork generated with OpenAI built-in image generation for DSH Themes.",
@@ -8198,8 +8196,7 @@
             "borderStrength": 0.5,
             "glowStrength": 0,
             "mobileWelcomeSurface": true,
-            "mobileWelcomeOffset": 80,
-            "desktopWelcomeLayout": "compact-left"
+            "mobileWelcomeOffset": 80
           },
           "assets": [
             {
@@ -8254,21 +8251,21 @@
             },
             {
               "role": "preview-light",
-              "path": "assets/d21599fd9c14d04e41a7161a048974636b92886abe85cba36733614e9043daca.webp",
-              "url": "/__dsh-themes/mono-bloom/assets/d21599fd9c14d04e41a7161a048974636b92886abe85cba36733614e9043daca.webp",
-              "sha256": "d21599fd9c14d04e41a7161a048974636b92886abe85cba36733614e9043daca",
+              "path": "assets/c70a6abc7634515d8730a5404ebe4101592c1ce90f02c46fcd94cfa4cc0059d4.webp",
+              "url": "/__dsh-themes/mono-bloom/assets/c70a6abc7634515d8730a5404ebe4101592c1ce90f02c46fcd94cfa4cc0059d4.webp",
+              "sha256": "c70a6abc7634515d8730a5404ebe4101592c1ce90f02c46fcd94cfa4cc0059d4",
               "mimeType": "image/webp",
-              "sizeBytes": 75676,
+              "sizeBytes": 72588,
               "width": 960,
               "height": 600
             },
             {
               "role": "preview-dark",
-              "path": "assets/d825b736dc553c3f7388d907c66e086bea76a392b13b06e960f8fa0eba12755f.webp",
-              "url": "/__dsh-themes/mono-bloom/assets/d825b736dc553c3f7388d907c66e086bea76a392b13b06e960f8fa0eba12755f.webp",
-              "sha256": "d825b736dc553c3f7388d907c66e086bea76a392b13b06e960f8fa0eba12755f",
+              "path": "assets/ebd8c02e7c6155f4c14a1601c3cfa10a68f00d24c62e3fb9cea6daa0efc2b2be.webp",
+              "url": "/__dsh-themes/mono-bloom/assets/ebd8c02e7c6155f4c14a1601c3cfa10a68f00d24c62e3fb9cea6daa0efc2b2be.webp",
+              "sha256": "ebd8c02e7c6155f4c14a1601c3cfa10a68f00d24c62e3fb9cea6daa0efc2b2be",
               "mimeType": "image/webp",
-              "sizeBytes": 60708,
+              "sizeBytes": 57488,
               "width": 960,
               "height": 600
             }
@@ -8281,15 +8278,15 @@
           },
           "preview": {
             "light": {
-              "url": "/__dsh-themes/mono-bloom/assets/d21599fd9c14d04e41a7161a048974636b92886abe85cba36733614e9043daca.webp",
-              "sha256": "d21599fd9c14d04e41a7161a048974636b92886abe85cba36733614e9043daca",
+              "url": "/__dsh-themes/mono-bloom/assets/c70a6abc7634515d8730a5404ebe4101592c1ce90f02c46fcd94cfa4cc0059d4.webp",
+              "sha256": "c70a6abc7634515d8730a5404ebe4101592c1ce90f02c46fcd94cfa4cc0059d4",
               "width": 960,
               "height": 600,
               "source": "runtime"
             },
             "dark": {
-              "url": "/__dsh-themes/mono-bloom/assets/d825b736dc553c3f7388d907c66e086bea76a392b13b06e960f8fa0eba12755f.webp",
-              "sha256": "d825b736dc553c3f7388d907c66e086bea76a392b13b06e960f8fa0eba12755f",
+              "url": "/__dsh-themes/mono-bloom/assets/ebd8c02e7c6155f4c14a1601c3cfa10a68f00d24c62e3fb9cea6daa0efc2b2be.webp",
+              "sha256": "ebd8c02e7c6155f4c14a1601c3cfa10a68f00d24c62e3fb9cea6daa0efc2b2be",
               "width": 960,
               "height": 600,
               "source": "runtime"
@@ -8297,21 +8294,21 @@
           },
           "artifact": {
             "name": "@dsh-themes/mono-bloom",
-            "version": "1.0.0-alpha.2",
-            "fileName": "mono-bloom-1.0.0-alpha.2.tgz",
-            "sha256": "b2f9f36ec80118f8ce40528d9b0891c7894547cd58968a131e742eb1d20611b6",
-            "integrity": "sha256-svnzbsgBGPjOQFKNmwiRx4lFR81YlooTHnQusdIGEbY=",
+            "version": "1.0.0-alpha.3",
+            "fileName": "mono-bloom-1.0.0-alpha.3.tgz",
+            "sha256": "a8c21b06ec0b486fde337a3770310896292e15e6f6d5ef3aede53a12514b6d65",
+            "integrity": "sha256-qMIbBuwLSG/eM3o3cDEIlikuFeb21e867eU6ElFLbWU=",
             "digestScope": "artifact-tgz"
           },
           "payload": {
-            "fileName": "mono-bloom-1.0.0-alpha.2.payload.tar",
-            "sha256": "66c2e508ebdcb5815fe9f841f3d20d49214858c2810b171b6417cb184a7c96e1",
-            "integrity": "sha256-ZsLlCOvctYFf6fhB89INSSFIWMKBCxcbZBfLGEp8luE=",
+            "fileName": "mono-bloom-1.0.0-alpha.3.payload.tar",
+            "sha256": "c0c96360712d8269cae0198ae9e0c44cb41e9c90e4d96273bfb5f74962031bfa",
+            "integrity": "sha256-wMljYHEtgmnK4BmK6eDETLQenJDk2WJzv7X3SWIDG/o=",
             "digestScope": "canonical-tar-payload-excluding-manifest"
           }
         },
-        "artifactUrl": "https://dsh-themes.com/api/themes/mono-bloom/download/1.0.0-alpha.2",
-        "artifactSha256": "b2f9f36ec80118f8ce40528d9b0891c7894547cd58968a131e742eb1d20611b6",
+        "artifactUrl": "https://dsh-themes.com/api/themes/mono-bloom/download/1.0.0-alpha.3",
+        "artifactSha256": "a8c21b06ec0b486fde337a3770310896292e15e6f6d5ef3aede53a12514b6d65",
         "verified": true,
         "distribution": {
           "kind": "hosted-verified-artifact",
@@ -8331,7 +8328,7 @@
           "lifecycle": "managed-cold-restart"
         }
       },
-      "runtimeReceiptId": "layout-fix-20260906-48"
+      "runtimeReceiptId": "welcome-layout-20260907-6"
     },
     {
       "catalogId": 2028,
@@ -10246,11 +10243,11 @@
       "kind": "full-skin",
       "name": "Tropical Matchday",
       "packageName": "@dsh-themes/tropical-matchday",
-      "version": "1.0.1-alpha.2",
+      "version": "1.0.1-alpha.3",
       "status": "runtime-verified",
-      "artifactSha256": "b734f0abe419bc13b643ccf881b380a4b4282a9c8137694a96fac2d47dae5da9",
-      "manifestCanonicalSha256": "08bef3e26e2e92b74d76156ab3f8f704e472da907872adcc7eba731d3a3cb010",
-      "payloadSha256": "36b81e04a241e007b8405fba851cb9e6957df5214d9aeb516778987848177ded",
+      "artifactSha256": "d28be73d4261dbfa3c35011e8e3d7c8c7e19cb8fe2024b6bd405b8c7acd5d5df",
+      "manifestCanonicalSha256": "527def7a62666a6af278cdeb443ed58abe4a01558c114a959803941eb6e865f8",
+      "payloadSha256": "39d55547c3789c15b06d210f6f0d16703a7354110eb939b6700b397f4c95b6fe",
       "releaseRecord": {
         "manifest": {
           "schemaVersion": "3.0",
@@ -10263,7 +10260,7 @@
             "name": "DSH-Themes"
           },
           "license": "CC-BY-4.0",
-          "version": "1.0.1-alpha.2",
+          "version": "1.0.1-alpha.3",
           "copyright": {
             "source": "generated",
             "attribution": "Original unofficial clean-room football artwork generated with OpenAI built-in image generation for DSH-Themes; no federation crest, flag, official emblem, commercial kit trade dress, player likeness, jersey number, sponsor, mascot, or trophy mark was used.",
@@ -10390,9 +10387,7 @@
             "overlayOpacity": 0.22,
             "borderStrength": 0.58,
             "glowStrength": 0.12,
-            "mobileWelcomeSurface": true,
-            "desktopWelcomeLayout": "compact-center",
-            "desktopWelcomeSurface": true
+            "mobileWelcomeSurface": true
           },
           "assets": [
             {
@@ -10427,21 +10422,21 @@
             },
             {
               "role": "preview-light",
-              "path": "assets/b404ec594a9ac7a7594c361966e66fbff296e394ce245fa095219d40d5618c6d.webp",
-              "url": "/__dsh-themes/tropical-matchday/assets/b404ec594a9ac7a7594c361966e66fbff296e394ce245fa095219d40d5618c6d.webp",
-              "sha256": "b404ec594a9ac7a7594c361966e66fbff296e394ce245fa095219d40d5618c6d",
+              "path": "assets/1b9e2a8dc2f6071cf55b5fdd75cdeea4c94babc138512065fe3de6a295f755b3.webp",
+              "url": "/__dsh-themes/tropical-matchday/assets/1b9e2a8dc2f6071cf55b5fdd75cdeea4c94babc138512065fe3de6a295f755b3.webp",
+              "sha256": "1b9e2a8dc2f6071cf55b5fdd75cdeea4c94babc138512065fe3de6a295f755b3",
               "mimeType": "image/webp",
-              "sizeBytes": 68000,
+              "sizeBytes": 67212,
               "width": 960,
               "height": 600
             },
             {
               "role": "preview-dark",
-              "path": "assets/67b33da1fd7a4330fc06aed17b2eaaa5e44b618e68e7a273b37326240a28a421.webp",
-              "url": "/__dsh-themes/tropical-matchday/assets/67b33da1fd7a4330fc06aed17b2eaaa5e44b618e68e7a273b37326240a28a421.webp",
-              "sha256": "67b33da1fd7a4330fc06aed17b2eaaa5e44b618e68e7a273b37326240a28a421",
+              "path": "assets/797e8973808eca937704116545ccafcc198cc825c84bc13a03ea5bf28004d012.webp",
+              "url": "/__dsh-themes/tropical-matchday/assets/797e8973808eca937704116545ccafcc198cc825c84bc13a03ea5bf28004d012.webp",
+              "sha256": "797e8973808eca937704116545ccafcc198cc825c84bc13a03ea5bf28004d012",
               "mimeType": "image/webp",
-              "sizeBytes": 53234,
+              "sizeBytes": 53156,
               "width": 960,
               "height": 600
             }
@@ -10454,15 +10449,15 @@
           },
           "preview": {
             "light": {
-              "url": "/__dsh-themes/tropical-matchday/assets/b404ec594a9ac7a7594c361966e66fbff296e394ce245fa095219d40d5618c6d.webp",
-              "sha256": "b404ec594a9ac7a7594c361966e66fbff296e394ce245fa095219d40d5618c6d",
+              "url": "/__dsh-themes/tropical-matchday/assets/1b9e2a8dc2f6071cf55b5fdd75cdeea4c94babc138512065fe3de6a295f755b3.webp",
+              "sha256": "1b9e2a8dc2f6071cf55b5fdd75cdeea4c94babc138512065fe3de6a295f755b3",
               "width": 960,
               "height": 600,
               "source": "runtime"
             },
             "dark": {
-              "url": "/__dsh-themes/tropical-matchday/assets/67b33da1fd7a4330fc06aed17b2eaaa5e44b618e68e7a273b37326240a28a421.webp",
-              "sha256": "67b33da1fd7a4330fc06aed17b2eaaa5e44b618e68e7a273b37326240a28a421",
+              "url": "/__dsh-themes/tropical-matchday/assets/797e8973808eca937704116545ccafcc198cc825c84bc13a03ea5bf28004d012.webp",
+              "sha256": "797e8973808eca937704116545ccafcc198cc825c84bc13a03ea5bf28004d012",
               "width": 960,
               "height": 600,
               "source": "runtime"
@@ -10470,21 +10465,21 @@
           },
           "artifact": {
             "name": "@dsh-themes/tropical-matchday",
-            "version": "1.0.1-alpha.2",
-            "fileName": "tropical-matchday-1.0.1-alpha.2.tgz",
-            "sha256": "b734f0abe419bc13b643ccf881b380a4b4282a9c8137694a96fac2d47dae5da9",
-            "integrity": "sha256-tzTwq+QZvBO2Q8z4gbOApLQoKpyBN2lKlvrC1H2uXak=",
+            "version": "1.0.1-alpha.3",
+            "fileName": "tropical-matchday-1.0.1-alpha.3.tgz",
+            "sha256": "d28be73d4261dbfa3c35011e8e3d7c8c7e19cb8fe2024b6bd405b8c7acd5d5df",
+            "integrity": "sha256-0ovnPUJh2/o8NQEejj18jH4Zy4/iAktr1AW4x6zV1d8=",
             "digestScope": "artifact-tgz"
           },
           "payload": {
-            "fileName": "tropical-matchday-1.0.1-alpha.2.payload.tar",
-            "sha256": "36b81e04a241e007b8405fba851cb9e6957df5214d9aeb516778987848177ded",
-            "integrity": "sha256-NrgeBKJB4Ae4QF+6hRy55pV99SFNmutRZ3iYeEgXfe0=",
+            "fileName": "tropical-matchday-1.0.1-alpha.3.payload.tar",
+            "sha256": "39d55547c3789c15b06d210f6f0d16703a7354110eb939b6700b397f4c95b6fe",
+            "integrity": "sha256-OdVVR8N4nBWwbSEPbw0WcDpzVBEOuTm2cAs5f0yVtv4=",
             "digestScope": "canonical-tar-payload-excluding-manifest"
           }
         },
-        "artifactUrl": "https://dsh-themes.com/api/themes/tropical-matchday/download/1.0.1-alpha.2",
-        "artifactSha256": "b734f0abe419bc13b643ccf881b380a4b4282a9c8137694a96fac2d47dae5da9",
+        "artifactUrl": "https://dsh-themes.com/api/themes/tropical-matchday/download/1.0.1-alpha.3",
+        "artifactSha256": "d28be73d4261dbfa3c35011e8e3d7c8c7e19cb8fe2024b6bd405b8c7acd5d5df",
         "verified": true,
         "distribution": {
           "kind": "hosted-verified-artifact",
@@ -10504,7 +10499,7 @@
           "lifecycle": "managed-cold-restart"
         }
       },
-      "runtimeReceiptId": "layout-fix-20260906-48"
+      "runtimeReceiptId": "welcome-layout-20260907-6"
     },
     {
       "catalogId": 2036,
@@ -12093,9 +12088,9 @@
       "packageName": "@dsh-themes/shiba-morning-post",
       "version": "1.0.1-alpha.3",
       "status": "runtime-verified",
-      "artifactSha256": "050bf2c294557b382c283ab8bd8e030fdab2895573de9444232dede02936791a",
-      "manifestCanonicalSha256": "835b7ad9ee821129af8708aa6e301e87bab106d27d44c5914ba3a90d822cd4f1",
-      "payloadSha256": "4323bc47c5e8ad2ccdc112997c136bb85f1ea5caf86088ef1bd4877ca99cdd64",
+      "artifactSha256": "a5ff89be97494c2c9c6ee5daffff1601cb434cb21e05309ef0755781307fc051",
+      "manifestCanonicalSha256": "950ab8ee9a963a04fb6d05a11bebc7965b505a9ccf07e57d982410efe9e7ea97",
+      "payloadSha256": "6bda94e7fca894ba0143f914a4ebb5102d6c7246a07f4d2629dceb58576d89b5",
       "releaseRecord": {
         "manifest": {
           "schemaVersion": "3.0",
@@ -12235,11 +12230,7 @@
             "overlayOpacity": 0.2,
             "borderStrength": 0.5,
             "glowStrength": 0.09,
-            "mobileWelcomeSurface": true,
-            "mobileWelcomeOffset": -60,
-            "desktopWelcomeLayout": "compact-left",
-            "desktopWelcomeSurface": true,
-            "welcomeSurfaceStyle": "panel"
+            "mobileWelcomeSurface": true
           },
           "assets": [
             {
@@ -12274,21 +12265,21 @@
             },
             {
               "role": "preview-light",
-              "path": "assets/9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856.webp",
-              "url": "/__dsh-themes/shiba-morning-post/assets/9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856.webp",
-              "sha256": "9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856",
+              "path": "assets/f5261313f7321e4979d9062ebbc00587ee5aae5ce9cc311427246cfa900a6131.webp",
+              "url": "/__dsh-themes/shiba-morning-post/assets/f5261313f7321e4979d9062ebbc00587ee5aae5ce9cc311427246cfa900a6131.webp",
+              "sha256": "f5261313f7321e4979d9062ebbc00587ee5aae5ce9cc311427246cfa900a6131",
               "mimeType": "image/webp",
-              "sizeBytes": 57424,
+              "sizeBytes": 57708,
               "width": 960,
               "height": 600
             },
             {
               "role": "preview-dark",
-              "path": "assets/2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a.webp",
-              "url": "/__dsh-themes/shiba-morning-post/assets/2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a.webp",
-              "sha256": "2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a",
+              "path": "assets/03673324eb946aba28563206d9fb4fe22c746c1ac76cbb57b6dde08436a1085c.webp",
+              "url": "/__dsh-themes/shiba-morning-post/assets/03673324eb946aba28563206d9fb4fe22c746c1ac76cbb57b6dde08436a1085c.webp",
+              "sha256": "03673324eb946aba28563206d9fb4fe22c746c1ac76cbb57b6dde08436a1085c",
               "mimeType": "image/webp",
-              "sizeBytes": 42216,
+              "sizeBytes": 40500,
               "width": 960,
               "height": 600
             }
@@ -12301,15 +12292,15 @@
           },
           "preview": {
             "light": {
-              "url": "/__dsh-themes/shiba-morning-post/assets/9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856.webp",
-              "sha256": "9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856",
+              "url": "/__dsh-themes/shiba-morning-post/assets/f5261313f7321e4979d9062ebbc00587ee5aae5ce9cc311427246cfa900a6131.webp",
+              "sha256": "f5261313f7321e4979d9062ebbc00587ee5aae5ce9cc311427246cfa900a6131",
               "width": 960,
               "height": 600,
               "source": "runtime"
             },
             "dark": {
-              "url": "/__dsh-themes/shiba-morning-post/assets/2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a.webp",
-              "sha256": "2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a",
+              "url": "/__dsh-themes/shiba-morning-post/assets/03673324eb946aba28563206d9fb4fe22c746c1ac76cbb57b6dde08436a1085c.webp",
+              "sha256": "03673324eb946aba28563206d9fb4fe22c746c1ac76cbb57b6dde08436a1085c",
               "width": 960,
               "height": 600,
               "source": "runtime"
@@ -12319,19 +12310,19 @@
             "name": "@dsh-themes/shiba-morning-post",
             "version": "1.0.1-alpha.3",
             "fileName": "shiba-morning-post-1.0.1-alpha.3.tgz",
-            "sha256": "050bf2c294557b382c283ab8bd8e030fdab2895573de9444232dede02936791a",
-            "integrity": "sha256-BQvywpRVezgsKDq4vY4DD9qyiVVz3pREIy3t4Ck2eRo=",
+            "sha256": "a5ff89be97494c2c9c6ee5daffff1601cb434cb21e05309ef0755781307fc051",
+            "integrity": "sha256-pf+JvpdJTCycbuXa//8WActDTLIeBTCe8HVXgTB/wFE=",
             "digestScope": "artifact-tgz"
           },
           "payload": {
             "fileName": "shiba-morning-post-1.0.1-alpha.3.payload.tar",
-            "sha256": "4323bc47c5e8ad2ccdc112997c136bb85f1ea5caf86088ef1bd4877ca99cdd64",
-            "integrity": "sha256-QyO8R8XorSzNwRKZfBNruF8epcr4YIjvG9SHfKmc3WQ=",
+            "sha256": "6bda94e7fca894ba0143f914a4ebb5102d6c7246a07f4d2629dceb58576d89b5",
+            "integrity": "sha256-a9qU5/yolLoBQ/kUpOu1EC1sckagf00mKdzrWFdtibU=",
             "digestScope": "canonical-tar-payload-excluding-manifest"
           }
         },
         "artifactUrl": "https://dsh-themes.com/api/themes/shiba-morning-post/download/1.0.1-alpha.3",
-        "artifactSha256": "050bf2c294557b382c283ab8bd8e030fdab2895573de9444232dede02936791a",
+        "artifactSha256": "a5ff89be97494c2c9c6ee5daffff1601cb434cb21e05309ef0755781307fc051",
         "verified": true,
         "distribution": {
           "kind": "hosted-verified-artifact",
@@ -12351,7 +12342,7 @@
           "lifecycle": "managed-cold-restart"
         }
       },
-      "runtimeReceiptId": "shiba-welcome-panel-20260907"
+      "runtimeReceiptId": "welcome-layout-20260907-6"
     },
     {
       "catalogId": 2044,
@@ -13212,11 +13203,11 @@
       "kind": "full-skin",
       "name": "Alhambra Reflections",
       "packageName": "@dsh-themes/alhambra-mosaic",
-      "version": "1.0.0-alpha.2",
+      "version": "1.0.0-alpha.3",
       "status": "runtime-verified",
-      "artifactSha256": "5d788aa46bc8cdc1474bb28513358c65373e492c9cdfb630ffc1f131d3ac4466",
-      "manifestCanonicalSha256": "af354c99db92b76b970db244f290255663cf741549261f5b7ead2e286a848910",
-      "payloadSha256": "33a91cf75fa469b70f883d40286c9885c77c1a5f28005ef4fa7252b132495545",
+      "artifactSha256": "3826757244fbf8ddb5ea52434422f40af1db8ae9112c5c514d6e3739711da266",
+      "manifestCanonicalSha256": "56403401774af808cf3c79b8658ccf6f75bb701f92b846686059bad7e2c83190",
+      "payloadSha256": "4060239d12f8f0aec954d5deebada0f643946f38e26c19aab17246ddfb5c0082",
       "releaseRecord": {
         "manifest": {
           "schemaVersion": "3.0",
@@ -13229,7 +13220,7 @@
             "name": "DSH Themes"
           },
           "license": "CC-BY-4.0",
-          "version": "1.0.0-alpha.2",
+          "version": "1.0.0-alpha.3",
           "copyright": {
             "source": "generated",
             "attribution": "Original artwork generated with OpenAI built-in image generation for DSH Themes.",
@@ -13356,8 +13347,7 @@
             "overlayOpacity": 0.12,
             "borderStrength": 0.5,
             "glowStrength": 0,
-            "mobileWelcomeSurface": true,
-            "desktopWelcomeSurface": true
+            "mobileWelcomeSurface": true
           },
           "assets": [
             {
@@ -13412,21 +13402,21 @@
             },
             {
               "role": "preview-light",
-              "path": "assets/1996718d7079ca8fbcbc52ef0bd040ca0350bb5e84ad93d590cf40d11b4f9536.webp",
-              "url": "/__dsh-themes/alhambra-mosaic/assets/1996718d7079ca8fbcbc52ef0bd040ca0350bb5e84ad93d590cf40d11b4f9536.webp",
-              "sha256": "1996718d7079ca8fbcbc52ef0bd040ca0350bb5e84ad93d590cf40d11b4f9536",
+              "path": "assets/2dea2db4cddd6ca9e9f32663a6a139dc82e0b6c143b3f11660863024e290a0ac.webp",
+              "url": "/__dsh-themes/alhambra-mosaic/assets/2dea2db4cddd6ca9e9f32663a6a139dc82e0b6c143b3f11660863024e290a0ac.webp",
+              "sha256": "2dea2db4cddd6ca9e9f32663a6a139dc82e0b6c143b3f11660863024e290a0ac",
               "mimeType": "image/webp",
-              "sizeBytes": 98426,
+              "sizeBytes": 103496,
               "width": 960,
               "height": 600
             },
             {
               "role": "preview-dark",
-              "path": "assets/c76592f6db874a2e091fe01d2e3fb074d6db4f92b42a95f253d5c309ec406e2e.webp",
-              "url": "/__dsh-themes/alhambra-mosaic/assets/c76592f6db874a2e091fe01d2e3fb074d6db4f92b42a95f253d5c309ec406e2e.webp",
-              "sha256": "c76592f6db874a2e091fe01d2e3fb074d6db4f92b42a95f253d5c309ec406e2e",
+              "path": "assets/aee80bdf187ac4c3779233f4248c9eca9c44b3cca3b66bcb379f7dfb09e07490.webp",
+              "url": "/__dsh-themes/alhambra-mosaic/assets/aee80bdf187ac4c3779233f4248c9eca9c44b3cca3b66bcb379f7dfb09e07490.webp",
+              "sha256": "aee80bdf187ac4c3779233f4248c9eca9c44b3cca3b66bcb379f7dfb09e07490",
               "mimeType": "image/webp",
-              "sizeBytes": 46680,
+              "sizeBytes": 48364,
               "width": 960,
               "height": 600
             }
@@ -13439,15 +13429,15 @@
           },
           "preview": {
             "light": {
-              "url": "/__dsh-themes/alhambra-mosaic/assets/1996718d7079ca8fbcbc52ef0bd040ca0350bb5e84ad93d590cf40d11b4f9536.webp",
-              "sha256": "1996718d7079ca8fbcbc52ef0bd040ca0350bb5e84ad93d590cf40d11b4f9536",
+              "url": "/__dsh-themes/alhambra-mosaic/assets/2dea2db4cddd6ca9e9f32663a6a139dc82e0b6c143b3f11660863024e290a0ac.webp",
+              "sha256": "2dea2db4cddd6ca9e9f32663a6a139dc82e0b6c143b3f11660863024e290a0ac",
               "width": 960,
               "height": 600,
               "source": "runtime"
             },
             "dark": {
-              "url": "/__dsh-themes/alhambra-mosaic/assets/c76592f6db874a2e091fe01d2e3fb074d6db4f92b42a95f253d5c309ec406e2e.webp",
-              "sha256": "c76592f6db874a2e091fe01d2e3fb074d6db4f92b42a95f253d5c309ec406e2e",
+              "url": "/__dsh-themes/alhambra-mosaic/assets/aee80bdf187ac4c3779233f4248c9eca9c44b3cca3b66bcb379f7dfb09e07490.webp",
+              "sha256": "aee80bdf187ac4c3779233f4248c9eca9c44b3cca3b66bcb379f7dfb09e07490",
               "width": 960,
               "height": 600,
               "source": "runtime"
@@ -13455,21 +13445,21 @@
           },
           "artifact": {
             "name": "@dsh-themes/alhambra-mosaic",
-            "version": "1.0.0-alpha.2",
-            "fileName": "alhambra-mosaic-1.0.0-alpha.2.tgz",
-            "sha256": "5d788aa46bc8cdc1474bb28513358c65373e492c9cdfb630ffc1f131d3ac4466",
-            "integrity": "sha256-XXiKpGvIzcFHS7KFEzWMZTc+SSyc37Yw/8HxMdOsRGY=",
+            "version": "1.0.0-alpha.3",
+            "fileName": "alhambra-mosaic-1.0.0-alpha.3.tgz",
+            "sha256": "3826757244fbf8ddb5ea52434422f40af1db8ae9112c5c514d6e3739711da266",
+            "integrity": "sha256-OCZ1ckT7+N216lJDRCL0CvHbiukRLFxRTW43OXEdomY=",
             "digestScope": "artifact-tgz"
           },
           "payload": {
-            "fileName": "alhambra-mosaic-1.0.0-alpha.2.payload.tar",
-            "sha256": "33a91cf75fa469b70f883d40286c9885c77c1a5f28005ef4fa7252b132495545",
-            "integrity": "sha256-M6kc91+kabcPiD1AKGyYhcd8Gl8oAF70+nJSsTJJVUU=",
+            "fileName": "alhambra-mosaic-1.0.0-alpha.3.payload.tar",
+            "sha256": "4060239d12f8f0aec954d5deebada0f643946f38e26c19aab17246ddfb5c0082",
+            "integrity": "sha256-QGAjnRL48K7JVNXe662g9kOUbzjibBmqsXJG3ftcAII=",
             "digestScope": "canonical-tar-payload-excluding-manifest"
           }
         },
-        "artifactUrl": "https://dsh-themes.com/api/themes/alhambra-mosaic/download/1.0.0-alpha.2",
-        "artifactSha256": "5d788aa46bc8cdc1474bb28513358c65373e492c9cdfb630ffc1f131d3ac4466",
+        "artifactUrl": "https://dsh-themes.com/api/themes/alhambra-mosaic/download/1.0.0-alpha.3",
+        "artifactSha256": "3826757244fbf8ddb5ea52434422f40af1db8ae9112c5c514d6e3739711da266",
         "verified": true,
         "distribution": {
           "kind": "hosted-verified-artifact",
@@ -13489,7 +13479,7 @@
           "lifecycle": "managed-cold-restart"
         }
       },
-      "runtimeReceiptId": "layout-final-corrections-20260906"
+      "runtimeReceiptId": "welcome-layout-20260907-6"
     },
     {
       "catalogId": 2048,

@@ -60,7 +60,9 @@ node skills/dsh-plugin-installer/scripts/install-plugins.mjs --top10 --dry-run
 
 已审目录快照包含 **192 条已发布状态记录：21 个 Theme、71 个 Skin、100 个 Plugin**。54 个第一方制品、38 条社区主题/皮肤和 100 项插件现均有逐项 Alpha 生命周期证据。[原 Top 10 组合证据](skills/dsh-plugin-installer/references/history/top10-before-spotlight-alpha.json)已通过安装、加载、重复操作、受控失败恢复与卸载。当前推荐将终端项目换为用于 Web 命令、会话和插件设置检索的 DSH Spotlight，新组合已通过完整技术生命周期和独立的最终皮肤共存实测。[组合证明](skills/dsh-plugin-installer/references/top10-installation-alpha.json)将未改动的十插件技术证据与最终 Reasoning Tide 包、Spotlight 检索及设置操作、两项卸载、基线恢复和全部十二张已审截图绑定。DSH TUI 仍保留在已逐项验证的 100 项目录；[推荐变更记录](skills/dsh-plugin-installer/references/recommendation-transition-alpha.json)固定保留全部原安装配方和逐项证据。模型调用和账户相关功能不在这份生命周期证据的验证范围内。这些本地结果不代表网站已生产部署。目录可发现、逐项可安装与生产上线分别记录；执行操作前应读取每项当前的验证记录。
 
-2026-09-07，**柴犬晨报 #2043 `1.0.1-alpha.3`** 通过独立的候选包、最终包生命周期与移动端检查。统一欢迎面板在移动侧栏展开时隐藏，关闭后恢复，避免被挤成狭窄长条。原插画和配色保持不变，其余 53 个包沿用既有验证。
+**2026-09-07 · 六款欢迎区布局修复。** `#2019`、`#2020`、`#2027`、`#2035`、`#2043`、`#2047` 恢复正常的桌面标题、工作区控件与输入框布局，保留原画和配色 tokens。六款均已通过本地 candidate、final、mobile 检查，最终生命周期及基线恢复通过；其他 48 个包沿用原有验证记录。参见[六款运行收据](skills/dsh-theme-manager/references/alpha-hosted-runtime-welcome-layout-20260907.json)与[当前授权记录](skills/dsh-theme-manager/references/alpha-hosted-artifacts.json)。
+
+手机展开侧栏时仍会挤压主区；这一局限在未安装皮肤的官方基线中已存在，相关观察继续保留。这些本地检查不表示已生产部署。
 
 ## 设置选定的 Harness 版本
 
