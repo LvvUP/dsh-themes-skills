@@ -9,6 +9,11 @@ const INITIAL_ALPHA_AUTHORITY_SHA256 =
   "e31252736c472f4750d467c48b685ef1e907697f8bc2a073b0dfa152796f3789";
 const REFRESHED_ALPHA_AUTHORITY_SHA256 =
   "eb66299a36c2c3e1431bcdd92826fe98f7e32e53825b1fa005d51b30c5520c39";
+const LAYOUT_ALPHA_AUTHORITY_SHA256 =
+  "cfda9bf95549ea7d6d9d80aa2828123281d0940bdf0c916d6919acce284c4c50";
+const SHIBA_WELCOME_RECEIPT_ID = "shiba-welcome-panel-20260907";
+const SHIBA_WELCOME_RECEIPT_FILE =
+  "alpha-hosted-runtime-shiba-welcome-panel-20260907.json";
 export function stableAlphaJson(value) {
   const stable = (entry) =>
     Array.isArray(entry)
@@ -50,8 +55,11 @@ export function loadAlphaHostedAuthority() {
   );
 }
 
-function validateLayoutFixSettings(result) {
-  for (const phase of ["rendered", "coldRestart"]) {
+function validateLayoutFixSettings(
+  result,
+  phases = ["rendered", "coldRestart"],
+) {
+  for (const phase of phases) {
     const modes = result[phase]?.modes;
     if (
       !Array.isArray(modes) ||
@@ -67,7 +75,14 @@ function validateLayoutFixSettings(result) {
     for (const mode of modes) {
       const check = mode.settingsLayout,
         g = check?.geometry;
-      if (check?.status !== "passed" || check.contentReadable !== true || !g)
+      // Recovery measures the original UI after removal, rather than a skin layout.
+      const expectedStatus =
+        phase === "recovery" ? "baseline-observation" : "passed";
+      if (
+        check?.status !== expectedStatus ||
+        check.contentReadable !== true ||
+        !g
+      )
         throw new Error("The layout fix lacks readable Settings evidence.");
       for (const [name, rect] of Object.entries({
         viewport: g.viewport,
@@ -122,8 +137,60 @@ function validateLayoutFixSettings(result) {
   }
 }
 
+function validateAlphaHostedEntry(entry, ids = new Set(), tuples = new Set()) {
+  if (
+    !Number.isInteger(entry.catalogId) ||
+    entry.catalogId < 1000 ||
+    entry.catalogId > 9999 ||
+    !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(entry.slug) ||
+    !["theme", "full-skin"].includes(entry.kind) ||
+    !isExactSemver(entry.version) ||
+    entry.packageName !== `@dsh-themes/${entry.slug}` ||
+    !/^[a-f0-9]{64}$/.test(entry.artifactSha256 ?? "") ||
+    !/^[a-f0-9]{64}$/.test(entry.manifestCanonicalSha256 ?? "") ||
+    !/^[a-f0-9]{64}$/.test(entry.payloadSha256 ?? "") ||
+    entry.status !== "runtime-verified" ||
+    ids.has(entry.catalogId) ||
+    tuples.has(`${entry.packageName}@${entry.version}`)
+  )
+    throw new Error(
+      "Alpha hosted artifact identities are invalid or duplicated.",
+    );
+  ids.add(entry.catalogId);
+  tuples.add(`${entry.packageName}@${entry.version}`);
+  const manifest = entry.releaseRecord?.manifest;
+  if (
+    manifest?.schemaVersion !== "3.0" ||
+    manifest.kind !== entry.kind ||
+    manifest.slug !== entry.slug ||
+    manifest.version !== entry.version ||
+    manifest.artifact?.name !== entry.packageName ||
+    manifest.artifact?.version !== entry.version ||
+    manifest.artifact?.sha256 !== entry.artifactSha256 ||
+    manifest.artifact?.fileName !== `${entry.slug}-${entry.version}.tgz` ||
+    manifest.artifact?.integrity !==
+      `sha256-${Buffer.from(entry.artifactSha256, "hex").toString("base64")}` ||
+    manifest.artifact?.digestScope !== "artifact-tgz" ||
+    manifest.payload?.sha256 !== entry.payloadSha256 ||
+    manifest.payload?.fileName !==
+      `${entry.slug}-${entry.version}.payload.tar` ||
+    manifest.payload?.integrity !==
+      `sha256-${Buffer.from(entry.payloadSha256, "hex").toString("base64")}` ||
+    manifest.payload?.digestScope !==
+      "canonical-tar-payload-excluding-manifest" ||
+    alphaSha256(stableAlphaJson(manifest)) !== entry.manifestCanonicalSha256 ||
+    entry.releaseRecord.artifactSha256 !== entry.artifactSha256 ||
+    entry.releaseRecord.verified !== true
+  )
+    throw new Error(
+      `Alpha manifest and artifact bindings differ for #${entry.catalogId}.`,
+    );
+}
+
 /** Compose exact old and new item receipts without claiming the retained items were rerun. */
 export function validateAlphaHostedAuthority(authority, readReceipt) {
+  if (authority.schemaVersion === 4)
+    return validateShibaWelcomeAuthority(authority, readReceipt);
   if (
     ![1, 2, 3].includes(authority.schemaVersion) ||
     authority.sourceCommit !== ALPHA_SOURCE.commit ||
@@ -304,54 +371,7 @@ export function validateAlphaHostedAuthority(authority, readReceipt) {
     receipts.set(registration.id, receipt);
   }
   for (const entry of authority.entries) {
-    if (
-      !Number.isInteger(entry.catalogId) ||
-      entry.catalogId < 1000 ||
-      entry.catalogId > 9999 ||
-      !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(entry.slug) ||
-      !["theme", "full-skin"].includes(entry.kind) ||
-      !isExactSemver(entry.version) ||
-      entry.packageName !== `@dsh-themes/${entry.slug}` ||
-      !/^[a-f0-9]{64}$/.test(entry.artifactSha256 ?? "") ||
-      !/^[a-f0-9]{64}$/.test(entry.manifestCanonicalSha256 ?? "") ||
-      !/^[a-f0-9]{64}$/.test(entry.payloadSha256 ?? "") ||
-      entry.status !== "runtime-verified" ||
-      ids.has(entry.catalogId) ||
-      tuples.has(`${entry.packageName}@${entry.version}`)
-    )
-      throw new Error(
-        "Alpha hosted artifact identities are invalid or duplicated.",
-      );
-    ids.add(entry.catalogId);
-    tuples.add(`${entry.packageName}@${entry.version}`);
-    const manifest = entry.releaseRecord?.manifest;
-    if (
-      manifest?.schemaVersion !== "3.0" ||
-      manifest.kind !== entry.kind ||
-      manifest.slug !== entry.slug ||
-      manifest.version !== entry.version ||
-      manifest.artifact?.name !== entry.packageName ||
-      manifest.artifact?.version !== entry.version ||
-      manifest.artifact?.sha256 !== entry.artifactSha256 ||
-      manifest.artifact?.fileName !== `${entry.slug}-${entry.version}.tgz` ||
-      manifest.artifact?.integrity !==
-        `sha256-${Buffer.from(entry.artifactSha256, "hex").toString("base64")}` ||
-      manifest.artifact?.digestScope !== "artifact-tgz" ||
-      manifest.payload?.sha256 !== entry.payloadSha256 ||
-      manifest.payload?.fileName !==
-        `${entry.slug}-${entry.version}.payload.tar` ||
-      manifest.payload?.integrity !==
-        `sha256-${Buffer.from(entry.payloadSha256, "hex").toString("base64")}` ||
-      manifest.payload?.digestScope !==
-        "canonical-tar-payload-excluding-manifest" ||
-      alphaSha256(stableAlphaJson(manifest)) !==
-        entry.manifestCanonicalSha256 ||
-      entry.releaseRecord.artifactSha256 !== entry.artifactSha256 ||
-      entry.releaseRecord.verified !== true
-    )
-      throw new Error(
-        `Alpha manifest and artifact bindings differ for #${entry.catalogId}.`,
-      );
+    validateAlphaHostedEntry(entry, ids, tuples);
     if (initialAuthority && authority.schemaVersion === 2) {
       const initial = initialAuthority.entries.find(
         (item) => item.catalogId === entry.catalogId,
@@ -468,6 +488,349 @@ export function validateAlphaHostedAuthority(authority, readReceipt) {
       );
   }
   return authority;
+}
+
+/** A single opt-in layout upgrade. Historical schema 1–3 validation stays intact. */
+function validateShibaWelcomeAuthority(authority, readReceipt) {
+  const parentFile = "alpha-hosted-artifacts-layout-20260906.json";
+  if (
+    authority.status !== "runtime-verified" ||
+    authority.sourceCommit !== ALPHA_SOURCE.commit ||
+    authority.runtimeAttestationSha256 !== ALPHA_SOURCE.verification.sha256 ||
+    stableAlphaJson(authority.previousAuthority) !==
+      stableAlphaJson({
+        file: parentFile,
+        sha256: LAYOUT_ALPHA_AUTHORITY_SHA256,
+      }) ||
+    authority.retainedPackageCount !== 53 ||
+    authority.refreshedPackageCount !== 1 ||
+    !Array.isArray(authority.entries) ||
+    authority.entries.length !== 54
+  )
+    throw new Error(
+      "The Shiba upgrade must bind its exact schema 3 parent and retain 53 entries.",
+    );
+  const parentBytes = readReceipt(parentFile);
+  if (alphaSha256(parentBytes) !== LAYOUT_ALPHA_AUTHORITY_SHA256)
+    throw new Error("The prior layout Alpha authority digest differs.");
+  const parent = JSON.parse(parentBytes.toString("utf8"));
+  if (parent.schemaVersion !== 3)
+    throw new Error("The Shiba upgrade requires the original schema 3 parent.");
+  validateAlphaHostedAuthority(parent, readReceipt);
+  const registrations = authority.receiptRegistry;
+  if (
+    !Array.isArray(registrations) ||
+    registrations.length !== 5 ||
+    stableAlphaJson(registrations.slice(0, 4)) !==
+      stableAlphaJson(parent.receiptRegistry)
+  )
+    throw new Error(
+      "The Shiba upgrade must preserve all four historical receipts.",
+    );
+  const registration = registrations[4];
+  if (
+    stableAlphaJson(Object.keys(registration).sort()) !==
+      stableAlphaJson([
+        "file",
+        "id",
+        "indexSha256",
+        "sha256",
+        "verifiedPackageCount",
+      ]) ||
+    registration.id !== SHIBA_WELCOME_RECEIPT_ID ||
+    registration.file !== SHIBA_WELCOME_RECEIPT_FILE ||
+    registration.verifiedPackageCount !== 1 ||
+    !/^[a-f0-9]{64}$/.test(registration.sha256 ?? "") ||
+    !/^[a-f0-9]{64}$/.test(registration.indexSha256 ?? "")
+  )
+    throw new Error("Invalid single-item Shiba receipt path or identity.");
+  const receiptBytes = readReceipt(registration.file);
+  if (alphaSha256(receiptBytes) !== registration.sha256)
+    throw new Error("The Shiba lifecycle receipt digest differs.");
+  const receipt = JSON.parse(receiptBytes.toString("utf8"));
+  if (
+    receipt.schemaVersion !== 1 ||
+    receipt.stage !== "final" ||
+    receipt.status !== "passed" ||
+    receipt.indexSha256 !== registration.indexSha256 ||
+    receipt.dshVersion !== ALPHA_SOURCE.version ||
+    receipt.sourceCommit !== ALPHA_SOURCE.commit ||
+    stableAlphaJson(receipt.requestedSlugs) !==
+      stableAlphaJson(["shiba-morning-post"]) ||
+    !Array.isArray(receipt.results) ||
+    receipt.results.length !== 1 ||
+    receipt.results[0].catalogId !== 2043
+  )
+    throw new Error("The Shiba final receipt must cover exactly #2043.");
+  const previous = parent.entries.find((entry) => entry.catalogId === 2043);
+  const entry = authority.entries.find((entry) => entry.catalogId === 2043);
+  if (
+    !entry ||
+    authority.entries.filter((row) => row.catalogId === 2043).length !== 1
+  )
+    throw new Error("The Shiba upgrade cannot add or reassign catalog IDs.");
+  for (const retained of parent.entries.filter(
+    (row) => row.catalogId !== 2043,
+  )) {
+    const rows = authority.entries.filter(
+      (row) => row.catalogId === retained.catalogId,
+    );
+    if (
+      rows.length !== 1 ||
+      stableAlphaJson(rows[0]) !== stableAlphaJson(retained)
+    )
+      throw new Error(
+        `Retained Alpha artifact #${retained.catalogId} changed.`,
+      );
+  }
+  validateAlphaHostedEntry(entry);
+  const entryIdentity = ({
+    version,
+    artifactSha256,
+    payloadSha256,
+    manifestCanonicalSha256,
+    releaseRecord,
+    runtimeReceiptId,
+    ...identity
+  }) => identity;
+  const oldArtifacts = new Set(
+    parent.receiptRegistry.flatMap((row) =>
+      JSON.parse(readReceipt(row.file).toString("utf8")).results.map(
+        (result) => result.artifactSha256,
+      ),
+    ),
+  );
+  if (
+    stableAlphaJson(entryIdentity(entry)) !==
+      stableAlphaJson(entryIdentity(previous)) ||
+    previous.version !== "1.0.1-alpha.2" ||
+    entry.version !== "1.0.1-alpha.3" ||
+    entry.runtimeReceiptId !== SHIBA_WELCOME_RECEIPT_ID ||
+    oldArtifacts.has(entry.artifactSha256) ||
+    entry.payloadSha256 === previous.payloadSha256 ||
+    entry.manifestCanonicalSha256 === previous.manifestCanonicalSha256
+  )
+    throw new Error(
+      "The Shiba upgrade has a stale or reassigned artifact identity.",
+    );
+  const manifest = entry.releaseRecord.manifest,
+    oldManifest = previous.releaseRecord.manifest;
+  const manifestIdentity = ({
+    version,
+    artifact,
+    payload,
+    visual,
+    preview,
+    assets,
+    ...identity
+  }) => identity;
+  const recordIdentity = ({
+    manifest,
+    artifactUrl,
+    artifactSha256,
+    ...identity
+  }) => identity;
+  if (
+    stableAlphaJson(manifestIdentity(manifest)) !==
+      stableAlphaJson(manifestIdentity(oldManifest)) ||
+    stableAlphaJson(recordIdentity(entry.releaseRecord)) !==
+      stableAlphaJson(recordIdentity(previous.releaseRecord)) ||
+    entry.releaseRecord.artifactUrl !==
+      `https://dsh-themes.com/api/themes/${entry.slug}/download/${entry.version}` ||
+    stableAlphaJson(manifest.visual) !==
+      stableAlphaJson({
+        ...oldManifest.visual,
+        mobileWelcomeOffset: -60,
+        welcomeSurfaceStyle: "panel",
+      }) ||
+    !Array.isArray(manifest.assets) ||
+    manifest.assets.length !== oldManifest.assets.length ||
+    stableAlphaJson(
+      manifest.assets.filter((asset) => !asset.role.startsWith("preview-")),
+    ) !==
+      stableAlphaJson(
+        oldManifest.assets.filter(
+          (asset) => !asset.role.startsWith("preview-"),
+        ),
+      )
+  )
+    throw new Error(
+      "The Shiba upgrade must preserve its artwork, tokens and existing design identity.",
+    );
+  for (const mode of ["light", "dark"]) {
+    const preview = manifest.preview?.[mode];
+    const assets = manifest.assets.filter(
+      (asset) => asset.role === `preview-${mode}`,
+    );
+    if (
+      !preview ||
+      !/^[a-f0-9]{64}$/.test(preview.sha256 ?? "") ||
+      preview.sha256 === oldManifest.preview[mode].sha256 ||
+      preview.source !== "runtime" ||
+      assets.length !== 1 ||
+      assets[0].sha256 !== preview.sha256 ||
+      assets[0].url !== preview.url ||
+      assets[0].path !== `assets/${preview.sha256}.webp` ||
+      preview.url !==
+        `/__dsh-themes/${entry.slug}/assets/${preview.sha256}.webp` ||
+      assets[0].mimeType !== "image/webp" ||
+      !Number.isSafeInteger(assets[0].sizeBytes) ||
+      assets[0].sizeBytes <= 0 ||
+      ![preview.width, preview.height].every(
+        (value) => Number.isSafeInteger(value) && value > 0,
+      ) ||
+      assets[0].width !== preview.width ||
+      assets[0].height !== preview.height
+    )
+      throw new Error(
+        "The Shiba upgrade needs complete new runtime previews in both modes.",
+      );
+  }
+  validateShibaWelcomeLifecycle(receipt.results[0], entry);
+  return authority;
+}
+
+function validateShibaWelcomeLifecycle(result, entry) {
+  const phases = ["rendered", "coldRestart", "recovery"];
+  if (
+    result.slug !== entry.slug ||
+    result.kind !== entry.kind ||
+    result.status !== "passed" ||
+    result.artifactSha256 !== entry.artifactSha256 ||
+    !/^[a-f0-9]{64}$/.test(result.manifestSha256 ?? "") ||
+    !/^[a-f0-9]{64}$/.test(result.packedManifestSha256 ?? "") ||
+    phases.some(
+      (phase) =>
+        result[phase]?.status !== "passed" ||
+        !Array.isArray(result[phase]?.errors) ||
+        result[phase].errors.length !== 0,
+    )
+  )
+    throw new Error(
+      "The Shiba lifecycle contains an invalid or failed package row.",
+    );
+  validateLayoutFixSettings(result, phases);
+  const manifest = entry.releaseRecord.manifest;
+  for (const phase of phases) {
+    const modes = result[phase].modes;
+    if (phase !== "coldRestart" && modes.length !== 2)
+      throw new Error(
+        "The Shiba lifecycle requires both rendered and recovered modes.",
+      );
+    for (const mode of modes) {
+      if (
+        mode.rootChildren !== 1 ||
+        mode.horizontalOverflow !== false ||
+        mode.dark !== (mode.mode === "dark") ||
+        mode.colorScheme !== mode.mode
+      )
+        throw new Error(
+          "The Shiba lifecycle has an unreadable or incorrect mode.",
+        );
+      if (phase === "recovery") {
+        if (
+          mode.dataSkin !== null ||
+          mode.stylesheet !== null ||
+          mode.backgroundImage !== "none"
+        )
+          throw new Error(
+            "Shiba removal did not recover the original interface.",
+          );
+        continue;
+      }
+      if (
+        mode.dataSkin !== entry.slug ||
+        mode.stylesheet !== `/__dsh-themes/${entry.slug}/skin.css` ||
+        stableAlphaJson(mode.tokens) !==
+          stableAlphaJson(
+            Object.fromEntries(
+              Object.entries(manifest.tokens).map(([name, values]) => [
+                name,
+                values[mode.mode],
+              ]),
+            ),
+          ) ||
+        mode.settingsLayout.closeClick !== "passed" ||
+        mode.settingsLayout.escape !== "passed" ||
+        !Array.isArray(mode.welcomeSurfaces) ||
+        mode.welcomeSurfaces.length !== 2 ||
+        stableAlphaJson(
+          mode.welcomeSurfaces.map((surface) => surface.name).sort(),
+        ) !== stableAlphaJson(["headline", "workspace"])
+      )
+        throw new Error(
+          "The Shiba welcome panel lacks readable measured content or Settings interaction evidence.",
+        );
+      for (const surface of mode.welcomeSurfaces) {
+        const rect = surface.bounds,
+          viewport = mode.settingsLayout.geometry.viewport;
+        if (
+          !Number.isFinite(surface.contrast) ||
+          surface.contrast < 4.5 ||
+          surface.backgroundOpaque !== true ||
+          !Number.isFinite(surface.controlHeight) ||
+          surface.controlHeight < 24 ||
+          !rect ||
+          ![rect.x, rect.y, rect.width, rect.height].every(Number.isFinite) ||
+          rect.width <= 0 ||
+          rect.height <= 0 ||
+          rect.x < 0 ||
+          rect.y < 0 ||
+          rect.x + rect.width > viewport.width + 1 ||
+          rect.y + rect.height > viewport.height + 1
+        )
+          throw new Error(
+            "The Shiba welcome panel has clipped or low-contrast content.",
+          );
+      }
+      const expectedResources = [
+        { role: "skin-css", url: mode.stylesheet },
+        ...manifest.assets,
+      ];
+      if (
+        !Array.isArray(mode.resources) ||
+        mode.resources.length !== expectedResources.length
+      )
+        throw new Error("The Shiba runtime resource coverage is incomplete.");
+      for (const expected of expectedResources) {
+        const matches = mode.resources.filter(
+          (resource) => resource.role === expected.role,
+        );
+        const resource = matches[0];
+        if (
+          matches.length !== 1 ||
+          resource.url !== expected.url ||
+          resource.status !== 200 ||
+          !/^[a-f0-9]{64}$/.test(resource.sha256 ?? "") ||
+          resource.sha256 !== resource.expectedSha256 ||
+          (expected.sha256 &&
+            (resource.sha256 !== expected.sha256 ||
+              resource.sizeBytes !== expected.sizeBytes)) ||
+          !Number.isSafeInteger(resource.sizeBytes) ||
+          resource.sizeBytes <= 0
+        )
+          throw new Error(
+            "The Shiba runtime loaded an incorrect artifact or preview resource.",
+          );
+      }
+    }
+  }
+  const expectedRemoved = [
+    `/__dsh-themes/${entry.slug}/skin.css`,
+    ...manifest.assets.map((asset) => asset.url),
+  ];
+  const removed = result.recovery.recoveryResources;
+  if (
+    !Array.isArray(removed) ||
+    removed.length !== expectedRemoved.length ||
+    expectedRemoved.some(
+      (url) =>
+        removed.filter(
+          (resource) => resource.url === url && resource.status === 404,
+        ).length !== 1,
+    )
+  )
+    throw new Error("The Shiba removal has surviving artifact resources.");
 }
 
 export function validateAlphaRelease(record, rawOrigin) {

@@ -11,6 +11,7 @@ const submitter = resolve('skills/dsh-theme-submitter/scripts/validate-submissio
 const cases = [
   ['desktopWelcomeLayout', ['compact-left', 'compact-center'], ['left', 'compact-left;display:none', null, true, 1, {}, []]],
   ['desktopWelcomeSurface', [true, false], ['true', null, 1, {}, []]],
+  ['welcomeSurfaceStyle', ['panel'], ['', 'glass', 'Panel', 'panel;display:none', null, true, 0, {}, []]],
   ['mobileDarkFocusX', [0, 50, 100], [-1, 101, 0.5, '0', null, false, {}, []]],
 ];
 for (const [key, valid, invalid] of cases) {

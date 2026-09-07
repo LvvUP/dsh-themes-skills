@@ -1,0 +1,1494 @@
+{
+  "schemaVersion": 1,
+  "stage": "final",
+  "status": "passed",
+  "indexSha256": "02831f70c9faf3d9fc479877c57bdd7c58cdfad36cafe00fe4ee811ae01c557a",
+  "dshVersion": "0.1.3-alpha.1",
+  "sourceCommit": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
+  "requestedSlugs": [
+    "shiba-morning-post"
+  ],
+  "results": [
+    {
+      "catalogId": 2043,
+      "slug": "shiba-morning-post",
+      "kind": "full-skin",
+      "status": "passed",
+      "artifactSha256": "050bf2c294557b382c283ab8bd8e030fdab2895573de9444232dede02936791a",
+      "manifestSha256": "107ab55d7e92e6529641e07af05108236ced064a0a0e42aad661950021739803",
+      "packedManifestSha256": "4385ac21cfe16e9555fd52bfd7d79c42b1bdc0191ab3442b042b3c722769a9b2",
+      "rendered": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": "shiba-morning-post",
+          "backgroundImage": "linear-gradient(rgba(19, 40, 59, 0.2), rgba(19, 40, 59, 0.2)), url(\"http://127.0.0.1:4015/__dsh-themes/shiba-morning-post/assets/abf67c12c1471f044f2b18732c475342db8ec49b2cb1db2ae92e1dda6363c192.webp\")",
+          "stylesheet": "/__dsh-themes/shiba-morning-post/skin.css",
+          "tokens": {
+            "--dsw-alias-bg-base": "#13283BF7",
+            "--dsw-alias-bg-layer-1": "#1C344AF5",
+            "--dsw-alias-bg-layer-2": "#29445BF3",
+            "--dsw-alias-bg-overlay": "#36536BF4",
+            "--dsw-alias-border-l1": "#57738A",
+            "--dsw-alias-border-l2": "#8BA5B8",
+            "--dsw-alias-brand-primary": "#FF9B61",
+            "--dsw-alias-label-primary": "#FFF5E5",
+            "--dsw-alias-label-secondary": "#D7C9B5",
+            "--dsw-alias-state-error-primary": "#FF8790",
+            "--dsw-alias-state-success-primary": "#83D29A",
+            "--dsw-alias-state-warn-primary": "#F0C875",
+            "--dsw-specific-sidebar-fill": "#182E42F6"
+          }
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "tokens": {
+              "--dsw-alias-bg-base": "#FFF7EAF5",
+              "--dsw-alias-bg-layer-1": "#FFFCF4F6",
+              "--dsw-alias-bg-layer-2": "#EEE4D2F2",
+              "--dsw-alias-bg-overlay": "#FFF6E8F5",
+              "--dsw-alias-border-l1": "#C8B69C",
+              "--dsw-alias-border-l2": "#7C765B",
+              "--dsw-alias-brand-primary": "#B64E27",
+              "--dsw-alias-label-primary": "#33291F",
+              "--dsw-alias-label-secondary": "#6B6053",
+              "--dsw-alias-state-error-primary": "#A63D43",
+              "--dsw-alias-state-success-primary": "#48704E",
+              "--dsw-alias-state-warn-primary": "#7D590E",
+              "--dsw-specific-sidebar-fill": "#EDE0CDF3"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/shiba-morning-post/skin.css",
+                "status": 200,
+                "sha256": "d9e0e0040e1f126d3d18eb87344361df6bc66628b806b3a9e384f1bf085115f6",
+                "expectedSha256": "d9e0e0040e1f126d3d18eb87344361df6bc66628b806b3a9e384f1bf085115f6",
+                "sizeBytes": 10724
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/shiba-morning-post/assets/abf67c12c1471f044f2b18732c475342db8ec49b2cb1db2ae92e1dda6363c192.webp",
+                "status": 200,
+                "sha256": "abf67c12c1471f044f2b18732c475342db8ec49b2cb1db2ae92e1dda6363c192",
+                "expectedSha256": "abf67c12c1471f044f2b18732c475342db8ec49b2cb1db2ae92e1dda6363c192",
+                "sizeBytes": 238356
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/shiba-morning-post/assets/f7e1995a03556cf81fae3e622594d6bac7238e16cfa43bdfee94c29ece48ecdf.webp",
+                "status": 200,
+                "sha256": "f7e1995a03556cf81fae3e622594d6bac7238e16cfa43bdfee94c29ece48ecdf",
+                "expectedSha256": "f7e1995a03556cf81fae3e622594d6bac7238e16cfa43bdfee94c29ece48ecdf",
+                "sizeBytes": 160146
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/shiba-morning-post/assets/b508996c3300357fc9f5d8a6e2af8ee5db7dad7ee16e20ca59b562c892ed26bd.webp",
+                "status": 200,
+                "sha256": "b508996c3300357fc9f5d8a6e2af8ee5db7dad7ee16e20ca59b562c892ed26bd",
+                "expectedSha256": "b508996c3300357fc9f5d8a6e2af8ee5db7dad7ee16e20ca59b562c892ed26bd",
+                "sizeBytes": 75278
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/shiba-morning-post/assets/9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856.webp",
+                "status": 200,
+                "sha256": "9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856",
+                "expectedSha256": "9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856",
+                "sizeBytes": 57424
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/shiba-morning-post/assets/2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a.webp",
+                "status": 200,
+                "sha256": "2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a",
+                "expectedSha256": "2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a",
+                "sizeBytes": 42216
+              }
+            ],
+            "dataSkin": "shiba-morning-post",
+            "dark": false,
+            "colorScheme": "light",
+            "bodyBackground": "rgba(255, 247, 234, 0.96)",
+            "backgroundImage": "linear-gradient(rgba(255, 247, 234, 0.11), rgba(255, 247, 234, 0.11)), url(\"http://127.0.0.1:4015/__dsh-themes/shiba-morning-post/assets/abf67c12c1471f044f2b18732c475342db8ec49b2cb1db2ae92e1dda6363c192.webp\")",
+            "stylesheet": "/__dsh-themes/shiba-morning-post/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null,
+            "settingsLayout": {
+              "status": "passed",
+              "expectedWidth": 800,
+              "expectedX": 320,
+              "expectedHeight": 800,
+              "expectedY": 50,
+              "contentReadable": true,
+              "geometry": {
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                },
+                "dialog": {
+                  "x": 320,
+                  "y": 50,
+                  "width": 800,
+                  "height": 800
+                },
+                "overlay": {
+                  "x": 0,
+                  "y": 0,
+                  "width": 1440,
+                  "height": 900
+                },
+                "content": {
+                  "x": 508,
+                  "y": 50,
+                  "width": 612,
+                  "height": 800
+                },
+                "options": {
+                  "x": 508,
+                  "y": 104,
+                  "width": 612,
+                  "height": 746
+                },
+                "contentHorizontalOverflow": false,
+                "optionsHorizontalOverflow": false
+              },
+              "interactions": [
+                {
+                  "tab": 0,
+                  "label": "通用设置",
+                  "selected": true,
+                  "bounds": {
+                    "x": 332,
+                    "y": 114,
+                    "width": 164,
+                    "height": 40
+                  },
+                  "scroll": {
+                    "scrollHeight": 746,
+                    "clientHeight": 746,
+                    "maximumReached": 0
+                  },
+                  "geometry": {
+                    "viewport": {
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "dialog": {
+                      "x": 320,
+                      "y": 50,
+                      "width": 800,
+                      "height": 800
+                    },
+                    "overlay": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "content": {
+                      "x": 508,
+                      "y": 50,
+                      "width": 612,
+                      "height": 800
+                    },
+                    "options": {
+                      "x": 508,
+                      "y": 104,
+                      "width": 612,
+                      "height": 746
+                    },
+                    "contentHorizontalOverflow": false,
+                    "optionsHorizontalOverflow": false
+                  }
+                },
+                {
+                  "tab": 1,
+                  "label": "模型",
+                  "selected": true,
+                  "bounds": {
+                    "x": 332,
+                    "y": 158,
+                    "width": 164,
+                    "height": 40
+                  },
+                  "scroll": {
+                    "scrollHeight": 746,
+                    "clientHeight": 746,
+                    "maximumReached": 0
+                  },
+                  "geometry": {
+                    "viewport": {
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "dialog": {
+                      "x": 320,
+                      "y": 50,
+                      "width": 800,
+                      "height": 800
+                    },
+                    "overlay": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "content": {
+                      "x": 508,
+                      "y": 50,
+                      "width": 612,
+                      "height": 800
+                    },
+                    "options": {
+                      "x": 508,
+                      "y": 104,
+                      "width": 612,
+                      "height": 746
+                    },
+                    "contentHorizontalOverflow": false,
+                    "optionsHorizontalOverflow": false
+                  }
+                },
+                {
+                  "tab": 2,
+                  "label": "插件",
+                  "selected": true,
+                  "bounds": {
+                    "x": 332,
+                    "y": 202,
+                    "width": 164,
+                    "height": 40
+                  },
+                  "scroll": {
+                    "scrollHeight": 746,
+                    "clientHeight": 746,
+                    "maximumReached": 0
+                  },
+                  "geometry": {
+                    "viewport": {
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "dialog": {
+                      "x": 320,
+                      "y": 50,
+                      "width": 800,
+                      "height": 800
+                    },
+                    "overlay": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "content": {
+                      "x": 508,
+                      "y": 50,
+                      "width": 612,
+                      "height": 800
+                    },
+                    "options": {
+                      "x": 508,
+                      "y": 104,
+                      "width": 612,
+                      "height": 746
+                    },
+                    "contentHorizontalOverflow": false,
+                    "optionsHorizontalOverflow": false
+                  }
+                },
+                {
+                  "tab": 3,
+                  "label": "Agent 预设",
+                  "selected": true,
+                  "bounds": {
+                    "x": 332,
+                    "y": 246,
+                    "width": 164,
+                    "height": 40
+                  },
+                  "scroll": {
+                    "scrollHeight": 746,
+                    "clientHeight": 746,
+                    "maximumReached": 0
+                  },
+                  "geometry": {
+                    "viewport": {
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "dialog": {
+                      "x": 320,
+                      "y": 50,
+                      "width": 800,
+                      "height": 800
+                    },
+                    "overlay": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "content": {
+                      "x": 508,
+                      "y": 50,
+                      "width": 612,
+                      "height": 800
+                    },
+                    "options": {
+                      "x": 508,
+                      "y": 104,
+                      "width": 612,
+                      "height": 746
+                    },
+                    "contentHorizontalOverflow": false,
+                    "optionsHorizontalOverflow": false
+                  }
+                }
+              ],
+              "closeBounds": {
+                "x": 1078,
+                "y": 70,
+                "width": 28,
+                "height": 28
+              },
+              "screenshotPath": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/shiba-welcome-panel-20260907/iteration-2/runtime-final/screenshots/shiba-morning-post-settings-light.png",
+              "closeClick": "passed",
+              "escape": "passed"
+            },
+            "welcomeSurfaces": [
+              {
+                "name": "headline",
+                "color": "rgb(51, 41, 31)",
+                "background": "rgb(255, 247, 234)",
+                "contrast": 13.361377412900522,
+                "backgroundOpaque": true,
+                "controlHeight": 32,
+                "bounds": {
+                  "x": 382.59375,
+                  "y": 330,
+                  "width": 550,
+                  "height": 32
+                }
+              },
+              {
+                "name": "workspace",
+                "color": "rgb(51, 41, 31)",
+                "background": "rgb(255, 247, 234)",
+                "contrast": 13.361377412900522,
+                "backgroundOpaque": true,
+                "controlHeight": 28,
+                "bounds": {
+                  "x": 358.59375,
+                  "y": 386,
+                  "width": 598,
+                  "height": 28
+                }
+              }
+            ]
+          },
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#13283BF7",
+              "--dsw-alias-bg-layer-1": "#1C344AF5",
+              "--dsw-alias-bg-layer-2": "#29445BF3",
+              "--dsw-alias-bg-overlay": "#36536BF4",
+              "--dsw-alias-border-l1": "#57738A",
+              "--dsw-alias-border-l2": "#8BA5B8",
+              "--dsw-alias-brand-primary": "#FF9B61",
+              "--dsw-alias-label-primary": "#FFF5E5",
+              "--dsw-alias-label-secondary": "#D7C9B5",
+              "--dsw-alias-state-error-primary": "#FF8790",
+              "--dsw-alias-state-success-primary": "#83D29A",
+              "--dsw-alias-state-warn-primary": "#F0C875",
+              "--dsw-specific-sidebar-fill": "#182E42F6"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/shiba-morning-post/skin.css",
+                "status": 200,
+                "sha256": "d9e0e0040e1f126d3d18eb87344361df6bc66628b806b3a9e384f1bf085115f6",
+                "expectedSha256": "d9e0e0040e1f126d3d18eb87344361df6bc66628b806b3a9e384f1bf085115f6",
+                "sizeBytes": 10724
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/shiba-morning-post/assets/abf67c12c1471f044f2b18732c475342db8ec49b2cb1db2ae92e1dda6363c192.webp",
+                "status": 200,
+                "sha256": "abf67c12c1471f044f2b18732c475342db8ec49b2cb1db2ae92e1dda6363c192",
+                "expectedSha256": "abf67c12c1471f044f2b18732c475342db8ec49b2cb1db2ae92e1dda6363c192",
+                "sizeBytes": 238356
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/shiba-morning-post/assets/f7e1995a03556cf81fae3e622594d6bac7238e16cfa43bdfee94c29ece48ecdf.webp",
+                "status": 200,
+                "sha256": "f7e1995a03556cf81fae3e622594d6bac7238e16cfa43bdfee94c29ece48ecdf",
+                "expectedSha256": "f7e1995a03556cf81fae3e622594d6bac7238e16cfa43bdfee94c29ece48ecdf",
+                "sizeBytes": 160146
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/shiba-morning-post/assets/b508996c3300357fc9f5d8a6e2af8ee5db7dad7ee16e20ca59b562c892ed26bd.webp",
+                "status": 200,
+                "sha256": "b508996c3300357fc9f5d8a6e2af8ee5db7dad7ee16e20ca59b562c892ed26bd",
+                "expectedSha256": "b508996c3300357fc9f5d8a6e2af8ee5db7dad7ee16e20ca59b562c892ed26bd",
+                "sizeBytes": 75278
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/shiba-morning-post/assets/9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856.webp",
+                "status": 200,
+                "sha256": "9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856",
+                "expectedSha256": "9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856",
+                "sizeBytes": 57424
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/shiba-morning-post/assets/2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a.webp",
+                "status": 200,
+                "sha256": "2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a",
+                "expectedSha256": "2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a",
+                "sizeBytes": 42216
+              }
+            ],
+            "dataSkin": "shiba-morning-post",
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgba(19, 40, 59, 0.97)",
+            "backgroundImage": "linear-gradient(rgba(19, 40, 59, 0.2), rgba(19, 40, 59, 0.2)), url(\"http://127.0.0.1:4015/__dsh-themes/shiba-morning-post/assets/abf67c12c1471f044f2b18732c475342db8ec49b2cb1db2ae92e1dda6363c192.webp\")",
+            "stylesheet": "/__dsh-themes/shiba-morning-post/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null,
+            "settingsLayout": {
+              "status": "passed",
+              "expectedWidth": 800,
+              "expectedX": 320,
+              "expectedHeight": 800,
+              "expectedY": 50,
+              "contentReadable": true,
+              "geometry": {
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                },
+                "dialog": {
+                  "x": 320,
+                  "y": 50,
+                  "width": 800,
+                  "height": 800
+                },
+                "overlay": {
+                  "x": 0,
+                  "y": 0,
+                  "width": 1440,
+                  "height": 900
+                },
+                "content": {
+                  "x": 508,
+                  "y": 50,
+                  "width": 612,
+                  "height": 800
+                },
+                "options": {
+                  "x": 508,
+                  "y": 104,
+                  "width": 612,
+                  "height": 746
+                },
+                "contentHorizontalOverflow": false,
+                "optionsHorizontalOverflow": false
+              },
+              "interactions": [
+                {
+                  "tab": 0,
+                  "label": "通用设置",
+                  "selected": true,
+                  "bounds": {
+                    "x": 332,
+                    "y": 114,
+                    "width": 164,
+                    "height": 40
+                  },
+                  "scroll": {
+                    "scrollHeight": 746,
+                    "clientHeight": 746,
+                    "maximumReached": 0
+                  },
+                  "geometry": {
+                    "viewport": {
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "dialog": {
+                      "x": 320,
+                      "y": 50,
+                      "width": 800,
+                      "height": 800
+                    },
+                    "overlay": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "content": {
+                      "x": 508,
+                      "y": 50,
+                      "width": 612,
+                      "height": 800
+                    },
+                    "options": {
+                      "x": 508,
+                      "y": 104,
+                      "width": 612,
+                      "height": 746
+                    },
+                    "contentHorizontalOverflow": false,
+                    "optionsHorizontalOverflow": false
+                  }
+                },
+                {
+                  "tab": 1,
+                  "label": "模型",
+                  "selected": true,
+                  "bounds": {
+                    "x": 332,
+                    "y": 158,
+                    "width": 164,
+                    "height": 40
+                  },
+                  "scroll": {
+                    "scrollHeight": 746,
+                    "clientHeight": 746,
+                    "maximumReached": 0
+                  },
+                  "geometry": {
+                    "viewport": {
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "dialog": {
+                      "x": 320,
+                      "y": 50,
+                      "width": 800,
+                      "height": 800
+                    },
+                    "overlay": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "content": {
+                      "x": 508,
+                      "y": 50,
+                      "width": 612,
+                      "height": 800
+                    },
+                    "options": {
+                      "x": 508,
+                      "y": 104,
+                      "width": 612,
+                      "height": 746
+                    },
+                    "contentHorizontalOverflow": false,
+                    "optionsHorizontalOverflow": false
+                  }
+                },
+                {
+                  "tab": 2,
+                  "label": "插件",
+                  "selected": true,
+                  "bounds": {
+                    "x": 332,
+                    "y": 202,
+                    "width": 164,
+                    "height": 40
+                  },
+                  "scroll": {
+                    "scrollHeight": 746,
+                    "clientHeight": 746,
+                    "maximumReached": 0
+                  },
+                  "geometry": {
+                    "viewport": {
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "dialog": {
+                      "x": 320,
+                      "y": 50,
+                      "width": 800,
+                      "height": 800
+                    },
+                    "overlay": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "content": {
+                      "x": 508,
+                      "y": 50,
+                      "width": 612,
+                      "height": 800
+                    },
+                    "options": {
+                      "x": 508,
+                      "y": 104,
+                      "width": 612,
+                      "height": 746
+                    },
+                    "contentHorizontalOverflow": false,
+                    "optionsHorizontalOverflow": false
+                  }
+                },
+                {
+                  "tab": 3,
+                  "label": "Agent 预设",
+                  "selected": true,
+                  "bounds": {
+                    "x": 332,
+                    "y": 246,
+                    "width": 164,
+                    "height": 40
+                  },
+                  "scroll": {
+                    "scrollHeight": 746,
+                    "clientHeight": 746,
+                    "maximumReached": 0
+                  },
+                  "geometry": {
+                    "viewport": {
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "dialog": {
+                      "x": 320,
+                      "y": 50,
+                      "width": 800,
+                      "height": 800
+                    },
+                    "overlay": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "content": {
+                      "x": 508,
+                      "y": 50,
+                      "width": 612,
+                      "height": 800
+                    },
+                    "options": {
+                      "x": 508,
+                      "y": 104,
+                      "width": 612,
+                      "height": 746
+                    },
+                    "contentHorizontalOverflow": false,
+                    "optionsHorizontalOverflow": false
+                  }
+                }
+              ],
+              "closeBounds": {
+                "x": 1078,
+                "y": 70,
+                "width": 28,
+                "height": 28
+              },
+              "screenshotPath": "/Users/vvmacair/Documents/vv_AI_Project/DSH-Themes/.cache/shiba-welcome-panel-20260907/iteration-2/runtime-final/screenshots/shiba-morning-post-settings-dark.png",
+              "closeClick": "passed",
+              "escape": "passed"
+            },
+            "welcomeSurfaces": [
+              {
+                "name": "headline",
+                "color": "rgb(255, 245, 229)",
+                "background": "rgb(19, 40, 59)",
+                "contrast": 13.945034586215508,
+                "backgroundOpaque": true,
+                "controlHeight": 32,
+                "bounds": {
+                  "x": 382.59375,
+                  "y": 330,
+                  "width": 550,
+                  "height": 32
+                }
+              },
+              {
+                "name": "workspace",
+                "color": "rgb(255, 245, 229)",
+                "background": "rgb(19, 40, 59)",
+                "contrast": 13.945034586215508,
+                "backgroundOpaque": true,
+                "controlHeight": 28,
+                "bounds": {
+                  "x": 358.59375,
+                  "y": 386,
+                  "width": 598,
+                  "height": 28
+                }
+              }
+            ]
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "disk": {
+        "freeBeforeBytes": 4581871616,
+        "freeAfterBytes": 4537335808
+      },
+      "coldRestart": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": "shiba-morning-post",
+          "backgroundImage": "linear-gradient(rgba(19, 40, 59, 0.2), rgba(19, 40, 59, 0.2)), url(\"http://127.0.0.1:4015/__dsh-themes/shiba-morning-post/assets/abf67c12c1471f044f2b18732c475342db8ec49b2cb1db2ae92e1dda6363c192.webp\")",
+          "stylesheet": "/__dsh-themes/shiba-morning-post/skin.css",
+          "tokens": {
+            "--dsw-alias-bg-base": "#13283BF7",
+            "--dsw-alias-bg-layer-1": "#1C344AF5",
+            "--dsw-alias-bg-layer-2": "#29445BF3",
+            "--dsw-alias-bg-overlay": "#36536BF4",
+            "--dsw-alias-border-l1": "#57738A",
+            "--dsw-alias-border-l2": "#8BA5B8",
+            "--dsw-alias-brand-primary": "#FF9B61",
+            "--dsw-alias-label-primary": "#FFF5E5",
+            "--dsw-alias-label-secondary": "#D7C9B5",
+            "--dsw-alias-state-error-primary": "#FF8790",
+            "--dsw-alias-state-success-primary": "#83D29A",
+            "--dsw-alias-state-warn-primary": "#F0C875",
+            "--dsw-specific-sidebar-fill": "#182E42F6"
+          }
+        },
+        "modes": [
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#13283BF7",
+              "--dsw-alias-bg-layer-1": "#1C344AF5",
+              "--dsw-alias-bg-layer-2": "#29445BF3",
+              "--dsw-alias-bg-overlay": "#36536BF4",
+              "--dsw-alias-border-l1": "#57738A",
+              "--dsw-alias-border-l2": "#8BA5B8",
+              "--dsw-alias-brand-primary": "#FF9B61",
+              "--dsw-alias-label-primary": "#FFF5E5",
+              "--dsw-alias-label-secondary": "#D7C9B5",
+              "--dsw-alias-state-error-primary": "#FF8790",
+              "--dsw-alias-state-success-primary": "#83D29A",
+              "--dsw-alias-state-warn-primary": "#F0C875",
+              "--dsw-specific-sidebar-fill": "#182E42F6"
+            },
+            "resources": [
+              {
+                "role": "skin-css",
+                "url": "/__dsh-themes/shiba-morning-post/skin.css",
+                "status": 200,
+                "sha256": "d9e0e0040e1f126d3d18eb87344361df6bc66628b806b3a9e384f1bf085115f6",
+                "expectedSha256": "d9e0e0040e1f126d3d18eb87344361df6bc66628b806b3a9e384f1bf085115f6",
+                "sizeBytes": 10724
+              },
+              {
+                "role": "background",
+                "url": "/__dsh-themes/shiba-morning-post/assets/abf67c12c1471f044f2b18732c475342db8ec49b2cb1db2ae92e1dda6363c192.webp",
+                "status": 200,
+                "sha256": "abf67c12c1471f044f2b18732c475342db8ec49b2cb1db2ae92e1dda6363c192",
+                "expectedSha256": "abf67c12c1471f044f2b18732c475342db8ec49b2cb1db2ae92e1dda6363c192",
+                "sizeBytes": 238356
+              },
+              {
+                "role": "sidebar",
+                "url": "/__dsh-themes/shiba-morning-post/assets/f7e1995a03556cf81fae3e622594d6bac7238e16cfa43bdfee94c29ece48ecdf.webp",
+                "status": 200,
+                "sha256": "f7e1995a03556cf81fae3e622594d6bac7238e16cfa43bdfee94c29ece48ecdf",
+                "expectedSha256": "f7e1995a03556cf81fae3e622594d6bac7238e16cfa43bdfee94c29ece48ecdf",
+                "sizeBytes": 160146
+              },
+              {
+                "role": "card",
+                "url": "/__dsh-themes/shiba-morning-post/assets/b508996c3300357fc9f5d8a6e2af8ee5db7dad7ee16e20ca59b562c892ed26bd.webp",
+                "status": 200,
+                "sha256": "b508996c3300357fc9f5d8a6e2af8ee5db7dad7ee16e20ca59b562c892ed26bd",
+                "expectedSha256": "b508996c3300357fc9f5d8a6e2af8ee5db7dad7ee16e20ca59b562c892ed26bd",
+                "sizeBytes": 75278
+              },
+              {
+                "role": "preview-light",
+                "url": "/__dsh-themes/shiba-morning-post/assets/9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856.webp",
+                "status": 200,
+                "sha256": "9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856",
+                "expectedSha256": "9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856",
+                "sizeBytes": 57424
+              },
+              {
+                "role": "preview-dark",
+                "url": "/__dsh-themes/shiba-morning-post/assets/2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a.webp",
+                "status": 200,
+                "sha256": "2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a",
+                "expectedSha256": "2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a",
+                "sizeBytes": 42216
+              }
+            ],
+            "dataSkin": "shiba-morning-post",
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgba(19, 40, 59, 0.97)",
+            "backgroundImage": "linear-gradient(rgba(19, 40, 59, 0.2), rgba(19, 40, 59, 0.2)), url(\"http://127.0.0.1:4015/__dsh-themes/shiba-morning-post/assets/abf67c12c1471f044f2b18732c475342db8ec49b2cb1db2ae92e1dda6363c192.webp\")",
+            "stylesheet": "/__dsh-themes/shiba-morning-post/skin.css",
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null,
+            "settingsLayout": {
+              "status": "passed",
+              "expectedWidth": 800,
+              "expectedX": 320,
+              "expectedHeight": 800,
+              "expectedY": 50,
+              "contentReadable": true,
+              "geometry": {
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                },
+                "dialog": {
+                  "x": 320,
+                  "y": 50,
+                  "width": 800,
+                  "height": 800
+                },
+                "overlay": {
+                  "x": 0,
+                  "y": 0,
+                  "width": 1440,
+                  "height": 900
+                },
+                "content": {
+                  "x": 508,
+                  "y": 50,
+                  "width": 612,
+                  "height": 800
+                },
+                "options": {
+                  "x": 508,
+                  "y": 104,
+                  "width": 612,
+                  "height": 746
+                },
+                "contentHorizontalOverflow": false,
+                "optionsHorizontalOverflow": false
+              },
+              "interactions": [
+                {
+                  "tab": 0,
+                  "label": "通用设置",
+                  "selected": true,
+                  "bounds": {
+                    "x": 332,
+                    "y": 114,
+                    "width": 164,
+                    "height": 40
+                  },
+                  "scroll": {
+                    "scrollHeight": 746,
+                    "clientHeight": 746,
+                    "maximumReached": 0
+                  },
+                  "geometry": {
+                    "viewport": {
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "dialog": {
+                      "x": 320,
+                      "y": 50,
+                      "width": 800,
+                      "height": 800
+                    },
+                    "overlay": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "content": {
+                      "x": 508,
+                      "y": 50,
+                      "width": 612,
+                      "height": 800
+                    },
+                    "options": {
+                      "x": 508,
+                      "y": 104,
+                      "width": 612,
+                      "height": 746
+                    },
+                    "contentHorizontalOverflow": false,
+                    "optionsHorizontalOverflow": false
+                  }
+                },
+                {
+                  "tab": 1,
+                  "label": "模型",
+                  "selected": true,
+                  "bounds": {
+                    "x": 332,
+                    "y": 158,
+                    "width": 164,
+                    "height": 40
+                  },
+                  "scroll": {
+                    "scrollHeight": 746,
+                    "clientHeight": 746,
+                    "maximumReached": 0
+                  },
+                  "geometry": {
+                    "viewport": {
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "dialog": {
+                      "x": 320,
+                      "y": 50,
+                      "width": 800,
+                      "height": 800
+                    },
+                    "overlay": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "content": {
+                      "x": 508,
+                      "y": 50,
+                      "width": 612,
+                      "height": 800
+                    },
+                    "options": {
+                      "x": 508,
+                      "y": 104,
+                      "width": 612,
+                      "height": 746
+                    },
+                    "contentHorizontalOverflow": false,
+                    "optionsHorizontalOverflow": false
+                  }
+                },
+                {
+                  "tab": 2,
+                  "label": "插件",
+                  "selected": true,
+                  "bounds": {
+                    "x": 332,
+                    "y": 202,
+                    "width": 164,
+                    "height": 40
+                  },
+                  "scroll": {
+                    "scrollHeight": 746,
+                    "clientHeight": 746,
+                    "maximumReached": 0
+                  },
+                  "geometry": {
+                    "viewport": {
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "dialog": {
+                      "x": 320,
+                      "y": 50,
+                      "width": 800,
+                      "height": 800
+                    },
+                    "overlay": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "content": {
+                      "x": 508,
+                      "y": 50,
+                      "width": 612,
+                      "height": 800
+                    },
+                    "options": {
+                      "x": 508,
+                      "y": 104,
+                      "width": 612,
+                      "height": 746
+                    },
+                    "contentHorizontalOverflow": false,
+                    "optionsHorizontalOverflow": false
+                  }
+                },
+                {
+                  "tab": 3,
+                  "label": "Agent 预设",
+                  "selected": true,
+                  "bounds": {
+                    "x": 332,
+                    "y": 246,
+                    "width": 164,
+                    "height": 40
+                  },
+                  "scroll": {
+                    "scrollHeight": 746,
+                    "clientHeight": 746,
+                    "maximumReached": 0
+                  },
+                  "geometry": {
+                    "viewport": {
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "dialog": {
+                      "x": 320,
+                      "y": 50,
+                      "width": 800,
+                      "height": 800
+                    },
+                    "overlay": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 1440,
+                      "height": 900
+                    },
+                    "content": {
+                      "x": 508,
+                      "y": 50,
+                      "width": 612,
+                      "height": 800
+                    },
+                    "options": {
+                      "x": 508,
+                      "y": 104,
+                      "width": 612,
+                      "height": 746
+                    },
+                    "contentHorizontalOverflow": false,
+                    "optionsHorizontalOverflow": false
+                  }
+                }
+              ],
+              "closeBounds": {
+                "x": 1078,
+                "y": 70,
+                "width": 28,
+                "height": 28
+              },
+              "closeClick": "passed",
+              "escape": "passed"
+            },
+            "welcomeSurfaces": [
+              {
+                "name": "headline",
+                "color": "rgb(255, 245, 229)",
+                "background": "rgb(19, 40, 59)",
+                "contrast": 13.945034586215508,
+                "backgroundOpaque": true,
+                "controlHeight": 32,
+                "bounds": {
+                  "x": 382.59375,
+                  "y": 330,
+                  "width": 550,
+                  "height": 32
+                }
+              },
+              {
+                "name": "workspace",
+                "color": "rgb(255, 245, 229)",
+                "background": "rgb(19, 40, 59)",
+                "contrast": 13.945034586215508,
+                "backgroundOpaque": true,
+                "controlHeight": 28,
+                "bounds": {
+                  "x": 358.59375,
+                  "y": 386,
+                  "width": 598,
+                  "height": 28
+                }
+              }
+            ]
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "recovery": {
+        "status": "passed",
+        "fresh": {
+          "dark": true,
+          "scheme": "dark",
+          "dataSkin": null,
+          "backgroundImage": "none",
+          "stylesheet": null,
+          "tokens": {
+            "--dsw-alias-bg-base": "#151517",
+            "--dsw-alias-bg-layer-1": "#232324",
+            "--dsw-alias-bg-layer-2": "#2c2c2e",
+            "--dsw-alias-bg-overlay": "#61666b",
+            "--dsw-alias-border-l1": "#ffffff0f",
+            "--dsw-alias-border-l2": "#ffffff1f",
+            "--dsw-alias-brand-primary": "#f9fafb",
+            "--dsw-alias-label-primary": "#f9fafb",
+            "--dsw-alias-label-secondary": "#cfd3d6",
+            "--dsw-alias-state-error-primary": "#f25a5a",
+            "--dsw-alias-state-success-primary": "#22c55e",
+            "--dsw-alias-state-warn-primary": "#f59e0b",
+            "--dsw-specific-sidebar-fill": "#1b1b1c"
+          }
+        },
+        "modes": [
+          {
+            "mode": "light",
+            "tokens": {
+              "--dsw-alias-bg-base": "#fff",
+              "--dsw-alias-bg-layer-1": "#fff",
+              "--dsw-alias-bg-layer-2": "#fff",
+              "--dsw-alias-bg-overlay": "#e9ecf2",
+              "--dsw-alias-border-l1": "#0000000a",
+              "--dsw-alias-border-l2": "#0000001a",
+              "--dsw-alias-brand-primary": "#0f1115",
+              "--dsw-alias-label-primary": "#0f1115",
+              "--dsw-alias-label-secondary": "#61666b",
+              "--dsw-alias-state-error-primary": "#ec1313",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#f9fafb"
+            },
+            "resources": [],
+            "dataSkin": null,
+            "dark": false,
+            "colorScheme": "light",
+            "bodyBackground": "rgb(255, 255, 255)",
+            "backgroundImage": "none",
+            "stylesheet": null,
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null,
+            "settingsLayout": {
+              "status": "baseline-observation",
+              "expectedWidth": 800,
+              "expectedX": 320,
+              "expectedHeight": 800,
+              "expectedY": 50,
+              "contentReadable": true,
+              "geometry": {
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                },
+                "dialog": {
+                  "x": 320,
+                  "y": 50,
+                  "width": 800,
+                  "height": 800
+                },
+                "overlay": {
+                  "x": 0,
+                  "y": 0,
+                  "width": 1440,
+                  "height": 900
+                },
+                "content": {
+                  "x": 508,
+                  "y": 50,
+                  "width": 612,
+                  "height": 800
+                },
+                "options": {
+                  "x": 508,
+                  "y": 104,
+                  "width": 612,
+                  "height": 746
+                },
+                "contentHorizontalOverflow": false,
+                "optionsHorizontalOverflow": false
+              }
+            }
+          },
+          {
+            "mode": "dark",
+            "tokens": {
+              "--dsw-alias-bg-base": "#151517",
+              "--dsw-alias-bg-layer-1": "#232324",
+              "--dsw-alias-bg-layer-2": "#2c2c2e",
+              "--dsw-alias-bg-overlay": "#61666b",
+              "--dsw-alias-border-l1": "#ffffff0f",
+              "--dsw-alias-border-l2": "#ffffff1f",
+              "--dsw-alias-brand-primary": "#f9fafb",
+              "--dsw-alias-label-primary": "#f9fafb",
+              "--dsw-alias-label-secondary": "#cfd3d6",
+              "--dsw-alias-state-error-primary": "#f25a5a",
+              "--dsw-alias-state-success-primary": "#22c55e",
+              "--dsw-alias-state-warn-primary": "#f59e0b",
+              "--dsw-specific-sidebar-fill": "#1b1b1c"
+            },
+            "resources": [],
+            "dataSkin": null,
+            "dark": true,
+            "colorScheme": "dark",
+            "bodyBackground": "rgb(21, 21, 23)",
+            "backgroundImage": "none",
+            "stylesheet": null,
+            "rootChildren": 1,
+            "horizontalOverflow": false,
+            "screenshotPath": null,
+            "settingsLayout": {
+              "status": "baseline-observation",
+              "expectedWidth": 800,
+              "expectedX": 320,
+              "expectedHeight": 800,
+              "expectedY": 50,
+              "contentReadable": true,
+              "geometry": {
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                },
+                "dialog": {
+                  "x": 320,
+                  "y": 50,
+                  "width": 800,
+                  "height": 800
+                },
+                "overlay": {
+                  "x": 0,
+                  "y": 0,
+                  "width": 1440,
+                  "height": 900
+                },
+                "content": {
+                  "x": 508,
+                  "y": 50,
+                  "width": 612,
+                  "height": 800
+                },
+                "options": {
+                  "x": 508,
+                  "y": 104,
+                  "width": 612,
+                  "height": 746
+                },
+                "contentHorizontalOverflow": false,
+                "optionsHorizontalOverflow": false
+              }
+            }
+          }
+        ],
+        "errors": [],
+        "recoveryResources": [
+          {
+            "url": "/__dsh-themes/shiba-morning-post/skin.css",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/shiba-morning-post/assets/abf67c12c1471f044f2b18732c475342db8ec49b2cb1db2ae92e1dda6363c192.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/shiba-morning-post/assets/f7e1995a03556cf81fae3e622594d6bac7238e16cfa43bdfee94c29ece48ecdf.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/shiba-morning-post/assets/b508996c3300357fc9f5d8a6e2af8ee5db7dad7ee16e20ca59b562c892ed26bd.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/shiba-morning-post/assets/9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856.webp",
+            "status": 404
+          },
+          {
+            "url": "/__dsh-themes/shiba-morning-post/assets/2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a.webp",
+            "status": 404
+          }
+        ],
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+      },
+      "completedAt": "2026-09-07T14:35:10.231Z"
+    }
+  ],
+  "minFreeMiB": 700,
+  "baseline": {
+    "status": "passed",
+    "fresh": {
+      "dark": true,
+      "scheme": "dark",
+      "dataSkin": null,
+      "backgroundImage": "none",
+      "stylesheet": null,
+      "tokens": {
+        "--dsw-alias-bg-base": "#151517",
+        "--dsw-alias-bg-layer-1": "#232324",
+        "--dsw-alias-bg-layer-2": "#2c2c2e",
+        "--dsw-alias-bg-overlay": "#61666b",
+        "--dsw-alias-border-l1": "#ffffff0f",
+        "--dsw-alias-border-l2": "#ffffff1f",
+        "--dsw-alias-brand-primary": "#f9fafb",
+        "--dsw-alias-label-primary": "#f9fafb",
+        "--dsw-alias-label-secondary": "#cfd3d6",
+        "--dsw-alias-state-error-primary": "#f25a5a",
+        "--dsw-alias-state-success-primary": "#22c55e",
+        "--dsw-alias-state-warn-primary": "#f59e0b",
+        "--dsw-specific-sidebar-fill": "#1b1b1c"
+      }
+    },
+    "modes": [
+      {
+        "mode": "light",
+        "tokens": {
+          "--dsw-alias-bg-base": "#fff",
+          "--dsw-alias-bg-layer-1": "#fff",
+          "--dsw-alias-bg-layer-2": "#fff",
+          "--dsw-alias-bg-overlay": "#e9ecf2",
+          "--dsw-alias-border-l1": "#0000000a",
+          "--dsw-alias-border-l2": "#0000001a",
+          "--dsw-alias-brand-primary": "#0f1115",
+          "--dsw-alias-label-primary": "#0f1115",
+          "--dsw-alias-label-secondary": "#61666b",
+          "--dsw-alias-state-error-primary": "#ec1313",
+          "--dsw-alias-state-success-primary": "#22c55e",
+          "--dsw-alias-state-warn-primary": "#f59e0b",
+          "--dsw-specific-sidebar-fill": "#f9fafb"
+        },
+        "resources": [],
+        "dataSkin": null,
+        "dark": false,
+        "colorScheme": "light",
+        "bodyBackground": "rgb(255, 255, 255)",
+        "backgroundImage": "none",
+        "stylesheet": null,
+        "rootChildren": 1,
+        "horizontalOverflow": false,
+        "screenshotPath": null,
+        "settingsLayout": {
+          "status": "baseline-observation",
+          "expectedWidth": 800,
+          "expectedX": 320,
+          "expectedHeight": 800,
+          "expectedY": 50,
+          "contentReadable": true,
+          "geometry": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "dialog": {
+              "x": 320,
+              "y": 50,
+              "width": 800,
+              "height": 800
+            },
+            "overlay": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 900
+            },
+            "content": {
+              "x": 508,
+              "y": 50,
+              "width": 612,
+              "height": 800
+            },
+            "options": {
+              "x": 508,
+              "y": 104,
+              "width": 612,
+              "height": 746
+            },
+            "contentHorizontalOverflow": false,
+            "optionsHorizontalOverflow": false
+          }
+        }
+      },
+      {
+        "mode": "dark",
+        "tokens": {
+          "--dsw-alias-bg-base": "#151517",
+          "--dsw-alias-bg-layer-1": "#232324",
+          "--dsw-alias-bg-layer-2": "#2c2c2e",
+          "--dsw-alias-bg-overlay": "#61666b",
+          "--dsw-alias-border-l1": "#ffffff0f",
+          "--dsw-alias-border-l2": "#ffffff1f",
+          "--dsw-alias-brand-primary": "#f9fafb",
+          "--dsw-alias-label-primary": "#f9fafb",
+          "--dsw-alias-label-secondary": "#cfd3d6",
+          "--dsw-alias-state-error-primary": "#f25a5a",
+          "--dsw-alias-state-success-primary": "#22c55e",
+          "--dsw-alias-state-warn-primary": "#f59e0b",
+          "--dsw-specific-sidebar-fill": "#1b1b1c"
+        },
+        "resources": [],
+        "dataSkin": null,
+        "dark": true,
+        "colorScheme": "dark",
+        "bodyBackground": "rgb(21, 21, 23)",
+        "backgroundImage": "none",
+        "stylesheet": null,
+        "rootChildren": 1,
+        "horizontalOverflow": false,
+        "screenshotPath": null,
+        "settingsLayout": {
+          "status": "baseline-observation",
+          "expectedWidth": 800,
+          "expectedX": 320,
+          "expectedHeight": 800,
+          "expectedY": 50,
+          "contentReadable": true,
+          "geometry": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "dialog": {
+              "x": 320,
+              "y": 50,
+              "width": 800,
+              "height": 800
+            },
+            "overlay": {
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 900
+            },
+            "content": {
+              "x": 508,
+              "y": 50,
+              "width": 612,
+              "height": 800
+            },
+            "options": {
+              "x": 508,
+              "y": 104,
+              "width": 612,
+              "height": 746
+            },
+            "contentHorizontalOverflow": false,
+            "optionsHorizontalOverflow": false
+          }
+        }
+      }
+    ],
+    "errors": [],
+    "recoveryResources": [],
+    "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36"
+  }
+}

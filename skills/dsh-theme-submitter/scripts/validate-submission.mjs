@@ -288,11 +288,12 @@ if (manifest.kind === 'theme') {
     copyright.source === 'licensed' && licensePolicy.attributionRequired &&
     (!copyright.attribution || !copyright.noticeUrl)
   ) throw new Error('Attribution-required licensed art requires attribution and noticeUrl');
-  const visual = object(manifest.visual, 'visual', ['preset', 'focus', 'surfaceOpacity', 'overlayOpacity', 'borderStrength', 'glowStrength', 'mobileWelcomeSurface', 'mobileWelcomeOffset', 'desktopWelcomeLayout', 'desktopWelcomeSurface', 'mobileDarkFocusX']);
+  const visual = object(manifest.visual, 'visual', ['preset', 'focus', 'surfaceOpacity', 'overlayOpacity', 'borderStrength', 'glowStrength', 'mobileWelcomeSurface', 'mobileWelcomeOffset', 'desktopWelcomeLayout', 'desktopWelcomeSurface', 'welcomeSurfaceStyle', 'mobileDarkFocusX']);
   if (visual.mobileWelcomeSurface !== undefined && typeof visual.mobileWelcomeSurface !== 'boolean') throw new Error('visual.mobileWelcomeSurface must be boolean');
   if (visual.mobileWelcomeOffset !== undefined && (!Number.isInteger(visual.mobileWelcomeOffset) || visual.mobileWelcomeOffset < -120 || visual.mobileWelcomeOffset > 120)) throw new Error('visual.mobileWelcomeOffset must be an integer from -120 to 120');
   if (visual.desktopWelcomeLayout !== undefined && !['compact-left', 'compact-center'].includes(visual.desktopWelcomeLayout)) throw new Error('visual.desktopWelcomeLayout is invalid');
   if (visual.desktopWelcomeSurface !== undefined && typeof visual.desktopWelcomeSurface !== 'boolean') throw new Error('visual.desktopWelcomeSurface must be boolean');
+  if (visual.welcomeSurfaceStyle !== undefined && visual.welcomeSurfaceStyle !== 'panel') throw new Error('visual.welcomeSurfaceStyle is invalid');
   if (visual.mobileDarkFocusX !== undefined && (!Number.isInteger(visual.mobileDarkFocusX) || visual.mobileDarkFocusX < 0 || visual.mobileDarkFocusX > 100)) throw new Error('visual.mobileDarkFocusX must be an integer from 0 to 100');
   if (!['glass', 'outline', 'glow'].includes(visual.preset)) throw new Error('invalid visual preset');
   const focus = object(visual.focus, 'visual.focus', ['x', 'y']);

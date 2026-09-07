@@ -1,14 +1,14 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 3,
   "status": "runtime-verified",
   "sourceCommit": "d347e703908d0406b7a7ef80e3a0e594d86b2215",
   "runtimeAttestationSha256": "bdf642512562483aa052224698416a3c216060df54f0ff07f43c50298beb5f81",
   "previousAuthority": {
-    "file": "alpha-hosted-artifacts-layout-20260906.json",
-    "sha256": "cfda9bf95549ea7d6d9d80aa2828123281d0940bdf0c916d6919acce284c4c50"
+    "file": "alpha-hosted-artifacts-refresh-20260906.json",
+    "sha256": "eb66299a36c2c3e1431bcdd92826fe98f7e32e53825b1fa005d51b30c5520c39"
   },
-  "retainedPackageCount": 53,
-  "refreshedPackageCount": 1,
+  "retainedPackageCount": 6,
+  "refreshedPackageCount": 48,
   "receiptRegistry": [
     {
       "id": "initial-alpha-54",
@@ -37,13 +37,6 @@
       "sha256": "839d747548b0c4c561e3b52e5fb9d32ec62c8cf5e91ff7811d51f5698af1e3de",
       "indexSha256": "20c2cb7c393125f96d6ef4d7d87f261bd9fd609f82b09d4851a8553ceec04e96",
       "verifiedPackageCount": 14
-    },
-    {
-      "id": "shiba-welcome-panel-20260907",
-      "file": "alpha-hosted-runtime-shiba-welcome-panel-20260907.json",
-      "sha256": "11e71360129f8455103b2db2a20643edb9ae0a49ca08e2f40bbc97c2aff74c1c",
-      "indexSha256": "02831f70c9faf3d9fc479877c57bdd7c58cdfad36cafe00fe4ee811ae01c557a",
-      "verifiedPackageCount": 1
     }
   ],
   "entries": [
@@ -12091,11 +12084,11 @@
       "kind": "full-skin",
       "name": "Shiba Morning Post",
       "packageName": "@dsh-themes/shiba-morning-post",
-      "version": "1.0.1-alpha.3",
+      "version": "1.0.1-alpha.2",
       "status": "runtime-verified",
-      "artifactSha256": "050bf2c294557b382c283ab8bd8e030fdab2895573de9444232dede02936791a",
-      "manifestCanonicalSha256": "835b7ad9ee821129af8708aa6e301e87bab106d27d44c5914ba3a90d822cd4f1",
-      "payloadSha256": "4323bc47c5e8ad2ccdc112997c136bb85f1ea5caf86088ef1bd4877ca99cdd64",
+      "artifactSha256": "2240d2a74aeb3dd369de279b94e75b772d2c25d4106047b322389a7c77780cee",
+      "manifestCanonicalSha256": "81077cc230fa385a5074fb198f4673c99d24cb7e7b45fc826de5501b0dcf9d8b",
+      "payloadSha256": "5cba481924f1d5afdcac746c4c6271d3cab66a8da89bade3ec8baddac27c246f",
       "releaseRecord": {
         "manifest": {
           "schemaVersion": "3.0",
@@ -12108,7 +12101,7 @@
             "name": "DSH-Themes"
           },
           "license": "CC-BY-4.0",
-          "version": "1.0.1-alpha.3",
+          "version": "1.0.1-alpha.2",
           "copyright": {
             "source": "generated",
             "attribution": "Original clean-room Shiba Inu storybook artwork generated with OpenAI built-in image generation for DSH-Themes; no meme dog, named animal, franchise character, mascot, brand, real place, logo, costume, or artist style was copied.",
@@ -12236,10 +12229,8 @@
             "borderStrength": 0.5,
             "glowStrength": 0.09,
             "mobileWelcomeSurface": true,
-            "mobileWelcomeOffset": -60,
             "desktopWelcomeLayout": "compact-left",
-            "desktopWelcomeSurface": true,
-            "welcomeSurfaceStyle": "panel"
+            "desktopWelcomeSurface": true
           },
           "assets": [
             {
@@ -12274,21 +12265,21 @@
             },
             {
               "role": "preview-light",
-              "path": "assets/9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856.webp",
-              "url": "/__dsh-themes/shiba-morning-post/assets/9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856.webp",
-              "sha256": "9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856",
+              "path": "assets/426e4463e796ec9d9b44bf7fed095f12c7694959879197be4ffa7a0878b35f31.webp",
+              "url": "/__dsh-themes/shiba-morning-post/assets/426e4463e796ec9d9b44bf7fed095f12c7694959879197be4ffa7a0878b35f31.webp",
+              "sha256": "426e4463e796ec9d9b44bf7fed095f12c7694959879197be4ffa7a0878b35f31",
               "mimeType": "image/webp",
-              "sizeBytes": 57424,
+              "sizeBytes": 58130,
               "width": 960,
               "height": 600
             },
             {
               "role": "preview-dark",
-              "path": "assets/2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a.webp",
-              "url": "/__dsh-themes/shiba-morning-post/assets/2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a.webp",
-              "sha256": "2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a",
+              "path": "assets/3d11cde8222aa851a2605c4b17fbd082598af2830d7dda77830a3e22cc825a3f.webp",
+              "url": "/__dsh-themes/shiba-morning-post/assets/3d11cde8222aa851a2605c4b17fbd082598af2830d7dda77830a3e22cc825a3f.webp",
+              "sha256": "3d11cde8222aa851a2605c4b17fbd082598af2830d7dda77830a3e22cc825a3f",
               "mimeType": "image/webp",
-              "sizeBytes": 42216,
+              "sizeBytes": 43326,
               "width": 960,
               "height": 600
             }
@@ -12301,15 +12292,15 @@
           },
           "preview": {
             "light": {
-              "url": "/__dsh-themes/shiba-morning-post/assets/9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856.webp",
-              "sha256": "9e6aafa9fb89e65342526fa1bfee43245ba68d35b93dbb027e624ed090b14856",
+              "url": "/__dsh-themes/shiba-morning-post/assets/426e4463e796ec9d9b44bf7fed095f12c7694959879197be4ffa7a0878b35f31.webp",
+              "sha256": "426e4463e796ec9d9b44bf7fed095f12c7694959879197be4ffa7a0878b35f31",
               "width": 960,
               "height": 600,
               "source": "runtime"
             },
             "dark": {
-              "url": "/__dsh-themes/shiba-morning-post/assets/2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a.webp",
-              "sha256": "2eca7974944cc04e07670d37d0b6cb6dd529a9adbfbb8265046c3f914fc3ee6a",
+              "url": "/__dsh-themes/shiba-morning-post/assets/3d11cde8222aa851a2605c4b17fbd082598af2830d7dda77830a3e22cc825a3f.webp",
+              "sha256": "3d11cde8222aa851a2605c4b17fbd082598af2830d7dda77830a3e22cc825a3f",
               "width": 960,
               "height": 600,
               "source": "runtime"
@@ -12317,21 +12308,21 @@
           },
           "artifact": {
             "name": "@dsh-themes/shiba-morning-post",
-            "version": "1.0.1-alpha.3",
-            "fileName": "shiba-morning-post-1.0.1-alpha.3.tgz",
-            "sha256": "050bf2c294557b382c283ab8bd8e030fdab2895573de9444232dede02936791a",
-            "integrity": "sha256-BQvywpRVezgsKDq4vY4DD9qyiVVz3pREIy3t4Ck2eRo=",
+            "version": "1.0.1-alpha.2",
+            "fileName": "shiba-morning-post-1.0.1-alpha.2.tgz",
+            "sha256": "2240d2a74aeb3dd369de279b94e75b772d2c25d4106047b322389a7c77780cee",
+            "integrity": "sha256-IkDSp0rrPdNp3ieblOdbdy0sJdQQYEezIjiafHd4DO4=",
             "digestScope": "artifact-tgz"
           },
           "payload": {
-            "fileName": "shiba-morning-post-1.0.1-alpha.3.payload.tar",
-            "sha256": "4323bc47c5e8ad2ccdc112997c136bb85f1ea5caf86088ef1bd4877ca99cdd64",
-            "integrity": "sha256-QyO8R8XorSzNwRKZfBNruF8epcr4YIjvG9SHfKmc3WQ=",
+            "fileName": "shiba-morning-post-1.0.1-alpha.2.payload.tar",
+            "sha256": "5cba481924f1d5afdcac746c4c6271d3cab66a8da89bade3ec8baddac27c246f",
+            "integrity": "sha256-XLpIGSTx1a/crHRsTGJx08q2ao2om63j7Iut2sJ8JG8=",
             "digestScope": "canonical-tar-payload-excluding-manifest"
           }
         },
-        "artifactUrl": "https://dsh-themes.com/api/themes/shiba-morning-post/download/1.0.1-alpha.3",
-        "artifactSha256": "050bf2c294557b382c283ab8bd8e030fdab2895573de9444232dede02936791a",
+        "artifactUrl": "https://dsh-themes.com/api/themes/shiba-morning-post/download/1.0.1-alpha.2",
+        "artifactSha256": "2240d2a74aeb3dd369de279b94e75b772d2c25d4106047b322389a7c77780cee",
         "verified": true,
         "distribution": {
           "kind": "hosted-verified-artifact",
@@ -12351,7 +12342,7 @@
           "lifecycle": "managed-cold-restart"
         }
       },
-      "runtimeReceiptId": "shiba-welcome-panel-20260907"
+      "runtimeReceiptId": "layout-fix-20260906-48"
     },
     {
       "catalogId": 2044,
